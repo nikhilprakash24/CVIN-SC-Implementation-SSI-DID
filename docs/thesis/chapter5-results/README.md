@@ -122,42 +122,52 @@ on-chain claim is actually required — the design intent, now measured.
 
 ## 5.4 RQ4 / Thrust 3 — Real-Time V2V Feasibility
 
-**Provenance**: `cv2x-testbed/sumo/results/v2v_latency.json`, produced by
-`python3 cv2x-testbed/sumo/sumo_identity_integration.py --simulate`. All
-verifications are real cryptography (no simulated latencies).
+**Provenance**: `cv2x-testbed/sumo/results/v2v_latency_stats.json`,
+produced by `python3 cv2x-testbed/sumo/run_v2v_stats.py --runs 30
+--duration 20 --vehicles 50`, which drives
+`sumo_identity_integration.py --simulate --seed s` as an independent
+subprocess for seeds 1–30. All verifications are real cryptography (no
+simulated latencies). Statistics are computed over the 30 per-run
+medians; the 95% CI is a 10,000-resample bootstrap percentile interval
+of the across-run median (fixed bootstrap seed).
 
-Latency of identity verification in the V2V message path, split by
-first-contact ("cold", full credential/certificate validation) and
-subsequent messages ("warm", signature check against cached peer):
+Latency of identity verification in the V2V message path (**N=30 seeded
+runs**, median [95% CI] in ms), split by first-contact ("cold", full
+credential/certificate validation) and subsequent messages ("warm",
+signature check against cached peer):
 
-| Path | Sign (p95) | Cold verify (p95) | Warm verify (p95) |
+| Path | Sign | Cold verify | Warm verify |
 |---|--:|--:|--:|
-| SSI (blockchain credential) | 0.36 ms | 0.63 ms | **0.27 ms** |
-| PKI (IEEE 1609.2 baseline) | 0.16 ms | 0.81 ms | 0.14 ms |
+| SSI (blockchain credential) | 0.241 [0.238, 0.243] | 0.400 [0.392, 0.405] | **0.165 [0.162, 0.168]** |
+| PKI (IEEE 1609.2 baseline) | 0.083 [0.082, 0.085] | 0.450 [0.447, 0.459] | 0.102 [0.101, 0.104] |
 
-Throughput/integrity of the run (50 vehicles, 10 Hz):
+Aggregate throughput/integrity over the 30 runs (50 vehicles, 10 Hz):
 
-| Metric | SSI population | PKI population |
-|---|--:|--:|
-| Messages verified | 18,999 | 8,753 |
-| Verification failures | 2 | 1 |
+| Metric | Value |
+|---|--:|
+| Messages verified | 1,650,318 |
+| Verification failures | 90 |
 
-The failures were **exactly the injected attacks** (tampered SSI BSM +
-uncredentialed sender for SSI; tampered PKI BSM for PKI) — no false
-negatives, no false positives.
+The 90 failures are **exactly the injected attacks** — 3 per run
+(tampered SSI BSM, uncredentialed SSI sender, tampered PKI BSM) × 30
+runs — caught with zero false negatives and zero false positives across
+1.65 M verifications.
 
 **Findings (RQ4 / H3):**
 
 1. **Blockchain-credential V2V verification fits the safety budget with
-   large margin.** SSI warm verification p95 is 0.27 ms against the
-   ~100 ms end-to-end V2V budget — roughly 370× headroom — and even the
-   cold full-credential path (0.63 ms p95) clears the 10 ms
-   signature-check target. This **supports H3**: pre-issued credentials
-   verified off-chain (no chain round-trip at message time) are viable
-   for safety-critical V2V.
+   large margin, now with tight confidence intervals.** SSI warm
+   verification is 0.165 ms (95% CI [0.162, 0.168], n=30) against the
+   ~100 ms end-to-end V2V budget — a ~600× margin — and even the cold
+   full-credential path (0.400 ms) clears the 10 ms signature-check
+   target by 25×. This **supports H3**: pre-issued credentials verified
+   off-chain (no chain round-trip at message time) are viable for
+   safety-critical V2V. The N=30 CIs are non-overlapping between SSI and
+   PKI, so the SSI/PKI difference below is statistically resolved, not
+   noise.
 
-2. **SSI costs ~2× PKI per message but both are immaterial** at the
-   safety timescale (0.27 ms vs 0.14 ms warm p95). The blockchain-rooted
+2. **SSI costs ~1.6× PKI per warm message but both are immaterial** at
+   the safety timescale (0.165 ms vs 0.102 ms). The blockchain-rooted
    identity does not introduce a latency barrier to V2V safety
    messaging; the cost of blockchain identity is at issuance/registration
    (RQ1 gas), not at verification time.
@@ -275,7 +285,7 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
 |---|---|---|
 | **H1** — minimal-state ≥10× cheaper for identity creation | **Supported** | ERC-1056 52,612 vs ERC-721 542,429 (10.3×); §5.2 |
 | **H2** — ≥90% W3C compliance achievable via a translation layer | **Supported** | 93.2% measured, deviations are canonicalization/suite only; §5.5 |
-| **H3** — off-chain credential verification meets the V2V budget | **Supported** | SSI warm p95 0.27 ms ≪ 100 ms; cold 0.63 ms ≤ 10 ms; §5.4 |
+| **H3** — off-chain credential verification meets the V2V budget | **Supported** | SSI warm 0.165 ms (95% CI [0.162,0.168], N=30) ≪ 100 ms; cold 0.400 ms ≤ 10 ms; §5.4 |
 | **H4** — MOBI VID realizable across backends | **Partially demonstrated** | VID I + 11 VID II event types on-chain; broader backend sweep future work |
 | **H5** — hybrid on the cost/capability frontier | **Supported** | CVIN-Combined = ERC-1056 identity cost + on-chain claims; §5.3 |
 
