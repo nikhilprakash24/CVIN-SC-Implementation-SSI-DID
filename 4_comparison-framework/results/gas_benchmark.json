@@ -279,7 +279,7 @@
     "addDelegateOrClaim": {
       "gasUsed": 35286,
       "txCount": 1,
-      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 192718 gas."
+      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 192706 gas."
     },
     "transferOwnership": {
       "gasUsed": 200018,
@@ -334,7 +334,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-07-19T21:08:26.839Z",
+    "date": "2026-07-19T21:21:04.401Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [
