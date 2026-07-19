@@ -8,6 +8,54 @@ The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [0.8.0] — 2026-07-15 — "Rigor & Ground-Truth Hardening"
+
+Executes Stage 0.8 of `docs/planning/NEXT_STAGES_PLAN.md`: closes the
+sharpest examiner exposures from the v0.7.0 audit and adds statistical
+rigor. ~295 automated tests green (217 Hardhat + 28 VC + 32 MOBI VID + 6
+VIN + 12 use cases) + 93.2% W3C compliance.
+
+### Added
+- **ERC-725xy — the missing 9th standard.** Full ERC-725X (generic
+  executor) + ERC-725Y (data store) vehicle smart-account
+  (`contracts/ERC725xy/CVINVehicleERC725XY.sol`), 15 tests, real gas
+  (createIdentity 1,704,992 — the heaviest; the full account deploy). The
+  "nine standards" comparison is now true on-chain; the gas table no
+  longer rests on the MOBI VID profile filling the slot.
+- **V2V latency statistical rigor (N=30).** `run_v2v_stats.py` drives 30
+  seeded runs; SSI warm verify **0.165 ms [95% CI 0.162, 0.168]**, PKI
+  0.102 ms [0.101, 0.104]; 1.65 M verifications, 90 failures = 3 injected
+  attacks × 30 runs. Non-overlapping SSI/PKI CIs.
+- **Gas reproducibility (N=30).** `run_gas_stats.py`: every operation
+  byte-identical across 30 runs (σ = 0) — the point estimates are exact,
+  not single-sample flukes.
+
+### Fixed / Hardened
+- **MOBI `attestEvent` now verifies its signature on-chain.** The audit
+  found the attestation signature was stored but never checked (forgery/
+  replay gap). Now `ecrecover` over a domain-separated digest (contract +
+  chainId + vehicle + eventId, EIP-191, OZ ECDSA low-s); forged/replayed
+  attestations revert. Cost 121,110 → 192,718 gas. MOBI `Replay` security
+  cell PARTIAL → DEFENDED. A found-and-fixed result with before/after
+  tests.
+- **AES-256-GCM VIN encryption** replaces the demo XOR keystream at both
+  sites, with HKDF key derivation and a documented key-custody model;
+  real decryption; tamper/wrong-key/wrong-AAD all raise `InvalidTag`. The
+  VIN and key never appear in the anchored artifact.
+
+### Known limitations (carried into 0.9)
+- No public-testnet (Sepolia) validation yet — gas measured on
+  Hardhat-local (deterministic, so the comparison holds; absolute fiat
+  cost is gas-price dependent).
+- V2V latency still excludes the radio/MAC/network stack; mobility is
+  simulated (no SUMO binary).
+- ERC-4337 EntryPoint and LSP8 remain minimal representative
+  implementations (documented in-header).
+- Key distribution/HSM custody for the VIN cipher is out of scope for the
+  testbed.
+
+---
+
 ## [0.7.0] — 2026-07-14 — "Integration & Verification Milestone"
 
 The milestone that turned a collection of demo-grade prototypes into a
