@@ -40,6 +40,7 @@ from birth_certificate import (  # noqa: E402
     BirthCertificateIssuer, BirthCertificateVerifier,
     credential_content_hash, decrypt_vin, salted_vin_hash,
 )
+from cryptography.exceptions import InvalidTag  # noqa: E402
 from lifecycle_events import (  # noqa: E402
     ALLOWED_ISSUERS, EVENT_VC_TYPES, LifecycleEventRecorder,
     VehicleHistoryAggregator,
@@ -212,9 +213,40 @@ class TestBirthCertificate:
             "0x0000000000000000000000000000000000000000"
 
     def test_encrypted_vin_round_trip(self, registry, vehicle, birth):
+        # AES-256-GCM: authorized holder of (secret, salt) + on-chain vinHash
+        # recovers the exact VIN; the plaintext never appears in the artifact.
         record = registry.get_vehicle_birth(vehicle.address)
-        assert decrypt_vin(record["encryptedVIN"], "owner-only-secret") == VIN
+        assert record["encryptedVIN"].startswith("gcm1:")
         assert VIN not in record["encryptedVIN"]
+        recovered = decrypt_vin(
+            record["encryptedVIN"], "owner-only-secret",
+            salt=birth["vinSalt"], aad=record["vinHash"])
+        assert recovered == VIN
+
+    def test_encrypted_vin_tamper_and_wrong_key_fail(self, registry, vehicle,
+                                                     birth):
+        # GCM auth tag must reject tampering, a wrong secret, and a mismatched
+        # AAD (ciphertext transplanted onto a different vinHash).
+        record = registry.get_vehicle_birth(vehicle.address)
+        ct = record["encryptedVIN"]
+
+        # (a) flip one ciphertext byte -> InvalidTag
+        blob = bytearray.fromhex(ct[len("gcm1:"):])
+        blob[-1] ^= 0x01
+        tampered = "gcm1:" + blob.hex()
+        with pytest.raises(InvalidTag):
+            decrypt_vin(tampered, "owner-only-secret",
+                        salt=birth["vinSalt"], aad=record["vinHash"])
+
+        # (b) wrong secret -> InvalidTag
+        with pytest.raises(InvalidTag):
+            decrypt_vin(ct, "not-the-owner-secret",
+                        salt=birth["vinSalt"], aad=record["vinHash"])
+
+        # (c) wrong AAD (bound to a different vehicle's vinHash) -> InvalidTag
+        with pytest.raises(InvalidTag):
+            decrypt_vin(ct, "owner-only-secret",
+                        salt=birth["vinSalt"], aad=b"\x00" * 32)
 
     def test_full_verification_report(self, registry, vehicle, birth):
         verifier = BirthCertificateVerifier(registry)

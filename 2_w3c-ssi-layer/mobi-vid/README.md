@@ -93,7 +93,7 @@ DECOMMISSION`.
 |---|---|---|
 | VID I birth registration (manufacturer ≠ first owner, with attributes) | Implemented | Hardhat + pytest (previously reverted; V1 bugs fixed) |
 | Salted-SHA256 VIN hash + on-chain lookup | Implemented | `test_salted_vin_hash_lookup` |
-| Encrypted VIN field | Demo-grade only | XOR keystream cipher, NOT production crypto (no AEAD) |
+| Encrypted VIN field | Implemented (AEAD) | AES-256-GCM, key = HKDF-SHA256(owner secret, salt = VIN salt), AEAD-bound to on-chain `vinHash`; `test_vin_cipher.py`, `test_encrypted_vin_round_trip`, `test_encrypted_vin_tamper_and_wrong_key_fail` |
 | Birth certificate as schema-enforced W3C VC | Implemented | `VehicleBirthCertificate` schema, `enforce_schema=True` |
 | Content-hash anchoring of VCs | Implemented | keccak256(VC) checked in both directions |
 | 11 lifecycle event types | Implemented | contract + Python enums, tested for 5 types end-to-end |
@@ -179,8 +179,20 @@ Hardhat contract tests (V1 regression + V2 behavior) live in
 
 ## Known limitations
 
-- The VIN "encryption" is a demonstrative XOR keystream, not vetted
-  cryptography; production use requires an AEAD scheme (e.g. AES-GCM).
+- The VIN cipher is **AES-256-GCM** (authenticated encryption), replacing an
+  earlier demonstration-grade XOR keystream. Key-custody model: the
+  owner/issuer holds a per-vehicle `vinSecret` (returned by
+  `issue_birth_certificate`); the 32-byte AES-256 key is derived from it with
+  HKDF-SHA256 salted by the 32-byte VIN salt, and the ciphertext is
+  AEAD-bound to the on-chain `vinHash` (GCM associated data). Only the salted
+  VIN *hash* and the ciphertext are anchored on-chain — never the VIN or the
+  key. An authorized verifier decrypts with `(vinSecret, vinSalt)` plus the
+  on-chain `vinHash`; a tampered ciphertext, wrong secret, wrong salt, or
+  mismatched AAD all fail the GCM auth tag. **Out of scope** for this testbed:
+  secure *distribution*/escrow of the secret and hardware (HSM/KMS) key
+  custody — the secret is simply returned to the caller in memory.
+  (The `cv2x-testbed` `MOBIVIDProvider` uses the same AEAD with an
+  issuer-held master key and HKDF-derived per-vehicle keys instead.)
 - `attestEvent` accepts `bytes32(0)` as an event id without reverting
   (empty-struct comparison quirk in the contract); clients must not treat
   the zero id as valid.

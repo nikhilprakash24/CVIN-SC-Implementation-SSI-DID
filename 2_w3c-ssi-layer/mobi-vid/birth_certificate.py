@@ -27,10 +27,16 @@ Design decisions (documented honestly):
   The salt is returned to the issuer/owner and must be disclosed to any
   party that should be able to link VIN -> vehicle identity.
 
-* The `encryptedVIN` contract field is filled with an XOR-keystream
-  ciphertext derived from a caller-supplied secret (see `encrypt_vin`).
-  This is a DEMONSTRATION cipher for the thesis testbed, not a vetted
-  AEAD scheme — production use would substitute e.g. AES-GCM.
+* The `encryptedVIN` contract field is filled with an AES-256-GCM
+  (authenticated) ciphertext (see `encrypt_vin`). Key custody model:
+  the owner/issuer holds a per-vehicle `vinSecret` (returned from
+  `issue_birth_certificate`); the 32-byte AES-256 key is derived from it
+  with HKDF-SHA256 (salt = the 32-byte VIN salt) and never stored on-chain.
+  The ciphertext is AEAD-bound to the on-chain `vinHash` via the GCM
+  associated-data, so it cannot be lifted onto another vehicle's record
+  without failing the auth tag. Only the plaintext salted VIN *hash* and
+  the ciphertext ever reach the chain — never the VIN or the key.
+  Out of scope for this testbed: key distribution / HSM custody.
 
 Author: Nikhil Prakash
 Thesis: MASc, UBC ECE
@@ -45,6 +51,10 @@ from typing import Any, Dict, Optional
 
 from eth_account.signers.local import LocalAccount
 from web3 import Web3
+
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 
 # --- canonical VC layer bootstrap -----------------------------------------
 _VC_LAYER = Path(__file__).resolve().parent.parent / "verifiable-credentials"
@@ -78,30 +88,71 @@ def salted_vin_hash(vin: str, salt: str) -> bytes:
     return hashlib.sha256(f"{vin}:{salt}".encode("utf-8")).digest()
 
 
-def _keystream(secret: str, length: int) -> bytes:
-    """SHA256-based expanding keystream (demo cipher support)."""
-    stream = b""
-    counter = 0
-    while len(stream) < length:
-        stream += hashlib.sha256(f"{secret}:{counter}".encode()).digest()
-        counter += 1
-    return stream[:length]
+# AES-256-GCM VIN cipher.
+#
+# KEY CUSTODY: the owner/issuer holds a per-vehicle `secret` (an opaque
+# string; `issue_birth_certificate` returns it as `vinSecret`). The 32-byte
+# AES-256 key is DERIVED from that secret with HKDF-SHA256, domain-separated
+# by the 32-byte VIN salt, so no two vehicles share a key even if the same
+# secret were reused. The key is never persisted on-chain; only the salted
+# VIN hash and the ciphertext are anchored. To decrypt, an authorized party
+# needs (secret, salt) — both disclosed off-chain by the owner — plus the
+# on-chain `vinHash` used as GCM associated data.
+#
+# Out of scope for this testbed: secure distribution / HSM custody of the
+# secret itself.
+
+_VIN_CIPHER_PREFIX = "gcm1:"
+_VIN_KDF_INFO = b"MOBI-VID-I/VIN/AES-256-GCM/v1"
+_VIN_NONCE_BYTES = 12
 
 
-def encrypt_vin(vin: str, secret: str) -> str:
-    """XOR-keystream VIN encryption (demonstration-grade, see module docs)."""
-    data = vin.encode("utf-8")
-    ct = bytes(a ^ b for a, b in zip(data, _keystream(secret, len(data))))
-    return "xor1:" + ct.hex()
+def derive_vin_key(secret: str, salt: str) -> bytes:
+    """
+    HKDF-SHA256 -> 32-byte AES-256 key from the owner secret and VIN salt.
+
+    The VIN salt (hex) is used as the HKDF salt so the derived key is unique
+    per vehicle; `secret` supplies the input keying material.
+    """
+    salt_bytes = bytes.fromhex(salt) if salt else b""
+    return HKDF(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt_bytes,
+        info=_VIN_KDF_INFO,
+    ).derive(secret.encode("utf-8"))
 
 
-def decrypt_vin(ciphertext: str, secret: str) -> str:
-    """Inverse of encrypt_vin."""
-    if not ciphertext.startswith("xor1:"):
+def encrypt_vin(vin: str, secret: str, salt: str, aad: bytes = b"") -> str:
+    """
+    Authenticated VIN encryption with AES-256-GCM.
+
+    Returns ``"gcm1:" + hex(nonce || ciphertext || tag)`` with a fresh 12-byte
+    random nonce per call. `aad` (typically the on-chain `vinHash`) is bound
+    into the GCM tag, so the ciphertext cannot be transplanted onto another
+    vehicle's record without failing authentication on decrypt.
+    """
+    key = derive_vin_key(secret, salt)
+    nonce = secrets.token_bytes(_VIN_NONCE_BYTES)
+    ct = AESGCM(key).encrypt(nonce, vin.encode("utf-8"), aad)
+    return _VIN_CIPHER_PREFIX + (nonce + ct).hex()
+
+
+def decrypt_vin(ciphertext: str, secret: str, salt: str, aad: bytes = b"") -> str:
+    """
+    Inverse of `encrypt_vin`. Recovers the VIN for an authorized holder of
+    (secret, salt).
+
+    Raises `cryptography.exceptions.InvalidTag` if the ciphertext was
+    tampered with, the wrong key/secret is supplied, or the associated data
+    does not match; raises `ValueError` on an unrecognised format.
+    """
+    if not ciphertext.startswith(_VIN_CIPHER_PREFIX):
         raise ValueError("unsupported ciphertext format")
-    ct = bytes.fromhex(ciphertext[len("xor1:"):])
-    pt = bytes(a ^ b for a, b in zip(ct, _keystream(secret, len(ct))))
-    return pt.decode("utf-8")
+    blob = bytes.fromhex(ciphertext[len(_VIN_CIPHER_PREFIX):])
+    nonce, ct = blob[:_VIN_NONCE_BYTES], blob[_VIN_NONCE_BYTES:]
+    key = derive_vin_key(secret, salt)
+    return AESGCM(key).decrypt(nonce, ct, aad).decode("utf-8")
 
 
 def credential_content_hash(vc: Dict[str, Any]) -> bytes:
@@ -209,7 +260,8 @@ class BirthCertificateIssuer:
         salt = new_vin_salt()
         vin_hash = salted_vin_hash(vin, salt)
         secret = vin_secret or secrets.token_hex(32)
-        encrypted = encrypt_vin(vin, secret)
+        # AES-256-GCM, AEAD-bound to the on-chain vinHash (see cipher docs).
+        encrypted = encrypt_vin(vin, secret, salt=salt, aad=vin_hash)
 
         birth_attributes = b""
         if anchor_attributes:

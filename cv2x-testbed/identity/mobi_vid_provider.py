@@ -31,6 +31,7 @@ from web3.middleware import ExtraDataToPOAMiddleware
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.backends import default_backend
 
 from identity.base import (
@@ -54,7 +55,8 @@ class MOBIVIDProvider(IdentityProvider):
         web3_provider_url: str = "http://127.0.0.1:8545",
         contract_address: Optional[str] = None,
         private_key: Optional[str] = None,
-        ipfs_gateway: str = "http://127.0.0.1:5001"
+        ipfs_gateway: str = "http://127.0.0.1:5001",
+        vin_master_key: Optional[bytes] = None
     ):
         super().__init__(IdentityType.ERC1056_DID)  # Using ERC1056_DID type for now
 
@@ -94,8 +96,24 @@ class MOBIVIDProvider(IdentityProvider):
         self.birth_certificates = {}  # vehicleIdentity -> VehicleBirth
         self.did_cache = {}  # DID -> resolved document (TTL cache)
 
-        # VIN encryption keys (in production, use HSM or key management service)
-        self.vin_encryption_keys = {}  # vehicle_id -> encryption key
+        # VIN encryption key custody.
+        #
+        # The provider (issuer) holds ONE 32-byte AES-256 master key, generated
+        # once here (or injected via `vin_master_key` so an authorized party can
+        # reconstruct it). Per-vehicle keys are derived from it with HKDF-SHA256
+        # salted by the vehicle identity, so a leak of one vehicle's derived key
+        # does not compromise the others, and nothing secret is ever placed
+        # on-chain (only the salted VIN hash + AES-GCM ciphertext are anchored).
+        #
+        # Out of scope for this testbed: distributing/escrowing the master key
+        # to owners and hardware (HSM/KMS) custody -- see README.
+        if vin_master_key is not None:
+            if len(vin_master_key) != 32:
+                raise ValueError("vin_master_key must be 32 bytes (AES-256)")
+            self.vin_master_key = bytes(vin_master_key)
+        else:
+            self.vin_master_key = AESGCM.generate_key(bit_length=256)
+        self.vin_encryption_keys = {}  # vehicle_identity -> derived AES-256 key
 
         # Update metrics
         self.metrics.signature_algorithm = "ECDSA-secp256k1"
@@ -216,33 +234,69 @@ class MOBIVIDProvider(IdentityProvider):
 
         return vin_hash
 
-    def _encrypt_vin(self, vin: str, owner_public_key: bytes) -> str:
+    # HKDF label + GCM nonce size for the VIN cipher.
+    _VIN_KDF_INFO = b"MOBI-VID/VIN/AES-256-GCM/v1"
+    _VIN_NONCE_BYTES = 12
+
+    def _derive_vin_key(self, vehicle_identity: str) -> bytes:
         """
-        Encrypt VIN with owner's public key.
+        Per-vehicle AES-256 key = HKDF-SHA256(master_key, salt=vehicle_identity).
 
-        In production, use owner's public key for asymmetric encryption.
-        For simplicity, using symmetric encryption with a generated key.
+        Deterministic in the vehicle identity, so an authorized party holding
+        the provider's master key can always reconstruct the exact key needed
+        to decrypt a given vehicle's VIN.
         """
-        # Generate encryption key
-        key = AESGCM.generate_key(bit_length=256)
-        aesgcm = AESGCM(key)
+        return HKDF(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=vehicle_identity.encode('utf-8'),
+            info=self._VIN_KDF_INFO,
+        ).derive(self.vin_master_key)
 
-        # Encrypt
-        nonce = secrets.token_bytes(12)
-        ciphertext = aesgcm.encrypt(nonce, vin.encode('utf-8'), None)
+    def _encrypt_vin(self, vin: str, vehicle_identity: str) -> str:
+        """
+        Authenticated VIN encryption (AES-256-GCM).
 
-        # Combine nonce + ciphertext and encode as hex
-        encrypted = nonce + ciphertext
+        The key is derived from the provider's master key (see `__init__`),
+        never discarded, and cached in `self.vin_encryption_keys` for the
+        authorized holder. The vehicle identity is bound in as GCM associated
+        data so a ciphertext cannot be replayed onto another vehicle's record.
+        Returns hex(nonce || ciphertext || tag) — no plaintext VIN or key is
+        emitted, so the on-chain artifact stays confidential.
+        """
+        key = self._derive_vin_key(vehicle_identity)
+        self.vin_encryption_keys[vehicle_identity] = key
 
-        # Store key for this vehicle (in production, encrypt key with owner's public key)
-        # For now, store in memory
-        return encrypted.hex()
+        nonce = secrets.token_bytes(self._VIN_NONCE_BYTES)
+        aad = vehicle_identity.encode('utf-8')
+        ciphertext = AESGCM(key).encrypt(nonce, vin.encode('utf-8'), aad)
+        return (nonce + ciphertext).hex()
 
     def _decrypt_vin(self, encrypted_vin_hex: str, vehicle_identity: str) -> str:
-        """Decrypt VIN (for authorized users only)"""
-        # In production, use private key to decrypt
-        # For now, this is a placeholder
-        return "[ENCRYPTED_VIN]"
+        """
+        Recover the VIN for an authorized party (holder of the master key).
+
+        Raises `cryptography.exceptions.InvalidTag` if the ciphertext was
+        tampered with, the wrong key is used, or the associated data does not
+        match the vehicle identity.
+        """
+        key = self.vin_encryption_keys.get(vehicle_identity)
+        if key is None:
+            key = self._derive_vin_key(vehicle_identity)
+
+        blob = bytes.fromhex(encrypted_vin_hex)
+        nonce = blob[:self._VIN_NONCE_BYTES]
+        ciphertext = blob[self._VIN_NONCE_BYTES:]
+        aad = vehicle_identity.encode('utf-8')
+        return AESGCM(key).decrypt(nonce, ciphertext, aad).decode('utf-8')
+
+    def export_vin_key(self, vehicle_identity: str) -> bytes:
+        """
+        Export the per-vehicle AES-256 key so an authorized verifier can
+        decrypt this vehicle's VIN out-of-band. Deriving it requires the
+        provider's master key, so this is an authorized-party operation.
+        """
+        return self._derive_vin_key(vehicle_identity)
 
     # ============ VEHICLE BIRTH REGISTRATION (MOBI VID I) ============
 
@@ -282,9 +336,8 @@ class MOBIVIDProvider(IdentityProvider):
         vin_hash = self._hash_vin(vin, vehicle_identity)
         vin_hash_bytes32 = Web3.to_bytes(hexstr=vin_hash.hex())
 
-        # Encrypt VIN
-        owner_pub_key = b""  # Placeholder
-        encrypted_vin = self._encrypt_vin(vin, owner_pub_key)
+        # Encrypt VIN (AES-256-GCM, per-vehicle key bound to the identity)
+        encrypted_vin = self._encrypt_vin(vin, vehicle_identity)
 
         # Create complete birth certificate
         complete_birth_cert = {
