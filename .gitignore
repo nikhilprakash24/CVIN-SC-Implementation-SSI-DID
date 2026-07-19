@@ -6,3 +6,7 @@ cv2x-testbed/scripts/comparison_results.json
 
 # Security-analysis generated matrices are reproducible; keep committed copies
 # (thesis artifacts). Transient node_modules etc. already ignored above.
+
+# Sepolia validation output is environment-specific (generated per run);
+# the real public-testnet witness is committed deliberately, not the local dry-run.
+4_comparison-framework/results/sepolia_validation.json
