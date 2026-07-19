@@ -2,6 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "./MOBIVIDRegistry.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
 /**
  * @title MOBI VID Registry V2
@@ -295,9 +297,24 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
      * @dev Attest to an event
      * Allows multiple parties to sign off on an event
      *
+     * The attester must sign the domain-separated attestation digest
+     *
+     *     keccak256(abi.encodePacked(
+     *         address(this), block.chainid, vehicleIdentity, eventId))
+     *
+     * wrapped with the EIP-191 ("\x19Ethereum Signed Message:\n32") prefix.
+     * The signature is recovered on-chain and MUST match msg.sender.
+     *
+     * SECURITY (before/after): earlier revisions stored `signature` verbatim
+     * and NEVER verified it on-chain (no ecrecover) — the call was gated only
+     * by the attester's role, so any role-holder could record a garbage or
+     * forged attestation signature (a replay/forgery gap). This revision binds
+     * the signature to this contract, this chain, the vehicle and the event,
+     * and rejects anything that does not recover to the attester.
+     *
      * @param eventId Event to attest
      * @param vehicleIdentity Vehicle DID
-     * @param signature Signature of event data
+     * @param signature EIP-191 signature over the attestation digest, by msg.sender
      */
     function attestEvent(
         bytes32 eventId,
@@ -314,6 +331,20 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
             authorizedIssuers[msg.sender] != IssuerRole.NONE,
             "Not authorized to attest"
         );
+
+        // ---- On-chain attestation signature verification (security fix) ----
+        // Bind the signature to (contract, chain, vehicle, event) to stop
+        // cross-contract / cross-chain replay, then recover the signer.
+        // OpenZeppelin ECDSA.recover enforces EIP-2 low-s malleability and
+        // rejects the zero address (it reverts on a malformed signature).
+        bytes32 attestationHash = keccak256(
+            abi.encodePacked(address(this), block.chainid, vehicleIdentity, eventId)
+        );
+        address recovered = ECDSA.recover(
+            MessageHashUtils.toEthSignedMessageHash(attestationHash),
+            signature
+        );
+        require(recovered == msg.sender, "Invalid attestation signature");
 
         // Create attestation
         EventAttestation memory attestation = EventAttestation({

@@ -5,7 +5,7 @@
     "ozVersion": "5.0.2",
     "network": "hardhat-local",
     "chainId": 31337,
-    "date": "2026-07-14T02:43:35.009Z",
+    "date": "2026-07-19T21:09:18.398Z",
     "categories": [
       "impersonation",
       "replay",
@@ -291,9 +291,9 @@
         "method": "executed"
       },
       "replay": {
-        "outcome": "PARTIAL",
-        "mechanism": "no signed meta-tx on the identity path (role-gated direct calls); attestEvent stores a signature blob that is NEVER verified on-chain (no ecrecover) — a replay/forgery gap for attestations",
-        "evidence": "birth/ownership ops carry no replayable in-contract signature; attestEvent signatures are unvalidated and could be replayed/forged (only gated by attester role).",
+        "outcome": "DEFENDED",
+        "mechanism": "identity path is role-gated direct calls (no replayable signature); attestEvent now verifies the attester signature on-chain (ecrecover over a domain-separated digest binding contract address, chainId, vehicle, and eventId) — forged and cross-context replayed attestations revert",
+        "evidence": "birth/ownership ops carry no replayable in-contract signature; attestEvent forgery/replay is now rejected on-chain (was previously an unverified-signature gap, now fixed with a before/after test).",
         "method": "reasoned"
       },
       "identity_theft": {

@@ -731,13 +731,17 @@ async function scenarioMOBI(signers) {
     await reg.registerVehicleBirth(vehicleIdentity, vinHash, encVIN, certHash, firstOwner.address, "0x")
   ).wait();
 
-  // replay: MOBI VID layer has no signed meta-tx; attestEvent stores an
-  // UNVERIFIED signature blob (a finding) but the birth/transfer path is
-  // direct-call + role gated.
+  // replay: the identity path (birth/transfer) is role-gated direct calls
+  // with no replayable in-contract signature. attestEvent previously stored
+  // an UNVERIFIED signature blob (a finding surfaced by this analysis); it
+  // now verifies the attester signature on-chain over a domain-separated
+  // digest (address(this) + chainid + vehicle + eventId, EIP-191, OZ ECDSA
+  // low-s), which closes the forgery/replay gap. See the before/after test
+  // in test/MOBIVID/MOBIVIDRegistry.test.js.
   out.replay = cell(
-    "PARTIAL",
-    "no signed meta-tx on the identity path (role-gated direct calls); attestEvent stores a signature blob that is NEVER verified on-chain (no ecrecover) — a replay/forgery gap for attestations",
-    "birth/ownership ops carry no replayable in-contract signature; attestEvent signatures are unvalidated and could be replayed/forged (only gated by attester role).",
+    "DEFENDED",
+    "identity path is role-gated direct calls (no replayable signature); attestEvent now verifies the attester signature on-chain (ecrecover over a domain-separated digest binding contract address, chainId, vehicle, and eventId) — forged and cross-context replayed attestations revert",
+    "birth/ownership ops carry no replayable in-contract signature; attestEvent forgery/replay is now rejected on-chain (was previously an unverified-signature gap, now fixed with a before/after test).",
     "reasoned"
   );
 

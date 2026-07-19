@@ -61,6 +61,18 @@ function extractEventId(registry, receipt) {
   throw new Error("LifecycleEventRecorded not emitted");
 }
 
+// Domain-separated attestation signature, EIP-191 wrapped, byte-identical to
+// what MOBIVIDRegistryV2.attestEvent recovers on-chain:
+//   keccak256(abi.encodePacked(address(this), block.chainid, vehicleIdentity, eventId))
+// then the "\x19Ethereum Signed Message:\n32" prefix (signer.signMessage).
+async function attestationSignature(registry, chainId, vehicleAddress, eventId, signer) {
+  const inner = ethers.solidityPackedKeccak256(
+    ["address", "uint256", "address", "bytes32"],
+    [await registry.getAddress(), chainId, vehicleAddress, eventId]
+  );
+  return await signer.signMessage(ethers.getBytes(inner));
+}
+
 describe("MOBI VID Registry V1 (birth certificates)", function () {
   async function deployV1Fixture() {
     const [authority, manufacturer, firstOwner, secondOwner, vehicle, outsider] =
@@ -332,7 +344,7 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
   });
 
   describe("attestEvent", function () {
-    it("lets other authorized parties attest to an event", async function () {
+    it("lets other authorized parties attest to an event (valid signatures)", async function () {
       const { registry, serviceCenter, dmv, inspection, vehicle } =
         await loadFixture(deployV2Fixture);
 
@@ -340,19 +352,70 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
         vehicle.address, EventType.MAINTENANCE, 12000, DATA_HASH, CRED_HASH, "BC-CAN"
       );
       const eventId = extractEventId(registry, await tx.wait());
+      const chainId = (await ethers.provider.getNetwork()).chainId;
 
-      const sig = ethers.toUtf8Bytes("0xsignature-placeholder");
-      const attestTx = await registry.connect(dmv).attestEvent(eventId, vehicle.address, sig);
+      const dmvSig = await attestationSignature(registry, chainId, vehicle.address, eventId, dmv);
+      const attestTx = await registry.connect(dmv).attestEvent(eventId, vehicle.address, dmvSig);
       const attestReceipt = await attestTx.wait();
-      console.log(`        gas(V2 attestEvent): ${attestReceipt.gasUsed}`);
+      console.log(`        gas(V2 attestEvent, with ecrecover): ${attestReceipt.gasUsed}`);
       await expect(attestTx).to.emit(registry, "EventAttested");
-      await registry.connect(inspection).attestEvent(eventId, vehicle.address, sig);
+
+      const inspectionSig = await attestationSignature(registry, chainId, vehicle.address, eventId, inspection);
+      await registry.connect(inspection).attestEvent(eventId, vehicle.address, inspectionSig);
 
       const attestations = await registry.getEventAttestations(eventId);
       expect(attestations.length).to.equal(2);
       expect(attestations[0].attester).to.equal(dmv.address);
       expect(attestations[0].role).to.equal(BigInt(IssuerRole.GOVERNMENT_DMV));
       expect(attestations[1].attester).to.equal(inspection.address);
+    });
+
+    it("verifies the attestation signature on-chain: rejects forged / invalid / replayed signatures (SECURITY before/after)", async function () {
+      // BEFORE this fix, attestEvent stored the `signature` blob verbatim with
+      // NO ecrecover: gated only by the attester's role, a role-holder could
+      // record a garbage or forged attestation signature (a replay/forgery
+      // gap). AFTER the fix the signature is bound to (contract, chain,
+      // vehicle, event) and MUST recover to msg.sender.
+      const { registry, serviceCenter, dmv, inspection, vehicle } =
+        await loadFixture(deployV2Fixture);
+
+      const tx = await registry.connect(serviceCenter).recordLifecycleEvent(
+        vehicle.address, EventType.MAINTENANCE, 12000, DATA_HASH, CRED_HASH, "BC-CAN"
+      );
+      const eventId = extractEventId(registry, await tx.wait());
+      const chainId = (await ethers.provider.getNetwork()).chainId;
+
+      // (1) A valid signature by the attester (dmv) is accepted.
+      const validSig = await attestationSignature(registry, chainId, vehicle.address, eventId, dmv);
+      await expect(registry.connect(dmv).attestEvent(eventId, vehicle.address, validSig))
+        .to.emit(registry, "EventAttested");
+
+      // (2) Garbage bytes (the previous placeholder style) now revert
+      //     (OZ ECDSA: ECDSAInvalidSignatureLength).
+      const garbage = ethers.toUtf8Bytes("0xsignature-placeholder");
+      await expect(
+        registry.connect(dmv).attestEvent(eventId, vehicle.address, garbage)
+      ).to.be.reverted;
+
+      // (3) A well-formed signature by the WRONG key (a role-holder forging
+      //     another party's attestation) reverts.
+      const forged = await attestationSignature(registry, chainId, vehicle.address, eventId, inspection);
+      await expect(
+        registry.connect(dmv).attestEvent(eventId, vehicle.address, forged)
+      ).to.be.revertedWith("Invalid attestation signature");
+
+      // (4) A valid dmv signature for a DIFFERENT event (replay) reverts,
+      //     because the digest binds the exact eventId.
+      const otherId = ethers.keccak256(ethers.toUtf8Bytes("some-other-event"));
+      const replay = await attestationSignature(registry, chainId, vehicle.address, otherId, dmv);
+      await expect(
+        registry.connect(dmv).attestEvent(eventId, vehicle.address, replay)
+      ).to.be.revertedWith("Invalid attestation signature");
+
+      // Only the single valid attestation from (1) was recorded.
+      const attestations = await registry.getEventAttestations(eventId);
+      expect(attestations.length).to.equal(1);
+      expect(attestations[0].attester).to.equal(dmv.address);
     });
 
     it("rejects attestations from unauthorized parties and for unknown events", async function () {

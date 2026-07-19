@@ -220,21 +220,45 @@ class LifecycleEventRecorder:
     # ------------------------------------------------------------------
 
     @staticmethod
-    def attestation_signature(event_id: bytes,
+    def attestation_digest(contract_address: str, chain_id: int,
+                           vehicle_identity: str, event_id: bytes) -> bytes:
+        """
+        Domain-separated attestation digest, byte-for-byte identical to the
+        hash recovered on-chain in MOBIVIDRegistryV2.attestEvent:
+
+            keccak256(abi.encodePacked(
+                address(this), block.chainid, vehicleIdentity, eventId))
+
+        Binding the attester's signature to (contract, chain, vehicle, event)
+        prevents cross-contract and cross-chain replay of an attestation.
+        """
+        return bytes(Web3.solidity_keccak(
+            ["address", "uint256", "address", "bytes32"],
+            [Web3.to_checksum_address(contract_address), int(chain_id),
+             Web3.to_checksum_address(vehicle_identity), event_id]))
+
+    def attestation_signature(self, event_id: bytes, vehicle_identity: str,
                               attester: LocalAccount) -> bytes:
         """
-        EIP-191 personal-sign over the event id. Any verifier can recover
-        the attester address from this signature and compare it against
-        the on-chain attestation record.
+        EIP-191 personal-sign over the domain-separated attestation digest.
+        The contract recovers the signer on-chain (ecrecover) and requires it
+        to equal the attester (msg.sender); any verifier can independently
+        recover it and compare against the on-chain attestation record.
         """
-        message = encode_defunct(event_id)
-        signed = Account.sign_message(message, attester.key)
+        digest = self.attestation_digest(
+            self.registry.address, self.registry.chain_id(),
+            vehicle_identity, event_id)
+        signed = Account.sign_message(encode_defunct(digest), attester.key)
         return bytes(signed.signature)
 
-    @staticmethod
-    def recover_attester(event_id: bytes, signature: bytes) -> str:
+    @classmethod
+    def recover_attester(cls, contract_address: str, chain_id: int,
+                         vehicle_identity: str, event_id: bytes,
+                         signature: bytes) -> str:
         """Recover the address that produced an attestation signature."""
-        return Account.recover_message(encode_defunct(event_id),
+        digest = cls.attestation_digest(
+            contract_address, chain_id, vehicle_identity, event_id)
+        return Account.recover_message(encode_defunct(digest),
                                        signature=signature)
 
     def attest_event(self, event_id: bytes, vehicle_identity: str,
@@ -242,11 +266,13 @@ class LifecycleEventRecorder:
                      ) -> Dict[str, Any]:
         """
         Attest to an existing event (multi-party sign-off). The attester
-        must hold ANY authorized role on-chain; the signature binds their
-        key to the event id.
+        must hold ANY authorized role on-chain; the signature binds their key
+        to (this contract, this chain, the vehicle, the event) and is verified
+        on-chain via ecrecover.
         """
         acct = attester or self.account
-        signature = self.attestation_signature(event_id, acct)
+        signature = self.attestation_signature(
+            event_id, vehicle_identity, acct)
         receipt = self.registry.attest_event(
             attester=acct, event_id=event_id,
             vehicle_identity=vehicle_identity, signature=signature)
@@ -314,7 +340,8 @@ class VehicleHistoryAggregator:
                 }
 
             if verify:
-                entry["attestations"] = self._verified_attestations(event_id)
+                entry["attestations"] = self._verified_attestations(
+                    vehicle_identity, event_id)
 
             events.append(entry)
 
@@ -360,12 +387,14 @@ class VehicleHistoryAggregator:
 
         return report
 
-    def _verified_attestations(self, event_id: bytes) -> List[Dict[str, Any]]:
+    def _verified_attestations(self, vehicle_identity: str,
+                               event_id: bytes) -> List[Dict[str, Any]]:
         out = []
         for att in self.registry.get_event_attestations(event_id):
             try:
                 recovered = LifecycleEventRecorder.recover_attester(
-                    event_id, att["signature"])
+                    self.registry.address, self.registry.chain_id(),
+                    vehicle_identity, event_id, att["signature"])
                 sig_ok = recovered.lower() == att["attester"].lower()
             except Exception:
                 sig_ok = False

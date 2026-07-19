@@ -330,13 +330,15 @@ class TestLifecycleEvents:
         assert [e["odometer"] for e in odo] == [12000, 15500, 15500]
 
     def test_attestation_recorded_and_signature_recoverable(
-            self, registry, accounts, lifecycle):
+            self, registry, accounts, vehicle, lifecycle):
         event_id = lifecycle["events"]["maintenance"]["eventId"]
         atts = registry.get_event_attestations(event_id)
         assert len(atts) == 1
         assert atts[0]["attester"] == accounts["dmv"].address
         assert atts[0]["role"] == IssuerRole.GOVERNMENT_DMV
+        # Domain-separated digest: bound to (contract, chain, vehicle, event).
         recovered = LifecycleEventRecorder.recover_attester(
+            registry.address, registry.chain_id(), vehicle.address,
             event_id, atts[0]["signature"])
         assert recovered == accounts["dmv"].address
 
@@ -428,6 +430,31 @@ class TestNegativePaths:
         with pytest.raises((ContractLogicError, Web3RPCError, ValueError),
                            match="Not authorized"):
             recorder.attest_event(event_id, vehicle.address)
+
+    def test_forged_attestation_signature_rejected_on_chain(
+            self, registry, accounts, vehicle, lifecycle):
+        # SECURITY (before/after): a role-holder (DMV, authorized to attest)
+        # submits a structurally-valid signature that was produced by a
+        # DIFFERENT key, so it recovers to first_owner, not the DMV sending
+        # the tx. BEFORE the fix attestEvent stored any signature blob verbatim
+        # (no ecrecover) and this succeeded; AFTER the fix the on-chain
+        # signature check recovers the signer and rejects the mismatch.
+        from eth_account.messages import encode_defunct
+
+        event_id = lifecycle["events"]["accident"]["eventId"]
+        dmv = accounts["dmv"]                 # authorized -> role gate passes
+        wrong_signer = accounts["first_owner"]
+
+        digest = LifecycleEventRecorder.attestation_digest(
+            registry.address, registry.chain_id(), vehicle.address, event_id)
+        forged = bytes(Account.sign_message(
+            encode_defunct(digest), wrong_signer.key).signature)
+
+        with pytest.raises((ContractLogicError, Web3RPCError, ValueError),
+                           match="Invalid attestation signature"):
+            registry.attest_event(attester=dmv, event_id=event_id,
+                                  vehicle_identity=vehicle.address,
+                                  signature=forged)
 
     def test_tampered_vc_fails_verification(self, registry, vehicle,
                                             lifecycle):

@@ -357,8 +357,16 @@ async function benchmarkMOBIVIDV2(signers) {
 
   // Setup: authorize a second issuer (deployer as DEALER) to attest (not counted).
   await (await registry.authorizeIssuer(deployer.address, 2 /* DEALER */)).wait();
+  // attestEvent now verifies the attester's signature on-chain (domain-separated
+  // digest: address(this) + chainId + vehicle + eventId, EIP-191 wrapped).
+  const attestChainId = (await ethers.provider.getNetwork()).chainId;
+  const attestInner = ethers.solidityPackedKeccak256(
+    ["address", "uint256", "address", "bytes32"],
+    [await registry.getAddress(), attestChainId, vehicleIdentity, eventId]
+  );
+  const attestSig = await deployer.signMessage(ethers.getBytes(attestInner));
   const attestGas = await gasOf(
-    registry.attestEvent(eventId, vehicleIdentity, "0x" + "ab".repeat(65))
+    registry.attestEvent(eventId, vehicleIdentity, attestSig)
   );
 
   // Also measure the inherited ERC-1056 addDelegate for cross-standard comparability.

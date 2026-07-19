@@ -1024,11 +1024,22 @@ describe("Security / MOBI-VID-V2 (MOBIVIDRegistryV2)", function () {
     const eventIds = await registry.getVehicleEvents(vehicle);
     const eventId = eventIds[0];
     await (await registry.authorizeIssuer(dealer.address, 2 /* DEALER */)).wait();
+    // Attacker is unauthorized: the role gate (`authorizedIssuers != NONE`)
+    // reverts before the signature is ever checked, so a garbage blob is fine
+    // to prove the defense here.
     const r = await H.attempt(() =>
       registry.connect(attacker).attestEvent(eventId, vehicle, "0x" + "ab".repeat(65))
     );
+    // Control: the authorized dealer must supply a VALID attestation signature.
+    // attestEvent now verifies the signature on-chain (ecrecover, bound to
+    // contract/chain/vehicle/event), so the legitimate path signs the digest.
+    const chainId = (await ethers.provider.getNetwork()).chainId;
+    const dealerSig = await dealer.signMessage(ethers.getBytes(
+      ethers.solidityPackedKeccak256(
+        ["address", "uint256", "address", "bytes32"],
+        [await registry.getAddress(), chainId, vehicle, eventId])));
     const ctl = await H.control(() =>
-      registry.connect(dealer).attestEvent(eventId, vehicle, "0x" + "cd".repeat(65))
+      registry.connect(dealer).attestEvent(eventId, vehicle, dealerSig)
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(ctl).to.equal("PASS");

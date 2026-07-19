@@ -239,7 +239,7 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
 | ERC-1155 | ✓ | n/a* | **✓** (soulbound) | ✓ | ◐ | ✗ |
 | ERC-4337 | ✓ | ✓ | ◐ | ◐ | **✓** (guardian) | ◐ |
 | LSP8 | ✓ | n/a* | ✗ | ✓ | ◐ | ✗ |
-| MOBI-VID-V2 | ✓ | ◐* | ◐ | ✓ | ✗* | **✓** (hashed VIN) |
+| MOBI-VID-V2 | ✓ | ✓ | ◐ | ✓ | ✗* | **✓** (hashed VIN) |
 | CVIN-Combined | ✓ | ◐ | ◐ | ✗ | ✗* | ◐ |
 | W3C VC/VP (off-chain) | ✓ | ✓ | ✓ | ◐ | ◐ | ✓ |
 
@@ -272,10 +272,19 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
    VIN-embedding `did:mobi:<VIN>` method, which the resolver defines but
    the on-chain layer correctly avoids — flagged as a privacy footgun).
 
-5. **Source-level finding (new):** MOBI VID's `attestEvent` stores an
-   attestation signature that is **never verified on-chain** (no
-   `ecrecover`), gated only by attester role — a replay/forgery gap
-   recorded for the security chapter and the future-work list.
+5. **Source-level finding, found and fixed.** This analysis surfaced that
+   MOBI VID's `attestEvent` originally stored an attestation signature
+   that was **never verified on-chain** (no `ecrecover`), gated only by
+   attester role — a replay/forgery gap. It was then **fixed**:
+   `attestEvent` now recovers the attester from the signature over a
+   domain-separated digest (contract address + chainId + vehicle +
+   eventId, EIP-191, OZ ECDSA low-s) and reverts on mismatch. A
+   before/after test (`test/MOBIVID/MOBIVIDRegistry.test.js`) confirms a
+   valid attestation succeeds while forged, wrong-key, and replayed
+   signatures revert. Cost: attestEvent rose from **121,110 → 192,718
+   gas** (the added `ecrecover` + storing a real 65-byte signature) — the
+   security/performance trade-off made concrete. This flipped the MOBI
+   `Replay` cell from ◐ to ✓ in the matrix above.
 
 ---
 
