@@ -24,19 +24,26 @@ wall-clock medians/percentiles over the sample sizes stated.
 | V2V simulation | 50 vehicles, 10 Hz BSM, 300 m radius | `v2v_latency.json` |
 | Signature backend | secp256k1 (coincurve), ECDSA P-256 (cryptography) | `sumo/README.md` |
 
-The nine standards and the exact contract measured for each:
+The nine standards, plus the MOBI VID application profile measured
+alongside them, and the exact contract for each:
 
 | Standard | Contract |
 |---|---|
 | ERC-1056 | `ERC1056/EthereumDIDRegistry.sol` |
 | ERC-721 | `ERC721/CVINVehicleNFT.sol` |
 | ERC-725 | `ERC725/CVIN_DID_ERC725.sol` |
+| ERC-725xy | `ERC725xy/CVINVehicleERC725XY.sol` (full ERC-725 X+Y account) |
 | ERC-735 | `ERC735/CVINVehicleClaimHolder.sol` |
 | ERC-1155 | `ERC1155/CVINVehicleCredential1155.sol` |
 | ERC-4337 | `ERC4337/CVINVehicleAccount.sol` + `CVINMinimalEntryPoint.sol` |
 | LSP8 | `LSP8/CVINVehicleLSP8.sol` |
-| MOBI VID | `MOBI/MOBIVIDRegistryV2.sol` |
 | CVIN-Combined | `CVINCombined/CVINCombinedIdentity.sol` |
+| MOBI VID (profile) | `MOBI/MOBIVIDRegistryV2.sol` |
+
+All nine standards now have an on-chain contract and a measured gas row;
+ERC-725xy — the full ERC-725X (generic executor) + ERC-725Y (data store)
+account — was added in Stage 0.8, closing the one gap where the earlier
+"nine standards" claim had rested on the MOBI VID profile filling the slot.
 
 ---
 
@@ -61,13 +68,17 @@ Exact `receipt.gasUsed` per standard for an identical operation set. "—"
 | ERC-721 | 542,429 | 119,753 | 48,306 | 27,685 | 174,707 |
 | ERC-4337 | 768,204 | 49,366 | 47,560 | 25,432 | 28,561 |
 | ERC-735 | 1,404,108 | 75,151 | 290,249 | 72,100 | 28,704 |
+| ERC-725xy | 1,704,992 | 49,950 | — | — | 28,839 |
 
 **Findings (RQ1):**
 
-1. **Identity-creation cost spans 27×** across the nine standards, from
-   52,178 gas (CVIN-Combined) to 1,404,108 gas (ERC-735). The minimal
+1. **Identity-creation cost spans ~33×** across the nine standards, from
+   52,178 gas (CVIN-Combined) to 1,704,992 gas (ERC-725xy). The minimal
    event-log designs (ERC-1056, CVIN-Combined) are the cheapest; the
-   claim-holder and NFT designs are the most expensive.
+   full smart-account designs (ERC-725xy's X+Y account, ERC-4337) and the
+   claim-holder (ERC-735) are the most expensive — ERC-725xy is the
+   heaviest because each identity deploys a complete generic-executor +
+   data-store contract.
 
 2. **ERC-1056 vs. NFT/proxy designs**: creating an identity costs
    ~10.3× more on ERC-721 (542,429) and ERC-725 (528,647) than on
