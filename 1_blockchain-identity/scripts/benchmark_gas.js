@@ -9,6 +9,7 @@
  *   - ERC-1056     : contracts/ERC1056/EthereumDIDRegistry.sol
  *   - ERC-721      : contracts/ERC721/CVINVehicleNFT.sol
  *   - ERC-725      : contracts/ERC725/CVIN_DID_ERC725.sol (CVIN_SCBasedAccOrID_DID_ERC725Basic)
+ *   - ERC-725xy    : contracts/ERC725xy/CVINVehicleERC725XY.sol (full ERC-725 X + Y smart account)
  *   - ERC-735      : contracts/ERC735/CVINVehicleClaimHolder.sol
  *   - ERC-1155     : contracts/ERC1155/CVINVehicleCredential1155.sol
  *   - ERC-4337     : contracts/ERC4337/CVINVehicleAccount.sol + CVINMinimalEntryPoint.sol
@@ -238,6 +239,55 @@ async function benchmarkERC725(signers) {
     await gasOf(identityContract.transferOwnership(newOwner.address)),
     1,
     "transferOwnership of the identity contract to the new vehicle owner."
+  );
+
+  return results;
+}
+
+// ---------------------------------------------------------------------------
+// ERC-725xy (CVINVehicleERC725XY: full ERC-725 X + Y smart account)
+// ---------------------------------------------------------------------------
+
+async function benchmarkERC725XY(signers) {
+  const [, identityOwner, , newOwner] = signers;
+  const results = {};
+
+  results.deployRegistry = unsupported(
+    "No shared registry in ERC-725: each identity is its own ERC-725 smart-account contract. Deployment cost is counted under createIdentity."
+  );
+
+  const Factory = await ethers.getContractFactory("CVINVehicleERC725XY", identityOwner);
+  const { contract: account, gasUsed: deployGas } = await deployWithGas(
+    Factory,
+    identityOwner.address // initialOwner
+  );
+  results.createIdentity = op(
+    deployGas,
+    1,
+    "Per-vehicle ERC-725 (X+Y) smart-account deployment (proxy account); constructor sets the deployer as owner/controlling key. Paid once per identity. Heavier than the ERC-725 'basic' variant because it bundles the full ERC-725X generic executor and ERC-725Y data store."
+  );
+
+  // updateAttribute = ERC-725Y setData writing the VIN attribute (cold slot first write).
+  const vinKey = await account.VIN_KEY();
+  const vinValue = ethers.toUtf8Bytes("1HGCM82633A004352"); // 17 bytes
+  results.updateAttribute = op(
+    await gasOf(account.setData(vinKey, vinValue)),
+    1,
+    "ERC-725Y setData(bytes32,bytes): writes the vehicle VIN attribute into the generic key/value store (cold slot first write, DataChanged event)."
+  );
+
+  results.addDelegateOrClaim = unsupported(
+    "ERC-725 has no native delegate or on-chain claim model. Verification-key delegation lives in ERC-1056 and on-chain claims in the companion ERC-735 claim holder (both benchmarked separately)."
+  );
+
+  results.revoke = unsupported(
+    "ERC-725 has no identity-level revocation primitive: the account contract persists. Individual attributes can be cleared via setData(key, \"0x\") and control can be renounced via renounceOwnership, but neither is a standard revoke operation."
+  );
+
+  results.transferOwnership = op(
+    await gasOf(account.transferOwnership(newOwner.address)),
+    1,
+    "transferOwnership of the ERC-725 account = controlling-key rotation; the identity (account address) is unchanged."
   );
 
   return results;
@@ -774,6 +824,9 @@ async function main() {
   console.log("Benchmarking ERC-725 (CVIN_SCBasedAccOrID_DID_ERC725Basic)...");
   results["ERC-725"] = await benchmarkERC725(signers);
 
+  console.log("Benchmarking ERC-725xy (CVINVehicleERC725XY, full ERC-725 X+Y)...");
+  results["ERC-725xy"] = await benchmarkERC725XY(signers);
+
   console.log("Benchmarking ERC-735 (CVINVehicleClaimHolder)...");
   results["ERC-735"] = await benchmarkERC735(signers);
 
@@ -814,6 +867,7 @@ async function main() {
         "ERC-1056": "contracts/ERC1056/EthereumDIDRegistry.sol:EthereumDIDRegistry",
         "ERC-721": "contracts/ERC721/CVINVehicleNFT.sol:CVINVehicleNFT",
         "ERC-725": "contracts/ERC725/CVIN_DID_ERC725.sol:CVIN_SCBasedAccOrID_DID_ERC725Basic",
+        "ERC-725xy": "contracts/ERC725xy/CVINVehicleERC725XY.sol:CVINVehicleERC725XY (full ERC-725 X+Y smart account)",
         "ERC-735": "contracts/ERC735/CVINVehicleClaimHolder.sol:CVINVehicleClaimHolder",
         "ERC-1155": "contracts/ERC1155/CVINVehicleCredential1155.sol:CVINVehicleCredential1155",
         "ERC-4337": "contracts/ERC4337/CVINVehicleAccount.sol:CVINVehicleAccount + contracts/ERC4337/CVINMinimalEntryPoint.sol:CVINMinimalEntryPoint",

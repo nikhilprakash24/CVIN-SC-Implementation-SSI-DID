@@ -2,7 +2,7 @@
 % Requires \usepackage{booktabs}.
 \begin{table}[htbp]
   \centering
-  \caption{Gas cost comparison of blockchain vehicle-identity standards (rows: standards, columns: lifecycle operations). Each cell reports the measured \texttt{gasUsed} of one representative transaction, with the relative cost versus the cheapest standard supporting that operation in parentheses. Measured on a local Hardhat network (chain id 31337) with Solidity 0.8.24 (optimizer enabled, 200 runs, via-IR) and OpenZeppelin Contracts 5.0.2, 2026-07-13. ``\textemdash'' denotes an operation not supported by the standard; for ERC-725, ERC-735 and ERC-4337 the per-identity contract deployment is counted as identity creation. ``Update via EP'' is the ERC-4337-only measurement of the same attribute update routed through the EntryPoint as a UserOperation (indirection overhead; bundler overhead excluded).}
+  \caption{Gas cost comparison of blockchain vehicle-identity standards (rows: standards, columns: lifecycle operations). Each cell reports the measured \texttt{gasUsed} of one representative transaction, with the relative cost versus the cheapest standard supporting that operation in parentheses. Measured on a local Hardhat network (chain id 31337) with Solidity 0.8.24 (optimizer enabled, 200 runs, via-IR) and OpenZeppelin Contracts 5.0.2, 2026-07-19. ``\textemdash'' denotes an operation not supported by the standard; for ERC-725, ERC-735 and ERC-4337 the per-identity contract deployment is counted as identity creation. ``Update via EP'' is the ERC-4337-only measurement of the same attribute update routed through the EntryPoint as a UserOperation (indirection overhead; bundler overhead excluded).}
   \label{tab:gas-comparison}
   \footnotesize
   \setlength{\tabcolsep}{4pt}
@@ -14,7 +14,8 @@
     ERC-1056 & 979,720 (2.13$\times$) & 52,612 (1.01$\times$) & 35,512 (1.01$\times$) & \textemdash & 54,853 (1.55$\times$) & 35,065 (1.38$\times$) & 51,764 (1.82$\times$) \\
     ERC-721 & 2,778,046 (6.03$\times$) & 542,429 (10.40$\times$) & 119,753 (3.41$\times$) & \textemdash & 48,306 (1.37$\times$) & 27,685 (1.09$\times$) & 174,707 (6.15$\times$) \\
     ERC-725 & \textemdash & 528,647 (10.13$\times$) & 137,107 (3.91$\times$) & \textemdash & 120,007 (3.40$\times$) & 43,410 (1.71$\times$) & 28,397 (1.00$\times$) \\
-    ERC-735 & \textemdash & 1,404,108 (26.91$\times$) & 75,151 (2.14$\times$) & \textemdash & 290,249 (8.23$\times$) & 72,100 (2.84$\times$) & 28,704 (1.01$\times$) \\
+    ERC-725xy & \textemdash & 1,704,992 (32.68$\times$) & 49,950 (1.42$\times$) & \textemdash & \textemdash & \textemdash & 28,839 (1.02$\times$) \\
+    ERC-735 & \textemdash & 1,404,108 (26.91$\times$) & 75,188 (2.14$\times$) & \textemdash & 290,212 (8.22$\times$) & 72,100 (2.84$\times$) & 28,704 (1.01$\times$) \\
     ERC-1155 & 2,314,487 (5.02$\times$) & 103,905 (1.99$\times$) & 49,156 (1.40$\times$) & \textemdash & 57,126 (1.62$\times$) & 30,641 (1.20$\times$) & 83,641 (2.95$\times$) \\
     ERC-4337 & 460,882 (1.00$\times$) & 768,204 (14.72$\times$) & 49,366 (1.41$\times$) & 96,228 (1.00$\times$) & 47,560 (1.35$\times$) & 25,432 (1.00$\times$) & 28,561 (1.01$\times$) \\
     LSP8 & 1,631,155 (3.54$\times$) & 149,352 (2.86$\times$) & 55,065 (1.57$\times$) & \textemdash & \textemdash & 41,877 (1.65$\times$) & 80,526 (2.84$\times$) \\

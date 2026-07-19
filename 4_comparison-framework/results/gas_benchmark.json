@@ -95,6 +95,38 @@
       "notes": "transferOwnership of the identity contract to the new vehicle owner."
     }
   },
+  "ERC-725xy": {
+    "deployRegistry": {
+      "gasUsed": null,
+      "txCount": 0,
+      "notes": "No shared registry in ERC-725: each identity is its own ERC-725 smart-account contract. Deployment cost is counted under createIdentity."
+    },
+    "createIdentity": {
+      "gasUsed": 1704992,
+      "txCount": 1,
+      "notes": "Per-vehicle ERC-725 (X+Y) smart-account deployment (proxy account); constructor sets the deployer as owner/controlling key. Paid once per identity. Heavier than the ERC-725 'basic' variant because it bundles the full ERC-725X generic executor and ERC-725Y data store."
+    },
+    "updateAttribute": {
+      "gasUsed": 49950,
+      "txCount": 1,
+      "notes": "ERC-725Y setData(bytes32,bytes): writes the vehicle VIN attribute into the generic key/value store (cold slot first write, DataChanged event)."
+    },
+    "addDelegateOrClaim": {
+      "gasUsed": null,
+      "txCount": 0,
+      "notes": "ERC-725 has no native delegate or on-chain claim model. Verification-key delegation lives in ERC-1056 and on-chain claims in the companion ERC-735 claim holder (both benchmarked separately)."
+    },
+    "revoke": {
+      "gasUsed": null,
+      "txCount": 0,
+      "notes": "ERC-725 has no identity-level revocation primitive: the account contract persists. Individual attributes can be cleared via setData(key, \"0x\") and control can be renounced via renounceOwnership, but neither is a standard revoke operation."
+    },
+    "transferOwnership": {
+      "gasUsed": 28839,
+      "txCount": 1,
+      "notes": "transferOwnership of the ERC-725 account = controlling-key rotation; the identity (account address) is unchanged."
+    }
+  },
   "ERC-735": {
     "deployRegistry": {
       "gasUsed": null,
@@ -107,12 +139,12 @@
       "notes": "Per-vehicle claim-holder contract deployment (constructor stores VIN + vinHash, deployer becomes owner). Paid once per identity."
     },
     "addDelegateOrClaim": {
-      "gasUsed": 290249,
+      "gasUsed": 290212,
       "txCount": 1,
       "notes": "addClaim (new claim, ClaimAdded): stores full signed claim on-chain after verifying the issuer's EIP-191 signature over (identity, topic, data) via ecrecover. Delegates are not part of ERC-735."
     },
     "updateAttribute": {
-      "gasUsed": 75151,
+      "gasUsed": 75188,
       "txCount": 1,
       "notes": "No key/attribute model in ERC-735. Measured closest analogue: re-adding a claim for the same (issuer, topic) updates it in place (ClaimChanged, warm same-size rewrite of data/signature/URI)."
     },
@@ -302,7 +334,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-07-13T00:32:43.436Z",
+    "date": "2026-07-19T20:39:57.819Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [
@@ -318,6 +350,7 @@
       "ERC-1056": "contracts/ERC1056/EthereumDIDRegistry.sol:EthereumDIDRegistry",
       "ERC-721": "contracts/ERC721/CVINVehicleNFT.sol:CVINVehicleNFT",
       "ERC-725": "contracts/ERC725/CVIN_DID_ERC725.sol:CVIN_SCBasedAccOrID_DID_ERC725Basic",
+      "ERC-725xy": "contracts/ERC725xy/CVINVehicleERC725XY.sol:CVINVehicleERC725XY (full ERC-725 X+Y smart account)",
       "ERC-735": "contracts/ERC735/CVINVehicleClaimHolder.sol:CVINVehicleClaimHolder",
       "ERC-1155": "contracts/ERC1155/CVINVehicleCredential1155.sol:CVINVehicleCredential1155",
       "ERC-4337": "contracts/ERC4337/CVINVehicleAccount.sol:CVINVehicleAccount + contracts/ERC4337/CVINMinimalEntryPoint.sol:CVINMinimalEntryPoint",
