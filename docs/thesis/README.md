@@ -18,53 +18,58 @@ thesis/
 
 ## Chapter Status
 
-| Chapter | Title | Status | Pages |
+The implementation is largely complete and Chapter 5 is backed by **measured
+data** (all figures traceable to committed artifacts): see the working draft
+at [`chapter5-results/`](chapter5-results/). Remaining work is public-testnet
+(Sepolia) validation, optional real-SUMO execution, and thesis writing.
+
+| Chapter | Title | Status | Pages (est.) |
 |---------|-------|--------|-------|
 | 1 | Introduction | 🔄 Draft | 15 |
 | 2 | Literature Review | 🔄 Draft | 30 |
 | 3 | Methodology | ✅ Complete | 25 |
 | 4 | Implementation | ✅ Complete | 40 |
-| 5 | Results | 🔄 In Progress | 35 |
+| 5 | Results | 🔄 Draft from measured artifacts (`chapter5-results/`) | 35 |
 | 6 | Discussion | ⏳ Planned | 20 |
 | 7 | Conclusion | ⏳ Planned | 10 |
 
-**Total**: ~175 pages (target: 150-200)
+**Total**: ~175 pages (target: 150-200; page counts are estimates)
 
 ## Key Contributions (Chapter 4-5)
 
 ### Implementation Contributions
-1. **9 Blockchain Identity Standards** - First comprehensive comparison for automotive
-2. **W3C Compliant System** - 89.6% compliance (exceeds industry average)
-3. **Real-time V2V Integration** - First working demo of blockchain identity + safety apps
-4. **MOBI VID Compliance** - Reference implementation
+1. **9 Blockchain Identity Standards + MOBI VID profile** - all implemented, tested (217 Hardhat tests), and gas-benchmarked on-chain
+2. **W3C Compliant System** - 93.2% measured compliance (executable checker, CI-gated ≥90%)
+3. **Real-time V2V Integration** - blockchain identity verified in the V2V message path with real cryptography (SSI warm verify 0.165 ms)
+4. **MOBI VID** - VID I birth certificate + VID II (11 lifecycle event types), on-chain `attestEvent` signature verification, AES-256-GCM VIN encryption
 
-### Experimental Results (Chapter 5)
-1. **Performance Comparison** - Detailed gas costs, latency measurements
-2. **Security Analysis** - Threat modeling and attack scenario testing
-3. **Usability Study** - 10 complete use case implementations
-4. **Scalability Testing** - SUMO simulation with 50 vehicles
+### Experimental Results (Chapter 5 — measured; see `chapter5-results/`)
+1. **Performance Comparison** - exact gas costs across all 9 standards (N=30, byte-identical, σ=0); ~33× spread
+2. **Security Analysis** - two complementary lenses: 54-scenario revert suite (43/43 applicable cells defended) + threat matrix
+3. **Use-Case Validation** - 12/12 lifecycle use cases with real cryptographic verification (forged/replayed credentials fail)
+4. **V2V Latency** - N=30 seeded runs, 50 vehicles, 10 Hz BSM; 1.65 M verifications; mobility simulated (no SUMO binary)
 
 ## Research Questions Addressed
 
 ### RQ1: Performance
 **Question**: How do different blockchain identity standards compare in transaction cost, latency, and throughput?
 
-**Answer**: ERC-1056 provides 10x gas savings over ERC-721 while maintaining security. Resolution time: 50-100ms (acceptable for non-critical operations).
+**Answer (measured, H1 supported)**: identity-creation gas spans ~33× across the nine standards (CVIN-Combined 52,178 → ERC-725xy 1,704,992). ERC-1056 (52,612) is ~10× cheaper than ERC-721 (542,429) and ERC-725 (528,647). ERC-4337 EntryPoint indirection adds 46,862 gas/op. Gas is deterministic (N=30, byte-identical, σ=0).
 
 ### RQ2: Security
 **Question**: Which architecture provides strongest security guarantees for V2X communication?
 
-**Answer**: Hybrid approach (ERC-1056 + ERC-735 claims) provides optimal balance of security and performance.
+**Answer (measured, H5 supported)**: no single standard dominates — standards occupy distinct points on the security/performance frontier. Only ERC-4337 offers genuine on-chain key recovery; ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that hashes + encrypts the VIN. The 54-scenario revert suite defends 43/43 applicable attack cells.
 
 ### RQ3: W3C Compliance
 **Question**: Can blockchain identity achieve W3C SSI compliance while meeting automotive requirements?
 
-**Answer**: Yes. Achieved 89.6% W3C compliance (DID Core: 75%, VC: 100%, SSI: 100%).
+**Answer (measured, H2 supported)**: Yes — **93.2%** measured (executable checker): DID Core v1.0 93.3% (13/15), VC Data Model v2.0 93.1% (27/29). The two deviations are documented and deliberate (canonical JSON vs URDNA2015; thesis-defined cryptosuite).
 
 ### RQ4: Real-Time Feasibility
 **Question**: Are blockchain identities viable for real-time safety-critical V2V?
 
-**Answer**: Partial. Suitable for non-critical V2V (BSM broadcasts). Safety-critical applications require hybrid PKI/blockchain approach.
+**Answer (measured, H3 supported)**: Yes for the cryptographic path. SSI warm verify is 0.165 ms [0.162, 0.168] (N=30) against the ~100 ms V2V budget (~600× margin); cold full-credential verify 0.400 ms. Caveat: excludes radio/MAC/network-stack latency; mobility is simulated.
 
 ## Writing Guidelines
 
@@ -87,14 +92,20 @@ thesis/
 
 ## Timeline
 
+Dates below are **proposed / TBD** — the earlier target dates have passed and
+no revised defense date is fixed in the repository. Implementation and the
+measured experimental results are done; remaining work is Sepolia validation,
+optional real-SUMO, and thesis writing.
+
 | Milestone | Target Date | Status |
 |-----------|-------------|--------|
-| Chapter 1-3 Draft | 2025-12-15 | 🔄 |
-| Implementation Complete | 2026-01-31 | ✅ |
-| Experimental Results | 2026-03-15 | 🔄 |
-| Full Draft | 2026-04-30 | ⏳ |
-| Committee Review | 2026-05-15 | ⏳ |
-| Final Defense | 2026-06-30 | ⏳ |
+| Implementation complete (9 standards + MOBI VID + testbed) | — | ✅ Done |
+| Experimental results (gas, V2V, W3C compliance, security) | — | ✅ Done (measured; `chapter5-results/`) |
+| Sepolia public-testnet validation run | TBD | ⏳ Harness exists (`validate_sepolia.js`); not yet executed |
+| Chapters 1-2 draft | TBD | 🔄 |
+| Full draft | TBD | ⏳ |
+| Committee review | TBD | ⏳ |
+| Final defense | TBD | ⏳ |
 
 ## Thesis Metrics (Target)
 
@@ -102,9 +113,8 @@ thesis/
 - **References**: 100+ (currently ~60)
 - **Figures**: 30-40
 - **Tables**: 20-30
-- **Code Files**: 50+ (currently 35)
-- **Test Cases**: 200+ (currently 150)
-- **Lines of Code**: 15,000+ (currently 12,000)
+- **Test Cases**: 200+ — **met**: ~295 automated tests green (217 Hardhat + 28 VC + 32 MOBI VID + 12/12 use cases)
+- **W3C Compliance**: ≥90% target — **met**: 93.2% measured
 
 ## Committee
 

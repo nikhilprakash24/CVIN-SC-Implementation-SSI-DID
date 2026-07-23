@@ -10,3 +10,4 @@ cv2x-testbed/scripts/comparison_results.json
 # Sepolia validation output is environment-specific (generated per run);
 # the real public-testnet witness is committed deliberately, not the local dry-run.
 4_comparison-framework/results/sepolia_validation.json
+w3c_compliance_report.json

@@ -2,736 +2,422 @@
 
 **Complete guide to what this thesis implementation can do**
 
+> Comparative Analysis of Self-Sovereign Identity Systems for Connected and
+> Autonomous Vehicles — Nikhil Prakash, MASc, University of British Columbia
+> (ECE, Blockchain Interdisciplinary Research Cluster).
+> Version 0.9.0-dev (v0.8.0 tagged: "Rigor & Ground-Truth Hardening").
+
 ---
 
 ## 🎯 Overview
 
-This system implements **Self-Sovereign Identity (SSI) for Connected and Autonomous Vehicles** using **9 different blockchain standards**. It demonstrates:
+This system implements **Self-Sovereign Identity (SSI) for Connected and
+Autonomous Vehicles** and compares **9 blockchain identity standards** plus the
+MOBI VID application profile under one measurement harness. Every layer listed
+below is **built and tested** — automated suites total ~295 passing tests
+(**217 Hardhat contract tests + 28 W3C VC + 32 MOBI VID + 6 VIN-cipher +
+12/12 lifecycle use cases**).
 
-- ✅ Vehicle identity creation and management
+- ✅ Vehicle identity across **9 blockchain standards** (real on-chain gas)
 - ✅ W3C DID resolution (4 methods)
-- 🔄 W3C Verifiable Credential issuance/verification
-- 🔄 MOBI VID birth certificates and lifecycle events
-- ⏳ Real-time V2V safety messaging
-- ⏳ Performance comparison across standards
+- ✅ W3C Verifiable Credentials — issue / hold / verify, selective disclosure,
+  revocation (**built**, was previously "planned")
+- ✅ MOBI VID I birth certificates + VID II lifecycle events (on-chain
+  attestation, AES-256-GCM VIN encryption)
+- ✅ Real-time V2V safety messaging (SUMO sim, measured latency)
+- ✅ Performance, security, and W3C-compliance comparison framework
+
+**Honesty caveats (kept throughout):** gas is Hardhat-local and deterministic —
+a Sepolia validation harness exists but the public-testnet run is not yet
+executed; V2V latency is identity-verification CPU time only (no radio/MAC/
+network stack; simulated mobility); the ERC-4337 EntryPoint and LSP8 are
+minimal representative implementations; VIN-cipher key distribution / HSM
+custody is out of scope for the testbed.
 
 ---
 
 ## 1️⃣ Blockchain Identity Capabilities
 
-### ERC-1056 Lightweight DID ✅
+All 9 standards are implemented as Solidity contracts in
+`1_blockchain-identity/contracts/` and benchmarked by
+`scripts/benchmark_gas.js`. Gas below is the **exact `receipt.gasUsed`** of one
+representative transaction per operation, measured on a fresh in-process
+Hardhat network (solc 0.8.24, optimizer runs=200, viaIR, OpenZeppelin 5.0.2),
+**verified byte-identical across N=30 runs (95% CI width = 0)** — EVM gas is
+deterministic for fixed calldata and pre-state.
 
-**What it does**: Creates and manages decentralized identifiers using minimal gas
+### Real measured gas (per operation)
 
-**Capabilities**:
+| Standard | Create identity | Update attribute | Transfer |
+|----------|----------------:|-----------------:|---------:|
+| **CVIN-Combined** (ERC-1056 + ERC-735 hybrid) | 52,178 | 35,078 | 51,734 |
+| **ERC-1056** (lightweight DID registry) | 52,612 | 35,512 | 51,764 |
+| **ERC-1155** (multi-token, soulbound) | 103,905 | 49,156 | 83,641 |
+| **LSP8** (LUKSO NFT, *minimal repr.*) | 149,352 | 55,065 | 80,526 |
+| **MOBI-VID-V2** (application profile) | 298,923 | 306,980 | 200,018 |
+| **ERC-725** (proxy account) | 528,647 | 137,107 | 28,397 |
+| **ERC-721** (vehicle NFT) | 542,429 | 119,753 | 174,707 |
+| **ERC-4337** (account abstraction, *minimal repr.*) | 768,204 | 49,366 | 28,561 |
+| **ERC-735** (claim holder) | 1,404,108 | 75,188 | 28,704 |
+| **ERC-725xy** (full ERC-725 X+Y smart account) | 1,704,992 | 49,950 | 28,839 |
 
-#### Create DID
+**Key finding (H1 SUPPORTED):** ~33× spread from cheapest to most expensive
+identity creation; the minimal registries (CVIN-Combined, ERC-1056) are ~10×
+cheaper to create than ERC-721/ERC-725. For ERC-4337, routing the same
+`setAttribute` through the EntryPoint as a UserOperation costs 96,228 gas vs
+49,366 direct — a **+46,862 gas / op** indirection overhead (bundler overhead
+excluded).
+
+*Gas is dimensionless; any fiat figure depends on the live gas price and token
+price and is intentionally omitted here.*
+
+---
+
+### ERC-1056 — Lightweight DID Registry ✅
+
+**What it does:** every Ethereum address is implicitly its own `did:ethr` (zero
+on-chain cost to exist); the registry records attributes, delegates, and owner
+changes as events.
+
+*Illustrative usage (Hardhat / ethers):*
 ```javascript
-// Deploy registry
 const registry = await EthereumDIDRegistry.deploy();
-
-// Create DID for vehicle
-const vehicleDID = `did:ethr:${chainId}:${vehicleAddress}`;
-// Gas cost: ~45,000 gas (~$0.50 at 30 gwei)
+// did:ethr:<chainId>:<vehicleAddress> — no creation tx required
+await registry.setAttribute(vehicle, key, value, validitySeconds); // 35,512 gas
+await registry.addDelegate(vehicle, "sigAuth", serviceCenter, ttl); // 54,853 gas
+await registry.changeOwner(vehicle, newOwner);                      // 51,764 gas
 ```
+**Use cases:** birth-certificate anchoring, service-center authorization, key
+rotation, attribute timestamping. This is also the CVIN-Combined base.
 
-#### Manage Attributes
-```javascript
-// Set attribute (e.g., VIN hash)
-await registry.setAttribute(
-  vehicleAddress,
-  "VIN_HASH",
-  "0x123...",  // VIN hash
-  86400        // Valid for 1 day
-);
-// Gas cost: ~50,000 gas
+### ERC-721 — NFT-Based Identity ✅
+Each vehicle is a unique, transferable NFT (`did:nft`). Mint 542,429 gas;
+`safeTransferFrom` 174,707 gas; metadata is read-only. Use cases: unique
+vehicle identity, ownership-transfer tracking, marketplaces.
 
-// Get attribute
-const vinHash = await registry.getAttribute(vehicleAddress, "VIN_HASH");
-```
+### ERC-725 / ERC-725xy — Proxy / Smart-Account Identity ✅
+`ERC-725` separates identity from keys (key rotation, multi-key control,
+generic `execute`). `ERC-725xy` is the **full ERC-725 X+Y smart account** added
+in v0.8.0 — the heaviest to deploy (1,704,992 gas create) but cheap to transfer
+control (28,839 gas). Use cases: multi-sig / fleet ownership, meta-transactions,
+key rotation without changing the identity.
 
-#### Delegate Keys
-```javascript
-// Add service center as delegate
-await registry.addDelegate(
-  vehicleAddress,
-  "sigAuth",           // Signature authentication
-  serviceCenterAddress,
-  3600                 // Valid for 1 hour
-);
-// Gas cost: ~55,000 gas
-```
+### ERC-735 — Claim Holder ✅
+On-chain claim registry (addClaim / removeClaim). Expensive to deploy
+(1,404,108 gas) because it carries the full claim-management state machine.
+Use cases: manufacturer/regulator attestations bound to an identity.
 
-**Performance**:
-- DID Creation: 45,000 gas (~$0.50)
-- Attribute Setting: 50,000 gas (~$0.55)
-- Delegate Adding: 55,000 gas (~$0.60)
-- Total for full setup: ~$1.65
+### ERC-1155 — Multi-Token Credentials (soulbound) ✅
+One contract issues many credential types; the thesis configures credentials as
+**soulbound** (non-transferable). In the security analysis this is the only
+standard that structurally resists identity theft. Create 103,905 gas.
 
-**Use Cases**:
-- ✅ Vehicle birth certificate anchoring
-- ✅ Service center authorization
-- ✅ Key rotation
-- ✅ Attribute timestamping
+### ERC-4337 — Account Abstraction (minimal representative) ✅ ⚠️
+`CVINVehicleAccount` + `CVINMinimalEntryPoint` demonstrate UserOperation flow
+and **guardian-based social recovery** — the only standard here with genuine
+on-chain key recovery. **Deliberately minimal** (documented in the contract
+headers); its gas is a lower bound. Create 768,204 gas; the EntryPoint
+indirection adds +46,862 gas per routed op.
 
----
+### LSP8 — LUKSO Identifiable Digital Asset (minimal representative) ✅ ⚠️
+A minimal LSP8 vehicle asset for cross-ecosystem comparison. Create 149,352
+gas; also a lower-bound reference implementation.
 
-### ERC-721 NFT-Based Identity ✅
-
-**What it does**: Each vehicle is a unique NFT with embedded identity
-
-**Capabilities**:
-
-#### Mint Vehicle NFT
-```javascript
-// Mint vehicle token
-const tokenId = await vehicleNFT.mint(
-  ownerAddress,
-  "QmVIN123...",  // IPFS metadata hash
-  {
-    vin: "5YJ3E1EA0PF123456",
-    make: "Tesla",
-    model: "Model 3",
-    year: 2024
-  }
-);
-// Gas cost: ~150,000 gas (~$1.50)
-```
-
-#### Transfer Ownership
-```javascript
-// Transfer vehicle with history preserved
-await vehicleNFT.safeTransferFrom(
-  oldOwner,
-  newOwner,
-  tokenId
-);
-// Gas cost: ~70,000 gas (~$0.70)
-// History: Immutably recorded on-chain
-```
-
-#### Query Vehicle History
-```javascript
-// Get complete ownership chain
-const history = await vehicleNFT.getOwnershipHistory(tokenId);
-// Returns: Array of {owner, timestamp, price}
-
-// Get metadata
-const metadata = await vehicleNFT.tokenURI(tokenId);
-// Returns: IPFS hash with full vehicle data
-```
-
-**Performance**:
-- NFT Minting: 150,000 gas (~$1.50)
-- Transfer: 70,000 gas (~$0.70)
-- Metadata Query: Free (read-only)
-
-**Use Cases**:
-- ✅ Unique vehicle identity
-- ✅ Ownership transfer tracking
-- ✅ Fractional ownership (future)
-- ✅ Vehicle marketplaces
-
----
-
-### ERC-725 Proxy Account ✅
-
-**What it does**: Separates identity from keys, enabling key rotation and multi-sig
-
-**Capabilities**:
-
-#### Create Identity Proxy
-```javascript
-// Deploy proxy for vehicle
-const proxy = await CVIN_DID_ERC725.deploy(ownerAddress);
-// Creates proxy contract at new address
-// Gas cost: ~350,000 gas (~$3.50)
-```
-
-#### Manage Multiple Keys
-```javascript
-// Add manufacturer key
-await proxy.addKey(
-  manufacturerKey,
-  1,  // Management key
-  1   // Key type: ECDSA
-);
-
-// Add service center key
-await proxy.addKey(
-  serviceCenterKey,
-  2,  // Action key
-  1
-);
-
-// Execute action through proxy
-await proxy.execute(
-  0,  // Operation: CALL
-  targetContract,
-  0,  // value
-  data
-);
-// Gas cost: ~100,000 gas (~$1.00)
-```
-
-#### Store Data
-```javascript
-// Store vehicle data
-await proxy.setData(
-  "MAINTENANCE_RECORD",
-  "0xabcd..."  // Hash of maintenance record
-);
-
-// Retrieve data
-const record = await proxy.getData("MAINTENANCE_RECORD");
-```
-
-**Performance**:
-- Proxy Creation: 350,000 gas (~$3.50)
-- Key Management: 80,000 gas (~$0.80)
-- Data Storage: 45,000 gas (~$0.45)
-- Execution: 100,000+ gas (depends on call)
-
-**Use Cases**:
-- ✅ Multi-signature vehicle ownership
-- ✅ Fleet management (multiple keys)
-- ✅ Key rotation without identity change
-- ✅ Meta-transactions
+### CVIN-Combined — the thesis's own hybrid ✅
+`CVINCombinedIdentity` fuses ERC-1056 lightweight DID semantics with ERC-735
+claims. Cheapest identity creation measured (52,178 gas) while still supporting
+claims — placing it on the security/performance frontier (H5 SUPPORTED).
 
 ---
 
 ## 2️⃣ W3C DID Resolution Capabilities ✅
 
-**What it does**: Resolves DIDs to DID Documents per W3C DID Core v1.0
+`2_w3c-ssi-layer/did-resolution/did_resolver.py` resolves DIDs to W3C DID Core
+v1.0 documents.
 
-### Supported DID Methods
+| Method | Format | Backed by |
+|--------|--------|-----------|
+| `did:ethr` | `did:ethr:<chainId>:<address>` | ERC-1056 |
+| `did:nft`  | `did:nft:<chainId>:<contract>:<tokenId>` | ERC-721 |
+| `did:key`  | `did:key:<chainId>:<address>` | ERC-725 |
+| `did:mobi` | `did:mobi:<VIN>` | MOBI VID |
 
-| Method | Format | Example |
-|--------|--------|---------|
-| did:ethr | `did:ethr:<chainId>:<address>` | `did:ethr:0x1:0x123...` |
-| did:nft | `did:nft:<chainId>:<contract>:<tokenId>` | `did:nft:0x1:0xabc:123` |
-| did:key | `did:key:<chainId>:<proxyAddress>` | `did:key:0x1:0x456...` |
-| did:mobi | `did:mobi:<VIN>` | `did:mobi:5YJ3E1EA0PF123456` |
-
-### Resolve DID
+*Real API:*
 ```python
-from did_resolver import DIDResolver
+from did_resolver import DIDResolver, DIDMethod
 
 resolver = DIDResolver()
+result = resolver.resolve("did:ethr:0x1:0x123...")   # -> DIDResolutionResult
+#   result.didDocument / result.didResolutionMetadata / result.didDocumentMetadata
 
-# Resolve did:ethr
-result = resolver.resolve("did:ethr:0x1:0x123...")
-
-# Returns DIDResolutionResult with:
-# - didDocument: W3C compliant document
-# - didResolutionMetadata: Resolution info
-# - didDocumentMetadata: Document metadata
+did, doc = resolver.create_did(DIDMethod.MOBI, vin="5YJ3E1EA0PF123456")
 ```
-
-### DID Document Structure
-```json
-{
-  "@context": [
-    "https://www.w3.org/ns/did/v1",
-    "https://w3id.org/security/suites/secp256k1-2019/v1"
-  ],
-  "id": "did:ethr:0x1:0x123...",
-  "verificationMethod": [{
-    "id": "did:ethr:0x1:0x123...#controller",
-    "type": "EcdsaSecp256k1VerificationKey2019",
-    "controller": "did:ethr:0x1:0x123...",
-    "blockchainAccountId": "eip155:1:0x123..."
-  }],
-  "authentication": ["did:ethr:0x1:0x123...#controller"],
-  "assertionMethod": ["did:ethr:0x1:0x123...#controller"]
-}
-```
-
-### Create New DID
-```python
-# Create did:mobi for vehicle
-did, did_document = resolver.create_did(
-    method=DIDMethod.MOBI,
-    vin="5YJ3E1EA0PF123456"
-)
-# Returns: ("did:mobi:5YJ3E1EA0PF123456", DIDDocument)
-```
-
-**Performance**:
-- DID Resolution: 50-100ms (with blockchain lookup)
-- DID Creation: <1ms (local)
-- Caching: Subsequent resolves < 1ms
-
-**W3C Compliance**: 75%
-- ✅ DID Document structure
-- ✅ Verification methods
-- ✅ Service endpoints
-- ❌ Some advanced properties (canonicalId, equivalentId)
-
-**Use Cases**:
-- ✅ Vehicle DID creation
-- ✅ Multi-method resolution
-- ✅ Service discovery
-- ✅ Key verification
+Documents include `@context`, `verificationMethod`
+(`EcdsaSecp256k1VerificationKey2019`, `blockchainAccountId`), and the W3C
+verification relationships (`authentication`, `assertionMethod`, …). Resolution
+is offline/local for the address-bearing methods; caching amortizes repeats.
 
 ---
 
-## 3️⃣ W3C Verifiable Credentials (Planned) 🔄
+## 3️⃣ W3C Verifiable Credentials ✅ (BUILT — 28 tests)
 
-**What it will do**: Issue, hold, and verify W3C compliant credentials
+`2_w3c-ssi-layer/verifiable-credentials/` implements the **VC Data Model 2.0**
+end-to-end with an Ethereum-native securing mechanism. Signatures verify
+**offline via secp256k1 public-key recovery** — no blockchain round-trip at
+verification time (the V2V latency requirement).
 
-### Issue Credential (Planned)
+- **Proof:** `DataIntegrityProof`, cryptosuite `eip191-secp256k1-recovery-2024`
+  (EIP-191 personal-sign over deterministic canonical JSON). The signing key is
+  the same key that controls the issuer's on-chain identity.
+- **10 automotive schemas** (`vc_schemas.py`): VehicleBirthCertificate,
+  OwnershipTransfer, InsuranceClaim, MaintenanceRecord, SafetyRecall,
+  TheftReport, RegistrationCredential, DecommissionCertificate,
+  V2VSafetyCredential, EmissionsCompliance.
+- **Selective disclosure:** SD-JWT-style salted claim digests — the signed VC
+  carries only `claimDigests`; the holder discloses chosen claim+salt pairs at
+  presentation time and the verifier recomputes each digest.
+- **Revocation:** `credentialStatus` checked against a `RevocationRegistry`
+  (in-memory or JSON-file backed; MOBI VID adds the on-chain anchor).
+- **6-stage verify pipeline:** structure → schema → temporal → revocation →
+  signature → disclosure. Presentations additionally bind challenge (replay
+  protection) and domain (audience), with `proofPurpose: authentication`.
+
+*Real API (matches the modules):*
 ```python
 from vc_issuer import CredentialIssuer
-
-issuer = CredentialIssuer(
-    issuer_did="did:ethr:0x1:0xTESLA...",
-    private_key="0x...",
-    issuer_name="Tesla Inc."
-)
-
-# Issue birth certificate
-birth_cert = issuer.issue_credential(
-    credential_type="VehicleBirthCertificate",
-    subject_did="did:mobi:5YJ3E1EA0PF123456",
-    claims={
-        "vin": "5YJ3E1EA0PF123456",
-        "make": "Tesla",
-        "model": "Model 3",
-        "year": 2024,
-        "manufacturer": "Tesla Inc."
-    },
-    validity_days=36500  # 100 years
-)
-```
-
-### Credential Structure
-```json
-{
-  "@context": ["https://www.w3.org/2018/credentials/v1"],
-  "id": "urn:uuid:12345...",
-  "type": ["VerifiableCredential", "VehicleBirthCertificate"],
-  "issuer": "did:ethr:0x1:0xTESLA...",
-  "issuanceDate": "2024-01-15T00:00:00Z",
-  "credentialSubject": {
-    "id": "did:mobi:5YJ3E1EA0PF123456",
-    "vin": "5YJ3E1EA0PF123456",
-    "make": "Tesla",
-    "model": "Model 3",
-    "year": 2024
-  },
-  "proof": {
-    "type": "EcdsaSecp256k1Signature2019",
-    "created": "2024-01-15T00:00:00Z",
-    "proofPurpose": "assertionMethod",
-    "verificationMethod": "did:ethr:0x1:0xTESLA...#key-1",
-    "jws": "eyJhbGciOiJFUzI1NksiLCJ..."
-  }
-}
-```
-
-### Create Presentation (Planned)
-```python
 from vc_holder import HolderWallet
-
-wallet = HolderWallet(
-    holder_did="did:ethr:0x1:0xOWNER...",
-    private_key="0x..."
-)
-
-# Store credentials
-wallet.store_credential(birth_cert)
-wallet.store_credential(maintenance_cert)
-
-# Create presentation for verifier
-presentation = wallet.create_presentation(
-    credential_ids=[birth_cert.id, maintenance_cert.id],
-    challenge="nonce_from_verifier",
-    domain="dmv.example.com"
-)
-```
-
-### Verify Credential (Planned)
-```python
 from vc_verifier import CredentialVerifier
 
-verifier = CredentialVerifier()
+issuer = CredentialIssuer.with_ethr_did(chain_id="0x1")   # DID derived from key
+envelope = issuer.issue_credential(
+    credential_type="VehicleBirthCertificate",
+    subject_did="did:mobi:5YJ3E1EA0PF123456",
+    claims={"vin": "5YJ3E1EA0PF123456", "make": "Tesla", "model": "Model 3",
+            "year": 2024, "manufacturingDate": "2024-01-15",
+            "manufacturerDid": issuer.issuer_did},
+    validity_days=None,          # birth certificates do not expire
+)                                # -> {"verifiableCredential": ..., "disclosures": ...}
 
-# Verify single credential
-is_valid, result = verifier.verify_credential(birth_cert)
+wallet = HolderWallet.with_ethr_did()
+cid = wallet.store_credential(envelope)
+vp = wallet.create_presentation([cid], challenge="nonce-42",
+                                domain="dmv.gov.bc.ca")
 
-# Verify presentation
-is_valid, result = verifier.verify_presentation(
-    presentation,
-    challenge="nonce_from_verifier",
-    domain="dmv.example.com"
-)
-
-# Result includes:
-# - signature_valid: bool
-# - not_expired: bool
-# - not_revoked: bool
-# - schema_valid: bool
+verifier = CredentialVerifier(revocation_registry=issuer.revocation_registry)
+ok, report = verifier.verify_presentation(vp, "nonce-42", "dmv.gov.bc.ca")
+# report["credentials"][0]["checks"] -> {structure, schema, temporal,
+#   revocation, signature, disclosure}
 ```
-
-**Planned Performance**:
-- Credential Issuance: <100ms
-- Presentation Creation: <50ms
-- Credential Verification: 5-10ms (PKI) or 50-100ms (blockchain)
-
-**W3C Compliance Target**: 100%
-
-**Planned Use Cases**:
-- Birth certificate issuance
-- Maintenance record credentials
-- Insurance claim credentials
-- Selective disclosure presentations
+Forged proofs, tampered disclosures, wrong-challenge replays, expired and
+revoked credentials all fail these checks — exercised by the 28-test suite
+(`tests/test_vc_layer.py`).
 
 ---
 
-## 4️⃣ MOBI VID Capabilities (Planned) 🔄
+## 4️⃣ MOBI VID Capabilities ✅ (BUILT — 32 tests + 6 VIN-cipher)
 
-**What it will do**: Issue MOBI VID I (birth certificates) and VID II (lifecycle events)
+`2_w3c-ssi-layer/mobi-vid/` layers MOBI VID on top of the canonical VC layer and
+anchors each credential on-chain via **content-hash anchoring**
+(keccak256 of the canonicalized signed VC → contract field). **No IPFS is
+involved anywhere.** The registry contract is `MOBIVIDRegistryV2.sol`.
 
-### MOBI VID I: Birth Certificate (Planned)
+### MOBI VID I — Birth Certificate
+`BirthCertificateIssuer.issue_birth_certificate(...)` (1) issues a
+schema-enforced `VehicleBirthCertificate` VC, (2) computes its keccak256
+content hash, and (3) registers the birth on-chain.
 
-```python
-from birth_certificate import BirthCertificateIssuer
-
-issuer = BirthCertificateIssuer(
-    manufacturer_did="did:ethr:0x1:0xTESLA...",
-    manufacturer_name="Tesla Inc."
-)
-
-# Issue birth certificate
-cert = issuer.issue_birth_certificate(
-    vin="5YJ3E1EA0PF123456",
-    make="Tesla",
-    model="Model 3",
-    year=2024,
-    production_date="2024-01-15",
-    first_owner_did="did:ethr:0x1:0xOWNER...",
-    ipfs_metadata="QmVehicleData123..."
-)
-
-# Returns:
-# - Birth certificate JSON
-# - IPFS hash
-# - Blockchain transaction hash
-```
-
-**Birth Certificate Contents**:
-```json
-{
-  "mobivid_version": "1.0",
-  "vin": "encrypted_vin_hash",
-  "manufacturer": {
-    "did": "did:ethr:0x1:0xTESLA...",
-    "name": "Tesla Inc.",
-    "facility": "Fremont, CA"
-  },
-  "vehicle": {
-    "make": "Tesla",
-    "model": "Model 3",
-    "year": 2024,
-    "color": "Deep Blue",
-    "specs": {...}
-  },
-  "production": {
-    "date": "2024-01-15",
-    "batch": "2024-Q1-001"
-  },
-  "first_owner": "did:ethr:0x1:0xOWNER...",
-  "attestations": [{
-    "issuer": "did:ethr:0x1:0xTESLA...",
-    "signature": "0x..."
-  }]
-}
-```
-
-### MOBI VID II: Lifecycle Events (Planned)
+- **VIN privacy — salted hash:** only `sha256(vin || ":" || salt)` (32-byte
+  random salt) reaches the chain; the salt is disclosed off-chain to parties
+  that must link VIN → vehicle. The vehicle DID is `did:ethr:<chainId>:<addr>`,
+  **not** `did:mobi:<VIN>`, so the identifier itself never leaks the VIN.
+- **VIN encryption — AES-256-GCM** (replaced an earlier demo XOR): the 32-byte
+  key is HKDF-SHA256-derived from a per-vehicle owner secret (salted by the VIN
+  salt); the ciphertext is AEAD-bound to the on-chain `vinHash` via GCM
+  associated data, so it cannot be transplanted onto another record. Neither VIN
+  nor key ever reaches the chain. (6 dedicated cipher tests;
+  `tests/test_vin_cipher.py`.)
 
 ```python
-from lifecycle_events import LifecycleEventRecorder
-
-recorder = LifecycleEventRecorder()
-
-# Record maintenance
-maintenance = recorder.record_event(
-    vehicle_did="did:mobi:5YJ3E1EA0PF123456",
-    event_type="MAINTENANCE",
-    issuer_did="did:ethr:0x1:0xSERVICE...",
-    odometer=10000,
-    event_data={
-        "services": ["Oil change", "Tire rotation"],
-        "parts": ["Oil filter", "Engine oil 5W-30"],
-        "cost": 150.00,
-        "next_service_due": 15000
-    },
-    jurisdiction="CA-USA"
-)
+result = issuer.issue_birth_certificate(
+    vehicle_identity=vehicle.address, vin="5YJ3E1EA0PF123456",
+    make="Tesla", model="Model 3", year=2024,
+    manufacturing_date="2024-01-15", first_owner=owner.address)
+# -> verifiableCredential, vinSalt, vinHash, vinSecret, contentHash, gasUsed
 ```
+`BirthCertificateVerifier.verify(...)` checks the VC pipeline **and** that
+keccak256(VC) equals the on-chain `birthCertHash`, the (vin, salt) recomputes
+the on-chain `vinHash`, and the VC issuer equals the on-chain manufacturer.
 
-**Event Types** (11 total):
-1. MAINTENANCE - Regular service
-2. REPAIR - Unscheduled repair
-3. ACCIDENT - Collision/incident
-4. RECALL - Manufacturer recall
-5. INSPECTION - Government inspection
-6. MODIFICATION - Aftermarket changes
-7. THEFT_REPORT - Stolen vehicle
-8. RECOVERY - Recovered vehicle
-9. INSURANCE_CLAIM - Insurance event
-10. REGISTRATION - DMV registration
-11. DECOMMISSION - End of life
+### MOBI VID II — Lifecycle Events
+`LifecycleEventRecorder.record_event(...)` issues an event VC and anchors it
+on-chain in one call. The enums mirror `MOBIVIDRegistryV2.sol` exactly:
 
-**Issuer Roles** (8 types):
-- MANUFACTURER
-- SERVICE_CENTER
-- GOVERNMENT_DMV
-- GOVERNMENT_INSPECTION
-- INSURANCE_COMPANY
-- POLICE
-- OWNER
-- FLEET_MANAGER
+**11 event types:** MAINTENANCE, REPAIR, ACCIDENT, RECALL, INSPECTION,
+MODIFICATION, THEFT_REPORT, RECOVERY, INSURANCE_CLAIM, REGISTRATION,
+DECOMMISSION. Types with a registered schema are issued strict; the rest are
+still cryptographically signed and verifiable.
 
-### Query Vehicle History (Planned)
-```python
-# Get complete history
-history = recorder.get_vehicle_history("did:mobi:5YJ3E1EA0PF123456")
+**Issuer roles (NONE + 8):** MANUFACTURER, DEALER, SERVICE_CENTER,
+INSPECTION_STATION, GOVERNMENT_DMV, INSURANCE_COMPANY, POLICE, OWNER — the
+contract gates which role may issue which event.
 
-# Returns:
-{
-  "birth_certificate": {...},
-  "total_events": 25,
-  "lifecycle_events": [
-    {"type": "MAINTENANCE", "date": "2024-01-15", ...},
-    {"type": "REGISTRATION", "date": "2024-01-20", ...},
-    {"type": "MAINTENANCE", "date": "2024-06-15", ...}
-  ],
-  "current_owner": "did:ethr:0x1:0xOWNER2...",
-  "odometer": 10000,
-  "total_claims": 0,
-  "recall_status": "compliant"
-}
-```
-
-**Planned Performance**:
-- Birth Certificate Issuance: 50ms + blockchain time
-- Event Recording: 20ms + blockchain time
-- History Query: 100ms (aggregates all events)
-
-**Use Cases**:
-- Complete vehicle provenance
-- Used car sales transparency
-- Insurance claim verification
-- Recall compliance tracking
+**On-chain multi-party attestation:** `attest_event(...)` produces an EIP-191
+signature over a domain-separated digest
+`keccak256(contract, chainId, vehicle, eventId)`; the contract recovers the
+signer on-chain (**ecrecover**) and requires it to equal the attester, so
+forged/replayed attestations revert. `VehicleHistoryAggregator` rebuilds a
+fully verified history (anchor integrity + signature recovery + issuer
+consistency) and includes an odometer-rollback fraud heuristic.
 
 ---
 
-## 5️⃣ Use Case Capabilities (Planned) ⏳
+## 5️⃣ Lifecycle Use Cases ✅ (12/12 passing)
 
-**What it will do**: Demonstrate 10 complete real-world scenarios
+`cv2x-testbed/scripts/test_use_cases.py` runs 12 end-to-end scenarios with
+**real cryptographic verification** and **computed** (not hardcoded) pass/fail;
+the suite exits nonzero if any use case fails.
 
-### Implemented Use Cases (Planned)
+1. Vehicle Manufacturing & Birth Registration
+2. Regular Maintenance Service
+3. Ownership Transfer (Used-Car Sale)
+4. Insurance Claim (Accident)
+5. Manufacturer Recall
+6. Cross-Border Vehicle Import
+7. Fleet Management
+8. Emissions Testing & Compliance
+9. Vehicle Theft & Recovery
+10. Autonomous Vehicle Data Sharing (selective disclosure)
+11. Dealership-Mediated Sale (Trade-In + Certified Resale)
+12. End-of-Life Decommission
 
-1. **Vehicle Manufacturing & Birth Registration**
-   - Manufacturer creates birth certificate
-   - First owner receives credential
-   - DID created: `did:mobi:<VIN>`
-
-2. **Regular Maintenance Service**
-   - Service center records maintenance
-   - Issues verifiable credential
-   - Updates vehicle history
-
-3. **Ownership Transfer (Used Car Sale)**
-   - Seller creates verifiable presentation
-   - Buyer verifies complete history
-   - DMV facilitates transfer
-
-4. **Insurance Claim (Accident)**
-   - Police issue accident report
-   - Owner files claim
-   - Insurance verifies history
-   - Repair shop issues credential
-
-5. **Manufacturer Recall**
-   - Manufacturer issues recall events
-   - All affected vehicles notified
-   - Compliance tracked
-
-6. **Cross-Border Vehicle Import**
-   - Birth certificate verified at customs
-   - EPA compliance check
-   - DMV registration
-
-7. **Fleet Management**
-   - Multiple vehicles under one entity
-   - Centralized maintenance tracking
-   - Analytics dashboard
-
-8. **Emissions Testing & Compliance**
-   - Test station issues credential
-   - EPA verifies
-   - DMV registration depends on pass/fail
-
-9. **Vehicle Theft & Recovery**
-   - Theft reported (public event)
-   - Recovery tracked
-   - Ownership verified via birth certificate
-
-10. **Autonomous Vehicle Data Sharing**
-    - Owner controls data sharing
-    - Selective disclosure to different parties
-    - Data monetization + privacy
-
-### Demo Capabilities (Planned)
-```python
-from demo_runner import DemoRunner
-
-runner = DemoRunner()
-
-# Run single use case
-runner.run_use_case(3)  # Ownership transfer
-
-# Run all use cases
-runner.run_all()
-
-# Generate report
-runner.generate_report(format="pdf")
-```
+Forged and replayed credentials are demonstrated to **fail** within these flows,
+not merely asserted.
 
 ---
 
-## 6️⃣ Performance Comparison Capabilities (Planned) ⏳
+## 6️⃣ CV2X / V2V Safety Messaging ✅
 
-**What it will do**: Compare all 9 blockchain identity standards
+`cv2x-testbed/sumo/sumo_identity_integration.py --simulate` runs a 3-lane
+highway V2V simulation broadcasting 10 Hz Basic Safety Messages, with **real
+ECDSA (PKI baseline)** and **real W3C VC (SSI)** verification in the message
+path. `run_v2v_stats.py` aggregates **N=30 seeded runs**.
 
-### Gas Cost Analysis (Planned)
-```python
-from gas_analyzer import GasAnalyzer
+**Measured verification latency — median [95% CI], ms:**
 
-analyzer = GasAnalyzer()
+| Path | Warm verify | Cold verify |
+|------|------------:|------------:|
+| SSI (blockchain credential) | **0.165 [0.162, 0.168]** | 0.400 [0.392, 0.405] |
+| PKI baseline | 0.102 [0.101, 0.104] | — |
 
-# Analyze all standards
-results = analyzer.compare_all_standards(
-    operations=["create_did", "set_attribute", "transfer"]
-)
+Across the campaign: **1,650,318 verifications, 90 failures** — exactly the 3
+injected attacks × 30 runs (all caught). **H3 SUPPORTED:** the warm SSI verify
+sits ~600× under the 100 ms V2V budget.
 
-# Generate LaTeX table
-analyzer.generate_thesis_table(results, "thesis/tables/gas_costs.tex")
-```
-
-**Expected Output**:
-| Standard | DID Creation | Attribute Set | Transfer | Total |
-|----------|-------------|---------------|----------|-------|
-| ERC-1056 | 45K gas | 50K gas | N/A | 95K |
-| ERC-721 | 150K gas | N/A | 70K gas | 220K |
-| ERC-725 | 350K gas | 45K gas | N/A | 395K |
-
-### Latency Analysis (Planned)
-```python
-from latency_analyzer import LatencyAnalyzer
-
-analyzer = LatencyAnalyzer()
-
-# Measure DID resolution times
-results = analyzer.measure_did_resolution(
-    methods=["ethr", "nft", "key", "mobi"],
-    iterations=1000
-)
-
-# Results:
-# - Mean latency
-# - Median latency
-# - 95th percentile
-# - Standard deviation
-```
+**Caveats (stated in the results):** figures are pure identity-verification CPU
+time — no radio/MAC/propagation/queueing; mobility is a mock kinematic model
+(no SUMO binary required; real SUMO is optional/future); single warm,
+uncontended core, so absolute latencies are hardware-dependent.
 
 ---
 
-## 7️⃣ Security Capabilities (Planned) ⏳
+## 7️⃣ Comparison Framework ✅
 
-**What it will do**: Analyze security properties and attack scenarios
+`4_comparison-framework/` turns the raw measurements into thesis artifacts.
 
-### Threat Modeling (Planned)
-- Sybil attack resistance
-- Position falsification detection
-- Replay attack prevention
-- Man-in-the-middle protection
+### Gas benchmark
+`1_blockchain-identity/scripts/benchmark_gas.js` benchmarks all 9 standards +
+MOBI-VID-V2 across 7 operations; `performance-metrics/run_gas_stats.py` reruns
+N=30 and records determinism (`gas_benchmark_stats.json`).
+`performance-metrics/generate_tables.py` emits the thesis **LaTeX** table
+(`results/gas_comparison.tex`) and **CSV** (`gas_comparison.csv`).
 
-### Attack Scenarios (Planned)
-1. Fake vehicle identity creation
-2. Ownership theft
-3. History falsification
-4. Credential forgery
-5. DoS attacks on registry
+### W3C compliance checker
+`cv2x-testbed/scripts/w3c_compliance_checker.py` is an **executable** checker
+(negative checks are first-class: forged/tampered/expired/unsupported inputs
+must be rejected). Measured score **93.2%** (44 executed checks), CI-gated at
+≥90% — **H2 SUPPORTED**. The 2 documented deviations are canonical JSON vs
+URDNA2015 and the thesis-defined cryptosuite.
+
+### Sepolia validation harness
+`1_blockchain-identity/scripts/validate_sepolia.js` + `SEPOLIA_VALIDATION.md`
+re-run the gas benchmark against public Sepolia to confirm the local numbers.
+**Not yet executed** — it needs an RPC URL and a funded test key
+(`results/sepolia_validation.json` is a placeholder until then).
+
+---
+
+## 8️⃣ Security Capabilities ✅ (two complementary lenses)
+
+### Lens 1 — executable attack suite
+`1_blockchain-identity/test/security/securityScenarios.test.js` runs Mocha
+attack scenarios against the deployed contracts. The security matrix has **54
+cells; 43/43 applicable cells DEFENDED** (11 are structurally N/A per standard),
+CI-gated. Forged issuance, unauthorized state writes, unauthorized
+delegate/claim installs, and unauthorized revocations all revert with the
+expected reasons (`4_comparison-framework/security-analysis/`).
+
+### Lens 2 — threat-matrix analysis
+Adds properties the test suite cannot execute: Sybil economics, recovery
+availability, and on-chain PII leakage. **Findings (H5):** no standard dominates
+— security and performance trade off along a frontier; only **ERC-4337** has
+genuine on-chain key recovery; **ERC-1155** (soulbound) uniquely resists
+identity theft; the **MOBI VID** family is the only one that both hashes and
+encrypts the VIN.
+
+### Found-and-fixed result (honesty asset)
+The audit found MOBI `attestEvent` was **storing** an attestation signature but
+never verifying it (a forgery/replay gap). It now recovers the signer on-chain
+(ecrecover) and reverts forged/replayed attestations. Cost moved
+**121,110 → 192,718 gas**; the MOBI `Replay` security test now passes.
 
 ---
 
 ## 📊 Capability Matrix
 
-| Capability | ERC-1056 | ERC-721 | ERC-725 | W3C DID | W3C VC | MOBI VID |
-|------------|----------|---------|---------|---------|--------|----------|
-| DID Creation | ✅ | ✅ | ✅ | ✅ | N/A | ✅ |
-| Ownership Transfer | ❌ | ✅ | ✅ | N/A | ✅ | ✅ |
-| Key Rotation | ✅ | ❌ | ✅ | ✅ | N/A | ✅ |
-| Credentials | ❌ | ✅ | ✅ | N/A | ✅ | ✅ |
-| History Tracking | ✅ | ✅ | ✅ | N/A | ✅ | ✅ |
-| Privacy (VIN) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| W3C Compliant | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Capability | ERC-1056 | ERC-721 | ERC-725(xy) | ERC-735 | ERC-1155 | ERC-4337 | LSP8 | CVIN-Comb. | W3C VC | MOBI VID |
+|------------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| Identity creation | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | N/A | ✅ |
+| Ownership transfer | ✅ | ✅ | ✅ | ✅ | soulbound | ✅ | ✅ | ✅ | N/A | ✅ |
+| Key rotation / recovery | ✅ | ❌ | ✅ | ✅ | ❌ | ✅ recovery | ✅ | ✅ | N/A | ✅ |
+| On-chain claims | via hybrid | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ (VC) | ✅ |
+| VIN privacy (hash+encrypt) | — | — | — | — | — | — | — | — | — | ✅ |
+| W3C DID resolvable | ✅ | ✅ | ✅ | — | — | — | — | ✅ | — | ✅ |
 
 ---
 
 ## 🎯 What This System Can Do (Summary)
 
-### ✅ Currently Working
+### ✅ Built and tested
+1. Create & compare vehicle identities across **9 blockchain standards** with
+   real, deterministic on-chain gas (N=30).
+2. Resolve DIDs to W3C DID Core documents (**4 methods**).
+3. **Issue / hold / verify W3C Verifiable Credentials** with selective
+   disclosure and revocation (28 tests).
+4. **MOBI VID I + II** with on-chain content-hash anchoring, on-chain
+   attestation (ecrecover), and AES-256-GCM VIN encryption (32 + 6 tests).
+5. Run **12 lifecycle use cases** end-to-end with real crypto (12/12).
+6. Simulate **V2V** with real signature verification and measured latency.
+7. Generate the comparison artifacts: gas benchmark (LaTeX/CSV), security
+   matrix, and the executable **93.2%** W3C-compliance report.
 
-1. **Create vehicle DIDs** using 3 blockchain standards
-2. **Resolve DIDs** to W3C compliant documents (4 methods)
-3. **Manage blockchain identities** with gas-efficient operations
-4. **Run automated tests** with CI/CD
-5. **Track performance** with daily benchmarks
-
-### 🔄 Partially Working
-
-1. **W3C compliance** - DID resolver done, VC layer needed
-2. **MOBI VID** - Documentation done, implementation needed
-
-### ⏳ Planned
-
-1. **Issue/verify credentials** (VC layer)
-2. **Complete use cases** (10 scenarios)
-3. **Compare performance** (all 9 standards)
-4. **Analyze security** (threat modeling)
-5. **SUMO simulation** (real-world testing)
+### 🔜 Remaining
+1. Public-testnet (**Sepolia**) validation run (harness ready; needs RPC + key).
+2. Optional real-SUMO mobility (mock kinematics used today).
+3. Thesis writing.
 
 ---
 
-## 📈 Performance Characteristics
+## 📈 Hypotheses Status
 
-### Current System
-
-| Operation | Time | Gas | Cost (30 gwei) |
-|-----------|------|-----|----------------|
-| DID Creation (1056) | <1s | 45K | $0.50 |
-| DID Creation (721) | <1s | 150K | $1.50 |
-| DID Creation (725) | <1s | 350K | $3.50 |
-| DID Resolution | 50-100ms | 0 | Free |
-| Attribute Set | <1s | 50K | $0.55 |
-
-### Target Performance
-
-| Operation | Target | Current | Status |
-|-----------|--------|---------|--------|
-| VC Issuance | <100ms | N/A | ⏳ |
-| VC Verification | <10ms | N/A | ⏳ |
-| V2V Message Sign | <100ms | N/A | ⏳ |
-| V2V Message Verify | <10ms | N/A | ⏳ |
+| # | Hypothesis | Status | Evidence |
+|---|------------|--------|----------|
+| H1 | Minimal standards ≥10× cheaper to create | **Supported** | ERC-1056/CVIN-Combined ~10× under ERC-721/725; ~33× total spread |
+| H2 | ≥90% W3C compliance | **Supported** | 93.2% executable checker |
+| H3 | Off-chain verify meets V2V budget | **Supported** | 0.165 ms warm SSI verify, ~600× margin |
+| H4 | MOBI VID across backends | **Partial** | one backend measured |
+| H5 | Hybrid on the security/perf frontier | **Supported** | CVIN-Combined |
 
 ---
 
-**Last Updated**: June 21, 2026  
-**Status**: Living document - updated as capabilities are built  
-**Maintainer**: Nikhil Prakash (UBC MASc Thesis)
+**Status:** Living document — reflects the built system as of v0.9.0-dev.
+**Maintainer:** Nikhil Prakash (UBC MASc thesis).
