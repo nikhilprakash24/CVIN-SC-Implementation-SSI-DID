@@ -35,7 +35,7 @@
 - **H1** — Minimal identity standards (e.g. ERC-1056) are at least ~10× cheaper to create than heavyweight account standards. **SUPPORTED.**
 - **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (93.2% measured).**
 - **H3** — Off-chain credential verification meets the real-time V2V latency budget (100 ms). **SUPPORTED (0.165 ms warm).**
-- **H4** — MOBI VID generalizes across identity backends. **PARTIAL (one backend measured end-to-end).**
+- **H4** — MOBI VID generalizes across identity backends. **SUPPORTED** (5-backend realization sweep; birth + lifecycle native on all, multi-party attestation native on claim-capable backends — a documented fidelity gradient).
 - **H5** — A hybrid design can sit on the security/performance frontier. **SUPPORTED (CVIN-Combined).**
 
 Overarching hypothesis: lightweight blockchain identity standards can provide sufficient security and W3C compliance for vehicle identity management while maintaining performance suitable for real-time V2V safety applications, offering a viable alternative to centralized PKI systems.
