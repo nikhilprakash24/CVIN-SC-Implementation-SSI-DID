@@ -6,13 +6,13 @@ This directory contains the MASc thesis chapters and supporting documentation.
 
 ```
 thesis/
-├── 01-introduction.md          # Research problem and objectives
-├── 02-literature-review.md     # Survey of SSI and vehicle identity
-├── 03-methodology.md           # Research design and approach
-├── 04-implementation.md        # System implementation details
-├── 05-results.md               # Experimental results
-├── 06-discussion.md            # Analysis and interpretation
-├── 07-conclusion.md            # Conclusions and future work
+├── 01-introduction.md          # Research problem and objectives (planned)
+├── 02-literature-review.md     # Survey of SSI and vehicle identity (planned; needs citations)
+├── chapter3-methodology/       # ✏️ Draft — research design & measurement methods
+├── chapter4-implementation/    # ✏️ Draft — system architecture & implementation
+├── chapter5-results/           # ✏️ Draft from measured artifacts
+├── 06-discussion.md            # Analysis and interpretation (planned)
+├── 07-conclusion.md            # Conclusions and future work (planned)
 └── appendices/                 # Code listings, data tables
 ```
 
@@ -25,11 +25,11 @@ at [`chapter5-results/`](chapter5-results/). Remaining work is public-testnet
 
 | Chapter | Title | Status | Pages (est.) |
 |---------|-------|--------|-------|
-| 1 | Introduction | 🔄 Draft | 15 |
-| 2 | Literature Review | 🔄 Draft | 30 |
-| 3 | Methodology | ✅ Complete | 25 |
-| 4 | Implementation | ✅ Complete | 40 |
-| 5 | Results | 🔄 Draft from measured artifacts (`chapter5-results/`) | 35 |
+| 1 | Introduction | ⏳ Planned | 15 |
+| 2 | Literature Review | ⏳ Planned (needs citation set) | 30 |
+| 3 | Methodology | ✏️ Draft (`chapter3-methodology/`) | 25 |
+| 4 | Implementation | ✏️ Draft (`chapter4-implementation/`) | 40 |
+| 5 | Results | ✏️ Draft from measured artifacts (`chapter5-results/`) | 35 |
 | 6 | Discussion | ⏳ Planned | 20 |
 | 7 | Conclusion | ⏳ Planned | 10 |
 
