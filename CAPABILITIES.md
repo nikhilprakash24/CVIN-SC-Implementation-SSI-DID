@@ -414,7 +414,7 @@ never verifying it (a forgery/replay gap). It now recovers the signer on-chain
 | H1 | Minimal standards ≥10× cheaper to create | **Supported** | ERC-1056/CVIN-Combined ~10× under ERC-721/725; ~33× total spread |
 | H2 | ≥90% W3C compliance | **Supported** | 93.2% executable checker |
 | H3 | Off-chain verify meets V2V budget | **Supported** | 0.165 ms warm SSI verify, ~600× margin |
-| H4 | MOBI VID across backends | **Partial** | one backend measured |
+| H4 | MOBI VID across backends | **Supported** | 5-backend sweep; fidelity gradient (birth+lifecycle native on all; attestation native on claim-capable) |
 | H5 | Hybrid on the security/perf frontier | **Supported** | CVIN-Combined |
 
 ---
