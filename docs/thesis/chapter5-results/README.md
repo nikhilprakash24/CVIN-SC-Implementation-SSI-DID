@@ -414,7 +414,13 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
 | **H2** — ≥90% W3C compliance achievable via a translation layer | **Supported** | 93.2% measured, deviations are canonicalization/suite only; §5.5 |
 | **H3** — off-chain credential verification meets the V2V budget | **Supported** | SSI warm 0.165 ms (95% CI [0.162,0.168], N=30) ≪ 100 ms; cold 0.400 ms ≤ 10 ms; §5.4 |
 | **H4** — MOBI VID realizable across backends | **Supported** (fidelity gradient) | 5-backend native sweep: birth + lifecycle native on all 5; multi-party attestation native on 3/5 (ERC-735, CVIN-Combined, MOBI-VID-V2 = 5/5), partial on ERC-1056/ERC-1155 (3/5); §5.3.1 |
-| **H5** — hybrid on the cost/capability frontier | **Supported** | CVIN-Combined = ERC-1056 identity cost + on-chain claims; §5.3 |
+| **H5** — hybrid on the cost/capability frontier | **Supported** (creation *and* lifetime) | CVIN-Combined = ERC-1056 identity cost + on-chain claims (§5.3); §5.9 sharpens it — the hybrid slides linearly along the cost/verifiability axis (claim fraction *f*), tunable per-event over a vehicle lifetime |
+
+**Scaling addendum (§5.9, RQ-S1–3):** no standard degrades with history (all O(1));
+lifetime cost *reverses* the creation ranking (ERC-1056 cheapest over 15 years,
+CVIN-Combined tunable via *f*); verification is O(1) in credential richness and linear
+in traffic density with a saturation point (P\* ≈ 772 neighbours) far beyond any
+realistic V2V regime.
 
 ---
 
@@ -440,6 +446,118 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
 
 ---
 
+## 5.9 Scaling & Lifetime Cost
+
+**Provenance**: `scaling_marginal.json`, `scaling_lifetime.json` (from
+`1_blockchain-identity/scripts/benchmark_scaling.js`), and `scaling_verify.json`
+(from `run_verify_richness.py`, `cv2x-testbed/sumo/run_verify_scaling.py`); design
+pre-registered in `docs/SCALING_EXPERIMENTS.md`; tables/figures via
+`generate_scaling_tables.py`.
+
+The point measurements of §5.2 report the *first* operation on a fresh identity. But
+a vehicle identity is a decades-long accumulating record. This section asks whether
+cost degrades as history accumulates (RQ-S1), what a whole vehicle *lifetime* costs
+(RQ-S2), and whether verification scales benignly with credential richness and traffic
+density (RQ-S3).
+
+### 5.9.1 Marginal cost is O(1) — history does not degrade any standard (RQ-S1)
+
+Fifty sequential append operations were performed on a fresh deployment of each
+standard. **Every standard is O(1): steady-state marginal cost is exactly constant
+from the second operation onward.** The only index-dependence is a one-time
+cold-storage penalty on the first write — precisely **17,100 gas per counter/length
+storage slot touched** (the EVM cold-vs-warm SSTORE differential): ×1 for ERC-1056,
+ERC-735, ERC-1155; ×2 for CVIN-Combined (claim array + change pointer); ×3 for
+MOBI-VID-V2 (event array + two counters). After that first write, each is flat.
+
+| Standard | Append | Steady-state marginal | Verdict |
+|---|--:|--:|:--:|
+| ERC-1056 | `setAttribute` | 35,512 | O(1) |
+| ERC-1155 | `issueCredential` | 40,026 | O(1) |
+| ERC-735 | `addClaim` | 273,233 | O(1) |
+| CVIN-Combined | `addClaim` | 272,933 | O(1) |
+| MOBI-VID-V2 | `recordLifecycleEvent` | 255,680 | O(1) |
+
+This is a **null result, and an important one**: the a-priori concern that
+claim-storing or event-storing substrates would degrade to O(n) as a vehicle's history
+grows is empirically refuted — appending to a Solidity mapping or array is O(1) in gas
+even as the structure grows, because history *aggregation* happens off-chain at read
+time, not on-chain at write time. No standard is disqualified by history accumulation,
+and the cost is now *explained mechanistically* (the 17,100-gas cold-storage step),
+not merely reported — addressing the internal-validity concern of §5.8.
+
+### 5.9.2 Lifetime cost reverses the point ranking — and reveals the hybrid's real value (RQ-S2)
+
+Integrating the steady-state marginal costs over a canonical 15-year profile (1 birth,
+30 maintenance, 4 inspections, 1 recall, 3 transfers ≈ 39 records) gives the lifetime
+cost per standard. **This is a model over an assumed profile; gas is relative on-chain
+work, not fiat.**
+
+| Rank | Standard | Lifetime gas | ±50%-frequency band |
+|---|---|--:|---|
+| 1 | ERC-1056 | 1,450,824 | 0.75–2.15 M |
+| 2 | ERC-1155 | 1,755,738 | 0.93–2.58 M |
+| 3 | CVIN-Combined | 9,759,510 | 4.91–14.6 M |
+| 4 | MOBI-VID-V2 | 9,847,777 | 5.07–14.6 M |
+| 5 | ERC-735 | 11,052,885 | 6.23–15.9 M |
+
+**The ranking reverses §5.2.** CVIN-Combined, the *cheapest* substrate to *create* an
+identity (52,178 gas), is only third over a *lifetime* — because storing every
+lifecycle event as an on-chain claim costs ~273k each, versus ~35k for an event-log
+write. The event-only substrates (ERC-1056, ERC-1155) are ~6–7× cheaper over a
+lifetime. **The "best" standard therefore depends on whether the workload is
+creation-dominated or history-dominated** — a temporal dimension the point benchmark
+cannot see, and a sharpening of the "no standard dominates" result (§5.6, H5).
+
+**The critical nuance — and why this strengthens rather than weakens the hybrid.** The
+model above stores *all 39 records* as on-chain claims/events, which is the **worst
+case for CVIN-Combined**: its entire design premise (§4.3) is to record most events
+cheaply on the event-log path and pay the claim price *only* for the safety-critical
+subset that needs on-chain verifiability. Its true lifetime cost is therefore a
+function of the claim fraction *f* — the share of lifecycle events requiring verifiable
+on-chain claims:
+
+> Lifetime(CVIN-Combined, *f*) ≈ 52,178 (birth) + 3 × 51,734 (transfers)
+> + 35 × [(1−*f*)·35,000 (event write) + *f*·272,933 (claim)]
+
+At *f* = 0 this is ≈ **1.43 M** (indistinguishable from ERC-1056, the lifetime winner);
+at *f* = 1 it is the ≈ **9.76 M** worst case tabulated above. **The hybrid slides
+linearly along the entire cost/verifiability trade-off within a single substrate** —
+which is precisely its contribution: not "cheapest always," but the ability to buy
+on-chain verifiability incrementally, only where the application demands it, across the
+vehicle's lifetime. A monolithic substrate forces the choice once, for everything;
+the hybrid defers it to per-event. This is the lifecycle-scale statement of H5.
+
+### 5.9.3 Verification scales benignly (RQ-S3)
+
+- **Vs credential richness (Exp C):** verification is **O(1) in claim count** — median
+  holds ≈ 0.16 ms from 1 to 32 claims (fitted slope 0.0003 ms/claim), p95 ≈ 0.21 ms,
+  staying ≫ 60× under the 10 ms signature-check target across the range. Selective
+  disclosure is mildly **O(k)** in the number of disclosed claims (each adds one salted
+  SHA-256 recompute atop the constant ECDSA recovery), rising only 0.175 → 0.222 ms as
+  *k* goes 1 → 16.
+- **Vs traffic density (Exp D) — the saturation point:** per-vehicle per-interval
+  verification time is **linear at 0.130 ms/neighbour (R² = 0.9999)**. At 80 neighbours
+  it consumes 10.4% of the 100 ms V2V interval; it never saturates within the tested
+  range, and linear extrapolation places the **saturation point at P\* ≈ 772
+  neighbours** — an order of magnitude beyond any realistic V2V neighbourhood (dense
+  intersections are ≤ ~100). The engineering conclusion: **cryptographic verification
+  is decisively not the V2V bottleneck, even at extreme density.** (Crypto load only;
+  excludes radio/MAC — §5.8; extrapolation assumes the linearity that independent
+  per-signature verification guarantees.)
+
+### RQ-S verdicts
+
+- **RQ-S1 — Supported (null):** no standard degrades with history; all are O(1), with
+  the first-write cost mechanistically explained.
+- **RQ-S2 — Supported, with nuance:** lifetime cost reverses the creation ranking;
+  optimal choice is workload-dependent, and the hybrid's value is *tunability* along
+  the cost/verifiability axis (parameterized by claim fraction *f*).
+- **RQ-S3 — Supported:** verification is O(1) in credential richness and linear in
+  peers, never saturating in any realistic regime.
+
+---
+
 *Draft generated from committed measurement artifacts. Regenerate all
-numbers with: the benchmark command (§5.2), the SUMO command (§5.4), and
-the compliance command (§5.5).*
+numbers with: the benchmark command (§5.2), the SUMO command (§5.4), the
+compliance command (§5.5), and the scaling commands (§5.9).*

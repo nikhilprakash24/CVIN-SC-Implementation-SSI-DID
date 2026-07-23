@@ -114,6 +114,8 @@ Every chapter draft is measured against this list before it is called done.
 | SSI warm verify 0.165 ms ≪ 100 ms | H3 | `v2v_latency_stats.json` (N=30, bootstrap CI) | §5.4 |
 | 93.2% W3C compliance | H2 | `w3c_compliance_checker.py` (live; snapshot pending) | §5.5 |
 | No standard dominates; found-and-fixed attestation gap | H5/security | `security_matrix.json`, `attack_results.json` | §5.6 |
+| Marginal cost O(1) (no history degradation); lifetime cost reverses point ranking; hybrid tunable via claim fraction *f* | H5 (lifetime) | `scaling_marginal.json`, `scaling_lifetime.json` | §5.9 |
+| Verify O(1) in claims, linear in peers; V2V saturation P\*≈772 ≫ realistic | H3 (scaling) | `scaling_verify.json` | §5.9 |
 
 ---
 
