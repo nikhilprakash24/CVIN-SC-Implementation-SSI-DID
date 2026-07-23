@@ -80,7 +80,7 @@ never be committed.
 | `4_comparison-framework/results/mobi_vid_backends.{json,csv,tex}` | H4 5-backend gas × fidelity | §5.3.1 |
 | `4_comparison-framework/security-analysis/results/security_matrix.json`, `onchain_security.json`, `attack_results.{json,csv,tex}` | Two-lens security | §5.6 |
 | `cv2x-testbed/sumo/results/v2v_latency_stats.json` (+ `v2v_latency.json`) | V2V latency N=30 + CIs | §5.4 |
-| `w3c_compliance_checker.py` output (live; snapshot to be persisted) | 93.2% W3C compliance | §5.5 |
+| `4_comparison-framework/results/w3c_compliance.json` (snapshot of `w3c_compliance_checker.py`) | 93.2% W3C compliance | §5.5 |
 
 > **Caveat:** `4_comparison-framework/results/sepolia_validation.json` is a **local
 > dry-run** (chainId 31337), not a real public-testnet run. A real Sepolia witness

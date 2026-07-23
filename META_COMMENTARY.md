@@ -38,9 +38,25 @@ register, some written content blocks — and, last, an expansion plan.
 - **Sepolia run** — needs an RPC URL + a funded test-only key to turn the
   validation harness into a real public-testnet witness (then cut `v0.9.0`).
 
+## Working mode (updated by researcher)
+- **`COMPOSITION.md` tags along the whole time** — the master through-line, re-threaded
+  each pass; read it for "what the thesis argues" end to end.
+- **Alternate the flow**: interleave (a) code/execution/analysis, (b) per-source
+  artifacts in batches, (c) thesis-writing passes — not one straight through. Other
+  tasks between artifact batches strengthen the whole.
+- **The priority gap is thesis writing** — the discipline/methodology of an ECE MASc
+  thesis (Part II of `COMPOSITION.md`). Implementation is over-complete; more
+  code/execution/analysis is welcome but the through-line goal is examiner-grade prose.
+- **Have ALL possible information before adding more** (the researcher has much to add
+  later) — hence the consolidation/provenance spine first.
+
 ## Decisions taken this pass
-- Artifacts: **one per source/material** (max granularity), produced in paced waves.
+- Artifacts: **one per source/material**, produced **both** as local committed HTML
+  and (on request) published externally; paced in batches, alternated with other work.
 - `AUTONOMOUS_*` logs: **consolidated + corrected** into `DEVELOPMENT_HISTORY.md`.
+- **Versioning/push:** version everything; full GitHub access is being granted (not a
+  token). On access: `git push --all && git push --tags`; push milestone versions
+  (`v0.7.0`, `v0.8.0`, later `v0.9.0`). See `COMPOSITION.md` Part V.
 
 ## Durability & pacing
 Push is blocked, so every deliverable is committed and the git bundle refreshed;
