@@ -6,13 +6,13 @@ This directory contains the MASc thesis chapters and supporting documentation.
 
 ```
 thesis/
-├── 01-introduction.md          # Research problem and objectives (planned)
+├── chapter1-introduction/      # ✏️ Draft — motivation, RQs, contributions
 ├── 02-literature-review.md     # Survey of SSI and vehicle identity (planned; needs citations)
 ├── chapter3-methodology/       # ✏️ Draft — research design & measurement methods
 ├── chapter4-implementation/    # ✏️ Draft — system architecture & implementation
 ├── chapter5-results/           # ✏️ Draft from measured artifacts
-├── 06-discussion.md            # Analysis and interpretation (planned)
-├── 07-conclusion.md            # Conclusions and future work (planned)
+├── chapter6-discussion/        # ✏️ Draft — interpretation of the results
+├── chapter7-conclusion/        # ✏️ Draft — verdicts, contributions, future work
 └── appendices/                 # Code listings, data tables
 ```
 
@@ -25,13 +25,16 @@ at [`chapter5-results/`](chapter5-results/). Remaining work is public-testnet
 
 | Chapter | Title | Status | Pages (est.) |
 |---------|-------|--------|-------|
-| 1 | Introduction | ⏳ Planned | 15 |
+| 1 | Introduction | ✏️ Draft (`chapter1-introduction/`) | 15 |
 | 2 | Literature Review | ⏳ Planned (needs citation set) | 30 |
 | 3 | Methodology | ✏️ Draft (`chapter3-methodology/`) | 25 |
 | 4 | Implementation | ✏️ Draft (`chapter4-implementation/`) | 40 |
 | 5 | Results | ✏️ Draft from measured artifacts (`chapter5-results/`) | 35 |
-| 6 | Discussion | ⏳ Planned | 20 |
-| 7 | Conclusion | ⏳ Planned | 10 |
+| 6 | Discussion | ✏️ Draft (`chapter6-discussion/`) | 20 |
+| 7 | Conclusion | ✏️ Draft (`chapter7-conclusion/`) | 10 |
+
+**6 of 7 chapters drafted** (all but the Literature Review, which awaits the
+citation set). Chapters 3–7 are grounded in the measured artifacts.
 
 **Total**: ~175 pages (target: 150-200; page counts are estimates)
 

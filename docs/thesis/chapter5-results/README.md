@@ -193,8 +193,8 @@ linkage to a specific prior event.
    (**3/5**), where it degrades to off-chain VCs or an unlinked approximation.
    MOBI VID therefore ports faithfully to 3 of 5 backends and partially to 2.
 
-2. **Event-log standards are cheapest for the common path (supports Fable's
-   H4 sub-hypothesis).** The two event-log backends own the cheapest birth
+2. **Event-log standards are cheapest for the common path.** The two
+   event-log backends own the cheapest birth
    and lifecycle writes (CVIN-Combined 51,728 / 34,652; ERC-1056 51,962 /
    34,946) — roughly **6–9× cheaper** than the purpose-built MOBI-VID-V2
    registry (298,923 / 306,980), which pays for dedicated on-chain structs
