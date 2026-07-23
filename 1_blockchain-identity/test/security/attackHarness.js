@@ -129,6 +129,18 @@ function writeMatrix(metadata) {
   );
   fs.mkdirSync(outDir, { recursive: true });
   const outFile = path.join(outDir, "attack_results.json");
+  // Preserve the previously committed `date` so an unchanged security
+  // outcome re-run produces a byte-identical file (no wall-clock churn
+  // dirtying the tree on every `npx hardhat test`). The provenance of a
+  // real regeneration lives in git history.
+  try {
+    const prior = JSON.parse(fs.readFileSync(outFile, "utf8"));
+    if (prior && prior.metadata && prior.metadata.date) {
+      output.metadata.date = prior.metadata.date;
+    }
+  } catch (_) {
+    /* first run: keep the fresh date */
+  }
   fs.writeFileSync(outFile, JSON.stringify(output, null, 2));
   return outFile;
 }
