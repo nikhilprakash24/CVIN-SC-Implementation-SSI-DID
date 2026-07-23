@@ -31,6 +31,15 @@ register, some written content blocks — and, last, an expansion plan.
 | D8 | This handoff doc — kept live | 🔄 ongoing |
 | D9 | `EXPANSION_PLAN.md` — produced LAST | ⏳ pending |
 
+## ⏸ Gate: research audit pending review
+`docs/RESEARCH_AUDIT.md` is a critical, research-grade self-assessment (validity
+threats, honest claim boundaries, and a research program to close them). Per the
+researcher's "have ALL possible information before we add more," **expansion is gated
+on the researcher auditing §4 (threats) and deciding §7 (framing scope).** Several
+validity threats genuinely narrow the headline claims (gas-determinism ≠ CIs; V2V
+"600× margin" is a sub-component-vs-whole-budget scope mismatch; self-authored
+compliance checker; implementation confounds; informal threat model; no scaling studies).
+
 ## What needs the researcher (not blocking this pass)
 - **Push access** — both remotes 403 all session; work is committed locally + in
   the git bundles sent to you. Push tomorrow when access is restored.
