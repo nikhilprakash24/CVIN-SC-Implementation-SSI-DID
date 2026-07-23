@@ -23,7 +23,7 @@ register, some written content blocks — and, last, an expansion plan.
 |---|---|---|
 | D1 | Attribution correction → `docs/DEVELOPMENT_HISTORY.md`; 4 `AUTONOMOUS_*` logs removed | ✅ done |
 | D2 | `SOURCES.md` master source register | ✅ done |
-| D3 | `PROVENANCE.md` project genealogy | ⏳ next |
+| D3 | `PROVENANCE.md` project genealogy | ✅ done |
 | D4 | Published artifacts — one per source/material (waves A–D) + `docs/ARTIFACTS_MANIFEST.md` | ⏳ pending |
 | D5 | `THESIS_SCAFFOLD.md` + `docs/thesis/appendices/` + Ch. 2 stub | ⏳ pending |
 | D6 | `SIDE_PAPERS.md` register (8 candidates) | ⏳ pending |
