@@ -251,7 +251,7 @@ Additional living docs at repo root: `README.md`, `CHANGELOG.md`, `CAPABILITIES.
 | H1 — minimal-state ≥10× cheaper for identity creation | ✅ Supported (ERC-1056 52,612 vs ERC-721 542,429 = 10.3×) |
 | H2 — ≥90% W3C compliance achievable | ✅ Supported (93.2% measured) |
 | H3 — off-chain verify meets V2V budget | ✅ Supported (SSI warm 0.165 ms ≪ 100 ms) |
-| H4 — MOBI VID realizable across backends | 🔄 Partial (one backend measured) |
+| H4 — MOBI VID realizable across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
 | H5 — hybrid on the cost/capability frontier | ✅ Supported (CVIN-Combined) |
 
 ---

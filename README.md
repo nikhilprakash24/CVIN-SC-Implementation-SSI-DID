@@ -167,7 +167,7 @@ Findings: no standard dominates (a security/performance frontier — **H5**); on
 | H1 — minimal ≥10× cheaper | ✅ Supported |
 | H2 — ≥90% W3C compliance | ✅ Supported (93.2%) |
 | H3 — off-chain verify meets V2V budget | ✅ Supported (0.165 ms warm) |
-| H4 — MOBI VID across backends | 🟡 Partial (one backend measured) |
+| H4 — MOBI VID across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
 | H5 — hybrid on the frontier | ✅ Supported (CVIN-Combined) |
 
 ---
