@@ -24,7 +24,8 @@ indigo accent; system + monospace type; dual light/dark themes).
   matrices, V2V latency, W3C compliance.
 - **Wave C — tools / prior work:** Hardhat, OpenZeppelin, ethers, SUMO, web3,
   eth-account, coincurve, cryptography; CVIN-ID-SCs; repo/template URLs.
-- **Wave D — genealogy nodes:** the researcher's key inputs/decisions (from `PROVENANCE.md`).
+- **Wave D — genealogy nodes:** the researcher's key inputs/decisions — **covered by
+  `PROVENANCE.md`; per-node artifacts optional** (not produced as standalone HTML).
 
 ## Register
 
@@ -51,5 +52,40 @@ style byte-verbatim with the template; grounded in `SOURCES.md` + committed meas
 | 16 | IEEE 1609.2 — V2X security (PKI baseline) | `ieee-1609-2.html` | — |
 | 17 | SAE J2735 — V2X message set | `sae-j2735.html` | — |
 
-_Ext URL stays "—" until external publishing is requested. Waves B (measured-data),
-C (tools/prior-work), D (genealogy) follow in paced batches._
+**Wave B — complete (5 dossiers).** Measured-result dossiers (eyebrow _Source Register ·
+Measured Result_), one per Chapter-5 dataset; every number grounded in the committed JSON
+under `4_comparison-framework/results/`, `…/security-analysis/results/`, and
+`cv2x-testbed/sumo/results/`; each carries its honesty caveat (V2V §4.4 crypto-only scope;
+W3C §4.6 self-assessment; security §4.7 informal adversary model).
+
+| # | Source | File | Ext URL |
+|---|---|---|---|
+| 18 | Gas benchmark — 9-standard cost register (H1/H5) | `result-gas-benchmark.html` | — |
+| 19 | MOBI VID cross-backend sweep (H4) | `result-mobi-backends.html` | — |
+| 20 | Security — two-lens adversarial register (H5) | `result-security.html` | — |
+| 21 | V2V latency — credential verification, N=30 (H3) | `result-v2v-latency.html` | — |
+| 22 | W3C compliance — DID + VC conformance (H2) | `result-w3c-compliance.html` | — |
+
+**Wave C — complete (7 dossiers).** Toolchain dossiers (eyebrow _Source Register ·
+Toolchain_) and one prior-work dossier (_· Prior Work_); versions from `SOURCES.md` §4/§5.
+
+| # | Source | File | Ext URL |
+|---|---|---|---|
+| 23 | Hardhat — Solidity build & gas harness | `hardhat.html` | — |
+| 24 | OpenZeppelin Contracts — audited ERC base | `openzeppelin.html` | — |
+| 25 | ethers.js — contract interaction (v6) | `ethers.html` | — |
+| 26 | SUMO — V2V traffic simulation | `sumo.html` | — |
+| 27 | cryptography — AES-256-GCM VIN cipher & HKDF | `cryptography.html` | — |
+| 28 | coincurve — native secp256k1 | `coincurve.html` | — |
+| 29 | CVIN-ID-SCs — prior smart-contract groundwork | `cvin-id-scs.html` | — |
+
+_Wave C libraries **web3.py** and **eth-account / eth-keys** and the **repo / thesis-template
+URLs** remain register entries in `SOURCES.md` §4/§5; standalone dossiers for them are optional._
+
+**Waves B + C complete (12 new dossiers, 29 total).** All local HTML in `docs/artifacts/`;
+secret-free; `<style>` block and footer **byte-verbatim** with the `erc-1056.html` template;
+dual light/dark themes; every figure grounded in committed `SOURCES.md` sources + measured
+JSON. **Wave D** is covered by `PROVENANCE.md` — per-node genealogy artifacts are optional
+and not produced.
+
+_Ext URL stays "—" until external publishing is requested._
