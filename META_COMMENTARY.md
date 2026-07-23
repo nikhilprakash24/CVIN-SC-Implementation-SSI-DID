@@ -40,6 +40,12 @@ added. Validity threats to revisit when expanding: gas-determinism ≠ CIs; V2V 
 scope mismatch; self-authored compliance checker; implementation confounds; informal
 threat model; no scaling studies.
 
+## Goal & path: thesis-complete base first (see `docs/BASE_COMPLETION_PLAN.md`)
+Reach a self-contained base that would pass as a thesis on its own, THEN layer in the
+researcher's additional material ("a couple notebooks full"). Ungated work proceeding
+(scaling → §5.9, audit reframes, Ch.5 to examiner-grade, LaTeX skeleton with notebook
+slots). Top researcher unblock: **Ch.2 citation set + a one-page notebook index.**
+
 ## What needs the researcher (not blocking this pass)
 - **Push access** — both remotes 403 all session; work is committed locally + in
   the git bundles sent to you. Push tomorrow when access is restored.
