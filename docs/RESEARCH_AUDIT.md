@@ -1,8 +1,14 @@
-# Research Audit — for the researcher's review
+# Research Audit — Interim Internal Report
 
-*A critical, research-grade self-assessment of the project: what it is, what it has
-produced, what it can and cannot yet defensibly claim, and the research program that
-closes the gap. Written to be interrogated, not admired. Audit this before we add more.*
+*Status: **interim internal report**, not a finished assessment — a research-grade
+self-critique captured at v0.9.0-dev to inform decisions, revised as the work matures.
+It is written to be interrogated, not admired.*
+
+**Scope of what this gates.** This report gates **new research, experiments, and
+outward claims** (the §6 program) — those wait on the researcher's §7 framing
+decisions. It does **not** gate **consolidation**: capturing the existing knowledge
+base into stable, complete artifacts is proceeding now, because the goal is to have
+ALL current information stabilized and full *before* deciding what to add.*
 
 **Subject:** MASc thesis (UBC ECE) — comparative analysis of blockchain identity
 standards as SSI substrates for connected/autonomous vehicles.
