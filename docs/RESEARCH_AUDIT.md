@@ -86,13 +86,15 @@ ERC-4337 EntryPoint) and report the delta; (c) add per-operation *opcode/SSTORE
 accounting* so the gas is explained by structure, not just reported — this converts a
 "my number" into a mechanistic result.
 
-### 4.3 The gas "N=30, σ=0" framing is not statistical rigor.
+### 4.3 The gas "N=30, σ=0" framing is not statistical rigor. — ✓ ADDRESSED
+*(§5.2/§5.9 now present gas determinism as reproducibility verification, not CIs; slopes reported as exact.)*
 EVM gas is deterministic for fixed calldata + pre-state; running it 30× confirms the
 EVM is deterministic, nothing more. Presenting it as "confidence intervals" is a
 category error. **Fix:** relabel as **reproducibility/determinism verification** (which
 is genuinely valuable), and reserve statistical language for the latency study.
 
-### 4.4 The V2V "~600× margin" is a scope mismatch.
+### 4.4 The V2V "~600× margin" is a scope mismatch. — ✓ PARTLY ADDRESSED
+*(§5.4/§5.7 claim narrowed to "verification is not the bottleneck" with explicit scope; the analytic end-to-end budget figure — §15 — still pending a citation set.)*
 We compare a *sub-component* (crypto verification, 0.165 ms) against the *whole-system*
 100 ms V2V budget. The dominant budget terms — radio access/MAC contention, propagation,
 queuing, application processing — are **excluded** (no network stack; mock mobility;
@@ -115,13 +117,15 @@ narrower, correct interpretation.
 they exist, and report our checker's agreement with them; without that, present 93.2%
 as a self-assessment, explicitly.
 
-### 4.7 The threat model is informal.
+### 4.7 The threat model is informal. — ✓ ADDRESSED
+*(`docs/THREAT_MODEL.md`: formal adversary model A1–A4, trust assumptions T1–T4, goals G1–G8, mapped to the 54 scenarios + matrix dimensions.)*
 The security work is strong operationally (54 executable attacks, found-and-fixed
 attestation gap) but there is no *formalized* adversary model (capabilities, trust
 assumptions, what is out of scope). **Fix:** a half-page formal threat model in Ch.3;
 map each of the 54 scenarios and the six matrix dimensions to it.
 
-### 4.8 Missing experimental design elements an ECE thesis expects.
+### 4.8 Missing experimental design elements an ECE thesis expects. — ✓ LARGELY ADDRESSED
+*(§5.9 adds marginal-cost stationarity, a lifetime-cost model, verification-richness and traffic-density scaling with a saturation point; the PKI baseline is foregrounded there. Optimizer/calldata sensitivity (SN-1/2) still open.)*
 - **No scaling studies.** Gas vs #delegates/#claims; verify-latency vs credential size
   and vs #peers. Scaling curves are standard ECE evidence and are cheap to produce here.
 - **No sensitivity analysis** (e.g. optimizer runs, calldata size effects).
