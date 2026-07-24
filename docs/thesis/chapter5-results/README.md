@@ -534,6 +534,24 @@ on-chain verifiability incrementally, only where the application demands it, acr
 vehicle's lifetime. A monolithic substrate forces the choice once, for everything;
 the hybrid defers it to per-event. This is the lifecycle-scale statement of H5.
 
+**Frontier & dominance — H5 stated precisely.** Earlier drafts called CVIN-Combined
+"Pareto-optimal" loosely; the committed data lets us make the exact claim. Define the
+objective space (create-identity gas ↓, MOBI VID fidelity ↑; §5.3.1). A point *x*
+dominates *y* iff gas(*x*) ≤ gas(*y*) and fidelity(*x*) ≥ fidelity(*y*) with at least
+one strict. At creation, CVIN-Combined = (52,178 gas, 5/5) is **non-dominated**: it is
+the unique point attaining full fidelity at near-minimal cost — ERC-1056 (52,612, 3/5)
+is neither cheaper *and* higher-fidelity, and every other 5/5 substrate (ERC-735 1.40 M,
+MOBI-VID-V2 298,923) is strictly dominated *by* it. At lifetime scope, among all
+full-fidelity substrates CVIN-Combined at *f*=1 (9.76 M) is the cheapest — it dominates
+ERC-735 (11.05 M) and MOBI-VID-V2 (9.85 M); it is incomparable to ERC-1056 (1.45 M, but
+only 3/5). As *f* varies in [0,1], CVIN-Combined **traces the efficient frontier itself**
+between the cheap-lower-fidelity corner and the full-fidelity corner. So the rigorous H5
+statement is not "cheapest" but: **CVIN-Combined is Pareto-non-dominated on the
+(cost, fidelity) plane at both creation and lifetime scope, and parameterically spans the
+frontier.** (The security axis admits no total order — that is the "no standard
+dominates" result of §5.6 — so dominance is claimed on cost×fidelity, with the security
+trade-off reported separately, per `docs/THREAT_MODEL.md` goals G5–G8.)
+
 ### 5.9.3 Verification scales benignly (RQ-S3)
 
 - **Vs credential richness (Exp C):** verification is **O(1) in claim count** — median

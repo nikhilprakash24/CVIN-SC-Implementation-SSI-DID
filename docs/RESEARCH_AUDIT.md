@@ -132,7 +132,8 @@ map each of the 54 scenarios and the six matrix dimensions to it.
 - **Baseline under-used:** the centralized/PKI baseline exists but isn't foregrounded as
   the control condition it is.
 
-### 4.9 "Pareto-optimal" is used loosely.
+### 4.9 "Pareto-optimal" is used loosely. — ✓ ADDRESSED
+*(§5.9.2 now gives the formal dominance relation and proves CVIN-Combined non-dominated on (cost, fidelity) at creation and lifetime scope, spanning the frontier as claim fraction f varies; security axis reported separately as no-total-order.)*
 Claiming CVIN-Combined is Pareto-optimal requires the axes, the dominance relation, and
 a demonstration that no compared point dominates it. **Fix:** define the objective space
 (gas × fidelity, and separately gas × security-score), plot the frontier, and show the
