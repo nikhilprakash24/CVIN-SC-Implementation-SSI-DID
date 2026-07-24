@@ -580,6 +580,26 @@ trade-off reported separately, per `docs/THREAT_MODEL.md` goals G5–G8.)
 - **RQ-S3 — Supported:** verification is O(1) in credential richness and linear in
   peers, never saturating in any realistic regime.
 
+### 5.9.4 Sensitivity — the comparison is robust (SN-1, SN-2)
+
+**Provenance**: `sensitivity.json`/`.csv`/`.tex`.
+
+Two robustness checks confirm the gas comparison is not an artifact of measurement
+choices. **SN-1 (compiler optimizer):** re-measuring at solc optimizer runs
+∈ {1, 200, 10000} leaves the **ranking identical at every setting**
+(CVIN-Combined < ERC-1056 < MOBI-VID-V2 < ERC-721 < ERC-725xy) and every *runtime*
+message-call operation within **0.4%**. The only large swing is ERC-725xy's
+`createIdentity` (+14.2% at runs=10000) — expected, because that operation is a
+contract *deployment* and higher optimizer runs trade deploy-size for runtime
+efficiency; it does not change ERC-725xy's standing as by far the most expensive to
+instantiate. **SN-2 (calldata composition):** an identical `setAttribute` differing
+only in a 128-byte value (all-zero vs all-non-zero) costs exactly **12 gas/byte** more
+for non-zero bytes (the EVM's 16 − 4 rule), accounting mechanistically for the small
+±12-gas calldata artifacts seen when address/signature byte patterns shift (e.g. the
+Sepolia dry-run, §5.2 provenance note). Together these establish that the headline
+figures and their ranking are compiler- and calldata-robust — closing the
+construct/internal-validity concern (`RESEARCH_AUDIT.md` §4.1, §4.8).
+
 ---
 
 *Draft generated from committed measurement artifacts. Regenerate all

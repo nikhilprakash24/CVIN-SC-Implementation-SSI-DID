@@ -124,8 +124,8 @@ attestation gap) but there is no *formalized* adversary model (capabilities, tru
 assumptions, what is out of scope). **Fix:** a half-page formal threat model in Ch.3;
 map each of the 54 scenarios and the six matrix dimensions to it.
 
-### 4.8 Missing experimental design elements an ECE thesis expects. — ✓ LARGELY ADDRESSED
-*(§5.9 adds marginal-cost stationarity, a lifetime-cost model, verification-richness and traffic-density scaling with a saturation point; the PKI baseline is foregrounded there. Optimizer/calldata sensitivity (SN-1/2) still open.)*
+### 4.8 Missing experimental design elements an ECE thesis expects. — ✓ ADDRESSED
+*(§5.9 adds marginal-cost stationarity, a lifetime-cost model, verification-richness and traffic-density scaling with a saturation point; §5.9.4 adds optimizer + calldata sensitivity (SN-1/2 — ranking robust across optimizer settings; 12 gas/byte calldata rule); PKI baseline foregrounded.)*
 - **No scaling studies.** Gas vs #delegates/#claims; verify-latency vs credential size
   and vs #peers. Scaling curves are standard ECE evidence and are cheap to produce here.
 - **No sensitivity analysis** (e.g. optimizer runs, calldata size effects).
