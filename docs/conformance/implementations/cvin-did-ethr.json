@@ -1,0 +1,60 @@
+{
+  "didMethod": "did:ethr",
+  "implementation": "CVIN did_resolver.py (ERC-1056)",
+  "implementer": "CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)",
+  "supportedContentTypes": [
+    "application/did+ld+json"
+  ],
+  "dids": [
+    "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678"
+  ],
+  "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678": {
+    "didDocumentDataModel": {
+      "properties": {
+        "id": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678",
+        "controller": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678",
+        "verificationMethod": [
+          {
+            "id": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller",
+            "type": "EcdsaSecp256k1VerificationKey2019",
+            "controller": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678",
+            "blockchainAccountId": "eip155:0x1:0x1234567890abcdef1234567890abcdef12345678"
+          }
+        ],
+        "authentication": [
+          "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller"
+        ],
+        "assertionMethod": [
+          "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller"
+        ]
+      }
+    },
+    "application/did+ld+json": {
+      "didDocumentDataModel": {
+        "representationSpecificEntries": {
+          "@context": [
+            "https://www.w3.org/ns/did/v1",
+            "https://w3id.org/security/suites/secp256k1-2019/v1"
+          ]
+        }
+      },
+      "representation": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"controller\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"verificationMethod\": [{\"id\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"blockchainAccountId\": \"eip155:0x1:0x1234567890abcdef1234567890abcdef12345678\"}], \"authentication\": [\"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\"], \"assertionMethod\": [\"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\"]}",
+      "didDocumentMetadata": {
+        "created": "2026-09-24T23:32:46.715115+00:00",
+        "updated": null,
+        "deactivated": false,
+        "versionId": "1",
+        "nextUpdate": null,
+        "nextVersionId": null,
+        "equivalentId": [],
+        "canonicalId": null
+      },
+      "didResolutionMetadata": {
+        "contentType": "application/did+ld+json",
+        "retrieved": "2026-09-24T23:32:46.715160+00:00",
+        "error": null,
+        "errorMessage": null
+      }
+    }
+  }
+}

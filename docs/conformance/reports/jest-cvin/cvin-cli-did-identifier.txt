@@ -1,0 +1,31 @@
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+(node:1033) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS suites/did-identifier/did-identifier.spec.js
+  suites/did-identifier
+    IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      3.x Identifier - did:ethr - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        3.1 DID Syntax
+          did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678
+            ✓ 3.1 DID Syntax - All DIDs MUST conform to the DID Syntax ABNF Rules. (1 ms)
+    IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      3.x Identifier - did:mobi - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        3.1 DID Syntax
+          did:mobi:5YJ3E1EA0PF123456
+            ✓ 3.1 DID Syntax - All DIDs MUST conform to the DID Syntax ABNF Rules.
+    IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      3.x Identifier - did:nft - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        3.1 DID Syntax
+          did:nft:0x1:0xabc:123
+            ✓ 3.1 DID Syntax - All DIDs MUST conform to the DID Syntax ABNF Rules.
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        1.008 s
+Ran all test suites matching /suites\/did-identifier/i.
+Test results written to: report/tmp/cvin-cli-did-identifier.json

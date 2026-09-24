@@ -1,0 +1,2375 @@
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+(node:1178) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+FAIL suites/did-resolution/did-resolution.spec.js
+  suites/did-resolution
+    IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        ✓ All conformant DID resolvers MUST implement the DID resolution functions for at least one DID method and MUST be able to return a DID document in at least one conformant representation. (2 ms)
+        did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678
+          PARAMETER expected outcome: defaultOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax. (1 ms)
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure. (1 ms)
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty. (1 ms)
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty. (1 ms)
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation. (1 ms)
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty. (2 ms)
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure. (1 ms)
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function. (1 ms)
+                ✓ 7.1.1 DID Resolution Options - The Media Type of the caller's preferred representation of the DID document.
+                ✓ 7.1.1 DID Resolution Options - The Media Type MUST be expressed as an ASCII string. (1 ms)
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✕ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations. (3 ms)
+                ✕ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model. (1 ms)
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model. (1 ms)
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string. (1 ms)
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string. (2 ms)
+            DID Document Metadata
+              created
+                ✕ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. (1 ms)
+                ✕ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. (1 ms)
+              updated
+                ✕ 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+                ✕ 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+              deactivated
+                ✓ 7.1.3 DID Document Metadata - deactivated - If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the boolean value false. (1 ms)
+                ✓ 7.1.3 DID Document Metadata - deactivated - If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the boolean value false.
+              nextUpdate
+                ✕ 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+                ✕ 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+              versionId
+                ✓ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+                ✓ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string. (1 ms)
+              nextVersionId
+                ✕ 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string. (1 ms)
+                ✕ 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+              equivalentId
+                ✓ 7.1.3 DID Document Metadata - equivalentId - The value of equivalentId MUST be a set where each item in the list is a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - Each equivalentId DID value MUST be produced by, and a form of, the same DID Method as the id property value.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - The value of equivalentId MUST be a set where each item in the list is a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - Each equivalentId DID value MUST be produced by, and a form of, the same DID Method as the id property value.
+              canonicalId
+                ✕ 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax. (1 ms)
+                ✕ 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+                ✕ 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value. (1 ms)
+            didDocumentStream
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolveRepresentation function was called, this MUST be a byte stream of the resolved DID document in one of the conformant representations. (1 ms)
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream. (1 ms)
+        did:ethr_0x1234
+          PARAMETER expected outcome: invalidDidErrorOutcome
+            ✕ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure. (1 ms)
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✕ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called. (1 ms)
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+                ✕ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string. (1 ms)
+                ✕ 7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax. (2 ms)
+            DID Document Metadata
+              created
+                ✕ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+              updated
+                ✕ 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+              deactivated
+                ✓ 7.1.3 DID Document Metadata - deactivated - If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the boolean value false.
+              nextUpdate
+                ✕ 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+              versionId
+                ✕ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+              nextVersionId
+                ✕ 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string. (1 ms)
+              equivalentId
+                ✓ 7.1.3 DID Document Metadata - equivalentId - The value of equivalentId MUST be a set where each item in the list is a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - Each equivalentId DID value MUST be produced by, and a form of, the same DID Method as the id property value.
+              canonicalId
+                ✕ 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+        did:web:example.com
+          PARAMETER expected outcome: methodNotSupportedErrorOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure. (1 ms)
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure. (1 ms)
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✕ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations. (1 ms)
+                ✕ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+            DID Document Metadata
+              created
+                ✕ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. (1 ms)
+              updated
+                ✕ 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+              deactivated
+                ✓ 7.1.3 DID Document Metadata - deactivated - If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the boolean value false.
+              nextUpdate
+                ✕ 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+              versionId
+                ✕ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+              nextVersionId
+                ✕ 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string. (1 ms)
+              equivalentId
+                ✓ 7.1.3 DID Document Metadata - equivalentId - The value of equivalentId MUST be a set where each item in the list is a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - Each equivalentId DID value MUST be produced by, and a form of, the same DID Method as the id property value.
+              canonicalId
+                ✕ 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+    IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        ✓ All conformant DID resolvers MUST implement the DID resolution functions for at least one DID method and MUST be able to return a DID document in at least one conformant representation. (3 ms)
+        did:mobi:5YJ3E1EA0PF123456
+          PARAMETER expected outcome: defaultOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax. (1 ms)
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty. (1 ms)
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty. (1 ms)
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function. (1 ms)
+                ✓ 7.1.1 DID Resolution Options - The Media Type of the caller's preferred representation of the DID document.
+                ✓ 7.1.1 DID Resolution Options - The Media Type MUST be expressed as an ASCII string.
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✕ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+                ✕ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations. (1 ms)
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+            DID Document Metadata
+              created
+                ✕ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+                ✕ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. (1 ms)
+              updated
+                ✕ 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+                ✕ 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+              deactivated
+                ✓ 7.1.3 DID Document Metadata - deactivated - If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the boolean value false.
+                ✓ 7.1.3 DID Document Metadata - deactivated - If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the boolean value false.
+              nextUpdate
+                ✕ 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property. (1 ms)
+                ✕ 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+              versionId
+                ✕ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+                ✕ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+              nextVersionId
+                ✕ 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string. (1 ms)
+                ✕ 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string. (1 ms)
+              equivalentId
+                ✓ 7.1.3 DID Document Metadata - equivalentId - The value of equivalentId MUST be a set where each item in the list is a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - Each equivalentId DID value MUST be produced by, and a form of, the same DID Method as the id property value.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - The value of equivalentId MUST be a set where each item in the list is a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - Each equivalentId DID value MUST be produced by, and a form of, the same DID Method as the id property value.
+              canonicalId
+                ✕ 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax. (1 ms)
+                ✕ 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+                ✕ 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+            didDocumentStream
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolveRepresentation function was called, this MUST be a byte stream of the resolved DID document in one of the conformant representations.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream. (1 ms)
+        did:mobi:
+          PARAMETER expected outcome: invalidDidErrorOutcome
+            ✕ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty. (2 ms)
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✕ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error. (1 ms)
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure. (1 ms)
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✕ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations. (1 ms)
+                ✕ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+                ✕ 7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.
+            DID Document Metadata
+              created
+                ✕ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+              updated
+                ✕ 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+              deactivated
+                ✓ 7.1.3 DID Document Metadata - deactivated - If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the boolean value false. (1 ms)
+              nextUpdate
+                ✕ 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+              versionId
+                ✕ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+              nextVersionId
+                ✕ 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+              equivalentId
+                ✓ 7.1.3 DID Document Metadata - equivalentId - The value of equivalentId MUST be a set where each item in the list is a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - Each equivalentId DID value MUST be produced by, and a form of, the same DID Method as the id property value.
+              canonicalId
+                ✕ 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✕ 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+    IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        ✓ All conformant DID resolvers MUST implement the DID resolution functions for at least one DID method and MUST be able to return a DID document in at least one conformant representation.
+        did:nft:0x1:0xabc:123
+          PARAMETER expected outcome: defaultOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty. (1 ms)
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+                ✓ 7.1.1 DID Resolution Options - The Media Type of the caller's preferred representation of the DID document.
+                ✓ 7.1.1 DID Resolution Options - The Media Type MUST be expressed as an ASCII string. (2 ms)
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✕ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called. (1 ms)
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+                ✕ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations. (1 ms)
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string. (1 ms)
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string. (1 ms)
+            DID Document Metadata
+              created
+                ✕ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+                ✕ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+              updated
+                ✕ 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+                ✕ 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+              deactivated
+                ✓ 7.1.3 DID Document Metadata - deactivated - If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the boolean value false.
+                ✓ 7.1.3 DID Document Metadata - deactivated - If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the boolean value false.
+              nextUpdate
+                ✕ 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+                ✕ 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+              versionId
+                ✕ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+                ✕ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string. (1 ms)
+              nextVersionId
+                ✕ 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+                ✕ 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+              equivalentId
+                ✓ 7.1.3 DID Document Metadata - equivalentId - The value of equivalentId MUST be a set where each item in the list is a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - Each equivalentId DID value MUST be produced by, and a form of, the same DID Method as the id property value.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - The value of equivalentId MUST be a set where each item in the list is a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - Each equivalentId DID value MUST be produced by, and a form of, the same DID Method as the id property value.
+              canonicalId
+                ✕ 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax. (1 ms)
+                ✕ 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+                ✕ 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+            didDocumentStream
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolveRepresentation function was called, this MUST be a byte stream of the resolved DID document in one of the conformant representations.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream. (1 ms)
+        did:nft:0x1:0xabc
+          PARAMETER expected outcome: invalidDidErrorOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax. (1 ms)
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✕ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✕ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called. (1 ms)
+                ✕ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+                ✕ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process. (1 ms)
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+                ✕ 7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.
+            DID Document Metadata
+              created
+                ✕ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. (1 ms)
+              updated
+                ✕ 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+              deactivated
+                ✓ 7.1.3 DID Document Metadata - deactivated - If a DID has not been deactivated, this property is OPTIONAL, but if included, MUST have the boolean value false.
+              nextUpdate
+                ✕ 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+              versionId
+                ✕ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string. (1 ms)
+              nextVersionId
+                ✕ 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+              equivalentId
+                ✓ 7.1.3 DID Document Metadata - equivalentId - The value of equivalentId MUST be a set where each item in the list is a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - equivalentId - Each equivalentId DID value MUST be produced by, and a form of, the same DID Method as the id property value.
+              canonicalId
+                ✕ 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+                ✓ 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › didDocument › 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+
+    expect(received).toBeFalsy()
+
+    Received: {"@context": ["https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/secp256k1-2019/v1"], "assertionMethod": ["did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller"], "authentication": ["did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller"], "controller": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678", "id": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678", "verificationMethod": [{"blockchainAccountId": "eip155:0x1:0x1234567890abcdef1234567890abcdef12345678", "controller": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678", "id": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller", "type": "EcdsaSecp256k1VerificationKey2019"}]}
+
+      63 |           it('7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.', async () => {
+      64 |             if (didResolutionMetadata.hasOwnProperty('error')) {
+    > 65 |               expect(didDocument).toBeFalsy();
+         |                                   ^
+      66 |             }
+      67 |           });
+      68 |         });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:65:35)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › didDocumentMetadata › 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 8
+    Received array:  ["created", "updated", "deactivated", "versionId", "nextUpdate", "nextVersionId", "equivalentId", "canonicalId"]
+
+      94 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      95 |             utils.expectConformantMetadataStructure(didDocumentMetadata);
+    > 96 |             expect(Object.keys(didDocumentMetadata)).toHaveLength(0);
+         |                                                      ^
+      97 |           }
+      98 |         });
+      99 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:96:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected value: not "contentType"
+    Received array:     ["contentType", "retrieved", "error", "errorMessage"]
+
+      124 |           it('7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.', async () => {
+      125 |             if (execution.function === 'resolve') {
+    > 126 |               expect(Object.keys(didResolutionMetadata)).not.toContain('contentType');
+          |                                                              ^
+      127 |             }
+      128 |           });
+      129 |           if (didResolutionMetadata.hasOwnProperty('contentType')) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:126:62)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+
+    SyntaxError: "undefined" is not valid JSON
+        at JSON.parse (<anonymous>)
+
+      50 |   // TODO: improve this by re-using other test code
+      51 |   if (contentType.startsWith('application/did+ld+json')) {
+    > 52 |     let didDocument = JSON.parse(representation);
+         |                            ^
+      53 |     expect(Object.keys(didDocument)).toContain('@context');
+      54 |     return didDocument;
+      55 |   } else if (contentType.startsWith('application/did+json')) {
+
+      at consumeRepresentation (suites/resolution-utils.js:52:28)
+      at Object.expectConformantDidDocumentRepresentation (suites/resolution-utils.js:73:23)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:133:23)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+
+    expect(received).not.toBeFalsy()
+
+    Received: undefined
+
+      136 |           it('7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.', async() => {
+      137 |             if (didResolutionMetadata.hasOwnProperty('contentType')) {
+    > 138 |               expect(didDocumentStream).not.toBeFalsy();
+          |                                             ^
+      139 |               expect(utils.consumeRepresentation(didDocumentStream, didResolutionMetadata['contentType'])).not.toBeFalsy();
+      140 |               expect(utils.consumeRepresentation(didDocumentStream, 'image/jpeg')).toBeFalsy();
+      141 |             }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:138:45)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      150 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      151 |             it('7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.', async () => {
+    > 152 |               expect(didResolutionMetadata['error']).toBeAsciiString();
+          |                                                      ^
+      153 |               expect(didResolutionMetadata['error']).not.toMatch('\\s');
+      154 |             });
+      155 |           }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:152:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › created › 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      "2026-09-24T23:32:46.715115+00:00"
+
+      185 |     if (didDocumentMetadata.hasOwnProperty('created')) {
+      186 |       it('7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.', async () => {
+    > 187 |         expect(didDocumentMetadata['created']).toBeDidCoreDatetime();
+          |                                                ^
+      188 |         //console.log("CREATED CHECK", didDocumentMetadata['created'], 'SUCCESS');
+      189 |       });
+      190 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:187:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › updated › 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      193 |     if (didDocumentMetadata.hasOwnProperty('updated')) {
+      194 |       it('7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 195 |         expect(didDocumentMetadata['updated']).toBeDidCoreDatetime();
+          |                                                ^
+      196 |         //console.log("UPDATED CHECK", didDocumentMetadata['updated'], 'SUCCESS');
+      197 |       });
+      198 |       /*
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:195:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextUpdate › 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      225 |     if (didDocumentMetadata.hasOwnProperty('nextUpdate')) {
+      226 |       it('7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 227 |         expect(didDocumentMetadata['nextUpdate']).toBeDidCoreDatetime();
+          |                                                   ^
+      228 |       });
+      229 |       /*
+      230 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:227:51)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextVersionId › 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      254 |     if (didDocumentMetadata.hasOwnProperty('nextVersionId')) {
+      255 |       it('7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.', async () => {
+    > 256 |         expect(didDocumentMetadata['nextVersionId']).toBeAsciiString();
+          |                                                      ^
+      257 |       });
+      258 |       /*
+      259 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:256:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      null
+
+      292 |       it('7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.', async () => {
+      293 |         const canonicalId = didDocumentMetadata['canonicalId'];
+    > 294 |         expect(canonicalId).toBeValidDid();
+          |                             ^
+      295 |       });
+      296 |       it('7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.', async () => {
+      297 |         if (didDocument) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:294:29)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+
+    TypeError: Cannot read properties of null (reading 'split')
+
+      33 |
+      34 | const parseDidMethod = (did) => {
+    > 35 |   var res = did.split(":");
+         |                 ^
+      36 |   return res[1];
+      37 | };
+      38 |
+
+      at Object.parseDidMethod (suites/resolution-utils.js:35:17)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:299:24)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › didDocumentStream › 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: ""
+    Received: "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"controller\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"verificationMethod\": [{\"id\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"blockchainAccountId\": \"eip155:0x1:0x1234567890abcdef1234567890abcdef12345678\"}], \"authentication\": [\"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\"], \"assertionMethod\": [\"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\"]}"
+
+      80 |           it('7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream.', async () => {
+      81 |             if (didResolutionMetadata.hasOwnProperty('error')) {
+    > 82 |               expect(didDocumentStream).toBe('');
+         |                                         ^
+      83 |             }
+      84 |           });
+      85 |         });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:82:41)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › didDocumentMetadata › 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 8
+    Received array:  ["created", "updated", "deactivated", "versionId", "nextUpdate", "nextVersionId", "equivalentId", "canonicalId"]
+
+      94 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      95 |             utils.expectConformantMetadataStructure(didDocumentMetadata);
+    > 96 |             expect(Object.keys(didDocumentMetadata)).toHaveLength(0);
+         |                                                      ^
+      97 |           }
+      98 |         });
+      99 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:96:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      150 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      151 |             it('7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.', async () => {
+    > 152 |               expect(didResolutionMetadata['error']).toBeAsciiString();
+          |                                                      ^
+      153 |               expect(didResolutionMetadata['error']).not.toMatch('\\s');
+      154 |             });
+      155 |           }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:152:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › created › 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      "2026-09-24T23:32:46.715115+00:00"
+
+      185 |     if (didDocumentMetadata.hasOwnProperty('created')) {
+      186 |       it('7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.', async () => {
+    > 187 |         expect(didDocumentMetadata['created']).toBeDidCoreDatetime();
+          |                                                ^
+      188 |         //console.log("CREATED CHECK", didDocumentMetadata['created'], 'SUCCESS');
+      189 |       });
+      190 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:187:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › updated › 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      193 |     if (didDocumentMetadata.hasOwnProperty('updated')) {
+      194 |       it('7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 195 |         expect(didDocumentMetadata['updated']).toBeDidCoreDatetime();
+          |                                                ^
+      196 |         //console.log("UPDATED CHECK", didDocumentMetadata['updated'], 'SUCCESS');
+      197 |       });
+      198 |       /*
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:195:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextUpdate › 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      225 |     if (didDocumentMetadata.hasOwnProperty('nextUpdate')) {
+      226 |       it('7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 227 |         expect(didDocumentMetadata['nextUpdate']).toBeDidCoreDatetime();
+          |                                                   ^
+      228 |       });
+      229 |       /*
+      230 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:227:51)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextVersionId › 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      254 |     if (didDocumentMetadata.hasOwnProperty('nextVersionId')) {
+      255 |       it('7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.', async () => {
+    > 256 |         expect(didDocumentMetadata['nextVersionId']).toBeAsciiString();
+          |                                                      ^
+      257 |       });
+      258 |       /*
+      259 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:256:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      null
+
+      292 |       it('7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.', async () => {
+      293 |         const canonicalId = didDocumentMetadata['canonicalId'];
+    > 294 |         expect(canonicalId).toBeValidDid();
+          |                             ^
+      295 |       });
+      296 |       it('7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.', async () => {
+      297 |         if (didDocument) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:294:29)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      "did:ethr_0x1234"
+
+       9 |         expect(did).not.toBeFalsy();
+      10 |         if (! didResolutionMetadata.hasOwnProperty('error') || didResolutionMetadata['error'] !== 'invalidDid') {
+    > 11 |           expect(did).toBeValidDid();
+         |                       ^
+      12 |         }
+      13 |       });
+      14 |       describe('resolutionOptions', () => {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:11:23)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › didDocumentMetadata › 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 8
+    Received array:  ["created", "updated", "deactivated", "versionId", "nextUpdate", "nextVersionId", "equivalentId", "canonicalId"]
+
+      94 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      95 |             utils.expectConformantMetadataStructure(didDocumentMetadata);
+    > 96 |             expect(Object.keys(didDocumentMetadata)).toHaveLength(0);
+         |                                                      ^
+      97 |           }
+      98 |         });
+      99 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:96:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected value: not "contentType"
+    Received array:     ["contentType", "retrieved", "error", "errorMessage"]
+
+      124 |           it('7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.', async () => {
+      125 |             if (execution.function === 'resolve') {
+    > 126 |               expect(Object.keys(didResolutionMetadata)).not.toContain('contentType');
+          |                                                              ^
+      127 |             }
+      128 |           });
+      129 |           if (didResolutionMetadata.hasOwnProperty('contentType')) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:126:62)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+
+    SyntaxError: "undefined" is not valid JSON
+        at JSON.parse (<anonymous>)
+
+      50 |   // TODO: improve this by re-using other test code
+      51 |   if (contentType.startsWith('application/did+ld+json')) {
+    > 52 |     let didDocument = JSON.parse(representation);
+         |                            ^
+      53 |     expect(Object.keys(didDocument)).toContain('@context');
+      54 |     return didDocument;
+      55 |   } else if (contentType.startsWith('application/did+json')) {
+
+      at consumeRepresentation (suites/resolution-utils.js:52:28)
+      at Object.expectConformantDidDocumentRepresentation (suites/resolution-utils.js:73:23)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:133:23)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+
+    expect(received).not.toBeFalsy()
+
+    Received: undefined
+
+      136 |           it('7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.', async() => {
+      137 |             if (didResolutionMetadata.hasOwnProperty('contentType')) {
+    > 138 |               expect(didDocumentStream).not.toBeFalsy();
+          |                                             ^
+      139 |               expect(utils.consumeRepresentation(didDocumentStream, didResolutionMetadata['contentType'])).not.toBeFalsy();
+      140 |               expect(utils.consumeRepresentation(didDocumentStream, 'image/jpeg')).toBeFalsy();
+      141 |             }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:138:45)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "invalidDid"
+    Received: "internalError"
+
+      156 |           if (expectedOutcome === 'invalidDidErrorOutcome') {
+      157 |             it('7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.', async () => {
+    > 158 |               expect(didResolutionMetadata['error']).toBe('invalidDid');
+          |                                                      ^
+      159 |               expect(did).not.toBeValidDid();
+      160 |               expect(didDocument).toBeFalsy();
+      161 |             });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:158:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › created › 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      185 |     if (didDocumentMetadata.hasOwnProperty('created')) {
+      186 |       it('7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.', async () => {
+    > 187 |         expect(didDocumentMetadata['created']).toBeDidCoreDatetime();
+          |                                                ^
+      188 |         //console.log("CREATED CHECK", didDocumentMetadata['created'], 'SUCCESS');
+      189 |       });
+      190 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:187:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › updated › 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      193 |     if (didDocumentMetadata.hasOwnProperty('updated')) {
+      194 |       it('7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 195 |         expect(didDocumentMetadata['updated']).toBeDidCoreDatetime();
+          |                                                ^
+      196 |         //console.log("UPDATED CHECK", didDocumentMetadata['updated'], 'SUCCESS');
+      197 |       });
+      198 |       /*
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:195:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › nextUpdate › 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      225 |     if (didDocumentMetadata.hasOwnProperty('nextUpdate')) {
+      226 |       it('7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 227 |         expect(didDocumentMetadata['nextUpdate']).toBeDidCoreDatetime();
+          |                                                   ^
+      228 |       });
+      229 |       /*
+      230 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:227:51)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › versionId › 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      246 |     if (didDocumentMetadata.hasOwnProperty('versionId')) {
+      247 |       it('7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.', async () => {
+    > 248 |         expect(didDocumentMetadata['versionId']).toBeAsciiString();
+          |                                                  ^
+      249 |         //console.log("VERSION_ID CHECK", didDocumentMetadata['versionId'], 'SUCCESS');
+      250 |       });
+      251 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:248:50)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › nextVersionId › 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      254 |     if (didDocumentMetadata.hasOwnProperty('nextVersionId')) {
+      255 |       it('7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.', async () => {
+    > 256 |         expect(didDocumentMetadata['nextVersionId']).toBeAsciiString();
+          |                                                      ^
+      257 |       });
+      258 |       /*
+      259 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:256:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:ethr_0x1234 › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      null
+
+      292 |       it('7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.', async () => {
+      293 |         const canonicalId = didDocumentMetadata['canonicalId'];
+    > 294 |         expect(canonicalId).toBeValidDid();
+          |                             ^
+      295 |       });
+      296 |       it('7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.', async () => {
+      297 |         if (didDocument) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:294:29)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:web:example.com › PARAMETER expected outcome: methodNotSupportedErrorOutcome › didDocumentMetadata › 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 8
+    Received array:  ["created", "updated", "deactivated", "versionId", "nextUpdate", "nextVersionId", "equivalentId", "canonicalId"]
+
+      94 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      95 |             utils.expectConformantMetadataStructure(didDocumentMetadata);
+    > 96 |             expect(Object.keys(didDocumentMetadata)).toHaveLength(0);
+         |                                                      ^
+      97 |           }
+      98 |         });
+      99 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:96:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:web:example.com › PARAMETER expected outcome: methodNotSupportedErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected value: not "contentType"
+    Received array:     ["contentType", "retrieved", "error", "errorMessage"]
+
+      124 |           it('7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.', async () => {
+      125 |             if (execution.function === 'resolve') {
+    > 126 |               expect(Object.keys(didResolutionMetadata)).not.toContain('contentType');
+          |                                                              ^
+      127 |             }
+      128 |           });
+      129 |           if (didResolutionMetadata.hasOwnProperty('contentType')) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:126:62)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:web:example.com › PARAMETER expected outcome: methodNotSupportedErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+
+    SyntaxError: "undefined" is not valid JSON
+        at JSON.parse (<anonymous>)
+
+      50 |   // TODO: improve this by re-using other test code
+      51 |   if (contentType.startsWith('application/did+ld+json')) {
+    > 52 |     let didDocument = JSON.parse(representation);
+         |                            ^
+      53 |     expect(Object.keys(didDocument)).toContain('@context');
+      54 |     return didDocument;
+      55 |   } else if (contentType.startsWith('application/did+json')) {
+
+      at consumeRepresentation (suites/resolution-utils.js:52:28)
+      at Object.expectConformantDidDocumentRepresentation (suites/resolution-utils.js:73:23)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:133:23)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:web:example.com › PARAMETER expected outcome: methodNotSupportedErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+
+    expect(received).not.toBeFalsy()
+
+    Received: undefined
+
+      136 |           it('7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.', async() => {
+      137 |             if (didResolutionMetadata.hasOwnProperty('contentType')) {
+    > 138 |               expect(didDocumentStream).not.toBeFalsy();
+          |                                             ^
+      139 |               expect(utils.consumeRepresentation(didDocumentStream, didResolutionMetadata['contentType'])).not.toBeFalsy();
+      140 |               expect(utils.consumeRepresentation(didDocumentStream, 'image/jpeg')).toBeFalsy();
+      141 |             }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:138:45)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:web:example.com › PARAMETER expected outcome: methodNotSupportedErrorOutcome › DID Document Metadata › created › 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      185 |     if (didDocumentMetadata.hasOwnProperty('created')) {
+      186 |       it('7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.', async () => {
+    > 187 |         expect(didDocumentMetadata['created']).toBeDidCoreDatetime();
+          |                                                ^
+      188 |         //console.log("CREATED CHECK", didDocumentMetadata['created'], 'SUCCESS');
+      189 |       });
+      190 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:187:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:web:example.com › PARAMETER expected outcome: methodNotSupportedErrorOutcome › DID Document Metadata › updated › 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      193 |     if (didDocumentMetadata.hasOwnProperty('updated')) {
+      194 |       it('7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 195 |         expect(didDocumentMetadata['updated']).toBeDidCoreDatetime();
+          |                                                ^
+      196 |         //console.log("UPDATED CHECK", didDocumentMetadata['updated'], 'SUCCESS');
+      197 |       });
+      198 |       /*
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:195:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:web:example.com › PARAMETER expected outcome: methodNotSupportedErrorOutcome › DID Document Metadata › nextUpdate › 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      225 |     if (didDocumentMetadata.hasOwnProperty('nextUpdate')) {
+      226 |       it('7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 227 |         expect(didDocumentMetadata['nextUpdate']).toBeDidCoreDatetime();
+          |                                                   ^
+      228 |       });
+      229 |       /*
+      230 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:227:51)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:web:example.com › PARAMETER expected outcome: methodNotSupportedErrorOutcome › DID Document Metadata › versionId › 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      246 |     if (didDocumentMetadata.hasOwnProperty('versionId')) {
+      247 |       it('7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.', async () => {
+    > 248 |         expect(didDocumentMetadata['versionId']).toBeAsciiString();
+          |                                                  ^
+      249 |         //console.log("VERSION_ID CHECK", didDocumentMetadata['versionId'], 'SUCCESS');
+      250 |       });
+      251 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:248:50)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:web:example.com › PARAMETER expected outcome: methodNotSupportedErrorOutcome › DID Document Metadata › nextVersionId › 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      254 |     if (didDocumentMetadata.hasOwnProperty('nextVersionId')) {
+      255 |       it('7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.', async () => {
+    > 256 |         expect(didDocumentMetadata['nextVersionId']).toBeAsciiString();
+          |                                                      ^
+      257 |       });
+      258 |       /*
+      259 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:256:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:web:example.com › PARAMETER expected outcome: methodNotSupportedErrorOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      null
+
+      292 |       it('7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.', async () => {
+      293 |         const canonicalId = didDocumentMetadata['canonicalId'];
+    > 294 |         expect(canonicalId).toBeValidDid();
+          |                             ^
+      295 |       });
+      296 |       it('7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.', async () => {
+      297 |         if (didDocument) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:294:29)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › didDocument › 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+
+    expect(received).toBeFalsy()
+
+    Received: {"@context": ["https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/secp256k1-2019/v1"], "alsoKnownAs": ["vin:5YJ3E1EA0PF123456"], "authentication": ["did:mobi:5YJ3E1EA0PF123456#manufacturer-key"], "id": "did:mobi:5YJ3E1EA0PF123456", "service": [{"id": "did:mobi:5YJ3E1EA0PF123456#birth-certificate", "serviceEndpoint": "ipfs://Qm...", "type": "MobiVidBirthCertificate"}, {"id": "did:mobi:5YJ3E1EA0PF123456#lifecycle-events", "serviceEndpoint": "https://mobi-vid-registry.example.com/events", "type": "MobiVidLifecycleEvents"}], "verificationMethod": [{"controller": "did:mobi:5YJ3E1EA0PF123456", "id": "did:mobi:5YJ3E1EA0PF123456#manufacturer-key", "publicKeyHex": "0x...", "type": "EcdsaSecp256k1VerificationKey2019"}]}
+
+      63 |           it('7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.', async () => {
+      64 |             if (didResolutionMetadata.hasOwnProperty('error')) {
+    > 65 |               expect(didDocument).toBeFalsy();
+         |                                   ^
+      66 |             }
+      67 |           });
+      68 |         });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:65:35)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › didDocumentMetadata › 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 8
+    Received array:  ["created", "updated", "deactivated", "versionId", "nextUpdate", "nextVersionId", "equivalentId", "canonicalId"]
+
+      94 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      95 |             utils.expectConformantMetadataStructure(didDocumentMetadata);
+    > 96 |             expect(Object.keys(didDocumentMetadata)).toHaveLength(0);
+         |                                                      ^
+      97 |           }
+      98 |         });
+      99 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:96:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected value: not "contentType"
+    Received array:     ["contentType", "retrieved", "error", "errorMessage"]
+
+      124 |           it('7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.', async () => {
+      125 |             if (execution.function === 'resolve') {
+    > 126 |               expect(Object.keys(didResolutionMetadata)).not.toContain('contentType');
+          |                                                              ^
+      127 |             }
+      128 |           });
+      129 |           if (didResolutionMetadata.hasOwnProperty('contentType')) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:126:62)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+
+    SyntaxError: "undefined" is not valid JSON
+        at JSON.parse (<anonymous>)
+
+      50 |   // TODO: improve this by re-using other test code
+      51 |   if (contentType.startsWith('application/did+ld+json')) {
+    > 52 |     let didDocument = JSON.parse(representation);
+         |                            ^
+      53 |     expect(Object.keys(didDocument)).toContain('@context');
+      54 |     return didDocument;
+      55 |   } else if (contentType.startsWith('application/did+json')) {
+
+      at consumeRepresentation (suites/resolution-utils.js:52:28)
+      at Object.expectConformantDidDocumentRepresentation (suites/resolution-utils.js:73:23)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:133:23)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+
+    expect(received).not.toBeFalsy()
+
+    Received: undefined
+
+      136 |           it('7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.', async() => {
+      137 |             if (didResolutionMetadata.hasOwnProperty('contentType')) {
+    > 138 |               expect(didDocumentStream).not.toBeFalsy();
+          |                                             ^
+      139 |               expect(utils.consumeRepresentation(didDocumentStream, didResolutionMetadata['contentType'])).not.toBeFalsy();
+      140 |               expect(utils.consumeRepresentation(didDocumentStream, 'image/jpeg')).toBeFalsy();
+      141 |             }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:138:45)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      150 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      151 |             it('7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.', async () => {
+    > 152 |               expect(didResolutionMetadata['error']).toBeAsciiString();
+          |                                                      ^
+      153 |               expect(didResolutionMetadata['error']).not.toMatch('\\s');
+      154 |             });
+      155 |           }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:152:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › created › 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      "2026-09-24T23:32:46.715779+00:00"
+
+      185 |     if (didDocumentMetadata.hasOwnProperty('created')) {
+      186 |       it('7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.', async () => {
+    > 187 |         expect(didDocumentMetadata['created']).toBeDidCoreDatetime();
+          |                                                ^
+      188 |         //console.log("CREATED CHECK", didDocumentMetadata['created'], 'SUCCESS');
+      189 |       });
+      190 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:187:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › updated › 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      193 |     if (didDocumentMetadata.hasOwnProperty('updated')) {
+      194 |       it('7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 195 |         expect(didDocumentMetadata['updated']).toBeDidCoreDatetime();
+          |                                                ^
+      196 |         //console.log("UPDATED CHECK", didDocumentMetadata['updated'], 'SUCCESS');
+      197 |       });
+      198 |       /*
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:195:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextUpdate › 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      225 |     if (didDocumentMetadata.hasOwnProperty('nextUpdate')) {
+      226 |       it('7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 227 |         expect(didDocumentMetadata['nextUpdate']).toBeDidCoreDatetime();
+          |                                                   ^
+      228 |       });
+      229 |       /*
+      230 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:227:51)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › versionId › 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      246 |     if (didDocumentMetadata.hasOwnProperty('versionId')) {
+      247 |       it('7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.', async () => {
+    > 248 |         expect(didDocumentMetadata['versionId']).toBeAsciiString();
+          |                                                  ^
+      249 |         //console.log("VERSION_ID CHECK", didDocumentMetadata['versionId'], 'SUCCESS');
+      250 |       });
+      251 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:248:50)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextVersionId › 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      254 |     if (didDocumentMetadata.hasOwnProperty('nextVersionId')) {
+      255 |       it('7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.', async () => {
+    > 256 |         expect(didDocumentMetadata['nextVersionId']).toBeAsciiString();
+          |                                                      ^
+      257 |       });
+      258 |       /*
+      259 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:256:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      null
+
+      292 |       it('7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.', async () => {
+      293 |         const canonicalId = didDocumentMetadata['canonicalId'];
+    > 294 |         expect(canonicalId).toBeValidDid();
+          |                             ^
+      295 |       });
+      296 |       it('7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.', async () => {
+      297 |         if (didDocument) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:294:29)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+
+    TypeError: Cannot read properties of null (reading 'split')
+
+      33 |
+      34 | const parseDidMethod = (did) => {
+    > 35 |   var res = did.split(":");
+         |                 ^
+      36 |   return res[1];
+      37 | };
+      38 |
+
+      at Object.parseDidMethod (suites/resolution-utils.js:35:17)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:299:24)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › didDocumentStream › 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: ""
+    Received: "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:mobi:5YJ3E1EA0PF123456\", \"verificationMethod\": [{\"id\": \"did:mobi:5YJ3E1EA0PF123456#manufacturer-key\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:mobi:5YJ3E1EA0PF123456\", \"publicKeyHex\": \"0x...\"}], \"authentication\": [\"did:mobi:5YJ3E1EA0PF123456#manufacturer-key\"], \"service\": [{\"id\": \"did:mobi:5YJ3E1EA0PF123456#birth-certificate\", \"type\": \"MobiVidBirthCertificate\", \"serviceEndpoint\": \"ipfs://Qm...\"}, {\"id\": \"did:mobi:5YJ3E1EA0PF123456#lifecycle-events\", \"type\": \"MobiVidLifecycleEvents\", \"serviceEndpoint\": \"https://mobi-vid-registry.example.com/events\"}], \"alsoKnownAs\": [\"vin:5YJ3E1EA0PF123456\"]}"
+
+      80 |           it('7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream.', async () => {
+      81 |             if (didResolutionMetadata.hasOwnProperty('error')) {
+    > 82 |               expect(didDocumentStream).toBe('');
+         |                                         ^
+      83 |             }
+      84 |           });
+      85 |         });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:82:41)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › didDocumentMetadata › 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 8
+    Received array:  ["created", "updated", "deactivated", "versionId", "nextUpdate", "nextVersionId", "equivalentId", "canonicalId"]
+
+      94 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      95 |             utils.expectConformantMetadataStructure(didDocumentMetadata);
+    > 96 |             expect(Object.keys(didDocumentMetadata)).toHaveLength(0);
+         |                                                      ^
+      97 |           }
+      98 |         });
+      99 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:96:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      150 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      151 |             it('7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.', async () => {
+    > 152 |               expect(didResolutionMetadata['error']).toBeAsciiString();
+          |                                                      ^
+      153 |               expect(didResolutionMetadata['error']).not.toMatch('\\s');
+      154 |             });
+      155 |           }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:152:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › created › 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      "2026-09-24T23:32:46.715779+00:00"
+
+      185 |     if (didDocumentMetadata.hasOwnProperty('created')) {
+      186 |       it('7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.', async () => {
+    > 187 |         expect(didDocumentMetadata['created']).toBeDidCoreDatetime();
+          |                                                ^
+      188 |         //console.log("CREATED CHECK", didDocumentMetadata['created'], 'SUCCESS');
+      189 |       });
+      190 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:187:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › updated › 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      193 |     if (didDocumentMetadata.hasOwnProperty('updated')) {
+      194 |       it('7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 195 |         expect(didDocumentMetadata['updated']).toBeDidCoreDatetime();
+          |                                                ^
+      196 |         //console.log("UPDATED CHECK", didDocumentMetadata['updated'], 'SUCCESS');
+      197 |       });
+      198 |       /*
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:195:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextUpdate › 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      225 |     if (didDocumentMetadata.hasOwnProperty('nextUpdate')) {
+      226 |       it('7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 227 |         expect(didDocumentMetadata['nextUpdate']).toBeDidCoreDatetime();
+          |                                                   ^
+      228 |       });
+      229 |       /*
+      230 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:227:51)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › versionId › 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      246 |     if (didDocumentMetadata.hasOwnProperty('versionId')) {
+      247 |       it('7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.', async () => {
+    > 248 |         expect(didDocumentMetadata['versionId']).toBeAsciiString();
+          |                                                  ^
+      249 |         //console.log("VERSION_ID CHECK", didDocumentMetadata['versionId'], 'SUCCESS');
+      250 |       });
+      251 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:248:50)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextVersionId › 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      254 |     if (didDocumentMetadata.hasOwnProperty('nextVersionId')) {
+      255 |       it('7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.', async () => {
+    > 256 |         expect(didDocumentMetadata['nextVersionId']).toBeAsciiString();
+          |                                                      ^
+      257 |       });
+      258 |       /*
+      259 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:256:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi:5YJ3E1EA0PF123456 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      null
+
+      292 |       it('7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.', async () => {
+      293 |         const canonicalId = didDocumentMetadata['canonicalId'];
+    > 294 |         expect(canonicalId).toBeValidDid();
+          |                             ^
+      295 |       });
+      296 |       it('7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.', async () => {
+      297 |         if (didDocument) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:294:29)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      "did:mobi:"
+
+       9 |         expect(did).not.toBeFalsy();
+      10 |         if (! didResolutionMetadata.hasOwnProperty('error') || didResolutionMetadata['error'] !== 'invalidDid') {
+    > 11 |           expect(did).toBeValidDid();
+         |                       ^
+      12 |         }
+      13 |       });
+      14 |       describe('resolutionOptions', () => {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:11:23)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › didResolutionMetadata › 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+
+    expect(received).toBeTruthy()
+
+    Received: null
+
+      40 |           if (utils.isErrorExpectedOutcome(expectedOutcome)) {
+      41 |             expect(Object.keys(didResolutionMetadata)).toContain('error');
+    > 42 |             expect(didResolutionMetadata['error']).toBeTruthy();
+         |                                                    ^
+      43 |           }
+      44 |         });
+      45 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:42:52)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › didDocument › 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+
+    expect(received).toBeFalsy()
+
+    Received: {"@context": ["https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/secp256k1-2019/v1"], "alsoKnownAs": ["vin:"], "authentication": ["did:mobi:#manufacturer-key"], "id": "did:mobi:", "service": [{"id": "did:mobi:#birth-certificate", "serviceEndpoint": "ipfs://Qm...", "type": "MobiVidBirthCertificate"}, {"id": "did:mobi:#lifecycle-events", "serviceEndpoint": "https://mobi-vid-registry.example.com/events", "type": "MobiVidLifecycleEvents"}], "verificationMethod": [{"controller": "did:mobi:", "id": "did:mobi:#manufacturer-key", "publicKeyHex": "0x...", "type": "EcdsaSecp256k1VerificationKey2019"}]}
+
+      63 |           it('7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.', async () => {
+      64 |             if (didResolutionMetadata.hasOwnProperty('error')) {
+    > 65 |               expect(didDocument).toBeFalsy();
+         |                                   ^
+      66 |             }
+      67 |           });
+      68 |         });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:65:35)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › didDocumentMetadata › 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 8
+    Received array:  ["created", "updated", "deactivated", "versionId", "nextUpdate", "nextVersionId", "equivalentId", "canonicalId"]
+
+      94 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      95 |             utils.expectConformantMetadataStructure(didDocumentMetadata);
+    > 96 |             expect(Object.keys(didDocumentMetadata)).toHaveLength(0);
+         |                                                      ^
+      97 |           }
+      98 |         });
+      99 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:96:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected value: not "contentType"
+    Received array:     ["contentType", "retrieved", "error", "errorMessage"]
+
+      124 |           it('7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.', async () => {
+      125 |             if (execution.function === 'resolve') {
+    > 126 |               expect(Object.keys(didResolutionMetadata)).not.toContain('contentType');
+          |                                                              ^
+      127 |             }
+      128 |           });
+      129 |           if (didResolutionMetadata.hasOwnProperty('contentType')) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:126:62)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+
+    SyntaxError: "undefined" is not valid JSON
+        at JSON.parse (<anonymous>)
+
+      50 |   // TODO: improve this by re-using other test code
+      51 |   if (contentType.startsWith('application/did+ld+json')) {
+    > 52 |     let didDocument = JSON.parse(representation);
+         |                            ^
+      53 |     expect(Object.keys(didDocument)).toContain('@context');
+      54 |     return didDocument;
+      55 |   } else if (contentType.startsWith('application/did+json')) {
+
+      at consumeRepresentation (suites/resolution-utils.js:52:28)
+      at Object.expectConformantDidDocumentRepresentation (suites/resolution-utils.js:73:23)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:133:23)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+
+    expect(received).not.toBeFalsy()
+
+    Received: undefined
+
+      136 |           it('7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.', async() => {
+      137 |             if (didResolutionMetadata.hasOwnProperty('contentType')) {
+    > 138 |               expect(didDocumentStream).not.toBeFalsy();
+          |                                             ^
+      139 |               expect(utils.consumeRepresentation(didDocumentStream, didResolutionMetadata['contentType'])).not.toBeFalsy();
+      140 |               expect(utils.consumeRepresentation(didDocumentStream, 'image/jpeg')).toBeFalsy();
+      141 |             }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:138:45)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      150 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      151 |             it('7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.', async () => {
+    > 152 |               expect(didResolutionMetadata['error']).toBeAsciiString();
+          |                                                      ^
+      153 |               expect(didResolutionMetadata['error']).not.toMatch('\\s');
+      154 |             });
+      155 |           }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:152:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "invalidDid"
+    Received: null
+
+      156 |           if (expectedOutcome === 'invalidDidErrorOutcome') {
+      157 |             it('7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.', async () => {
+    > 158 |               expect(didResolutionMetadata['error']).toBe('invalidDid');
+          |                                                      ^
+      159 |               expect(did).not.toBeValidDid();
+      160 |               expect(didDocument).toBeFalsy();
+      161 |             });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:158:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › created › 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      "2026-09-24T23:32:46.715908+00:00"
+
+      185 |     if (didDocumentMetadata.hasOwnProperty('created')) {
+      186 |       it('7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.', async () => {
+    > 187 |         expect(didDocumentMetadata['created']).toBeDidCoreDatetime();
+          |                                                ^
+      188 |         //console.log("CREATED CHECK", didDocumentMetadata['created'], 'SUCCESS');
+      189 |       });
+      190 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:187:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › updated › 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      193 |     if (didDocumentMetadata.hasOwnProperty('updated')) {
+      194 |       it('7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 195 |         expect(didDocumentMetadata['updated']).toBeDidCoreDatetime();
+          |                                                ^
+      196 |         //console.log("UPDATED CHECK", didDocumentMetadata['updated'], 'SUCCESS');
+      197 |       });
+      198 |       /*
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:195:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › nextUpdate › 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      225 |     if (didDocumentMetadata.hasOwnProperty('nextUpdate')) {
+      226 |       it('7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 227 |         expect(didDocumentMetadata['nextUpdate']).toBeDidCoreDatetime();
+          |                                                   ^
+      228 |       });
+      229 |       /*
+      230 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:227:51)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › versionId › 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      246 |     if (didDocumentMetadata.hasOwnProperty('versionId')) {
+      247 |       it('7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.', async () => {
+    > 248 |         expect(didDocumentMetadata['versionId']).toBeAsciiString();
+          |                                                  ^
+      249 |         //console.log("VERSION_ID CHECK", didDocumentMetadata['versionId'], 'SUCCESS');
+      250 |       });
+      251 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:248:50)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › nextVersionId › 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      254 |     if (didDocumentMetadata.hasOwnProperty('nextVersionId')) {
+      255 |       it('7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.', async () => {
+    > 256 |         expect(didDocumentMetadata['nextVersionId']).toBeAsciiString();
+          |                                                      ^
+      257 |       });
+      258 |       /*
+      259 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:256:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      null
+
+      292 |       it('7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.', async () => {
+      293 |         const canonicalId = didDocumentMetadata['canonicalId'];
+    > 294 |         expect(canonicalId).toBeValidDid();
+          |                             ^
+      295 |       });
+      296 |       it('7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.', async () => {
+      297 |         if (didDocument) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:294:29)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:mobi: › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+
+    TypeError: Cannot read properties of null (reading 'split')
+
+      33 |
+      34 | const parseDidMethod = (did) => {
+    > 35 |   var res = did.split(":");
+         |                 ^
+      36 |   return res[1];
+      37 | };
+      38 |
+
+      at Object.parseDidMethod (suites/resolution-utils.js:35:17)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:299:24)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › didDocument › 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+
+    expect(received).toBeFalsy()
+
+    Received: {"@context": ["https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/secp256k1-2019/v1"], "authentication": ["did:nft:0x1:0xabc:123#owner"], "id": "did:nft:0x1:0xabc:123", "service": [{"id": "did:nft:0x1:0xabc:123#nft-metadata", "serviceEndpoint": "https://api.opensea.io/api/v1/asset/0xabc/123", "type": "NFTMetadata"}], "verificationMethod": [{"blockchainAccountId": "eip155:0x1:0xabc", "controller": "did:nft:0x1:0xabc:123", "id": "did:nft:0x1:0xabc:123#owner", "type": "EcdsaSecp256k1VerificationKey2019"}]}
+
+      63 |           it('7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.', async () => {
+      64 |             if (didResolutionMetadata.hasOwnProperty('error')) {
+    > 65 |               expect(didDocument).toBeFalsy();
+         |                                   ^
+      66 |             }
+      67 |           });
+      68 |         });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:65:35)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › didDocumentMetadata › 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 8
+    Received array:  ["created", "updated", "deactivated", "versionId", "nextUpdate", "nextVersionId", "equivalentId", "canonicalId"]
+
+      94 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      95 |             utils.expectConformantMetadataStructure(didDocumentMetadata);
+    > 96 |             expect(Object.keys(didDocumentMetadata)).toHaveLength(0);
+         |                                                      ^
+      97 |           }
+      98 |         });
+      99 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:96:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected value: not "contentType"
+    Received array:     ["contentType", "retrieved", "error", "errorMessage"]
+
+      124 |           it('7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.', async () => {
+      125 |             if (execution.function === 'resolve') {
+    > 126 |               expect(Object.keys(didResolutionMetadata)).not.toContain('contentType');
+          |                                                              ^
+      127 |             }
+      128 |           });
+      129 |           if (didResolutionMetadata.hasOwnProperty('contentType')) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:126:62)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+
+    SyntaxError: "undefined" is not valid JSON
+        at JSON.parse (<anonymous>)
+
+      50 |   // TODO: improve this by re-using other test code
+      51 |   if (contentType.startsWith('application/did+ld+json')) {
+    > 52 |     let didDocument = JSON.parse(representation);
+         |                            ^
+      53 |     expect(Object.keys(didDocument)).toContain('@context');
+      54 |     return didDocument;
+      55 |   } else if (contentType.startsWith('application/did+json')) {
+
+      at consumeRepresentation (suites/resolution-utils.js:52:28)
+      at Object.expectConformantDidDocumentRepresentation (suites/resolution-utils.js:73:23)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:133:23)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+
+    expect(received).not.toBeFalsy()
+
+    Received: undefined
+
+      136 |           it('7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.', async() => {
+      137 |             if (didResolutionMetadata.hasOwnProperty('contentType')) {
+    > 138 |               expect(didDocumentStream).not.toBeFalsy();
+          |                                             ^
+      139 |               expect(utils.consumeRepresentation(didDocumentStream, didResolutionMetadata['contentType'])).not.toBeFalsy();
+      140 |               expect(utils.consumeRepresentation(didDocumentStream, 'image/jpeg')).toBeFalsy();
+      141 |             }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:138:45)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      150 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      151 |             it('7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.', async () => {
+    > 152 |               expect(didResolutionMetadata['error']).toBeAsciiString();
+          |                                                      ^
+      153 |               expect(didResolutionMetadata['error']).not.toMatch('\\s');
+      154 |             });
+      155 |           }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:152:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › created › 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      "2026-09-24T23:32:46.716390+00:00"
+
+      185 |     if (didDocumentMetadata.hasOwnProperty('created')) {
+      186 |       it('7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.', async () => {
+    > 187 |         expect(didDocumentMetadata['created']).toBeDidCoreDatetime();
+          |                                                ^
+      188 |         //console.log("CREATED CHECK", didDocumentMetadata['created'], 'SUCCESS');
+      189 |       });
+      190 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:187:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › updated › 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      193 |     if (didDocumentMetadata.hasOwnProperty('updated')) {
+      194 |       it('7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 195 |         expect(didDocumentMetadata['updated']).toBeDidCoreDatetime();
+          |                                                ^
+      196 |         //console.log("UPDATED CHECK", didDocumentMetadata['updated'], 'SUCCESS');
+      197 |       });
+      198 |       /*
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:195:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextUpdate › 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      225 |     if (didDocumentMetadata.hasOwnProperty('nextUpdate')) {
+      226 |       it('7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 227 |         expect(didDocumentMetadata['nextUpdate']).toBeDidCoreDatetime();
+          |                                                   ^
+      228 |       });
+      229 |       /*
+      230 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:227:51)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › versionId › 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      246 |     if (didDocumentMetadata.hasOwnProperty('versionId')) {
+      247 |       it('7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.', async () => {
+    > 248 |         expect(didDocumentMetadata['versionId']).toBeAsciiString();
+          |                                                  ^
+      249 |         //console.log("VERSION_ID CHECK", didDocumentMetadata['versionId'], 'SUCCESS');
+      250 |       });
+      251 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:248:50)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextVersionId › 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      254 |     if (didDocumentMetadata.hasOwnProperty('nextVersionId')) {
+      255 |       it('7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.', async () => {
+    > 256 |         expect(didDocumentMetadata['nextVersionId']).toBeAsciiString();
+          |                                                      ^
+      257 |       });
+      258 |       /*
+      259 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:256:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      null
+
+      292 |       it('7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.', async () => {
+      293 |         const canonicalId = didDocumentMetadata['canonicalId'];
+    > 294 |         expect(canonicalId).toBeValidDid();
+          |                             ^
+      295 |       });
+      296 |       it('7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.', async () => {
+      297 |         if (didDocument) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:294:29)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.
+
+    TypeError: Cannot read properties of null (reading 'split')
+
+      33 |
+      34 | const parseDidMethod = (did) => {
+    > 35 |   var res = did.split(":");
+         |                 ^
+      36 |   return res[1];
+      37 | };
+      38 |
+
+      at Object.parseDidMethod (suites/resolution-utils.js:35:17)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:299:24)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › didDocumentStream › 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: ""
+    Received: "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:nft:0x1:0xabc:123\", \"verificationMethod\": [{\"id\": \"did:nft:0x1:0xabc:123#owner\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:nft:0x1:0xabc:123\", \"blockchainAccountId\": \"eip155:0x1:0xabc\"}], \"authentication\": [\"did:nft:0x1:0xabc:123#owner\"], \"service\": [{\"id\": \"did:nft:0x1:0xabc:123#nft-metadata\", \"type\": \"NFTMetadata\", \"serviceEndpoint\": \"https://api.opensea.io/api/v1/asset/0xabc/123\"}]}"
+
+      80 |           it('7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream.', async () => {
+      81 |             if (didResolutionMetadata.hasOwnProperty('error')) {
+    > 82 |               expect(didDocumentStream).toBe('');
+         |                                         ^
+      83 |             }
+      84 |           });
+      85 |         });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:82:41)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › didDocumentMetadata › 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 8
+    Received array:  ["created", "updated", "deactivated", "versionId", "nextUpdate", "nextVersionId", "equivalentId", "canonicalId"]
+
+      94 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      95 |             utils.expectConformantMetadataStructure(didDocumentMetadata);
+    > 96 |             expect(Object.keys(didDocumentMetadata)).toHaveLength(0);
+         |                                                      ^
+      97 |           }
+      98 |         });
+      99 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:96:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      150 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      151 |             it('7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.', async () => {
+    > 152 |               expect(didResolutionMetadata['error']).toBeAsciiString();
+          |                                                      ^
+      153 |               expect(didResolutionMetadata['error']).not.toMatch('\\s');
+      154 |             });
+      155 |           }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:152:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › created › 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      "2026-09-24T23:32:46.716390+00:00"
+
+      185 |     if (didDocumentMetadata.hasOwnProperty('created')) {
+      186 |       it('7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.', async () => {
+    > 187 |         expect(didDocumentMetadata['created']).toBeDidCoreDatetime();
+          |                                                ^
+      188 |         //console.log("CREATED CHECK", didDocumentMetadata['created'], 'SUCCESS');
+      189 |       });
+      190 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:187:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › updated › 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      193 |     if (didDocumentMetadata.hasOwnProperty('updated')) {
+      194 |       it('7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 195 |         expect(didDocumentMetadata['updated']).toBeDidCoreDatetime();
+          |                                                ^
+      196 |         //console.log("UPDATED CHECK", didDocumentMetadata['updated'], 'SUCCESS');
+      197 |       });
+      198 |       /*
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:195:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextUpdate › 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      225 |     if (didDocumentMetadata.hasOwnProperty('nextUpdate')) {
+      226 |       it('7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 227 |         expect(didDocumentMetadata['nextUpdate']).toBeDidCoreDatetime();
+          |                                                   ^
+      228 |       });
+      229 |       /*
+      230 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:227:51)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › versionId › 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      246 |     if (didDocumentMetadata.hasOwnProperty('versionId')) {
+      247 |       it('7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.', async () => {
+    > 248 |         expect(didDocumentMetadata['versionId']).toBeAsciiString();
+          |                                                  ^
+      249 |         //console.log("VERSION_ID CHECK", didDocumentMetadata['versionId'], 'SUCCESS');
+      250 |       });
+      251 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:248:50)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › nextVersionId › 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      254 |     if (didDocumentMetadata.hasOwnProperty('nextVersionId')) {
+      255 |       it('7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.', async () => {
+    > 256 |         expect(didDocumentMetadata['nextVersionId']).toBeAsciiString();
+          |                                                      ^
+      257 |       });
+      258 |       /*
+      259 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:256:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc:123 › PARAMETER expected outcome: defaultOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      null
+
+      292 |       it('7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.', async () => {
+      293 |         const canonicalId = didDocumentMetadata['canonicalId'];
+    > 294 |         expect(canonicalId).toBeValidDid();
+          |                             ^
+      295 |       });
+      296 |       it('7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.', async () => {
+      297 |         if (didDocument) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:294:29)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › didDocumentMetadata › 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 8
+    Received array:  ["created", "updated", "deactivated", "versionId", "nextUpdate", "nextVersionId", "equivalentId", "canonicalId"]
+
+      94 |           if (didResolutionMetadata.hasOwnProperty('error')) {
+      95 |             utils.expectConformantMetadataStructure(didDocumentMetadata);
+    > 96 |             expect(Object.keys(didDocumentMetadata)).toHaveLength(0);
+         |                                                      ^
+      97 |           }
+      98 |         });
+      99 |       });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:96:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected value: not "contentType"
+    Received array:     ["contentType", "retrieved", "error", "errorMessage"]
+
+      124 |           it('7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.', async () => {
+      125 |             if (execution.function === 'resolve') {
+    > 126 |               expect(Object.keys(didResolutionMetadata)).not.toContain('contentType');
+          |                                                              ^
+      127 |             }
+      128 |           });
+      129 |           if (didResolutionMetadata.hasOwnProperty('contentType')) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:126:62)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+
+    SyntaxError: "undefined" is not valid JSON
+        at JSON.parse (<anonymous>)
+
+      50 |   // TODO: improve this by re-using other test code
+      51 |   if (contentType.startsWith('application/did+ld+json')) {
+    > 52 |     let didDocument = JSON.parse(representation);
+         |                            ^
+      53 |     expect(Object.keys(didDocument)).toContain('@context');
+      54 |     return didDocument;
+      55 |   } else if (contentType.startsWith('application/did+json')) {
+
+      at consumeRepresentation (suites/resolution-utils.js:52:28)
+      at Object.expectConformantDidDocumentRepresentation (suites/resolution-utils.js:73:23)
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:133:23)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › contentType › 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+
+    expect(received).not.toBeFalsy()
+
+    Received: undefined
+
+      136 |           it('7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.', async() => {
+      137 |             if (didResolutionMetadata.hasOwnProperty('contentType')) {
+    > 138 |               expect(didDocumentStream).not.toBeFalsy();
+          |                                             ^
+      139 |               expect(utils.consumeRepresentation(didDocumentStream, didResolutionMetadata['contentType'])).not.toBeFalsy();
+      140 |               expect(utils.consumeRepresentation(didDocumentStream, 'image/jpeg')).toBeFalsy();
+      141 |             }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:138:45)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "invalidDid"
+    Received: "internalError"
+
+      156 |           if (expectedOutcome === 'invalidDidErrorOutcome') {
+      157 |             it('7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.', async () => {
+    > 158 |               expect(didResolutionMetadata['error']).toBe('invalidDid');
+          |                                                      ^
+      159 |               expect(did).not.toBeValidDid();
+      160 |               expect(didDocument).toBeFalsy();
+      161 |             });
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:158:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › created › 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      185 |     if (didDocumentMetadata.hasOwnProperty('created')) {
+      186 |       it('7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.', async () => {
+    > 187 |         expect(didDocumentMetadata['created']).toBeDidCoreDatetime();
+          |                                                ^
+      188 |         //console.log("CREATED CHECK", didDocumentMetadata['created'], 'SUCCESS');
+      189 |       });
+      190 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:187:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › updated › 7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      193 |     if (didDocumentMetadata.hasOwnProperty('updated')) {
+      194 |       it('7.1.3 DID Document Metadata - updated - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 195 |         expect(didDocumentMetadata['updated']).toBeDidCoreDatetime();
+          |                                                ^
+      196 |         //console.log("UPDATED CHECK", didDocumentMetadata['updated'], 'SUCCESS');
+      197 |       });
+      198 |       /*
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:195:48)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › nextUpdate › 7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.
+
+    expect(received).toBeDidCoreDatetime()
+
+    Expected value to be of a valid DID Core Datetime, but received:
+      null
+
+      225 |     if (didDocumentMetadata.hasOwnProperty('nextUpdate')) {
+      226 |       it('7.1.3 DID Document Metadata - nextUpdate - The value of the property MUST follow the same formatting rules as the created property.', async () => {
+    > 227 |         expect(didDocumentMetadata['nextUpdate']).toBeDidCoreDatetime();
+          |                                                   ^
+      228 |       });
+      229 |       /*
+      230 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:227:51)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › versionId › 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      246 |     if (didDocumentMetadata.hasOwnProperty('versionId')) {
+      247 |       it('7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.', async () => {
+    > 248 |         expect(didDocumentMetadata['versionId']).toBeAsciiString();
+          |                                                  ^
+      249 |         //console.log("VERSION_ID CHECK", didDocumentMetadata['versionId'], 'SUCCESS');
+      250 |       });
+      251 |     }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:248:50)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › nextVersionId › 7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.
+
+    expect(received).toBeAsciiString()
+
+    Expected value to be of type INFRA string, but received:
+      null
+
+      254 |     if (didDocumentMetadata.hasOwnProperty('nextVersionId')) {
+      255 |       it('7.1.3 DID Document Metadata - nextVersionId - The value of the property MUST be an ASCII string.', async () => {
+    > 256 |         expect(didDocumentMetadata['nextVersionId']).toBeAsciiString();
+          |                                                      ^
+      257 |       });
+      258 |       /*
+      259 |        * While it is interesting to test this, it's not actually a normative statement in the specification, therefore this doesn't have to be tested.
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:256:54)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Document Metadata › canonicalId › 7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.
+
+    expect(received).toBeValidDid()
+
+    Expected value to be of valid DID, but received:
+      null
+
+      292 |       it('7.1.3 DID Document Metadata - canonicalId - The value of canonicalId MUST be a string that conforms to the rules in Section § 3.1 DID Syntax.', async () => {
+      293 |         const canonicalId = didDocumentMetadata['canonicalId'];
+    > 294 |         expect(canonicalId).toBeValidDid();
+          |                             ^
+      295 |       });
+      296 |       it('7.1.3 DID Document Metadata - canonicalId - A canonicalId value MUST be produced by, and a form of, the same DID Method as the id property value.', async () => {
+      297 |         if (didDocument) {
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:294:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       113 failed, 186 passed, 299 total
+Snapshots:   0 total
+Time:        1.257 s
+Ran all test suites matching /suites\/did-resolution/i.
+Test results written to: report/tmp/cvin-cli-did-resolution.json

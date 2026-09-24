@@ -1,0 +1,30 @@
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+(node:1141) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS suites/did-consumption/did-consumption.spec.js
+  6.x Consumption - did:ethr - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+    IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      6.3.2 JSON-LD Consumption
+        did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678
+          ✓ 6.3.2 JSON-LD Consumption - The DID document and any DID document data structures expressed by a JSON-LD representation MUST be deserialized into the data model according to the JSON representation consumption rules as defined in § 6.2 JSON. (7 ms)
+  6.x Consumption - did:mobi - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+    IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      6.3.2 JSON-LD Consumption
+        did:mobi:5YJ3E1EA0PF123456
+          ✓ 6.3.2 JSON-LD Consumption - The DID document and any DID document data structures expressed by a JSON-LD representation MUST be deserialized into the data model according to the JSON representation consumption rules as defined in § 6.2 JSON. (1 ms)
+  6.x Consumption - did:nft - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+    IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      6.3.2 JSON-LD Consumption
+        did:nft:0x1:0xabc:123
+          ✓ 6.3.2 JSON-LD Consumption - The DID document and any DID document data structures expressed by a JSON-LD representation MUST be deserialized into the data model according to the JSON representation consumption rules as defined in § 6.2 JSON.
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        0.916 s, estimated 1 s
+Ran all test suites matching /suites\/did-consumption/i.
+Test results written to: report/tmp/cvin-cli-did-consumption.json

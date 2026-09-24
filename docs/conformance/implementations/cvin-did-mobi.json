@@ -1,0 +1,71 @@
+{
+  "didMethod": "did:mobi",
+  "implementation": "CVIN did_resolver.py (MOBI VID)",
+  "implementer": "CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)",
+  "supportedContentTypes": [
+    "application/did+ld+json"
+  ],
+  "dids": [
+    "did:mobi:5YJ3E1EA0PF123456"
+  ],
+  "did:mobi:5YJ3E1EA0PF123456": {
+    "didDocumentDataModel": {
+      "properties": {
+        "id": "did:mobi:5YJ3E1EA0PF123456",
+        "verificationMethod": [
+          {
+            "id": "did:mobi:5YJ3E1EA0PF123456#manufacturer-key",
+            "type": "EcdsaSecp256k1VerificationKey2019",
+            "controller": "did:mobi:5YJ3E1EA0PF123456",
+            "publicKeyHex": "0x..."
+          }
+        ],
+        "authentication": [
+          "did:mobi:5YJ3E1EA0PF123456#manufacturer-key"
+        ],
+        "service": [
+          {
+            "id": "did:mobi:5YJ3E1EA0PF123456#birth-certificate",
+            "type": "MobiVidBirthCertificate",
+            "serviceEndpoint": "ipfs://Qm..."
+          },
+          {
+            "id": "did:mobi:5YJ3E1EA0PF123456#lifecycle-events",
+            "type": "MobiVidLifecycleEvents",
+            "serviceEndpoint": "https://mobi-vid-registry.example.com/events"
+          }
+        ],
+        "alsoKnownAs": [
+          "vin:5YJ3E1EA0PF123456"
+        ]
+      }
+    },
+    "application/did+ld+json": {
+      "didDocumentDataModel": {
+        "representationSpecificEntries": {
+          "@context": [
+            "https://www.w3.org/ns/did/v1",
+            "https://w3id.org/security/suites/secp256k1-2019/v1"
+          ]
+        }
+      },
+      "representation": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:mobi:5YJ3E1EA0PF123456\", \"verificationMethod\": [{\"id\": \"did:mobi:5YJ3E1EA0PF123456#manufacturer-key\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:mobi:5YJ3E1EA0PF123456\", \"publicKeyHex\": \"0x...\"}], \"authentication\": [\"did:mobi:5YJ3E1EA0PF123456#manufacturer-key\"], \"service\": [{\"id\": \"did:mobi:5YJ3E1EA0PF123456#birth-certificate\", \"type\": \"MobiVidBirthCertificate\", \"serviceEndpoint\": \"ipfs://Qm...\"}, {\"id\": \"did:mobi:5YJ3E1EA0PF123456#lifecycle-events\", \"type\": \"MobiVidLifecycleEvents\", \"serviceEndpoint\": \"https://mobi-vid-registry.example.com/events\"}], \"alsoKnownAs\": [\"vin:5YJ3E1EA0PF123456\"]}",
+      "didDocumentMetadata": {
+        "created": "2026-09-24T23:32:46.715779+00:00",
+        "updated": null,
+        "deactivated": false,
+        "versionId": null,
+        "nextUpdate": null,
+        "nextVersionId": null,
+        "equivalentId": [],
+        "canonicalId": null
+      },
+      "didResolutionMetadata": {
+        "contentType": "application/did+ld+json",
+        "retrieved": "2026-09-24T23:32:46.715788+00:00",
+        "error": null,
+        "errorMessage": null
+      }
+    }
+  }
+}
