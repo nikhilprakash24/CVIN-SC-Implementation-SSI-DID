@@ -166,7 +166,10 @@ repo-tracked analysis + prose.
 - **GitHub durability:** ✅ RESOLVED — pushes work; remote is authoritative.
 - **Canonical trunk:** ✅ `dfac1e9` pushed to
   `origin/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy`.
-- **Direction B merge:** ✅ done 2026-09-24 (see §3).
+- **Direction B merge:** ✅ done 2026-09-24 (see §3); merge commit `781dc0b`, trunk at 99 commits.
+- **Tags `v0.7.0`, `v0.8.0`:** recovered from the bundle and present locally, but **not on GitHub** — the session's push policy allows only the designated branch (tag push returns HTTP 403; the API tag path is blocked by the proxy). To publish them from your machine, from a clone of this branch:
+  `git fetch origin claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy && git tag -a v0.7.0 be32c6e -m "v0.7.0 — Integration & Verification Milestone" && git tag -a v0.8.0 a64c6f3 -m "v0.8.0 — Rigor & Ground-Truth Hardening" && git push origin v0.7.0 v0.8.0`
+  (both target commits are on the branch now). `v0.9.0` should be cut on the merge commit `781dc0b` once the Sepolia witness exists.
 - **Direction C triage:** ⏳ awaiting notebook index.
 - **Next durable checkpoint:** tag `v0.9.0` after A+B integration.
 
