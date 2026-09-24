@@ -297,9 +297,12 @@ for each registry) or remove the word from RQ1.
 | 9 | Adopt the W3C DID Method Rubric as the qualitative axis | §4 |
 | 10 | Replace "first" with "measured, domain-constrained, reproducible" in contribution claims | C1, C2 |
 
-Items 2, 3, 4 and 8 need no external input and can be done immediately. Item
-1 needs the bundle. Item 5 needs a decision on which resolver interface to
-expose to the suite.
+**Status 2026-09-24 (end of second pass):** items **2, 3, 4, 6, 8, 9, 10
+done**; item **7 analytic half done** (`docs/LATENCY_BUDGET.md`), simulation
+half pending a SUMO install; item **5 in progress** (external W3C DID test
+suite run); item **1 needs the bundle** from the author. Decisions still
+open for the author: SC-05 (throughput), SC-06 (VC DM version), and
+confirmation of the reconstructed reasons in SC-01/SC-02.
 
 ---
 
