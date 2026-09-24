@@ -1,4 +1,5 @@
 const { expect } = require("chai");
+const { ethers } = require("hardhat");
 
 describe("ERC721 Combined Test Suite", function () {
     let CVIN_NFT_DID_ERC721, CVIN_NFT_DID_ERC721_Monolithic, cvin_nft_did_erc721, cvin_nft_did_erc721_monolithic;
