@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Generated analysis/build artifacts
+w3c_compliance_report.json
+gas-report.txt
