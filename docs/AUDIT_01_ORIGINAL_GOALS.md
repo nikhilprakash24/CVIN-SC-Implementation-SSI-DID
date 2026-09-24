@@ -172,6 +172,18 @@ be run, say why in the limitations section. Note also that the internal
 checker targets VC Data Model **v1.1**, while the project elsewhere claims
 **v2.0**; pick one and state it.
 
+**Closed 2026-09-24** — official w3c/did-test-suite (`939b31d`) run against
+the resolver's real output: **328/441 (74.4%)**; DID identifier, core
+properties, production and consumption all pass; **DID Resolution
+186/299**, with all 113 failures in five metadata root causes (null
+`error`/`errorMessage` emitted on success; `contentType` present on
+`resolve()`; null-valued metadata keys; `created` not XML-datetime; no DID
+ABNF validation). The internal 75% figure is therefore roughly right in
+magnitude but wrong in *content*: it fails optional features that pass
+externally and misses every metadata category that fails externally.
+Write-up and raw reports: `docs/conformance/`. The five root causes are a
+bounded resolver fix; re-running the suite after it is the next step.
+
 ### F6 — The compound hypothesis has not been decomposed in the primary text (medium)
 See §1.2. The thrust document has the decomposition; the README and the
 thesis README do not. One structure, everywhere.

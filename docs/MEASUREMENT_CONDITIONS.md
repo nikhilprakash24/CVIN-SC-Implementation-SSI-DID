@@ -70,7 +70,8 @@ evidence (rewrite) · **B** bundle lineage, unverified on trunk.
 | 1 | createVehicleDID 78,068 gas | `PROJECT_SUMMARY.md` §2.2 | M1 | `1_blockchain-identity` tests; `results_snapshot.json` | **V** |
 | 2 | changeOwner 68,854 · addDelegate 72,219 · setAttribute 51,126 | same | M1 | same | **V** |
 | 3 | ERC-721 mint 102,804 (avg) | same | M1 | `gas-report.txt` | **V** |
-| 4 | W3C compliance 89.6% (DID 75 / VC 100 / SSI 100) | thesis README, summary | M0 | `w3c_compliance_checker.py` | **V** (self-scored; external suite pending, audit F5) |
+| 4 | W3C compliance 89.6% (DID 75 / VC 100 / SSI 100) | thesis README, summary | M0 | `w3c_compliance_checker.py` | **V** — internal, self-scored; external result is #24 |
+| 24 | **External** W3C DID test suite: 328/441 (74.4%) — identifier 3/3, core properties 88/88, production 48/48, consumption 3/3, **resolution 186/299**; per resolver ethr 77/119, mobi 52/90, nft 57/90 | `docs/conformance/W3C_DID_TEST_SUITE.md` | M0 | w3c/did-test-suite @ `939b31d`, implementations generated from `DIDResolver.resolve()`; raw jest reports in `docs/conformance/reports/` | **V** — all 113 failures are resolution-metadata conformance (5 root causes, fixable); internal checker misses these categories |
 | 5 | VC layer 28/28, contracts 47/47 | summary | — | pytest / hardhat | **V** |
 | 6 | "ERC-1056 provides **10× gas savings over ERC-721**" | `docs/thesis/README.md` RQ1 answer | M1 | none | **U** — on the trunk the create-equivalents are 102,804 vs 78,068 = **1.32×**. The order-of-magnitude gaps in the bundle lineage are against ERC-725xy (1,704,992), not ERC-721. |
 | 7 | DID creation ~45,000 gas · attribute 50,000 · delegate 55,000 | `CAPABILITIES.md` | M1 | none | **E** — design estimates; measured values in #1–2 differ (createVehicleDID also writes the VIN attribute) |
