@@ -34,7 +34,10 @@ contract CVIN_NFT_DID_ERC721_Monolithic is IERC165, IERC2981, Ownable {
     mapping(uint256 => RoyaltyInfo) private _tokenRoyaltyInfo;
 
     // Constructor
-    constructor(string memory name, string memory symbol, address royaltyReceiver, uint96 royaltyFeeNumerator) {
+    // OpenZeppelin v5: Ownable requires the initial owner to be passed explicitly.
+    constructor(string memory name, string memory symbol, address royaltyReceiver, uint96 royaltyFeeNumerator)
+        Ownable(msg.sender)
+    {
         _name = name;
         _symbol = symbol;
         _setDefaultRoyalty(royaltyReceiver, royaltyFeeNumerator);
@@ -147,7 +150,9 @@ contract CVIN_NFT_DID_ERC721_Monolithic is IERC165, IERC2981, Ownable {
         require(to != address(0), "Mint to the zero address");
         require(!_exists(tokenId), "Token already minted");
 
-        _balances[to] += tokenId;
+        // Balance counts tokens held, so it moves by 1 per mint/burn/transfer
+        // (the original monolithic draft mistakenly added the tokenId itself).
+        _balances[to] += 1;
         _owners[tokenId] = to;
 
         emit Transfer(address(0), to, tokenId);
@@ -158,7 +163,7 @@ contract CVIN_NFT_DID_ERC721_Monolithic is IERC165, IERC2981, Ownable {
 
         _approve(address(0), tokenId);
 
-        _balances[owner] -= tokenId;
+        _balances[owner] -= 1;
         delete _owners[tokenId];
 
         emit Transfer(owner, address(0), tokenId);
@@ -170,8 +175,8 @@ contract CVIN_NFT_DID_ERC721_Monolithic is IERC165, IERC2981, Ownable {
 
         _approve(address(0), tokenId);
 
-        _balances[from] -= tokenId;
-        _balances[to] += tokenId;
+        _balances[from] -= 1;
+        _balances[to] += 1;
         _owners[tokenId] = to;
 
         emit Transfer(from, to, tokenId);
@@ -183,7 +188,7 @@ contract CVIN_NFT_DID_ERC721_Monolithic is IERC165, IERC2981, Ownable {
     }
 
     function _checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory _data) private returns (bool) {
-        if (to.isContract()) {
+        if (to.code.length > 0) {
             try IERC721Receiver(to).onERC721Received(msg.sender, from, tokenId, _data) returns (bytes4 retval) {
                 return retval == IERC721Receiver.onERC721Received.selector;
             } catch (bytes memory reason) {

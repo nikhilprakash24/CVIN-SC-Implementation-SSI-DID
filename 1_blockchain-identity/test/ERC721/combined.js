@@ -1,4 +1,5 @@
 const { expect } = require("chai");
+const { ethers } = require("hardhat");
 
 describe("ERC721 Combined Test Suite", function () {
     let CVIN_NFT_DID_ERC721, CVIN_NFT_DID_ERC721_Monolithic, cvin_nft_did_erc721, cvin_nft_did_erc721_monolithic;
@@ -9,11 +10,11 @@ describe("ERC721 Combined Test Suite", function () {
 
         CVIN_NFT_DID_ERC721 = await ethers.getContractFactory("CVIN_NFT_DID_ERC721");
         cvin_nft_did_erc721 = await CVIN_NFT_DID_ERC721.deploy("CVIN", "CVN", owner.address, 500);
-        await cvin_nft_did_erc721.deployed();
+        await cvin_nft_did_erc721.waitForDeployment();
 
         CVIN_NFT_DID_ERC721_Monolithic = await ethers.getContractFactory("CVIN_NFT_DID_ERC721_Monolithic");
         cvin_nft_did_erc721_monolithic = await CVIN_NFT_DID_ERC721_Monolithic.deploy("CVIN", "CVN", owner.address, 500);
-        await cvin_nft_did_erc721_monolithic.deployed();
+        await cvin_nft_did_erc721_monolithic.waitForDeployment();
     });
 
     describe("Regular ERC721", function () {

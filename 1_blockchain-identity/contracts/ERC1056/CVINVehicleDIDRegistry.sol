@@ -33,6 +33,12 @@ contract CVINVehicleDIDRegistry {
     /// @dev Contract owner
     address public owner;
 
+    /// @dev Vehicle owner recorded by this registry while it holds ERC-1056
+    ///      control of a DID (see vehicleOwnerOf). address(0) means "the DID
+    ///      address itself", mirroring identityOwner()'s default, so
+    ///      createVehicleDID needs no extra storage write.
+    mapping(address => address) public vehicleOwners;
+
     // ============ Attribute Keys (bytes32) ============
 
     bytes32 public constant DID_VIN = keccak256("did/vehicle/vin");
@@ -90,7 +96,7 @@ contract CVINVehicleDIDRegistry {
 
     modifier onlyVehicleOwner(address did) {
         require(
-            msg.sender == didRegistry.identityOwner(did),
+            msg.sender == vehicleOwnerOf(did),
             "CVINRegistry: not vehicle owner"
         );
         _;
@@ -204,6 +210,31 @@ contract CVINVehicleDIDRegistry {
     // ============ Ownership Management ============
 
     /**
+     * @notice Transfer vehicle ownership in a single step via this registry
+     * @dev Requires this contract to hold ERC-1056 control of the DID (the
+     *      vehicle owner calls didRegistry.changeOwner(did, address(this))
+     *      once). The DID itself is unchanged; only its owner record moves.
+     *      For the direct ERC-1056 flow use updateOwnershipMapping instead.
+     * @param did Vehicle DID
+     * @param newOwner New vehicle owner address
+     */
+    function transferVehicleOwnership(
+        address did,
+        address newOwner
+    ) external onlyVehicleOwner(did) {
+        require(newOwner != address(0), "CVINRegistry: new owner is zero address");
+        require(
+            didRegistry.identityOwner(did) == address(this),
+            "CVINRegistry: registry does not control DID"
+        );
+
+        address previousOwner = vehicleOwnerOf(did);
+        vehicleOwners[did] = newOwner;
+
+        emit VehicleOwnershipTransferred(did, previousOwner, newOwner);
+    }
+
+    /**
      * @notice Transfer vehicle ownership
      * @dev In ERC-1056, the owner must call didRegistry.changeOwner() directly
      * @dev This function updates the VIN mapping after ownership transfer
@@ -306,12 +337,33 @@ contract CVINVehicleDIDRegistry {
     }
 
     /**
+     * @notice Resolve the vehicle owner of a DID
+     * @dev ERC-1056 only lets the identity owner mutate a DID, so the wrapper
+     *      functions above (service endpoints, delegates) can only act once the
+     *      vehicle owner has handed ERC-1056 control of the DID to this contract
+     *      via didRegistry.changeOwner(did, address(this)). While this contract
+     *      is the ERC-1056 owner, the vehicle owner is tracked in vehicleOwners
+     *      (defaulting to the DID address itself, the initial owner set by
+     *      createVehicleDID). Otherwise the ERC-1056 owner is authoritative.
+     * @param did Vehicle DID
+     * @return Vehicle owner address
+     */
+    function vehicleOwnerOf(address did) public view returns (address) {
+        address controller = didRegistry.identityOwner(did);
+        if (controller != address(this)) {
+            return controller;
+        }
+        address recorded = vehicleOwners[did];
+        return recorded == address(0) ? did : recorded;
+    }
+
+    /**
      * @notice Get vehicle owner
      * @param did Vehicle DID
      * @return Owner address
      */
     function getVehicleOwner(address did) external view returns (address) {
-        return didRegistry.identityOwner(did);
+        return vehicleOwnerOf(did);
     }
 
     /**

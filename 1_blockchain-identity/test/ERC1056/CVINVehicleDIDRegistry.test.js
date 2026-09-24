@@ -211,6 +211,13 @@ describe("CVINVehicleDIDRegistry", function () {
                 );
 
             vehicleDID = await vehicleRegistry.getDIDFromVIN(TEST_VIN);
+
+            // ERC-1056 only lets the identity owner mutate a DID, so the vehicle
+            // owner hands control of the DID to the vehicle registry; from then
+            // on the registry tracks the vehicle owner itself (vehicleOwnerOf).
+            await didRegistry
+                .connect(vehicleOwner)
+                .changeOwner(vehicleDID, await vehicleRegistry.getAddress());
         });
 
         it("should transfer ownership", async function () {
@@ -268,6 +275,13 @@ describe("CVINVehicleDIDRegistry", function () {
                 );
 
             vehicleDID = await vehicleRegistry.getDIDFromVIN(TEST_VIN);
+
+            // ERC-1056 only lets the identity owner mutate a DID, so the vehicle
+            // owner hands control of the DID to the vehicle registry; from then
+            // on the registry tracks the vehicle owner itself (vehicleOwnerOf).
+            await didRegistry
+                .connect(vehicleOwner)
+                .changeOwner(vehicleDID, await vehicleRegistry.getAddress());
         });
 
         it("should set service endpoint", async function () {
@@ -311,6 +325,13 @@ describe("CVINVehicleDIDRegistry", function () {
                 );
 
             vehicleDID = await vehicleRegistry.getDIDFromVIN(TEST_VIN);
+
+            // ERC-1056 only lets the identity owner mutate a DID, so the vehicle
+            // owner hands control of the DID to the vehicle registry; from then
+            // on the registry tracks the vehicle owner itself (vehicleOwnerOf).
+            await didRegistry
+                .connect(vehicleOwner)
+                .changeOwner(vehicleDID, await vehicleRegistry.getAddress());
         });
 
         it("should add verification delegate", async function () {
