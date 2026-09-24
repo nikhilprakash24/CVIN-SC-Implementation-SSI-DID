@@ -126,6 +126,16 @@ PKI provider exists; the experiment does not. **Action:** a single script that
 runs identical operations through `pki_identity.py` and `erc1056_provider.py`
 and writes one CSV is the highest-value experiment remaining.
 
+**Closed 2026-09-24** — `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py`,
+results in `cv2x-testbed/results/pki_vs_erc1056.{csv,json,md}` (n=50, three
+providers, exact gas, RPC counts, environment header). Hot-path verify: PKI
+0.32 ms vs ERC-1056 uncached 18.2 ms median (7 round trips). The hypothesis
+conjunct now has evidence, and the evidence supports H3's split (off-chain
+verify is PKI-class; on-chain reads at message time are not), with the
+caveats recorded in the .md. Running it also exposed that the blockchain
+provider's verification path had never worked (placeholder key resolution),
+which strengthens F4's point.
+
 ### F3 — The same quantity is reported with three different values (high)
 Identity-resolution latency appears as "50–100 ms" (`docs/thesis/README.md`
 RQ1 answer), "~0.8 ms" (`RESEARCH_THRUSTS_REPORT.md`), and 0.05 ms (measured
@@ -140,7 +150,14 @@ summary marked components "✅ complete" while the contract project could not
 compile with a fresh install, and the ERC-1056 wrapper's service-endpoint and
 delegate functions were unreachable by construction. The wrapper is the
 substrate that H1 favours; a defect there that no test could reach is the
-strongest possible argument for CI gating. **Action:** make the CI workflows that already exist
+strongest possible argument for CI gating.
+
+**Closed 2026-09-24.** Workflows rewritten to the trunk (`5ab8d4d`); the
+first GitHub run failed because `package-lock.json` was gitignored (an
+environment difference local runs could not reveal); fixed by tracking the
+lockfile (`ed85dfd`). Both push-triggered workflows now pass on GitHub:
+[Smart Contract Tests](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006587),
+[W3C SSI Compliance](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006689). **Action:** make the CI workflows that already exist
 (`test-contracts.yml`, `benchmark.yml`, `w3c-compliance.yml`) actually run on
 the trunk and gate on green. Reproducibility then becomes a badge, not a
 sentence.

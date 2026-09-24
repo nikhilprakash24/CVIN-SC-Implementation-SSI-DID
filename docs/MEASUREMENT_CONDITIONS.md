@@ -78,8 +78,8 @@ evidence (rewrite) · **B** bundle lineage, unverified on trunk.
 | 9 | ERC-725 proxy creation ~350,000 gas | `CAPABILITIES.md` | M1 | none | **E** — ERC-725 has no test on the trunk |
 | 10 | Resolution 50–100 ms "with blockchain lookup" | README, CAPABILITIES, thesis README | M2 | none | **E** |
 | 11 | Resolution ~0.8 ms / <1 ms | `RESEARCH_THRUSTS_REPORT.md` | M0 | none | **S** |
-| 12 | VC verification "5–10 ms (PKI) or 50–100 ms (blockchain)" | `CAPABILITIES.md` | M0/M2 | none | **E** |
-| 13 | VC verify "median 7.5 ms / p95 8.9 ms (offline)" | `INVENTORY.md` | M0 | none (script not on trunk) | **S** — re-measure with the PKI-vs-ERC-1056 experiment |
+| 12 | VC verification "5–10 ms (PKI) or 50–100 ms (blockchain)" | `CAPABILITIES.md` | M0/M2 | none | **E** — measured values are #21 (PKI 0.32 ms M0; ERC-1056 uncached 18.2 ms M1) |
+| 13 | VC verify "median 7.5 ms / p95 8.9 ms (offline)" | `INVENTORY.md` | M0 | none (script not on trunk) | **S** — superseded by #21 |
 | 14 | "<10 ms verification" | `README.md` | M0 | none | **E** (target from roadmap) |
 | 15 | SUMO simulation "with 50 vehicles" | README, thesis README, thrusts report | — | `cv2x-testbed/sumo/` config exists; no results file | **E** — configured, not run |
 | 16 | Nine standards compared | README, thesis README | M1 | 3 implemented on trunk | **B** (audit F1) |
@@ -87,6 +87,9 @@ evidence (rewrite) · **B** bundle lineage, unverified on trunk.
 | 18 | ERC-1056 createIdentity 52,612 · CVIN-Combined 52,178 · ERC-725xy 1,704,992 | bundle lineage | M1 | not on trunk | **B** |
 | 19 | Security 43/43 attacks defended | bundle lineage | — | not on trunk | **B** |
 | 20 | USD costs ("~$0.50 at 30 gwei") | `CAPABILITIES.md` | — | none | **E** — gas price and ETH price are dated; report gas units only, convert in one appendix table with the date |
+| 21 | PKI vs ERC-1056 identical operations, n=50 (median / p95 ms): verify **0.321 / 0.366** PKI vs **18.158 / 23.741** ERC-1056 uncached (7 RPC calls); resolve 0.171 vs 10.058; check-revocation 0.001 vs 7.712; register 15.2 vs 16.9; issue 0.72 vs 13.5; revoke 0.02 vs 12.6 | `cv2x-testbed/results/pki_vs_erc1056.{csv,json,md}` | M0 (PKI, in-process) / M1 (ERC-1056 via local RPC) | `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py`, commit `ed85dfd`+ | **V** — with the caveats in the .md: in-process PKI is a lower bound on real PKI; local RPC floor ≈2.5 ms per round trip; ERC-1056 verify measured uncached (worst case) |
+| 22 | `cv2x-testbed` ERC1056Registry gas: register 54,860 · issue (attribute) 37,779 · revoke 75,044 · deploy 878,509 | same | M1 (solc 0.8.20) | same | **V** — a *different contract* from the `1_blockchain-identity` registries in #1–2; do not merge the two columns |
+| 23 | Signed BSM-like message size: PKI ≈1.08–1.11 kB (carries PEM cert) vs ERC-1056 595 B (carries DID only) | same | — | same | **V** |
 
 ---
 

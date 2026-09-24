@@ -36,6 +36,8 @@ intended to be thesis-grade on its own before parallel research is merged.
 | **W3C compliance** | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ **89.6%** overall (DID Core 75%, VC DM 100%, SSI 100%; 58/67) **[verified]** |
 | **Contract compile** | `1_blockchain-identity` Hardhat compile | ✅ **31 contracts compile** (after fix, see §2.1) **[verified]** |
 | **Contract tests** | `1_blockchain-identity` Hardhat test | ✅ **47 passing / 0 failing** (after reconciliation, see §2.3) **[verified]** |
+| **PKI vs ERC-1056** | `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py` → `cv2x-testbed/results/pki_vs_erc1056.{csv,json,md}` | ✅ n=50 per op, 3 providers. Hot-path verify **PKI 0.32 ms vs ERC-1056 uncached 18.2 ms median / 23.7 ms p95** (7 RPC calls); ERC-1056 register 54,860 gas, revoke 75,044; message 595 B vs ≈1.1 kB **[verified]** (caveats in the .md) |
+| **CI on GitHub** | `.github/workflows/` at `ed85dfd` | ✅ **Smart Contract Tests: success** ([run 36066006587](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006587)) · **W3C SSI Compliance: success** ([run 36066006689](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006689)) — first green CI in the project **[verified externally]** |
 
 ### 2.1 Build fix applied this session
 The trunk **did not compile as received**: `hardhat.config.js` pinned solc
@@ -83,6 +85,15 @@ count and belong in the implementation chapter:
    interoperability detail the W3C-compliance discussion should record
    (`did:ethr` proof suites vs. EIP-191 Data Integrity proofs in the VC
    layer).
+4. **Non-functional blockchain verification path (found by the PKI
+   experiment).** `erc1056_provider.resolve_identity_from_address` returned
+   the literal placeholder `"0x04..."`, so `verify_message` for the
+   blockchain provider could never succeed; `registerVehicle`/`revokeIdentity`
+   were also signed by the deployer, which the contract's `onlyOwner`
+   rejects. Every earlier "V2V + blockchain identity" claim on this trunk
+   therefore rested on a path that did not run. Fixed with real ERC-1056
+   resolution (`getIdentityInfo` + `previousChange` event walk) and
+   vehicle-signed transactions.
 
 Also: the ERC-721 tests were written against `recordEntry` / `payToll`
 functions that no revision of the contract ever had; those were added to the
@@ -147,8 +158,12 @@ session (container is ephemeral — nothing here is pre-provisioned).
 - W3C compliance checker (`scripts/w3c_compliance_checker.py`, 782).
 
 ### 3.4 CI/CD — `.github/workflows/`
-- `test-contracts.yml`, `benchmark.yml` (nightly gas), `w3c-compliance.yml`
-  (>90% gate). Present in-repo; not yet observed running against this trunk.
+- `test-contracts.yml` (compile + 47 tests), `w3c-compliance.yml` (VC pytest
+  + compliance score with an honest 89.0% floor and 90% target),
+  `benchmark.yml` (nightly gas report artifact). Rewritten to match the
+  trunk on 2026-09-24 (`5ab8d4d`); the contract job first failed on GitHub
+  because `package-lock.json` was gitignored, fixed by tracking it
+  (`ed85dfd`). **Both push-triggered workflows are green on GitHub** (§2).
 
 ### 3.5 Documentation
 - Root: `README`, `INVENTORY`, `CAPABILITIES`, `QUICKSTART`,
