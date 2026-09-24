@@ -18,7 +18,11 @@ from typing import Dict, Tuple, Optional
 from datetime import datetime, timedelta
 from eth_account import Account
 from web3 import Web3
-from web3.middleware import geth_poa_middleware
+
+try:  # web3 >= 7 renamed the PoA middleware
+    from web3.middleware import ExtraDataToPOAMiddleware as _poa_middleware
+except ImportError:  # web3 < 7
+    from web3.middleware import geth_poa_middleware as _poa_middleware
 
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
@@ -53,8 +57,8 @@ class ERC1056Provider(IdentityProvider):
 
         # Add PoA middleware for some chains (Ganache, etc.)
         try:
-            self.w3.middleware_onion.inject(geth_poa_middleware, layer=0)
-        except:
+            self.w3.middleware_onion.inject(_poa_middleware, layer=0)
+        except Exception:
             pass
 
         if not self.w3.is_connected():
@@ -79,6 +83,13 @@ class ERC1056Provider(IdentityProvider):
         # Local storage (for performance)
         self.vehicles = {}  # vehicle_id -> vehicle data
         self.did_cache = {}  # DID -> resolved document (TTL cache)
+
+        # Receipt of the most recent state-changing transaction (exact gasUsed,
+        # tx hash, block number). Set by register/revoke/update; None otherwise.
+        self.last_receipt = None
+
+        # ERC-1056 attribute name under which registerVehicle() stores the key
+        self.KEY_ATTRIBUTE_NAME = bytes(Web3.keccak(text="did/pub/secp256k1/veriKey/base64"))
 
         # Update metrics
         self.metrics.signature_algorithm = "ECDSA-secp256k1"
@@ -154,6 +165,73 @@ class ERC1056Provider(IdentityProvider):
             }
         ]
 
+    # ------------------------------------------------------------------
+    # Transaction helpers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _raw_tx(signed):
+        """eth-account >= 0.13 renamed rawTransaction -> raw_transaction."""
+        raw = getattr(signed, 'raw_transaction', None)
+        if raw is None:
+            raw = signed.rawTransaction
+        return raw
+
+    @staticmethod
+    def vehicle_account(vehicle_id: str):
+        """
+        Deterministic Ethereum account for a vehicle (the DID subject / controller).
+
+        ERC1056Registry guards registerVehicle/updateVehicleKey/revokeIdentity with
+        onlyOwner(identity, msg.sender); identityOwner() defaults to the identity
+        itself, so these transactions must be signed by this account.
+        """
+        return Account.from_key(hashlib.sha256(vehicle_id.encode()).digest())
+
+    def _send_tx(self, contract_fn, sender, gas: int):
+        """
+        Build, sign, send and confirm a contract call from `sender` (an eth_account
+        LocalAccount). Raises if the transaction reverted. Stores the receipt in
+        self.last_receipt (exact gasUsed from the receipt).
+        """
+        nonce = self.w3.eth.get_transaction_count(sender.address)
+        transaction = contract_fn.build_transaction({
+            'from': sender.address,
+            'nonce': nonce,
+            'gas': gas,
+            'gasPrice': self.w3.eth.gas_price
+        })
+        signed = sender.sign_transaction(transaction)
+        tx_hash = self.w3.eth.send_raw_transaction(self._raw_tx(signed))
+        receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash)
+        if receipt.status != 1:
+            raise RuntimeError(f"Transaction {tx_hash.hex()} reverted (status={receipt.status})")
+        self.last_receipt = receipt
+        return transaction, receipt
+
+    def fund_vehicle_account(self, vehicle_id: str, wei: int) -> dict:
+        """
+        Transfer `wei` from the provider's funding account to the vehicle's account
+        so the vehicle can pay gas for its own registration/rotation/revocation.
+        Provisioning step; not part of any identity operation.
+        """
+        vehicle = self.vehicle_account(vehicle_id)
+        nonce = self.w3.eth.get_transaction_count(self.account.address)
+        tx = {
+            'to': vehicle.address,
+            'value': wei,
+            'gas': 21000,
+            'gasPrice': self.w3.eth.gas_price,
+            'nonce': nonce,
+            'chainId': self.w3.eth.chain_id,
+        }
+        signed = self.account.sign_transaction(tx)
+        tx_hash = self.w3.eth.send_raw_transaction(self._raw_tx(signed))
+        receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash)
+        if receipt.status != 1:
+            raise RuntimeError(f"Funding transaction {tx_hash.hex()} failed")
+        return receipt
+
     def deploy_contract(self) -> str:
         """
         Deploy ERC-1056 registry contract.
@@ -188,7 +266,7 @@ class ERC1056Provider(IdentityProvider):
 
         # Sign and send
         signed = self.account.sign_transaction(transaction)
-        tx_hash = self.w3.eth.send_raw_transaction(signed.rawTransaction)
+        tx_hash = self.w3.eth.send_raw_transaction(self._raw_tx(signed))
 
         # Wait for receipt
         print(f"Transaction sent: {tx_hash.hex()}")
@@ -218,8 +296,7 @@ class ERC1056Provider(IdentityProvider):
         public_key = private_key.public_key()
 
         # Derive Ethereum address from vehicle_id (deterministic for testing)
-        vehicle_hash = hashlib.sha256(vehicle_id.encode()).digest()
-        vehicle_account = Account.from_key(vehicle_hash)
+        vehicle_account = self.vehicle_account(vehicle_id)
         vehicle_address = vehicle_account.address
 
         # Get public key bytes
@@ -228,25 +305,18 @@ class ERC1056Provider(IdentityProvider):
             format=serialization.PublicFormat.UncompressedPoint
         )
 
-        # Build transaction
-        nonce = self.w3.eth.get_transaction_count(self.account.address)
-
-        transaction = self.contract.functions.registerVehicle(
-            Web3.to_checksum_address(vehicle_address),
-            public_key_bytes
-        ).build_transaction({
-            'from': self.account.address,
-            'nonce': nonce,
-            'gas': 200000,
-            'gasPrice': self.w3.eth.gas_price
-        })
-
-        # Sign and send
-        signed = self.account.sign_transaction(transaction)
-        tx_hash = self.w3.eth.send_raw_transaction(signed.rawTransaction)
-
-        # Wait for confirmation
-        receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash)
+        # registerVehicle() is onlyOwner(identity, msg.sender): the vehicle
+        # registers itself, so the tx is signed by the vehicle account (which
+        # must hold ETH for gas; see fund_vehicle_account()).
+        transaction, receipt = self._send_tx(
+            self.contract.functions.registerVehicle(
+                Web3.to_checksum_address(vehicle_address),
+                public_key_bytes
+            ),
+            vehicle_account,
+            gas=200000,
+        )
+        tx_hash = receipt.transactionHash
 
         # Calculate gas cost (in ETH)
         gas_used = receipt.gasUsed
@@ -365,7 +435,10 @@ class ERC1056Provider(IdentityProvider):
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
-            # Get public key
+            # Get public key (resolved from DIDAttributeChanged events)
+            if not identity_data.get('public_key'):
+                metrics.verification_time_ms = (time.time() - start_time) * 1000
+                return False, metrics
             public_key_bytes = bytes.fromhex(identity_data['public_key'])
             public_key = ec.EllipticCurvePublicKey.from_encoded_point(
                 ec.SECP256K1(),
@@ -405,24 +478,15 @@ class ERC1056Provider(IdentityProvider):
         vehicle = self.vehicles[vehicle_id]
         vehicle_address = vehicle['address']
 
-        # Build transaction
-        nonce = self.w3.eth.get_transaction_count(self.account.address)
-
-        transaction = self.contract.functions.revokeIdentity(
-            Web3.to_checksum_address(vehicle_address)
-        ).build_transaction({
-            'from': self.account.address,
-            'nonce': nonce,
-            'gas': 100000,
-            'gasPrice': self.w3.eth.gas_price
-        })
-
-        # Sign and send
-        signed = self.account.sign_transaction(transaction)
-        tx_hash = self.w3.eth.send_raw_transaction(signed.rawTransaction)
-
-        # Wait for confirmation
-        receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash)
+        # revokeIdentity() is onlyOwner(identity, msg.sender): signed by the
+        # vehicle (identity owner) account.
+        transaction, receipt = self._send_tx(
+            self.contract.functions.revokeIdentity(
+                Web3.to_checksum_address(vehicle_address)
+            ),
+            self.vehicle_account(vehicle_id),
+            gas=100000,
+        )
 
         # Update metrics
         gas_used = receipt.gasUsed
@@ -455,13 +519,40 @@ class ERC1056Provider(IdentityProvider):
         return is_revoked, elapsed
 
     def update_credential(self, vehicle_id: str, updates: Dict) -> bool:
-        """Update credential (requires blockchain transaction)"""
-        # In ERC-1056, updates are done via setAttribute
-        # This is a placeholder for the interface
-        if vehicle_id in self.vehicles:
-            self.vehicles[vehicle_id]['metadata'].update(updates)
-            return True
-        return False
+        """
+        Update credential.
+
+        `{'rotate_key': True}` publishes a fresh secp256k1 verification key for
+        the vehicle on-chain via ERC1056Registry.updateVehicleKey() (a
+        DIDAttributeChanged event, signed by the identity owner). This is the
+        ERC-1056 counterpart of a CA issuing a new certificate: a new key is
+        bound to the identity. Any other keys are stored as local metadata only.
+        """
+        if vehicle_id not in self.vehicles:
+            return False
+
+        vehicle = self.vehicles[vehicle_id]
+        updates = dict(updates or {})
+
+        if updates.pop('rotate_key', False):
+            new_private_key = ec.generate_private_key(ec.SECP256K1(), default_backend())
+            new_public_key_bytes = new_private_key.public_key().public_bytes(
+                encoding=serialization.Encoding.X962,
+                format=serialization.PublicFormat.UncompressedPoint
+            )
+            self._send_tx(
+                self.contract.functions.updateVehicleKey(
+                    Web3.to_checksum_address(vehicle['address']),
+                    new_public_key_bytes
+                ),
+                self.vehicle_account(vehicle_id),
+                gas=200000,
+            )
+            vehicle['private_key'] = new_private_key
+            vehicle['public_key'] = new_private_key.public_key()
+
+        vehicle['metadata'].update(updates)
+        return True
 
     def get_credential(self, vehicle_id: str) -> Optional[VehicleCredential]:
         """Get vehicle credential"""
@@ -502,20 +593,27 @@ class ERC1056Provider(IdentityProvider):
         start_time = time.time()
 
         try:
-            # Get identity info from contract
+            checksum = Web3.to_checksum_address(address)
+
+            # 1 eth_call: registry state for this identity
             owner, last_changed, is_revoked, revoked_at = self.contract.functions.getIdentityInfo(
-                Web3.to_checksum_address(address)
+                checksum
             ).call()
 
-            # In full implementation, we'd parse events to build DID document
-            # For now, return basic info
+            # ERC-1056 resolution: walk the `previousChange` linked list of
+            # blocks (1 eth_getLogs per hop) until the current verification key
+            # attribute is found. Same algorithm as ethr-did-resolver.
+            public_key_hex, valid_to, hops = self._resolve_key_from_events(checksum, last_changed)
+
             identity_data = {
                 'address': address,
                 'owner': owner,
                 'last_changed': last_changed,
                 'is_revoked': is_revoked,
                 'revoked_at': revoked_at,
-                'public_key': "0x04..."  # Would be resolved from events
+                'public_key': public_key_hex,   # hex (no 0x), None if not found
+                'public_key_valid_to': valid_to,
+                'resolution_hops': hops,
             }
 
             elapsed = (time.time() - start_time) * 1000
@@ -524,6 +622,61 @@ class ERC1056Provider(IdentityProvider):
         except Exception as e:
             print(f"Resolution error: {e}")
             return None, (time.time() - start_time) * 1000
+
+    def _resolve_key_from_events(self, checksum_address: str, last_changed: int,
+                                 max_hops: int = 64):
+        """
+        Follow the ERC-1056 change chain backwards from block `last_changed`
+        and return (public_key_hex, valid_to, hops) for the newest still-valid
+        key attribute, or (None, None, hops) if none exists.
+        """
+        identity_topic = '0x' + checksum_address[2:].lower().rjust(64, '0')
+        events = {
+            self.contract.events.DIDOwnerChanged().topic: self.contract.events.DIDOwnerChanged(),
+            self.contract.events.DIDDelegateChanged().topic: self.contract.events.DIDDelegateChanged(),
+            self.contract.events.DIDAttributeChanged().topic: self.contract.events.DIDAttributeChanged(),
+            self.contract.events.DIDRevoked().topic: self.contract.events.DIDRevoked(),
+        }
+        now = int(time.time())
+
+        block = int(last_changed)
+        hops = 0
+        while block > 0 and hops < max_hops:
+            hops += 1
+            logs = self.w3.eth.get_logs({
+                'address': self.contract.address,
+                'fromBlock': block,
+                'toBlock': block,
+                'topics': [None, identity_topic],
+            })
+
+            previous_change = None
+            found_key = None
+            found_valid_to = None
+            for raw in logs:
+                event = events.get(Web3.to_hex(raw['topics'][0]))
+                if event is None:
+                    continue
+                args = event.process_log(raw)['args']
+                if 'previousChange' in args:
+                    prev = int(args['previousChange'])
+                    previous_change = prev if previous_change is None else min(previous_change, prev)
+                if (event.event_name == 'DIDAttributeChanged'
+                        and bytes(args['name']) == self.KEY_ATTRIBUTE_NAME
+                        and int(args['validTo']) > now):
+                    # later logs in the same block supersede earlier ones
+                    found_key = bytes(args['value']).hex()
+                    found_valid_to = int(args['validTo'])
+
+            if found_key is not None:
+                return found_key, found_valid_to, hops
+
+            # DIDRevoked carries no previousChange, so the chain ends there.
+            if previous_change is None or previous_change >= block:
+                break
+            block = previous_change
+
+        return None, None, hops
 
 
 if __name__ == "__main__":
