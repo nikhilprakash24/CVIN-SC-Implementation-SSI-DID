@@ -9,7 +9,7 @@ describe("ERC721 Identity-Based Transaction Test Suite", function () {
 
         CVIN_NFT_DID_ERC721 = await ethers.getContractFactory("CVIN_NFT_DID_ERC721");
         cvin_nft_did_erc721 = await CVIN_NFT_DID_ERC721.deploy("CVIN", "CVN", owner.address, 500);
-        await cvin_nft_did_erc721.deployed();
+        await cvin_nft_did_erc721.waitForDeployment();
     });
 
     it("Should verify identity and pay toll", async function () {
