@@ -75,7 +75,7 @@ hypothesis and the evidence.
 | C2 | "First working implementation" of real-time V2V + blockchain identity | Priority claims ("first") are hard to defend and invite a literature counter-example. At least one 2025 Springer chapter presents an SSI-based V2V authentication system (see §4). Reframe as "an open, reproducible implementation" rather than "first". |
 | C3 | MOBI VID + W3C bridge | Supported (VID V2 registry, provider, VC layer). |
 | C4 | Hybrid architecture | Design exists in `CVIN-SSI-ARCHITECTURE.md`; the CVIN-Combined contract is **not on the trunk**. |
-| C5 | Open-source reproducible testbed | Undermined until today: the trunk **did not compile as received** (solc/OpenZeppelin mismatch, fixed in `b0934a8`) and the contract suite had 14 failing tests. Reproducibility is a property you demonstrate, not declare. |
+| C5 | Open-source reproducible testbed | Undermined until today: the trunk **did not compile as received** (solc/OpenZeppelin mismatch, fixed in `b0934a8`) and the contract suite had 14 failing tests, since reconciled to 47/47. The reconciliation exposed three latent defects (unreachable wrapper functions, an NFT balance-accounting bug, a signing-scheme mismatch) that "✅ complete" session logs had hidden. Reproducibility is a property you demonstrate, not declare. |
 
 ### 1.4 Roadmap success criteria (CV2X_REALISTIC_ROADMAP.md)
 
@@ -135,9 +135,12 @@ define the measurement conditions once (what is resolved, from where, cache
 state), and let only trunk-generated numbers appear in chapters.
 
 ### F4 — Reproducibility was asserted while the build was broken (high)
-Fixed today, but the lesson matters: every session summary marked components
-"✅ complete" while the contract project could not compile with a fresh
-install. **Action:** make the CI workflows that already exist
+Fixed today (build, then 47/47 tests), but the lesson matters: every session
+summary marked components "✅ complete" while the contract project could not
+compile with a fresh install, and the ERC-1056 wrapper's service-endpoint and
+delegate functions were unreachable by construction. The wrapper is the
+substrate that H1 favours; a defect there that no test could reach is the
+strongest possible argument for CI gating. **Action:** make the CI workflows that already exist
 (`test-contracts.yml`, `benchmark.yml`, `w3c-compliance.yml`) actually run on
 the trunk and gate on green. Reproducibility then becomes a badge, not a
 sentence.

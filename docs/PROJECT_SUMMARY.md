@@ -35,7 +35,7 @@ intended to be thesis-grade on its own before parallel research is merged.
 | **DID resolver** | `did_resolver.py did:ethr:0x1:0x…` | ✅ valid W3C DID Document, **~0.05 ms** resolve **[verified]** |
 | **W3C compliance** | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ **89.6%** overall (DID Core 75%, VC DM 100%, SSI 100%; 58/67) **[verified]** |
 | **Contract compile** | `1_blockchain-identity` Hardhat compile | ✅ **31 contracts compile** (after fix, see §2.1) **[verified]** |
-| **Contract tests** | `1_blockchain-identity` Hardhat test | ⚠️ **30 passing / 14 failing** (after fix; interface mismatches remain, see §2.2) **[verified]** |
+| **Contract tests** | `1_blockchain-identity` Hardhat test | ✅ **47 passing / 0 failing** (after reconciliation, see §2.3) **[verified]** |
 
 ### 2.1 Build fix applied this session
 The trunk **did not compile as received**: `hardhat.config.js` pinned solc
@@ -47,30 +47,48 @@ successfully** (warnings only).
 ### 2.2 Measured gas (Hardhat local, solc 0.8.24, optimizer 200 + viaIR) **[verified]**
 | Operation | Gas |
 |---|---|
-| Vehicle DID creation (CVINVehicleDIDRegistry) | **78,034** |
+| Vehicle DID creation (CVINVehicleDIDRegistry) | **78,068** (78,034 before the wrapper fix; +34 is viaIR dispatch from added public functions) |
 | changeOwner (EthereumDIDRegistry / ERC-1056) | **68,854** |
 | addDelegate | **72,219** |
 | setAttribute | **51,126** |
+| transferVehicleOwnership (wrapper) | **57,146** |
+| ERC-721 mint (CVIN_NFT_DID_ERC721, avg) | **102,804** |
+| Deployment: EthereumDIDRegistry / CVINVehicleDIDRegistry / CVIN_NFT_DID_ERC721 | 958,726 / 1,715,173 / 1,325,111 |
 
-These are the first gas numbers traceable to *this* trunk. They supersede any
-figures quoted in older session logs until those are likewise re-run here.
+These are the first gas numbers traceable to *this* trunk
+(`docs/figures/results_snapshot.json`; figure in
+`docs/figures/verification_dashboard.png`). They supersede any figures
+quoted in older session logs until those are likewise re-run here.
 
-### 2.3 Contract test status (honest)
-30 pass, 14 fail. The 14 failures are **test-harness / interface mismatches,
-not proven contract bugs**, in three groups:
-1. **ERC-721 toll/entry tests** call `recordEntry(...)` — a function the
-   deployed `CVIN_NFT_DID_ERC721` does not expose (test written for a
-   different contract revision).
-2. **CVINVehicleDIDRegistry tests** (ownership transfer, service endpoint,
-   delegate mgmt) call `transferVehicleOwnership(...)` and hit
-   `DIDRegistry: unauthorized` — the test interface/signing setup does not
-   match the current registry API.
-3. **ERC-1056 event assertions** compare the event's `previousChange` block
-   against `changed()` read *after* the tx (off-by-one: 99 vs 100) — a test
-   capture bug (should snapshot `changed()` before the tx).
-Fixed this session: solc config, ethers-v6 `waitForDeployment()` migration,
-and an infeasible `<50k` gas bound. The remaining three groups are queued
-follow-ups (each needs a decision on the intended contract interface).
+### 2.3 Contract test status — reconciled to 47/47
+As received: uncompilable. After the build fix: 30 pass / 14 fail. After
+reconciliation: **47 pass / 0 fail** (19 EthereumDIDRegistry, 19
+CVINVehicleDIDRegistry, 9 ERC-721). The reconciliation surfaced three
+**latent defects in the research code**, which matter more than the pass
+count and belong in the implementation chapter:
+
+1. **Unreachable wrapper functions (ERC-1056 substrate).**
+   `CVINVehicleDIDRegistry.setServiceEndpoint` and the delegate functions
+   required `msg.sender == ERC-1056 owner`, but the inner ERC-1056 call then
+   executed with the *wrapper* as sender, which ERC-1056 rejects. They could
+   never succeed. Fixed with `vehicleOwnerOf()`: when the wrapper holds
+   ERC-1056 control it tracks the vehicle owner (default = DID address, no
+   extra storage write); otherwise ERC-1056 stays authoritative, so every
+   pre-existing flow is unchanged. Cost: +34 gas on `createVehicleDID`.
+2. **Accounting bug in the monolithic ERC-721 draft.** `_balances[to] +=
+   tokenId` instead of `+= 1` in mint/burn/transfer. Corrected on restore.
+3. **Signing-scheme mismatch.** The ERC-1056 registry verifies with raw
+   `ecrecover` over its own digest; the test signed with EIP-191
+   `signMessage`. The test was wrong, but the mismatch is exactly the kind of
+   interoperability detail the W3C-compliance discussion should record
+   (`did:ethr` proof suites vs. EIP-191 Data Integrity proofs in the VC
+   layer).
+
+Also: the ERC-721 tests were written against `recordEntry` / `payToll`
+functions that no revision of the contract ever had; those were added to the
+contract the tests deploy. Test-side: ethers v5→v6 migration, `previousChange`
+snapshot before the tx, an infeasible `<50k` gas bound relaxed, and an
+absolute-balance check replaced by `changeEtherBalances`.
 
 **Compliance caveat (validity):** the 89.6% is produced by a *self-authored*
 checker (`w3c_compliance_checker.py`, 782 lines). It is defensible as an
@@ -208,10 +226,9 @@ session (container is ephemeral — nothing here is pre-provisioned).
 
 ## 6. Known Gaps & Caveats (honest list)
 
-1. **Gas partially re-run on this trunk** — core ERC-1056/registry ops
-   measured (§2.2); a *full* per-standard table (all 9 substrates,
-   create/update/delegate/anchor/revoke) still needs generation once the
-   §2.3 test-interface mismatches are resolved.
+1. **Gas re-run for the three implemented standards** (§2.2); a *full*
+   per-standard table (all 9 substrates, create/update/delegate/anchor/
+   revoke) needs the bundle lineage's contracts merged first (audit F1).
 2. **Compliance is self-scored** — external W3C conformance run outstanding.
 3. **V2V latency scope** — resolver timing is measured; full
    receive→resolve→verify→trust pipeline timing under SUMO is not yet

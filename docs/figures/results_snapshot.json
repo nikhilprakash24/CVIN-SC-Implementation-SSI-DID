@@ -1,0 +1,98 @@
+{
+ "meta": {
+  "repo": "nikhilprakash24/CVIN-SC-Implementation-SSI-DID",
+  "commit": "708302a",
+  "date": "2026-09-24",
+  "env": "Node 22.22 \u00b7 Hardhat \u00b7 solc 0.8.24 (cancun, viaIR) \u00b7 Python 3.11",
+  "contracts_compiled": 32
+ },
+ "suites": [
+  {
+   "name": "VC layer (pytest)",
+   "passed": 28,
+   "failed": 0
+  },
+  {
+   "name": "EthereumDIDRegistry (ERC-1056)",
+   "passed": 19,
+   "failed": 0
+  },
+  {
+   "name": "CVINVehicleDIDRegistry (ERC-1056 wrapper)",
+   "passed": 19,
+   "failed": 0
+  },
+  {
+   "name": "ERC-721 combined",
+   "passed": 4,
+   "failed": 0
+  },
+  {
+   "name": "ERC-721 identity-based",
+   "passed": 1,
+   "failed": 0
+  },
+  {
+   "name": "ERC-721 regular extended",
+   "passed": 4,
+   "failed": 0
+  }
+ ],
+ "gas": {
+  "Vehicle DID creation": 78068,
+  "changeOwner (ERC-1056)": 68854,
+  "addDelegate (ERC-1056)": 72219,
+  "setAttribute (ERC-1056)": 51126,
+  "transferVehicleOwnership": 57146,
+  "ERC-721 mint (avg)": 102804
+ },
+ "compliance": {
+  "overall_pct": 89.6,
+  "pass": 58,
+  "partial": 4,
+  "fail": 5,
+  "total": 67,
+  "by_spec": {
+   "W3C DID Core v1.0": {
+    "pass": 19,
+    "total": 28,
+    "pct": 75.0
+   },
+   "W3C VC Data Model v1.1": {
+    "pass": 29,
+    "total": 29,
+    "pct": 100.0
+   },
+   "SSI Principles": {
+    "pass": 10,
+    "total": 10,
+    "pct": 100.0
+   }
+  }
+ },
+ "fixes": [
+  "Build: solc <code>0.8.24</code> + <code>evmVersion: cancun</code> added so OpenZeppelin (^0.8.24, uses <code>mcopy</code>) compiles \u2014 the trunk did not compile as received.",
+  "<code>CVINVehicleDIDRegistry</code>: service-endpoint and delegate functions were unreachable (ERC-1056 owner check vs. wrapper as caller); fixed with <code>vehicleOwnerOf()</code>, behaviour-preserving for existing flows.",
+  "<code>CVIN_NFT_DID_ERC721_Monolithic</code> restored from backup with OpenZeppelin v5 fixes; a <code>_balances += tokenId</code> accounting bug corrected to <code>+= 1</code>.",
+  "<code>CVIN_NFT_DID_ERC721</code>: added <code>recordEntry</code> / <code>getEntryTimestamp</code> / <code>payToll</code> that the tests were written against.",
+  "Tests migrated from ethers v5 to v6; <code>previousChange</code> off-by-one and an infeasible &lt;50k gas bound corrected; ERC-1056 signed-change test now signs the raw digest (contract uses <code>ecrecover</code>, not EIP-191)."
+ ],
+ "links": [
+  {
+   "text": "Project summary",
+   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/PROJECT_SUMMARY.md"
+  },
+  {
+   "text": "After-action report",
+   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/AFTER_ACTION_REPORT.md"
+  },
+  {
+   "text": "Audit 01 \u2014 original goals",
+   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/AUDIT_01_ORIGINAL_GOALS.md"
+  },
+  {
+   "text": "Repository branch",
+   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/tree/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy"
+  }
+ ]
+}

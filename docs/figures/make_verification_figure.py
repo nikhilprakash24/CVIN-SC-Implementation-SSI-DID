@@ -135,13 +135,14 @@ def main():
     panel_tests(axes[0], snap["suites"])
     panel_gas(axes[1], snap["gas"])
     panel_compliance(axes[2], snap["compliance"])
-    fig.suptitle("Trunk verification snapshot", x=0.02, ha="left",
-                 fontsize=14, color=INK, fontweight="bold")
-    fig.text(0.02, 0.965,
+    # Title on its own line, meta line beneath it, plots start below both.
+    fig.suptitle("Trunk verification snapshot", x=0.02, y=0.985, ha="left",
+                 va="top", fontsize=14, color=INK, fontweight="bold")
+    fig.text(0.02, 0.962,
              f"{snap['meta']['repo']} @ {snap['meta']['commit']} · "
              f"{snap['meta']['date']} · {snap['meta']['env']}",
-             fontsize=8.5, color=MUTED)
-    fig.tight_layout(rect=(0, 0, 1, 0.95))
+             fontsize=8.5, color=MUTED, va="top")
+    fig.tight_layout(rect=(0, 0, 1, 0.935))
     for ext in ("png", "svg"):
         out = HERE / f"verification_dashboard.{ext}"
         fig.savefig(out, dpi=200 if ext == "png" else None)
