@@ -159,3 +159,15 @@ git -C .\TEST status; git -C .\TEST branch --show-current   # sandbox-onboarding
 ---
 
 *End of plan. Reality observed during execution supersedes this document — differences get recorded in FINDINGS, not smoothed. On your word: we execute P0 (a: decisions D1–D4) and then P1–P3 (b: WO-S1).*
+
+---
+
+## Addendum v1.1 (2026-09-24) — execution status & corrections
+
+**Executed since v1.0:** P0 ✅ (freeze, tag `asfound/pre-onboarding`, secret sweeps, 4 PRs to `CVIN-ID/TEST`); P1 ✅ (solc 0.8.17/19/24 vendored checksum-MATCH; Build-III restore provenance byte-pinned to upstream `3b1b4935`; H9/H10 defused via logged insteadOf; npm caches proven by offline replay, lockfiles unchanged). **D5 RESOLVED** by reading canonical `cvin-sandbox-v1.3` (verbatim solidity block `{0.8.24, optimizer runs:200}`+paris default; npm solc-js subtask override; full ISetA/B/C F1–F12 signatures). **D6 confirmed** (H10 dead `git://` → Build-II source-only).
+
+**Corrections (see FINDINGS §G):** gates are **G0–G6**; G0/G1 are operator-executed; `createPresentation` framing refined (anchor-implemented; gap = *native* ERC support); SP-1 = anchor **+ credential anchor pattern**; ERC-740 = unresolved [R1]. §2's P4/P5 text and the §5 comparison stand as written for the record; where they conflict with FINDINGS §G, §G governs.
+
+**New since v1.0:** canonical WO-0 (source-doc ingest) is BLOCKING-open — sequencing question raised to architect (handoff Q3). **Sister repo `nikhilprakash24/CVIN-SC-Implementation-SSI-DID`** carries an active parallel implementation stream (CVINVehicleDIDRegistry, 47/47 suite, W3C checker CI, through 2026-09-24) — **B↔C compliance-regime reconciliation** added as an architect item; this branch is pushed there as `sandbox-onboarding`.
+
+**Still gated:** D1/[TS-4] key rotation (operator, OPEN); D2 restore ratification; D4 V7 toolbox. P2→P3 fire on those words.
