@@ -4,10 +4,13 @@ name: Performance Benchmarks
 # gas-report.txt as a workflow artifact. hardhat.config.js already sets
 # gasReporter.outputFile = "gas-report.txt" when REPORT_GAS=true.
 #
-# The earlier version of this workflow also ran DID-resolution / VC benchmark
-# scripts and a thesis-table generator under 4_comparison-framework/. None of
-# those scripts or that directory exist on this trunk, so those jobs were
-# removed rather than left to fail silently.
+# A second job runs the nine-standard gas benchmark (scripts/benchmark_gas.js)
+# and regenerates the CSV/LaTeX tables with
+# 4_comparison-framework/performance-metrics/generate_tables.py, publishing
+# 4_comparison-framework/results/gas_* as an artifact. Gas is deterministic for
+# fixed compiler settings, so the job also fails if the JSON differs from the
+# committed results of record (a silent compiler/config drift would otherwise
+# change every number in the thesis).
 
 on:
   push:
@@ -63,4 +66,70 @@ jobs:
       with:
         name: gas-report
         path: 1_blockchain-identity/gas-report.txt
+        if-no-files-found: error
+
+  nine-standard-gas:
+    name: Nine-standard gas benchmark (results of record)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: 1_blockchain-identity/package-lock.json
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      working-directory: 1_blockchain-identity
+      run: npm ci
+
+    - name: Save committed results of record
+      run: cp 4_comparison-framework/results/gas_benchmark.json /tmp/gas_benchmark.committed.json
+
+    - name: Run nine-standard gas benchmark
+      working-directory: 1_blockchain-identity
+      run: npx hardhat run scripts/benchmark_gas.js
+
+    - name: Regenerate CSV / LaTeX tables
+      working-directory: 4_comparison-framework/performance-metrics
+      run: python3 generate_tables.py
+
+    - name: Check determinism against committed results
+      shell: bash
+      run: |
+        python3 - <<'PY'
+        import json, sys
+        def cells(d):
+            src = d.get("results", d); out = {}
+            for std, ops in src.items():
+                if isinstance(ops, dict):
+                    for op, v in ops.items():
+                        if isinstance(v, dict) and isinstance(v.get("gasUsed"), int):
+                            out[(std, op)] = v["gasUsed"]
+            return out
+        a = cells(json.load(open("/tmp/gas_benchmark.committed.json")))
+        b = cells(json.load(open("4_comparison-framework/results/gas_benchmark.json")))
+        diff = [(k, a[k], b[k]) for k in a if k in b and a[k] != b[k]]
+        print(f"{len(a)} committed cells, {len(diff)} differ")
+        for k, x, y in diff: print(f"  {k}: {x} -> {y}")
+        sys.exit(1 if diff else 0)
+        PY
+
+    - name: Upload gas results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: nine-standard-gas
+        path: |
+          4_comparison-framework/results/gas_benchmark.json
+          4_comparison-framework/results/gas_benchmark_stats.json
+          4_comparison-framework/results/gas_comparison.csv
+          4_comparison-framework/results/gas_comparison.tex
         if-no-files-found: error

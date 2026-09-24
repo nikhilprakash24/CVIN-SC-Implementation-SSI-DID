@@ -6,65 +6,73 @@ This directory contains the MASc thesis chapters and supporting documentation.
 
 ```
 thesis/
-├── 01-introduction.md          # Research problem and objectives
-├── 02-literature-review.md     # Survey of SSI and vehicle identity
-├── 03-methodology.md           # Research design and approach
-├── 04-implementation.md        # System implementation details
-├── 05-results.md               # Experimental results
-├── 06-discussion.md            # Analysis and interpretation
-├── 07-conclusion.md            # Conclusions and future work
+├── chapter1-introduction/      # ✏️ Draft — motivation, RQs, contributions
+├── 02-literature-review.md     # Survey of SSI and vehicle identity (planned; needs citations)
+├── chapter3-methodology/       # ✏️ Draft — research design & measurement methods
+├── chapter4-implementation/    # ✏️ Draft — system architecture & implementation
+├── chapter5-results/           # ✏️ Draft from measured artifacts
+├── chapter6-discussion/        # ✏️ Draft — interpretation of the results
+├── chapter7-conclusion/        # ✏️ Draft — verdicts, contributions, future work
 └── appendices/                 # Code listings, data tables
 ```
 
 ## Chapter Status
 
-| Chapter | Title | Status | Pages |
-|---------|-------|--------|-------|
-| 1 | Introduction | 🔄 Draft | 15 |
-| 2 | Literature Review | 🔄 Draft | 30 |
-| 3 | Methodology | ✅ Complete | 25 |
-| 4 | Implementation | ✅ Complete | 40 |
-| 5 | Results | 🔄 In Progress | 35 |
-| 6 | Discussion | ⏳ Planned | 20 |
-| 7 | Conclusion | ⏳ Planned | 10 |
+The implementation is largely complete and Chapter 5 is backed by **measured
+data** (all figures traceable to committed artifacts): see the working draft
+at [`chapter5-results/`](chapter5-results/). Remaining work is public-testnet
+(Sepolia) validation, optional real-SUMO execution, and thesis writing.
 
-**Total**: ~175 pages (target: 150-200)
+| Chapter | Title | Status | Pages (est.) |
+|---------|-------|--------|-------|
+| 1 | Introduction | ✏️ Draft (`chapter1-introduction/`) | 15 |
+| 2 | Literature Review | ⏳ Planned (needs citation set) | 30 |
+| 3 | Methodology | ✏️ Draft (`chapter3-methodology/`) | 25 |
+| 4 | Implementation | ✏️ Draft (`chapter4-implementation/`) | 40 |
+| 5 | Results | ✏️ Draft from measured artifacts (`chapter5-results/`) | 35 |
+| 6 | Discussion | ✏️ Draft (`chapter6-discussion/`) | 20 |
+| 7 | Conclusion | ✏️ Draft (`chapter7-conclusion/`) | 10 |
+
+**6 of 7 chapters drafted** (all but the Literature Review, which awaits the
+citation set). Chapters 3–7 are grounded in the measured artifacts.
+
+**Total**: ~175 pages (target: 150-200; page counts are estimates)
 
 ## Key Contributions (Chapter 4-5)
 
 ### Implementation Contributions
-1. **Blockchain Identity Standards, measured under automotive constraints** - identical operation sets, exact gas, latency with N/median/p95 (three standards on this branch, nine after merge — SC-07)
-2. **W3C-aligned System** - 89.6% on the internal 67-check list (self-scored; external W3C test-suite result pending, audit F5). "Exceeds industry average" has no source and is withdrawn.
-3. **Reproducible V2V Integration** - blockchain identity in the message path, measured against a PKI baseline (not claimed as "first"; see SC-04)
-4. **MOBI VID Compliance** - Reference implementation
+1. **9 Blockchain Identity Standards + MOBI VID profile** - all implemented, tested (217 Hardhat tests), and gas-benchmarked on-chain
+2. **W3C Compliant System** - 93.2% measured compliance (executable checker, CI-gated ≥90%)
+3. **Real-time V2V Integration** - blockchain identity verified in the V2V message path with real cryptography (SSI warm verify 0.165 ms)
+4. **MOBI VID** - VID I birth certificate + VID II (11 lifecycle event types), on-chain `attestEvent` signature verification, AES-256-GCM VIN encryption
 
-### Experimental Results (Chapter 5)
-1. **Performance Comparison** - Detailed gas costs, latency measurements
-2. **Security Analysis** - Threat modeling and attack scenario testing
-3. **Usability Study** - 10 complete use case implementations
-4. **Scalability Testing** - SUMO simulation with 50 vehicles (configured in `cv2x-testbed/sumo/`; not yet run to a results file — see `docs/MEASUREMENT_CONDITIONS.md` #15)
+### Experimental Results (Chapter 5 — measured; see `chapter5-results/`)
+1. **Performance Comparison** - exact gas costs across all 9 standards (N=30, byte-identical, σ=0); ~33× spread
+2. **Security Analysis** - two complementary lenses: 54-scenario revert suite (43/43 applicable cells defended) + threat matrix
+3. **Use-Case Validation** - 12/12 lifecycle use cases with real cryptographic verification (forged/replayed credentials fail)
+4. **V2V Latency** - N=30 seeded runs, 50 vehicles, 10 Hz BSM; 1.65 M verifications; mobility simulated (no SUMO binary)
 
 ## Research Questions Addressed
 
 ### RQ1: Performance
 **Question**: How do different blockchain identity standards compare in transaction cost, latency, and throughput?
 
-**Answer (trunk-measured, condition M1, commit 708302a)**: For the create-equivalent operation, ERC-1056 vehicle-DID creation costs 78,068 gas against 102,804 gas (avg) for an ERC-721 vehicle-NFT mint — a 1.32× saving, not an order of magnitude. Order-of-magnitude gaps arise only against rich-state standards (ERC-725xy, bundle lineage, unverified on trunk). In-process DID resolution (M0, N=30, commit f602fdf) is 0.009 ms median / 0.013 ms p95 cold and 0.002 ms warm (cache hit), for each of `did:ethr`, `did:mobi`, `did:nft` — i.e. resolution is not on the critical path; the hot-path cost is signature verification, which the PKI-vs-ERC-1056 experiment measures. Resolution with a blockchain lookup (M2) has not been measured. See `docs/MEASUREMENT_CONDITIONS.md`.
+**Answer (measured, H1 supported)**: identity-creation gas spans ~33× across the nine standards (CVIN-Combined 52,170 → ERC-725xy 1,680,816), condition M1 (solc 0.8.24, optimizer 200 + viaIR, evm cancun, OpenZeppelin 5.0.2, Hardhat local, re-executed 2026-09-24). ERC-1056's bare `createIdentity` (52,594) is ~10× cheaper than ERC-721's VIN-bound `mintVehicle` (542,378) and ERC-725 (519,384); with the VIN bound on both sides (`createVehicleDID`, 78,068) the ratio is ≈7×. A bare ERC-721 `mint` on the lighter `CVIN_NFT_DID_ERC721` contract costs 102,804 and is *not* the create-identity operation (no VIN binding) — the two figures are reconciled in `docs/MEASUREMENT_CONDITIONS.md` #6/#25. ERC-4337 EntryPoint indirection adds 46,862 gas/op. Gas is deterministic (repeated runs byte-identical; N is a reproducibility check, not a confidence interval).
 
 ### RQ2: Security
 **Question**: Which architecture provides strongest security guarantees for V2X communication?
 
-**Answer**: Hybrid approach (ERC-1056 + ERC-735 claims) provides optimal balance of security and performance.
+**Answer (measured, H5 supported)**: no single standard dominates — standards occupy distinct points on the security/performance frontier. Only ERC-4337 offers genuine on-chain key recovery; ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that hashes + encrypts the VIN. The 54-scenario revert suite defends 43/43 applicable attack cells.
 
 ### RQ3: W3C Compliance
 **Question**: Can blockchain identity achieve W3C SSI compliance while meeting automotive requirements?
 
-**Answer**: Yes. Achieved 89.6% W3C compliance (DID Core: 75%, VC: 100%, SSI: 100%).
+**Answer (measured, H2 supported)**: Yes — **93.2%** measured (executable checker): DID Core v1.0 93.3% (13/15), VC Data Model v2.0 93.1% (27/29). The two deviations are documented and deliberate (canonical JSON vs URDNA2015; thesis-defined cryptosuite).
 
 ### RQ4: Real-Time Feasibility
 **Question**: Are blockchain identities viable for real-time safety-critical V2V?
 
-**Answer**: Partial. Suitable for non-critical V2V (BSM broadcasts). Safety-critical applications require hybrid PKI/blockchain approach.
+**Answer (measured, H3 supported)**: Yes for the cryptographic path. SSI warm verify is 0.165 ms [0.162, 0.168] (N=30) against the ~100 ms V2V budget (~600× margin); cold full-credential verify 0.400 ms. Caveat: excludes radio/MAC/network-stack latency; mobility is simulated.
 
 ## Writing Guidelines
 
@@ -87,14 +95,20 @@ thesis/
 
 ## Timeline
 
+Dates below are **proposed / TBD** — the earlier target dates have passed and
+no revised defense date is fixed in the repository. Implementation and the
+measured experimental results are done; remaining work is Sepolia validation,
+optional real-SUMO, and thesis writing.
+
 | Milestone | Target Date | Status |
 |-----------|-------------|--------|
-| Chapter 1-3 Draft | 2025-12-15 | 🔄 |
-| Implementation Complete | 2026-01-31 | ✅ |
-| Experimental Results | 2026-03-15 | 🔄 |
-| Full Draft | 2026-04-30 | ⏳ |
-| Committee Review | 2026-05-15 | ⏳ |
-| Final Defense | 2026-06-30 | ⏳ |
+| Implementation complete (9 standards + MOBI VID + testbed) | — | ✅ Done |
+| Experimental results (gas, V2V, W3C compliance, security) | — | ✅ Done (measured; `chapter5-results/`) |
+| Sepolia public-testnet validation run | TBD | ⏳ Harness exists (`validate_sepolia.js`); not yet executed |
+| Chapters 1-2 draft | TBD | 🔄 |
+| Full draft | TBD | ⏳ |
+| Committee review | TBD | ⏳ |
+| Final defense | TBD | ⏳ |
 
 ## Thesis Metrics (Target)
 
@@ -102,9 +116,8 @@ thesis/
 - **References**: 100+ (currently ~60)
 - **Figures**: 30-40
 - **Tables**: 20-30
-- **Code Files**: 50+ (currently 35)
-- **Test Cases**: 200+ (currently 150)
-- **Lines of Code**: 15,000+ (currently 12,000)
+- **Test Cases**: 200+ — **met**: ~295 automated tests green (217 Hardhat + 28 VC + 32 MOBI VID + 12/12 use cases)
+- **W3C Compliance**: ≥90% target — **met**: 93.2% measured
 
 ## Committee
 

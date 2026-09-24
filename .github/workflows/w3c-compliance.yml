@@ -49,15 +49,16 @@ jobs:
     runs-on: ubuntu-latest
     # COMPLIANCE_FLOOR is the gate; COMPLIANCE_TARGET is aspirational.
     #
-    # Why the floor is 89.0 and not 90: the checker's verified score on this
-    # trunk is 89.6% (58 pass, 4 partial, 5 fail of 67 checks). The previous
+    # Why the floor is 93.0: after the analysis-lineage merge (2026-09-24) the
+    # checker's verified score on this trunk is 93.2% (its two documented
+    # deviations are counted as FAIL by design). Earlier floor: 89.0 at 89.6%. The previous
     # version of this workflow claimed a ">90%" gate, which would have failed
     # on day one and was never actually enforced (the step was an echo). The
     # floor is set just under the current verified level so that any regression
     # fails CI, while the 90% thesis target is printed so progress toward it is
     # visible. Raise COMPLIANCE_FLOOR when the score genuinely goes up.
     env:
-      COMPLIANCE_FLOOR: '89.0'
+      COMPLIANCE_FLOOR: '93.0'
       COMPLIANCE_TARGET: '90.0'
 
     steps:

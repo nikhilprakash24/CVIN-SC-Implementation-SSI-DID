@@ -1,117 +1,93 @@
 # Thesis Repository - Complete Inventory
 
-> **Figures in this file are design-time estimates.** Gas and latency values here predate measurement and are superseded by `docs/figures/results_snapshot.json` (measured on the trunk). Condition tags and the claim-by-claim status: `docs/MEASUREMENT_CONDITIONS.md`.
-
-**Last Updated**: June 21, 2026  
-**Total Files**: 43+  
-**Total Lines of Code**: ~15,000  
-**Repository**: https://github.com/nikhilprakash-cvin/2_miniature-waffle-CV2X-Testbed-MOBI-VID
+**Last Updated**: July 23, 2026
+**Version**: v0.8.0 tagged ("Rigor & Ground-Truth Hardening"); working toward 0.9.0 (VERSION reads `0.9.0-dev`)
+**Repository (mirror, up to date through tags)**: https://github.com/nikhilprakash-cvin/2_miniature-waffle-CV2X-Testbed-MOBI-VID
+**Repository (designated origin)**: https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID
 
 ---
 
 ## 📊 Summary Statistics
 
-| Category | Files | Lines | Status | Test Coverage |
-|----------|-------|-------|--------|---------------|
-| Smart Contracts | 12 | ~3,500 | ✅ Complete | 85% |
-| W3C SSI Layer | 4 | ~1,100 | 🔄 60% | 40% |
-| CV2X Testbed | 0 | 0 | ⏳ Planned | 0% |
-| Comparison Framework | 0 | 0 | ⏳ Planned | 0% |
-| Documentation | 15 | ~4,000 | 🔄 70% | N/A |
-| CI/CD | 3 | ~225 | ✅ Complete | N/A |
-| Tests | 9 | ~2,500 | ✅ Complete | N/A |
-| **TOTAL** | **43** | **~11,325** | **40%** | **65%** |
+| Category | Status | Evidence |
+|----------|--------|----------|
+| Smart Contracts (all 9 standards + MOBI VID) | ✅ Complete | 217 Hardhat tests passing |
+| W3C SSI Layer (DID + VC + MOBI VID) | ✅ Complete | 28 VC + 32 MOBI VID pytest passing; 93.2% measured W3C compliance |
+| CV2X Testbed (use cases + V2V + SUMO-sim) | 🔄 ~85% | 12/12 use cases; real-crypto V2V loop measured (N=30); mobility still simulated |
+| Comparison Framework | ✅ Complete | 9/9 standards gas-benchmarked (N=30, σ=0); security matrices + Sepolia harness generated |
+| Documentation | 🔄 ~80% | honest-claims cleanup done; Chapter 5 results draft assembled from measured artifacts |
+| CI/CD | ✅ Complete | 3 workflows (contracts, benchmark, W3C compliance gate ≥90%) |
+| **OVERALL** | **~70%+** | **~295 automated tests green** |
+
+Automated test totals (all green): **217 Hardhat contract tests + 28 W3C VC + 32 MOBI VID (Python) + 12/12 lifecycle use cases** (~295 total). W3C compliance: **93.2% measured** (executable checker, CI-gated ≥90%).
 
 ---
 
 ## 1️⃣ Blockchain Identity Layer (`1_blockchain-identity/`)
 
-### Smart Contracts (Solidity)
+Hardhat project implementing all 9 blockchain identity standards plus the MOBI VID application profile. **217 tests passing.** solc 0.8.24, optimizer (200 runs) + viaIR, OpenZeppelin 5.0.2.
 
-#### ERC-1056 Lightweight DID ✅
+### The 9 standards + MOBI VID (Solidity contracts)
 
-| File | Lines | Status | Description |
-|------|-------|--------|-------------|
-| `contracts/ERC1056/EthereumDIDRegistry.sol` | 450 | ✅ Complete | Standard ERC-1056 registry |
-| `contracts/ERC1056/CVINVehicleDIDRegistry.sol` | 380 | ✅ Complete | Vehicle-specific DID registry |
+| Standard | File | Lines | Status | Notes |
+|----------|------|-------|--------|-------|
+| ERC-1056 | `contracts/ERC1056/EthereumDIDRegistry.sol` | 408 | ✅ Complete | Standard ERC-1056 registry (event-log DID) |
+| ERC-1056 | `contracts/ERC1056/CVINVehicleDIDRegistry.sol` | 331 | ✅ Complete | Vehicle-specific DID registry |
+| ERC-721 | `contracts/ERC721/CVINVehicleNFT.sol` | 400 | ✅ Complete | Vehicle NFT with DID integration |
+| ERC-721 | `contracts/ERC721/CVIN_NFT_DID_ERC721.sol` | 44 | ✅ Complete | NFT DID thin wrapper |
+| ERC-725 | `contracts/ERC725/CVIN_DID_ERC725.sol` | 89 | ✅ Complete | Proxy account with key/data store |
+| ERC-725xy | `contracts/ERC725xy/CVINVehicleERC725XY.sol` | 388 | ✅ Complete | Full ERC-725X (executor) + ERC-725Y (data store) account — added v0.8.0, closing the last missing standard |
+| ERC-725xy | `contracts/ERC725xy/CVINExecuteTarget.sol` | 26 | ✅ Complete | Execution target used in tests |
+| ERC-735 | `contracts/ERC735/CVINVehicleClaimHolder.sol` | 346 | ✅ Complete | On-chain claim holder with issuer signatures |
+| ERC-1155 | `contracts/ERC1155/CVINVehicleCredential1155.sol` | 214 | ✅ Complete | Soulbound credential (resists identity theft) |
+| ERC-4337 | `contracts/ERC4337/CVINVehicleAccount.sol` | 248 | ✅ Complete | Account abstraction, guardian recovery |
+| ERC-4337 | `contracts/ERC4337/CVINMinimalEntryPoint.sol` | 93 | ✅ Complete | **Minimal representative** EntryPoint (gas is a lower bound; documented in header) |
+| LSP8 | `contracts/LSP8/CVINVehicleLSP8.sol` | 317 | ✅ Complete | **Minimal representative** LSP8 identity |
+| CVIN-Combined | `contracts/CVINCombined/CVINCombinedIdentity.sol` | 335 | ✅ Complete | Thesis hybrid: ERC-1056 event identity + ERC-735 on-chain claims (H5) |
+| MOBI VID | `contracts/MOBI/MOBIVIDRegistryV2.sol` | 572 | ✅ Complete | VID II registry; `attestEvent` ecrecover signature verification + AES-256-GCM VIN encryption |
+| MOBI VID | `contracts/MOBI/MOBIVIDRegistry.sol` | 524 | ✅ Complete | VID I birth-registration registry |
+| MOBI VID | `contracts/MOBI/ERC1056Registry.sol` | 321 | ✅ Complete | ERC-1056 registry used by MOBI layer |
 
-**Capabilities**:
-- DID creation and management
-- Attribute management (key-value storage)
-- Delegate management
-- Event emission for off-chain indexing
+**Total contract Solidity**: ~4,656 lines across 16 files.
 
-**Test Coverage**: 90%
+### Test Files (217 tests total)
 
-#### ERC-721 NFT-Based Identity ✅
+| File | `it()` scenarios | Status | Purpose |
+|------|------------------|--------|---------|
+| `test/ERC1056/EthereumDIDRegistry.test.js` | 19 | ✅ | ERC-1056 registry |
+| `test/ERC1056/CVINVehicleDIDRegistry.test.js` | 19 | ✅ | Vehicle DID |
+| `test/ERC721/combined.js` | 3 | ✅ | NFT comprehensive |
+| `test/ERC721/identityBased.js` | 1 | ✅ | Identity-focused |
+| `test/ERC721/regularExtended.js` | 4 | ✅ | Extended NFT |
+| `test/ERC725xy/CVINVehicleERC725XY.test.js` | 15 | ✅ | ERC-725X+Y account |
+| `test/ERC735/CVINVehicleClaimHolder.test.js` | 16 | ✅ | Claim holder |
+| `test/ERC1155/CVINVehicleCredential1155.test.js` | 17 | ✅ | Soulbound credential |
+| `test/ERC4337/CVINVehicleAccount.test.js` | 16 | ✅ | Account abstraction + guardian recovery |
+| `test/LSP8/CVINVehicleLSP8.test.js` | 18 | ✅ | LSP8 identity |
+| `test/CVINCombined/CVINCombinedIdentity.test.js` | 19 | ✅ | Hybrid identity |
+| `test/MOBIVID/MOBIVIDRegistry.test.js` | 16 | ✅ | MOBI VID incl. `attestEvent` forge/replay reverts |
+| `test/security/securityScenarios.test.js` | 54 | ✅ | Adversarial revert suite — 43/43 applicable cells DEFENDED |
+| `test/security/attackHarness.js` | (helper) | ✅ | Shared attack-scenario harness |
 
-| File | Lines | Status | Description |
-|------|-------|--------|-------------|
-| `contracts/ERC721/CVINVehicleNFT.sol` | 520 | ✅ Complete | Vehicle NFT with DID integration |
-| `contracts/ERC721/CVIN_NFT_DID_ERC721.sol` | 680 | ✅ Complete | Full-featured NFT DID |
-| `contracts/ERC721/CVIN_NFT_DID_ERC721_monolithic.sol` | 750 | ✅ Complete | Monolithic implementation |
+> The 217 passing total exceeds the raw `it()` count above because several suites generate parameterized cases per standard/operation at runtime.
 
-**Capabilities**:
-- Unique vehicle token minting
-- Ownership transfer with history
-- Metadata management (on-chain + IPFS)
-- Birth certificate anchoring
+### Scripts
 
-**Test Coverage**: 85%
+| File | Status | Purpose |
+|------|--------|---------|
+| `scripts/benchmark_gas.js` | ✅ Complete | Gas benchmark across all 9 standards + MOBI VID → `gas_benchmark.json` |
+| `scripts/security_scenarios.js` | ✅ Complete | Drives on-chain security scenarios |
+| `scripts/validate_sepolia.js` | ✅ Complete | Public-testnet (Sepolia) validation harness — **not yet executed** (needs RPC URL + funded key) |
+| `scripts/deployERC1056.js` | ✅ Complete | ERC-1056 deployment |
 
-#### ERC-725 Proxy Account ✅
+### Documentation / Config
 
-| File | Lines | Status | Description |
-|------|-------|--------|-------------|
-| `contracts/ERC725/CVIN_DID_ERC725.sol` | 420 | ✅ Complete | Proxy account with key management |
+| File | Status | Purpose |
+|------|--------|---------|
+| `hardhat.config.js`, `package.json` | ✅ Complete | Hardhat / NPM config |
+| `SEPOLIA_VALIDATION.md` | ✅ Complete | Sepolia validation procedure (run pending) |
 
-**Capabilities**:
-- Key management (multiple keys per identity)
-- Data storage (key-value)
-- Proxy execution (meta-transactions)
-- Event logging
-
-**Test Coverage**: 80%
-
-### Test Files
-
-| File | Lines | Status | Purpose |
-|------|-------|--------|---------|
-| `test/ERC1056/EthereumDIDRegistry.test.js` | 380 | ✅ Complete | ERC-1056 unit tests |
-| `test/ERC1056/CVINVehicleDIDRegistry.test.js` | 320 | ✅ Complete | Vehicle DID tests |
-| `test/ERC721/combined.js` | 450 | ✅ Complete | NFT comprehensive tests |
-| `test/ERC721/identityBased.js` | 280 | ✅ Complete | Identity-focused tests |
-| `test/ERC721/regularExtended.js` | 310 | ✅ Complete | Extended functionality tests |
-
-### Deployment Scripts
-
-| File | Lines | Status | Purpose |
-|------|-------|--------|---------|
-| `scripts/deployERC1056.js` | 85 | ✅ Complete | ERC-1056 deployment |
-| `ERC721/scripts/deployRegular.js` | 75 | ✅ Complete | Regular NFT deployment |
-| `ERC721/scripts/deployMonolithic.js` | 80 | ✅ Complete | Monolithic deployment |
-| `ERC721/scripts/deployBoth.js` | 95 | ✅ Complete | Combined deployment |
-
-### Configuration
-
-| File | Lines | Status | Purpose |
-|------|-------|--------|---------|
-| `hardhat.config.js` | 120 | ✅ Complete | Hardhat configuration |
-| `package.json` | 45 | ✅ Complete | NPM dependencies |
-| `.gitignore` | 25 | ✅ Complete | Git exclusions |
-| `.env.example` | 15 | ✅ Complete | Environment template |
-
-### Documentation
-
-| File | Lines | Status | Coverage |
-|------|-------|--------|----------|
-| `README.md` | 180 | ✅ Complete | Main project overview |
-| `CVIN-SSI-ARCHITECTURE.md` | 2,400 | ✅ Complete | System architecture |
-| `ERC1056/README.md` | 320 | ✅ Complete | ERC-1056 guide |
-| `ERC721/README.md` | 280 | ✅ Complete | ERC-721 guide |
-| `ERC725/README.md` | 150 | ✅ Complete | ERC-725 guide |
-
-**Status**: ✅ **COMPLETE** - Production ready for thesis experiments
+**Status**: ✅ **COMPLETE** — all 9 standards + MOBI VID implemented, tested (217), and gas-benchmarked.
 
 ---
 
@@ -121,357 +97,184 @@
 
 | File | Lines | Status | Description |
 |------|-------|--------|-------------|
-| `did-resolution/did_resolver.py` | 680 | ✅ Complete | W3C DID Core resolver |
+| `did-resolution/did_resolver.py` | 518 | ✅ Complete | W3C DID Core resolver — 4 methods (did:ethr, did:nft, did:key, did:mobi) |
 
-**Capabilities**:
-- Resolve 4 DID methods (ethr, nft, key, mobi)
-- Generate W3C compliant DID Documents
-- Verification method management
-- Service endpoint management
-- Resolution metadata
-- Caching for performance
-
-**W3C Compliance**: 75% (DID Core v1.0)  
-**Test Coverage**: 0% (needs tests)
-
-### Verifiable Credentials ✅
+### Verifiable Credentials ✅ — **28 tests passing**
 
 | File | Lines | Status | Description |
 |------|-------|--------|-------------|
-| `verifiable-credentials/vc_issuer.py` | 332 | ✅ Complete | Issuance, EIP-191 Data Integrity proofs, revocation registry |
-| `verifiable-credentials/vc_holder.py` | 230 | ✅ Complete | Wallet, presentations (challenge/domain), selective disclosure |
-| `verifiable-credentials/vc_verifier.py` | 432 | ✅ Complete | 6-stage verification pipeline, compliance self-scorer |
+| `verifiable-credentials/vc_issuer.py` | 337 | ✅ Complete | Issuance, EIP-191 secp256k1 Data Integrity proofs, revocation registry |
+| `verifiable-credentials/vc_holder.py` | 230 | ✅ Complete | Wallet, presentations (challenge/domain), selective disclosure (SD-JWT-style salted digests) |
+| `verifiable-credentials/vc_verifier.py` | 441 | ✅ Complete | 6-stage offline verification pipeline, compliance self-scorer |
 | `verifiable-credentials/vc_schemas.py` | 338 | ✅ Complete | 10 automotive schemas (1:1 with thesis use cases) |
-| `verifiable-credentials/tests/test_vc_layer.py` | 324 | ✅ Complete | 28 tests (all passing) |
-| `verifiable-credentials/BUILD_PLAN.md` | 60 | ✅ Complete | Design decisions + verification gates |
-| `verifiable-credentials/README.md` | 120 | ✅ Complete | Documentation with measured performance |
+| `verifiable-credentials/tests/test_vc_layer.py` | — | ✅ Complete | 28 tests (all passing) |
+| `verifiable-credentials/BUILD_PLAN.md`, `README.md` | — | ✅ Complete | Design decisions + measured performance |
 
-**W3C Compliance**: 85.7% self-scored (VC DM v2.0; deviations documented)  
-**Test Coverage**: 28 tests, gates G1–G11 passed  
-**Earlier measurement (superseded)**: verify median 7.5 ms / p95 8.9 ms (offline) — the producing script is not on the trunk; to be re-measured by `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py` (see `docs/MEASUREMENT_CONDITIONS.md` #13)  
-**Unblocked**: MOBI VID, all 10 use cases, V2V credential experiments
+**Capabilities**: issuer, holder wallet, verifier (6-stage offline pipeline), 10 automotive schemas, selective disclosure, revocation registry, EIP-191 secp256k1 Data Integrity proofs.
 
-### MOBI VID 🔄
+### MOBI VID ✅ — **32 Python tests passing**
 
 | File | Lines | Status | Description |
 |------|-------|--------|-------------|
-| `mobi-vid/birth_certificate.py` | 0 | ⏳ **NEEDS BUILD** | VID I issuance |
-| `mobi-vid/lifecycle_events.py` | 0 | ⏳ **NEEDS BUILD** | VID II events |
-| `mobi-vid/mobi_vid_registry.py` | 0 | ⏳ **NEEDS BUILD** | Registry interface |
-| `mobi-vid/README.md` | 200 | ✅ Complete | Comprehensive guide |
+| `mobi-vid/birth_certificate.py` | 393 | ✅ Complete | VID I: W3C VC birth certificate + keccak256 on-chain content-hash anchoring |
+| `mobi-vid/lifecycle_events.py` | 436 | ✅ Complete | VID II: 11 lifecycle event types, attestations, history aggregation |
+| `mobi-vid/mobi_vid_registry.py` | 387 | ✅ Complete | web3 v7 binding to `MOBIVIDRegistryV2` |
+| `mobi-vid/tests/test_mobi_vid_layer.py` | — | ✅ Complete | MOBI VID layer tests (on-chain, self-managed Hardhat node) |
+| `mobi-vid/tests/test_vin_cipher.py` | — | ✅ Complete | AES-256-GCM VIN encryption tests (replaced earlier demo XOR) |
+| `mobi-vid/README.md` | — | ✅ Complete | Honest implemented-status table |
 
-**Missing**: ~1,200 lines of implementation  
-**Priority**: 🔴 **CRITICAL** (core thesis component)
+**MOBI VID Python test suite total**: 32 tests (layer + VIN cipher). On-chain `attestEvent` now verifies attester signature via ecrecover (forged/replayed attestations revert); attestEvent cost rose 121k → 193k gas as a result.
 
-### Configuration
+### Config
 
-| File | Lines | Status | Purpose |
-|------|-------|--------|---------|
-| `requirements.txt` | 20 | ✅ Complete | Python dependencies |
+| File | Status | Purpose |
+|------|--------|---------|
+| `requirements.txt` | ✅ Complete | Python deps (web3, eth-account, cryptography, coincurve, pytest) |
 
-**Status**: 🔄 **60% COMPLETE** - DID resolver done, VC/MOBI VID needed
+**Status**: ✅ **COMPLETE** — DID resolver (4 methods), VC layer (28 tests), MOBI VID layer (32 tests).
 
 ---
 
-## 3️⃣ CV2X Testbed (`3_cv2x-testbed/`)
+## 3️⃣ CV2X Testbed (`3_cv2x-testbed/` → `cv2x-testbed/`)
 
-### Directory Structure
+`3_cv2x-testbed/` is a thesis-chapter mapping stub (a `README.md` that points to the working testbed). The **working CV2X testbed physically lives in the repo-root `cv2x-testbed/`** directory (kept there to preserve internal `sys.path` wiring).
 
-```
-3_cv2x-testbed/
-├── sumo-simulation/         # ⏳ EMPTY
-├── safety-applications/     # ⏳ EMPTY
-└── use-cases/              # ⏳ EMPTY
-```
+### Working testbed contents (`cv2x-testbed/`)
 
-### Missing Components ⏳
+| Component | Location | Status |
+|-----------|----------|--------|
+| Use-case suite (12 lifecycle scenarios) | `scripts/test_use_cases.py` | ✅ 12/12 passing, real VC verification (forged/replayed credentials fail; computed pass/fail) |
+| Identity providers (PKI, centralized, ERC-1056, MOBI VID, W3C VC) | `identity/` | ✅ Clean under web3 v7 |
+| V2V scenarios (basic V2V, integration) | `scenarios/` | ✅ Real ECDSA verification |
+| SUMO V2V simulation | `sumo/sumo_identity_integration.py` | 🔄 `--simulate` mode; real ECDSA (PKI) + real W3C VC (SSI) verification in the message path; 10 Hz BSM |
+| V2V N=30 statistics harness | `sumo/run_v2v_stats.py` | ✅ Produces `sumo/results/v2v_latency_stats.json` (seeds 1–30) |
+| SUMO configs (50 vehicles) | `sumo/*.net.xml`, `routes.rou.xml`, `simulation.sumocfg` | 🔄 hand-authored; regenerate with `netconvert` for real-SUMO runs |
+| CV2X protocol stack (PHY/MAC, BSM/DENM) | `protocols/cv2x_stack.py` | ✅ Simulation-grade |
+| W3C compliance checker (executable) | `scripts/w3c_compliance_checker.py` | ✅ 93.2% measured |
+| MOBI VID / VIN encryption test scripts | `scripts/test_mobi_vid.py`, `scripts/test_vin_encryption.py` | ✅ Passing |
+| On-chain contracts + Hardhat project | `contracts/`, `hardhat.config.js` | ✅ ERC-1056, MOBI VID V1/V2 |
 
-| Component | Est. Lines | Priority | Description |
-|-----------|-----------|----------|-------------|
-| `sumo-simulation/network.net.xml` | 200 | P2 | SUMO road network |
-| `sumo-simulation/routes.rou.xml` | 150 | P2 | Vehicle routes |
-| `sumo-simulation/sumo_integration.py` | 750 | P2 | TraCI integration |
-| `safety-applications/fcw.py` | 250 | P2 | Forward Collision Warning |
-| `safety-applications/eebl.py` | 220 | P2 | Emergency Brake Light |
-| `safety-applications/ima.py` | 230 | P2 | Intersection Movement Assist |
-| `use-cases/use_case_suite.py` | 1,000 | P1 | All 10 use cases |
-| `use-cases/demo_runner.py` | 300 | P1 | Demo orchestration |
+**Measured V2V result** (N=30 seeded runs): SSI warm verify **0.165 ms** [0.162, 0.168]; cold 0.400 ms; PKI warm 0.102 ms. 1,650,318 messages verified, 90 failures = exactly the 3 injected attacks × 30 runs (zero false positives/negatives). ~600× margin to the 100 ms V2V budget (H3 supported).
 
-**Missing**: ~3,100 lines  
-**Priority**: P1 for use cases, P2 for SUMO  
-**Status**: ⏳ **PLANNED**
+**Honest caveats**: V2V latency excludes radio/MAC/network-stack; mobility is simulated (no SUMO binary in the measurement environment).
+
+**Status**: 🔄 **~85%** — use cases, V2V real-crypto loop, and statistics done; real-SUMO execution is optional/future.
 
 ---
 
 ## 4️⃣ Comparison Framework (`4_comparison-framework/`)
 
-### Directory Structure
+### Performance metrics ✅
 
-```
-4_comparison-framework/
-├── performance-metrics/     # ⏳ EMPTY
-├── security-analysis/      # ⏳ EMPTY
-└── results/                # ⏳ EMPTY
-```
+| File | Status | Purpose |
+|------|--------|---------|
+| `performance-metrics/generate_tables.py` | ✅ Complete | LaTeX/CSV table generation from benchmark JSON |
+| `performance-metrics/run_gas_stats.py` | ✅ Complete | N=30 gas stability run (σ=0, CI width 0) |
+| `results/gas_benchmark.json`, `gas_benchmark_stats.json` | ✅ Complete | Exact `gasUsed` per standard; 30-run stability |
+| `results/gas_comparison.csv`, `gas_comparison.tex` | ✅ Complete | Camera-ready gas comparison table |
+| `results/sepolia_validation.json` | ✅ Complete (scaffold) | Sepolia validation output slot (real run pending) |
 
-### Missing Components ⏳
+**Gas finding (RQ1/H1)**: ~33× spread across standards; CVIN-Combined 52,178 gas (cheapest) → ERC-725xy 1,704,992 (heaviest full-account deploy); ERC-1056 ~10× cheaper than ERC-721/725 (H1 supported); ERC-4337 EntryPoint indirection = +46,862 gas/op.
 
-| Component | Est. Lines | Priority | Description |
-|-----------|-----------|----------|-------------|
-| `performance-metrics/gas_analyzer.py` | 400 | P1 | Gas cost analysis |
-| `performance-metrics/latency_analyzer.py` | 350 | P1 | Timing measurements |
-| `performance-metrics/benchmark_runner.py` | 300 | P2 | Automated benchmarks |
-| `security-analysis/threat_model.py` | 400 | P2 | Threat modeling |
-| `security-analysis/attack_scenarios.py` | 450 | P2 | Attack simulations |
-| `results/generate_thesis_tables.py` | 450 | P1 | LaTeX table generation |
-| `results/generate_graphs.py` | 350 | P2 | matplotlib graphs |
+### Security analysis ✅ — two complementary lenses
 
-**Missing**: ~2,700 lines  
-**Priority**: P1 for thesis tables  
-**Status**: ⏳ **PLANNED**
+| File | Status | Purpose |
+|------|--------|---------|
+| `security-analysis/attack_scenarios.py` | ✅ Complete | Attack-scenario modeling |
+| `security-analysis/generate_attack_tables.py` | ✅ Complete | Attack + security matrix table generation |
+| `security-analysis/results/attack_results.{json,csv,tex}` | ✅ Complete | Test-suite lens (54 scenarios; 43/43 applicable cells DEFENDED) |
+| `security-analysis/results/security_matrix.{json,csv}` | ✅ Complete | Analysis lens: Sybil economics, recovery availability, on-chain PII leakage |
+| `security-analysis/results/onchain_security.json`, `security_comparison.tex` | ✅ Complete | On-chain security findings + comparison table |
+| `security-analysis/EXECUTABLE_ATTACK_SCENARIOS.md`, `README.md`, `INDEX.md` | ✅ Complete | Documentation of both lenses |
+
+**Security finding (RQ2/H5)**: no standard dominates (security/performance frontier); only ERC-4337 has genuine on-chain key recovery; ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that hashes + encrypts the VIN. MOBI `attestEvent` signature-verification gap was found AND fixed (121k → 193k gas).
+
+**Status**: ✅ **COMPLETE** — gas benchmark, security matrices, and Sepolia harness all generated.
 
 ---
 
 ## 5️⃣ Documentation (`docs/`)
 
-### Thesis Chapters
+| File | Status | Purpose |
+|------|--------|---------|
+| `docs/RESEARCH_THRUSTS_REPORT.md` | ✅ Complete | Research thrusts mapping |
+| `docs/planning/NEXT_STAGES_PLAN.md` | ✅ Complete | Next-stages plan |
+| `docs/thesis/README.md` | ✅ Updated | Thesis chapter structure / status / timeline |
+| `docs/thesis/chapter5-results/README.md` | ✅ Complete | **Chapter 5 Results — working draft from measured artifacts** (gas RQ1, V2V RQ4, W3C RQ3, security RQ2, hypotheses table) |
 
-| File | Lines | Status | Completion |
-|------|-------|--------|------------|
-| `thesis/README.md` | 150 | ✅ Complete | Structure defined |
-| `thesis/01-introduction.md` | 0 | ⏳ Planned | 0% |
-| `thesis/02-literature-review.md` | 0 | ⏳ Planned | 0% |
-| `thesis/03-methodology.md` | 0 | ⏳ Planned | 0% |
-| `thesis/04-implementation.md` | 0 | ⏳ Planned | 0% |
-| `thesis/05-results.md` | 0 | ⏳ Planned | 0% |
-| `thesis/06-discussion.md` | 0 | ⏳ Planned | 0% |
-| `thesis/07-conclusion.md` | 0 | ⏳ Planned | 0% |
+Additional living docs at repo root: `README.md`, `CHANGELOG.md`, `CAPABILITIES.md`, `QUICKSTART.md`, `CV2X_REALISTIC_ROADMAP.md`, `MOBI_VID*` specs.
 
-**Target**: 150-200 pages total  
-**Current**: 0 pages  
-**Status**: ⏳ **PLANNED** (Phase 5)
-
-### Architecture Documentation
-
-| File | Lines | Status | Purpose |
-|------|-------|--------|---------|
-| `architecture/system-design.md` | 0 | ⏳ Planned | Overall design |
-| `architecture/security-model.md` | 0 | ⏳ Planned | Security analysis |
-| `architecture/privacy-design.md` | 0 | ⏳ Planned | Privacy features |
-
-### API Documentation
-
-| File | Lines | Status | Purpose |
-|------|-------|--------|---------|
-| `api/smart-contracts.md` | 0 | ⏳ Planned | Contract APIs |
-| `api/w3c-ssi.md` | 0 | ⏳ Planned | DID/VC APIs |
-| `api/cv2x-testbed.md` | 0 | ⏳ Planned | Testbed APIs |
-
-### Repository Documentation
-
-| File | Lines | Status | Purpose |
-|------|-------|--------|---------|
-| `README.md` (main) | 180 | ✅ Complete | Project overview |
-| `SECOND_PASS_PLAN.md` | 350 | ✅ Complete | This pass plan |
-| `SESSION_THESIS_INTEGRATION.md` | 450 | ✅ Complete | Previous session |
-| `INVENTORY.md` (this file) | 500 | ✅ Complete | Component inventory |
-| `CAPABILITIES.md` | 0 | 🔄 In Progress | System capabilities |
-| `QUICKSTART.md` | 0 | 🔄 In Progress | Startup guide |
+> **Historical record — do not rewrite** (kept as a research log): `SESSION_*`, `AUTONOMOUS_*`, `SECOND_PASS_PLAN.md`, `SESSION_THESIS_INTEGRATION.md`.
 
 ---
 
 ## 6️⃣ CI/CD Infrastructure (`.github/workflows/`)
 
-### Workflows ✅
+| File | Status | Purpose |
+|------|--------|---------|
+| `test-contracts.yml` | ✅ Complete | Smart-contract testing (217 Hardhat) |
+| `benchmark.yml` | ✅ Complete | Gas benchmarks |
+| `w3c-compliance.yml` | ✅ Complete | W3C compliance gate (≥90%; measured 93.2%) |
 
-| File | Lines | Status | Purpose |
-|------|-------|--------|---------|
-| `test-contracts.yml` | 70 | ✅ Complete | Smart contract testing |
-| `benchmark.yml` | 90 | ✅ Complete | Performance benchmarks |
-| `w3c-compliance.yml` | 65 | ✅ Complete | W3C compliance tests |
-
-**Capabilities**:
-- Automated testing on every push
-- Daily performance benchmarks
-- W3C compliance validation (>90% target)
-- Gas reporting
-- Code coverage tracking
-
-**Status**: ✅ **COMPLETE** - Fully automated
+**Status**: ✅ **COMPLETE** — fully automated.
 
 ---
 
 ## 📈 Progress Tracking
 
-### Overall Completion: 40%
+### Overall Completion: ~70%+
 
 ```
-█████████░░░░░░░░░░░░░░░ 40%
+████████████████████░░░░ ~70%+
 ```
 
 | Phase | Completion | Status |
 |-------|------------|--------|
-| Smart Contracts | 100% | ✅ |
-| W3C DID Layer | 100% | ✅ |
-| W3C VC Layer | 0% | ⏳ |
-| MOBI VID | 10% | ⏳ |
-| CV2X Testbed | 0% | ⏳ |
-| Comparison Framework | 0% | ⏳ |
-| Documentation | 30% | 🔄 |
+| Smart Contracts (9 standards + MOBI VID) | 100% (217 tests) | ✅ |
+| W3C DID Layer | 100% (4 methods) | ✅ |
+| W3C VC Layer | 100% (28 tests) | ✅ |
+| MOBI VID (Python + on-chain) | 100% (32 tests; AES-256-GCM VIN) | ✅ |
+| CV2X Testbed | ~85% (12/12 use cases + real-crypto V2V N=30; SUMO in simulate mode) | 🔄 |
+| Comparison Framework | 100% (gas N=30 σ=0, security two-lens, Sepolia harness) | ✅ |
+| W3C Compliance | 93.2% measured (executable checker) | ✅ |
+| Documentation | ~80% (Ch. 5 results draft from measured artifacts) | 🔄 |
 | CI/CD | 100% | ✅ |
 
-### Lines of Code Progress
-
-| Component | Current | Target | % |
-|-----------|---------|--------|---|
-| Smart Contracts | 3,500 | 3,500 | 100% |
-| W3C SSI Layer | 1,100 | 3,600 | 31% |
-| CV2X Testbed | 0 | 3,100 | 0% |
-| Comparison Framework | 0 | 2,700 | 0% |
-| Tests | 2,500 | 4,000 | 63% |
-| Documentation | 4,000 | 6,000 | 67% |
-| **TOTAL** | **11,100** | **22,900** | **48%** |
+**Remaining work**: public-testnet (Sepolia) validation run (harness exists, not executed), optional real-SUMO execution, and thesis writing.
 
 ---
 
-## 🎯 Critical Path Items
+## Hypotheses Status (from measured results)
 
-### 🔴 Priority 1 (Blocking Thesis Progress)
-
-1. **W3C Verifiable Credentials** (1,300 lines)
-   - Needed for: All use cases
-   - Needed for: W3C compliance testing
-   - Needed for: Thesis Chapter 4
-
-2. **MOBI VID Implementation** (1,200 lines)
-   - Needed for: Vehicle identity
-   - Needed for: Use cases 1, 3, 5, 6, 9
-   - Needed for: Industry compliance
-
-3. **Use Case Suite** (1,300 lines)
-   - Needed for: Thesis Chapter 5 (Results)
-   - Needed for: Demonstrations
-   - Needed for: Academic validation
-
-### 🟡 Priority 2 (Important but Not Blocking)
-
-1. **Comparison Framework** (2,700 lines)
-   - Needed for: Performance analysis
-   - Needed for: Thesis tables/graphs
-   - Can be built incrementally
-
-2. **CV2X SUMO Integration** (1,800 lines)
-   - Needed for: Real-world validation
-   - Needed for: Performance testing
-   - Can use simulation mode initially
-
-### 🟢 Priority 3 (Can Wait)
-
-1. **Thesis Chapter Writing** (150-200 pages)
-   - Phase 5 activity
-   - Depends on experimental results
-   - Target: December 2026
-
-2. **Advanced Documentation**
-   - API docs can be auto-generated
-   - Architecture docs support thesis
-   - Nice-to-have, not critical
+| Hypothesis | Verdict |
+|------------|---------|
+| H1 — minimal-state ≥10× cheaper for identity creation | ✅ Supported (ERC-1056 52,612 vs ERC-721 542,429 = 10.3×) |
+| H2 — ≥90% W3C compliance achievable | ✅ Supported (93.2% measured) |
+| H3 — off-chain verify meets V2V budget | ✅ Supported (SSI warm 0.165 ms ≪ 100 ms) |
+| H4 — MOBI VID realizable across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
+| H5 — hybrid on the cost/capability frontier | ✅ Supported (CVIN-Combined) |
 
 ---
 
 ## 🔧 Dependencies
 
-### External Dependencies
-
-**Node.js/Hardhat**:
-- hardhat: ^2.19.0
-- @openzeppelin/contracts: ^5.0.0
-- ethers: ^6.0.0
-- @nomicfoundation/hardhat-toolbox: ^4.0.0
-
-**Python**:
-- web3: 6.11.0
-- cryptography: 41.0.7
-- pytest: 7.4.3
-- eth-account: 0.10.0
-
-**Optional** (for CV2X testbed):
-- SUMO traffic simulator
-- traci: 1.24.0
-- sumolib: 1.24.0
-
-### Internal Dependencies
-
-```
-Use Cases → VC Layer → DID Resolver
-         → MOBI VID → Smart Contracts
-         
-Comparison → Performance Tools → All Components
-          → Security Analysis → Threat Model
-
-CI/CD → All Components (for testing)
-```
+**Node.js/Hardhat**: hardhat, @openzeppelin/contracts 5.0.2, ethers 6, hardhat-toolbox. Node 18.
+**Python 3.11**: web3, eth-account, cryptography, coincurve, pytest.
+**Optional** (CV2X real-SUMO): SUMO traffic simulator, traci, sumolib — not required for `--simulate` mode.
 
 ---
 
-## 📊 Test Coverage
+## 🚀 Getting Started (verified commands)
 
-### Current Coverage: 65%
-
-| Component | Coverage | Status |
-|-----------|----------|--------|
-| ERC-1056 | 90% | ✅ Excellent |
-| ERC-721 | 85% | ✅ Good |
-| ERC-725 | 80% | ✅ Good |
-| DID Resolver | 0% | ❌ Needs tests |
-| VC Layer | N/A | ⏳ Not built |
-| MOBI VID | N/A | ⏳ Not built |
-
-### Test Files Needed
-
-1. `2_w3c-ssi-layer/did-resolution/test_did_resolver.py`
-2. `2_w3c-ssi-layer/verifiable-credentials/test_vc_suite.py`
-3. `2_w3c-ssi-layer/mobi-vid/test_mobi_vid.py`
-4. `3_cv2x-testbed/use-cases/test_use_cases.py`
+- Contracts: `cd 1_blockchain-identity && npm ci && npx hardhat test` → 217 passing
+- VC tests: `python3 -m pytest 2_w3c-ssi-layer/verifiable-credentials/tests/` → 28
+- MOBI VID tests: `cd 2_w3c-ssi-layer/mobi-vid && python3 -m pytest tests/` → 32
+- Use cases: `python3 cv2x-testbed/scripts/test_use_cases.py` → 12/12
+- W3C compliance: `python3 cv2x-testbed/scripts/w3c_compliance_checker.py` → 93.2%
+- Gas benchmark: `cd 1_blockchain-identity && npx hardhat run scripts/benchmark_gas.js`; tables via `4_comparison-framework/performance-metrics/generate_tables.py`
+- V2V sim: `python3 cv2x-testbed/sumo/sumo_identity_integration.py --simulate`; N=30 stats via `cv2x-testbed/sumo/run_v2v_stats.py`
 
 ---
 
-## 🚀 Next Steps
-
-### Immediate (This Pass)
-
-1. ✅ Build W3C VC Layer (1,300 lines)
-2. ✅ Build MOBI VID (1,200 lines)
-3. ✅ Build Use Cases (1,300 lines)
-4. ✅ Build Comparison Tools (1,200 lines)
-
-**Total to Build**: ~5,000 lines
-
-### Short-Term (Next Week)
-
-1. Write tests for new components
-2. Run comprehensive benchmarks
-3. Generate thesis tables/graphs
-4. Update documentation
-
-### Medium-Term (Next Month)
-
-1. SUMO integration
-2. Security analysis
-3. Performance optimization
-4. Begin thesis writing
-
----
-
-## 📝 Notes
-
-- **Focus**: Production-quality code suitable for thesis
-- **Testing**: All code must have tests
-- **Documentation**: All code must be documented
-- **Reproducibility**: All experiments must be reproducible
-
----
-
-**Last Updated**: June 21, 2026  
-**Next Update**: After second pass completion  
+**Last Updated**: July 23, 2026
 **Maintainer**: Nikhil Prakash (UBC MASc Thesis)

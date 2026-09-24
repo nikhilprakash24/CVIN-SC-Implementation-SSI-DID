@@ -33,10 +33,12 @@ intended to be thesis-grade on its own before parallel research is merged.
 |---|---|---|
 | **VC layer** | `pytest 2_w3c-ssi-layer/verifiable-credentials/tests/` | ✅ **28/28 passed** (0.55s) **[verified]** |
 | **DID resolver** | `did_resolver.py`; `docs/figures/resolution_latency_M0.json` | ✅ valid W3C DID Document; in-process resolve **0.009 ms median / 0.013 ms p95 cold, 0.002 ms warm** (M0, N=30 per method) **[verified]** |
-| **W3C compliance (internal)** | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ **89.6%** overall (DID Core 75%, VC DM 100%, SSI 100%; 58/67) **[verified, self-scored]** |
+| **W3C compliance (internal)** | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ **93.2%** on the merged trunk (the analysis lineage's updated checker, which counts its two documented Data-Integrity deviations as FAIL by design; 89.6% on the pre-merge checker) **[verified, self-scored]** |
 | **W3C DID conformance (external)** | `docs/conformance/W3C_DID_TEST_SUITE.md` | ✅ **328/441 (74.4%)** on w3c/did-test-suite `939b31d`; identifier, properties, production, consumption 142/142; resolution 186/299 — 113 failures in 5 fixable metadata root causes **[verified externally]** |
 | **Contract compile** | `1_blockchain-identity` Hardhat compile | ✅ **31 contracts compile** (after fix, see §2.1) **[verified]** |
-| **Contract tests** | `1_blockchain-identity` Hardhat test | ✅ **47 passing / 0 failing** (after reconciliation, see §2.3) **[verified]** |
+| **Contract tests** | `1_blockchain-identity` Hardhat test | ✅ **219 passing / 0 failing** on the merged trunk (47 contracts, all nine standards + MOBI VID + security scenarios; 47/47 before the merge, see §2.3) **[verified]** |
+| **Python suites** | `2_w3c-ssi-layer/**/tests` | ✅ **60 passed** (VC layer 28, MOBI VID I/II, VIN cipher) **[verified]** |
+| **Nine-standard gas benchmark** | `1_blockchain-identity/scripts/benchmark_gas.js` → `4_comparison-framework/results/gas_*` | ✅ re-executed on the merged trunk; see claim register #25 for the cancun-vs-July delta **[verified]** |
 | **PKI vs ERC-1056** | `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py` → `cv2x-testbed/results/pki_vs_erc1056.{csv,json,md}` | ✅ n=50 per op, 3 providers. Hot-path verify **PKI 0.32 ms vs ERC-1056 uncached 18.2 ms median / 23.7 ms p95** (7 RPC calls); ERC-1056 register 54,860 gas, revoke 75,044; message 595 B vs ≈1.1 kB **[verified]** (caveats in the .md) |
 | **CI on GitHub** | `.github/workflows/` at `ed85dfd` | ✅ **Smart Contract Tests: success** ([run 36066006587](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006587)) · **W3C SSI Compliance: success** ([run 36066006689](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006689)) — first green CI in the project **[verified externally]** |
 

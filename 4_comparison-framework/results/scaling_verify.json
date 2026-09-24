@@ -1,0 +1,142 @@
+{
+  "credential_richness": {
+    "N": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "median_ms": [
+      0.16374,
+      0.1644,
+      0.16009,
+      0.16208,
+      0.16658,
+      0.17173
+    ],
+    "p95_ms": [
+      0.20936,
+      0.2126,
+      0.19767,
+      0.20464,
+      0.2161,
+      0.20931
+    ],
+    "mean_ms": [
+      0.17081,
+      0.17402,
+      0.16648,
+      0.16865,
+      0.17491,
+      0.17759
+    ],
+    "runs_per_point": 300,
+    "warmup_per_point": 50,
+    "sig_check_target_ms": 10.0,
+    "stays_under_target_across_range": true,
+    "scaling": {
+      "slope_ms_per_unit": 0.000298,
+      "intercept_ms": 0.161641,
+      "r2": 0.7616,
+      "spread_ratio_max_over_min": 1.073,
+      "relative_slope_per_unit": 0.00184,
+      "order": "O(1) \u2014 effectively constant (ECDSA recovery dominates)"
+    }
+  },
+  "selective_disclosure": {
+    "N": 16,
+    "k": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "median_ms": [
+      0.17452,
+      0.17824,
+      0.18694,
+      0.19788,
+      0.22167
+    ],
+    "p95_ms": [
+      0.21609,
+      0.22557,
+      0.32793,
+      0.23897,
+      0.2636
+    ],
+    "mean_ms": [
+      0.17999,
+      0.18407,
+      0.2068,
+      0.20352,
+      0.22792
+    ],
+    "runs_per_point": 300,
+    "warmup_per_point": 50,
+    "scaling": {
+      "slope_ms_per_unit": 0.003099,
+      "intercept_ms": 0.172635,
+      "r2": 0.9958,
+      "spread_ratio_max_over_min": 1.27,
+      "relative_slope_per_unit": 0.01795,
+      "order": "O(N) \u2014 linear marginal growth"
+    }
+  },
+  "method": "Real W3C VC DM 2.0 verification via the canonical VC layer (2_w3c-ssi-layer/verifiable-credentials: secp256k1 EIP-191 sign + public-key recovery, verify_credential runs structure/schema/temporal/revocation/signature/disclosure checks). For each point we warm up 50 runs then take the MEDIAN over 300 warm runs (p95 is the warm tail), timed with time.perf_counter. Credential richness varies N claims in {1,2,4,8,16,32}; selective disclosure fixes N=16 salted claim digests and discloses k in {1,2,4,8,16}. Scaling order is a least-squares fit of median latency vs N (and vs k).",
+  "host_note": "Linux 6.18.5-fc-v15 | x86_64 | python 3.11.15 | processor=x86_64",
+  "repeatability_caveat": "Single host, crypto-only, warm uncontended core (thesis \u00a75.4 / RESEARCH_AUDIT \u00a74.5 repeatability framing). Absolute latencies are hardware-dependent; the transferable results are the median and the scaling ORDER, not a population confidence interval.",
+  "v2v_density": {
+    "P": [
+      5,
+      10,
+      20,
+      40,
+      80
+    ],
+    "per_interval_ms": [
+      0.63747,
+      1.2713,
+      2.5387,
+      5.07024,
+      10.36288
+    ],
+    "per_interval_p95_ms": [
+      0.8901,
+      1.43764,
+      2.79931,
+      5.3745,
+      12.3349
+    ],
+    "per_interval_mean_ms": [
+      0.66455,
+      1.28983,
+      2.59034,
+      5.14193,
+      10.86366
+    ],
+    "per_message_median_ms": [
+      0.12377,
+      0.121838,
+      0.12138,
+      0.120988,
+      0.131095
+    ],
+    "budget_ms": 100.0,
+    "saturation_P": null,
+    "extrapolated_saturation_P": 771.8,
+    "fit": {
+      "slope_ms_per_neighbor": 0.129628,
+      "intercept_ms": -0.042349,
+      "r2": 0.9999
+    },
+    "intervals_per_point": 300,
+    "warmup_per_point": 50,
+    "saturation_note": "per-interval verification stays within the 100 ms budget across the whole tested range (P<=80); saturation is beyond the tested range, extrapolated P*~=772 neighbors",
+    "method": "Reuses SSIIdentityLayer from sumo_identity_integration.py (real secp256k1 EIP-191 sign at sender, signature recovery + cached-peer address comparison at receiver = warm V2V verify path). One receiver verifies P pre-cached neighbors per 100 ms interval; P neighbors are signed fresh each interval OUTSIDE the timed region, and only the receiver's P verifications are timed (time.perf_counter). Reported per_interval_ms is the MEDIAN over the timed intervals. P* is the smallest P whose median exceeds 100 ms; if none within P<=80 it is extrapolated from a least-squares linear fit.",
+    "honesty": "Crypto verification LOAD ONLY (RESEARCH_AUDIT \u00a74.4). Excludes radio propagation, MAC-layer contention, channel loss and queueing; BSMs are delivered in-process. This is a CPU-time saturation bound, not end-to-end V2V latency. Warm path (cached peers) only \u2014 first-contact VC verification is amortised and not included per interval."
+  }
+}

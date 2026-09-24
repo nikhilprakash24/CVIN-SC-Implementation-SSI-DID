@@ -1,0 +1,138 @@
+<style>
+  :root{
+    --paper:#f4f6f9; --surface:#ffffff; --ink:#161a21; --muted:#5f6b7c;
+    --line:#e2e6ec; --accent:#3a49c9; --accent-soft:rgba(58,73,201,.08);
+    --good:#1f7a4d; --good-soft:rgba(31,122,77,.10);
+    --font-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --maxw:44rem;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0e1116; --surface:#161b23; --ink:#e7eaf0; --muted:#8b95a6;
+      --line:#232b36; --accent:#8091ff; --accent-soft:rgba(128,145,255,.13);
+      --good:#4bbd85; --good-soft:rgba(75,189,133,.14);
+    }
+  }
+  :root[data-theme="light"]{
+    --paper:#f4f6f9; --surface:#ffffff; --ink:#161a21; --muted:#5f6b7c;
+    --line:#e2e6ec; --accent:#3a49c9; --accent-soft:rgba(58,73,201,.08);
+    --good:#1f7a4d; --good-soft:rgba(31,122,77,.10);
+  }
+  :root[data-theme="dark"]{
+    --paper:#0e1116; --surface:#161b23; --ink:#e7eaf0; --muted:#8b95a6;
+    --line:#232b36; --accent:#8091ff; --accent-soft:rgba(128,145,255,.13);
+    --good:#4bbd85; --good-soft:rgba(75,189,133,.14);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans);
+    line-height:1.55;-webkit-font-smoothing:antialiased;
+    padding:clamp(1.25rem,4vw,3rem);}
+  .card{max-width:var(--maxw);margin:0 auto;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 32px -18px rgba(0,0,0,.22);}
+  .band{height:4px;background:linear-gradient(90deg,var(--accent),transparent 78%);}
+  .pad{padding:clamp(1.5rem,4vw,2.5rem);}
+  .eyebrow{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 .9rem;}
+  h1{font-size:clamp(1.65rem,4.5vw,2.3rem);line-height:1.08;margin:0 0 .5rem;
+    letter-spacing:-.015em;text-wrap:balance;font-weight:650;}
+  .spec{font-family:var(--font-mono);font-size:.82rem;color:var(--muted);
+    margin:0 0 1.15rem;}
+  .role{font-size:1.05rem;color:var(--ink);margin:0 0 1.6rem;max-width:38rem;
+    text-wrap:pretty;}
+  dl{display:grid;grid-template-columns:minmax(9rem,10rem) 1fr;gap:.05rem 1.4rem;
+    margin:0;border-top:1px solid var(--line);padding-top:1.3rem;}
+  dt{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--muted);padding:.55rem 0;}
+  dd{margin:0;padding:.55rem 0;font-size:.94rem;border-bottom:1px solid var(--line);}
+  dt{border-bottom:1px solid var(--line);}
+  dd code,dd .path{font-family:var(--font-mono);font-size:.82em;
+    background:var(--accent-soft);color:var(--accent);padding:.08em .4em;
+    border-radius:5px;word-break:break-word;}
+  dd a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft);}
+  dd a:hover{border-bottom-color:var(--accent);}
+  .callout{margin-top:1.6rem;display:flex;gap:.85rem;align-items:flex-start;
+    background:var(--good-soft);border:1px solid color-mix(in srgb,var(--good) 30%,transparent);
+    border-radius:10px;padding:.95rem 1.1rem;}
+  .callout .tag{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--good);border:1px solid currentColor;
+    border-radius:4px;padding:.15em .45em;white-space:nowrap;margin-top:.15rem;}
+  .callout p{margin:0;font-size:.9rem;}
+  .callout .num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;
+    font-weight:650;color:var(--ink);}
+  footer{border-top:1px solid var(--line);margin-top:1.9rem;padding-top:1.1rem;
+    font-size:.78rem;color:var(--muted);}
+  footer strong{color:var(--ink);font-weight:600;}
+  @media (max-width:34rem){dl{grid-template-columns:1fr;gap:0}
+    dt{border-bottom:none;padding-bottom:.1rem}}
+</style>
+
+<article class="card">
+  <div class="band"></div>
+  <div class="pad">
+    <p class="eyebrow">Source Register &middot; Measured Result</p>
+    <h1>Security &mdash; Two-Lens Adversarial Register</h1>
+    <p class="spec">attack_results.json &middot; security_matrix.json &middot; 54 executed attacks &middot; solc 0.8.24 &middot; OZ 5.0.2 &middot; Hardhat-local</p>
+    <p class="role">Two complementary security lenses over the nine standards. Lens A is an
+      <em>executed</em> attack suite &mdash; real malicious transactions sent and their
+      reverts captured. Lens B is a comparative threat-posture matrix that surfaces the
+      security/performance trade-offs behind <strong>H5</strong> (no single standard
+      dominates).</p>
+
+    <dl>
+      <dt>What it measures</dt>
+      <dd><strong>Lens A</strong> (attack_results.json): 9 standards &times; 6 attack classes
+        (unauthorized issuance / attribute-write / delegate-or-claim / revocation, identity
+        hijack, signature replay) = 54 cells. <strong>Lens B</strong> (security_matrix.json):
+        9 standards &times; 6 threat categories (impersonation, replay, identity theft,
+        sybil, recovery, privacy) across on-chain + off-chain layers.</dd>
+
+      <dt>Method</dt>
+      <dd>Every Lens-A cell is a real on-chain outcome: the malicious tx was actually sent
+        and its revert reason recorded (<code>method=executed</code>) or a structural absence
+        argued from verified source (<code>method=reasoned</code>). Lens B grades each cell
+        DEFENDED / PARTIAL / VULNERABLE / N/A and pairs it with the demonstrated mechanism
+        and evidence string.</dd>
+
+      <dt>Key numbers</dt>
+      <dd>Of the 54 attack cells, <span class="num">11</span> are N/A (no gated step to
+        bypass) and all <span class="num">43</span> applicable scenarios are
+        <span class="num">DEFENDED</span> &mdash; <span class="num">43/43</span>, zero
+        vulnerable. The comparative matrix is deliberately not all-green: 21 DEFENDED,
+        15 PARTIAL, 14 VULNERABLE, 4 N/A on-chain, showing where each standard sits on the
+        frontier.</dd>
+
+      <dt>Source file</dt>
+      <dd><span class="path">4_comparison-framework/security-analysis/results/attack_results.json</span>,
+        <span class="path">security_matrix.json</span>
+        (+ <span class="path">onchain_security.json</span>)</dd>
+
+      <dt>Provenance / caveat</dt>
+      <dd>The audit found MOBI <code>attestEvent</code> stored an attestation signature it
+        never verified (a forgery/replay gap); the researcher added on-chain
+        <code>ecrecover</code> over a domain-separated digest (contract + chainId + vehicle +
+        eventId, EIP-191, OZ ECDSA low-s), with a before/after regression test.
+        <strong>Caveat:</strong> the adversary model is operational, not formalized
+        (RESEARCH_AUDIT &sect;4.7); the matrix records PARTIAL/VULNERABLE cells honestly
+        rather than claiming universal defense.</dd>
+    </dl>
+
+    <div class="callout">
+      <span class="tag">Found &amp; fixed</span>
+      <p>All <span class="num">43</span> applicable attacks (of 54) are defended, with every
+        revert captured from a real transaction. The honesty asset: the suite caught our own
+        bug &mdash; <code>attestEvent</code> now verifies its signature on-chain, moving the
+        MOBI <em>Replay</em> cell from PARTIAL to DEFENDED at a cost of
+        <span class="num">121,110</span>&nbsp;&rarr;&nbsp;<span class="num">192,718</span>
+        gas. <em>(Security &sect;5.6.)</em></p>
+    </div>
+
+    <footer>
+      Part of the <strong>CVIN-SSI Source Register</strong> (<code>SOURCES.md</code>) for
+      the MASc thesis <em>Comparative Analysis of Self-Sovereign Identity Systems for
+      Connected and Autonomous Vehicles</em> — <strong>Nikhil Prakash</strong>, UBC ECE.
+      Provenance and attribution: <code>PROVENANCE.md</code>, <code>docs/DEVELOPMENT_HISTORY.md</code>.
+    </footer>
+  </div>
+</article>

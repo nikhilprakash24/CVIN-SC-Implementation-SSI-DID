@@ -1,0 +1,392 @@
+{
+  "timestamp": "2026-07-23T22:51:29.630267",
+  "methodology": "All non-qualitative checks execute the DID resolver and VC stack and record observed outcomes. SSI principles are qualitative and excluded from the score.",
+  "summary": {
+    "executed_checks": 44,
+    "pass": 40,
+    "fail": 2,
+    "partial": 2,
+    "qualitative": 10,
+    "score": 93.18181818181817
+  },
+  "checks": [
+    {
+      "spec": "DID Core v1.0",
+      "section": "3.1",
+      "requirement": "Conformant DIDs (did:method:id) MUST resolve for all 4 implemented methods",
+      "status": "PASS",
+      "notes": "resolved 4 conformant DIDs (ethr, nft, key, mobi)"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "3.1",
+      "requirement": "Malformed DID (no 'did:' scheme) MUST produce a resolution error, not a document",
+      "status": "PASS",
+      "notes": "'not-a-did' rejected with error='internalError', didDocument=null"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "7.1.2",
+      "requirement": "Unsupported DID method MUST yield a resolution error ('methodNotSupported')",
+      "status": "PARTIAL",
+      "notes": "error surfaced (resolution safely refused) but code is 'internalError' instead of 'methodNotSupported'"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "3.1",
+      "requirement": "Method-specific identifier violating the method's ABNF (did:nft w/o tokenId) MUST error",
+      "status": "PASS",
+      "notes": "did:nft without tokenId rejected with error='internalError'"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "5.1.1",
+      "requirement": "DID document MUST contain 'id' equal to the DID that was resolved",
+      "status": "PASS",
+      "notes": "all 4 documents carry id equal to the resolved DID"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "6.3",
+      "requirement": "JSON-LD DID document MUST include the DID Core @context",
+      "status": "PASS",
+      "notes": "all 4 documents include 'https://www.w3.org/ns/did/v1'"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "5.1.2",
+      "requirement": "'controller', when present, MUST be a valid DID",
+      "status": "PASS",
+      "notes": "did:ethr controller = did:ethr:0x1:0xab12ab12ab12ab12ab12ab12ab12ab12ab12ab12"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "5.2",
+      "requirement": "Verification methods MUST have 'id', 'type' and 'controller'",
+      "status": "PASS",
+      "notes": "id/type/controller present on every verification method (4 methods)"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "5.2",
+      "requirement": "Verification methods MUST carry public key material",
+      "status": "PARTIAL",
+      "notes": "key material present for all methods, but ['mobi'] carry the placeholder '0x...' instead of a real key (registry lookup not implemented)"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "5.3.1",
+      "requirement": "'authentication' references MUST resolve to verification methods in the document",
+      "status": "PASS",
+      "notes": "authentication references resolve to in-document methods (4 methods)"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "5.3.2",
+      "requirement": "'assertionMethod', when present, MUST reference in-document verification methods",
+      "status": "PASS",
+      "notes": "valid assertionMethod on ['ethr', 'key'] (property is optional for the others)"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "5.4",
+      "requirement": "Services MUST have 'id', 'type' and 'serviceEndpoint'",
+      "status": "PASS",
+      "notes": "did:nft and did:mobi services all carry id/type/serviceEndpoint"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "7.1.2",
+      "requirement": "Resolution MUST return DID resolution metadata (contentType, retrieved)",
+      "status": "PASS",
+      "notes": "contentType + parseable 'retrieved' timestamp on all resolutions"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "7.1.3",
+      "requirement": "Resolution SHOULD return DID document metadata ('created')",
+      "status": "PASS",
+      "notes": "documentMetadata.created present and ISO-8601 parseable"
+    },
+    {
+      "spec": "DID Core v1.0",
+      "section": "7.2",
+      "requirement": "DID URL fragment MUST dereference to a resource inside the DID document",
+      "status": "PASS",
+      "notes": "'did:ethr:0x1:0xab12ab12ab12ab12ab12ab12ab12ab12ab12ab12#controller' dereferences to a verification method"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Contexts",
+      "requirement": "@context MUST be present with the base v2 context first",
+      "status": "PASS",
+      "notes": "@context[0] == 'https://www.w3.org/ns/credentials/v2' on a freshly issued VC"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Identifiers",
+      "requirement": "Credential 'id', when present, MUST be a URL/URI",
+      "status": "PASS",
+      "notes": "credential id is a URI: urn:uuid:c172c541-41ac-48ce-85dc-700f42f7fc80"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Types",
+      "requirement": "'type' MUST include 'VerifiableCredential' plus a specific type",
+      "status": "PASS",
+      "notes": "type = ['VerifiableCredential', 'VehicleBirthCertificate']"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Issuer",
+      "requirement": "'issuer' MUST be present and be a URI (DID) identifying the issuer",
+      "status": "PASS",
+      "notes": "issuer = did:ethr:0x1:0x6F9e4A189f83e614BFD94a213FF56DC5a679B6ff"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Credential Subject",
+      "requirement": "'credentialSubject' MUST be present with claims about the subject",
+      "status": "PASS",
+      "notes": "subject id = holder DID, 6 claims carried"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Validity Period",
+      "requirement": "'validFrom'/'validUntil' MUST be valid XML-Schema dateTime values (v2 renames issuanceDate)",
+      "status": "PASS",
+      "notes": "validFrom=2026-07-23T22:51:29Z, validUntil=2027-07-23T22:51:29Z, both XML-Schema dateTime"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Data Schemas",
+      "requirement": "'credentialSchema', when present, MUST have 'id' and 'type'",
+      "status": "PASS",
+      "notes": "credentialSchema: type=JsonSchema, id=https://cvin.ubc.ca/credentials/automotive/v1/schemas/VehicleBirthCertificate"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Status",
+      "requirement": "'credentialStatus', when present, MUST have 'id' and 'type'",
+      "status": "PASS",
+      "notes": "credentialStatus: type=CvinRevocationRegistry2024"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Securing Mechanisms",
+      "requirement": "Credential MUST carry a DataIntegrityProof with all required proof properties",
+      "status": "PASS",
+      "notes": "DataIntegrityProof with cryptosuite/created/verificationMethod/proofPurpose=assertionMethod/proofValue"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Securing Mechanisms",
+      "requirement": "Proof MUST be cryptographically bound to the issuer's key (recoverable signature)",
+      "status": "PASS",
+      "notes": "secp256k1 recovery yields the issuer address 0x6F9e4A189f83e614BFD94a213FF56DC5a679B6ff (offline, no chain round-trip)"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Verification",
+      "requirement": "A well-formed, freshly issued credential MUST verify end-to-end",
+      "status": "PASS",
+      "notes": "verify_credential => valid, sub-checks ['disclosure', 'revocation', 'schema', 'signature', 'structure', 'temporal'] all true (0.35 ms)"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Verification",
+      "requirement": "NEGATIVE: credential missing a required property MUST be rejected",
+      "status": "PASS",
+      "notes": "credential stripped of 'issuer' rejected by structure check"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Securing Mechanisms",
+      "requirement": "NEGATIVE: tampering with a signed claim MUST invalidate the proof",
+      "status": "PASS",
+      "notes": "claim edit ('make': Tesla\u2192Lada) breaks signature recovery"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Securing Mechanisms",
+      "requirement": "NEGATIVE: credential forged under another issuer's DID MUST be rejected",
+      "status": "PASS",
+      "notes": "recovered signer != address embedded in the claimed issuer DID \u2192 rejected"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Validity Period",
+      "requirement": "NEGATIVE: credential past 'validUntil' MUST be rejected",
+      "status": "PASS",
+      "notes": "validUntil in the past \u2192 temporal check rejects"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Status",
+      "requirement": "NEGATIVE: revoked credential MUST fail status checking",
+      "status": "PASS",
+      "notes": "valid before revocation, rejected after RevocationRegistry.revoke()"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Data Schemas",
+      "requirement": "NEGATIVE: claims violating the declared schema MUST be refused at issuance",
+      "status": "PASS",
+      "notes": "issuance refused: claims failed schema validation for VehicleBirthCertificate: missing required property 'model'; missing required property 'year'; missing required property 'manufacturingDate'; missing required property 'manufacturerDid'; property 'vin' failed validation: 'BAD'"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Verifiable Presentations",
+      "requirement": "VP MUST have '@context', 'type' incl. VerifiablePresentation, 'holder' and credentials",
+      "status": "PASS",
+      "notes": "@context/type/holder/verifiableCredential all present"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Verifiable Presentations",
+      "requirement": "VP proof MUST bind challenge + domain with proofPurpose 'authentication'",
+      "status": "PASS",
+      "notes": "holder-signed proof with proofPurpose=authentication, challenge and domain bound"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Verifiable Presentations",
+      "requirement": "A holder-signed VP MUST verify, including every embedded credential",
+      "status": "PASS",
+      "notes": "VP and embedded credential verify against the expected challenge/domain"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Verifiable Presentations",
+      "requirement": "NEGATIVE: replayed VP (stale challenge) MUST be rejected",
+      "status": "PASS",
+      "notes": "same VP replayed under a new challenge \u2192 rejected"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Verifiable Presentations",
+      "requirement": "NEGATIVE: VP bound to another domain/audience MUST be rejected",
+      "status": "PASS",
+      "notes": "VP presented to a different domain \u2192 rejected"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Verifiable Presentations",
+      "requirement": "NEGATIVE: presentation by a non-holder (stolen credential) MUST be rejected",
+      "status": "PASS",
+      "notes": "VP signed with a non-holder key over a stolen credential \u2192 rejected"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Verifiable Presentations",
+      "requirement": "NEGATIVE: wallet MUST refuse presentation creation without a challenge",
+      "status": "PASS",
+      "notes": "wallet refuses to create a VP without a challenge"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Selective Disclosure",
+      "requirement": "SD credential MUST carry salted claim digests, not raw claim values",
+      "status": "PASS",
+      "notes": "signed VC carries 7 salted digests; raw values stay with the holder"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Selective Disclosure",
+      "requirement": "Partial disclosure MUST verify while hidden claims remain hidden",
+      "status": "PASS",
+      "notes": "disclosed {vin, odometerKm} verified against signed digests; cost/technicianId values never leave the wallet"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Selective Disclosure",
+      "requirement": "NEGATIVE: tampering with a disclosed value MUST break the digest check",
+      "status": "PASS",
+      "notes": "odometer 42150\u21929000 after signing \u2192 digest mismatch \u2192 rejected"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Securing Mechanisms",
+      "requirement": "Data Integrity proofs SHOULD use a standard canonicalization (RDFC-1.0)",
+      "status": "FAIL",
+      "notes": "DOCUMENTED DEVIATION: proofs are computed over deterministic (sorted-key) JSON, not URDNA2015/RDFC-1.0 RDF dataset canonicalization required by registered Data Integrity cryptosuites"
+    },
+    {
+      "spec": "VC Data Model v2.0",
+      "section": "Securing Mechanisms",
+      "requirement": "Proof cryptosuite SHOULD be a W3C-registered Data Integrity cryptosuite",
+      "status": "FAIL",
+      "notes": "DOCUMENTED DEVIATION: cryptosuite 'eip191-secp256k1-recovery-2024' is thesis-defined (EIP-191 + secp256k1 recovery), not in the W3C Data Integrity cryptosuite registry ['bbs-2023', 'ecdsa-jcs-2019', 'ecdsa-rdfc-2019', 'ecdsa-sd-2023', 'eddsa-jcs-2022', 'eddsa-rdfc-2022']"
+    },
+    {
+      "spec": "SSI Principles",
+      "section": "1",
+      "requirement": "User Control: holder controls keys and credentials",
+      "status": "QUALITATIVE",
+      "notes": "assessed qualitatively \u2014 holder wallet holds its own secp256k1 key; presentations are holder-signed"
+    },
+    {
+      "spec": "SSI Principles",
+      "section": "2",
+      "requirement": "Consent: data sharing requires an explicit holder action",
+      "status": "QUALITATIVE",
+      "notes": "assessed qualitatively \u2014 credentials leave the wallet only via create_presentation()"
+    },
+    {
+      "spec": "SSI Principles",
+      "section": "3",
+      "requirement": "Portability: identity is expressed in standard formats",
+      "status": "QUALITATIVE",
+      "notes": "assessed qualitatively \u2014 W3C DIDs and VC DM 2.0 JSON documents"
+    },
+    {
+      "spec": "SSI Principles",
+      "section": "4",
+      "requirement": "Interoperability: follows open W3C specifications",
+      "status": "QUALITATIVE",
+      "notes": "assessed qualitatively \u2014 subject to the deviations counted as FAIL above"
+    },
+    {
+      "spec": "SSI Principles",
+      "section": "5",
+      "requirement": "Privacy by design: minimal data exposure",
+      "status": "QUALITATIVE",
+      "notes": "assessed qualitatively \u2014 selective disclosure via salted digests, demonstrated above"
+    },
+    {
+      "spec": "SSI Principles",
+      "section": "6",
+      "requirement": "Decentralization: no mandatory central verifier",
+      "status": "QUALITATIVE",
+      "notes": "assessed qualitatively \u2014 offline verification via signature recovery; no chain round-trip"
+    },
+    {
+      "spec": "SSI Principles",
+      "section": "7",
+      "requirement": "Transparency: open standards and auditable design",
+      "status": "QUALITATIVE",
+      "notes": "assessed qualitatively \u2014 spec-referenced checks in this file exercise the public API"
+    },
+    {
+      "spec": "SSI Principles",
+      "section": "8",
+      "requirement": "Minimal disclosure: share only what is required",
+      "status": "QUALITATIVE",
+      "notes": "assessed qualitatively \u2014 hidden claims travel as digests only, demonstrated above"
+    },
+    {
+      "spec": "SSI Principles",
+      "section": "9",
+      "requirement": "Security: cryptographic protection",
+      "status": "QUALITATIVE",
+      "notes": "assessed qualitatively \u2014 secp256k1 signatures; forgery/tamper/replay rejections demonstrated above"
+    },
+    {
+      "spec": "SSI Principles",
+      "section": "10",
+      "requirement": "Persistence: identifiers are long-lived",
+      "status": "QUALITATIVE",
+      "notes": "assessed qualitatively \u2014 DIDs derived from keys / VIN / on-chain identity"
+    }
+  ]
+}

@@ -40,4 +40,17 @@ describe("ERC721 Combined Test Suite", function () {
             expect(await cvin_nft_did_erc721_monolithic.ownerOf(1)).to.equal(addr1.address);
         });
     });
+
+    describe("Royalty (ERC2981)", function () {
+        it("Should report the default royalty configured at deployment", async function () {
+            await cvin_nft_did_erc721.mint(addr1.address, 1, "tokenURI");
+
+            const salePrice = ethers.parseEther("1");
+            const [receiver, royaltyAmount] = await cvin_nft_did_erc721.royaltyInfo(1, salePrice);
+
+            expect(receiver).to.equal(owner.address);
+            // 500 basis points = 5%
+            expect(royaltyAmount).to.equal((salePrice * 500n) / 10000n);
+        });
+    });
 });
