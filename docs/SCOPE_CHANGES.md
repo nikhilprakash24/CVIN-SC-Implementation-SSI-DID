@@ -1,0 +1,27 @@
+# Scope Change Log
+
+**Author:** Nikhil Prakash (MASc, UBC ECE)
+**Started:** 2026-09-24 (closes audit finding F10)
+
+Scope moves in a research master's are normal; unrecorded scope moves are a
+liability at the defence. Every entry here has a date, what changed, why,
+where the decision is evidenced, and how the thesis will treat it. Where the
+reason has been **reconstructed** from the repository history rather than
+recorded at the time, it says so, and the author should confirm or correct
+it.
+
+| ID | Date | Item | Change | Reason | Evidence | Thesis treatment |
+|---|---|---|---|---|---|---|
+| SC-01 | 2025-11 → 2026-09 | Position-falsification detection (>95 % accuracy), roadmap success criterion | **Deferred** | *Reconstructed:* misbehaviour detection is kinematic-plausibility / ML work, a separate research field; it has no identity-layer contribution and would not discriminate between the identity standards under comparison. | `CV2X_REALISTIC_ROADMAP.md` §Success Criteria (target); no implementation in any commit | Future work, ch. 7; mention in ch. 3 scope as "misbehaviour detection assumed external" |
+| SC-02 | 2025-11 → 2026-09 | Privacy analysis ("does blockchain expose more data than centralized?") | **Deferred, partially subsumed** | *Reconstructed:* VC layer and MOBI VID were prioritised on the critical path (`RESEARCH_THRUSTS_REPORT.md` §3). VIN hashing in MOBI VID and the selective-disclosure design address part of it, but no adversary-observation analysis was written. | roadmap RQ3; `MOBI_VID2_SSI_DESIGN.md`; VC layer selective disclosure | Add a bounded "on-chain observability" section to the security chapter (what a passive chain observer learns per standard); full linkability analysis → future work |
+| SC-03 | 2025-11 → 2026-09 | V2 design questions 8–10: optimal PKI–DID hybrid, ML misbehaviour detection, 5G NR-V2X feasibility | **Demoted to future work** | PhD-scale; not required to test H1–H5. | `cv2x-testbed/V2_DESIGN.md` §Research Questions | Ch. 7 future work, explicitly |
+| SC-04 | 2026-09-24 | Contribution claims "first comprehensive comparison" / "first working implementation" | **Rewording pending** | Priority claims invite literature counter-examples (e.g. Springer 2025 SSI V2V authentication chapter). | `docs/AUDIT_01_ORIGINAL_GOALS.md` §1.3, §4 | Reword to "measured, domain-constrained, reproducible" |
+| SC-05 | 2026-09-24 | "Throughput" in RQ1 | **Decision pending** | Nothing on the trunk measures TPS; either measure per-registry throughput on Hardhat/Sepolia or remove the word from RQ1. | audit §4 | Decide before ch. 3 is frozen |
+| SC-06 | 2026-09-24 | W3C VC Data Model version | **Decision pending** | Checker targets v1.1; thrust report and VC layer cite v2.0. | `w3c_compliance_checker.py`; `RESEARCH_THRUSTS_REPORT.md` | Pick one; if v2.0, update the checker's clause list |
+| SC-07 | 2026-09-24 | Nine standards → three on the canonical trunk | **Temporary reduction, pending merge** | ERC-735, 1155, LSP8, 4337, CVIN-Combined and the 725xy contract exist only in the unmerged bundle lineage. | audit F1; `AFTER_ACTION_REPORT.md` §3 | Merge bundle; until then chapters cite three |
+| SC-08 | 2026-09-24 | `CVIN_NFT_DID_ERC721` interface | **Extended** with `recordEntry`, `getEntryTimestamp`, `payToll` | ERC-721 tests were written against these functions; no contract revision ever had them. Added so the toll use case is exercisable. Changes the ERC-721 deployment size (1,325,111 gas). | commit `708302a` | Note in ch. 4 implementation; ERC-721 gas figures are for the extended contract |
+| SC-09 | 2026-09-24 | `CVINVehicleDIDRegistry` ownership model | **Corrected** (`vehicleOwnerOf`, `transferVehicleOwnership`) | Service-endpoint and delegate functions were unreachable by construction. Behaviour-preserving for existing flows; +34 gas on `createVehicleDID`. | commit `708302a`; `PROJECT_SUMMARY.md` §2.3 | Report as an implementation finding in ch. 4 |
+| SC-10 | 2026-09-24 | Compliance gate in CI | **Floor set to verified level (89.0 %)**, target 90 % logged | A >90 % gate would fail on the first run at 89.6 %; the gate must catch regressions, not encode an aspiration. | `.github/workflows/w3c-compliance.yml` | State in ch. 5 that 90 % is the target and 89.6 % the achieved value |
+
+Add entries above this line as decisions are made. Do not edit past entries;
+append a correction entry instead.

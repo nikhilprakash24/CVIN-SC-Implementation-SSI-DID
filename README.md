@@ -113,7 +113,7 @@ CVIN-SC-Implementation-SSI-DID/
 - SUMO network configuration
 - 3 safety applications (FCW, EEBL, IMA)
 - 10 complete use case scenarios
-- Performance metrics (<10ms verification)
+- Performance metrics (target: <10ms verification; measured values live in `docs/figures/results_snapshot.json`, conditions in `docs/MEASUREMENT_CONDITIONS.md`)
 
 ### Phase 4: Comparative Analysis (⏳ Planned)
 - Run identical experiments across all 9 standards
@@ -149,9 +149,11 @@ CVIN-SC-Implementation-SSI-DID/
 | Metric | ERC-1056 | ERC-721 | Centralized |
 |--------|----------|---------|-------------|
 | DID Creation | ~$0.50 | TBD | $0.01 |
-| DID Resolution | 50-100ms | TBD | <1ms |
-| VC Verification | 5-10ms | TBD | <1ms |
-| V2V Message Verify | 50ms | TBD | 5ms |
+| DID Resolution | 50-100ms (M2, estimate — not measured) | 0.05 ms in-process (M0, single run) | <1ms |
+| VC Verification | 5-10ms (estimate) | pending (PKI-vs-ERC-1056 experiment) | <1ms |
+| V2V Message Verify | 50ms (estimate) | pending | 5ms |
+
+Condition tags (M0/M1/M2) and the claim register: `docs/MEASUREMENT_CONDITIONS.md`.
 
 **Key Finding**: ERC-1056 lightweight DID meets real-time requirements for non-critical V2V applications but requires optimization for safety-critical scenarios.
 
@@ -229,6 +231,22 @@ python3 run_benchmarks.py
 # - Graphs and visualizations
 # - LaTeX tables for thesis
 ```
+
+---
+
+## CI
+
+Three GitHub Actions workflows live in `.github/workflows/`. All three were rewritten to match the current repository layout (Node 22, Python 3.11) and every shell step was verified locally before being committed.
+
+| Workflow | Triggers | What it checks |
+|----------|----------|----------------|
+| `test-contracts.yml` — Smart Contract Tests | push to `main` / `claude/**`, PRs to `main`, manual | `npm ci`, `npx hardhat compile` (32 contracts) and `npx hardhat test` (47 tests) in `1_blockchain-identity/`. |
+| `w3c-compliance.yml` — W3C SSI Compliance Tests | push to `main` / `claude/**`, PRs to `main`, manual | (1) VC-layer pytest suite in `2_w3c-ssi-layer/verifiable-credentials/` (28 tests). (2) `cv2x-testbed/scripts/w3c_compliance_checker.py`; parses the `OVERALL COMPLIANCE SCORE` line and uploads `w3c_compliance_report.json` as an artifact. |
+| `benchmark.yml` — Performance Benchmarks | push to `main`, nightly 00:00 UTC, manual | `REPORT_GAS=true npx hardhat test` in `1_blockchain-identity/`; uploads `gas-report.txt` as an artifact. |
+
+**Compliance floor rule.** The compliance job fails if the score drops below `COMPLIANCE_FLOOR` (currently **89.0%**). The floor is deliberately set just under the verified score on this trunk (89.6%) so that regressions fail CI, rather than at the 90% thesis target, which the implementation does not yet meet. The 90% figure is logged as `COMPLIANCE_TARGET` and reported in the job summary but is not enforced. When the real score rises, raise `COMPLIANCE_FLOOR` in `w3c-compliance.yml` to lock in the gain.
+
+Note: `2_w3c-ssi-layer/requirements.txt` pins `did-jwt==0.1.0`, which is not on PyPI, so CI installs the VC-layer test dependencies (`eth-account coincurve cryptography pytest`) unpinned instead of from that file.
 
 ---
 

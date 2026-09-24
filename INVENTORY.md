@@ -1,5 +1,7 @@
 # Thesis Repository - Complete Inventory
 
+> **Figures in this file are design-time estimates.** Gas and latency values here predate measurement and are superseded by `docs/figures/results_snapshot.json` (measured on the trunk). Condition tags and the claim-by-claim status: `docs/MEASUREMENT_CONDITIONS.md`.
+
 **Last Updated**: June 21, 2026  
 **Total Files**: 43+  
 **Total Lines of Code**: ~15,000  
@@ -146,7 +148,7 @@
 
 **W3C Compliance**: 85.7% self-scored (VC DM v2.0; deviations documented)  
 **Test Coverage**: 28 tests, gates G1–G11 passed  
-**Measured**: verify median 7.5 ms / p95 8.9 ms (offline) — first Thrust 3 data point  
+**Earlier measurement (superseded)**: verify median 7.5 ms / p95 8.9 ms (offline) — the producing script is not on the trunk; to be re-measured by `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py` (see `docs/MEASUREMENT_CONDITIONS.md` #13)  
 **Unblocked**: MOBI VID, all 10 use cases, V2V credential experiments
 
 ### MOBI VID 🔄

@@ -42,14 +42,14 @@ thesis/
 1. **Performance Comparison** - Detailed gas costs, latency measurements
 2. **Security Analysis** - Threat modeling and attack scenario testing
 3. **Usability Study** - 10 complete use case implementations
-4. **Scalability Testing** - SUMO simulation with 50 vehicles
+4. **Scalability Testing** - SUMO simulation with 50 vehicles (configured in `cv2x-testbed/sumo/`; not yet run to a results file — see `docs/MEASUREMENT_CONDITIONS.md` #15)
 
 ## Research Questions Addressed
 
 ### RQ1: Performance
 **Question**: How do different blockchain identity standards compare in transaction cost, latency, and throughput?
 
-**Answer**: ERC-1056 provides 10x gas savings over ERC-721 while maintaining security. Resolution time: 50-100ms (acceptable for non-critical operations).
+**Answer (trunk-measured, condition M1, commit 708302a)**: For the create-equivalent operation, ERC-1056 vehicle-DID creation costs 78,068 gas against 102,804 gas (avg) for an ERC-721 vehicle-NFT mint — a 1.32× saving, not an order of magnitude. Order-of-magnitude gaps arise only against rich-state standards (ERC-725xy, bundle lineage, unverified on trunk). In-process DID resolution (M0) is 0.05 ms (single run; N≥30 re-run pending). Resolution with a blockchain lookup (M2) has not been measured. See `docs/MEASUREMENT_CONDITIONS.md`.
 
 ### RQ2: Security
 **Question**: Which architecture provides strongest security guarantees for V2X communication?

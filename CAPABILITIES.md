@@ -1,5 +1,7 @@
 # System Capabilities Reference
 
+> **Figures in this file are design-time estimates.** Gas and latency values here predate measurement and are superseded by `docs/figures/results_snapshot.json` (measured on the trunk). Condition tags and the claim-by-claim status: `docs/MEASUREMENT_CONDITIONS.md`.
+
 **Complete guide to what this thesis implementation can do**
 
 ---
