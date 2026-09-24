@@ -48,7 +48,8 @@ evidenced:
 
 | Value | Where it appears | What it actually is | Tag | Status |
 |---|---|---|---|---|
-| **0.05 ms** | measured 2026-09-24, `did_resolver.py did:ethr:…` | Construct a `did:ethr` document from the address, in-process, single run | M0 | **verified** (single run; needs N≥30 for a chapter) |
+| **0.009 ms cold / 0.002 ms warm** (median; p95 0.013 / 0.003) | `docs/figures/resolution_latency_M0.json`, commit `f602fdf` | Construct a DID document in-process, N=30 after 3 warm-ups, per method (`did:ethr`, `did:mobi`, `did:nft`). *Cold* = resolver cache cleared before each call; *warm* = cache hit. Intel Xeon 2.10 GHz, Python 3.11.15 | M0 | **verified** (chapter-grade) |
+| 0.05 ms | CLI single run, 2026-09-24 | Same path plus CLI printing and metadata formatting, one sample | M0 | superseded by the row above |
 | 0.23 ms | `QUICKSTART.md` example output | `did:mobi` example, same code path | M0 | example output, not a result |
 | ~0.8 ms / "<1 ms" | `RESEARCH_THRUSTS_REPORT.md` | earlier session, different code state and hardware; no script on trunk | M0 | **superseded** |
 | 50–100 ms | `README.md`, `CAPABILITIES.md`, `docs/thesis/README.md` | design-time estimate for resolution *with a blockchain RPC lookup* | M2 | **estimate / target — never measured** |

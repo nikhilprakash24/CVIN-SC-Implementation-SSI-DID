@@ -49,7 +49,7 @@ thesis/
 ### RQ1: Performance
 **Question**: How do different blockchain identity standards compare in transaction cost, latency, and throughput?
 
-**Answer (trunk-measured, condition M1, commit 708302a)**: For the create-equivalent operation, ERC-1056 vehicle-DID creation costs 78,068 gas against 102,804 gas (avg) for an ERC-721 vehicle-NFT mint — a 1.32× saving, not an order of magnitude. Order-of-magnitude gaps arise only against rich-state standards (ERC-725xy, bundle lineage, unverified on trunk). In-process DID resolution (M0) is 0.05 ms (single run; N≥30 re-run pending). Resolution with a blockchain lookup (M2) has not been measured. See `docs/MEASUREMENT_CONDITIONS.md`.
+**Answer (trunk-measured, condition M1, commit 708302a)**: For the create-equivalent operation, ERC-1056 vehicle-DID creation costs 78,068 gas against 102,804 gas (avg) for an ERC-721 vehicle-NFT mint — a 1.32× saving, not an order of magnitude. Order-of-magnitude gaps arise only against rich-state standards (ERC-725xy, bundle lineage, unverified on trunk). In-process DID resolution (M0, N=30, commit f602fdf) is 0.009 ms median / 0.013 ms p95 cold and 0.002 ms warm (cache hit), for each of `did:ethr`, `did:mobi`, `did:nft` — i.e. resolution is not on the critical path; the hot-path cost is signature verification, which the PKI-vs-ERC-1056 experiment measures. Resolution with a blockchain lookup (M2) has not been measured. See `docs/MEASUREMENT_CONDITIONS.md`.
 
 ### RQ2: Security
 **Question**: Which architecture provides strongest security guarantees for V2X communication?

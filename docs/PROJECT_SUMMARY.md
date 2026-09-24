@@ -32,7 +32,7 @@ intended to be thesis-grade on its own before parallel research is merged.
 | Component | Command | Result |
 |---|---|---|
 | **VC layer** | `pytest 2_w3c-ssi-layer/verifiable-credentials/tests/` | ✅ **28/28 passed** (0.55s) **[verified]** |
-| **DID resolver** | `did_resolver.py did:ethr:0x1:0x…` | ✅ valid W3C DID Document, **~0.05 ms** resolve **[verified]** |
+| **DID resolver** | `did_resolver.py`; `docs/figures/resolution_latency_M0.json` | ✅ valid W3C DID Document; in-process resolve **0.009 ms median / 0.013 ms p95 cold, 0.002 ms warm** (M0, N=30 per method) **[verified]** |
 | **W3C compliance** | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ **89.6%** overall (DID Core 75%, VC DM 100%, SSI 100%; 58/67) **[verified]** |
 | **Contract compile** | `1_blockchain-identity` Hardhat compile | ✅ **31 contracts compile** (after fix, see §2.1) **[verified]** |
 | **Contract tests** | `1_blockchain-identity` Hardhat test | ✅ **47 passing / 0 failing** (after reconciliation, see §2.3) **[verified]** |
