@@ -69,6 +69,11 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
+    - name: Install Python dependencies
+      # The merged checker imports the VC layer (EIP-191 / secp256k1 proofs),
+      # so it needs the same packages as the VC job. Unpinned: see header note.
+      run: pip install eth-account coincurve cryptography web3
+
     - name: Run W3C compliance checker
       shell: bash
       run: |
