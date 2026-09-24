@@ -1,143 +1,62 @@
 # CVIN-ID/TEST — Progress & Change Report
 
-**Pass:** WO-S0 (Inventory & Safety Sweep) + Node/toolchain foundation · **Role:** CLI agent → operator handback
-**Branch:** `sandbox-onboarding` · **Workspace:** `C:\Users\nikhilp\Desktop\CVIN-2026-Sanbox1_v6` · **Date:** 2026-06-20 · **Status:** Provisional
+**v1.1 · 2026-09-24 · supersedes v1.0 (2026-06-20; superseded sections retained in git history)**
+**Pass:** WO-S0 → P1 complete + parallel-work integration + handoff · **Branch:** `sandbox-onboarding` · **Status:** Provisional
 
-> Scope honored: read-only safety sweep + environment foundation only. **No `npm install` on any project** (that is WO-S1, operator-supervised). No secret value printed or committed. No system Node altered. Work is on a branch; nothing committed yet (awaiting your go-ahead).
-
----
-
-## 1. What this pass did (in one paragraph)
-
-Established a clean, isolated sandbox foundation for the `CVIN-ID/TEST` onboarding: consolidated the working clone into the sandbox folder on a `sandbox-onboarding` branch, ran the WO-S0 read-only inventory + hazard sweep and captured it as immutable evidence, seeded `FINDINGS.md` and a Provisional Understanding Report, and stood up a **portable, per-shell Node toolchain** (16.19.0 + 18.20.4) that honours Build-III's pin **without touching your system Node 24**. The foundation is verified working.
+> v1.1 update: written after (a) execution of plan phases P0–P1, (b) integration of the canonical `cvin-sandbox-v1.3`, (c) the architect handoff, and (d) discovery that the **sister repo [`nikhilprakash24/CVIN-SC-Implementation-SSI-DID`](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID)** carries an active parallel implementation stream (commits through 2026-09-24). This branch now also lives there as `sandbox-onboarding`.
 
 ---
 
-## 2. Foundation status — verified ✅
+## 1. The three streams (read this first)
 
-| Component | Result | Notes |
+| Stream | What it is | State |
 |---|---|---|
-| **System probe** | node `v24.16.0`, npm `11.13.0`, git `2.54.0`, **winget `1.28`** present | yarn/pnpm/**docker** absent; `asdf`/`nvm` absent; `python` is the Store stub |
-| **Connectivity** | `registry.npmjs.org`, `github.com`, `nodejs.org` all reachable (TCP 443) | npm installs + git-URL dep fetch (Build-III) will work when WO-S1 runs |
-| **Working clone** | `…\CVIN-2026-Sanbox1_v6\TEST` on branch `sandbox-onboarding` | was `main`, 1 commit `0ab45bb first commit`, clean tree |
-| **Portable Node 16.19.0** | ✅ `node v16.19.0 / npm 8.19.3` | plan pin for **Build-III** (`.tool-versions`) |
-| **Portable Node 18.20.4** | ✅ `node v18.20.4 / npm 10.7.0` | workhorse for **cvin-v6 / cvin-v7** |
-| **Isolation check** | activating portable Node 16 resolves `node` to the sandbox copy; **system `C:\Program Files\nodejs\node.exe` still reports `v24.16.0`** | fully reversible — delete `toolchain\` to undo |
+| **A. TEST onboarding** (this repo/branch) | Gated WO-S characterisation of the original survey repo | WO-S0 ✅, P0–P1 ✅, WO-S1 gated on D1/D2/D4 |
+| **B. Canonical sandbox** (`cvin-sandbox-v1.3`, 2026-06-05) | IMinimalSSI F1–F12 + 12-test compliance canon; O1_ERC1056 12/12; gates G0–G6 | Architect-pass baseline only; G1–G6 unrun; WO-0 blocking-open |
+| **C. Sister implementation** (`CVIN-SC-Implementation-SSI-DID`) | Thesis implementation repo: 9 ERC standard impls, **`CVINVehicleDIDRegistry`** (ERC-1056 wrapper — the first *actual CVIN logic* in the programme), ERC-721 DID variant, **47/47 reconciled test suite**, gas figures, W3C compliance checker + CI, audits (`docs/AUDIT_01_ORIGINAL_GOALS.md`), MOBI VID specs | Active — autonomous sessions through **2026-09-24** |
 
----
+**⚠️ New reconciliation item (architect-level):** streams B and C now embody **two different compliance regimes** — canon's 12-test "Admission = compliance" IMinimalSSI suite (O1 only) vs. the sister repo's own 47/47 suite + Python W3C checker. They are not yet mapped to each other. Ruled by the architect, not here. (Also noted: the sister README references a further repo, `nikhilprakash-cvin/2_miniature-waffle-CV2X-Testbed-MOBI-VID`.)
 
-## 3. Change log (what changed on disk)
+**Scoped correction to v1.0's headline:** "no CVIN logic exists anywhere" remains true **of CVIN-ID/TEST as-found** — but no longer of the programme: stream C's `CVINVehicleDIDRegistry.sol` (+ tests) is real, working CVIN vehicle-identity code.
 
-| Action | Path | Reversible? |
+## 2. Work completed since v1.0
+
+| Phase | Outcome | Evidence/PR |
 |---|---|---|
-| Moved recon clone → sandbox | `Desktop\CVIN-TEST` → [CVIN-2026-Sanbox1_v6\TEST](CVIN-2026-Sanbox1_v6/TEST) | yes (move back) |
-| Created working branch | `sandbox-onboarding` (off `main`) | yes (`git checkout main`) |
-| Captured WO-S0 evidence | [TEST\evidence\](CVIN-2026-Sanbox1_v6/TEST/evidence) (3 files, timestamped) | append-only |
-| Seeded findings | [TEST\FINDINGS.md](CVIN-2026-Sanbox1_v6/TEST/FINDINGS.md) | yes |
-| Provisional report | [TEST\docs\UNDERSTANDING_TEST_REPO.md](CVIN-2026-Sanbox1_v6/TEST/docs/UNDERSTANDING_TEST_REPO.md) | yes |
-| Portable Node toolchain | [CVIN-2026-Sanbox1_v6\toolchain\](CVIN-2026-Sanbox1_v6/toolchain) (node 16 + 18) | yes (delete folder) |
-| Activation scripts | [use-node16.ps1](CVIN-2026-Sanbox1_v6/use-node16.ps1), [use-node18.ps1](CVIN-2026-Sanbox1_v6/use-node18.ps1) | yes |
+| **P0 freeze** | WO-S0 artifacts committed; baseline tag `asfound/pre-onboarding` @ `0ab45bb`; secret sweeps clean | [PR #1](https://github.com/CVIN-ID/TEST/pull/1) |
+| **PRs opened** | 4 cross-fork PRs into `CVIN-ID/TEST` (org write denied → fork `nikhilprakash24/TEST`) | [#1](https://github.com/CVIN-ID/TEST/pull/1) [#2](https://github.com/CVIN-ID/TEST/pull/2) [#3](https://github.com/CVIN-ID/TEST/pull/3) [#4](https://github.com/CVIN-ID/TEST/pull/4) |
+| **P1.1 solc vendored** | 0.8.17/0.8.19/0.8.24, exe+wasm **release** builds, all checksums MATCH (incl. documented correction of a nightly mis-grab) | `evidence/P1_solc_vendor_*` |
+| **P1.2 provenance pinned** | Upstream `ERC725Alliance/ERC725` commit **`3b1b4935`** = 13/13 byte-match of Build-III contracts + contains the missing `custom/`/`interfaces/`/`helpers/` dirs | `evidence/P1_upstream_diff_*` |
+| **P1.3 H9/H10 defused** | `ssh://`/`git://`→`https://` insteadOf rewrites (logged, reversible) | `evidence/P1_git_insteadof_*` |
+| **P1.4 offline npm proven** | Build-III (Node 16, 1109 pkgs) + V7 (Node 18, 576 pkgs): online `npm ci --ignore-scripts` **and** `--offline` replay exit 0; lockfiles hash-unchanged; zero lifecycle scripts | `evidence/P1_*_npmci_*` |
+| **Root README** | Repo had none (verified); comprehensive one added | [PR #4](https://github.com/CVIN-ID/TEST/pull/4) |
+| **Canon integration** | `cvin-sandbox-v1.3` read; **D5 resolved** (verbatim solidity block; solc-js override; full F1–F12 ISetA/B/C signatures); 5 corrections + 3 upstream risks logged | `FINDINGS.md` §G |
+| **Architect handoff** | Paste-ready handback with 6 numbered architect questions | `docs/HANDOFF_TO_ARCHITECT_v1.0.md` |
+| **Sister-repo integration** *(v1.1)* | Stream C discovered/read; this branch pushed to the sister repo; cross-reference doc added there | this report §1 |
 
-**Not done (deliberately):** no `npm install`, no compile, no test, no git commit, no network calls from project code, no action on the leaked key.
+## 3. Corrections adopted since v1.0 (logged in FINDINGS §G, not smoothed)
 
----
+Gates are **G0–G6** (not G0–G5); **G0/G1 are operator-executed** (only G2–G5 are WO-encoded); `createPresentation` (F8) is *declared and anchor-implemented* on O1 (62,441 gas) — the structural finding is "no ERC provides it **natively**"; SP-1 = "ERC-1056 anchor **+ credential anchor pattern**"; ERC-740 attribution stays unresolved token **[R1]**; canon's `solc: ^0.8.24` caret is unpinned (float risk — our checksummed vendored soljson can harden it); canonical sandbox needs **Node ≥ 20** (system Node 24 serves it; portable 16/18 are for TEST's legacy builds only).
 
-## 4. WO-S0 results — inventory & hazards
+## 4. Foundation status (verified, unchanged since P1)
 
-**The big picture:** `CVIN-ID/TEST` is a **survey of three identity standards**, assembled from canonical upstream reference implementations — *not* a built vehicle-identity system. The "CVIN-modified" contract is byte-identical to standard ERC-725 (a filename prefix only). No subfolder sits at the pinned **solc 0.8.24** target, so the core job is **compatibility triage**, not "just run it." Full per-build detail: [UNDERSTANDING_TEST_REPO.md](CVIN-2026-Sanbox1_v6/TEST/docs/UNDERSTANDING_TEST_REPO.md).
+Portable Node **16.19.0** + **18.20.4** in `toolchain\` (system Node untouched); 6 vendored solc release binaries; upstream ERC725 clone with pinned restore commit; warm npm caches proven offline; extracted canon at `toolchain\parallel-work\cvin-sandbox-v1.3\` (read-only); `use-node16.ps1`/`use-node18.ps1` activation.
 
-**Hazards surfaced (full table in [FINDINGS.md](CVIN-2026-Sanbox1_v6/TEST/FINDINGS.md) §A):**
-- **H1 / [TS-4] — leaked Infura key** at `cvin-v6/index.js:19` (location only; **operator rotates**).
-- **H2 — deprecated Goerli** in V6 (resolution will fail).
-- **H3 / [TS-1] — Build-III won't compile as checked in** (missing `custom/`, `interfaces/`, `helpers/` dirs).
-- **H4 — duplicate** flat copy of Build-III contracts (evaluate one).
-- **H5 / [TS-6] — V7 is an empty Hardhat shell** (`Lock.sol` sample only).
-- **H6 — V7 plugin/version mismatch** (`hardhat-toolbox` absent; ethers v5/v6 clash).
-- **H7 — non-functional react-dapp**; **H8 / [TS-7] — LSP0 unbuilt**.
+## 5. Open gates & next steps
 
-**Evidence (immutable, timestamped) in [TEST\evidence\](CVIN-2026-Sanbox1_v6/TEST/evidence):**
-`WO-S0_filetree_*.txt`, `WO-S0_pragmas_*.txt`, `WO-S0_network_secrets_*.txt` (secret values redacted).
+| Gate | Owner | State |
+|---|---|---|
+| **D1 / [TS-4]** — rotate leaked Infura key (`cvin-v6/index.js:19`, public since first commit) | **Operator** | **OPEN — standing reminder** |
+| **D2** — ratify Build-III restore from `3b1b4935` (byte-proven completion-not-modification) | Operator | Open |
+| **D4** — V7 `hardhat-toolbox@^2` pinned deviation | Operator | Open |
+| Architect answers (6 Qs incl. WO-0 sequencing, solc pinning, gate credit) | Architect | Open — see handoff |
+| **NEW: B↔C compliance-regime reconciliation** | Architect | Open — §1 |
 
----
+**On D1+D2 (+D4):** P2 egress lockdown → WO-S1 (as-found failing log → provenance-stamped restore → Build-III build+test @ Node 16 → V7 scaffold check) → WO-S2 @ canon-verbatim 0.8.24 → WO-S3 matrices @ full F1–F12 → WO-S4 ADR.
 
-## 5. Node/nvm foundation — what was set up & why
+## 6. Where everything lives
 
-The plan pins **Node 16.19.0** for Build-III, but your machine runs **Node 24** system-wide. Rather than install nvm-windows (which would have to take over `C:\Program Files\nodejs`, needs UAC elevation, and requires a fresh shell before it's usable), I laid a **portable per-shell foundation** — safer, instantly usable, fully reversible, and aligned with the plan's isolation/offline ethos.
-
-**How to use it (per terminal):**
-```powershell
-cd C:\Users\nikhilp\Desktop\CVIN-2026-Sanbox1_v6
-. .\use-node16.ps1   # Build-III work  (note the leading dot — dot-source)
-# ...or...
-. .\use-node18.ps1   # cvin-v6 / cvin-v7 work
-```
-Each script prepends the chosen Node to **this shell's** PATH only and prints the active versions. Open a new shell (or just don't dot-source) to return to system Node 24.
-
-**Optional — system-wide nvm instead.** If you'd rather manage Node globally, winget is ready:
-```powershell
-winget install CoreyButler.NVMforWindows   # approve the UAC prompt; then open a NEW terminal
-nvm install 16.19.0; nvm install 18.20.4
-```
-⚠️ nvm-windows will offer to take control of your existing Node 24 at `C:\Program Files\nodejs`. Say yes only if you want nvm to manage all Node versions. Tell me and I'll walk it through.
-
----
-
-## 6. Deliverables produced
-
-1. [TEST\FINDINGS.md](CVIN-2026-Sanbox1_v6/TEST/FINDINGS.md) — hazards, deviations, **[TS-1…TS-7] token register**, empty WO-S2 compatibility table (to fill).
-2. [TEST\docs\UNDERSTANDING_TEST_REPO.md](CVIN-2026-Sanbox1_v6/TEST/docs/UNDERSTANDING_TEST_REPO.md) — Provisional; inventory matrix + per-build characterisation (empirical fields tokenized).
-3. [TEST\evidence\](CVIN-2026-Sanbox1_v6/TEST/evidence) — 3 immutable WO-S0 logs.
-4. Portable Node toolchain + activation scripts (above).
-5. This report.
-
-*Per the plan, the formal `docs/ADR-0001_TEST_consolidation.md` and the populated compatibility table are WO-S2/WO-S4 outputs — not this pass.*
-
----
-
-## 7. Next steps (gated, in order)
-
-| Step | Work order | What happens | Node | Gate |
-|---|---|---|---|---|
-| **A** | finish WO-S0 | (optional) `git commit` the WO-S0 artifacts on the branch — *awaiting your OK* | — | pre-G0 |
-| **B** | **WO-S1** | Build-III: `npm ci` → `npm run build` → `npm test` at **Node 16.19.0**; capture logs. **Expect H3 compile failure** → record as finding [TS-1], do **not** patch upstream. Then V7: confirm the empty `Lock` scaffold compiles (add `hardhat-toolbox` first). | 16 / 18 | G0 |
-| **C** | **WO-S2** | Scratch Hardhat @ **solc 0.8.24 offline**; triage Build-III X/Y, Build-0, Build-II → fill the compatibility table; resolve [TS-2]/[TS-3]. | 16/18 | G2 |
-| **D** | **WO-S3** | F1–F12 IMinimalSSI **expectation** matrices for ERC-725 & ERC-1056 anchors (needs ISetA/B/C signatures from you/architect). | — | Stage-2 overlay |
-| **E** | **WO-S4** | Consolidation ADR — recommend SP-2 anchor ([TS-5]) + V7 SP-1 scope ([TS-6]) + V6/LSP0 disposition. Architect ratifies. | — | architect merge |
-
-**Decisions I need from you (operator/architect) before/within WO-S1:**
-- **[TS-4]** Rotate/remove the Infura key (operator-only action).
-- Approve restoring Build-III's missing sources from upstream `ERC725Alliance/ERC725` (needed before [TS-1] can pass) — or confirm we log it as a blocked finding and move on.
-- Confirm you want me to **commit** the WO-S0 artifacts on the branch.
-
----
-
-## 8. Startup guide (resume from a fresh terminal)
-
-```powershell
-# 0) Go to the sandbox
-cd C:\Users\nikhilp\Desktop\CVIN-2026-Sanbox1_v6
-
-# 1) Confirm the branch + clean state
-git -C .\TEST status
-git -C .\TEST branch --show-current        # -> sandbox-onboarding
-
-# 2) Activate the right Node for the task (per shell)
-. .\use-node16.ps1                          # Build-III  (Node 16.19.0)
-#   . .\use-node18.ps1                       # cvin-v6 / cvin-v7 (Node 18.20.4)
-
-# 3) WO-S1 — Build-III native bring-up (EXPECT the H3 missing-import failure; capture it)
-cd .\TEST\CVIN-Implementation-I-ERC725-735\Build-III-FullERC725StandardCodeBaseAndImplementation\ERC725-develop\implementations
-npm ci                                       # falls back to: npm install (log if ci fails)
-npm run build  *> ..\..\..\..\evidence\buildIII_native_compile.log    # hardhat compile
-npm test       *> ..\..\..\..\evidence\buildIII_native_test.log
-
-# 4) WO-S1 — V7 empty-shell check (Node 18; add the missing toolbox first)
-cd ..\..\..\..\CVIN-Implementation-II-ERC1056\CVIN-Implementation-1056Testbed-V7\cvin-v7
-npm install
-npm install --save-dev @nomicfoundation/hardhat-toolbox
-npx hardhat compile  *> ..\..\..\evidence\v7_scaffold_compile.log
-npx hardhat test     *> ..\..\..\evidence\v7_scaffold_test.log
-```
-**Safety reminders during WO-S1:** local EVM only (Hardhat in-process / `npx hardhat node`); no testnet transactions; do **not** run `cvin-v6/index.js` (live Goerli) or the `react-dapp` this pass; if any step fails, that's a *finding* in `FINDINGS.md`, not a thing to patch.
-
-> Say the word and I'll kick off **WO-S1** (Build-III bring-up on Node 16) and report the evidence back here.
+- **Sister repo (working home):** [`nikhilprakash24/CVIN-SC-Implementation-SSI-DID`](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID) — implementation stream on its `claude/*` branches; this onboarding stream on branch **`sandbox-onboarding`**; cross-reference doc at repo root.
+- **Upstream PRs:** `CVIN-ID/TEST` #1–#4 (via fork `nikhilprakash24/TEST`).
+- **Machine:** `C:\Users\nikhilp\Desktop\CVIN-2026-Sanbox1_v6\` (clone, toolchain, evidence, handoff copy at root).
+- **Evidence:** `evidence/` — 9 files + `EVIDENCE_MANIFEST.txt` (SHA-256, append-only).
