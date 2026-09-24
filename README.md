@@ -28,9 +28,17 @@
 
 4. **Practical Feasibility**: Are blockchain identity systems viable for real-time safety-critical V2V (Vehicle-to-Vehicle) communication?
 
-### Hypothesis
+### Hypotheses
 
-Lightweight blockchain identity standards (ERC-1056) can provide sufficient security and W3C compliance for vehicle identity management while maintaining performance suitable for real-time V2V safety applications, offering a viable alternative to centralized PKI systems.
+The thesis tests five falsifiable hypotheses, one per research thrust (full statements and methods in `docs/RESEARCH_THRUSTS_REPORT.md`; this decomposition replaces the earlier single compound hypothesis, see `docs/SCOPE_CHANGES.md`):
+
+- **H1 (cost)** — minimal-state standards (ERC-1056) are cheaper than rich-state standards (ERC-725/735) for DID creation and update, at the price of on-chain expressiveness.
+- **H2 (compliance)** — ≥90% aggregate W3C DID/VC compliance is achievable from blockchain primitives, with minimal standards needing off-chain augmentation for specific properties.
+- **H3 (real time)** — off-chain verification of pre-issued credentials fits the V2V safety budget; designs that read the chain at message time do not.
+- **H4 (industry)** — MOBI VID's event model maps most economically onto event-log standards and most faithfully onto claim-based ones; the CVIN-Combined hybrid sits on the fidelity-per-gas frontier.
+- **H5 (security)** — no single standard dominates; standards occupy a security/performance Pareto frontier, and the ERC-1056 + ERC-735 hybrid lies on it.
+
+Measured evidence to date, with conditions: `docs/MEASUREMENT_CONDITIONS.md`.
 
 ---
 
@@ -338,9 +346,9 @@ Each use case includes:
 
 ### Novel Contributions
 
-1. **First comprehensive comparison** of 9 blockchain identity standards for automotive applications
+1. **Measured, domain-constrained comparison** of blockchain identity standards for automotive use — identical operation sets, exact gas, latency with N/median/p95, under SAE J2945/1 timing constraints (three standards on this branch; nine after the analysis lineage is merged, see `docs/SCOPE_CHANGES.md` SC-07)
 
-2. **Real-time V2V integration** with blockchain identity verification (first working implementation)
+2. **Open, reproducible V2V integration** with blockchain identity verification, measured against an in-process PKI baseline (`cv2x-testbed/results/pki_vs_erc1056.md`)
 
 3. **MOBI VID + W3C compliance** - bridging automotive and web identity standards
 

@@ -33,9 +33,9 @@ thesis/
 ## Key Contributions (Chapter 4-5)
 
 ### Implementation Contributions
-1. **9 Blockchain Identity Standards** - First comprehensive comparison for automotive
-2. **W3C Compliant System** - 89.6% compliance (exceeds industry average)
-3. **Real-time V2V Integration** - First working demo of blockchain identity + safety apps
+1. **Blockchain Identity Standards, measured under automotive constraints** - identical operation sets, exact gas, latency with N/median/p95 (three standards on this branch, nine after merge — SC-07)
+2. **W3C-aligned System** - 89.6% on the internal 67-check list (self-scored; external W3C test-suite result pending, audit F5). "Exceeds industry average" has no source and is withdrawn.
+3. **Reproducible V2V Integration** - blockchain identity in the message path, measured against a PKI baseline (not claimed as "first"; see SC-04)
 4. **MOBI VID Compliance** - Reference implementation
 
 ### Experimental Results (Chapter 5)
