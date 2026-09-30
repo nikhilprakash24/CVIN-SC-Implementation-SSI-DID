@@ -5,3 +5,6 @@ __pycache__/
 # Generated analysis/build artifacts
 w3c_compliance_report.json
 gas-report.txt
+
+# Benchmark harness: only the promoted latest run is tracked
+1_blockchain-identity/results/metrics/runs/

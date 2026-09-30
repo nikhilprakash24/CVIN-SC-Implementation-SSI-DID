@@ -18,25 +18,25 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '22'
 
     - name: Install dependencies
       working-directory: 1_blockchain-identity
       run: npm ci
 
-    - name: Run gas benchmarks
+    - name: Adapter conformance gate
       working-directory: 1_blockchain-identity
-      run: |
-        echo "# Thesis Performance Benchmarks" > ../4_comparison-framework/results/gas-benchmarks.md
-        echo "Generated: $(date -u)" >> ../4_comparison-framework/results/gas-benchmarks.md
-        echo "" >> ../4_comparison-framework/results/gas-benchmarks.md
-        REPORT_GAS=true npx hardhat test >> ../4_comparison-framework/results/gas-benchmarks.md
+      run: npm run test:conformance
 
-    - name: Upload benchmark results
+    - name: Run CRUD-and-beyond metrics harness
+      working-directory: 1_blockchain-identity
+      run: npm run metrics
+
+    - name: Upload metrics run
       uses: actions/upload-artifact@v3
       with:
-        name: gas-benchmarks
-        path: 4_comparison-framework/results/gas-benchmarks.md
+        name: cvin-metrics
+        path: 1_blockchain-identity/results/metrics/latest
 
   benchmark-did-resolution:
     runs-on: ubuntu-latest
