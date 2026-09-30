@@ -29,7 +29,7 @@ comparison is unrun.
 
 | # | Step | Method | Output | Effort |
 |---|---|---|---|---|
-| M1 | **Clause-level reconciliation with the MOBI text** | Fetch the VID I preview PDF (linked in `MOBI_VID_RESEARCH.md`) and any public VID II material; build a checklist table: clause → contract/Python element → test → status | `docs/MOBI_VID_CHECKLIST.md`; SC entry if any clause is out of scope | 1 day |
+| M1 | **Clause-level reconciliation with the MOBI text** | Fetch the VID I preview PDF (linked in `MOBI_VID_RESEARCH.md`) and any public VID II material; build a checklist table: clause → contract/Python element → test → status | `docs/MOBI_VID_CHECKLIST.md` (to be created by this step; does not exist yet); SC entry if any clause is out of scope | 1 day |
 | M2 | **Fidelity gradient into chapter 5** | Turn `mobi_vid_backends.csv` into the chapter table and one figure (gas vs fidelity, five backends); state the "native=no" approximations per cell | figure + table; register row | ½ day |
 | M3 | **Regression test for the attestEvent fix** | A Hardhat test that asserts the vulnerable path is closed and pins the gas of the fixed path (192,718 ± 0) | test file; CI covers it | ½ day |
 | M4 | **Lifecycle-parity comparison (review §3.3)** | Extend `experiment_pki_vs_erc1056.py` with a `centralized_registry` backend for birth / lifecycle-event / ownership-transfer / history-query; n=50; same reporting | `cv2x-testbed/results/lifecycle_parity.*`; register row; SC-13 closed | 1 day |
