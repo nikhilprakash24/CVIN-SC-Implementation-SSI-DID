@@ -69,7 +69,7 @@ async function main() {
   console.log(`scenarios: ${opts.scenarios.join(", ")} · adapters: ${opts.adapters.join(", ")}\n`);
 
   const collector = new MetricsCollector({ hre, runDir, trace: opts.trace });
-  const ctx = { hre, ethers: hre.ethers, collector, dataset: makeDataset(1000, 42), payloads: PAYLOADS, ADAPTERS, adapterIds: opts.adapters, opts };
+  const ctx = { hre, ethers: hre.ethers, collector, dataset: makeDataset(1100, 42), payloads: PAYLOADS, ADAPTERS, adapterIds: opts.adapters, opts };
 
   const timings = {};
   for (const s of opts.scenarios) {
