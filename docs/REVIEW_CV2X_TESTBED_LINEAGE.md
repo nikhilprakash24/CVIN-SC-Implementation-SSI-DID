@@ -44,8 +44,9 @@ built and is not missed — see §5.8.
 ## 2. Plan versus actual, criterion by criterion
 
 The criteria matrix (`review_criteria_matrix.png`) scores every success criterion the
-three design documents wrote down. Totals: **11 met · 11 partial · 1 open · 2 dropped**
-of 25. The pattern behind the numbers:
+three design documents wrote down. Totals: **13 met · 9 partial · 1 open · 2 dropped**
+of 25 (the figure computes these from the same table; an earlier draft of this
+sentence said 11/11 before two statuses were corrected for the harness facts). The pattern behind the numbers:
 
 **What the roadmap got right and the trunk delivers.** Identity systems, the CV2X
 stack with a PKI provider, and the comparison framework (Phases 1–3) are complete and

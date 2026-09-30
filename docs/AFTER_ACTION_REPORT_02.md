@@ -104,6 +104,26 @@ drawn by hand.
   three facts (SUMO results directory, security-scenario count, safety apps in the
   harness).
 - S6 done: `docs/SESSION_MANIFEST_2026-09.md` written.
+- S3 completed with the last facts: the SUMO harness has a `--simulate` mode with mock
+  mobility **and has been run** — 50 vehicles (35 SSI, 15 PKI), 10 Hz, 300 m radius,
+  ≤8 receivers per broadcast, 30 seeds — plus an unrun real TraCI mode; it references
+  FCW/EEBL/IMA and has `run_attack_tests`; the security harness holds 68 scenarios
+  across nine standards. Two figure statuses were corrected accordingly (P4, P6, P7;
+  "SUMO 50+ vehicles" and "safety-app latency" criteria).
+- S2 completed: third batch verified — MOBI VID I/II official pages (dlt.mobi);
+  Kailus, Kern, Krauß, ACNS 2024 (SSI for EV charging, Tamarin-verified); EBSI VC
+  framework and wallet conformance. Thirteen works written up in the review §4 (the
+  request was eight), each with a description paragraph and an incorporation
+  paragraph.
+- S4 done: `docs/REVIEW_CV2X_TESTBED_LINEAGE.md` written (six sections).
+- S7 done: `docs/PLAN_MOBI_SUMO.md` written. Prerequisite de-risked: `eclipse-sumo`
+  1.27.1 is available from PyPI for this platform (a 147 MB manylinux wheel downloaded
+  successfully), so S0 of the SUMO plan is a one-command install once approved.
+- Interruption: the pass was suspended after S7 with five files uncommitted; on resume
+  (2026-09-30) the working tree was intact and the toolchain still installed — no loss.
+  Lesson kept: commit at every step boundary, not at pass end.
+- S5 done: figures rendered; S8: all pass-4 files committed and pushed in one commit
+  immediately on resume.
 
 ## 4. Decisions and their reasons (updated as taken)
 
@@ -121,8 +141,57 @@ drawn by hand.
   different document, the review's §1 is organised per document and can be
   re-pointed.
 
-## 5. What was done — *(closing section, written last)*
+## 5. What was done (closing section)
 
-## 6. What was not done, and why — *(closing section, written last)*
+| Task | Outcome | Where |
+|---|---|---|
+| T1 tags | Explained: a branch-scoped session token, not a secrets or openness question; two ways to publish the tags, both outside the session | §1; `AFTER_ACTION_REPORT.md` §6 |
+| T2 review | The sandbox guide and five design documents reviewed against the trunk; 25 criteria scored (13 met, 9 partial, 1 open, 2 dropped — the figure's computed totals; the prose was corrected to match after the one figure check); four drifts the audit had missed; the roadmap's RQ1 axis shown to be the wrong one (on/off the hot path, not read/write); eight grounded innovation opportunities; the thesis-text changes listed | `docs/REVIEW_CV2X_TESTBED_LINEAGE.md` §1–§3, §5–§6 |
+| T3 grounding | Thirteen canonical or closely related works, each with a description paragraph and an incorporation paragraph, links verified by search on 2026-09-25; one venue correction (Lu et al. 2019 is IEEE T-VLSI) | review §4 |
+| figures | Roadmap timeline, criteria matrix, as-designed vs as-built architecture — generated from one status table so the figures cannot disagree with the text | `docs/figures/review_*.png`, `make_review_figures.py` |
+| T4 manifest | Every artifact of the session by pass, with purpose and path; inputs supplied by the author; things deliberately not committed | `docs/SESSION_MANIFEST_2026-09.md` |
+| T5 plan | MOBI M1–M7 and SUMO S0–S8, each with hypothesis, metric, N, reporting rules, risks; SUMO install de-risked (pip wheel available) | `docs/PLAN_MOBI_SUMO.md` |
+| scope log | SC-12 (ZK VIN tier → future work), SC-13 (lifecycle-parity comparison → planned M4) | `docs/SCOPE_CHANGES.md` |
+| T6 this report | Written before the work, updated at each step, closed here | this file |
 
-## 7. What is needed from the author — *(closing section, written last)*
+Decisions taken during the pass, beyond D1: **D2** — thirteen grounding works rather
+than the minimum eight, because the testbed spans three fields (V2X security,
+vehicular simulation, SSI standards) and eight would have left one field
+under-represented; **D3** — figures generated from a single status table in the
+script rather than drawn, so a status change in the review forces a regeneration
+rather than a silent divergence; **D4** — the SUMO harness's `--simulate` results are
+treated as *real identity measurements on synthetic mobility*, not as SUMO results, and
+the plan's first experiment is to validate them against the real TraCI mode rather
+than to discard them.
+
+## 6. What was not done, and why
+
+- **No SUMO run.** The binary was not installed; the pass de-risked the install (the
+  wheel is available) but did not perform it, because a ~150 MB install is the
+  author's call for the session and the plan asks for that go-ahead explicitly.
+- **No resolver fixes for the five external-conformance root causes.** In scope of the
+  plan, not of a review pass; doing them here would have mixed code changes into a
+  documentation commit.
+- **No re-run of the bundle lineage's scaling and V2V experiments** (register #26,
+  #27 stay B). They are the SUMO plan's S1–S4.
+- **The MOBI VID I preview PDF was not fetched and reconciled clause by clause** (M1);
+  the review records that the checklist was built from secondary sources.
+- **Chapter text was not rewritten.** The review lists the changes (§6) rather than
+  making them, so the author can approve the framing first.
+- **Tags remain unpublished** — cannot be done from the session (§1).
+
+## 7. What is needed from the author
+
+1. **Go-ahead to install SUMO in-session** (or a local run of S1–S3 with the results
+   JSON committed). This is the single step that converts the most estimate rows to
+   verified rows.
+2. **Push the two tags** from your machine (30 seconds; §1).
+3. **Approve the framing changes** in review §6 before I edit chapter text — in
+   particular the on/off-hot-path axis replacing read/write, and crediting the sandbox
+   guide for the provider abstraction.
+4. **Sepolia RPC + funded key as environment secrets** (for M7 and the M2 rows).
+5. Still open from earlier: SC-05 (throughput), SC-06 (finish the VC DM 2.0 move),
+   SC-01/02 reason confirmation, the notebook index, the Chapter 2 citation set.
+
+*Closed 2026-09-30. Trunk at the closing commit is clean and pushed; CI status is
+recorded in `PROJECT_SUMMARY.md` §2.*

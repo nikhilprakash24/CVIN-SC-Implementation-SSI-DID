@@ -101,35 +101,40 @@ def strip(ax):
 
 
 def timeline():
-    fig, ax = plt.subplots(figsize=(11, 5.2))
-    y = list(range(len(PHASES)))[::-1]
+    import textwrap
+    fig, ax = plt.subplots(figsize=(13, 6.2))
+    y = [i * 1.0 for i in range(len(PHASES))][::-1]
     for yi, (name, w0, w1, st, ev) in zip(y, PHASES):
         c, g = STATUS[st]
         ax.barh(yi, max(w1 - w0, 0.35), left=w0, height=0.5, color=BLUE_L, edgecolor=SURFACE)
-        ax.text(max(w1, w0 + 0.35) + 0.12, yi, f"{g} {st.title()} — {ev}", va="center", fontsize=8.2, color=INK2)
+        label = textwrap.fill(f"{g} {st.title()} — {ev}", width=78)
+        ax.text(max(w1, w0 + 0.35) + 0.12, yi, label, va="center", fontsize=7.8, color=INK2, linespacing=1.15)
         ax.scatter([w0 - 0.18], [yi], s=90, color=c, zorder=3, edgecolor=SURFACE)
     ax.set_yticks(y); ax.set_yticklabels([p[0] for p in PHASES], fontsize=8.6)
     ax.set_xticks(range(0, 8)); ax.set_xticklabels(["done at\n2025-11-10"] + [f"wk {i}" for i in range(1, 8)], fontsize=8)
-    ax.set_xlim(-0.6, 13.5); ax.xaxis.grid(True, color=GRID); ax.set_axisbelow(True); strip(ax)
+    ax.set_xlim(-0.6, 15.5); ax.set_ylim(-0.7, len(PHASES) - 0.3)
+    ax.xaxis.grid(True, color=GRID); ax.set_axisbelow(True); strip(ax)
     ax.set_title("CV2X roadmap (2025-11-10): planned window vs state on the merged trunk (2026-09-25)",
                  loc="left", fontsize=11, pad=12)
-    ax.text(0, -1.05, "bar = planned window (weeks after 2025-11-10) · dot = status on the trunk: "
-            "✓ met · ◐ partial · ○ open · ✗ dropped (SCOPE_CHANGES.md)", fontsize=8, color=MUTED, transform=ax.transData)
+    ax.set_xlabel("bar = planned window (weeks after 2025-11-10) · dot = status on the trunk: "
+                  "✓ met · ◐ partial · ○ open · ✗ dropped (SCOPE_CHANGES.md)", fontsize=8, color=MUTED, labelpad=10)
     fig.tight_layout(); out = HERE / "review_roadmap_timeline.png"; fig.savefig(out, dpi=200); print("wrote", out)
 
 
 def matrix():
-    fig, ax = plt.subplots(figsize=(11, 8.6))
-    n = len(CRITERIA); ax.set_xlim(0, 10); ax.set_ylim(-0.5, n - 0.5)
+    fig, ax = plt.subplots(figsize=(12.5, 8.6))
+    n = len(CRITERIA); ax.set_xlim(0, 12); ax.set_ylim(-0.5, n - 0.5)
+    # Column x-positions: document | criterion | chip | evidence. The chip sits at
+    # 4.05 so the longest criterion label (≈40 chars at 8.8 pt) clears it.
     for i, (doc, crit, st, ev) in enumerate(CRITERIA):
         yi = n - 1 - i; c, g = STATUS[st]
-        ax.add_patch(FancyBboxPatch((2.55, yi - 0.36), 0.55, 0.72, boxstyle="round,pad=0.02,rounding_size=0.08", fc=c, ec=SURFACE))
-        ax.text(2.825, yi, g, ha="center", va="center", fontsize=10, color=SURFACE if st != "OPEN" else INK, fontweight="bold")
+        ax.add_patch(FancyBboxPatch((4.05, yi - 0.36), 0.55, 0.72, boxstyle="round,pad=0.02,rounding_size=0.08", fc=c, ec=SURFACE))
+        ax.text(4.325, yi, g, ha="center", va="center", fontsize=10, color=SURFACE if st != "OPEN" else INK, fontweight="bold")
         ax.text(0.02, yi, doc, va="center", fontsize=8, color=MUTED)
         ax.text(0.95, yi, crit, va="center", fontsize=8.8, color=INK)
-        ax.text(3.3, yi, f"{st.title()} — {ev}", va="center", fontsize=8, color=INK2)
+        ax.text(4.8, yi, f"{st.title()} — {ev}", va="center", fontsize=8, color=INK2)
         if i < n - 1:
-            ax.plot([0, 10], [yi - 0.5, yi - 0.5], color=GRID, lw=0.6)
+            ax.plot([0, 12], [yi - 0.5, yi - 0.5], color=GRID, lw=0.6)
     ax.axis("off")
     counts = {k: sum(1 for c in CRITERIA if c[2] == k) for k in STATUS}
     ax.set_title("Success criteria across the three design documents — status on the merged trunk  "
@@ -139,16 +144,19 @@ def matrix():
 
 
 def architecture():
-    fig, axes = plt.subplots(1, 2, figsize=(12, 5.4), gridspec_kw={"width_ratios": [1, 1.25]})
-    for ax, layers, title in ((axes[0], DESIGNED, "As designed — MOBI_VID1_TECHNICAL_SPEC (2025-11-10)"),
-                              (axes[1], BUILT, "As built — merged trunk (2026-09-25)")):
+    import textwrap
+    fig, axes = plt.subplots(1, 2, figsize=(13, 6.4), gridspec_kw={"width_ratios": [1, 1.25]})
+    for ax, layers, title, width in ((axes[0], DESIGNED, "As designed — MOBI_VID1_TECHNICAL_SPEC (2025-11-10)", 60),
+                                     (axes[1], BUILT, "As built — merged trunk (2026-09-25)", 76)):
         ax.set_xlim(0, 1); ax.set_ylim(0, len(layers)); ax.axis("off")
         for i, (name, body) in enumerate(layers):
             yi = len(layers) - 1 - i
-            ax.add_patch(FancyBboxPatch((0.02, yi + 0.08), 0.96, 0.84, boxstyle="round,pad=0.01,rounding_size=0.03",
+            ax.add_patch(FancyBboxPatch((0.02, yi + 0.06), 0.96, 0.88, boxstyle="round,pad=0.01,rounding_size=0.03",
                                         fc=SURFACE, ec=BLUE, lw=1.4))
-            ax.text(0.05, yi + 0.72, name, fontsize=9.5, fontweight="bold", color=BLUE)
-            ax.text(0.05, yi + 0.40, body, fontsize=8, color=INK2, wrap=True)
+            ax.text(0.05, yi + 0.76, name, fontsize=9.5, fontweight="bold", color=BLUE, va="center")
+            # Explicit wrapping: matplotlib's wrap=True does not respect axes bounds.
+            ax.text(0.05, yi + 0.40, textwrap.fill(body, width=width), fontsize=7.8, color=INK2,
+                    va="center", linespacing=1.2)
         ax.set_title(title, loc="left", fontsize=10.5, pad=8)
     fig.suptitle("Testbed architecture: four planned layers became five, with the SSI layer and the provider "
                  "abstraction as the additions", x=0.02, ha="left", fontsize=11, fontweight="bold")
