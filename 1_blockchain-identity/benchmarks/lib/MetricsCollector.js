@@ -91,17 +91,17 @@ class MetricsCollector {
           receipt.hash,
           { disableMemory: true, disableStack: true, disableStorage: true },
         ]);
-        let sstore = 0, sload = 0, logs = 0, newSlots = 0, maxDepth = 1, calls = 0;
+        let sstore = 0, sload = 0, logs = 0, z2nz = 0, maxDepth = 1, calls = 0;
         for (const s of t.structLogs) {
           switch (s.op) {
-            case "SSTORE": sstore++; if (s.gasCost >= 20000) newSlots++; break;
+            case "SSTORE": sstore++; if (s.gasCost >= 20000) z2nz++; break; // zero -> non-zero write (SSTORE_SET)
             case "SLOAD": sload++; break;
             case "LOG0": case "LOG1": case "LOG2": case "LOG3": case "LOG4": logs++; break;
             case "CALL": case "STATICCALL": case "DELEGATECALL": case "CALLCODE": case "CREATE": case "CREATE2": calls++; break;
           }
           if (s.depth > maxDepth) maxDepth = s.depth;
         }
-        Object.assign(row, { evmSteps: t.structLogs.length, sstoreCount: sstore, sloadCount: sload, newSlotsEstimate: newSlots, internalCalls: calls, maxCallDepth: maxDepth });
+        Object.assign(row, { evmSteps: t.structLogs.length, sstoreCount: sstore, sloadCount: sload, zeroToNonzeroSstores: z2nz, internalCalls: calls, maxCallDepth: maxDepth });
       } catch (e) {
         row.traceError = String(e.message || e).slice(0, 120);
       }
@@ -138,7 +138,7 @@ class MetricsCollector {
       logBytes: sum(txRows, "logBytes"),
       sstoreCount: sum(txRows, "sstoreCount"),
       sloadCount: sum(txRows, "sloadCount"),
-      newSlotsEstimate: sum(txRows, "newSlotsEstimate"),
+      zeroToNonzeroSstores: sum(txRows, "zeroToNonzeroSstores"),
       evmSteps: sum(txRows, "evmSteps"),
       deploysContract: txRows.some((r) => r.isCreate),
       txs: txRows,
@@ -219,8 +219,7 @@ class MetricsCollector {
       logBytes: first.logBytes,
       sstoreCount: first.sstoreCount,
       sloadCount: first.sloadCount,
-      newSlotsEstimate: first.newSlotsEstimate,
-      stateFootprintBytes: (first.newSlotsEstimate || 0) * 32,
+      zeroToNonzeroSstores: first.zeroToNonzeroSstores,
       evmSteps: first.evmSteps,
       deploysContract: first.deploysContract,
       latency: summarize(latencySamples),

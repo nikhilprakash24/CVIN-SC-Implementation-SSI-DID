@@ -52,14 +52,37 @@ async function main() {
   fs.mkdirSync(runDir, { recursive: true });
 
   const solc = hre.config.solidity.compilers[0];
+  const DATASET_SIZE = 1100, DATASET_SEED = 42;
+  // Review 02, H-10: record what actually executes. `evmVersion` is the solc
+  // compile target; `network.hardfork` is the EVM rules Hardhat executes with
+  // (2.2x defaults to a later fork than the compile target); the block gas
+  // limit is read from the node, not from the config default.
+  const latestBlock = await hre.ethers.provider.getBlock("latest");
   const meta = {
     runId, commit: git("rev-parse HEAD"), commitShort: sha, branch: git("rev-parse --abbrev-ref HEAD"),
     dirty: (git("status --porcelain") || "").length > 0,
     date: new Date().toISOString(),
     node: process.version, hardhat: require("hardhat/package.json").version, ethers: hre.ethers.version,
     solc: solc.version, evmVersion: solc.settings.evmVersion || "default", optimizerRuns: solc.settings.optimizer.runs, viaIR: !!solc.settings.viaIR,
-    network: { name: hre.network.name, chainId: hre.network.config.chainId, automine: true, blockGasLimit: hre.network.config.blockGasLimit || 30000000 },
-    conditions: { repetitions: opts.n, warmup: opts.warmup, scaleN: opts.scaleN, scaleH: opts.scaleH, throughput: { senders: opts.burstSenders, perSender: opts.burstPerSender, bursts: opts.bursts }, trace: opts.trace, datasetSeed: 42 },
+    network: {
+      name: hre.network.name, chainId: hre.network.config.chainId, automine: true,
+      hardfork: hre.network.config.hardfork || null,
+      blockGasLimit: Number(latestBlock.gasLimit),
+      blockGasLimitConfig: hre.network.config.blockGasLimit ?? null,
+    },
+    conditions: {
+      repetitions: opts.n, warmup: opts.warmup, scaleN: opts.scaleN, scaleH: opts.scaleH,
+      throughput: { senders: opts.burstSenders, perSender: opts.burstPerSender, bursts: opts.bursts },
+      sampling: {
+        txOps: `1 exact + ${opts.warmup} warm-up + ${opts.n} latency samples per op (crud)`,
+        reads: `${opts.warmup} warm-up + ${opts.n} samples (crud, resolve)`,
+        scaleReads: "2 warm-up + 10 samples",
+        lifecycleAndBatchAndScaleTx: "1 measurement per event / cell (gas is exact)",
+      },
+      trace: opts.trace, datasetSeed: DATASET_SEED, datasetSize: DATASET_SIZE,
+      freshKeys: "sk_i = keccak256(abi.encode('cvin-bench/fresh-key/v1', 42, i)), i restarts per chain reset; addresses with a 0x00 byte skipped",
+      credentialIssuer: "crud V1/V3/V5/V6: fresh issuer per iteration (identity + key anchor unmeasured)",
+    },
     scenarios: opts.scenarios, adapters: opts.adapters,
     derivedCostParams: { gasPriceGweiL1: 20, gasPriceGweiL2: 0.05, ethUSD: 3000 },
   };
@@ -69,7 +92,7 @@ async function main() {
   console.log(`scenarios: ${opts.scenarios.join(", ")} · adapters: ${opts.adapters.join(", ")}\n`);
 
   const collector = new MetricsCollector({ hre, runDir, trace: opts.trace });
-  const ctx = { hre, ethers: hre.ethers, collector, dataset: makeDataset(1100, 42), payloads: PAYLOADS, ADAPTERS, adapterIds: opts.adapters, opts };
+  const ctx = { hre, ethers: hre.ethers, collector, dataset: makeDataset(DATASET_SIZE, DATASET_SEED), payloads: PAYLOADS, ADAPTERS, adapterIds: opts.adapters, opts };
 
   const timings = {};
   for (const s of opts.scenarios) {

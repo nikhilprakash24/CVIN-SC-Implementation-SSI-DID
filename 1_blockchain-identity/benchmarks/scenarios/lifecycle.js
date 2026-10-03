@@ -59,11 +59,13 @@ async function run(ctx) {
     const perIdentityDeployGas = events.filter((e) => e.deploysContract).reduce((a, e) => a + e.txs.filter((t) => t.isCreate).reduce((s, t) => s + t.gasUsed, 0), 0);
     out.push({
       adapter: adapterId,
-      events: events.map((e) => ({ eventNo: e.eventNo, event: e.event, op: e.op, actor: e.actor, gasUsed: e.gasUsed, txCount: e.txCount, logBytes: e.logBytes, sstoreCount: e.sstoreCount, newSlotsEstimate: e.newSlotsEstimate, latencyMs: e.latencyMs })),
+      events: events.map((e) => ({ eventNo: e.eventNo, event: e.event, op: e.op, actor: e.actor, gasUsed: e.gasUsed, txCount: e.txCount, logBytes: e.logBytes, sstoreCount: e.sstoreCount, zeroToNonzeroSstores: e.zeroToNonzeroSstores, latencyMs: e.latencyMs })),
       lifetimeGas,
       lifetimeTxCount: events.reduce((a, e) => a + e.txCount, 0),
       lifetimeLogBytes: events.reduce((a, e) => a + e.logBytes, 0),
-      lifetimeNewSlots: events.reduce((a, e) => a + (e.newSlotsEstimate || 0), 0),
+      // Σ SSTOREs that wrote a zero slot to non-zero. NOT net state left behind:
+      // a slot later cleared (e.g. a revoked key) is still counted (review 02, H-8).
+      lifetimeZeroToNonzeroSstores: events.reduce((a, e) => a + (e.zeroToNonzeroSstores || 0), 0),
       sharedDeployGas: deployGas,
       perIdentityDeployGas,
       apportioned: Object.fromEntries(FLEETS.map((f) => [f, Math.round(lifetimeGas + deployGas / f)])),

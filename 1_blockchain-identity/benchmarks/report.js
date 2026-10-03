@@ -15,7 +15,7 @@ function load(runDir, name) {
 }
 
 function footerFor(meta) {
-  return `Run ${meta.runId} · commit ${meta.commitShort}${meta.dirty ? " (dirty)" : ""} · solc ${meta.solc} ${meta.evmVersion} runs=${meta.optimizerRuns} viaIR=${meta.viaIR} · Hardhat in-process automine · N=${meta.conditions.repetitions}`;
+  return `Run ${meta.runId} · commit ${meta.commitShort}${meta.dirty ? " (dirty)" : ""} · solc ${meta.solc} target ${meta.evmVersion} runs=${meta.optimizerRuns} viaIR=${meta.viaIR} · Hardhat in-process automine${meta.network && meta.network.hardfork ? ", executes " + meta.network.hardfork : ""} · N=${meta.conditions.repetitions}`;
 }
 
 function cellFactory(rows, adaptersRun, pick) {
@@ -59,7 +59,7 @@ function buildReport(runDir) {
     const specs = [
       ["crud_gas", { title: "L1 — Gas per catalogue operation (exact)", rowLabel: "Operation", rowKeys: txOps, colKeys, colLabels, rowLabels: opLabels, cellFn: cellFactory(crud, adaptersRun, (r) => r.gasUsed) }],
       ["crud_txcount", { title: "L1 — Transactions per semantic operation", rowLabel: "Operation", rowKeys: txOps, colKeys, colLabels, cellFn: cellFactory(crud, adaptersRun, (r) => r.txCount) }],
-      ["crud_storage", { title: "L1 — Storage writes per operation (SSTORE count / new slots)", rowLabel: "Operation", rowKeys: txOps, colKeys, colLabels, cellFn: cellFactory(crud, adaptersRun, (r) => `${r.sstoreCount} / ${r.newSlotsEstimate}`) }],
+      ["crud_storage", { title: "L1 — Storage writes per operation (SSTORE count / zero→nonzero SSTOREs)", rowLabel: "Operation", rowKeys: txOps, colKeys, colLabels, cellFn: cellFactory(crud, adaptersRun, (r) => `${r.sstoreCount} / ${r.zeroToNonzeroSstores}`) }],
       ["crud_logbytes", { title: "L1 — Event-log bytes per operation", rowLabel: "Operation", rowKeys: txOps, colKeys, colLabels, cellFn: cellFactory(crud, adaptersRun, (r) => r.logBytes) }],
       ["crud_calldata", { title: "L1 — Calldata bytes per operation", rowLabel: "Operation", rowKeys: txOps, colKeys, colLabels, cellFn: cellFactory(crud, adaptersRun, (r) => r.calldataBytes) }],
       ["crud_latency_tx", { title: "L1 — Tx latency, median / p95 ms (local node, N=" + meta.conditions.repetitions + ")", rowLabel: "Operation", rowKeys: txOps, colKeys, colLabels, cellFn: cellFactory(crud, adaptersRun, (r) => `${r.latency.median} / ${r.latency.p95}`) }],
@@ -75,7 +75,7 @@ function buildReport(runDir) {
     // long-format CSV for statistics
     writeCSV(path.join(runDir, "tables", "crud_long.csv"), crud.filter((r) => r.kind !== "deploy").map((r) => ({
       adapter: r.adapter, op: r.op, kind: r.kind, supported: r.supported, txCount: r.txCount, gasUsed: r.gasUsed, gasIntrinsic: r.gasIntrinsic, gasExecution: r.gasExecution,
-      calldataBytes: r.calldataBytes, logCount: r.logCount, logBytes: r.logBytes, sstoreCount: r.sstoreCount, sloadCount: r.sloadCount, newSlotsEstimate: r.newSlotsEstimate,
+      calldataBytes: r.calldataBytes, logCount: r.logCount, logBytes: r.logBytes, sstoreCount: r.sstoreCount, sloadCount: r.sloadCount, zeroToNonzeroSstores: r.zeroToNonzeroSstores,
       readRpcCalls: r.readRpcCalls, readBytes: r.readBytes, lat_n: r.latency?.n, lat_median: r.latency?.median, lat_p95: r.latency?.p95, lat_mean: r.latency?.mean, lat_sd: r.latency?.sd,
     })));
     const samples = [];
@@ -101,8 +101,8 @@ function buildReport(runDir) {
     };
     const spec = { title: "L2 — MOBI VID lifecycle gas per event", rowLabel: "Event", rowKeys, rowLabels, colKeys, colLabels, cellFn };
     emit(runDir, "lifecycle_gas", spec, meta); summary.push(markdownMatrix(spec));
-    const spec2 = { title: "L2 — Lifecycle totals: tx count / log bytes / new slots", rowLabel: "Metric", rowKeys: ["tx", "log", "slots"], rowLabels: { tx: "Transactions", log: "Log bytes", slots: "New storage slots" }, colKeys, colLabels,
-      cellFn: (r, a) => !adaptersRun.includes(a) ? NOT_IMPL : !idx[a] ? null : r === "tx" ? idx[a].lifetimeTxCount : r === "log" ? idx[a].lifetimeLogBytes : idx[a].lifetimeNewSlots };
+    const spec2 = { title: "L2 — Lifecycle totals: tx count / log bytes / zero→nonzero SSTOREs", rowLabel: "Metric", rowKeys: ["tx", "log", "z2nz"], rowLabels: { tx: "Transactions", log: "Log bytes", z2nz: "Zero→nonzero SSTOREs" }, colKeys, colLabels,
+      cellFn: (r, a) => !adaptersRun.includes(a) ? NOT_IMPL : !idx[a] ? null : r === "tx" ? idx[a].lifetimeTxCount : r === "log" ? idx[a].lifetimeLogBytes : idx[a].lifetimeZeroToNonzeroSstores };
     emit(runDir, "lifecycle_totals", spec2, meta); summary.push(markdownMatrix(spec2));
   }
 

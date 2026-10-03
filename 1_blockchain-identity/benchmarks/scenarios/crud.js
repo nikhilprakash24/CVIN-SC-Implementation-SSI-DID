@@ -24,7 +24,7 @@ async function run(ctx) {
       const row = await ctx.collector.repeatTx({ adapter: adapterId, scenario: "crud", op: opId }, iteration, { n, warmup });
       row.supported = true;
       rows.push(row);
-      log(ctx, `${opId.padEnd(28)} gas=${row.gasUsed} txs=${row.txCount} sstore=${row.sstoreCount} new=${row.newSlotsEstimate} log=${row.logBytes}B  lat.med=${row.latency.median}ms`);
+      log(ctx, `${opId.padEnd(28)} gas=${row.gasUsed} txs=${row.txCount} sstore=${row.sstoreCount} z2nz=${row.zeroToNonzeroSstores} log=${row.logBytes}B  lat.med=${row.latency.median}ms`);
     };
 
     const setupIdentity = async () => {

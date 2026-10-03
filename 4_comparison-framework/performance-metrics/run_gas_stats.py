@@ -12,7 +12,7 @@ stable, or could they be one-off flukes?"
 This driver answers that empirically: it re-runs the full 9-standard gas
 benchmark N times (each a fresh in-process Hardhat network) and aggregates
 `gasUsed` per (standard, operation). If every run agrees to the gas, the
-point estimates are exact and the CI width is zero — which is the expected
+point estimates are exact and the [min, max] range width is zero — which is the expected
 and desired result for deterministic gas, and is itself the reproducibility
 evidence an examiner asks for.
 
@@ -93,10 +93,11 @@ def main():
                 "max": hi,
                 "stdev": statistics.pstdev(vals) if len(vals) > 1 else 0.0,
                 "deterministic": deterministic,
-                # For deterministic gas the 95% CI collapses to the point value;
-                # if any variance appears it is calldata/state-ordering driven
-                # and the [min,max] envelope bounds it.
-                "ci95": [lo, hi],
+                # Observed [min, max] envelope over the N runs. This is NOT a
+                # 95% confidence interval (review 02, H-12): for deterministic
+                # gas it collapses to the point value; any spread is
+                # calldata/state-ordering driven and this envelope bounds it.
+                "range_min_max": [lo, hi],
             }
 
     all_deterministic = len(non_deterministic) == 0
@@ -108,8 +109,9 @@ def main():
             "Full 9-standard gas benchmark re-run N times on a fresh "
             "in-process Hardhat network each time; gasUsed aggregated per "
             "(standard, operation). EVM gas is deterministic for fixed "
-            "calldata + pre-state, so identical values across runs (CI "
-            "width 0) is the expected, correct reproducibility result."
+            "calldata + pre-state, so identical values across runs "
+            "(range_min_max width 0) is the expected, correct reproducibility "
+            "result. range_min_max is the observed envelope, not a CI."
         ),
         "source_metadata": metadata,
         "per_standard": per_standard,
