@@ -11,10 +11,11 @@ Features:
 - Revocation on-chain
 """
 
+import os
 import time
 import json
 import hashlib
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, Union
 from datetime import datetime, timedelta
 from eth_account import Account
 from web3 import Web3
@@ -48,9 +49,28 @@ class ERC1056Provider(IdentityProvider):
         self,
         web3_provider_url: str = "http://127.0.0.1:8545",
         contract_address: Optional[str] = None,
-        private_key: Optional[str] = None
+        private_key: Optional[str] = None,
+        freshness_k: Union[int, str, float, None] = None,
     ):
+        """
+        freshness_k controls the verifier-side cache used by verify_message():
+
+          None (default)  no cache: every verification resolves the key and the
+                          revocation flag from the registry (current behaviour,
+                          getIdentityInfo + event walk + isRevoked per message).
+          k >= 1          the resolved key / revocation state of each sender is
+                          cached after its first resolution; the chain is
+                          consulted again only on every k-th message from that
+                          sender, with ONE JSON-RPC round trip (eth_call of
+                          changed(identity)); a full re-resolution happens only
+                          if that block number differs from the cached one.
+                          k=1 consults the chain on every message.
+          0 or 'inf'      never refresh after the first resolution.
+        """
         super().__init__(IdentityType.ERC1056_DID)
+        self.freshness_k = self._parse_freshness(freshness_k)
+        # sender address (lowercase) -> cached verification state, see _cached_identity()
+        self._verifier_cache: Dict[str, Dict] = {}
 
         # Connect to blockchain
         self.w3 = Web3(Web3.HTTPProvider(web3_provider_url))
@@ -101,11 +121,18 @@ class ERC1056Provider(IdentityProvider):
 
     def _load_contract(self, address: str):
         """Load contract ABI and create contract instance"""
-        # Load ABI from compiled contract
-        try:
-            with open('contracts/ERC1056Registry_abi.json', 'r') as f:
-                abi = json.load(f)
-        except FileNotFoundError:
+        # Load ABI from compiled contract (cwd-relative, then relative to this package)
+        abi = None
+        for candidate in ('contracts/ERC1056Registry_abi.json',
+                          os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                                       'contracts', 'ERC1056Registry_abi.json')):
+            try:
+                with open(candidate, 'r') as f:
+                    abi = json.load(f)
+                break
+            except FileNotFoundError:
+                continue
+        if abi is None:
             # Inline ABI for bootstrapping
             abi = self._get_inline_abi()
 
@@ -130,6 +157,13 @@ class ERC1056Provider(IdentityProvider):
                 "name": "revokeIdentity",
                 "outputs": [],
                 "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "name": "changed",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
                 "type": "function"
             },
             {
@@ -421,29 +455,42 @@ class ERC1056Provider(IdentityProvider):
 
             vehicle_address = parts[3]
 
-            # Resolve DID (get public key from blockchain)
-            resolution_start = time.time()
-            identity_data, resolution_time = self.resolve_identity_from_address(vehicle_address)
-            metrics.resolution_time_ms = resolution_time
+            if self.freshness_k is not None:
+                # Cached verifier (freshness parameter k, see __init__).
+                entry, chain_ms = self._cached_identity(vehicle_address)
+                metrics.resolution_time_ms = chain_ms
+                if entry is None or entry['public_key_obj'] is None:
+                    metrics.verification_time_ms = (time.time() - start_time) * 1000
+                    return False, metrics
+                if entry['is_revoked']:
+                    metrics.verification_time_ms = (time.time() - start_time) * 1000
+                    return False, metrics
+                public_key = entry['public_key_obj']
+            else:
+                # Uncached verifier (default): read the registry on every message.
+                # Resolve DID (get public key from blockchain)
+                resolution_start = time.time()
+                identity_data, resolution_time = self.resolve_identity_from_address(vehicle_address)
+                metrics.resolution_time_ms = resolution_time
 
-            if not identity_data:
-                return False, metrics
+                if not identity_data:
+                    return False, metrics
 
-            # Check revocation
-            is_revoked, check_time = self.check_revocation_status_by_address(vehicle_address)
-            if is_revoked:
-                metrics.verification_time_ms = (time.time() - start_time) * 1000
-                return False, metrics
+                # Check revocation
+                is_revoked, check_time = self.check_revocation_status_by_address(vehicle_address)
+                if is_revoked:
+                    metrics.verification_time_ms = (time.time() - start_time) * 1000
+                    return False, metrics
 
-            # Get public key (resolved from DIDAttributeChanged events)
-            if not identity_data.get('public_key'):
-                metrics.verification_time_ms = (time.time() - start_time) * 1000
-                return False, metrics
-            public_key_bytes = bytes.fromhex(identity_data['public_key'])
-            public_key = ec.EllipticCurvePublicKey.from_encoded_point(
-                ec.SECP256K1(),
-                public_key_bytes
-            )
+                # Get public key (resolved from DIDAttributeChanged events)
+                if not identity_data.get('public_key'):
+                    metrics.verification_time_ms = (time.time() - start_time) * 1000
+                    return False, metrics
+                public_key_bytes = bytes.fromhex(identity_data['public_key'])
+                public_key = ec.EllipticCurvePublicKey.from_encoded_point(
+                    ec.SECP256K1(),
+                    public_key_bytes
+                )
 
             # Verify signature
             message_bytes = json.dumps(message, sort_keys=True).encode()
@@ -467,6 +514,106 @@ class ERC1056Provider(IdentityProvider):
             print(f"Verification error: {e}")
             metrics.verification_time_ms = (time.time() - start_time) * 1000
             return False, metrics
+
+    # ------------------------------------------------------------------
+    # Verifier-side cache with freshness parameter k
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _parse_freshness(value) -> Optional[int]:
+        """None -> off; 0/'inf'/float('inf') -> never refresh (0); int >= 1 -> k."""
+        if value is None:
+            return None
+        if isinstance(value, str):
+            if value.strip().lower() in ('inf', 'infinity', 'never'):
+                return 0
+            value = int(value)
+        if isinstance(value, float):
+            if value == float('inf'):
+                return 0
+            value = int(value)
+        if not isinstance(value, int) or value < 0:
+            raise ValueError(f"freshness_k must be None, an int >= 0 or 'inf' (got {value!r})")
+        return value
+
+    def _changed_block(self, checksum_address: str) -> int:
+        """
+        ERC-1056 freshness check: changed(identity), the block of the last
+        registry change for this identity (key rotation AND revocation both
+        update it in ERC1056Registry). Issued as a single raw eth_call so the
+        refresh is exactly one JSON-RPC round trip (web3's contract wrapper
+        adds two eth_chainId requests around every call).
+        """
+        data = self.contract.encode_abi('changed', args=[checksum_address])
+        resp = self.w3.provider.make_request('eth_call', [{'to': self.contract.address, 'data': data}, 'latest'])
+        if 'result' not in resp:
+            raise RuntimeError(f"eth_call changed() failed: {resp.get('error')}")
+        return int(resp['result'], 16)
+
+    def _resolve_for_cache(self, address: str) -> Optional[Dict]:
+        """Full resolution (getIdentityInfo + event walk) -> cache entry, or None."""
+        identity_data, _ = self.resolve_identity_from_address(address)
+        if not identity_data:
+            return None
+        key_obj = None
+        if identity_data.get('public_key'):
+            key_obj = ec.EllipticCurvePublicKey.from_encoded_point(
+                ec.SECP256K1(), bytes.fromhex(identity_data['public_key']))
+        return {
+            'last_changed': int(identity_data['last_changed']),
+            'is_revoked': bool(identity_data['is_revoked']),
+            'public_key': identity_data['public_key'],
+            'public_key_obj': key_obj,
+            'public_key_valid_to': identity_data.get('public_key_valid_to'),
+        }
+
+    def _cached_identity(self, address: str) -> Tuple[Optional[Dict], float]:
+        """
+        Return (cache entry, chain_read_ms) for `address`, consulting the chain
+        on the first message from the sender and then on every k-th message
+        (k = self.freshness_k; 0 = never). chain_read_ms is 0.0 when the entry
+        was served from the cache without any RPC.
+        """
+        key = address.lower()
+        entry = self._verifier_cache.get(key)
+        t0 = time.time()
+
+        if entry is None:
+            entry = self._resolve_for_cache(address)
+            if entry is None:
+                return None, (time.time() - t0) * 1000
+            entry.update({'since_refresh': 0, 'refreshes': 0, 'resolutions': 1, 'messages': 1})
+            self._verifier_cache[key] = entry
+            return entry, (time.time() - t0) * 1000
+
+        entry['messages'] += 1
+        entry['since_refresh'] += 1
+        valid_to = entry.get('public_key_valid_to')
+        expired = valid_to is not None and valid_to <= int(time.time())
+        due = self.freshness_k > 0 and entry['since_refresh'] >= self.freshness_k
+        if not (due or expired):
+            return entry, 0.0
+
+        # Freshness refresh: one round trip; full re-resolution only on change.
+        entry['since_refresh'] = 0
+        entry['refreshes'] += 1
+        changed = self._changed_block(Web3.to_checksum_address(address))
+        if changed != entry['last_changed'] or expired:
+            fresh = self._resolve_for_cache(address)
+            entry['resolutions'] += 1
+            if fresh is None:
+                self._verifier_cache.pop(key, None)
+                return None, (time.time() - t0) * 1000
+            entry.update(fresh)
+        return entry, (time.time() - t0) * 1000
+
+    def verifier_cache_stats(self) -> Dict[str, Dict[str, int]]:
+        """Per-sender counters of the freshness cache (messages, refreshes, resolutions)."""
+        return {addr: {k: e[k] for k in ('messages', 'since_refresh', 'refreshes', 'resolutions', 'last_changed')}
+                for addr, e in self._verifier_cache.items()}
+
+    def clear_verifier_cache(self):
+        self._verifier_cache.clear()
 
     def revoke_credential(self, vehicle_id: str, reason: str = "") -> bool:
         """Revoke vehicle identity on blockchain"""

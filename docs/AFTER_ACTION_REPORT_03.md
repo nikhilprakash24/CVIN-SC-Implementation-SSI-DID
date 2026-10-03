@@ -43,6 +43,7 @@ Not in this pass (need the author): SUMO install (S0), chapter framing edits, Se
   vocabulary mapping, thesis changes. N1 done to the extent the public text allows.
 - N2, N4 delegated (resolver conformance; freshness-k measurement) — running.
 - N2 done and accepted here: official suite 328/441 → **335/336** (resolution 193/194; the one failure is a suite vector generically valid under the 3.1 ABNF), internal checker 93.2% → **94.3%**, VC tests 60/60 unchanged; malformed DIDs now yield `invalidDid`, unknown methods `methodNotSupported`, success results carry no error keys, `resolveRepresentation` exists. CI floor raised 93.0 → 94.0; register #4/#24, summary and README updated.
+- N4 done and accepted here (anchor rows reproduced on a fresh node, n=60: k=1 3.10 ms / 1 RPC, k=∞ 0.456 ms / 0 RPC): the budget's two estimate rows are now measured (0.44 and 2.70 ms vs 0.40 and 2.5 estimated); the k-sweep shows median P* saturating at ≈110 from k=5 and the mean-based crossing of P*(0.5)=100 between k=25 and k=100; revocation bound holds for every finite k. Register #29; host-speed caveat recorded (2.80 vs 2.10 GHz). Default provider path unchanged (freshness off).
 
 ## 3. Decisions
 - **D1** — follow the handback order for N1 but run N2 and N4 concurrently, because
