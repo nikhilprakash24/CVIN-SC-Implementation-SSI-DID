@@ -302,7 +302,11 @@ class CentralizedIdentityProvider(IdentityProvider):
         return signed_message
 
     def verify_message(self, signed_message: Dict) -> Tuple[bool, IdentityMetrics]:
-        """Verify signed message"""
+        """
+        Verify signed message: CRL lookup, certificate validity window, CA
+        signature on the certificate (plus issuer name), then the message
+        signature under the certificate key. Any failure returns False.
+        """
         start_time = time.time()
         metrics = IdentityMetrics()
 
@@ -329,10 +333,12 @@ class CentralizedIdentityProvider(IdentityProvider):
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
-            # Verify certificate chain (simplified - check issuer)
-            if cert.issuer != self.ca_certificate.subject:
-                metrics.verification_time_ms = (time.time() - start_time) * 1000
-                return False, metrics
+            # Verify the certificate was issued by this CA (review 02, T-1):
+            # issuer name == CA subject AND the CA's ECDSA P-256 signature over
+            # the TBS certificate verifies under the CA public key. Comparing
+            # the issuer *name* alone accepted any self-signed certificate
+            # that copied the CA subject. Raises on mismatch.
+            cert.verify_directly_issued_by(self.ca_certificate)
 
             # Verify signature
             message_bytes = json.dumps(message, sort_keys=True).encode()
