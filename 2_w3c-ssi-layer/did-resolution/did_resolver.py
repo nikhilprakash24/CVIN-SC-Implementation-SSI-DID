@@ -18,8 +18,10 @@ Author: Nikhil Prakash
 Thesis: MASc, UBC ECE
 """
 
+import copy
 import json
 import hashlib
+import re
 import time
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field, asdict
@@ -165,6 +167,47 @@ class DIDResolutionResult:
         }
 
 
+class DIDResolutionError(ValueError):
+    """A resolution failure carrying a DID Core 7.1.2 error code."""
+
+    def __init__(self, code: str, message: str):
+        super().__init__(message)
+        self.code = code
+
+
+# DID Core 3.1 ABNF:  did = "did:" method-name ":" method-specific-id
+#   method-name        = 1*method-char ; %x61-7A / DIGIT
+#   method-specific-id = *( *idchar ":" ) 1*idchar
+#   idchar             = ALPHA / DIGIT / "." / "-" / "_" / pct-encoded
+_IDCHAR = r"(?:[A-Za-z0-9._-]|%[0-9A-Fa-f]{2})"
+_DID_RE = re.compile(
+    rf"did:([a-z0-9]+):((?:{_IDCHAR}*:)*{_IDCHAR}+)")
+_ETH_ADDRESS_RE = re.compile(r"0x[0-9a-fA-F]{40}")
+_ETH_PUBKEY_RE = re.compile(r"0x0[23][0-9a-fA-F]{64}")
+# did:ethr network names accepted by ethr-did-resolver -> EIP-155 chain id
+_ETHR_NETWORKS = {
+    "mainnet": 1, "ropsten": 3, "rinkeby": 4, "goerli": 5,
+    "sepolia": 11155111, "dev": 1337, "development": 1337,
+}
+
+
+def parse_chain_id(chain: str, did: str) -> int:
+    """
+    Chain-id component of a did:ethr / did:key / did:nft DID -> decimal
+    EIP-155 chain id, as CAIP-10 requires (``eip155:<decimal>:<address>``;
+    review 02, S-10). Accepts hex (``0x7a69``), decimal (``31337``) or a
+    did:ethr network name.
+    """
+    if re.fullmatch(r"0x[0-9a-fA-F]+", chain):
+        return int(chain, 16)
+    if re.fullmatch(r"[0-9]+", chain):
+        return int(chain)
+    if chain in _ETHR_NETWORKS:
+        return _ETHR_NETWORKS[chain]
+    raise DIDResolutionError("invalidDid",
+                             f"invalid chain id {chain!r} in {did}")
+
+
 class DIDResolver:
     """
     Universal DID Resolver for all thesis blockchain identity standards
@@ -173,15 +216,21 @@ class DIDResolver:
     https://www.w3.org/TR/did-core/#resolution
     """
 
-    def __init__(self, blockchain_provider=None):
+    def __init__(self, blockchain_provider=None,
+                 cache_ttl_s: Optional[float] = None):
         """
         Initialize DID Resolver
 
         Args:
             blockchain_provider: Web3 provider for blockchain lookups
+            cache_ttl_s: cache lifetime in seconds (None = never expires)
         """
         self.blockchain_provider = blockchain_provider
-        self.cache = {}  # Simple cache for resolved DIDs
+        self.cache_ttl_s = cache_ttl_s
+        # did -> (stored_at_monotonic, private copy of the result). Callers
+        # only ever receive deep copies, so mutating a returned result
+        # cannot poison later resolutions (review 02, S-10).
+        self.cache: Dict[str, Tuple[float, "DIDResolutionResult"]] = {}
 
     def resolve(self, did: str) -> DIDResolutionResult:
         """
@@ -201,10 +250,14 @@ class DIDResolver:
 
             # Check cache
             if did in self.cache:
-                cached = self.cache[did]
-                # Update retrieval time
-                cached.didResolutionMetadata.retrieved = datetime.now(timezone.utc).isoformat()
-                return cached
+                stored_at, cached = self.cache[did]
+                if self.cache_ttl_s is None or \
+                        time.monotonic() - stored_at <= self.cache_ttl_s:
+                    result = copy.deepcopy(cached)
+                    result.didResolutionMetadata.retrieved = \
+                        datetime.now(timezone.utc).isoformat()
+                    return result
+                del self.cache[did]
 
             # Resolve based on method
             if method == DIDMethod.ETHR:
@@ -229,9 +282,9 @@ class DIDResolver:
             # Set retrieval time
             result.didResolutionMetadata.retrieved = datetime.now(timezone.utc).isoformat()
 
-            # Cache successful resolutions
+            # Cache successful resolutions (a private copy)
             if not result.didResolutionMetadata.error:
-                self.cache[did] = result
+                self.cache[did] = (time.monotonic(), copy.deepcopy(result))
 
             # Log resolution time
             elapsed_ms = (time.time() - start_time) * 1000
@@ -239,6 +292,18 @@ class DIDResolver:
 
             return result
 
+        except DIDResolutionError as e:
+            # invalidDid / methodNotSupported (DID Core 7.1.2). Before
+            # review 02 every parse failure surfaced as internalError and
+            # the methodNotSupported branch above was unreachable.
+            return DIDResolutionResult(
+                didResolutionMetadata=DIDResolutionMetadata(
+                    error=e.code,
+                    errorMessage=str(e)
+                ),
+                didDocument=None,
+                didDocumentMetadata=DIDDocumentMetadata()
+            )
         except Exception as e:
             return DIDResolutionResult(
                 didResolutionMetadata=DIDResolutionMetadata(
@@ -250,19 +315,27 @@ class DIDResolver:
             )
 
     def _parse_did(self, did: str) -> Tuple[DIDMethod, str]:
-        """Parse DID into method and identifier"""
-        parts = did.split(":")
+        """
+        Parse DID into method and identifier.
 
-        if len(parts) < 3 or parts[0] != "did":
-            raise ValueError(f"Invalid DID format: {did}")
-
-        method = parts[1]
-        identifier = ":".join(parts[2:])  # Everything after method
+        Raises DIDResolutionError("invalidDid") for strings that violate
+        the DID Core 3.1 ABNF, and DIDResolutionError("methodNotSupported")
+        for a syntactically valid DID of a method this resolver lacks.
+        """
+        if not isinstance(did, str):
+            raise DIDResolutionError("invalidDid", "DID must be a string")
+        match = _DID_RE.fullmatch(did)
+        if match is None:
+            raise DIDResolutionError("invalidDid",
+                                     f"Invalid DID format: {did}")
+        method, identifier = match.group(1), match.group(2)
 
         try:
             method_enum = DIDMethod(method)
         except ValueError:
-            raise ValueError(f"Unsupported DID method: {method}")
+            raise DIDResolutionError(
+                "methodNotSupported",
+                f"DID method '{method}' is not supported") from None
 
         return method_enum, identifier
 
@@ -273,14 +346,29 @@ class DIDResolver:
         Format: did:ethr:<chainId>:<address>
         Example: did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678
         """
-        # Parse chain ID and address
+        # Parse chain ID and address (or compressed public key, which the
+        # did:ethr spec also allows as the identifier)
         parts = identifier.split(":")
         if len(parts) == 2:
-            chain_id, address = parts
-        else:
+            chain, address = parts
+        elif len(parts) == 1:
             # Default to mainnet
-            chain_id = "0x1"
+            chain = "0x1"
             address = identifier
+        else:
+            raise DIDResolutionError(
+                "invalidDid", f"did:ethr takes [<chainId>:]<address>: {did}")
+        chain_id = parse_chain_id(chain, did)
+
+        public_key_hex = None
+        if _ETH_PUBKEY_RE.fullmatch(address):
+            public_key_hex = address
+            address = self._address_from_compressed_key(address, did)
+        elif not _ETH_ADDRESS_RE.fullmatch(address):
+            raise DIDResolutionError(
+                "invalidDid",
+                f"did:ethr identifier must be a 0x-prefixed 20-byte address "
+                f"or 33-byte compressed public key: {did}")
 
         # In production, would query ERC-1056 registry on blockchain
         # For thesis demo, construct minimal valid DID document
@@ -291,6 +379,8 @@ class DIDResolver:
             id=verification_method_id,
             type="EcdsaSecp256k1VerificationKey2019",
             controller=did,
+            publicKeyHex=public_key_hex,
+            # CAIP-10: eip155:<decimal chain id>:<address>
             blockchainAccountId=f"eip155:{chain_id}:{address}"
         )
 
@@ -313,6 +403,19 @@ class DIDResolver:
             )
         )
 
+    @staticmethod
+    def _address_from_compressed_key(key_hex: str, did: str) -> str:
+        """Ethereum address of a compressed secp256k1 public key."""
+        try:
+            from eth_keys import keys
+            return keys.PublicKey.from_compressed_bytes(
+                bytes.fromhex(key_hex[2:])).to_checksum_address()
+        except Exception:
+            raise DIDResolutionError(
+                "invalidDid",
+                f"identifier is not a valid secp256k1 public key: {did}"
+            ) from None
+
     def _resolve_nft(self, did: str, identifier: str) -> DIDResolutionResult:
         """
         Resolve did:nft (ERC-721 NFT-based Identity)
@@ -321,9 +424,11 @@ class DIDResolver:
         """
         parts = identifier.split(":")
         if len(parts) != 3:
-            raise ValueError(f"Invalid did:nft format: {did}")
+            raise DIDResolutionError("invalidDid",
+                                     f"Invalid did:nft format: {did}")
 
-        chain_id, contract_address, token_id = parts
+        chain, contract_address, token_id = parts
+        chain_id = parse_chain_id(chain, did)
 
         # Would query ERC-721 contract for token owner
         verification_method_id = f"{did}#owner"
@@ -367,10 +472,14 @@ class DIDResolver:
         """
         parts = identifier.split(":")
         if len(parts) == 2:
-            chain_id, proxy_address = parts
-        else:
-            chain_id = "0x1"
+            chain, proxy_address = parts
+        elif len(parts) == 1:
+            chain = "0x1"
             proxy_address = identifier
+        else:
+            raise DIDResolutionError("invalidDid",
+                                     f"Invalid did:key format: {did}")
+        chain_id = parse_chain_id(chain, did)
 
         verification_method_id = f"{did}#keys-1"
 
