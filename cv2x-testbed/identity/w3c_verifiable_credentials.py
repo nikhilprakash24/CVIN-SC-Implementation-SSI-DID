@@ -23,9 +23,23 @@ keep working unchanged — but verification is now real: tampered or forged
 credentials FAIL.
 
 Legacy-API notes handled here:
-- Demo DIDs like `did:ethr:0x1:0xTESLA123` are not valid Ethereum addresses,
-  so every issuer/holder auto-registers its (DID -> signing address) mapping
-  in a shared TrustedIssuerRegistry that the verifier consults.
+- TRUST IS VERIFIER CONFIGURATION (review 02, T-3). Issuers and wallets no
+  longer register themselves as trusted: before, every issuer AND every
+  wallet self-registered in a shared TrustedIssuerRegistry, so a vehicle
+  could issue itself a V2VSafetyCredential and the SUMO layer accepted it.
+  A verifier now takes an explicit allow-list (`trusted_issuers=[issuer,
+  ...]` or a TrustedIssuerRegistry); did:ethr issuers must be on it too.
+  `CredentialVerifier()` with no allow-list trusts nobody.
+- Demo DIDs like `did:ethr:0x1:0xTESLA123` are not valid Ethereum addresses.
+  Wallets with such DIDs record a (DID -> address) KEY BINDING in
+  SHARED_HOLDER_KEYS (a stand-in for DID resolution, first binding wins);
+  that registry is consulted for presentation holders only, never for
+  issuer trust. Issuers with demo DIDs get their address from the
+  verifier's allow-list.
+- Each issuer has its own revocation registry, bound to its DID (S-2); a
+  verifier built from issuer objects picks those registries up.
+- Presentations: the holder must be the credential subject unless the
+  verifier is given `subject_holder_binding` (e.g. owner -> vehicle DID).
 - Legacy credential types (e.g. "VehicleMaintenanceCredential") are not in
   the canonical schema registry, so issuance runs with enforce_schema=False:
   claims are not schema-checked, but signatures are real and verified.
@@ -38,7 +52,7 @@ Author: Nikhil Prakash (MASc, UBC ECE)
 
 import os
 import sys
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
 _CANONICAL_DIR = os.path.abspath(os.path.join(
     os.path.dirname(__file__), "..", "..",
@@ -54,18 +68,31 @@ from vc_issuer import (                                     # noqa: E402
 from vc_holder import HolderWallet as _CanonicalWallet      # noqa: E402
 from vc_verifier import (                                   # noqa: E402
     CredentialVerifier as _CanonicalVerifier,
+    DIDKeyRegistry,
     TrustedIssuerRegistry,
     VerificationResult,
+    address_from_did,
 )
 
 # MOBI vocabulary context carried over from the original implementation
 MOBI_CONTEXT = "https://w3id.org/mobi/v1"
 
-# Shared state so independently-constructed issuers/wallets/verifiers in the
-# demo scripts see each other (the legacy API constructs CredentialVerifier()
-# with no arguments).
-SHARED_REVOCATION_REGISTRY = RevocationRegistry()
-SHARED_TRUSTED_ISSUERS = TrustedIssuerRegistry()
+
+class _FirstBindingKeyRegistry(DIDKeyRegistry):
+    """Key bindings for unresolvable demo DIDs; a DID binds once."""
+
+    def register(self, did: str, address: str) -> None:
+        existing = self.address_for(did)
+        if existing is not None and existing != address.lower():
+            raise ValueError(
+                f"{did} is already bound to {existing}; refusing to rebind "
+                f"it to {address} (a DID's key is not self-asserted)")
+        super().register(did, address)
+
+
+# Holder key bindings for demo DIDs (DID-resolution stand-in). NOT an issuer
+# trust list: verifiers never consult it for issuers (review 02, T-3).
+SHARED_HOLDER_KEYS = _FirstBindingKeyRegistry()
 
 
 class _Handle:
@@ -119,17 +146,21 @@ def _unwrap(document: Any) -> Any:
 
 
 class CredentialIssuer(_CanonicalIssuer):
-    """Legacy-API issuer: (issuer_did, private_key, issuer_name)."""
+    """
+    Legacy-API issuer: (issuer_did, private_key, issuer_name).
+
+    An issuer does NOT make itself trusted (review 02, T-3): a verifier
+    must list it in `trusted_issuers`. Each issuer owns a revocation
+    registry bound to its DID (S-2).
+    """
 
     def __init__(self, issuer_did: str,
                  private_key: Optional[str] = None,
-                 issuer_name: Optional[str] = None):
+                 issuer_name: Optional[str] = None,
+                 revocation_registry: Optional[RevocationRegistry] = None):
         super().__init__(issuer_did, private_key,
-                         revocation_registry=SHARED_REVOCATION_REGISTRY)
+                         revocation_registry=revocation_registry)
         self.issuer_name = issuer_name
-        # Demo DIDs don't embed real addresses — register the mapping so
-        # the verifier can check recovered signers for real.
-        SHARED_TRUSTED_ISSUERS.register(issuer_did, self.address)
 
     def issue_credential(self, credential_type: str, subject_did: str,
                          claims: Dict[str, Any],
@@ -152,7 +183,11 @@ class HolderWallet(_CanonicalWallet):
 
     def __init__(self, holder_did: str, private_key: Optional[str] = None):
         super().__init__(holder_did, private_key)
-        SHARED_TRUSTED_ISSUERS.register(holder_did, self.address)
+        # Demo DIDs embed no address: record the KEY binding (first one
+        # wins) so this wallet's presentations can be checked. This grants
+        # no issuer trust (T-3).
+        if address_from_did(holder_did) is None:
+            SHARED_HOLDER_KEYS.register(holder_did, self.address)
 
     def store_credential(self, credential: Any) -> str:
         return super().store_credential(_unwrap(credential))
@@ -167,9 +202,23 @@ class HolderWallet(_CanonicalWallet):
         return VPHandle(vp)
 
 
+def trusted_issuer_registry(issuers: Iterable[_CanonicalIssuer]
+                            ) -> TrustedIssuerRegistry:
+    """Allow-list of the given issuer objects (DID -> signing address)."""
+    allow = TrustedIssuerRegistry()
+    for issuer in issuers:
+        allow.register(issuer.issuer_did, issuer.address)
+    return allow
+
+
 class CredentialVerifier:
     """
-    Legacy-API verifier: zero-arg constructor, tuple-returning methods.
+    Legacy-API verifier with tuple-returning methods.
+
+    Trust is explicit (review 02, T-3): `trusted_issuers` is the allow-list
+    — either a TrustedIssuerRegistry or an iterable of issuer objects (their
+    DIDs, addresses and revocation registries are taken from them). Without
+    it the verifier trusts no issuer, so every credential fails.
 
     Composes (rather than subclasses) the canonical verifier: the canonical
     verify_presentation calls self.verify_credential internally and expects
@@ -178,12 +227,31 @@ class CredentialVerifier:
     """
 
     def __init__(self,
-                 revocation_registry: Optional[RevocationRegistry] = None,
-                 trusted_issuers: Optional[TrustedIssuerRegistry] = None):
+                 revocation_registry: Union[
+                     RevocationRegistry, Iterable[RevocationRegistry],
+                     None] = None,
+                 trusted_issuers: Union[
+                     TrustedIssuerRegistry, Iterable[_CanonicalIssuer],
+                     None] = None,
+                 subject_holder_binding: Any = None,
+                 allow_bearer_credentials: bool = False):
+        registries: List[RevocationRegistry] = []
+        if isinstance(revocation_registry, RevocationRegistry):
+            registries.append(revocation_registry)
+        elif revocation_registry is not None:
+            registries.extend(revocation_registry)
+        if isinstance(trusted_issuers, TrustedIssuerRegistry):
+            allow = trusted_issuers
+        else:
+            issuers = list(trusted_issuers or [])
+            allow = trusted_issuer_registry(issuers)
+            registries.extend(i.revocation_registry for i in issuers)
         self._inner = _CanonicalVerifier(
-            revocation_registry=revocation_registry
-            or SHARED_REVOCATION_REGISTRY,
-            trusted_issuers=trusted_issuers or SHARED_TRUSTED_ISSUERS,
+            revocation_registry=registries,
+            trusted_issuers=allow,           # always an allow-list (T-3)
+            holder_keys=SHARED_HOLDER_KEYS,
+            subject_holder_binding=subject_holder_binding,
+            allow_bearer_credentials=allow_bearer_credentials,
             strict_schema=False,  # legacy demo claims predate the schemas
         )
 
@@ -221,7 +289,10 @@ if __name__ == "__main__":
     wallet.store_credential(vc)
     vp = wallet.create_presentation([vc.id], challenge="nonce-1",
                                     domain="demo.example")
-    verifier = CredentialVerifier()
+    verifier = CredentialVerifier(
+        trusted_issuers=[issuer],
+        subject_holder_binding={"did:ethr:0x1:0xVEHICLE123":
+                                {wallet.holder_did}})
     ok, _ = verifier.verify_presentation(vp, "nonce-1", "demo.example")
     print(f"Genuine presentation verifies: {ok} (must be True)")
 

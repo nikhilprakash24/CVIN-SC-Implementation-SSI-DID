@@ -206,7 +206,11 @@ class SSIIdentityLayer:
             issuer_account.key.hex(),
             "CVIN Manufacturer Consortium",
         )
-        self.verifier = CredentialVerifier()
+        # Explicit trusted-issuer allow-list: only the consortium issuer
+        # (and its revocation registry). Before review 02 (T-3) every
+        # issuer/wallet self-registered as trusted, so a vehicle could
+        # issue itself a V2VSafetyCredential and be accepted here.
+        self.verifier = CredentialVerifier(trusted_issuers=[self.issuer])
         # vehicle_id -> {"account", "did", "credential"}
         self.wallets: Dict[str, Dict[str, Any]] = {}
         # Per-receiver cache: receiver_id -> {sender_did: signing_address}
