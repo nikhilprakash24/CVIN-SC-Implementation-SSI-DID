@@ -2,7 +2,7 @@ name: W3C SSI Compliance Tests
 
 # Two checks:
 #   1. The W3C VC layer (2_w3c-ssi-layer/verifiable-credentials) pytest suite.
-#      Verified locally on this trunk: 28 passing.
+#      Verified locally on this trunk: 28 passing. (All suites: python-full-suite.)
 #   2. The W3C compliance checker (cv2x-testbed/scripts/w3c_compliance_checker.py),
 #      which scores the implementation against DID Core, VC Data Model and SSI
 #      principles and writes w3c_compliance_report.json.
@@ -43,6 +43,58 @@ jobs:
 
     - name: Run VC layer tests
       run: python -m pytest tests/test_vc_layer.py -v
+
+  python-full-suite:
+    # Review 2 (Q-2): the vc-layer job above runs only test_vc_layer.py. This
+    # job runs every Python suite: the MOBI VID layer (starts its own Hardhat
+    # node on 8547), the DID resolver and review-02 negative tests, and
+    # cv2x-testbed/tests (on-chain cases use a node on 8548 and contracts
+    # compiled from 1_blockchain-identity/contracts/MOBI, because the tracked
+    # cv2x-testbed/artifacts predate the source fixes). A skipped test fails
+    # the job: every suite skips cleanly when its node is missing, and a skip
+    # must not read as green.
+    name: All Python suites (no skips)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: 1_blockchain-identity/package-lock.json
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: |
+        (cd 1_blockchain-identity && npm ci && npx hardhat compile)
+        python -m pip install eth-account coincurve cryptography web3 pytest
+
+    - name: Start Hardhat node for cv2x-testbed on-chain tests
+      shell: bash
+      run: |
+        (cd 1_blockchain-identity && nohup npx hardhat node --port 8548 > /tmp/node8548.log 2>&1 &)
+        for i in $(seq 1 60); do grep -q "Started HTTP" /tmp/node8548.log && break; sleep 1; done
+        grep -q "Started HTTP" /tmp/node8548.log || { cat /tmp/node8548.log; exit 1; }
+        mkdir -p /tmp/cv2x-art && ln -sfn "$GITHUB_WORKSPACE/1_blockchain-identity/artifacts/contracts/MOBI" /tmp/cv2x-art/contracts
+
+    - name: Run all Python suites
+      shell: bash
+      env:
+        CV2X_TEST_RPC_URL: http://127.0.0.1:8548
+        CV2X_TEST_ARTIFACTS_DIR: /tmp/cv2x-art
+      run: |
+        set -o pipefail
+        python -m pytest 2_w3c-ssi-layer cv2x-testbed/tests -q -rs | tee pytest.log
+        if grep -qE '[0-9]+ skipped' pytest.log; then
+          echo "::error::Python tests were skipped; see the SKIPPED lines above"
+          exit 1
+        fi
 
   compliance-score:
     name: W3C compliance score
