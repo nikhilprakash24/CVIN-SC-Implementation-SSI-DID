@@ -11,6 +11,7 @@ Features:
 - Revocation on-chain
 """
 
+import os
 import time
 import json
 import hashlib
@@ -34,6 +35,17 @@ from identity.base import (
     IdentityMetrics,
     VehicleCredential
 )
+
+_ABI_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                         'contracts', 'ERC1056Registry_abi.json')
+
+# Maximum assumed difference between this host's clock and the chain's block
+# timestamps. Attribute validity (`validTo`) is chain time; when a validTo lies
+# within this window of the wall clock, the chain's latest block timestamp is
+# fetched (one extra RPC) to decide. A local Hardhat node with automine runs a
+# few seconds ahead of the wall clock, so a revocation (validTo = block.timestamp)
+# can look "still valid" by the wall clock alone.
+CLOCK_SKEW_S = 900
 
 
 class ERC1056Provider(IdentityProvider):
@@ -102,8 +114,10 @@ class ERC1056Provider(IdentityProvider):
     def _load_contract(self, address: str):
         """Load contract ABI and create contract instance"""
         # Load ABI from compiled contract
+        # Resolved relative to this module, not the CWD (review 02, T-12): the
+        # inline fallback ABI has no events, so key resolution needs this file.
         try:
-            with open('contracts/ERC1056Registry_abi.json', 'r') as f:
+            with open(_ABI_PATH, 'r') as f:
                 abi = json.load(f)
         except FileNotFoundError:
             # Inline ABI for bootstrapping
@@ -180,12 +194,22 @@ class ERC1056Provider(IdentityProvider):
     @staticmethod
     def vehicle_account(vehicle_id: str):
         """
-        Deterministic Ethereum account for a vehicle (the DID subject / controller).
+        TEST-ONLY deterministic Ethereum account for a vehicle (the DID subject /
+        controller).
+
+        INSECURE BY CONSTRUCTION (review 02, T-11): the controller private key is
+        sha256(vehicle_id). Anyone who knows (or guesses) a vehicle id can derive
+        that vehicle's controller key and rotate or revoke its identity. This
+        exists only so the local-testbed experiments can re-derive the account
+        without key storage; a real deployment must generate the controller key
+        with a CSPRNG and keep it in the vehicle's secure element / HSM.
 
         ERC1056Registry guards registerVehicle/updateVehicleKey/revokeIdentity with
         onlyOwner(identity, msg.sender); identityOwner() defaults to the identity
         itself, so these transactions must be signed by this account.
         """
+        # !!! TEST-ONLY KEY DERIVATION — DO NOT USE OUTSIDE THE LOCAL TESTBED !!!
+        # !!! controller key = sha256(vehicle_id): publicly derivable (T-11).  !!!
         return Account.from_key(hashlib.sha256(vehicle_id.encode()).digest())
 
     def _send_tx(self, contract_fn, sender, gas: int):
@@ -429,9 +453,11 @@ class ERC1056Provider(IdentityProvider):
             if not identity_data:
                 return False, metrics
 
-            # Check revocation
-            is_revoked, check_time = self.check_revocation_status_by_address(vehicle_address)
-            if is_revoked:
+            # Check revocation. getIdentityInfo (the eth_call inside the
+            # resolution above) already returned the registry's revoked flag,
+            # read together with the `changed` pointer the key was resolved
+            # from; a second isRevoked eth_call is redundant (review 02, T-5).
+            if identity_data.get('is_revoked', True):
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
@@ -600,9 +626,9 @@ class ERC1056Provider(IdentityProvider):
                 checksum
             ).call()
 
-            # ERC-1056 resolution: walk the `previousChange` linked list of
-            # blocks (1 eth_getLogs per hop) until the current verification key
-            # attribute is found. Same algorithm as ethr-did-resolver.
+            # ERC-1056 resolution: collect the identity's events along the
+            # `previousChange` linked list (1 eth_getLogs per hop), then replay
+            # them forward (T-2). See _resolve_key_from_events.
             public_key_hex, valid_to, hops = self._resolve_key_from_events(checksum, last_changed)
 
             identity_data = {
@@ -624,11 +650,28 @@ class ERC1056Provider(IdentityProvider):
             return None, (time.time() - start_time) * 1000
 
     def _resolve_key_from_events(self, checksum_address: str, last_changed: int,
-                                 max_hops: int = 64):
+                                 max_hops: int = 256):
         """
-        Follow the ERC-1056 change chain backwards from block `last_changed`
-        and return (public_key_hex, valid_to, hops) for the newest still-valid
-        key attribute, or (None, None, hops) if none exists.
+        ERC-1056 key resolution by forward replay (review 02, T-2).
+
+        1. Collect: follow the `previousChange` chain backwards from block
+           `last_changed` (1 eth_getLogs per hop, as ethr-did-resolver does)
+           and keep every event for this identity.
+        2. Replay: sort the events by (blockNumber, logIndex) and apply them
+           oldest-first. For DIDAttributeChanged the attribute is the pair
+           (name, value); the newest event for a pair wins, and if its
+           `validTo` is not in the future (a `revokeAttribute` sets
+           validTo = block.timestamp) the pair is removed.
+        3. Select: among the surviving `veriKey` attributes, return the most
+           recently set one.
+
+        The previous implementation walked backwards and returned the first
+        still-valid key it met, so a revocation event (validTo <= now) was
+        skipped and the older "set" event for the same key was returned: a
+        key revoked by its owner kept verifying messages.
+
+        Returns (public_key_hex, valid_to, hops), or (None, None, hops) when no
+        valid key exists.
         """
         identity_topic = '0x' + checksum_address[2:].lower().rjust(64, '0')
         events = {
@@ -637,8 +680,9 @@ class ERC1056Provider(IdentityProvider):
             self.contract.events.DIDAttributeChanged().topic: self.contract.events.DIDAttributeChanged(),
             self.contract.events.DIDRevoked().topic: self.contract.events.DIDRevoked(),
         }
-        now = int(time.time())
 
+        # 1. collect
+        collected = []
         block = int(last_changed)
         hops = 0
         while block > 0 and hops < max_hops:
@@ -649,34 +693,69 @@ class ERC1056Provider(IdentityProvider):
                 'toBlock': block,
                 'topics': [None, identity_topic],
             })
-
             previous_change = None
-            found_key = None
-            found_valid_to = None
             for raw in logs:
                 event = events.get(Web3.to_hex(raw['topics'][0]))
                 if event is None:
                     continue
                 args = event.process_log(raw)['args']
+                collected.append((int(raw['blockNumber']), int(raw['logIndex']),
+                                  event.event_name, args))
                 if 'previousChange' in args:
                     prev = int(args['previousChange'])
-                    previous_change = prev if previous_change is None else min(previous_change, prev)
-                if (event.event_name == 'DIDAttributeChanged'
-                        and bytes(args['name']) == self.KEY_ATTRIBUTE_NAME
-                        and int(args['validTo']) > now):
-                    # later logs in the same block supersede earlier ones
-                    found_key = bytes(args['value']).hex()
-                    found_valid_to = int(args['validTo'])
-
-            if found_key is not None:
-                return found_key, found_valid_to, hops
-
-            # DIDRevoked carries no previousChange, so the chain ends there.
-            if previous_change is None or previous_change >= block:
+                    if prev < block:
+                        previous_change = prev if previous_change is None else min(previous_change, prev)
+            # DIDRevoked carries no previousChange, so the chain ends there
+            # (cv2x ERC1056Registry, review 02 K-5).
+            if previous_change is None:
                 break
             block = previous_change
 
-        return None, None, hops
+        # 2. replay oldest-first; newest event per (name, value) wins
+        collected.sort(key=lambda e: (e[0], e[1]))
+        attributes = {}   # (name, value) -> (validTo, (block, logIndex))
+        for block_number, log_index, event_name, args in collected:
+            if event_name != 'DIDAttributeChanged':
+                continue
+            pair = (bytes(args['name']), bytes(args['value']))
+            attributes[pair] = (int(args['validTo']), (block_number, log_index))
+
+        # 3. keep the still-valid pairs; pick the most recently set veriKey
+        clock = _ValidityClock(self.w3)
+        best = None
+        for (name, value), (valid_to, order) in attributes.items():
+            if name != self.KEY_ATTRIBUTE_NAME:
+                continue
+            if not clock.is_valid(valid_to):
+                continue   # expired or revoked
+            if best is None or order > best[2]:
+                best = (value.hex(), valid_to, order)
+
+        if best is None:
+            return None, None, hops
+        return best[0], best[1], hops
+
+
+class _ValidityClock:
+    """
+    Decides `validTo > now` in chain time. Uses the wall clock when validTo is
+    more than CLOCK_SKEW_S away from it (no RPC), otherwise fetches the latest
+    block timestamp once (1 eth_getBlockByNumber) and compares against it.
+    """
+
+    def __init__(self, w3):
+        self.w3 = w3
+        self.wall = int(time.time())
+        self.chain_now = None
+
+    def is_valid(self, valid_to: int) -> bool:
+        if valid_to > self.wall + CLOCK_SKEW_S:
+            return True
+        if valid_to <= self.wall - CLOCK_SKEW_S:
+            return False
+        if self.chain_now is None:
+            self.chain_now = max(self.wall, int(self.w3.eth.get_block('latest')['timestamp']))
+        return valid_to > self.chain_now
 
 
 if __name__ == "__main__":
