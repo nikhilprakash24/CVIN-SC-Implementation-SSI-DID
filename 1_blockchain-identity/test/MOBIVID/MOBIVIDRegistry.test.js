@@ -219,6 +219,102 @@ describe("MOBI VID Registry V1 (birth certificates)", function () {
       ).to.be.revertedWith("Only owner can perform this action");
     });
   });
+
+  // K-3 (REVIEW_02): the public ERC-1056 changeOwner bypassed ownershipHistory,
+  // and changeOwner / revokeDelegate / revokeAttribute ignored revoked[].
+  describe("K-3: no ownership bypass, revoked identities are frozen", function () {
+    const KEY = ethers.encodeBytes32String("sigAuth");
+    const ATTR = ethers.keccak256(ethers.toUtf8Bytes("did/svc/Endpoint"));
+
+    async function bornFixture() {
+      const f = await deployV1Fixture();
+      await f.registry.connect(f.manufacturer).registerVehicleBirth(
+        f.vehicle.address, VIN_HASH, "encrypted:VIN", BIRTH_CERT_HASH,
+        f.firstOwner.address, BIRTH_ATTRS
+      );
+      return f;
+    }
+
+    it("public changeOwner cannot move a registered vehicle outside transferVehicleOwnership", async function () {
+      const { registry, firstOwner, outsider, vehicle } = await loadFixture(bornFixture);
+      await expect(
+        registry.connect(firstOwner).changeOwner(vehicle.address, outsider.address)
+      ).to.be.revertedWith("MOBIVID: use transferVehicleOwnership");
+      expect(await registry.identityOwner(vehicle.address)).to.equal(firstOwner.address);
+      expect(await registry.getOwnershipHistoryCount(vehicle.address)).to.equal(0n);
+    });
+
+    it("public changeOwner still works for an identity with no birth certificate (plain ERC-1056)", async function () {
+      const { registry, outsider, secondOwner } = await loadFixture(deployV1Fixture);
+      await expect(registry.connect(outsider).changeOwner(outsider.address, secondOwner.address))
+        .to.emit(registry, "DIDOwnerChanged");
+      expect(await registry.identityOwner(outsider.address)).to.equal(secondOwner.address);
+    });
+
+    it("a revoked vehicle cannot be transferred, re-owned, or have delegates/attributes revoked", async function () {
+      const { registry, firstOwner, secondOwner, vehicle } = await loadFixture(bornFixture);
+      await registry.connect(firstOwner).addDelegate(vehicle.address, KEY, secondOwner.address, 3600);
+      await registry.connect(firstOwner).revokeIdentity(vehicle.address);
+
+      await expect(
+        registry.connect(firstOwner).transferVehicleOwnership(vehicle.address, secondOwner.address, 1, "X")
+      ).to.be.revertedWith("Vehicle identity is revoked");
+      await expect(
+        registry.connect(firstOwner).revokeDelegate(vehicle.address, KEY, secondOwner.address)
+      ).to.be.revertedWith("Identity is revoked");
+      await expect(
+        registry.connect(firstOwner).revokeAttribute(vehicle.address, ATTR, "0x01")
+      ).to.be.revertedWith("Identity is revoked");
+      await expect(
+        registry.connect(firstOwner).revokeIdentity(vehicle.address)
+      ).to.be.revertedWith("Identity is revoked");
+    });
+
+    it("a revoked non-vehicle identity cannot be re-assigned through public changeOwner", async function () {
+      const { registry, outsider, secondOwner } = await loadFixture(deployV1Fixture);
+      await registry.connect(outsider).revokeIdentity(outsider.address);
+      await expect(
+        registry.connect(outsider).changeOwner(outsider.address, secondOwner.address)
+      ).to.be.revertedWith("Identity is revoked");
+      expect(await registry.identityOwner(outsider.address)).to.equal(outsider.address);
+    });
+  });
+
+  // K-4 (REVIEW_02): registerVehicleBirth overwrote owners[] with no check, so
+  // an authorised manufacturer could take over any existing did:ethr or
+  // re-birth a revoked one.
+  describe("K-4: registerVehicleBirth only accepts a pristine identity", function () {
+    async function birth(f, identity, attrs = BIRTH_ATTRS) {
+      return f.registry.connect(f.manufacturer).registerVehicleBirth(
+        identity, VIN_HASH, "encrypted:VIN", BIRTH_CERT_HASH,
+        f.firstOwner.address, attrs
+      );
+    }
+
+    it("rejects an identity whose ERC-1056 owner was already changed", async function () {
+      const f = await loadFixture(deployV1Fixture);
+      await f.registry.connect(f.vehicle).changeOwner(f.vehicle.address, f.secondOwner.address);
+      await expect(birth(f, f.vehicle.address)).to.be.revertedWith("MOBIVID: identity already has DID history");
+      expect(await f.registry.identityOwner(f.vehicle.address)).to.equal(f.secondOwner.address);
+    });
+
+    it("rejects a revoked identity", async function () {
+      const f = await loadFixture(deployV1Fixture);
+      await f.registry.connect(f.vehicle).revokeIdentity(f.vehicle.address);
+      // Empty birth attributes: the pre-fix code then reached no revoked[]
+      // check at all and re-birthed the revoked identity.
+      await expect(birth(f, f.vehicle.address, "0x")).to.be.revertedWith("MOBIVID: identity already has DID history");
+      await expect(birth(f, f.vehicle.address)).to.be.revertedWith("MOBIVID: identity already has DID history");
+    });
+
+    it("rejects an identity that already published DID attributes", async function () {
+      const f = await loadFixture(deployV1Fixture);
+      await f.registry.connect(f.vehicle).setAttribute(
+        f.vehicle.address, ethers.keccak256(ethers.toUtf8Bytes("did/pub/k")), "0x01", 3600
+      );
+      await expect(birth(f, f.vehicle.address)).to.be.revertedWith("MOBIVID: identity already has DID history");
+    });
+  });
 });
 
 describe("MOBI VID Registry V2 (lifecycle events)", function () {
@@ -247,6 +343,13 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
 
   const DATA_HASH = ethers.keccak256(ethers.toUtf8Bytes("event-data"));
   const CRED_HASH = ethers.keccak256(ethers.toUtf8Bytes("signed-event-vc"));
+
+  it("K-3: V2 inherits the changeOwner guard (no transfer outside ownershipHistory)", async function () {
+    const { registry, firstOwner, outsider, vehicle } = await loadFixture(deployV2Fixture);
+    await expect(
+      registry.connect(firstOwner).changeOwner(vehicle.address, outsider.address)
+    ).to.be.revertedWith("MOBIVID: use transferVehicleOwnership");
+  });
 
   describe("recordLifecycleEvent", function () {
     it("records MAINTENANCE, INSPECTION, ACCIDENT, RECALL and REGISTRATION events", async function () {
