@@ -390,13 +390,18 @@ describe("CVINCombinedIdentity (ERC-1056 + ERC-735 hybrid)", function () {
                 expect(await registry.hasValidClaim(identity.address, CLAIM_TOPIC_VIN, issuerWallet.address)).to.be.false;
             });
 
-            it("issuer removal records the revocation (event + view)", async function () {
+            it("issuer removal records the revoked content in revokedClaims", async function () {
+                const keyFor = async (data) => ethers.solidityPackedKeccak256(
+                    ["address", "bytes32"],
+                    [issuerWallet.address, ethers.solidityPackedKeccak256(
+                        ["address", "address", "uint256", "bytes"],
+                        [await registry.getAddress(), identity.address, CLAIM_TOPIC_VIN, data])]
+                );
+                expect(await registry.revokedClaims(await keyFor(vinData))).to.be.false;
                 await expect(registry.connect(issuerSigner).removeClaim(identity.address, claimId))
-                    .to.emit(registry, "ClaimRevokedByIssuer");
-                expect(await registry.isClaimRevoked(identity.address, issuerWallet.address, CLAIM_TOPIC_VIN, vinData))
-                    .to.be.true;
-                expect(await registry.isClaimRevoked(identity.address, issuerWallet.address, CLAIM_TOPIC_VIN, "0x00"))
-                    .to.be.false;
+                    .to.emit(registry, "ClaimRemoved");
+                expect(await registry.revokedClaims(await keyFor(vinData))).to.be.true;
+                expect(await registry.revokedClaims(await keyFor("0x00"))).to.be.false;
             });
 
             it("a malleated (high-s) copy of the revoked signature is also rejected", async function () {

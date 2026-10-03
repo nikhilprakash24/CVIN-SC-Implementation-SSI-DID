@@ -85,7 +85,10 @@ contract CVINCombinedIdentity {
     mapping(address => mapping(uint256 => bytes32[])) private _claimIdsByTopic;
 
     /// @notice Issuer-revoked claim content (REVIEW_02 K-2).
-    /// @dev key = keccak256(abi.encodePacked(issuer, keccak256(abi.encodePacked(address(this), identity, topic, data)))).
+    /// @dev key = keccak256(abi.encodePacked(issuer, keccak256(abi.encodePacked(address(this), identity, topic, data)))),
+    ///      i.e. the issuer and the raw digest it signed. Set only by an
+    ///      issuer removal. No extra event or view, to keep the deployment
+    ///      cost of the fix small; verifiers query this getter.
     mapping(bytes32 => bool) public revokedClaims;
 
     // ============ Events ============
@@ -123,13 +126,6 @@ contract CVINCombinedIdentity {
         address indexed identity,
         uint256 indexed topic,
         address issuer
-    );
-    /// @notice The claim's issuer removed it; its signed content can no longer be added.
-    event ClaimRevokedByIssuer(
-        bytes32 indexed claimId,
-        address indexed identity,
-        address indexed issuer,
-        bytes32 revocationKey
     );
 
     // ============ Modifiers ============
@@ -297,11 +293,14 @@ contract CVINCombinedIdentity {
         delete _claims[identity][claimId];
 
         if (msg.sender == claim.issuer) {
-            bytes32 revocationKey = keccak256(
-                abi.encodePacked(claim.issuer, keccak256(abi.encodePacked(address(this), identity, claim.topic, claim.data)))
-            );
-            revokedClaims[revocationKey] = true;
-            emit ClaimRevokedByIssuer(claimId, identity, claim.issuer, revocationKey);
+            revokedClaims[
+                keccak256(
+                    abi.encodePacked(
+                        claim.issuer,
+                        keccak256(abi.encodePacked(address(this), identity, claim.topic, claim.data))
+                    )
+                )
+            ] = true;
         }
 
         emit ClaimRemoved(claimId, identity, claim.topic, claim.issuer);
@@ -350,16 +349,6 @@ contract CVINCombinedIdentity {
         bytes32 claimId = keccak256(abi.encodePacked(issuer, topic));
         Claim storage claim = _claims[identity][claimId];
         return claim.issuer == issuer && claim.topic == topic;
-    }
-
-    /// @notice Has `issuer` revoked its claim with this (topic, data) on `identity`?
-    function isClaimRevoked(
-        address identity,
-        address issuer,
-        uint256 topic,
-        bytes calldata data
-    ) external view returns (bool) {
-        return revokedClaims[keccak256(abi.encodePacked(issuer, _claimDigest(identity, topic, data)))];
     }
 
     // ============ Internal ============

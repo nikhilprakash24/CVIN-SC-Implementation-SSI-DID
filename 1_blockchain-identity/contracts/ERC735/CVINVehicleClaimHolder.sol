@@ -159,14 +159,16 @@ contract CVINVehicleClaimHolder is IERC735 {
     mapping(uint256 => bytes32[]) private claimIdsByTopic;
 
     /// @notice Issuer-revoked claim content (REVIEW_02 K-2).
-    /// @dev key = keccak256(abi.encodePacked(issuer, keccak256(abi.encodePacked(address(this), topic, data)))).
+    /// @dev key = keccak256(abi.encodePacked(issuer, keccak256(abi.encodePacked(address(this), topic, data)))),
+    ///      i.e. the issuer and the digest it signed. Set only by an issuer
+    ///      removal (an issuer removal is the ClaimRemoved whose tx sender is
+    ///      the issuer). No extra event or view, to keep the per-vehicle
+    ///      deployment cost of the fix small; verifiers query this getter.
     mapping(bytes32 => bool) public revokedClaims;
 
     // ============ Events (identity lifecycle, beyond ERC-735) ============
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     event VehicleIdentityCreated(bytes32 indexed vinHash, string vin, address indexed owner);
-    /// @notice The claim's issuer removed it; its signed content can no longer be added.
-    event ClaimRevokedByIssuer(bytes32 indexed claimId, address indexed issuer, bytes32 revocationKey);
 
     // ============ Modifiers ============
     modifier onlyOwner() {
@@ -272,14 +274,14 @@ contract CVINVehicleClaimHolder is IERC735 {
         delete claims[claimId];
 
         if (msg.sender == claim.issuer) {
-            bytes32 revocationKey = keccak256(
-                abi.encodePacked(
-                    claim.issuer,
-                    keccak256(abi.encodePacked(address(this), claim.topic, claim.data))
+            revokedClaims[
+                keccak256(
+                    abi.encodePacked(
+                        claim.issuer,
+                        keccak256(abi.encodePacked(address(this), claim.topic, claim.data))
+                    )
                 )
-            );
-            revokedClaims[revocationKey] = true;
-            emit ClaimRevokedByIssuer(claimId, claim.issuer, revocationKey);
+            ] = true;
         }
 
         emit ClaimRemoved(
@@ -328,19 +330,6 @@ contract CVINVehicleClaimHolder is IERC735 {
     /// @notice Convenience: check whether a live claim exists for (issuer, topic)
     function claimExists(address issuer, uint256 topic) external view returns (bool) {
         return claims[keccak256(abi.encodePacked(issuer, topic))].issuer != address(0);
-    }
-
-    /// @notice Has `issuer` revoked its claim with this (topic, data) on this identity?
-    function isClaimRevoked(address issuer, uint256 topic, bytes calldata data)
-        external
-        view
-        returns (bool)
-    {
-        return revokedClaims[
-            keccak256(
-                abi.encodePacked(issuer, keccak256(abi.encodePacked(address(this), topic, data)))
-            )
-        ];
     }
 
     // ============ Ownership (MANAGEMENT-key role) ============

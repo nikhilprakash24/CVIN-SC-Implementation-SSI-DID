@@ -260,16 +260,20 @@ describe("CVINVehicleClaimHolder (ERC-735)", function () {
             expect(await claimHolder.claimExists(insurer.address, INSURANCE)).to.be.false;
         });
 
-        it("K-2: issuer removal records the revocation (event + view)", async function () {
-            const key = ethers.solidityPackedKeccak256(
+        async function revocationKey() {
+            return ethers.solidityPackedKeccak256(
                 ["address", "bytes32"],
                 [insurer.address, ethers.solidityPackedKeccak256(
                     ["address", "uint256", "bytes"], [await claimHolder.getAddress(), INSURANCE, data])]
             );
+        }
+
+        it("K-2: issuer removal records the revoked content in revokedClaims", async function () {
+            const key = await revocationKey();
+            expect(await claimHolder.revokedClaims(key)).to.be.false;
             await expect(claimHolder.connect(insurer).removeClaim(claimId))
-                .to.emit(claimHolder, "ClaimRevokedByIssuer")
-                .withArgs(claimId, insurer.address, key);
-            expect(await claimHolder.isClaimRevoked(insurer.address, INSURANCE, data)).to.be.true;
+                .to.emit(claimHolder, "ClaimRemoved");
+            expect(await claimHolder.revokedClaims(key)).to.be.true;
         });
 
         it("K-2: issuer can re-issue the topic with new signed data after revoking", async function () {
@@ -286,7 +290,7 @@ describe("CVINVehicleClaimHolder (ERC-735)", function () {
 
         it("K-2: owner self-removal is not a revocation - owner may re-anchor the same claim", async function () {
             await claimHolder.connect(owner).removeClaim(claimId);
-            expect(await claimHolder.isClaimRevoked(insurer.address, INSURANCE, data)).to.be.false;
+            expect(await claimHolder.revokedClaims(await revocationKey())).to.be.false;
             await expect(
                 claimHolder
                     .connect(owner)
