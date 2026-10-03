@@ -525,8 +525,11 @@ class MOBIVIDProvider(IdentityProvider):
         signed_message = {
             'message': message,
             'signature': signature.hex(),
+            # Informational only: verify_message() never trusts this field;
+            # it resolves the key from the registration record (T-4).
             'public_key': vehicle_data['public_key'],
             'vehicle_did': vehicle_id,
+            'vehicle_identity': vehicle_identity,
             'timestamp': int(time.time())
         }
 
@@ -537,21 +540,75 @@ class MOBIVIDProvider(IdentityProvider):
 
         return signed_message
 
+    def _registered_key_for(self, signed_message: Dict) -> Optional[str]:
+        """
+        Resolve the verification key for the sender named in the message
+        (`vehicle_identity`, else `vehicle_did`) from this provider's
+        registration record, and reject revoked or unknown identities.
+
+        The key is never taken from the message itself (review 02, T-4): a
+        message carrying its own public key proves only that *someone* signed
+        it. MOBIVIDRegistry anchors no signing key on-chain, so the
+        registration record kept at register_vehicle_birth() is the key
+        source; the on-chain registry is consulted for revocation and
+        existence when a contract is loaded.
+
+        Returns the registered public key (hex), or None (reject).
+        """
+        sender = signed_message.get('vehicle_identity') or signed_message.get('vehicle_did')
+        if not isinstance(sender, str):
+            return None
+        if sender.startswith('did:'):
+            identity = sender.split(':')[-1]
+        elif sender.startswith('0x'):
+            identity = sender
+        else:
+            return None   # only DID / address senders are resolvable
+        identity = identity.lower()
+
+        record = None
+        for known, data in getattr(self, 'vehicles', {}).items():
+            if known.lower() == identity and isinstance(data, dict) and data.get('public_key'):
+                record = data
+                break
+        if record is None or record.get('revoked', False):
+            return None
+
+        contract = getattr(self, 'contract', None)
+        if contract is not None:
+            # getVehicleInfo reverts for an unregistered vehicle -> exception -> reject
+            _birth, _owner, is_revoked, _transfers = contract.functions.getVehicleInfo(
+                Web3.to_checksum_address(identity)
+            ).call()
+            if is_revoked:
+                return None
+        return record['public_key']
+
     def verify_message(self, signed_message: Dict) -> Tuple[bool, IdentityMetrics]:
-        """Verify a signed V2X message"""
+        """
+        Verify a signed V2X message against the sender's REGISTERED key.
+
+        Fails closed: unknown sender, revoked identity (local record or
+        on-chain), a message-supplied key that differs from the registered
+        one, or a bad signature all return False.
+        """
         start_time = time.time()
 
         try:
-            # Extract components
             message = signed_message['message']
             signature_hex = signed_message['signature']
-            public_key_hex = signed_message['public_key']
+
+            public_key_hex = self._registered_key_for(signed_message)
+            if public_key_hex is None:
+                raise ValueError("sender not registered, or revoked")
+            claimed = signed_message.get('public_key')
+            if claimed is not None and str(claimed).lower() != public_key_hex.lower():
+                raise ValueError("message key does not match the registered key")
 
             # Reconstruct public key
-            public_key_bytes = bytes.fromhex(public_key_hex)
             public_key = ec.EllipticCurvePublicKey.from_encoded_point(
                 ec.SECP256K1(),
-                public_key_bytes
+                bytes.fromhex(public_key_hex)
             )
 
             # Hash message
@@ -568,7 +625,7 @@ class MOBIVIDProvider(IdentityProvider):
 
             is_valid = True
 
-        except Exception as e:
+        except Exception:
             is_valid = False
 
         # Update metrics
@@ -580,7 +637,13 @@ class MOBIVIDProvider(IdentityProvider):
         return is_valid, metrics
 
     def revoke_credential(self, vehicle_id: str, reason: str = "") -> bool:
-        """Revoke a vehicle's credential"""
+        """
+        Revoke a vehicle's credential on-chain.
+
+        Returns True only if the revokeIdentity transaction was mined with
+        receipt.status == 1 (review 02, T-4); a reverted transaction returns
+        False and leaves the local record unrevoked.
+        """
         vehicle_identity = self._vehicle_id_to_identity(vehicle_id)
         vehicle_identity_addr = Web3.to_checksum_address(vehicle_identity)
 
@@ -597,6 +660,10 @@ class MOBIVIDProvider(IdentityProvider):
             signed = self.account.sign_transaction(transaction)
             tx_hash = self.w3.eth.send_raw_transaction(signed.raw_transaction)
             receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash)
+
+            if receipt['status'] != 1:
+                print(f"Revocation failed: transaction reverted (status={receipt['status']})")
+                return False
 
             if vehicle_identity in self.vehicles:
                 self.vehicles[vehicle_identity]['revoked'] = True
