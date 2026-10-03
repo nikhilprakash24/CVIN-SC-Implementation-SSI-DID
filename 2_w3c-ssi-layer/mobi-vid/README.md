@@ -161,9 +161,16 @@ recall = recorder.record_event(
             "description": "Firmware fault"},
 )
 
-# Verified history
-history = VehicleHistoryAggregator(registry).get_vehicle_history(
-    vehicle.address, vc_store=recorder.vc_store)
+# Verification — pass each issuer's status registry: a VC whose
+# credentialStatus names a registry the verifier does not hold is INVALID
+# (fail closed; review 02, S-2).
+report = BirthCertificateVerifier(
+    registry, status_registries=[issuer.status_registry]
+).verify(birth["verifiableCredential"], vehicle.address)
+
+history = VehicleHistoryAggregator(
+    registry, status_registries=[recorder.status_registry]
+).get_vehicle_history(vehicle.address, vc_store=recorder.vc_store)
 ```
 
 ## Running the tests
