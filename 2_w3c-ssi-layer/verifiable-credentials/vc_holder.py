@@ -34,9 +34,14 @@ class HolderWallet:
     Credential wallet bound to a holder DID and secp256k1 key.
 
     The holder key signs Verifiable Presentations (proofPurpose:
-    "authentication"), proving that the presenter controls the holder DID
-    — this is what stops a stolen credential from being replayed by a
-    third party.
+    "authentication"), proving that the presenter controls the holder DID.
+    That signature alone does NOT stop a stolen credential from being
+    presented: a thief can sign a VP under the thief's own DID. What stops
+    it is the verifier's holder-binding check (CredentialVerifier,
+    review 02 S-1): every embedded credential's credentialSubject.id must
+    equal the VP's holder (or be related to it by an explicitly configured
+    subject->holder relation). The wallet does not enforce this itself —
+    it will package any stored credential.
     """
 
     def __init__(self, holder_did: str, private_key: Optional[str] = None):
@@ -174,10 +179,11 @@ class HolderWallet:
             "challenge": challenge,
             "domain": domain,
         }
-        # disclosedClaims are excluded from the VP signature payload domain
-        # of each inner VC (they were never part of the issuer-signed VC);
-        # the VP proof covers the presentation as assembled, so tampering
-        # with disclosed values still breaks digest checks at verify time.
+        # disclosedClaims are not covered by the ISSUER's signature on each
+        # inner VC (they were never part of the issuer-signed VC), but they
+        # ARE covered by this holder signature, which spans the presentation
+        # as assembled. A tampered disclosed value is caught twice: by this
+        # VP signature and by the per-claim digest check at verify time.
         proof["proofValue"] = sign_document(
             presentation, proof, self._account.key
         )
