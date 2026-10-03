@@ -16,3 +16,6 @@ cv2x-testbed/scripts/comparison_results.json
 
 # Benchmark harness: only the promoted latest run is tracked
 1_blockchain-identity/results/metrics/runs/
+
+# Claude Code agent worktrees (local only)
+.claude/worktrees/

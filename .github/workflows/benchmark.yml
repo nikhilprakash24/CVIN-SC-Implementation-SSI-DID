@@ -14,7 +14,9 @@ name: Performance Benchmarks
 
 on:
   push:
-    branches: [ main ]
+    # claude/** added in review 2 (Q-1): the trunk has no `main`, so with
+    # `[ main ]` alone none of these jobs ran on push.
+    branches: [ main, claude/** ]
   schedule:
     # Nightly at 00:00 UTC
     - cron: '0 0 * * *'
@@ -117,9 +119,13 @@ jobs:
         a = cells(json.load(open("/tmp/gas_benchmark.committed.json")))
         b = cells(json.load(open("4_comparison-framework/results/gas_benchmark.json")))
         diff = [(k, a[k], b[k]) for k in a if k in b and a[k] != b[k]]
-        print(f"{len(a)} committed cells, {len(diff)} differ")
+        # Review 2 (Q-12): a cell that appears or disappears is also drift.
+        missing, added = sorted(set(a) - set(b)), sorted(set(b) - set(a))
+        print(f"{len(a)} committed cells, {len(diff)} differ, {len(missing)} missing, {len(added)} new")
         for k, x, y in diff: print(f"  {k}: {x} -> {y}")
-        sys.exit(1 if diff else 0)
+        for k in missing: print(f"  missing: {k}")
+        for k in added: print(f"  new: {k}")
+        sys.exit(1 if (diff or missing or added) else 0)
         PY
 
     - name: Upload gas results
