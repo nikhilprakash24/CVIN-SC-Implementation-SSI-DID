@@ -5,21 +5,21 @@
 \toprule
 Operation & ERC-1056 & ERC-721 & ERC-725 & ERC-735 & ERC-1155 & ERC-725xy & LSP8 & ERC-4337 & CVIN-Combined \\
 \midrule
-C1\_create\_identity & 11.644 / 23.617 & 14.434 / 19.007 & 23.741 / 32.455 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-C2\_create\_with\_attributes & 86.135 / 113.235 & 15.046 / 22.422 & 82.659 / 103.03 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-U1\_rotate\_controller & 8.354 / 12.412 & 10.252 / 15.283 & 7.494 / 12.651 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-U2\_add\_delegate & 8.553 / 13.09 & 8.655 / 11.968 & 8.636 / 12.618 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-U3\_set\_attribute & 8.81 / 12.993 & 8.538 / 11.825 & 8.551 / 12.823 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-U4\_transfer\_vehicle & 8.545 / 10.49 & 11.691 / 15.087 & 8.407 / 11.945 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-U5\_meta\_tx & 13.154 / 17.096 & n/a & n/a & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-D1\_revoke\_delegate & 9.107 / 13.836 & 9.493 / 13.276 & 11.041 / 14.296 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-D2\_revoke\_attribute & 9.069 / 12.251 & n/a & 10.479 / 14.86 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-D3\_deactivate\_identity & 8.715 / 13.041 & 10.205 / 12.397 & 7.938 / 10.779 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-V1\_issuer\_key\_anchor & 8.466 / 13.608 & 15.236 / 20.983 & 9.353 / 14.868 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-V3\_anchor\_status & 9.038 / 13.956 & 10.255 / 13.567 & 8.174 / 11.757 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-V5\_revoke\_credential & 8.391 / 12.279 & 9.689 / 13.629 & 26.711 / 68.47 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+C1\_create\_identity & 9.412 / 12.175 & 12.109 / 18.354 & 19.867 / 26.355 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+C2\_create\_with\_attributes & 72.985 / 92.488 & 12.314 / 16.437 & 68.889 / 89.044 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+U1\_rotate\_controller & 7.492 / 10.877 & 9.524 / 11.588 & 6.667 / 9.369 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+U2\_add\_delegate & 7.558 / 9.577 & 6.95 / 12.642 & 6.811 / 7.501 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+U3\_set\_attribute & 7.858 / 10.533 & 7.451 / 10.528 & 6.972 / 8.779 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+U4\_transfer\_vehicle & 6.977 / 9.471 & 9.044 / 11.815 & 6.439 / 7.386 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+U5\_meta\_tx & 11.785 / 15.346 & n/a & n/a & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+D1\_revoke\_delegate & 7.755 / 8.858 & 7.746 / 9.818 & 9.448 / 20.378 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+D2\_revoke\_attribute & 7.576 / 8.547 & n/a & 9.052 / 22.374 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+D3\_deactivate\_identity & 7.682 / 10.41 & 8.746 / 11.164 & 6.754 / 9.71 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+V1\_issuer\_key\_anchor & 7.482 / 10.895 & 12.757 / 18.215 & 6.804 / 10.16 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+V3\_anchor\_status & 7.471 / 10.588 & 8.8 / 11.946 & 7.213 / 8.707 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+V5\_revoke\_credential & 7.464 / 10.222 & 8.072 / 11.91 & 8.019 / 16.648 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
 \bottomrule
 \end{tabular}
-\caption{L1 — Tx latency, median / p95 ms (local node, N=30) Run 2026-09-30T23-34-57Z\_3b786c2 · commit 3b786c2 · solc 0.8.24 cancun runs=200 viaIR=true · Hardhat in-process automine · N=30}
+\caption{L1 — Tx latency, median / p95 ms (local node, N=30) Run 2026-10-03T23-16-23Z\_6620ac7 · commit 6620ac7 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30}
 \label{tab:crud_latency_tx}
 \end{table}

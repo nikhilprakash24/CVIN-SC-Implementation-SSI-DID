@@ -16,4 +16,4 @@
 | V3_anchor_status | 256 | 256 | 128 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 | V5_revoke_credential | 256 | 256 | 64 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 
-_Run 2026-09-30T23-34-57Z_3b786c2 · commit 3b786c2 · solc 0.8.24 cancun runs=200 viaIR=true · Hardhat in-process automine · N=30_
+_Run 2026-10-03T23-16-23Z_6620ac7 · commit 6620ac7 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_

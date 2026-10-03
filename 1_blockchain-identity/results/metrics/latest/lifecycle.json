@@ -11,8 +11,8 @@
         "txCount": 9,
         "logBytes": 2272,
         "sstoreCount": 10,
-        "newSlotsEstimate": 3,
-        "latencyMs": 92.329643
+        "zeroToNonzeroSstores": 3,
+        "latencyMs": 75.997111
       },
       {
         "eventNo": 2,
@@ -23,32 +23,32 @@
         "txCount": 1,
         "logBytes": 192,
         "sstoreCount": 2,
-        "newSlotsEstimate": 2,
-        "latencyMs": 8.859177
+        "zeroToNonzeroSstores": 2,
+        "latencyMs": 6.966868
       },
       {
         "eventNo": 3,
         "event": "Registration credential anchored",
         "op": "V3_anchor_status",
         "actor": "issuer",
-        "gasUsed": 33906,
+        "gasUsed": 33918,
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 10.211246
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 8.14326
       },
       {
         "eventNo": 4,
         "event": "Insurance credential anchored",
         "op": "V3_anchor_status",
         "actor": "issuer",
-        "gasUsed": 33906,
+        "gasUsed": 33918,
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 8.68595
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 8.317354
       },
       {
         "eventNo": 5,
@@ -59,8 +59,8 @@
         "txCount": 1,
         "logBytes": 288,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 8.433939
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 9.856208
       },
       {
         "eventNo": 6,
@@ -71,8 +71,8 @@
         "txCount": 1,
         "logBytes": 320,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 9.891544
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 7.309534
       },
       {
         "eventNo": 7,
@@ -83,8 +83,8 @@
         "txCount": 1,
         "logBytes": 320,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 11.450476
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 8.427559
       },
       {
         "eventNo": 8,
@@ -95,8 +95,8 @@
         "txCount": 1,
         "logBytes": 320,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 8.256627
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 7.815431
       },
       {
         "eventNo": 9,
@@ -107,8 +107,8 @@
         "txCount": 1,
         "logBytes": 320,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 7.981457
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 9.279596
       },
       {
         "eventNo": 10,
@@ -119,23 +119,35 @@
         "txCount": 1,
         "logBytes": 320,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 8.913909
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 8.585795
       },
       {
         "eventNo": 11,
-        "event": "Key rotation (add new, revoke old)",
-        "op": "U2_add_delegate+D1_revoke_delegate",
+        "event": "Delegate key added (k1)",
+        "op": "U2_add_delegate",
         "actor": "owner",
-        "gasUsed": 87975,
-        "txCount": 2,
-        "logBytes": 384,
-        "sstoreCount": 4,
-        "newSlotsEstimate": 1,
-        "latencyMs": 23.303011
+        "gasUsed": 55131,
+        "txCount": 1,
+        "logBytes": 192,
+        "sstoreCount": 2,
+        "zeroToNonzeroSstores": 1,
+        "latencyMs": 9.24614
       },
       {
         "eventNo": 12,
+        "event": "Key rotation (k1 to k2)",
+        "op": "rotate_delegate (U2+D1)",
+        "actor": "owner",
+        "gasUsed": 87987,
+        "txCount": 2,
+        "logBytes": 384,
+        "sstoreCount": 4,
+        "zeroToNonzeroSstores": 1,
+        "latencyMs": 18.573773
+      },
+      {
+        "eventNo": 13,
         "event": "Ownership transfer (resale)",
         "op": "U4_transfer_vehicle",
         "actor": "owner→newOwner",
@@ -143,11 +155,11 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 2,
-        "newSlotsEstimate": 1,
-        "latencyMs": 10.85058
+        "zeroToNonzeroSstores": 1,
+        "latencyMs": 10.564422
       },
       {
-        "eventNo": 13,
+        "eventNo": 14,
         "event": "Re-registration credential",
         "op": "V3_anchor_status",
         "actor": "issuer",
@@ -155,23 +167,23 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 8.859516
-      },
-      {
-        "eventNo": 14,
-        "event": "Credential revocation (old insurance)",
-        "op": "V5_revoke_credential",
-        "actor": "issuer",
-        "gasUsed": 33458,
-        "txCount": 1,
-        "logBytes": 256,
-        "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 8.744339
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 11.161202
       },
       {
         "eventNo": 15,
+        "event": "Credential revocation (old insurance)",
+        "op": "V5_revoke_credential",
+        "actor": "issuer",
+        "gasUsed": 33470,
+        "txCount": 1,
+        "logBytes": 256,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 7.422948
+      },
+      {
+        "eventNo": 16,
         "event": "Second ownership transfer",
         "op": "U4_transfer_vehicle",
         "actor": "newOwner→thirdOwner",
@@ -179,11 +191,11 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 2,
-        "newSlotsEstimate": 0,
-        "latencyMs": 7.813542
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 6.591916
       },
       {
-        "eventNo": 16,
+        "eventNo": 17,
         "event": "End-of-life deactivation",
         "op": "D3_deactivate_identity",
         "actor": "admin/owner",
@@ -191,20 +203,20 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 7.518872
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 6.968867
       }
     ],
-    "lifetimeGas": 995586,
-    "lifetimeTxCount": 25,
-    "lifetimeLogBytes": 6272,
-    "lifetimeNewSlots": 7,
+    "lifetimeGas": 1050765,
+    "lifetimeTxCount": 26,
+    "lifetimeLogBytes": 6464,
+    "lifetimeZeroToNonzeroSstores": 8,
     "sharedDeployGas": 2673900,
     "perIdentityDeployGas": 0,
     "apportioned": {
-      "1": 3669486,
-      "1000": 998260,
-      "1000000": 995589
+      "1": 3724665,
+      "1000": 1053439,
+      "1000000": 1050768
     }
   },
   {
@@ -219,8 +231,8 @@
         "txCount": 1,
         "logBytes": 416,
         "sstoreCount": 27,
-        "newSlotsEstimate": 23,
-        "latencyMs": 13.715739
+        "zeroToNonzeroSstores": 23,
+        "latencyMs": 27.059894
       },
       {
         "eventNo": 2,
@@ -231,8 +243,8 @@
         "txCount": 1,
         "logBytes": 416,
         "sstoreCount": 24,
-        "newSlotsEstimate": 16,
-        "latencyMs": 16.053302
+        "zeroToNonzeroSstores": 16,
+        "latencyMs": 11.586986
       },
       {
         "eventNo": 3,
@@ -243,8 +255,8 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 5,
-        "newSlotsEstimate": 5,
-        "latencyMs": 9.991625
+        "zeroToNonzeroSstores": 5,
+        "latencyMs": 7.327309
       },
       {
         "eventNo": 4,
@@ -255,8 +267,8 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 12.601257
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 7.817627
       },
       {
         "eventNo": 5,
@@ -267,8 +279,8 @@
         "txCount": 1,
         "logBytes": 224,
         "sstoreCount": 4,
-        "newSlotsEstimate": 3,
-        "latencyMs": 8.670001
+        "zeroToNonzeroSstores": 3,
+        "latencyMs": 6.605062
       },
       {
         "eventNo": 6,
@@ -279,8 +291,8 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 12.165631
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 6.809759
       },
       {
         "eventNo": 7,
@@ -291,8 +303,8 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 11.922694
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 6.701881
       },
       {
         "eventNo": 8,
@@ -303,8 +315,8 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 12.501965
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 6.642308
       },
       {
         "eventNo": 9,
@@ -315,8 +327,8 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 10.998079
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 7.57572
       },
       {
         "eventNo": 10,
@@ -327,35 +339,47 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 8.007116
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 7.293395
       },
       {
         "eventNo": 11,
-        "event": "Key rotation (add new, revoke old)",
-        "op": "U2_add_delegate+D1_revoke_delegate",
+        "event": "Delegate key added (k1)",
+        "op": "U2_add_delegate",
         "actor": "owner",
-        "gasUsed": 57376,
-        "txCount": 2,
-        "logBytes": 256,
-        "sstoreCount": 2,
-        "newSlotsEstimate": 0,
-        "latencyMs": 23.151012
+        "gasUsed": 48314,
+        "txCount": 1,
+        "logBytes": 128,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 1,
+        "latencyMs": 6.877497
       },
       {
         "eventNo": 12,
-        "event": "Ownership transfer (resale)",
-        "op": "U4_transfer_vehicle",
-        "actor": "owner→newOwner",
-        "gasUsed": 179587,
+        "event": "Key rotation (k1 to k2)",
+        "op": "rotate_delegate (U2+D1)",
+        "actor": "owner",
+        "gasUsed": 31214,
         "txCount": 1,
-        "logBytes": 288,
-        "sstoreCount": 13,
-        "newSlotsEstimate": 6,
-        "latencyMs": 10.45024
+        "logBytes": 128,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 5.959674
       },
       {
         "eventNo": 13,
+        "event": "Ownership transfer (resale)",
+        "op": "U4_transfer_vehicle",
+        "actor": "owner→newOwner",
+        "gasUsed": 177562,
+        "txCount": 1,
+        "logBytes": 288,
+        "sstoreCount": 13,
+        "zeroToNonzeroSstores": 6,
+        "latencyMs": 8.308031
+      },
+      {
+        "eventNo": 14,
         "event": "Re-registration credential",
         "op": "V3_anchor_status",
         "actor": "issuer",
@@ -363,11 +387,11 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 8.705373
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 7.177184
       },
       {
-        "eventNo": 14,
+        "eventNo": 15,
         "event": "Credential revocation (old insurance)",
         "op": "V5_revoke_credential",
         "actor": "issuer",
@@ -375,23 +399,23 @@
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 8.960272
-      },
-      {
-        "eventNo": 15,
-        "event": "Second ownership transfer",
-        "op": "U4_transfer_vehicle",
-        "actor": "newOwner→thirdOwner",
-        "gasUsed": 179599,
-        "txCount": 1,
-        "logBytes": 288,
-        "sstoreCount": 13,
-        "newSlotsEstimate": 6,
-        "latencyMs": 11.304253
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 7.311754
       },
       {
         "eventNo": 16,
+        "event": "Second ownership transfer",
+        "op": "U4_transfer_vehicle",
+        "actor": "newOwner→thirdOwner",
+        "gasUsed": 179574,
+        "txCount": 1,
+        "logBytes": 288,
+        "sstoreCount": 13,
+        "zeroToNonzeroSstores": 6,
+        "latencyMs": 16.127957
+      },
+      {
+        "eventNo": 17,
         "event": "End-of-life deactivation",
         "op": "D3_deactivate_identity",
         "actor": "admin/owner",
@@ -399,20 +423,20 @@
         "txCount": 1,
         "logBytes": 96,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 8.452444
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 7.817678
       }
     ],
-    "lifetimeGas": 2681137,
+    "lifetimeGas": 2701239,
     "lifetimeTxCount": 17,
     "lifetimeLogBytes": 4288,
-    "lifetimeNewSlots": 91,
-    "sharedDeployGas": 2751406,
+    "lifetimeZeroToNonzeroSstores": 92,
+    "sharedDeployGas": 2721476,
     "perIdentityDeployGas": 0,
     "apportioned": {
-      "1": 5432543,
-      "1000": 2683888,
-      "1000000": 2681140
+      "1": 5422715,
+      "1000": 2703960,
+      "1000000": 2701242
     }
   },
   {
@@ -427,8 +451,8 @@
         "txCount": 9,
         "logBytes": 1120,
         "sstoreCount": 41,
-        "newSlotsEstimate": 34,
-        "latencyMs": 73.352916
+        "zeroToNonzeroSstores": 34,
+        "latencyMs": 71.357725
       },
       {
         "eventNo": 2,
@@ -439,8 +463,8 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 5,
-        "newSlotsEstimate": 5,
-        "latencyMs": 12.713896
+        "zeroToNonzeroSstores": 5,
+        "latencyMs": 9.207207
       },
       {
         "eventNo": 3,
@@ -451,8 +475,8 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 9.126749
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 6.547811
       },
       {
         "eventNo": 4,
@@ -463,8 +487,8 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 8.342575
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 6.257768
       },
       {
         "eventNo": 5,
@@ -475,8 +499,8 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 10.31141
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 6.32159
       },
       {
         "eventNo": 6,
@@ -487,8 +511,8 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 12.377333
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 6.935479
       },
       {
         "eventNo": 7,
@@ -499,8 +523,8 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 13.136546
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 7.295804
       },
       {
         "eventNo": 8,
@@ -511,8 +535,8 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 12.964824
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 6.810519
       },
       {
         "eventNo": 9,
@@ -523,8 +547,8 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 11.229393
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 6.399559
       },
       {
         "eventNo": 10,
@@ -535,23 +559,35 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 10.21166
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 7.300018
       },
       {
         "eventNo": 11,
-        "event": "Key rotation (add new, revoke old)",
-        "op": "U2_add_delegate+D1_revoke_delegate",
+        "event": "Delegate key added (k1)",
+        "op": "U2_add_delegate",
+        "actor": "owner",
+        "gasUsed": 119852,
+        "txCount": 1,
+        "logBytes": 128,
+        "sstoreCount": 5,
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 7.641367
+      },
+      {
+        "eventNo": 12,
+        "event": "Key rotation (k1 to k2)",
+        "op": "rotate_delegate (U2+D1)",
         "actor": "owner",
         "gasUsed": 192830,
         "txCount": 2,
         "logBytes": 192,
         "sstoreCount": 11,
-        "newSlotsEstimate": 4,
-        "latencyMs": 32.557956
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 25.924404
       },
       {
-        "eventNo": 12,
+        "eventNo": 13,
         "event": "Ownership transfer (resale)",
         "op": "U4_transfer_vehicle",
         "actor": "owner→newOwner",
@@ -559,11 +595,11 @@
         "txCount": 1,
         "logBytes": 96,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 6.940296
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 6.439181
       },
       {
-        "eventNo": 13,
+        "eventNo": 14,
         "event": "Re-registration credential",
         "op": "V3_anchor_status",
         "actor": "issuer",
@@ -571,11 +607,11 @@
         "txCount": 1,
         "logBytes": 128,
         "sstoreCount": 5,
-        "newSlotsEstimate": 4,
-        "latencyMs": 7.733236
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 6.947187
       },
       {
-        "eventNo": 14,
+        "eventNo": 15,
         "event": "Credential revocation (old insurance)",
         "op": "V5_revoke_credential",
         "actor": "issuer",
@@ -583,11 +619,11 @@
         "txCount": 1,
         "logBytes": 64,
         "sstoreCount": 6,
-        "newSlotsEstimate": 0,
-        "latencyMs": 8.234278
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 7.668044
       },
       {
-        "eventNo": 15,
+        "eventNo": 16,
         "event": "Second ownership transfer",
         "op": "U4_transfer_vehicle",
         "actor": "newOwner→thirdOwner",
@@ -595,11 +631,11 @@
         "txCount": 1,
         "logBytes": 96,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 7.85791
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 6.395287
       },
       {
-        "eventNo": 16,
+        "eventNo": 17,
         "event": "End-of-life deactivation",
         "op": "D3_deactivate_identity",
         "actor": "admin/owner",
@@ -607,20 +643,20 @@
         "txCount": 1,
         "logBytes": 96,
         "sstoreCount": 1,
-        "newSlotsEstimate": 0,
-        "latencyMs": 7.202558
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 7.621601
       }
     ],
-    "lifetimeGas": 3035251,
-    "lifetimeTxCount": 25,
-    "lifetimeLogBytes": 2944,
-    "lifetimeNewSlots": 79,
+    "lifetimeGas": 3155103,
+    "lifetimeTxCount": 26,
+    "lifetimeLogBytes": 3072,
+    "lifetimeZeroToNonzeroSstores": 83,
     "sharedDeployGas": 519384,
     "perIdentityDeployGas": 519384,
     "apportioned": {
-      "1": 3554635,
-      "1000": 3035770,
-      "1000000": 3035252
+      "1": 3674487,
+      "1000": 3155622,
+      "1000000": 3155104
     }
   }
 ]
