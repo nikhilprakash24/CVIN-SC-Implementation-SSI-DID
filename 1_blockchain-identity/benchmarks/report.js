@@ -110,9 +110,15 @@ function buildReport(runDir) {
   if (scale) {
     const keys = [...new Set(scale.map((r) => `${r.axis}=${r.value}|${r.op}`))];
     const idx = new Map(scale.map((r) => [`${r.adapter}|${r.axis}=${r.value}|${r.op}`, r]));
-    const spec = { title: "L3 — Marginal cost vs population N and history h (gas; reads: median ms / RPC calls)", rowLabel: "Axis | op", rowKeys: keys, colKeys, colLabels,
-      cellFn: (k, a) => { if (!adaptersRun.includes(a)) return NOT_IMPL; const r = idx.get(`${a}|${k}`); if (!r) return null; return r.kind === "read" ? `${r.latency.median} ms / ${r.readRpcCalls}` : r.gasUsed; } };
+    // Deterministic quantities only (gas; reads: RPC calls / bytes), so scale.csv is
+    // byte-identical across runs of one commit; read latency is in scale_latency.
+    const spec = { title: "L3 — Marginal cost vs population N and history h (gas; reads: RPC calls / bytes)", rowLabel: "Axis | op", rowKeys: keys, colKeys, colLabels,
+      cellFn: (k, a) => { if (!adaptersRun.includes(a)) return NOT_IMPL; const r = idx.get(`${a}|${k}`); if (!r) return null; return r.kind === "read" ? `${r.readRpcCalls} RPC / ${r.readBytes} B` : r.gasUsed; } };
     emit(runDir, "scale", spec, meta); summary.push(markdownMatrix(spec));
+    const readKeys = keys.filter((k) => scale.some((r) => r.kind === "read" && `${r.axis}=${r.value}|${r.op}` === k));
+    const specLat = { title: "L3 — Read latency vs N and h: median / p95 ms (in-process, 2 warm-up + 10 samples)", rowLabel: "Axis | op", rowKeys: readKeys, colKeys, colLabels,
+      cellFn: (k, a) => { if (!adaptersRun.includes(a)) return NOT_IMPL; const r = idx.get(`${a}|${k}`); if (!r) return null; return `${r.latency.median} / ${r.latency.p95}`; } };
+    emit(runDir, "scale_latency", specLat, meta); summary.push(markdownMatrix(specLat));
   }
 
   const batch = load(runDir, "batch");
