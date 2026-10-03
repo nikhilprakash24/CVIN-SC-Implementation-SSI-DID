@@ -1,0 +1,19 @@
+### L1 — Tx latency, median / p95 ms (local node, N=30)
+
+| Operation | ERC-1056 | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| C1_create_identity | 11.644 / 23.617 | 14.434 / 19.007 | 23.741 / 32.455 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| C2_create_with_attributes | 86.135 / 113.235 | 15.046 / 22.422 | 82.659 / 103.03 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| U1_rotate_controller | 8.354 / 12.412 | 10.252 / 15.283 | 7.494 / 12.651 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| U2_add_delegate | 8.553 / 13.09 | 8.655 / 11.968 | 8.636 / 12.618 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| U3_set_attribute | 8.81 / 12.993 | 8.538 / 11.825 | 8.551 / 12.823 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| U4_transfer_vehicle | 8.545 / 10.49 | 11.691 / 15.087 | 8.407 / 11.945 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| U5_meta_tx | 13.154 / 17.096 | n/a | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| D1_revoke_delegate | 9.107 / 13.836 | 9.493 / 13.276 | 11.041 / 14.296 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| D2_revoke_attribute | 9.069 / 12.251 | n/a | 10.479 / 14.86 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| D3_deactivate_identity | 8.715 / 13.041 | 10.205 / 12.397 | 7.938 / 10.779 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| V1_issuer_key_anchor | 8.466 / 13.608 | 15.236 / 20.983 | 9.353 / 14.868 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| V3_anchor_status | 9.038 / 13.956 | 10.255 / 13.567 | 8.174 / 11.757 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| V5_revoke_credential | 8.391 / 12.279 | 9.689 / 13.629 | 26.711 / 68.47 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+
+_Run 2026-09-30T23-34-57Z_3b786c2 · commit 3b786c2 · solc 0.8.24 cancun runs=200 viaIR=true · Hardhat in-process automine · N=30_

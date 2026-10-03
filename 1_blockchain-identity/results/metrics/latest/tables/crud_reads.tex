@@ -1,0 +1,17 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+Operation & ERC-1056 & ERC-721 & ERC-725 & ERC-735 & ERC-1155 & ERC-725xy & LSP8 & ERC-4337 & CVIN-Combined \\
+\midrule
+R1\_resolve\_owner & 1 / 68 / 0.641 & 1 / 68 / 0.95 & 1 / 68 / 0.557 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+R2\_resolve\_by\_vin & 1 / 68 / 0.68 & 1 / 68 / 0.993 & n/a & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+R3\_resolve\_document & 12 / 8592 / 8.589 & 7 / 2652 / 4.554 & 12 / 2800 / 8.174 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+R4\_verify\_delegate & 1 / 68 / 0.763 & 2 / 136 / 1.229 & 1 / 196 / 0.708 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+V6\_status\_check & 1 / 92656 / 23.925 & 1 / 708 / 1.322 & 1 / 196 / 0.62 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+\bottomrule
+\end{tabular}
+\caption{L1 — Read ops: RPC calls / bytes / median ms Run 2026-09-30T23-34-57Z\_3b786c2 · commit 3b786c2 · solc 0.8.24 cancun runs=200 viaIR=true · Hardhat in-process automine · N=30}
+\label{tab:crud_reads}
+\end{table}

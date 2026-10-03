@@ -1,0 +1,25 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+Operation & ERC-1056 & ERC-721 & ERC-725 & ERC-735 & ERC-1155 & ERC-725xy & LSP8 & ERC-4337 & CVIN-Combined \\
+\midrule
+C1\_create\_identity & 1 & 1 & 2 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+C2\_create\_with\_attributes & 9 & 1 & 9 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+U1\_rotate\_controller & 1 & 1 & 1 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+U2\_add\_delegate & 1 & 1 & 1 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+U3\_set\_attribute & 1 & 1 & 1 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+U4\_transfer\_vehicle & 1 & 1 & 1 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+U5\_meta\_tx & 1 & n/a & n/a & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+D1\_revoke\_delegate & 1 & 1 & 1 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+D2\_revoke\_attribute & 1 & n/a & 1 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+D3\_deactivate\_identity & 1 & 1 & 1 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+V1\_issuer\_key\_anchor & 1 & 1 & 1 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+V3\_anchor\_status & 1 & 1 & 1 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+V5\_revoke\_credential & 1 & 1 & 1 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+\bottomrule
+\end{tabular}
+\caption{L1 — Transactions per semantic operation Run 2026-09-30T23-34-57Z\_3b786c2 · commit 3b786c2 · solc 0.8.24 cancun runs=200 viaIR=true · Hardhat in-process automine · N=30}
+\label{tab:crud_txcount}
+\end{table}

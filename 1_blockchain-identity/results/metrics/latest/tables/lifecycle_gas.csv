@@ -1,0 +1,23 @@
+Event,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
+1. VID-I birth certificate,366848,565262,1496416,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+2. Issuer key anchor,72243,419990,136952,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+3. Registration credential anchored,33906,142897,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+4. Insurance credential anchored,33906,125797,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+5. Service endpoint published,35012,102961,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+6. Service record 1,35542,125677,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+7. Service record 2,35542,125677,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+8. Service record 3,35542,125677,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+9. Service record 4,35542,125677,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+10. Service record 5,35542,125677,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+"11. Key rotation (add new, revoke old)",87975,57376,192830,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+12. Ownership transfer (resale),51742,179587,28390,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+13. Re-registration credential,33918,125797,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+14. Credential revocation (old insurance),33458,125809,49218,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+15. Second ownership transfer,34646,179599,28390,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+16. End-of-life deactivation,34222,27677,23091,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+**Lifetime total**,995586,2681137,3035251,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Shared deploy gas,2673900,2751406,519384,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Per-identity deploy gas (in total),0,0,519384,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Lifetime + shared/1,3669486,5432543,3554635,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Lifetime + shared/1 000,998260,2683888,3035770,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Lifetime + shared/1 000 000,995589,2681140,3035252,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.

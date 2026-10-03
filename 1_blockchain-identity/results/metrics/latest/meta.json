@@ -1,0 +1,68 @@
+{
+  "runId": "2026-09-30T23-34-57Z_3b786c2",
+  "commit": "3b786c20150f37468de5c18ca0295445e3831c9c",
+  "commitShort": "3b786c2",
+  "branch": "claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt",
+  "dirty": false,
+  "date": "2026-09-30T23:34:57.462Z",
+  "node": "v22.22.2",
+  "hardhat": "2.29.1",
+  "ethers": "6.17.0",
+  "solc": "0.8.24",
+  "evmVersion": "cancun",
+  "optimizerRuns": 200,
+  "viaIR": true,
+  "network": {
+    "name": "hardhat",
+    "chainId": 31337,
+    "automine": true,
+    "blockGasLimit": 60000000
+  },
+  "conditions": {
+    "repetitions": 30,
+    "warmup": 5,
+    "scaleN": [
+      0,
+      100,
+      1000
+    ],
+    "scaleH": [
+      1,
+      10,
+      50
+    ],
+    "throughput": {
+      "senders": 10,
+      "perSender": 20,
+      "bursts": 3
+    },
+    "trace": true,
+    "datasetSeed": 42
+  },
+  "scenarios": [
+    "crud",
+    "lifecycle",
+    "scale",
+    "batch",
+    "throughput",
+    "resolve"
+  ],
+  "adapters": [
+    "erc1056",
+    "erc721",
+    "erc725"
+  ],
+  "derivedCostParams": {
+    "gasPriceGweiL1": 20,
+    "gasPriceGweiL2": 0.05,
+    "ethUSD": 3000
+  },
+  "scenarioSeconds": {
+    "crud": 109.952,
+    "lifecycle": 1.494,
+    "scale": 100.463,
+    "batch": 12.353,
+    "throughput": 14.771,
+    "resolve": 3.349
+  }
+}

@@ -1,0 +1,14 @@
+Operation,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
+C1_create_identity,76786,399844,656480,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+C2_create_with_attributes,366956,568074,1496440,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U1_rotate_controller,51754,179482,28390,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U2_add_delegate,55143,48314,119852,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U3_set_attribute,35024,120061,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U4_transfer_vehicle,51754,182399,28390,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U5_meta_tx,62646,n/a,n/a,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+D1_revoke_delegate,32868,26174,57200,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+D2_revoke_attribute,34576,n/a,57316,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+D3_deactivate_identity,34230,27689,23091,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+V1_issuer_key_anchor,55143,419990,119852,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+V3_anchor_status,33918,142909,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+V5_revoke_credential,33470,125821,214099,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.

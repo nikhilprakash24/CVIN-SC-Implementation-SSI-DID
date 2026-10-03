@@ -1,0 +1,4 @@
+Metric,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
+tx / s (queue + mine),131.328,139.892,151.14,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+tx / s (mine only),1779.718,1248.748,2110.421,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+gas / s,4250130,17581224,18136045,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.

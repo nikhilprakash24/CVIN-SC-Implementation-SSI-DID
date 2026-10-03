@@ -1,0 +1,5 @@
+Operation,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
+R3_resolve_document,22 / 16936 / 18.435 / 22.966,7 / 5724 / 6.355 / 14.277,17 / 4100 / 12.805 / 15.291,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+R1_resolve_owner,1 / 68 / 0.81 / 1.618,1 / 68 / 0.704 / 0.906,1 / 68 / 0.562 / 0.7,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+R4_verify_delegate,1 / 68 / 0.858 / 1.732,2 / 136 / 1.103 / 1.709,2 / 264 / 1.428 / 1.884,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+V6_status_check,1 / 3395 / 1.403 / 2.008,1 / 3268 / 2.671 / 10.575,1 / 196 / 0.91 / 1.06,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
