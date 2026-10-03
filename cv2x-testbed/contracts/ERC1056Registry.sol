@@ -85,19 +85,23 @@ contract ERC1056Registry {
     }
 
     /**
-     * @dev Transfer ownership of an identity
+     * @dev Transfer ownership of an identity. A revoked identity is frozen
+     *      (REVIEW_02 K-3: it used to be re-assignable after revocation).
      */
     function changeOwner(
         address identity,
         address actor,
         address newOwner
     ) internal onlyOwner(identity, actor) {
+        require(!revoked[identity], "Identity is revoked");
         owners[identity] = newOwner;
         emit DIDOwnerChanged(identity, newOwner, changed[identity]);
         changed[identity] = block.number;
     }
 
-    function changeOwner(address identity, address newOwner) public {
+    /// @dev virtual so a registry that keeps its own ownership record (e.g.
+    ///      MOBIVIDRegistry.ownershipHistory) can stop this path bypassing it.
+    function changeOwner(address identity, address newOwner) public virtual {
         changeOwner(identity, msg.sender, newOwner);
     }
 
@@ -142,7 +146,7 @@ contract ERC1056Registry {
     }
 
     /**
-     * @dev Revoke a delegate
+     * @dev Revoke a delegate (rejected on a revoked identity, K-3)
      */
     function revokeDelegate(
         address identity,
@@ -150,6 +154,7 @@ contract ERC1056Registry {
         bytes32 delegateType,
         address delegate
     ) internal onlyOwner(identity, actor) {
+        require(!revoked[identity], "Identity is revoked");
         emit DIDDelegateChanged(
             identity,
             delegateType,
@@ -210,7 +215,7 @@ contract ERC1056Registry {
     }
 
     /**
-     * @dev Revoke an attribute
+     * @dev Revoke an attribute (rejected on a revoked identity, K-3)
      */
     function revokeAttribute(
         address identity,
@@ -218,6 +223,7 @@ contract ERC1056Registry {
         bytes32 name,
         bytes memory value
     ) internal onlyOwner(identity, actor) {
+        require(!revoked[identity], "Identity is revoked");
         emit DIDAttributeChanged(
             identity,
             name,
@@ -238,9 +244,11 @@ contract ERC1056Registry {
     }
 
     /**
-     * @dev Revoke entire identity (for vehicle decommissioning or security)
+     * @dev Revoke entire identity (for vehicle decommissioning or security).
+     *      Revocation is one-shot: a second call would overwrite revokedAt.
      */
     function revokeIdentity(address identity) public onlyOwner(identity, msg.sender) {
+        require(!revoked[identity], "Identity is revoked");
         revoked[identity] = true;
         revokedAt[identity] = block.timestamp;
 

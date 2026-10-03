@@ -134,39 +134,39 @@
       "notes": "No shared registry in ERC-735: each vehicle identity is its own claim-holder contract. Deployment cost is counted under createIdentity."
     },
     "createIdentity": {
-      "gasUsed": 1371394,
+      "gasUsed": 1466088,
       "txCount": 1,
       "notes": "Per-vehicle claim-holder contract deployment (constructor stores VIN + vinHash, deployer becomes owner). Paid once per identity."
     },
     "addDelegateOrClaim": {
-      "gasUsed": 290177,
+      "gasUsed": 292708,
       "txCount": 1,
       "notes": "addClaim (new claim, ClaimAdded): stores full signed claim on-chain after verifying the issuer's EIP-191 signature over (identity, topic, data) via ecrecover. Delegates are not part of ERC-735."
     },
     "updateAttribute": {
-      "gasUsed": 75160,
+      "gasUsed": 77691,
       "txCount": 1,
       "notes": "No key/attribute model in ERC-735. Measured closest analogue: re-adding a claim for the same (issuer, topic) updates it in place (ClaimChanged, warm same-size rewrite of data/signature/URI)."
     },
     "revoke": {
-      "gasUsed": 72064,
+      "gasUsed": 72142,
       "txCount": 1,
       "notes": "removeClaim (owner or issuer): deletes the claim struct and compacts the topic index (ClaimRemoved, storage refund applies)."
     },
     "transferOwnership": {
-      "gasUsed": 28702,
+      "gasUsed": 28724,
       "txCount": 1,
       "notes": "transferOwnership of the per-vehicle claim-holder contract to the new vehicle owner."
     }
   },
   "ERC-1155": {
     "deployRegistry": {
-      "gasUsed": 2277168,
+      "gasUsed": 2304865,
       "txCount": 1,
       "notes": "Single shared multi-token credential contract; deployer receives DEFAULT_ADMIN_ROLE and ISSUER_ROLE in constructor."
     },
     "createIdentity": {
-      "gasUsed": 103881,
+      "gasUsed": 103913,
       "txCount": 1,
       "notes": "registerVehicle (issuer-only): mints one soulbound BIRTH_CERT token, binds VIN string + vinHash mappings to the vehicle address."
     },
@@ -176,7 +176,7 @@
       "notes": "No key/attribute model in ERC-1155. Measured closest analogue: setTokenURI per-credential-type metadata URI override (issuer-only)."
     },
     "addDelegateOrClaim": {
-      "gasUsed": 57115,
+      "gasUsed": 57147,
       "txCount": 1,
       "notes": "issueCredential (issuer-only): mints an INSPECTION_CERT credential token to a registered vehicle (claim analogue; delegates are not part of ERC-1155)."
     },
@@ -186,7 +186,7 @@
       "notes": "revokeCredential (issuer-only burn) of the inspection credential. Burning the BIRTH_CERT would deregister the whole identity."
     },
     "transferOwnership": {
-      "gasUsed": 83608,
+      "gasUsed": 83947,
       "txCount": 1,
       "notes": "issuerTransferCredential of the BIRTH_CERT: re-binds VIN + registration mappings to the new vehicle address. Credentials are soulbound - holder-initiated transfers revert by design."
     }
@@ -262,12 +262,12 @@
   },
   "MOBI-VID-V2": {
     "deployRegistry": {
-      "gasUsed": 3952603,
+      "gasUsed": 4025159,
       "txCount": 1,
       "notes": "Single shared registry (V2 = ERC-1056 base + MOBI VID I birth certificates + VID II lifecycle events); deployer becomes registry authority + authorized manufacturer."
     },
     "createIdentity": {
-      "gasUsed": 298941,
+      "gasUsed": 299143,
       "txCount": 1,
       "notes": "registerVehicleBirth (MOBI VID I birth certificate): VIN hash + encrypted VIN + cert hash + first owner. birthAttributes left empty to avoid known V1 validity-overflow bug."
     },
@@ -279,47 +279,47 @@
     "addDelegateOrClaim": {
       "gasUsed": 35277,
       "txCount": 1,
-      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 192683 gas."
+      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 192671 gas."
     },
     "transferOwnership": {
-      "gasUsed": 199810,
+      "gasUsed": 200023,
       "txCount": 1,
       "notes": "transferVehicleOwnership: appends odometer-stamped ownership record + ERC-1056 changeOwner. Called by current owner."
     },
     "revoke": {
-      "gasUsed": 74836,
+      "gasUsed": 75052,
       "txCount": 1,
       "notes": "revokeIdentity (inherited ERC-1056 extension): permanently flags the vehicle DID as revoked (decommissioning)."
     }
   },
   "CVIN-Combined": {
     "deployRegistry": {
-      "gasUsed": 1325604,
+      "gasUsed": 1421834,
       "txCount": 1,
       "notes": "Single shared hybrid registry (ERC-1056 event-based identity + ERC-735 on-chain claim storage in one contract)."
     },
     "createIdentity": {
-      "gasUsed": 52170,
+      "gasUsed": 52192,
       "txCount": 1,
       "notes": "Identity exists implicitly (ERC-1056 side: every address is a DID, zero-cost). Measured: first setAttribute publishing a verification key (event-only)."
     },
     "updateAttribute": {
-      "gasUsed": 35070,
+      "gasUsed": 35092,
       "txCount": 1,
       "notes": "setAttribute rotating the published key (ERC-1056 side, event-only storage)."
     },
     "addDelegateOrClaim": {
-      "gasUsed": 289886,
+      "gasUsed": 292366,
       "txCount": 1,
-      "notes": "addClaim (ERC-735 side): verifies the issuer's raw-digest ECDSA signature via ecrecover and stores the full claim on-chain (O(1) verification thereafter). Event-only ERC-1056 addDelegate measured separately: 55162 gas."
+      "notes": "addClaim (ERC-735 side): verifies the issuer's raw-digest ECDSA signature via ecrecover and stores the full claim on-chain (O(1) verification thereafter). Event-only ERC-1056 addDelegate measured separately: 55184 gas."
     },
     "revoke": {
-      "gasUsed": 73688,
+      "gasUsed": 73795,
       "txCount": 1,
       "notes": "removeClaim (ERC-735 side): deletes the stored claim + topic index (storage refund applies). Event-only revokeAttribute/revokeDelegate (ERC-1056 side) also supported at ~ERC-1056 cost."
     },
     "transferOwnership": {
-      "gasUsed": 51725,
+      "gasUsed": 51747,
       "txCount": 1,
       "notes": "changeOwner (ERC-1056 side): rotates the controlling key of the DID (identifier stable)."
     }
@@ -334,7 +334,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-09-24T23:44:50.746Z",
+    "date": "2026-10-03T23:01:41.438Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [

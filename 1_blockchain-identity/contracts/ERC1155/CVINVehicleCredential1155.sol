@@ -140,6 +140,15 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
     ) external onlyRole(ISSUER_ROLE) {
         uint256 amount = balanceOf(from, credentialType);
         require(amount > 0, "CVIN1155: nothing to transfer");
+        // REVIEW_02 K-13: an address holds at most one BIRTH_CERT (one VIN).
+        // Moving a birth certificate onto a registered vehicle used to
+        // overwrite vehicleVIN[to] and orphan that vehicle's VIN.
+        if (credentialType == BIRTH_CERT) {
+            require(
+                balanceOf(to, BIRTH_CERT) == 0,
+                "CVIN1155: recipient already holds a BIRTH_CERT"
+            );
+        }
         _safeTransferFrom(from, to, credentialType, amount, "");
 
         if (credentialType == BIRTH_CERT) {

@@ -240,6 +240,14 @@ contract MOBIVIDRegistry is ERC1056Registry {
         require(vinHash != bytes32(0), "Invalid VIN hash");
         require(firstOwner != address(0), "Invalid first owner");
         require(vinHashToIdentity[vinHash] == address(0), "VIN hash already registered");
+        // REVIEW_02 K-4: only a pristine identity can be born. changed[] is
+        // advanced by every path that writes DID state (changeOwner,
+        // setAttribute, addDelegate, revoke*, revokeIdentity, and a previous
+        // birth), so changed == 0 means: no ERC-1056 owner other than itself,
+        // not revoked, and no published DID history. Without this an
+        // authorised manufacturer could take over any did:ethr in use, or
+        // re-birth a revoked vehicle. One SLOAD, re-read warm below.
+        require(changed[vehicleIdentity] == 0, "MOBIVID: identity already has DID history");
 
         // Create birth certificate
         vehicleBirths[vehicleIdentity] = VehicleBirth({
@@ -303,6 +311,21 @@ contract MOBIVIDRegistry is ERC1056Registry {
     }
 
     // ============ VEHICLE OWNERSHIP (MOBI VID II) ============
+
+    /**
+     * @dev The inherited public ERC-1056 changeOwner would move a registered
+     *      vehicle without an ownershipHistory record (odometer, authority).
+     *      REVIEW_02 K-3: registered vehicles must use
+     *      transferVehicleOwnership; identities with no birth certificate keep
+     *      plain ERC-1056 behaviour.
+     */
+    function changeOwner(address identity, address newOwner) public override {
+        require(
+            !vehicleBirths[identity].exists,
+            "MOBIVID: use transferVehicleOwnership"
+        );
+        super.changeOwner(identity, newOwner);
+    }
 
     /**
      * @dev Transfer vehicle ownership
