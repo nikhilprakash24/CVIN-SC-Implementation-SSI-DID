@@ -364,6 +364,80 @@ describe("CVINCombinedIdentity (ERC-1056 + ERC-735 hybrid)", function () {
                 registry.connect(attacker).removeClaim(identity.address, claimId)
             ).to.be.revertedWith("CVINCombined: unauthorized");
         });
+
+        // K-2 (REVIEW_02): issuer revocation must stick.
+        describe("K-2 issuer revocation", function () {
+            let issuerSigner, signature, claimId;
+
+            beforeEach(async function () {
+                issuerSigner = issuerWallet.connect(ethers.provider);
+                await (await deployer.sendTransaction({ to: issuerSigner.address, value: ethers.parseEther("1") })).wait();
+                signature = await signClaim(identity.address, CLAIM_TOPIC_VIN, vinData);
+                claimId = claimIdFor(issuerWallet.address, CLAIM_TOPIC_VIN);
+                await registry
+                    .connect(identity)
+                    .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri);
+            });
+
+            it("owner cannot re-add a claim the issuer revoked, using the old signature", async function () {
+                await registry.connect(issuerSigner).removeClaim(identity.address, claimId);
+
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri)
+                ).to.be.revertedWith("CVINCombined: claim revoked by issuer");
+                expect(await registry.hasValidClaim(identity.address, CLAIM_TOPIC_VIN, issuerWallet.address)).to.be.false;
+            });
+
+            it("issuer removal records the revocation (event + view)", async function () {
+                await expect(registry.connect(issuerSigner).removeClaim(identity.address, claimId))
+                    .to.emit(registry, "ClaimRevokedByIssuer");
+                expect(await registry.isClaimRevoked(identity.address, issuerWallet.address, CLAIM_TOPIC_VIN, vinData))
+                    .to.be.true;
+                expect(await registry.isClaimRevoked(identity.address, issuerWallet.address, CLAIM_TOPIC_VIN, "0x00"))
+                    .to.be.false;
+            });
+
+            it("a malleated (high-s) copy of the revoked signature is also rejected", async function () {
+                await registry.connect(issuerSigner).removeClaim(identity.address, claimId);
+                const sig = ethers.Signature.from(signature);
+                const n = BigInt("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141");
+                const highS = ethers.toBeHex(n - BigInt(sig.s), 32);
+                const flippedV = sig.v === 27 ? 28 : 27;
+                const malleated = ethers.concat([sig.r, highS, ethers.toBeHex(flippedV, 1)]);
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, malleated, vinData, claimUri)
+                ).to.be.revertedWith("CVINCombined: claim revoked by issuer");
+            });
+
+            it("issuer can re-issue the topic with new signed data after revoking", async function () {
+                await registry.connect(issuerSigner).removeClaim(identity.address, claimId);
+                const newData = ethers.toUtf8Bytes("1HGCM82633A004353");
+                const newSig = await signClaim(identity.address, CLAIM_TOPIC_VIN, newData);
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, newSig, newData, claimUri)
+                ).to.emit(registry, "ClaimAdded");
+            });
+
+            it("owner self-removal is not a revocation; the owner may re-anchor the claim", async function () {
+                await registry.connect(identity).removeClaim(identity.address, claimId);
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri)
+                ).to.emit(registry, "ClaimAdded");
+            });
+        });
+
+        // K-11 (REVIEW_02): an empty slot must not read as a valid claim.
+        it("K-11: hasValidClaim is false for an empty slot (issuer = 0, topic = 0)", async function () {
+            expect(await registry.hasValidClaim(identity.address, 0, ethers.ZeroAddress)).to.be.false;
+        });
     });
 
     describe("Gas Costs (hybrid benchmark)", function () {
