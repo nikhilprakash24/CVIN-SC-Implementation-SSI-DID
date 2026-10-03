@@ -15,7 +15,10 @@ Flow covered:
 Negative paths:
     * issuer with wrong role rejected ON-CHAIN (contract revert),
     * completely unauthorized issuer rejected,
-    * tampered VC fails both anchor check and signature verification.
+    * tampered VC fails both anchor check and signature verification,
+    * revocation status is actually checked (review 02, S-2): a revoked
+      birth/event VC fails, and a verifier without the issuer's status
+      registry fails closed instead of passing with a warning.
 """
 
 import os
@@ -249,7 +252,8 @@ class TestBirthCertificate:
                         salt=birth["vinSalt"], aad=b"\x00" * 32)
 
     def test_full_verification_report(self, registry, vehicle, birth):
-        verifier = BirthCertificateVerifier(registry)
+        verifier = BirthCertificateVerifier(
+            registry, status_registries=[birth["statusRegistry"]])
         report = verifier.verify(
             birth["verifiableCredential"], vehicle.address,
             vin=VIN, vin_salt=birth["vinSalt"])
@@ -327,6 +331,10 @@ def lifecycle(registry, accounts, vehicle, birth):
                    "recall": recall},
         "attestation": attestation,
         "vc_store": vc_store,
+        # each event VC's credentialStatus names its issuer's registry
+        "status_registries": [service.status_registry,
+                              police.status_registry,
+                              oem.status_registry],
     }
 
 
@@ -387,7 +395,8 @@ class TestHistoryAggregation:
 
     def test_aggregated_history_verifies_all_vcs(self, registry, vehicle,
                                                  lifecycle):
-        aggregator = VehicleHistoryAggregator(registry)
+        aggregator = VehicleHistoryAggregator(
+            registry, status_registries=lifecycle["status_registries"])
         history = aggregator.get_vehicle_history(
             vehicle.address, vc_store=lifecycle["vc_store"])
         assert history["eventCount"] == 3
@@ -495,22 +504,98 @@ class TestNegativePaths:
         tampered = copy.deepcopy(ev["verifiableCredential"])
         tampered["credentialSubject"]["odometerKm"] = 1  # rollback fraud
 
-        aggregator = VehicleHistoryAggregator(registry)
+        aggregator = VehicleHistoryAggregator(
+            registry, status_registries=lifecycle["status_registries"])
         on_chain = registry.get_event(vehicle.address, ev["eventId"])
         report = aggregator.verify_event_credential(tampered, on_chain)
         assert report["valid"] is False
         assert report["checks"]["anchored"] is False       # hash mismatch
         assert report["checks"]["credential"] is False     # signature broken
+        assert any("signature" in e for e in report["errors"])
 
     def test_tampered_birth_vc_fails_verification(self, registry, vehicle,
                                                   birth):
         import copy
         tampered = copy.deepcopy(birth["verifiableCredential"])
         tampered["credentialSubject"]["year"] = 1999
-        verifier = BirthCertificateVerifier(registry)
+        verifier = BirthCertificateVerifier(
+            registry, status_registries=[birth["statusRegistry"]])
         report = verifier.verify(tampered, vehicle.address)
         assert report["valid"] is False
         assert report["checks"]["anchored"] is False
+        assert any("signature" in e for e in report["errors"])
+
+
+# ---------------------------------------------------------------------------
+# Revocation status is actually checked (review 02, S-2)
+# ---------------------------------------------------------------------------
+
+class TestRevocationStatus:
+
+    @staticmethod
+    def _fresh_birth(registry, accounts):
+        issuer = BirthCertificateIssuer(
+            registry, accounts["manufacturer"], "Tesla Inc.")
+        car = Account.create()
+        result = issuer.issue_birth_certificate(
+            vehicle_identity=car.address, vin=VIN, make="Tesla",
+            model="Model Y", year=2025, manufacturing_date="2025-02-01",
+            first_owner=accounts["first_owner"].address)
+        return issuer, car, result
+
+    def test_birth_without_status_registry_fails_closed(self, registry,
+                                                        vehicle, birth):
+        # Before the fix: valid=True with a warning (S-2 PoC "no registry").
+        report = BirthCertificateVerifier(registry).verify(
+            birth["verifiableCredential"], vehicle.address)
+        assert report["valid"] is False
+        assert report["checks"]["credential"] is False
+        assert any("no status registry" in e for e in report["errors"])
+
+    def test_birth_with_foreign_registry_fails_closed(self, registry, vehicle,
+                                                      birth, lifecycle):
+        # Another issuer's registry does not answer for this credential.
+        report = BirthCertificateVerifier(
+            registry, status_registries=lifecycle["status_registries"]
+        ).verify(birth["verifiableCredential"], vehicle.address)
+        assert report["valid"] is False
+        assert any("no status registry" in e for e in report["errors"])
+
+    def test_revoked_birth_certificate_rejected(self, registry, accounts):
+        issuer, car, result = self._fresh_birth(registry, accounts)
+        vc = result["verifiableCredential"]
+        verifier = BirthCertificateVerifier(
+            registry, status_registries=[issuer.status_registry])
+        assert verifier.verify(vc, car.address)["valid"] is True
+
+        issuer.revoke_birth_certificate(vc["id"], reason="VIN cloned")
+        report = verifier.verify(vc, car.address)
+        assert report["valid"] is False
+        assert report["checks"]["anchored"] is True   # anchor still matches
+        assert any("revoked" in e for e in report["errors"])
+
+    def test_revoked_event_credential_rejected_in_history(self, registry,
+                                                          accounts):
+        _, car, _ = self._fresh_birth(registry, accounts)
+        service = LifecycleEventRecorder(registry, accounts["service_center"])
+        event = service.record_event(
+            car.address, EventType.MAINTENANCE, odometer=500,
+            claims={"vin": VIN, "serviceCenterDid": service.issuer_did,
+                    "serviceDate": "2025-04-01", "serviceType": "inspection",
+                    "odometerKm": 500})
+        aggregator = VehicleHistoryAggregator(
+            registry, status_registries=[service.status_registry])
+        history = aggregator.get_vehicle_history(
+            car.address, vc_store=service.vc_store)
+        assert history["allPresentedCredentialsValid"] is True
+
+        service.revoke_event_credential(
+            event["verifiableCredential"]["id"], reason="fraudulent entry")
+        history = aggregator.get_vehicle_history(
+            car.address, vc_store=service.vc_store)
+        assert history["allPresentedCredentialsValid"] is False
+        errors = history["events"][0]["credential"]["errors"]
+        assert any("revoked" in e for e in errors)
 
 
 # ---------------------------------------------------------------------------
