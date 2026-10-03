@@ -30,6 +30,7 @@ class VehiclePKIIdentity:
         self.pseudonym_certificates = []
         self.current_pseudonym_index = 0
         self.certificate_revocation_list = set()
+        self.trust_anchor = None  # CA certificate used to verify peers' certificates
 
     def generate_keypair(self):
         """Generate ECDSA P-256 keypair for vehicle."""
@@ -62,6 +63,8 @@ class VehiclePKIIdentity:
 
         # CA issues enrollment certificate
         self.long_term_certificate = ca.issue_enrollment_certificate(csr)
+        # The CA this vehicle enrolled with is its trust anchor for verifying peers.
+        self.trust_anchor = ca.ca_certificate
         return self.long_term_certificate
 
     def request_pseudonym_certificates(self, ca, count: int = 20):
@@ -174,13 +177,29 @@ class VehiclePKIIdentity:
 
         return signed_message
 
-    def verify_message(self, signed_message: dict, crl: set) -> tuple:
+    def trust_ca(self, ca_certificate: x509.Certificate):
+        """Install `ca_certificate` as this verifier's trust anchor."""
+        self.trust_anchor = ca_certificate
+
+    def verify_message(self, signed_message: dict, crl: set,
+                       ca_certificate: x509.Certificate = None) -> tuple:
         """
         Verify incoming V2X message.
+
+        Checks, in order (review 02, T-1):
+          1. the certificate was issued by the trusted CA: issuer name equals the
+             CA subject AND the certificate's signature verifies under the CA
+             public key (an ECDSA P-256 verify);
+          2. the certificate validity window;
+          3. the CRL (serial-number set);
+          4. the message signature under the certificate's public key.
 
         Args:
             signed_message: Signed message package
             crl: Certificate Revocation List
+            ca_certificate: trust anchor; defaults to the CA this identity
+                enrolled with (or set via trust_ca()). With no trust anchor
+                the message is rejected (fail closed).
 
         Returns:
             tuple: (is_valid: bool, verification_time_ms: float)
@@ -193,11 +212,19 @@ class VehiclePKIIdentity:
             signature = bytes.fromhex(signed_message['signature'])
             cert_pem = signed_message['certificate']
 
+            anchor = ca_certificate if ca_certificate is not None else getattr(self, 'trust_anchor', None)
+            if anchor is None:
+                return False, (time.time() - start_time) * 1000
+
             # Load certificate
             cert = x509.load_pem_x509_certificate(
                 cert_pem.encode(),
                 default_backend()
             )
+
+            # Certificate chain (one level): issuer name match + CA signature
+            # over the TBS certificate. Raises on mismatch / bad signature.
+            cert.verify_directly_issued_by(anchor)
 
             # Check certificate revocation
             cert_serial = cert.serial_number
