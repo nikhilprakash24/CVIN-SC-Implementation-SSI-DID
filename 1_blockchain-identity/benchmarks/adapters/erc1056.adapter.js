@@ -2,6 +2,10 @@
 const { IdentityAdapter } = require("./IdentityAdapter");
 
 const MAX_UINT = (1n << 256n) - 1n;
+// "Permanent" validity for the deactivation attribute. A fixed constant (all bytes
+// non-zero, no overflow with any realistic block.timestamp) replaces a value
+// derived from Date.now(), which made D3 calldata differ from run to run (H-3).
+const PERMANENT_VALIDITY = MAX_UINT - (1n << 40n);
 
 /**
  * ERC-1056: the controller address IS the DID (did:ethr:<address>). The
@@ -73,7 +77,14 @@ class ERC1056Adapter extends IdentityAdapter {
   async resolveByVin(vin) { return this.contracts.wrapper.getDIDFromVIN(vin); }
   async verifyDelegate(h, key) { return this.contracts.registry.validDelegate(h.did, this.K.veriKey, key.address); }
 
-  /** Walk the `changed` linked list over eth_getLogs (as ethr-did-resolver does). */
+  /**
+   * Walk the `changed` linked list over eth_getLogs (as ethr-did-resolver does),
+   * then replay the collected events FORWARD in chain order (blockNumber,
+   * logIndex). A delegate/attribute event with validTo <= now (incl. the
+   * validTo = 0 that revokeDelegate / revokeAttribute emit) removes the entry;
+   * a later event overrides an earlier one (review 02, H-4). The RPC pattern is
+   * unchanged: 1 x changed() + 1 x getLogs per linked block + 1 x identityOwner().
+   */
   async resolveDocument(h) {
     const reg = this.contracts.registry;
     const iface = reg.interface;
@@ -89,14 +100,25 @@ class ERC1056Adapter extends IdentityAdapter {
       let prev = 0;
       for (const log of logs) {
         const parsed = iface.parseLog(log);
-        events.push({ name: parsed.name, args: parsed.args });
+        events.push({ name: parsed.name, args: parsed.args, blockNumber: Number(log.blockNumber), logIndex: Number(log.index) });
         const pc = Number(parsed.args.previousChange);
         if (pc < block && pc > prev) prev = pc;
       }
       block = prev;
     }
+    events.sort((a, b) => a.blockNumber - b.blockNumber || a.logIndex - b.logIndex);
     const owner = await reg.identityOwner(h.did);
-    const now = Math.floor(Date.now() / 1000);
+    const now = BigInt(Math.floor(Date.now() / 1000));
+    const delegates = new Map(); // `${delegateType}|${delegate}` -> delegate address
+    const attributes = new Map(); // name -> value
+    for (const e of events) {
+      if (e.name === "DIDDelegateChanged") {
+        const k = `${e.args.delegateType}|${e.args.delegate}`;
+        if (BigInt(e.args.validTo) > now) delegates.set(k, e.args.delegate); else delegates.delete(k);
+      } else if (e.name === "DIDAttributeChanged") {
+        if (BigInt(e.args.validTo) > now) attributes.set(e.args.name, e.args.value); else attributes.delete(e.args.name);
+      }
+    }
     const doc = {
       "@context": ["https://www.w3.org/ns/did/v1"],
       id: `did:ethr:31337:${h.did}`,
@@ -106,14 +128,10 @@ class ERC1056Adapter extends IdentityAdapter {
       service: [],
       attributes: {},
     };
-    for (const e of events.reverse()) {
-      if (e.name === "DIDDelegateChanged" && Number(e.args.validTo) > now) {
-        doc.verificationMethod.push({ id: `#delegate-${e.args.delegate}`, type: "EcdsaSecp256k1RecoveryMethod2020", blockchainAccountId: `eip155:31337:${e.args.delegate}` });
-      } else if (e.name === "DIDAttributeChanged") {
-        const validTo = e.args.validTo;
-        doc.attributes[e.args.name] = validTo === 0n ? null : e.args.value;
-      }
+    for (const d of delegates.values()) {
+      doc.verificationMethod.push({ id: `#delegate-${d}`, type: "EcdsaSecp256k1RecoveryMethod2020", blockchainAccountId: `eip155:31337:${d}` });
     }
+    for (const [name, value] of attributes) doc.attributes[name] = value;
     return doc;
   }
 
@@ -169,7 +187,7 @@ class ERC1056Adapter extends IdentityAdapter {
   }
   async deactivate(h) {
     // ERC-1056 has no deactivate primitive (owner=0x0 resolves to self): publish a permanent attribute.
-    const tx = await this._reg(h.controller).setAttribute(h.did, this.K.deactivated, this.ethers.toUtf8Bytes("true"), MAX_UINT - BigInt(Math.floor(Date.now() / 1000)) - 10_000_000n);
+    const tx = await this._reg(h.controller).setAttribute(h.did, this.K.deactivated, this.ethers.toUtf8Bytes("true"), PERMANENT_VALIDITY);
     return { txs: [tx] };
   }
 
@@ -178,19 +196,19 @@ class ERC1056Adapter extends IdentityAdapter {
     const tx = await this._reg(issuer).addDelegate(issuer.address, this.K.veriKey, key.address, this.payloads.ttlSeconds);
     return { txs: [tx] };
   }
-  async anchorStatus(h, credHash) {
+  async anchorStatus(h, credHash, issuerArg) {
     // status attribute keyed by credential hash on the *issuer's* DID
-    const issuer = this.actors.issuer;
+    const issuer = this._issuer(issuerArg);
     const tx = await this._reg(issuer).setAttribute(issuer.address, credHash, this.ethers.toUtf8Bytes("active"), this.payloads.ttlSeconds);
     return { txs: [tx] };
   }
-  async revokeCredential(h, credHash) {
-    const issuer = this.actors.issuer;
+  async revokeCredential(h, credHash, issuerArg) {
+    const issuer = this._issuer(issuerArg);
     const tx = await this._reg(issuer).revokeAttribute(issuer.address, credHash, this.ethers.toUtf8Bytes("active"));
     return { txs: [tx] };
   }
-  async statusCheck(h, credHash) {
-    const issuer = this.actors.issuer.address;
+  async statusCheck(h, credHash, issuerArg) {
+    const issuer = this._issuer(issuerArg).address;
     const logs = await this.ethers.provider.getLogs({
       address: this.registryAddress, fromBlock: 0, toBlock: "latest",
       topics: [this.contracts.registry.interface.getEvent("DIDAttributeChanged").topicHash, this.ethers.zeroPadValue(issuer, 32)],

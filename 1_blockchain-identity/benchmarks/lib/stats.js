@@ -84,11 +84,19 @@ function mannWhitneyU(xs, ys) {
   return { U, z: round(z), p: round(p, 6), n1, n2 };
 }
 
+// erf(z) by Abramowitz–Stegun 7.1.26 (|error| ≤ 1.5e-7).
+function erf(z) {
+  const a = Math.abs(z);
+  const t = 1 / (1 + 0.3275911 * a);
+  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-a * a);
+  return z >= 0 ? y : -y;
+}
+
+// Standard normal CDF: Φ(x) = ½ (1 + erf(x / √2)). Review 02, H-5: the previous
+// version fed x (not x/√2) into the polynomial while using exp(−x²/2), mixing two
+// approximations (Φ(1.96) came out 0.981 instead of 0.975).
 function normalCdf(x) {
-  // Abramowitz–Stegun 7.1.26
-  const t = 1 / (1 + 0.3275911 * Math.abs(x));
-  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x / 2);
-  return x >= 0 ? 0.5 + y / 2 : 0.5 - y / 2;
+  return 0.5 * (1 + erf(x / Math.SQRT2));
 }
 
 function mode(xs) {
@@ -99,4 +107,4 @@ function mode(xs) {
   return { value: best, count: bestN, distinct: [...counts.keys()] };
 }
 
-module.exports = { summarize, percentile, bootstrapMedianCI, mannWhitneyU, mode, round };
+module.exports = { summarize, percentile, bootstrapMedianCI, mannWhitneyU, mode, round, normalCdf, erf };

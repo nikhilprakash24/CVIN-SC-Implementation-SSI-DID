@@ -1,4 +1,4 @@
 Metric,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
-Transactions,25,17,25,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-Log bytes,6272,4288,2944,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-New storage slots,7,91,79,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Transactions,26,17,26,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Log bytes,6464,4288,3072,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Zero→nonzero SSTOREs,8,92,83,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.

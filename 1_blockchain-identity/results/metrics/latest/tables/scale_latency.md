@@ -1,0 +1,12 @@
+### L3 — Read latency vs N and h: median / p95 ms (in-process, 2 warm-up + 10 samples)
+
+| Axis | op | ERC-1056 | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| N=0|R3_resolve_document | 9.152 / 10.64 | 4.003 / 4.61 | 7.298 / 8.781 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| N=100|R3_resolve_document | 10.233 / 11.769 | 3.867 / 4.682 | 8.942 / 18.034 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| N=1000|R3_resolve_document | 10.079 / 12.45 | 3.829 / 4.135 | 8.21 / 8.985 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| h=1|R3_resolve_document | 9.91 / 10.505 | 3.882 / 4.846 | 8.339 / 9.764 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| h=10|R3_resolve_document | 26.971 / 33.796 | 5.988 / 14.03 | 14.482 / 16.688 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| h=50|R3_resolve_document | 64.692 / 71.883 | 26.325 / 119.804 | 45.421 / 52.607 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+
+_Run 2026-10-03T23-16-23Z_6620ac7 · commit 6620ac7 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_

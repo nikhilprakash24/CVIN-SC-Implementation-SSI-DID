@@ -1,7 +1,7 @@
 "use strict";
 // S1 — L1 baseline: every catalogue op on fresh state, 1 exact + warmup + N latency samples.
 const { OPERATIONS } = require("../lib/operations");
-const { freshAdapter, credHash, freshKey, freshOwner, log } = require("./common");
+const { freshAdapter, credHash, freshKey, freshOwner, freshIssuer, log } = require("./common");
 
 async function run(ctx) {
   const rows = [];
@@ -13,8 +13,10 @@ async function run(ctx) {
     let vi = 0;
     const vehicle = () => ctx.dataset[vi++];
 
-    // one-time preconditions for credential ops
-    await adapter.anchorIssuerKey(actors.issuer, actors.delegateKey).then((r) => Promise.all(r.txs.map((t) => t.wait())));
+    // Credential ops (V1/V3/V5/V6) get a FRESH issuer per iteration, created and
+    // key-anchored in an unmeasured precondition (common.freshIssuer). A shared
+    // issuer accumulated keys/attributes across iterations, which made ERC-725 V5
+    // (O(keys) removeKey) and ERC-1056 V6 read bytes depend on N (review 02, H-1).
 
     const tx = async (opId, iteration) => {
       if (!adapter.supports(opId)) {
@@ -24,7 +26,7 @@ async function run(ctx) {
       const row = await ctx.collector.repeatTx({ adapter: adapterId, scenario: "crud", op: opId }, iteration, { n, warmup });
       row.supported = true;
       rows.push(row);
-      log(ctx, `${opId.padEnd(28)} gas=${row.gasUsed} txs=${row.txCount} sstore=${row.sstoreCount} new=${row.newSlotsEstimate} log=${row.logBytes}B  lat.med=${row.latency.median}ms`);
+      log(ctx, `${opId.padEnd(28)} gas=${row.gasUsed} txs=${row.txCount} sstore=${row.sstoreCount} z2nz=${row.zeroToNonzeroSstores} log=${row.logBytes}B  lat.med=${row.latency.median}ms`);
     };
 
     const setupIdentity = async () => {
@@ -51,21 +53,28 @@ async function run(ctx) {
       return { fn: () => adapter.revokeAttribute(h, P.attributeName) };
     });
     await tx("D3_deactivate_identity", async () => { const h = await setupIdentity(); return { fn: () => adapter.deactivate(h) }; });
-    await tx("V1_issuer_key_anchor", async () => { const k = freshKey(ctx); return { fn: () => adapter.anchorIssuerKey(actors.issuer, k) }; });
-    await tx("V3_anchor_status", async (i) => { const h = await setupIdentity(); return { fn: () => adapter.anchorStatus(h, credHash(ctx, adapterId, "V3", i)) }; });
+    await tx("V1_issuer_key_anchor", async () => {
+      const iss = await freshIssuer(ctx, adapter); const k = freshKey(ctx);
+      return { fn: () => adapter.anchorIssuerKey(iss, k) };
+    });
+    await tx("V3_anchor_status", async (i) => {
+      const h = await setupIdentity(); const iss = await freshIssuer(ctx, adapter);
+      return { fn: () => adapter.anchorStatus(h, credHash(ctx, adapterId, "V3", i), iss) };
+    });
     await tx("V5_revoke_credential", async (i) => {
-      const h = await setupIdentity(); const c = credHash(ctx, adapterId, "V5", i);
-      await (await adapter.anchorStatus(h, c)).txs.at(-1).wait();
-      return { fn: () => adapter.revokeCredential(h, c) };
+      const h = await setupIdentity(); const iss = await freshIssuer(ctx, adapter); const c = credHash(ctx, adapterId, "V5", i);
+      await (await adapter.anchorStatus(h, c, iss)).txs.at(-1).wait();
+      return { fn: () => adapter.revokeCredential(h, c, iss) };
     });
 
-    // ---- reads on one identity with realistic state ----
+    // ---- reads on one identity with realistic state (own issuer: V6 is independent of N) ----
     const h = await setupIdentity();
     const k = freshKey(ctx);
     await (await adapter.addDelegate(h, k, P.ttlSeconds)).txs.at(-1).wait();
     await (await adapter.setAttribute(h, P.attributeName, P.attributeValue)).txs.at(-1).wait();
+    const readIssuer = await freshIssuer(ctx, adapter);
     const c = credHash(ctx, adapterId, "read");
-    await (await adapter.anchorStatus(h, c)).txs.at(-1).wait();
+    await (await adapter.anchorStatus(h, c, readIssuer)).txs.at(-1).wait();
 
     const rd = async (opId, fn) => {
       if (!adapter.supports(opId)) {
@@ -81,7 +90,7 @@ async function run(ctx) {
     await rd("R2_resolve_by_vin", () => adapter.resolveByVin(h.vin));
     await rd("R3_resolve_document", () => adapter.resolveDocument(h));
     await rd("R4_verify_delegate", () => adapter.verifyDelegate(h, k));
-    await rd("V6_status_check", () => adapter.statusCheck(h, c));
+    await rd("V6_status_check", () => adapter.statusCheck(h, c, readIssuer));
 
     for (const d of deployRows) rows.push({ ...d, op: "DEPLOY_" + d.contract, supported: true });
   }

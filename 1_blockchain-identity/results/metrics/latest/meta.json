@@ -1,12 +1,12 @@
 {
-  "runId": "2026-09-30T23-34-57Z_3b786c2",
-  "commit": "3b786c20150f37468de5c18ca0295445e3831c9c",
-  "commitShort": "3b786c2",
-  "branch": "claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt",
+  "runId": "2026-10-03T23-16-23Z_6620ac7",
+  "commit": "6620ac76c7663a90e08ed9ca8911514f776d7af3",
+  "commitShort": "6620ac7",
+  "branch": "worktree-agent-a95fb17f7a3c9c645",
   "dirty": false,
-  "date": "2026-09-30T23:34:57.462Z",
-  "node": "v22.22.2",
-  "hardhat": "2.29.1",
+  "date": "2026-10-03T23:16:24.853Z",
+  "node": "v22.22.0",
+  "hardhat": "2.28.6",
   "ethers": "6.17.0",
   "solc": "0.8.24",
   "evmVersion": "cancun",
@@ -16,7 +16,9 @@
     "name": "hardhat",
     "chainId": 31337,
     "automine": true,
-    "blockGasLimit": 60000000
+    "hardfork": "osaka",
+    "blockGasLimit": 60000000,
+    "blockGasLimitConfig": 60000000
   },
   "conditions": {
     "repetitions": 30,
@@ -36,8 +38,17 @@
       "perSender": 20,
       "bursts": 3
     },
+    "sampling": {
+      "txOps": "1 exact + 5 warm-up + 30 latency samples per op (crud)",
+      "reads": "5 warm-up + 30 samples (crud, resolve)",
+      "scaleReads": "2 warm-up + 10 samples",
+      "lifecycleAndBatchAndScaleTx": "1 measurement per event / cell (gas is exact)"
+    },
     "trace": true,
-    "datasetSeed": 42
+    "datasetSeed": 42,
+    "datasetSize": 1100,
+    "freshKeys": "sk_i = keccak256(abi.encode('cvin-bench/fresh-key/v1', 42, i)), i restarts per chain reset; addresses with a 0x00 byte skipped",
+    "credentialIssuer": "crud V1/V3/V5/V6: fresh issuer per iteration (identity + key anchor unmeasured)"
   },
   "scenarios": [
     "crud",
@@ -58,11 +69,11 @@
     "ethUSD": 3000
   },
   "scenarioSeconds": {
-    "crud": 109.952,
-    "lifecycle": 1.494,
-    "scale": 100.463,
-    "batch": 12.353,
-    "throughput": 14.771,
-    "resolve": 3.349
+    "crud": 86.254,
+    "lifecycle": 1.329,
+    "scale": 65.477,
+    "batch": 8.668,
+    "throughput": 12.044,
+    "resolve": 3.443
   }
 }
