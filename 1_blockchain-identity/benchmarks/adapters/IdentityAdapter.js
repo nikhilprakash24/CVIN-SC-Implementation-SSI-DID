@@ -28,6 +28,7 @@ class IdentityAdapter {
   }
 
   supports(opId) { return !this.unsupported[opId]; }
+  _issuer(issuer) { return issuer || this.actors.issuer; }
   notSupported(op) { throw new NotSupported(this.constructor.id, op, this.unsupported[op] || "no primitive"); }
 
   /** Deploy shared contracts. Returns [{name, contract}] for deployment accounting. */
@@ -47,10 +48,15 @@ class IdentityAdapter {
   async revokeDelegate(handle, key) { throw new Error("D1"); }
   async revokeAttribute(handle, name) { throw new Error("D2"); }
   async deactivate(handle) { throw new Error("D3"); }
+
+  // Credential layer. `issuer` defaults to actors.issuer; the crud scenario passes a
+  // fresh issuer per iteration so cells do not depend on N (review 02, H-1).
+  /** Unmeasured precondition: make `issuer` an issuer identity on this substrate. */
+  async prepareIssuer(issuer) { /* default: an address is an identity */ }
   async anchorIssuerKey(issuer, key) { throw new Error("V1"); }
-  async anchorStatus(handle, credHash) { throw new Error("V3"); }
-  async revokeCredential(handle, credHash) { throw new Error("V5"); }
-  async statusCheck(handle, credHash) { throw new Error("V6"); }
+  async anchorStatus(handle, credHash, issuer) { throw new Error("V3"); }
+  async revokeCredential(handle, credHash, issuer) { throw new Error("V5"); }
+  async statusCheck(handle, credHash, issuer) { throw new Error("V6"); }
 
   /** Optional: prepare N senders for the throughput scenario; returns [{sender, handle}]. */
   async prepareThroughputSenders(senders) { throw new Error("throughput not implemented"); }

@@ -19,3 +19,10 @@ Adding a substrate: write `adapters/<id>.adapter.js` extending `IdentityAdapter`
 register it in `adapters/index.js`, make `npm run test:conformance` pass, run.
 Declare missing primitives in `this.unsupported[opId] = reason` — they print as
 `n/a` and are themselves a result.
+
+Determinism (review 02, H-1/H-3): every "fresh" key is derived from the dataset
+seed (`scenarios/common.js`; the counter restarts on each chain reset; addresses
+with a 0x00 byte are skipped), and credential ops (V1/V3/V5/V6) get a fresh issuer
+per iteration. Two runs of the same commit therefore give byte-identical gas
+tables, and a crud cell does not depend on `METRICS_N`. Statistics unit tests:
+`npx hardhat test test/benchmarks/stats.test.js`.

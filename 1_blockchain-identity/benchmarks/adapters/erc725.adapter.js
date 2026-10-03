@@ -105,23 +105,35 @@ class ERC725Adapter extends IdentityAdapter {
     return { txs: [tx] };
   }
 
-  async anchorIssuerKey(issuer, key) {
+  /** Unmeasured precondition: the issuer's own identity contract (one per issuer). */
+  async prepareIssuer(issuer) {
+    if (this.issuerContracts.has(issuer.address)) return;
+    const id = await this.factory.connect(issuer).deploy();
+    await id.waitForDeployment();
+    this.issuerContracts.set(issuer.address, id);
+  }
+  _issuerId(issuer) {
     const id = this.issuerContracts.get(issuer.address);
+    if (!id) throw new Error(`erc725: no identity contract for issuer ${issuer.address} (call prepareIssuer)`);
+    return id;
+  }
+  async anchorIssuerKey(issuer, key) {
+    const id = this._issuerId(issuer);
     const tx = await id.connect(issuer).addKey(this._addrKey(key.address), PURPOSE.CLAIM, KEYTYPE_ECDSA);
     return { txs: [tx] };
   }
-  async anchorStatus(h, credHash) {
-    const id = this.issuerContracts.get(this.actors.issuer.address);
-    const tx = await id.connect(this.actors.issuer).addKey(credHash, PURPOSE.STATUS, KEYTYPE_ECDSA);
+  async anchorStatus(h, credHash, issuerArg) {
+    const issuer = this._issuer(issuerArg);
+    const tx = await this._issuerId(issuer).connect(issuer).addKey(credHash, PURPOSE.STATUS, KEYTYPE_ECDSA);
     return { txs: [tx] };
   }
-  async revokeCredential(h, credHash) {
-    const id = this.issuerContracts.get(this.actors.issuer.address);
-    const tx = await id.connect(this.actors.issuer).removeKey(credHash);
+  async revokeCredential(h, credHash, issuerArg) {
+    const issuer = this._issuer(issuerArg);
+    const tx = await this._issuerId(issuer).connect(issuer).removeKey(credHash);
     return { txs: [tx] };
   }
-  async statusCheck(h, credHash) {
-    const id = this.issuerContracts.get(this.actors.issuer.address);
+  async statusCheck(h, credHash, issuerArg) {
+    const id = this._issuerId(this._issuer(issuerArg));
     const k = await id.getKey(credHash);
     return Number(k.purpose) === PURPOSE.STATUS ? "active" : "revoked";
   }

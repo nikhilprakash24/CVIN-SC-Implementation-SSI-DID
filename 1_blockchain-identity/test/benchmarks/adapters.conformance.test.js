@@ -71,6 +71,17 @@ describe("Benchmark adapter conformance", function () {
         expect(await adapter.statusCheck(h, c)).to.equal("revoked");
       });
 
+      it("V1/V3/V5 with a separate issuer (prepareIssuer) do not touch the default issuer", async function () {
+        const iss = actors.extras[0];
+        await adapter.prepareIssuer(iss);
+        await wait(await adapter.anchorIssuerKey(iss, actors.extras[1]));
+        const c = hre.ethers.keccak256(hre.ethers.toUtf8Bytes("cred2-" + id));
+        await wait(await adapter.anchorStatus(h, c, iss));
+        expect(await adapter.statusCheck(h, c, iss)).to.equal("active");
+        await wait(await adapter.revokeCredential(h, c, iss));
+        expect(await adapter.statusCheck(h, c, iss)).to.equal("revoked");
+      });
+
       it("U1/U4 controller rotation and transfer", async function () {
         await wait(await adapter.rotateController(h, actors.newOwner));
         expect(await adapter.resolveOwner(h)).to.equal(actors.newOwner.address);

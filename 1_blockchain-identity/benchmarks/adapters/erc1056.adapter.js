@@ -2,6 +2,10 @@
 const { IdentityAdapter } = require("./IdentityAdapter");
 
 const MAX_UINT = (1n << 256n) - 1n;
+// "Permanent" validity for the deactivation attribute. A fixed constant (all bytes
+// non-zero, no overflow with any realistic block.timestamp) replaces a value
+// derived from Date.now(), which made D3 calldata differ from run to run (H-3).
+const PERMANENT_VALIDITY = MAX_UINT - (1n << 40n);
 
 /**
  * ERC-1056: the controller address IS the DID (did:ethr:<address>). The
@@ -169,7 +173,7 @@ class ERC1056Adapter extends IdentityAdapter {
   }
   async deactivate(h) {
     // ERC-1056 has no deactivate primitive (owner=0x0 resolves to self): publish a permanent attribute.
-    const tx = await this._reg(h.controller).setAttribute(h.did, this.K.deactivated, this.ethers.toUtf8Bytes("true"), MAX_UINT - BigInt(Math.floor(Date.now() / 1000)) - 10_000_000n);
+    const tx = await this._reg(h.controller).setAttribute(h.did, this.K.deactivated, this.ethers.toUtf8Bytes("true"), PERMANENT_VALIDITY);
     return { txs: [tx] };
   }
 
@@ -178,19 +182,19 @@ class ERC1056Adapter extends IdentityAdapter {
     const tx = await this._reg(issuer).addDelegate(issuer.address, this.K.veriKey, key.address, this.payloads.ttlSeconds);
     return { txs: [tx] };
   }
-  async anchorStatus(h, credHash) {
+  async anchorStatus(h, credHash, issuerArg) {
     // status attribute keyed by credential hash on the *issuer's* DID
-    const issuer = this.actors.issuer;
+    const issuer = this._issuer(issuerArg);
     const tx = await this._reg(issuer).setAttribute(issuer.address, credHash, this.ethers.toUtf8Bytes("active"), this.payloads.ttlSeconds);
     return { txs: [tx] };
   }
-  async revokeCredential(h, credHash) {
-    const issuer = this.actors.issuer;
+  async revokeCredential(h, credHash, issuerArg) {
+    const issuer = this._issuer(issuerArg);
     const tx = await this._reg(issuer).revokeAttribute(issuer.address, credHash, this.ethers.toUtf8Bytes("active"));
     return { txs: [tx] };
   }
-  async statusCheck(h, credHash) {
-    const issuer = this.actors.issuer.address;
+  async statusCheck(h, credHash, issuerArg) {
+    const issuer = this._issuer(issuerArg).address;
     const logs = await this.ethers.provider.getLogs({
       address: this.registryAddress, fromBlock: 0, toBlock: "latest",
       topics: [this.contracts.registry.interface.getEvent("DIDAttributeChanged").topicHash, this.ethers.zeroPadValue(issuer, 32)],
