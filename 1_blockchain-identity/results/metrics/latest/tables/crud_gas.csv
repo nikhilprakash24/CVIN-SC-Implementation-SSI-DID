@@ -1,6 +1,6 @@
 Operation,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
-C1_create_identity,76786,399844,656480,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-C2_create_with_attributes,366956,568074,1496440,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+C1_create_identity,76808,399844,656480,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+C2_create_with_attributes,366978,568074,1496440,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
 U1_rotate_controller,51754,179470,28390,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
 U2_add_delegate,55143,48314,119852,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
 U3_set_attribute,35024,120061,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.

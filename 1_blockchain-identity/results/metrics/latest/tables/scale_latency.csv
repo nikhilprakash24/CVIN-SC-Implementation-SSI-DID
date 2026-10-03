@@ -1,7 +1,7 @@
 Axis | op,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
-N=0|R3_resolve_document,9.152 / 10.64,4.003 / 4.61,7.298 / 8.781,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-N=100|R3_resolve_document,10.233 / 11.769,3.867 / 4.682,8.942 / 18.034,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-N=1000|R3_resolve_document,10.079 / 12.45,3.829 / 4.135,8.21 / 8.985,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-h=1|R3_resolve_document,9.91 / 10.505,3.882 / 4.846,8.339 / 9.764,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-h=10|R3_resolve_document,26.971 / 33.796,5.988 / 14.03,14.482 / 16.688,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-h=50|R3_resolve_document,64.692 / 71.883,26.325 / 119.804,45.421 / 52.607,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+N=0|R3_resolve_document,8.472 / 9.09,3.925 / 5.396,6.82 / 7.608,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+N=100|R3_resolve_document,8.068 / 9.171,3.792 / 4.967,8.555 / 15.267,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+N=1000|R3_resolve_document,9.012 / 11.771,4.093 / 5.565,8.852 / 10.747,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+h=1|R3_resolve_document,8.782 / 11.576,4.166 / 4.854,8.783 / 10.321,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+h=10|R3_resolve_document,19.718 / 25.248,7.769 / 13.863,15.719 / 18.496,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+h=50|R3_resolve_document,68.016 / 78.582,29.333 / 121.629,52.072 / 67.677,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.

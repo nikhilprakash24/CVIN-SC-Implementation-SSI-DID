@@ -7,17 +7,17 @@
     "op": "C2_create_with_attributes",
     "kind": "tx",
     "txCount": 9,
-    "latencyMs": 78.317558,
-    "gasUsed": 366956,
+    "latencyMs": 69.656295,
+    "gasUsed": 366978,
     "gasIntrinsic": 206208,
-    "gasExecution": 160748,
+    "gasExecution": 160770,
     "calldataBytes": 2244,
     "logCount": 9,
     "logBytes": 2272,
     "sstoreCount": 10,
     "sloadCount": 20,
     "zeroToNonzeroSstores": 3,
-    "evmSteps": 4370,
+    "evmSteps": 4375,
     "deploysContract": false
   },
   {
@@ -28,7 +28,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.515086,
+    "latencyMs": 9.062288,
     "gasUsed": 35024,
     "gasIntrinsic": 23376,
     "gasExecution": 11648,
@@ -49,7 +49,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 6.934405,
+    "latencyMs": 6.325961,
     "gasUsed": 51754,
     "gasIntrinsic": 21800,
     "gasExecution": 29954,
@@ -78,12 +78,12 @@
     "resultSize": 1425,
     "latency": {
       "n": 10,
-      "mean": 9.194,
-      "sd": 0.966,
-      "median": 9.152,
-      "p95": 10.64,
-      "min": 8.116,
-      "max": 10.94
+      "mean": 8.429,
+      "sd": 0.556,
+      "median": 8.472,
+      "p95": 9.09,
+      "min": 7.546,
+      "max": 9.101
     }
   },
   {
@@ -94,17 +94,17 @@
     "op": "C2_create_with_attributes",
     "kind": "tx",
     "txCount": 9,
-    "latencyMs": 66.889869,
-    "gasUsed": 366956,
+    "latencyMs": 76.798453,
+    "gasUsed": 366978,
     "gasIntrinsic": 206208,
-    "gasExecution": 160748,
+    "gasExecution": 160770,
     "calldataBytes": 2244,
     "logCount": 9,
     "logBytes": 2272,
     "sstoreCount": 10,
     "sloadCount": 20,
     "zeroToNonzeroSstores": 3,
-    "evmSteps": 4370,
+    "evmSteps": 4375,
     "deploysContract": false
   },
   {
@@ -115,7 +115,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 9.665116,
+    "latencyMs": 8.268652,
     "gasUsed": 35024,
     "gasIntrinsic": 23376,
     "gasExecution": 11648,
@@ -136,7 +136,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.89191,
+    "latencyMs": 6.14757,
     "gasUsed": 51754,
     "gasIntrinsic": 21800,
     "gasExecution": 29954,
@@ -165,12 +165,12 @@
     "resultSize": 1425,
     "latency": {
       "n": 10,
-      "mean": 9.916,
-      "sd": 1.603,
-      "median": 10.233,
-      "p95": 11.769,
-      "min": 7.785,
-      "max": 11.96
+      "mean": 8.243,
+      "sd": 0.724,
+      "median": 8.068,
+      "p95": 9.171,
+      "min": 6.91,
+      "max": 9.344
     }
   },
   {
@@ -181,17 +181,17 @@
     "op": "C2_create_with_attributes",
     "kind": "tx",
     "txCount": 9,
-    "latencyMs": 86.020406,
-    "gasUsed": 366956,
+    "latencyMs": 87.99484,
+    "gasUsed": 366978,
     "gasIntrinsic": 206208,
-    "gasExecution": 160748,
+    "gasExecution": 160770,
     "calldataBytes": 2244,
     "logCount": 9,
     "logBytes": 2272,
     "sstoreCount": 10,
     "sloadCount": 20,
     "zeroToNonzeroSstores": 3,
-    "evmSteps": 4370,
+    "evmSteps": 4375,
     "deploysContract": false
   },
   {
@@ -202,7 +202,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 8.470057,
+    "latencyMs": 8.296935,
     "gasUsed": 35024,
     "gasIntrinsic": 23376,
     "gasExecution": 11648,
@@ -223,7 +223,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 20.151003,
+    "latencyMs": 8.398709,
     "gasUsed": 51754,
     "gasIntrinsic": 21800,
     "gasExecution": 29954,
@@ -252,12 +252,12 @@
     "resultSize": 1425,
     "latency": {
       "n": 10,
-      "mean": 10.12,
-      "sd": 1.711,
-      "median": 10.079,
-      "p95": 12.45,
-      "min": 8.195,
-      "max": 13.231
+      "mean": 9.237,
+      "sd": 1.666,
+      "median": 9.012,
+      "p95": 11.771,
+      "min": 7.498,
+      "max": 13.237
     }
   },
   {
@@ -268,7 +268,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 8.081938,
+    "latencyMs": 7.722269,
     "gasUsed": 35028,
     "gasIntrinsic": 23376,
     "gasExecution": 11652,
@@ -289,7 +289,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 6.758859,
+    "latencyMs": 7.787103,
     "gasUsed": 34658,
     "gasIntrinsic": 21800,
     "gasExecution": 12858,
@@ -318,12 +318,12 @@
     "resultSize": 1631,
     "latency": {
       "n": 10,
-      "mean": 9.566,
-      "sd": 0.864,
-      "median": 9.91,
-      "p95": 10.505,
-      "min": 8.376,
-      "max": 10.55
+      "mean": 9.324,
+      "sd": 1.44,
+      "median": 8.782,
+      "p95": 11.576,
+      "min": 8.252,
+      "max": 12.984
     }
   },
   {
@@ -334,7 +334,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.010966,
+    "latencyMs": 7.553895,
     "gasUsed": 35028,
     "gasIntrinsic": 23376,
     "gasExecution": 11652,
@@ -355,7 +355,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 8.424427,
+    "latencyMs": 6.822023,
     "gasUsed": 34658,
     "gasIntrinsic": 21800,
     "gasExecution": 12858,
@@ -384,12 +384,12 @@
     "resultSize": 3485,
     "latency": {
       "n": 10,
-      "mean": 26.69,
-      "sd": 4.92,
-      "median": 26.971,
-      "p95": 33.796,
-      "min": 19.464,
-      "max": 35.893
+      "mean": 20.714,
+      "sd": 2.515,
+      "median": 19.718,
+      "p95": 25.248,
+      "min": 18.306,
+      "max": 26.298
     }
   },
   {
@@ -400,7 +400,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.48345,
+    "latencyMs": 7.926162,
     "gasUsed": 35028,
     "gasIntrinsic": 23376,
     "gasExecution": 11652,
@@ -421,7 +421,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 6.849784,
+    "latencyMs": 6.097192,
     "gasUsed": 34658,
     "gasIntrinsic": 21800,
     "gasExecution": 12858,
@@ -450,12 +450,12 @@
     "resultSize": 11725,
     "latency": {
       "n": 10,
-      "mean": 65.914,
-      "sd": 4.629,
-      "median": 64.692,
-      "p95": 71.883,
-      "min": 60.399,
-      "max": 72.138
+      "mean": 69.538,
+      "sd": 5.752,
+      "median": 68.016,
+      "p95": 78.582,
+      "min": 62.75,
+      "max": 79.983
     }
   },
   {
@@ -466,7 +466,7 @@
     "op": "C2_create_with_attributes",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 12.332272,
+    "latencyMs": 12.139251,
     "gasUsed": 565274,
     "gasIntrinsic": 25296,
     "gasExecution": 539978,
@@ -487,7 +487,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 10.046986,
+    "latencyMs": 7.892235,
     "gasUsed": 120061,
     "gasIntrinsic": 22460,
     "gasExecution": 97601,
@@ -508,7 +508,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 8.75687,
+    "latencyMs": 9.239147,
     "gasUsed": 179574,
     "gasIntrinsic": 21940,
     "gasExecution": 157634,
@@ -536,12 +536,12 @@
     "resultSize": 977,
     "latency": {
       "n": 10,
-      "mean": 4.067,
-      "sd": 0.399,
-      "median": 4.003,
-      "p95": 4.61,
-      "min": 3.302,
-      "max": 4.82
+      "mean": 4.236,
+      "sd": 0.662,
+      "median": 3.925,
+      "p95": 5.396,
+      "min": 3.589,
+      "max": 5.449
     }
   },
   {
@@ -552,7 +552,7 @@
     "op": "C2_create_with_attributes",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 12.74573,
+    "latencyMs": 12.300725,
     "gasUsed": 568074,
     "gasIntrinsic": 25296,
     "gasExecution": 542778,
@@ -573,7 +573,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.711109,
+    "latencyMs": 7.572706,
     "gasUsed": 120061,
     "gasIntrinsic": 22460,
     "gasExecution": 97601,
@@ -594,7 +594,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 10.877802,
+    "latencyMs": 10.179456,
     "gasUsed": 179574,
     "gasIntrinsic": 21940,
     "gasExecution": 157634,
@@ -622,12 +622,12 @@
     "resultSize": 983,
     "latency": {
       "n": 10,
-      "mean": 3.961,
-      "sd": 0.419,
-      "median": 3.867,
-      "p95": 4.682,
-      "min": 3.429,
-      "max": 4.862
+      "mean": 3.977,
+      "sd": 0.581,
+      "median": 3.792,
+      "p95": 4.967,
+      "min": 3.469,
+      "max": 5.397
     }
   },
   {
@@ -638,7 +638,7 @@
     "op": "C2_create_with_attributes",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 13.156725,
+    "latencyMs": 13.310462,
     "gasUsed": 568074,
     "gasIntrinsic": 25296,
     "gasExecution": 542778,
@@ -659,7 +659,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.574748,
+    "latencyMs": 8.117047,
     "gasUsed": 120073,
     "gasIntrinsic": 22472,
     "gasExecution": 97601,
@@ -680,7 +680,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 10.62603,
+    "latencyMs": 12.106941,
     "gasUsed": 179586,
     "gasIntrinsic": 21952,
     "gasExecution": 157634,
@@ -708,12 +708,12 @@
     "resultSize": 986,
     "latency": {
       "n": 10,
-      "mean": 3.875,
-      "sd": 0.178,
-      "median": 3.829,
-      "p95": 4.135,
-      "min": 3.694,
-      "max": 4.208
+      "mean": 4.365,
+      "sd": 0.673,
+      "median": 4.093,
+      "p95": 5.565,
+      "min": 3.815,
+      "max": 5.81
     }
   },
   {
@@ -724,7 +724,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 8.481992,
+    "latencyMs": 8.65601,
     "gasUsed": 102961,
     "gasIntrinsic": 22460,
     "gasExecution": 80501,
@@ -745,7 +745,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 9.502451,
+    "latencyMs": 9.401572,
     "gasUsed": 179574,
     "gasIntrinsic": 21940,
     "gasExecution": 157634,
@@ -773,12 +773,12 @@
     "resultSize": 1160,
     "latency": {
       "n": 10,
-      "mean": 4.035,
-      "sd": 0.515,
-      "median": 3.882,
-      "p95": 4.846,
-      "min": 3.53,
-      "max": 5.247
+      "mean": 4.304,
+      "sd": 0.327,
+      "median": 4.166,
+      "p95": 4.854,
+      "min": 3.949,
+      "max": 4.869
     }
   },
   {
@@ -789,7 +789,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 8.474644,
+    "latencyMs": 8.046691,
     "gasUsed": 102961,
     "gasIntrinsic": 22460,
     "gasExecution": 80501,
@@ -810,7 +810,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 9.20647,
+    "latencyMs": 9.262315,
     "gasUsed": 179574,
     "gasIntrinsic": 21940,
     "gasExecution": 157634,
@@ -838,12 +838,12 @@
     "resultSize": 2816,
     "latency": {
       "n": 10,
-      "mean": 7.956,
-      "sd": 4.058,
-      "median": 5.988,
-      "p95": 14.03,
-      "min": 4.61,
-      "max": 14.541
+      "mean": 9.076,
+      "sd": 3.187,
+      "median": 7.769,
+      "p95": 13.863,
+      "min": 6.123,
+      "max": 14.181
     }
   },
   {
@@ -854,7 +854,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.499477,
+    "latencyMs": 7.63963,
     "gasUsed": 102961,
     "gasIntrinsic": 22460,
     "gasExecution": 80501,
@@ -875,7 +875,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 9.298814,
+    "latencyMs": 10.236475,
     "gasUsed": 179574,
     "gasIntrinsic": 21940,
     "gasExecution": 157634,
@@ -903,12 +903,12 @@
     "resultSize": 10180,
     "latency": {
       "n": 10,
-      "mean": 45.519,
-      "sd": 46.033,
-      "median": 26.325,
-      "p95": 119.804,
-      "min": 12.976,
-      "max": 163.521
+      "mean": 45.284,
+      "sd": 48.511,
+      "median": 29.333,
+      "p95": 121.629,
+      "min": 16.835,
+      "max": 178.005
     }
   },
   {
@@ -919,7 +919,7 @@
     "op": "C2_create_with_attributes",
     "kind": "tx",
     "txCount": 9,
-    "latencyMs": 69.691138,
+    "latencyMs": 69.810856,
     "gasUsed": 1496416,
     "gasIntrinsic": 261494,
     "gasExecution": 1234922,
@@ -940,7 +940,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 6.727951,
+    "latencyMs": 7.266324,
     "gasUsed": 119996,
     "gasIntrinsic": 21856,
     "gasExecution": 98140,
@@ -961,7 +961,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 6.563078,
+    "latencyMs": 5.929622,
     "gasUsed": 28390,
     "gasIntrinsic": 21432,
     "gasExecution": 6958,
@@ -989,12 +989,12 @@
     "resultSize": 1305,
     "latency": {
       "n": 10,
-      "mean": 7.504,
-      "sd": 0.742,
-      "median": 7.298,
-      "p95": 8.781,
-      "min": 6.577,
-      "max": 9.14
+      "mean": 6.895,
+      "sd": 0.497,
+      "median": 6.82,
+      "p95": 7.608,
+      "min": 6.264,
+      "max": 7.721
     }
   },
   {
@@ -1005,7 +1005,7 @@
     "op": "C2_create_with_attributes",
     "kind": "tx",
     "txCount": 9,
-    "latencyMs": 69.426542,
+    "latencyMs": 77.621962,
     "gasUsed": 1496428,
     "gasIntrinsic": 261506,
     "gasExecution": 1234922,
@@ -1026,7 +1026,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.35776,
+    "latencyMs": 7.98353,
     "gasUsed": 119996,
     "gasIntrinsic": 21856,
     "gasExecution": 98140,
@@ -1047,7 +1047,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.097104,
+    "latencyMs": 8.701075,
     "gasUsed": 28390,
     "gasIntrinsic": 21432,
     "gasExecution": 6958,
@@ -1075,12 +1075,12 @@
     "resultSize": 1305,
     "latency": {
       "n": 10,
-      "mean": 10.412,
-      "sd": 4.952,
-      "median": 8.942,
-      "p95": 18.034,
-      "min": 7.929,
-      "max": 24.379
+      "mean": 9.483,
+      "sd": 3.628,
+      "median": 8.555,
+      "p95": 15.267,
+      "min": 6.151,
+      "max": 19.233
     }
   },
   {
@@ -1091,7 +1091,7 @@
     "op": "C2_create_with_attributes",
     "kind": "tx",
     "txCount": 9,
-    "latencyMs": 74.902146,
+    "latencyMs": 71.016777,
     "gasUsed": 1496440,
     "gasIntrinsic": 261518,
     "gasExecution": 1234922,
@@ -1112,7 +1112,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 8.87761,
+    "latencyMs": 8.103721,
     "gasUsed": 119996,
     "gasIntrinsic": 21856,
     "gasExecution": 98140,
@@ -1133,7 +1133,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.405945,
+    "latencyMs": 7.688717,
     "gasUsed": 28390,
     "gasIntrinsic": 21432,
     "gasExecution": 6958,
@@ -1161,12 +1161,12 @@
     "resultSize": 1305,
     "latency": {
       "n": 10,
-      "mean": 8.311,
-      "sd": 0.429,
-      "median": 8.21,
-      "p95": 8.985,
-      "min": 7.926,
-      "max": 9.343
+      "mean": 9.012,
+      "sd": 1.196,
+      "median": 8.852,
+      "p95": 10.747,
+      "min": 7.486,
+      "max": 10.985
     }
   },
   {
@@ -1177,7 +1177,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 7.264446,
+    "latencyMs": 7.922899,
     "gasUsed": 119996,
     "gasIntrinsic": 21856,
     "gasExecution": 98140,
@@ -1198,7 +1198,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 6.760484,
+    "latencyMs": 7.351409,
     "gasUsed": 28390,
     "gasIntrinsic": 21432,
     "gasExecution": 6958,
@@ -1226,12 +1226,12 @@
     "resultSize": 1406,
     "latency": {
       "n": 10,
-      "mean": 8.437,
-      "sd": 0.872,
-      "median": 8.339,
-      "p95": 9.764,
-      "min": 7.176,
-      "max": 10.059
+      "mean": 8.871,
+      "sd": 0.96,
+      "median": 8.783,
+      "p95": 10.321,
+      "min": 7.564,
+      "max": 10.721
     }
   },
   {
@@ -1242,7 +1242,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 6.982988,
+    "latencyMs": 6.782777,
     "gasUsed": 119996,
     "gasIntrinsic": 21856,
     "gasExecution": 98140,
@@ -1263,7 +1263,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 6.437166,
+    "latencyMs": 9.549816,
     "gasUsed": 28390,
     "gasIntrinsic": 21432,
     "gasExecution": 6958,
@@ -1291,12 +1291,12 @@
     "resultSize": 2315,
     "latency": {
       "n": 10,
-      "mean": 14.178,
-      "sd": 1.8,
-      "median": 14.482,
-      "p95": 16.688,
-      "min": 11.795,
-      "max": 17.238
+      "mean": 15.681,
+      "sd": 2.029,
+      "median": 15.719,
+      "p95": 18.496,
+      "min": 12.704,
+      "max": 18.687
     }
   },
   {
@@ -1307,7 +1307,7 @@
     "op": "U3_set_attribute",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 6.947037,
+    "latencyMs": 6.626018,
     "gasUsed": 119996,
     "gasIntrinsic": 21856,
     "gasExecution": 98140,
@@ -1328,7 +1328,7 @@
     "op": "U4_transfer_vehicle",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 6.079281,
+    "latencyMs": 6.172865,
     "gasUsed": 28390,
     "gasIntrinsic": 21432,
     "gasExecution": 6958,
@@ -1356,12 +1356,12 @@
     "resultSize": 6355,
     "latency": {
       "n": 10,
-      "mean": 44.96,
-      "sd": 5.093,
-      "median": 45.421,
-      "p95": 52.607,
-      "min": 39.192,
-      "max": 55.337
+      "mean": 53.214,
+      "sd": 10.38,
+      "median": 52.072,
+      "p95": 67.677,
+      "min": 41.632,
+      "max": 68.06
     }
   }
 ]

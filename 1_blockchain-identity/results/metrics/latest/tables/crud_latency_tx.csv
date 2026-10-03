@@ -1,14 +1,14 @@
 Operation,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
-C1_create_identity,9.412 / 12.175,12.109 / 18.354,19.867 / 26.355,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-C2_create_with_attributes,72.985 / 92.488,12.314 / 16.437,68.889 / 89.044,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U1_rotate_controller,7.492 / 10.877,9.524 / 11.588,6.667 / 9.369,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U2_add_delegate,7.558 / 9.577,6.95 / 12.642,6.811 / 7.501,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U3_set_attribute,7.858 / 10.533,7.451 / 10.528,6.972 / 8.779,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U4_transfer_vehicle,6.977 / 9.471,9.044 / 11.815,6.439 / 7.386,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U5_meta_tx,11.785 / 15.346,n/a,n/a,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-D1_revoke_delegate,7.755 / 8.858,7.746 / 9.818,9.448 / 20.378,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-D2_revoke_attribute,7.576 / 8.547,n/a,9.052 / 22.374,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-D3_deactivate_identity,7.682 / 10.41,8.746 / 11.164,6.754 / 9.71,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-V1_issuer_key_anchor,7.482 / 10.895,12.757 / 18.215,6.804 / 10.16,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-V3_anchor_status,7.471 / 10.588,8.8 / 11.946,7.213 / 8.707,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-V5_revoke_credential,7.464 / 10.222,8.072 / 11.91,8.019 / 16.648,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+C1_create_identity,9.85 / 12.045,11.584 / 14.063,18.976 / 21.548,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+C2_create_with_attributes,70.276 / 83.47,12.86 / 17.727,68.64 / 89.115,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U1_rotate_controller,6.966 / 9.552,9.457 / 15.102,6.904 / 10.103,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U2_add_delegate,7.046 / 12.168,7.318 / 10.059,7.371 / 10.912,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U3_set_attribute,7.873 / 11.363,7.745 / 11.024,7.097 / 10.064,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U4_transfer_vehicle,6.995 / 10.472,10.005 / 14.052,6.841 / 8.699,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U5_meta_tx,12.335 / 15.56,n/a,n/a,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+D1_revoke_delegate,8.605 / 9.842,7.68 / 10.252,9.489 / 12.495,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+D2_revoke_attribute,8.228 / 9.683,n/a,9.392 / 12.125,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+D3_deactivate_identity,7.777 / 10.774,7.813 / 8.685,6.575 / 8.98,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+V1_issuer_key_anchor,7.487 / 10.268,11.969 / 14.243,7.061 / 10.502,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+V3_anchor_status,7.637 / 9.415,8.1 / 10.95,7.442 / 9.237,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+V5_revoke_credential,7.655 / 10.984,7.679 / 11.094,8.258 / 13.301,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.

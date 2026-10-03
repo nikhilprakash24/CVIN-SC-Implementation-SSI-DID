@@ -1,10 +1,10 @@
 {
-  "runId": "2026-10-03T23-16-23Z_6620ac7",
-  "commit": "6620ac76c7663a90e08ed9ca8911514f776d7af3",
-  "commitShort": "6620ac7",
-  "branch": "worktree-agent-a95fb17f7a3c9c645",
+  "runId": "2026-10-03T23-23-59Z_59405ff",
+  "commit": "59405ff78e07b394c8aaac8417a15d471472634f",
+  "commitShort": "59405ff",
+  "branch": "HEAD",
   "dirty": false,
-  "date": "2026-10-03T23:16:24.853Z",
+  "date": "2026-10-03T23:24:00.413Z",
   "node": "v22.22.0",
   "hardhat": "2.28.6",
   "ethers": "6.17.0",
@@ -69,11 +69,11 @@
     "ethUSD": 3000
   },
   "scenarioSeconds": {
-    "crud": 86.254,
-    "lifecycle": 1.329,
-    "scale": 65.477,
-    "batch": 8.668,
-    "throughput": 12.044,
-    "resolve": 3.443
+    "crud": 86.809,
+    "lifecycle": 1.324,
+    "scale": 66.557,
+    "batch": 8.848,
+    "throughput": 11.81,
+    "resolve": 2.968
   }
 }

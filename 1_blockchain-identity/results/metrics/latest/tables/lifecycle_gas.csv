@@ -1,5 +1,5 @@
 Event,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
-1. VID-I birth certificate,366848,565262,1496416,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+1. VID-I birth certificate,366870,565262,1496416,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
 2. Issuer key anchor,72243,419990,136952,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
 3. Registration credential anchored,33918,142897,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
 4. Insurance credential anchored,33918,125797,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
@@ -16,9 +16,9 @@ Event,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
 15. Credential revocation (old insurance),33470,125809,49218,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
 16. Second ownership transfer,34646,179574,28390,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
 17. End-of-life deactivation,34222,27677,23091,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-**Lifetime total**,1050765,2701239,3155103,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-Shared deploy gas,2673900,2721476,519384,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+**Lifetime total**,1050787,2701239,3155103,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Shared deploy gas,2709021,2721476,519384,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
 Per-identity deploy gas (in total),0,0,519384,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-Lifetime + shared/1,3724665,5422715,3674487,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-Lifetime + shared/1 000,1053439,2703960,3155622,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-Lifetime + shared/1 000 000,1050768,2701242,3155104,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Lifetime + shared/1,3759808,5422715,3674487,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Lifetime + shared/1 000,1053496,2703960,3155622,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Lifetime + shared/1 000 000,1050790,2701242,3155104,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
