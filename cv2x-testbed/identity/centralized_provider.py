@@ -402,9 +402,27 @@ class CentralizedIdentityProvider(IdentityProvider):
         return is_revoked, elapsed
 
     def update_credential(self, vehicle_id: str, updates: Dict) -> bool:
-        """Update credential metadata"""
+        """
+        Update credential.
+
+        `{'rotate_key': True}` makes the CA issue one new short-lived pseudonym
+        certificate (fresh keypair, CA-signed) and adds it to the vehicle's pool:
+        the PKI counterpart of publishing a new verification key. Other keys are
+        stored as metadata.
+        """
         if vehicle_id not in self.vehicles:
             return False
+
+        updates = dict(updates or {})
+        if updates.pop('rotate_key', False):
+            new_cert = self._generate_pseudonym_pool(vehicle_id, count=1)[0]
+            self.vehicles[vehicle_id]['pseudonym_pool'].append(new_cert)
+            self.ct_log.append({
+                'vehicle_id': vehicle_id,
+                'cert_serial': new_cert['certificate'].serial_number,
+                'timestamp': time.time(),
+                'operation': 'pseudonym_issuance'
+            })
 
         self.vehicles[vehicle_id]['metadata'].update(updates)
         return True

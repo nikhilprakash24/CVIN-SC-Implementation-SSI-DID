@@ -1,0 +1,124 @@
+{
+  "implementation": "CVIN did_resolver.py (ERC-721)",
+  "implementer": "CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)",
+  "didMethod": "did:nft",
+  "expectedOutcomes": {
+    "defaultOutcome": [
+      0,
+      1
+    ],
+    "invalidDidErrorOutcome": [
+      2
+    ],
+    "notFoundErrorOutcome": [],
+    "representationNotSupportedErrorOutcome": [],
+    "methodNotSupportedErrorOutcome": [],
+    "deactivatedOutcome": []
+  },
+  "executions": [
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:nft:0x1:0xabc:123",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "contentType": "application/did+ld+json",
+          "retrieved": "2026-09-24T23:32:46.716399+00:00",
+          "error": null,
+          "errorMessage": null
+        },
+        "didDocument": {
+          "@context": [
+            "https://www.w3.org/ns/did/v1",
+            "https://w3id.org/security/suites/secp256k1-2019/v1"
+          ],
+          "id": "did:nft:0x1:0xabc:123",
+          "verificationMethod": [
+            {
+              "id": "did:nft:0x1:0xabc:123#owner",
+              "type": "EcdsaSecp256k1VerificationKey2019",
+              "controller": "did:nft:0x1:0xabc:123",
+              "blockchainAccountId": "eip155:0x1:0xabc"
+            }
+          ],
+          "authentication": [
+            "did:nft:0x1:0xabc:123#owner"
+          ],
+          "service": [
+            {
+              "id": "did:nft:0x1:0xabc:123#nft-metadata",
+              "type": "NFTMetadata",
+              "serviceEndpoint": "https://api.opensea.io/api/v1/asset/0xabc/123"
+            }
+          ]
+        },
+        "didDocumentMetadata": {
+          "created": "2026-09-24T23:32:46.716390+00:00",
+          "updated": null,
+          "deactivated": false,
+          "versionId": null,
+          "nextUpdate": null,
+          "nextVersionId": null,
+          "equivalentId": [],
+          "canonicalId": null
+        }
+      }
+    },
+    {
+      "function": "resolveRepresentation",
+      "input": {
+        "did": "did:nft:0x1:0xabc:123",
+        "resolutionOptions": {
+          "accept": "application/did+ld+json"
+        }
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "contentType": "application/did+ld+json",
+          "retrieved": "2026-09-24T23:32:46.716399+00:00",
+          "error": null,
+          "errorMessage": null
+        },
+        "didDocumentStream": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:nft:0x1:0xabc:123\", \"verificationMethod\": [{\"id\": \"did:nft:0x1:0xabc:123#owner\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:nft:0x1:0xabc:123\", \"blockchainAccountId\": \"eip155:0x1:0xabc\"}], \"authentication\": [\"did:nft:0x1:0xabc:123#owner\"], \"service\": [{\"id\": \"did:nft:0x1:0xabc:123#nft-metadata\", \"type\": \"NFTMetadata\", \"serviceEndpoint\": \"https://api.opensea.io/api/v1/asset/0xabc/123\"}]}",
+        "didDocumentMetadata": {
+          "created": "2026-09-24T23:32:46.716390+00:00",
+          "updated": null,
+          "deactivated": false,
+          "versionId": null,
+          "nextUpdate": null,
+          "nextVersionId": null,
+          "equivalentId": [],
+          "canonicalId": null
+        }
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:nft:0x1:0xabc",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "contentType": "application/did+ld+json",
+          "retrieved": null,
+          "error": "internalError",
+          "errorMessage": "Invalid did:nft format: did:nft:0x1:0xabc"
+        },
+        "didDocument": null,
+        "didDocumentMetadata": {
+          "created": null,
+          "updated": null,
+          "deactivated": false,
+          "versionId": null,
+          "nextUpdate": null,
+          "nextVersionId": null,
+          "equivalentId": [],
+          "canonicalId": null
+        }
+      }
+    }
+  ]
+}

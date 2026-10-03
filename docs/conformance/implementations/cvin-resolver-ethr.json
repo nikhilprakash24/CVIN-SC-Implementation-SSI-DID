@@ -1,0 +1,149 @@
+{
+  "implementation": "CVIN did_resolver.py (ERC-1056)",
+  "implementer": "CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)",
+  "didMethod": "did:ethr",
+  "expectedOutcomes": {
+    "defaultOutcome": [
+      0,
+      1
+    ],
+    "invalidDidErrorOutcome": [
+      2
+    ],
+    "notFoundErrorOutcome": [],
+    "representationNotSupportedErrorOutcome": [],
+    "methodNotSupportedErrorOutcome": [
+      3
+    ],
+    "deactivatedOutcome": []
+  },
+  "executions": [
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "contentType": "application/did+ld+json",
+          "retrieved": "2026-09-24T23:32:46.715160+00:00",
+          "error": null,
+          "errorMessage": null
+        },
+        "didDocument": {
+          "@context": [
+            "https://www.w3.org/ns/did/v1",
+            "https://w3id.org/security/suites/secp256k1-2019/v1"
+          ],
+          "id": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678",
+          "controller": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678",
+          "verificationMethod": [
+            {
+              "id": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller",
+              "type": "EcdsaSecp256k1VerificationKey2019",
+              "controller": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678",
+              "blockchainAccountId": "eip155:0x1:0x1234567890abcdef1234567890abcdef12345678"
+            }
+          ],
+          "authentication": [
+            "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller"
+          ],
+          "assertionMethod": [
+            "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller"
+          ]
+        },
+        "didDocumentMetadata": {
+          "created": "2026-09-24T23:32:46.715115+00:00",
+          "updated": null,
+          "deactivated": false,
+          "versionId": "1",
+          "nextUpdate": null,
+          "nextVersionId": null,
+          "equivalentId": [],
+          "canonicalId": null
+        }
+      }
+    },
+    {
+      "function": "resolveRepresentation",
+      "input": {
+        "did": "did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678",
+        "resolutionOptions": {
+          "accept": "application/did+ld+json"
+        }
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "contentType": "application/did+ld+json",
+          "retrieved": "2026-09-24T23:32:46.715160+00:00",
+          "error": null,
+          "errorMessage": null
+        },
+        "didDocumentStream": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"controller\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"verificationMethod\": [{\"id\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"blockchainAccountId\": \"eip155:0x1:0x1234567890abcdef1234567890abcdef12345678\"}], \"authentication\": [\"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\"], \"assertionMethod\": [\"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\"]}",
+        "didDocumentMetadata": {
+          "created": "2026-09-24T23:32:46.715115+00:00",
+          "updated": null,
+          "deactivated": false,
+          "versionId": "1",
+          "nextUpdate": null,
+          "nextVersionId": null,
+          "equivalentId": [],
+          "canonicalId": null
+        }
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:ethr_0x1234",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "contentType": "application/did+ld+json",
+          "retrieved": null,
+          "error": "internalError",
+          "errorMessage": "Invalid DID format: did:ethr_0x1234"
+        },
+        "didDocument": null,
+        "didDocumentMetadata": {
+          "created": null,
+          "updated": null,
+          "deactivated": false,
+          "versionId": null,
+          "nextUpdate": null,
+          "nextVersionId": null,
+          "equivalentId": [],
+          "canonicalId": null
+        }
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:web:example.com",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "contentType": "application/did+ld+json",
+          "retrieved": "2026-09-24T23:32:46.715361+00:00",
+          "error": "methodNotSupported",
+          "errorMessage": "DID method 'DIDMethod.WEB' is not supported"
+        },
+        "didDocument": null,
+        "didDocumentMetadata": {
+          "created": null,
+          "updated": null,
+          "deactivated": false,
+          "versionId": null,
+          "nextUpdate": null,
+          "nextVersionId": null,
+          "equivalentId": [],
+          "canonicalId": null
+        }
+      }
+    }
+  ]
+}

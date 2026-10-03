@@ -1,0 +1,135 @@
+<style>
+  :root{
+    --paper:#f4f6f9; --surface:#ffffff; --ink:#161a21; --muted:#5f6b7c;
+    --line:#e2e6ec; --accent:#3a49c9; --accent-soft:rgba(58,73,201,.08);
+    --good:#1f7a4d; --good-soft:rgba(31,122,77,.10);
+    --font-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --maxw:44rem;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0e1116; --surface:#161b23; --ink:#e7eaf0; --muted:#8b95a6;
+      --line:#232b36; --accent:#8091ff; --accent-soft:rgba(128,145,255,.13);
+      --good:#4bbd85; --good-soft:rgba(75,189,133,.14);
+    }
+  }
+  :root[data-theme="light"]{
+    --paper:#f4f6f9; --surface:#ffffff; --ink:#161a21; --muted:#5f6b7c;
+    --line:#e2e6ec; --accent:#3a49c9; --accent-soft:rgba(58,73,201,.08);
+    --good:#1f7a4d; --good-soft:rgba(31,122,77,.10);
+  }
+  :root[data-theme="dark"]{
+    --paper:#0e1116; --surface:#161b23; --ink:#e7eaf0; --muted:#8b95a6;
+    --line:#232b36; --accent:#8091ff; --accent-soft:rgba(128,145,255,.13);
+    --good:#4bbd85; --good-soft:rgba(75,189,133,.14);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans);
+    line-height:1.55;-webkit-font-smoothing:antialiased;
+    padding:clamp(1.25rem,4vw,3rem);}
+  .card{max-width:var(--maxw);margin:0 auto;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 32px -18px rgba(0,0,0,.22);}
+  .band{height:4px;background:linear-gradient(90deg,var(--accent),transparent 78%);}
+  .pad{padding:clamp(1.5rem,4vw,2.5rem);}
+  .eyebrow{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 .9rem;}
+  h1{font-size:clamp(1.65rem,4.5vw,2.3rem);line-height:1.08;margin:0 0 .5rem;
+    letter-spacing:-.015em;text-wrap:balance;font-weight:650;}
+  .spec{font-family:var(--font-mono);font-size:.82rem;color:var(--muted);
+    margin:0 0 1.15rem;}
+  .role{font-size:1.05rem;color:var(--ink);margin:0 0 1.6rem;max-width:38rem;
+    text-wrap:pretty;}
+  dl{display:grid;grid-template-columns:minmax(9rem,10rem) 1fr;gap:.05rem 1.4rem;
+    margin:0;border-top:1px solid var(--line);padding-top:1.3rem;}
+  dt{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--muted);padding:.55rem 0;}
+  dd{margin:0;padding:.55rem 0;font-size:.94rem;border-bottom:1px solid var(--line);}
+  dt{border-bottom:1px solid var(--line);}
+  dd code,dd .path{font-family:var(--font-mono);font-size:.82em;
+    background:var(--accent-soft);color:var(--accent);padding:.08em .4em;
+    border-radius:5px;word-break:break-word;}
+  dd a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft);}
+  dd a:hover{border-bottom-color:var(--accent);}
+  .callout{margin-top:1.6rem;display:flex;gap:.85rem;align-items:flex-start;
+    background:var(--good-soft);border:1px solid color-mix(in srgb,var(--good) 30%,transparent);
+    border-radius:10px;padding:.95rem 1.1rem;}
+  .callout .tag{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--good);border:1px solid currentColor;
+    border-radius:4px;padding:.15em .45em;white-space:nowrap;margin-top:.15rem;}
+  .callout p{margin:0;font-size:.9rem;}
+  .callout .num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;
+    font-weight:650;color:var(--ink);}
+  footer{border-top:1px solid var(--line);margin-top:1.9rem;padding-top:1.1rem;
+    font-size:.78rem;color:var(--muted);}
+  footer strong{color:var(--ink);font-weight:600;}
+  @media (max-width:34rem){dl{grid-template-columns:1fr;gap:0}
+    dt{border-bottom:none;padding-bottom:.1rem}}
+</style>
+
+<article class="card">
+  <div class="band"></div>
+  <div class="pad">
+    <p class="eyebrow">Source Register &middot; Measured Result</p>
+    <h1>Gas Benchmark &mdash; 9-Standard Cost Register</h1>
+    <p class="spec">gas_benchmark.json &middot; solc 0.8.24 (viaIR, opt 200) &middot; OZ 5.0.2 &middot; Hardhat-local (chainId 31337) &middot; N=30</p>
+    <p class="role">The per-operation gas cost of every identity standard, measured as the
+      exact <code>receipt.gasUsed</code> of one representative transaction per (standard,
+      operation) on a fresh in-process Hardhat network. This is the primary evidence for
+      <strong>H1</strong> (minimal standards are &ge;10&times; cheaper) and feeds the
+      <strong>H5</strong> security/performance frontier.</p>
+
+    <dl>
+      <dt>What it measures</dt>
+      <dd>Deploy + five lifecycle operations (createIdentity, updateAttribute,
+        addDelegateOrClaim, revoke, transferOwnership) across nine identity standards plus
+        the MOBI-VID-V2 application profile; <code>null</code> where a standard has no
+        analogue for an operation.</dd>
+
+      <dt>Method</dt>
+      <dd>Full benchmark re-run <span class="num">30</span> times on a fresh Hardhat network
+        each time; <code>gasUsed</code> aggregated per cell. EVM gas is deterministic for
+        fixed calldata + pre-state, so identical values across runs (stdev 0, CI width 0)
+        is the expected reproducibility result. Setup txs (role grants, issuer auth) are
+        excluded from operation gas.</dd>
+
+      <dt>Key numbers</dt>
+      <dd>createIdentity ranges <span class="num">52,178</span> (CVIN-Combined) and
+        <span class="num">52,612</span> (ERC-1056) at the low end to
+        <span class="num">1,704,992</span> (ERC-725xy) at the high &mdash; a
+        <span class="num">~33&times;</span> spread; ERC-1056 is roughly 10&times; under
+        ERC-721 (542,429) and ERC-725 (528,647). The ERC-4337 EntryPoint indirection adds
+        +46,862 gas/op (96,228 vs 49,366).</dd>
+
+      <dt>Source file</dt>
+      <dd><span class="path">4_comparison-framework/results/gas_benchmark.json</span>
+        (+ <span class="path">gas_benchmark_stats.json</span> for the N=30 determinism proof)</dd>
+
+      <dt>Provenance / caveat</dt>
+      <dd>Produced by the researcher's Hardhat harness
+        (<span class="path">1_blockchain-identity/scripts/benchmark_gas.js</span>).
+        <strong>Caveat:</strong> gas is measured on Hardhat-local &mdash; deterministic, so
+        the <em>relative</em> comparison holds, but absolute fiat cost is gas-price
+        dependent and no public-testnet (Sepolia) witness exists yet. See
+        <code>PROVENANCE.md</code>.</dd>
+    </dl>
+
+    <div class="callout">
+      <span class="tag">Confirms H1</span>
+      <p>createIdentity spans <span class="num">52,178</span> to
+        <span class="num">1,704,992</span> gas &mdash; a <span class="num">~33&times;</span>
+        spread that puts the minimal event-log substrates an order of magnitude below the
+        rich-state standards. Every one of the <span class="num">30</span> runs returned
+        byte-identical values (stdev&nbsp;0), so the point estimates are exact, not
+        single-sample flukes. <em>(Results &sect;5.2.)</em></p>
+    </div>
+
+    <footer>
+      Part of the <strong>CVIN-SSI Source Register</strong> (<code>SOURCES.md</code>) for
+      the MASc thesis <em>Comparative Analysis of Self-Sovereign Identity Systems for
+      Connected and Autonomous Vehicles</em> — <strong>Nikhil Prakash</strong>, UBC ECE.
+      Provenance and attribution: <code>PROVENANCE.md</code>, <code>docs/DEVELOPMENT_HISTORY.md</code>.
+    </footer>
+  </div>
+</article>

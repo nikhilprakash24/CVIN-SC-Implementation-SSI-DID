@@ -85,16 +85,21 @@ async function main() {
   // Test basic functionality
   console.log("\n🧪 Testing contract...");
 
-  // Register a test vehicle
-  const testVehicleAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
+  // Register a test vehicle.
+  // ERC1056Registry.registerVehicle() is guarded by onlyOwner(identity, msg.sender),
+  // and identityOwner(identity) defaults to the identity itself, so the registration
+  // transaction MUST be sent from the vehicle's own account (self-sovereign registration).
+  // Sending it from the deployer reverts with "Only owner can perform this action".
+  const [, vehicleSigner] = await hre.ethers.getSigners();
+  const testVehicleAddress = vehicleSigner.address; // Hardhat account #1
   const testPublicKey = "0x" + "04" + "a".repeat(128); // Dummy public key
 
   console.log("   Registering test vehicle:", testVehicleAddress);
 
-  const tx = await registry.registerVehicle(testVehicleAddress, testPublicKey);
-  await tx.wait();
+  const tx = await registry.connect(vehicleSigner).registerVehicle(testVehicleAddress, testPublicKey);
+  const regReceipt = await tx.wait();
 
-  console.log("   ✅ Vehicle registered");
+  console.log("   ✅ Vehicle registered (gas used:", regReceipt.gasUsed.toString() + ")");
 
   // Check identity info
   const [owner, lastChanged, isRevoked, revokedAt] = await registry.getIdentityInfo(testVehicleAddress);

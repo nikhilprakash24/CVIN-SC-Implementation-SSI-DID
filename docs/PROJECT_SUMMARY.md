@@ -32,10 +32,15 @@ intended to be thesis-grade on its own before parallel research is merged.
 | Component | Command | Result |
 |---|---|---|
 | **VC layer** | `pytest 2_w3c-ssi-layer/verifiable-credentials/tests/` | ✅ **28/28 passed** (0.55s) **[verified]** |
-| **DID resolver** | `did_resolver.py did:ethr:0x1:0x…` | ✅ valid W3C DID Document, **~0.05 ms** resolve **[verified]** |
-| **W3C compliance** | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ **89.6%** overall (DID Core 75%, VC DM 100%, SSI 100%; 58/67) **[verified]** |
+| **DID resolver** | `did_resolver.py`; `docs/figures/resolution_latency_M0.json` | ✅ valid W3C DID Document; in-process resolve **0.009 ms median / 0.013 ms p95 cold, 0.002 ms warm** (M0, N=30 per method) **[verified]** |
+| **W3C compliance (internal)** | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ **93.2%** on the merged trunk (the analysis lineage's updated checker, which counts its two documented Data-Integrity deviations as FAIL by design; 89.6% on the pre-merge checker) **[verified, self-scored]** |
+| **W3C DID conformance (external)** | `docs/conformance/W3C_DID_TEST_SUITE.md` | ✅ **328/441 (74.4%)** on w3c/did-test-suite `939b31d`; identifier, properties, production, consumption 142/142; resolution 186/299 — 113 failures in 5 fixable metadata root causes **[verified externally]** |
 | **Contract compile** | `1_blockchain-identity` Hardhat compile | ✅ **31 contracts compile** (after fix, see §2.1) **[verified]** |
-| **Contract tests** | `1_blockchain-identity` Hardhat test | ✅ **47 passing / 0 failing** (after reconciliation, see §2.3) **[verified]** |
+| **Contract tests** | `1_blockchain-identity` Hardhat test | ✅ **219 passing / 0 failing** on the merged trunk (47 contracts, all nine standards + MOBI VID + security scenarios; 47/47 before the merge, see §2.3) **[verified]** |
+| **Python suites** | `2_w3c-ssi-layer/**/tests` | ✅ **60 passed** (VC layer 28, MOBI VID I/II, VIN cipher) **[verified]** |
+| **Nine-standard gas benchmark** | `1_blockchain-identity/scripts/benchmark_gas.js` → `4_comparison-framework/results/gas_*` | ✅ re-executed on the merged trunk; see claim register #25 for the cancun-vs-July delta **[verified]** |
+| **PKI vs ERC-1056** | `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py` → `cv2x-testbed/results/pki_vs_erc1056.{csv,json,md}` | ✅ n=50 per op, 3 providers. Hot-path verify **PKI 0.32 ms vs ERC-1056 uncached 18.2 ms median / 23.7 ms p95** (7 RPC calls); ERC-1056 register 54,860 gas, revoke 75,044; message 595 B vs ≈1.1 kB **[verified]** (caveats in the .md) |
+| **CI on GitHub** | `.github/workflows/` at `ed85dfd` | ✅ **Smart Contract Tests: success** ([run 36066006587](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006587)) · **W3C SSI Compliance: success** ([run 36066006689](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006689)) — first green CI in the project **[verified externally]** |
 
 ### 2.1 Build fix applied this session
 The trunk **did not compile as received**: `hardhat.config.js` pinned solc
@@ -83,6 +88,15 @@ count and belong in the implementation chapter:
    interoperability detail the W3C-compliance discussion should record
    (`did:ethr` proof suites vs. EIP-191 Data Integrity proofs in the VC
    layer).
+4. **Non-functional blockchain verification path (found by the PKI
+   experiment).** `erc1056_provider.resolve_identity_from_address` returned
+   the literal placeholder `"0x04..."`, so `verify_message` for the
+   blockchain provider could never succeed; `registerVehicle`/`revokeIdentity`
+   were also signed by the deployer, which the contract's `onlyOwner`
+   rejects. Every earlier "V2V + blockchain identity" claim on this trunk
+   therefore rested on a path that did not run. Fixed with real ERC-1056
+   resolution (`getIdentityInfo` + `previousChange` event walk) and
+   vehicle-signed transactions.
 
 Also: the ERC-721 tests were written against `recordEntry` / `payToll`
 functions that no revision of the contract ever had; those were added to the
@@ -147,8 +161,12 @@ session (container is ephemeral — nothing here is pre-provisioned).
 - W3C compliance checker (`scripts/w3c_compliance_checker.py`, 782).
 
 ### 3.4 CI/CD — `.github/workflows/`
-- `test-contracts.yml`, `benchmark.yml` (nightly gas), `w3c-compliance.yml`
-  (>90% gate). Present in-repo; not yet observed running against this trunk.
+- `test-contracts.yml` (compile + 47 tests), `w3c-compliance.yml` (VC pytest
+  + compliance score with an honest 89.0% floor and 90% target),
+  `benchmark.yml` (nightly gas report artifact). Rewritten to match the
+  trunk on 2026-09-24 (`5ab8d4d`); the contract job first failed on GitHub
+  because `package-lock.json` was gitignored, fixed by tracking it
+  (`ed85dfd`). **Both push-triggered workflows are green on GitHub** (§2).
 
 ### 3.5 Documentation
 - Root: `README`, `INVENTORY`, `CAPABILITIES`, `QUICKSTART`,

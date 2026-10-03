@@ -1,115 +1,167 @@
 name: Performance Benchmarks
 
+# Runs the Hardhat test suite with hardhat-gas-reporter enabled and publishes
+# gas-report.txt as a workflow artifact. hardhat.config.js already sets
+# gasReporter.outputFile = "gas-report.txt" when REPORT_GAS=true.
+#
+# A second job runs the nine-standard gas benchmark (scripts/benchmark_gas.js)
+# and regenerates the CSV/LaTeX tables with
+# 4_comparison-framework/performance-metrics/generate_tables.py, publishing
+# 4_comparison-framework/results/gas_* as an artifact. Gas is deterministic for
+# fixed compiler settings, so the job also fails if the JSON differs from the
+# committed results of record (a silent compiler/config drift would otherwise
+# change every number in the thesis).
+
 on:
   push:
     branches: [ main ]
   schedule:
-    # Run benchmarks daily at 00:00 UTC
+    # Nightly at 00:00 UTC
     - cron: '0 0 * * *'
-  workflow_dispatch:  # Allow manual trigger
+  workflow_dispatch:
 
 jobs:
-  benchmark-blockchain:
+  gas-benchmarks:
+    name: Gas report (hardhat-gas-reporter)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 1_blockchain-identity
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: 1_blockchain-identity/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Compile contracts
+      run: npx hardhat compile
+
+    - name: Run tests with gas reporter
+      env:
+        REPORT_GAS: 'true'
+      run: npx hardhat test
+
+    - name: Check gas report was written
+      shell: bash
+      run: |
+        test -s gas-report.txt || { echo "gas-report.txt missing or empty"; exit 1; }
+        echo "gas-report.txt: $(wc -l < gas-report.txt) lines"
+        {
+          echo "## Gas report"
+          echo '```'
+          cat gas-report.txt
+          echo '```'
+        } >> "${GITHUB_STEP_SUMMARY:-/dev/null}"
+
+    - name: Upload gas report
+      uses: actions/upload-artifact@v4
+      with:
+        name: gas-report
+        path: 1_blockchain-identity/gas-report.txt
+        if-no-files-found: error
+
+  nine-standard-gas:
+    name: Nine-standard gas benchmark (results of record)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: 1_blockchain-identity/package-lock.json
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
 
     - name: Install dependencies
       working-directory: 1_blockchain-identity
       run: npm ci
 
-    - name: Adapter conformance gate
+    - name: Save committed results of record
+      run: cp 4_comparison-framework/results/gas_benchmark.json /tmp/gas_benchmark.committed.json
+
+    - name: Run nine-standard gas benchmark
       working-directory: 1_blockchain-identity
+      run: npx hardhat run scripts/benchmark_gas.js
+
+    - name: Regenerate CSV / LaTeX tables
+      working-directory: 4_comparison-framework/performance-metrics
+      run: python3 generate_tables.py
+
+    - name: Check determinism against committed results
+      shell: bash
+      run: |
+        python3 - <<'PY'
+        import json, sys
+        def cells(d):
+            src = d.get("results", d); out = {}
+            for std, ops in src.items():
+                if isinstance(ops, dict):
+                    for op, v in ops.items():
+                        if isinstance(v, dict) and isinstance(v.get("gasUsed"), int):
+                            out[(std, op)] = v["gasUsed"]
+            return out
+        a = cells(json.load(open("/tmp/gas_benchmark.committed.json")))
+        b = cells(json.load(open("4_comparison-framework/results/gas_benchmark.json")))
+        diff = [(k, a[k], b[k]) for k in a if k in b and a[k] != b[k]]
+        print(f"{len(a)} committed cells, {len(diff)} differ")
+        for k, x, y in diff: print(f"  {k}: {x} -> {y}")
+        sys.exit(1 if diff else 0)
+        PY
+
+    - name: Upload gas results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: nine-standard-gas
+        path: |
+          4_comparison-framework/results/gas_benchmark.json
+          4_comparison-framework/results/gas_benchmark_stats.json
+          4_comparison-framework/results/gas_comparison.csv
+          4_comparison-framework/results/gas_comparison.tex
+        if-no-files-found: error
+
+  metrics-harness:
+    name: CRUD-and-beyond metrics harness (adapter gate + run)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 1_blockchain-identity
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: 1_blockchain-identity/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Adapter conformance gate
       run: npm run test:conformance
 
-    - name: Run CRUD-and-beyond metrics harness
-      working-directory: 1_blockchain-identity
+    - name: Run metrics harness
       run: npm run metrics
 
     - name: Upload metrics run
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: cvin-metrics
         path: 1_blockchain-identity/results/metrics/latest
-
-  benchmark-did-resolution:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
-    - name: Install dependencies
-      run: |
-        pip install -r 2_w3c-ssi-layer/requirements.txt || echo "No requirements.txt yet"
-
-    - name: Benchmark DID resolution
-      run: |
-        cd 2_w3c-ssi-layer/did-resolution
-        python3 benchmark_did_resolver.py > ../../4_comparison-framework/results/did-resolution-benchmarks.txt
-
-    - name: Upload DID benchmarks
-      uses: actions/upload-artifact@v3
-      with:
-        name: did-resolution-benchmarks
-        path: 4_comparison-framework/results/did-resolution-benchmarks.txt
-
-  benchmark-vc-operations:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
-    - name: Benchmark VC issuance/verification
-      run: |
-        cd 2_w3c-ssi-layer/verifiable-credentials
-        python3 benchmark_vc.py > ../../4_comparison-framework/results/vc-benchmarks.txt || echo "Script not yet created"
-
-    - name: Upload VC benchmarks
-      uses: actions/upload-artifact@v3
-      with:
-        name: vc-benchmarks
-        path: 4_comparison-framework/results/vc-benchmarks.txt
-
-  generate-comparison-report:
-    needs: [benchmark-blockchain, benchmark-did-resolution, benchmark-vc-operations]
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Download all benchmarks
-      uses: actions/download-artifact@v3
-
-    - name: Generate thesis comparison tables
-      run: |
-        cd 4_comparison-framework
-        python3 generate_thesis_tables.py || echo "Script not yet created"
-
-    - name: Commit updated results
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add 4_comparison-framework/results/
-        git diff --quiet && git diff --staged --quiet || git commit -m "Update thesis benchmarks [skip ci]"
-
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
+        if-no-files-found: error

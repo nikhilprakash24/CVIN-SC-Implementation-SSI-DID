@@ -1,0 +1,141 @@
+{
+  "optimizer": {
+    "ERC-1056": {
+      "updateOp": "setAttribute (key rotation)",
+      "createIdentity": {
+        "runs_1": 52651,
+        "runs_200": 52612,
+        "runs_10000": 52525,
+        "max_rel_delta": 0.002399
+      },
+      "update": {
+        "runs_1": 35551,
+        "runs_200": 35512,
+        "runs_10000": 35425,
+        "max_rel_delta": 0.003557
+      }
+    },
+    "ERC-721": {
+      "updateOp": "addServiceRecord",
+      "createIdentity": {
+        "runs_1": 542576,
+        "runs_200": 542429,
+        "runs_10000": 542057,
+        "max_rel_delta": 0.000957
+      },
+      "update": {
+        "runs_1": 119792,
+        "runs_200": 119753,
+        "runs_10000": 119660,
+        "max_rel_delta": 0.001103
+      }
+    },
+    "ERC-725xy": {
+      "updateOp": "setData (ERC-725Y VIN)",
+      "createIdentity": {
+        "runs_1": 1692527,
+        "runs_200": 1704992,
+        "runs_10000": 1933355,
+        "max_rel_delta": 0.142289
+      },
+      "update": {
+        "runs_1": 49965,
+        "runs_200": 49950,
+        "runs_10000": 49851,
+        "max_rel_delta": 0.002287
+      }
+    },
+    "CVIN-Combined": {
+      "updateOp": "setAttribute (key rotation)",
+      "createIdentity": {
+        "runs_1": 52235,
+        "runs_200": 52178,
+        "runs_10000": 52133,
+        "max_rel_delta": 0.001957
+      },
+      "update": {
+        "runs_1": 35135,
+        "runs_200": 35078,
+        "runs_10000": 35033,
+        "max_rel_delta": 0.002912
+      }
+    },
+    "MOBI-VID-V2": {
+      "updateOp": "recordLifecycleEvent",
+      "createIdentity": {
+        "runs_1": 299034,
+        "runs_200": 298923,
+        "runs_10000": 298755,
+        "max_rel_delta": 0.000934
+      },
+      "update": {
+        "runs_1": 306995,
+        "runs_200": 306980,
+        "runs_10000": 306845,
+        "max_rel_delta": 0.000489
+      }
+    }
+  },
+  "ranking": {
+    "metric": "createIdentity gasUsed, ascending",
+    "runs_1": [
+      "CVIN-Combined",
+      "ERC-1056",
+      "MOBI-VID-V2",
+      "ERC-721",
+      "ERC-725xy"
+    ],
+    "runs_200": [
+      "CVIN-Combined",
+      "ERC-1056",
+      "MOBI-VID-V2",
+      "ERC-721",
+      "ERC-725xy"
+    ],
+    "runs_10000": [
+      "CVIN-Combined",
+      "ERC-1056",
+      "MOBI-VID-V2",
+      "ERC-721",
+      "ERC-725xy"
+    ],
+    "stable": true
+  },
+  "calldata": {
+    "operation": "ERC-1056 setAttribute(address,bytes32,bytes,uint256)",
+    "payload_len_bytes": 128,
+    "zero_byte_gas": 52254,
+    "nonzero_byte_gas": 53790,
+    "total_delta": 1536,
+    "per_byte_delta": 12,
+    "note": "Identical setAttribute call on two fresh registries, same identity/attr key/validity, differing only in the 128-byte value payload (all 0x00 vs all 0xff). Storage and log costs are identical, so the 1536-gas difference is pure calldata composition: the EVM charges 16 gas/non-zero byte vs 4 gas/zero byte, i.e. 12 gas/byte (= 16 - 4). This explains the small (+~12 gas) calldata artifacts observed elsewhere (e.g. the Sepolia dry-run) when signature/address byte patterns change the zero/non-zero byte count. Verified identical (12 gas/byte) at optimizer runs 1, 200 and 10000."
+  },
+  "summary": {
+    "max_rel_delta_across_all_standards_and_ops": 0.142289,
+    "max_rel_delta_runtime_ops_only": 0.003557,
+    "finding": "The ranking of standards by createIdentity gas is identical at all three optimizer settings (runs in {1,200,10000}). Every runtime message-call operation (all update ops, and the createIdentity of ERC-1056/ERC-721/CVIN-Combined/MOBI-VID-V2, which are ordinary calls) moves by <0.4% across settings. The single larger swing is ERC-725xy createIdentity (14.2%), which is a one-time contract DEPLOYMENT: higher optimizer runs deliberately produce larger deployed bytecode (optimizing runtime cost over deploy size), so deploy gas rises with runs. This is expected and does not change ERC-725xy's position as by far the most expensive to instantiate. The headline gas comparison is therefore robust to the solc optimizer setting; it is not an artifact of runs=200."
+  },
+  "metadata": {
+    "experiment": "SN-1 (optimizer sensitivity) + SN-2 (calldata composition)",
+    "solcVersion": "0.8.24",
+    "viaIR": true,
+    "evmTarget": "paris",
+    "ozVersion": "5.0.2",
+    "optimizerRunsTested": [
+      1,
+      200,
+      10000
+    ],
+    "canonicalOptimizerRuns": 200,
+    "network": "hardhat in-process (chainId 31337)",
+    "method": "Per runs value: edit hardhat.config.js 0.8.24 optimizer.runs, hardhat clean && compile, then measure real receipt.gasUsed. Config restored to runs=200 and recompiled afterwards.",
+    "date": "2026-07-24T03:18:28.250Z",
+    "standards": [
+      "ERC-1056",
+      "ERC-721",
+      "ERC-725xy",
+      "CVIN-Combined",
+      "MOBI-VID-V2"
+    ]
+  }
+}

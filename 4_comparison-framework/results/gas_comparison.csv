@@ -1,0 +1,13 @@
+standard,Deploy registry gasUsed,Deploy registry rel. cost (x cheapest),Create identity gasUsed,Create identity rel. cost (x cheapest),Update key/attribute gasUsed,Update key/attribute rel. cost (x cheapest),Update via 4337 EntryPoint gasUsed,Update via 4337 EntryPoint rel. cost (x cheapest),Add delegate/claim gasUsed,Add delegate/claim rel. cost (x cheapest),Revoke gasUsed,Revoke rel. cost (x cheapest),Transfer ownership gasUsed,Transfer ownership rel. cost (x cheapest)
+ERC-1056,958726,2.10,52594,1.01,35494,1.01,—,—,54831,1.55,35046,1.38,51754,1.82
+ERC-721,2721476,5.96,542378,10.40,119737,3.41,—,—,48302,1.37,27677,1.09,174670,6.15
+ERC-725,—,—,519384,9.96,137096,3.91,—,—,119996,3.40,43388,1.71,28390,1.00
+ERC-725xy,—,—,1680816,32.22,49937,1.42,—,—,—,—,—,—,28834,1.02
+ERC-735,—,—,1371394,26.29,75160,2.14,—,—,290177,8.23,72064,2.83,28702,1.01
+ERC-1155,2277168,4.99,103881,1.99,49130,1.40,—,—,57115,1.62,30625,1.20,83608,2.94
+ERC-4337,456294,1.00,759088,14.55,49343,1.41,96173,1.00,47557,1.35,25429,1.00,28539,1.01
+LSP8,1592737,3.49,149430,2.86,55051,1.57,—,—,—,—,41838,1.65,80576,2.84
+MOBI-VID-V2,3952603,8.66,298941,5.73,306941,8.75,—,—,35277,1.00,74836,2.94,199810,7.04
+CVIN-Combined,1325604,2.91,52170,1.00,35070,1.00,—,—,289886,8.22,73688,2.90,51725,1.82
+
+Conditions,"solc 0.8.24 (optimizer on, 200 runs, viaIR)",OpenZeppelin 5.0.2,network hardhat-local,measured 2026-09-24T23:44:50.746Z

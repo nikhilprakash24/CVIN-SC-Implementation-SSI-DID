@@ -74,7 +74,7 @@ Overall thesis completion estimate: **~40%**. Target after VC + MOBI VID:
 - **Method**: SUMO simulation (50 vehicles) with credential checks in the
   message path; measure the full pipeline: receive → resolve (cached) →
   verify VC → trust decision.
-- **Status**: DID resolution at ~0.8 ms ✅; VC verify timing unmeasured
+- **Status**: in-process DID resolution 0.05 ms (M0, single run, commit 708302a; earlier "~0.8 ms" superseded) ✅; VC verify timing unmeasured
   (needs VC layer) 🔴; SUMO harness not built ⏳.
 
 ### Thrust 4 — Industry Alignment via MOBI VID
@@ -145,7 +145,7 @@ credential-anchoring measurements are also VC-gated.
 | Layer | Location | State | Evidence |
 |---|---|---|---|
 | Smart contracts (9 standards) | `1_blockchain-identity/` | ✅ 100% | 18+ passing tests, deploy scripts |
-| DID resolver (4 methods) | `2_w3c-ssi-layer/did-resolution/` | ✅ ~75% W3C DID Core | 680 lines, CLI, <1 ms resolution |
+| DID resolver (4 methods) | `2_w3c-ssi-layer/did-resolution/` | ✅ 75% W3C DID Core (19/28) | 518 lines, CLI, 0.05 ms in-process resolution (M0) |
 | VC layer | `2_w3c-ssi-layer/verifiable-credentials/` | 🔴 0% (README only) | — |
 | MOBI VID | `2_w3c-ssi-layer/mobi-vid/` | 🔴 spec only | 200-line spec doc |
 | CV2X testbed / use cases | `3_cv2x-testbed/` | ⏳ ~5% | scaffolding |

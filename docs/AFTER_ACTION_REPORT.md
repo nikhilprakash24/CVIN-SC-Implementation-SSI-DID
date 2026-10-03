@@ -77,9 +77,11 @@ This is what is **actually present in this working directory** at `dfac1e9`
   `CV2X_REALISTIC_ROADMAP`, several session summaries
 - `docs/`: `RESEARCH_THRUSTS_REPORT.md`, `thesis/README.md`, this report
 
-### 2.5 What is NOT in this lineage (important)
-The following were produced in earlier sessions on a **separate repository /
-git bundle lineage** (through commit `7118b83`) and are **absent here**:
+### 2.5 The analysis lineage — merged 2026-09-24
+The following were produced in earlier sessions on a **separate git bundle
+lineage** (through commit `7118b83`), were absent from this branch until the
+merge, and are **now on the trunk** (see `docs/INDEX.md` for which document
+is canonical):
 - Scaling experiments (`benchmark_scaling.js`, marginal/lifetime/verify data)
 - Formal threat model (`docs/THREAT_MODEL.md`)
 - `COMPOSITION.md`, `MASTER_UPDATE.md`, `PROVENANCE.md`, `SOURCES.md`,
@@ -104,7 +106,15 @@ Contracts + VC layer + MOBI VID V2 + CV2X testbed + thrusts report.
 This is the **canonical base** going forward because it is now the
 authoritative remote branch.
 
-### Direction B — Earlier research lineage (`7118b83` / bundle) ⏳ off-remote
+### Direction B — Earlier research lineage (`7118b83` / bundle) ✅ merged 2026-09-24
+Recovered from the author's bundle (complete history, 53 commits from the
+common base `bea1bdb`), merged in an isolated worktree with per-file
+resolution: trunk kept for CI, compiler config, contract/test fixes and the
+provider (all verified today); bundle kept for the lockfile, the rewritten
+descriptive docs (corrections re-applied) and its four consolidated session
+logs; union for ignores. Verified after merge: 47 contracts compile, 219
+Hardhat tests pass, 60 Python tests pass, checker 93.2%, nine-standard gas
+benchmark re-executed.
 Scaling model, threat model, dominance proof, composition/provenance docs,
 artifact dossiers, expanded chapter drafts. Rich analytical + writing
 material not represented in Direction A.
@@ -156,7 +166,10 @@ repo-tracked analysis + prose.
 - **GitHub durability:** ✅ RESOLVED — pushes work; remote is authoritative.
 - **Canonical trunk:** ✅ `dfac1e9` pushed to
   `origin/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy`.
-- **Direction B merge:** ⏳ awaiting bundle.
+- **Direction B merge:** ✅ done 2026-09-24 (see §3); merge commit `781dc0b`, trunk at 99 commits.
+- **Tags `v0.7.0`, `v0.8.0`:** recovered from the bundle and present locally, but **not on GitHub** — the session's push policy allows only the designated branch (tag push returns HTTP 403; the API tag path is blocked by the proxy). To publish them from your machine, from a clone of this branch:
+  `git fetch origin claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy && git tag -a v0.7.0 be32c6e -m "v0.7.0 — Integration & Verification Milestone" && git tag -a v0.8.0 a64c6f3 -m "v0.8.0 — Rigor & Ground-Truth Hardening" && git push origin v0.7.0 v0.8.0`
+  (both target commits are on the branch now). `v0.9.0` should be cut on the merge commit `781dc0b` once the Sepolia witness exists.
 - **Direction C triage:** ⏳ awaiting notebook index.
 - **Next durable checkpoint:** tag `v0.9.0` after A+B integration.
 

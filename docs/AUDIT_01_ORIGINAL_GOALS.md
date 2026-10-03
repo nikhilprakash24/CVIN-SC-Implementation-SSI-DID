@@ -126,6 +126,16 @@ PKI provider exists; the experiment does not. **Action:** a single script that
 runs identical operations through `pki_identity.py` and `erc1056_provider.py`
 and writes one CSV is the highest-value experiment remaining.
 
+**Closed 2026-09-24** — `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py`,
+results in `cv2x-testbed/results/pki_vs_erc1056.{csv,json,md}` (n=50, three
+providers, exact gas, RPC counts, environment header). Hot-path verify: PKI
+0.32 ms vs ERC-1056 uncached 18.2 ms median (7 round trips). The hypothesis
+conjunct now has evidence, and the evidence supports H3's split (off-chain
+verify is PKI-class; on-chain reads at message time are not), with the
+caveats recorded in the .md. Running it also exposed that the blockchain
+provider's verification path had never worked (placeholder key resolution),
+which strengthens F4's point.
+
 ### F3 — The same quantity is reported with three different values (high)
 Identity-resolution latency appears as "50–100 ms" (`docs/thesis/README.md`
 RQ1 answer), "~0.8 ms" (`RESEARCH_THRUSTS_REPORT.md`), and 0.05 ms (measured
@@ -140,7 +150,14 @@ summary marked components "✅ complete" while the contract project could not
 compile with a fresh install, and the ERC-1056 wrapper's service-endpoint and
 delegate functions were unreachable by construction. The wrapper is the
 substrate that H1 favours; a defect there that no test could reach is the
-strongest possible argument for CI gating. **Action:** make the CI workflows that already exist
+strongest possible argument for CI gating.
+
+**Closed 2026-09-24.** Workflows rewritten to the trunk (`5ab8d4d`); the
+first GitHub run failed because `package-lock.json` was gitignored (an
+environment difference local runs could not reveal); fixed by tracking the
+lockfile (`ed85dfd`). Both push-triggered workflows now pass on GitHub:
+[Smart Contract Tests](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006587),
+[W3C SSI Compliance](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006689). **Action:** make the CI workflows that already exist
 (`test-contracts.yml`, `benchmark.yml`, `w3c-compliance.yml`) actually run on
 the trunk and gate on green. Reproducibility then becomes a badge, not a
 sentence.
@@ -154,6 +171,18 @@ report *that* number alongside the internal one. If the external suite cannot
 be run, say why in the limitations section. Note also that the internal
 checker targets VC Data Model **v1.1**, while the project elsewhere claims
 **v2.0**; pick one and state it.
+
+**Closed 2026-09-24** — official w3c/did-test-suite (`939b31d`) run against
+the resolver's real output: **328/441 (74.4%)**; DID identifier, core
+properties, production and consumption all pass; **DID Resolution
+186/299**, with all 113 failures in five metadata root causes (null
+`error`/`errorMessage` emitted on success; `contentType` present on
+`resolve()`; null-valued metadata keys; `created` not XML-datetime; no DID
+ABNF validation). The internal 75% figure is therefore roughly right in
+magnitude but wrong in *content*: it fails optional features that pass
+externally and misses every metadata category that fails externally.
+Write-up and raw reports: `docs/conformance/`. The five root causes are a
+bounded resolver fix; re-running the suite after it is the next step.
 
 ### F6 — The compound hypothesis has not been decomposed in the primary text (medium)
 See §1.2. The thrust document has the decomposition; the README and the
@@ -280,9 +309,12 @@ for each registry) or remove the word from RQ1.
 | 9 | Adopt the W3C DID Method Rubric as the qualitative axis | §4 |
 | 10 | Replace "first" with "measured, domain-constrained, reproducible" in contribution claims | C1, C2 |
 
-Items 2, 3, 4 and 8 need no external input and can be done immediately. Item
-1 needs the bundle. Item 5 needs a decision on which resolver interface to
-expose to the suite.
+**Status 2026-09-24 (end of second pass):** items **2, 3, 4, 6, 8, 9, 10
+done**; item **7 analytic half done** (`docs/LATENCY_BUDGET.md`), simulation
+half pending a SUMO install; item **5 in progress** (external W3C DID test
+suite run); item **1 needs the bundle** from the author. Decisions still
+open for the author: SC-05 (throughput), SC-06 (VC DM version), and
+confirmation of the reconstructed reasons in SC-01/SC-02.
 
 ---
 
