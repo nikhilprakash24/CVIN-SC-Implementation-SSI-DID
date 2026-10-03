@@ -66,6 +66,19 @@ describe("Benchmark adapter conformance", function () {
         expect(mentions(await adapter.resolveDocument(h), key.address), "delegate in document after revoke").to.equal(false);
       });
 
+      it("rotateDelegate: new key valid, old key invalid (H-2)", async function () {
+        const k1 = hre.ethers.Wallet.createRandom();
+        const k2 = hre.ethers.Wallet.createRandom();
+        await wait(await adapter.addDelegate(h, k1, PAYLOADS.ttlSeconds));
+        await wait(await adapter.rotateDelegate(h, k1, k2, PAYLOADS.ttlSeconds));
+        expect(await adapter.verifyDelegate(h, k2)).to.equal(true);
+        expect(await adapter.verifyDelegate(h, k1)).to.equal(false);
+        const doc = await adapter.resolveDocument(h);
+        expect(mentions(doc, k2.address)).to.equal(true);
+        expect(mentions(doc, k1.address)).to.equal(false);
+        await wait(await adapter.revokeDelegate(h, k2));
+      });
+
       it("U3/R3 attribute appears in resolved document", async function () {
         await wait(await adapter.setAttribute(h, PAYLOADS.attributeName, PAYLOADS.attributeValue));
         const doc = await adapter.resolveDocument(h);

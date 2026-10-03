@@ -104,6 +104,14 @@ class ERC721Adapter extends IdentityAdapter {
     const tx = await this._nft(h.controller).approve(this.ethers.ZeroAddress, h.tokenId);
     return { txs: [tx] };
   }
+  /**
+   * ERC-721 has one approval slot per token: approve(newKey) replaces oldKey, so
+   * a rotation is one tx. The generic add+revoke would end in approve(0), i.e.
+   * with NO delegate at all (review 02, H-2).
+   */
+  async rotateDelegate(h, oldKey, newKey /*, ttl ignored */) {
+    return this.addDelegate(h, newKey);
+  }
   async revokeAttribute() { this.notSupported("D2_revoke_attribute"); }
   async deactivate(h) {
     const tx = await this._nft(this.actors.deployer).deactivateVehicle(h.tokenId);

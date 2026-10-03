@@ -20,33 +20,36 @@ function sequence(ctx, adapter, actors, state) {
   for (let i = 0; i < 5; i++) {
     ev.push({ n: 6 + i, event: `Service record ${i + 1}`, op: "U3_set_attribute", actor: "serviceCenter", fn: () => adapter.setAttribute(state.h, "svc/record/" + i, P.serviceRecordURI) });
   }
-  ev.push({ n: 11, event: "Key rotation (add new, revoke old)", op: "U2_add_delegate+D1_revoke_delegate", actor: "owner",
-    fn: async () => { const k1 = state.k1 || (state.k1 = freshKey(ctx)); const k2 = freshKey(ctx);
-      const a = await adapter.addDelegate(state.h, k2, P.ttlSeconds); const b = await adapter.revokeDelegate(state.h, k1); return { txs: [...a.txs, ...b.txs] }; } });
-  ev.push({ n: 12, event: "Ownership transfer (resale)", op: "U4_transfer_vehicle", actor: "owner→newOwner", fn: () => adapter.transferVehicle(state.h, actors.newOwner) });
-  ev.push({ n: 13, event: "Re-registration credential", op: "V3_anchor_status", actor: "issuer", fn: () => adapter.anchorStatus(state.h, c("reg2")) });
-  ev.push({ n: 14, event: "Credential revocation (old insurance)", op: "V5_revoke_credential", actor: "issuer", fn: () => adapter.revokeCredential(state.h, c("ins1")) });
-  ev.push({ n: 15, event: "Second ownership transfer", op: "U4_transfer_vehicle", actor: "newOwner→thirdOwner", fn: () => adapter.transferVehicle(state.h, actors.thirdOwner) });
-  ev.push({ n: 16, event: "End-of-life deactivation", op: "D3_deactivate_identity", actor: "admin/owner", fn: () => adapter.deactivate(state.h) });
+  // Review 02, H-2: the delegate that the rotation retires is added as its own
+  // measured event (it was an unmeasured precondition), and the rotation uses the
+  // adapter's rotateDelegate (ERC-721: one approve(k2), which replaces k1).
+  ev.push({ n: 11, event: "Delegate key added (k1)", op: "U2_add_delegate", actor: "owner",
+    fn: () => adapter.addDelegate(state.h, state.k1, P.ttlSeconds) });
+  ev.push({ n: 12, event: "Key rotation (k1 to k2)", op: "rotate_delegate (U2+D1)", actor: "owner",
+    fn: () => adapter.rotateDelegate(state.h, state.k1, state.k2, P.ttlSeconds) });
+  ev.push({ n: 13, event: "Ownership transfer (resale)", op: "U4_transfer_vehicle", actor: "owner→newOwner", fn: () => adapter.transferVehicle(state.h, actors.newOwner) });
+  ev.push({ n: 14, event: "Re-registration credential", op: "V3_anchor_status", actor: "issuer", fn: () => adapter.anchorStatus(state.h, c("reg2")) });
+  ev.push({ n: 15, event: "Credential revocation (old insurance)", op: "V5_revoke_credential", actor: "issuer", fn: () => adapter.revokeCredential(state.h, c("ins1")) });
+  ev.push({ n: 16, event: "Second ownership transfer", op: "U4_transfer_vehicle", actor: "newOwner→thirdOwner", fn: () => adapter.transferVehicle(state.h, actors.thirdOwner) });
+  ev.push({ n: 17, event: "End-of-life deactivation", op: "D3_deactivate_identity", actor: "admin/owner", fn: () => adapter.deactivate(state.h) });
   return ev;
 }
 
-/** Execute the lifecycle on an adapter; returns {events: rows, handle, deployRows}. */
+/**
+ * Execute the lifecycle on an adapter.
+ * Returns {adapter, actors, events, handle, deployRows, delegateKey}, where
+ * `delegateKey` is k2, the key the rotation installed (used by resolve R4, H-7).
+ */
 async function runLifecycle(ctx, adapterId, scenario = "lifecycle") {
   const { adapter, actors, deployRows } = await freshAdapter(ctx, adapterId, scenario);
-  const state = {};
-  // pre-create the key that event 11 revokes
-  state.k1 = freshKey(ctx);
+  const state = { k1: freshKey(ctx), k2: freshKey(ctx) };
   const events = [];
   for (const e of sequence(ctx, adapter, actors, state)) {
-    if (e.n === 11) {
-      await (await adapter.addDelegate(state.h, state.k1, ctx.payloads.ttlSeconds)).txs.at(-1).wait(); // precondition, unmeasured
-    }
     const row = await ctx.collector.measureTx({ adapter: adapterId, scenario, op: e.op, event: e.event, eventNo: e.n, actor: e.actor }, e.fn);
     events.push(row);
     log(ctx, `#${String(e.n).padStart(2)} ${e.event.padEnd(38)} gas=${row.gasUsed} txs=${row.txCount}`);
   }
-  return { adapter, actors, events, handle: state.h, deployRows };
+  return { adapter, actors, events, handle: state.h, deployRows, delegateKey: state.k2 };
 }
 
 async function run(ctx) {

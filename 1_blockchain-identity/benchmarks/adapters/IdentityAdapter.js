@@ -46,6 +46,17 @@ class IdentityAdapter {
   async transferVehicle(handle, to) { throw new Error("U4"); }
   async metaTxSetAttribute(handle, name, value, relayer) { this.notSupported("U5_meta_tx"); }
   async revokeDelegate(handle, key) { throw new Error("D1"); }
+  /**
+   * Key rotation: `newKey` becomes a delegate and `oldKey` stops being one.
+   * Default = U2(newKey) + D1(oldKey). A substrate whose delegate slot is
+   * single-valued (ERC-721 `approve` replaces the previous approval) overrides
+   * this with its one-tx primitive (review 02, H-2).
+   */
+  async rotateDelegate(handle, oldKey, newKey, ttl) {
+    const a = await this.addDelegate(handle, newKey, ttl);
+    const b = await this.revokeDelegate(handle, oldKey);
+    return { txs: [...a.txs, ...b.txs] };
+  }
   async revokeAttribute(handle, name) { throw new Error("D2"); }
   async deactivate(handle) { throw new Error("D3"); }
 
