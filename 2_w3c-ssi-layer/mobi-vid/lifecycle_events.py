@@ -31,7 +31,7 @@ Thesis: MASc, UBC ECE
 
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
 from eth_account.messages import encode_defunct
 from eth_account.signers.local import LocalAccount
@@ -43,7 +43,9 @@ _VC_LAYER = Path(__file__).resolve().parent.parent / "verifiable-credentials"
 if str(_VC_LAYER) not in sys.path:
     sys.path.insert(0, str(_VC_LAYER))
 
-from vc_issuer import CredentialIssuer, canonicalize  # noqa: E402
+from vc_issuer import (  # noqa: E402
+    CredentialIssuer, RevocationRegistry, canonicalize,
+)
 from vc_verifier import CredentialVerifier  # noqa: E402
 from vc_schemas import get_schema  # noqa: E402
 
@@ -135,6 +137,19 @@ class LifecycleEventRecorder:
     @property
     def issuer_did(self) -> str:
         return self.credential_issuer.issuer_did
+
+    @property
+    def status_registry(self) -> RevocationRegistry:
+        """
+        Revocation registry named in this issuer's event VCs (bound to the
+        issuer DID). Give it to VehicleHistoryAggregator (review 02, S-2).
+        """
+        return self.credential_issuer.revocation_registry
+
+    def revoke_event_credential(self, credential_id: str,
+                                reason: str = "unspecified") -> None:
+        """Revoke an event VC this recorder issued (off-chain status)."""
+        self.credential_issuer.revoke_credential(credential_id, reason)
 
     def on_chain_role(self) -> IssuerRole:
         return self.registry.issuer_role(self.account.address)
@@ -292,19 +307,26 @@ class VehicleHistoryAggregator:
       * per-event: presented VC (if available) checked for
           - anchor integrity: keccak256(VC) == on-chain credentialHash,
           - cryptographic validity via the canonical CredentialVerifier
-            (signature recovery against the issuer's did:ethr address),
+            (signature recovery against the issuer's did:ethr address, and
+            revocation status against the issuer's own status registry —
+            pass the recorders' ``status_registry`` objects; a declared
+            status whose registry is missing fails, review 02 S-2),
           - issuer consistency: VC signer == on-chain event issuer,
       * per-attestation: EIP-191 signature recovered and compared with the
         on-chain attester address.
     """
 
     def __init__(self, registry: MOBIVIDRegistryClient,
-                 strict_schema: bool = False):
+                 strict_schema: bool = False,
+                 status_registries: Optional[
+                     Iterable[RevocationRegistry]] = None):
         self.registry = registry
         # strict_schema=False: several event types intentionally have no
         # registered schema (see EVENT_VC_TYPES); signature/temporal/
         # revocation checks are never relaxed.
-        self.verifier = CredentialVerifier(strict_schema=strict_schema)
+        self.verifier = CredentialVerifier(
+            revocation_registry=list(status_registries or []),
+            strict_schema=strict_schema)
 
     def get_vehicle_history(self, vehicle_identity: str,
                             vc_store: Optional[Dict[bytes, Dict[str, Any]]]

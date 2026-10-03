@@ -285,3 +285,56 @@ internal 75 % should not be presented as if it were an external result.
 | `reports/did-spec-test-run.latest.json` | sanitized result set that the HTML report was generated from |
 | `reports/globals-path-run-cvin-detailed-results.json` | the discarded `globals`-path run, with failure messages |
 | `internal/w3c_compliance_report.json` | output of `cv2x-testbed/scripts/w3c_compliance_checker.py` for the comparison in section 5 |
+
+## 7. Review 02 (2026-10-03): S-10 and changes since this run
+
+**Status: the external suite was NOT re-run.** It needs a clone of
+`w3c/did-test-suite` plus its npm install, and neither is available offline in
+the remediation session. The numbers in sections 3-5 still describe the
+resolver at `434669d`. This section records what has changed since then and
+what the changes are expected to do.
+
+**S-10: a further root cause next to R1-R5.** `_parse_did` raised a bare
+`ValueError` for every malformed DID *and* for every method missing from the
+`DIDMethod` enum, and `resolve()` turned both into `internalError`. That left
+the `methodNotSupported` branch reachable only for `did:web`, which is in the
+enum but has no resolver. `did:example:12345` and `did:foo:bar` therefore came
+back as `internalError`. The suite's own unsupported-method execution used
+`did:web:example.com`, so this cause produced no failure in the run above. The
+internal checker did catch it: item 7.1.2 was PARTIAL.
+
+Fixed in `did_resolver.py` (commit "S-10: resolver returns cache copies and
+correct DID error codes"):
+
+| Input | Before | After |
+|---|---|---|
+| Violates the DID Core 3.1 ABNF (`did:ethr_0x1234`, `did:mobi:`, `not-a-did`) | `internalError`, or a document for `did:mobi:` | `invalidDid` |
+| `did:nft` without a tokenId | `internalError` | `invalidDid` |
+| `did:ethr` whose id is not a 20-byte address or a 33-byte compressed key (`did:ethr:not-an-address`), or has extra segments or a bad chain id | resolved to a document | `invalidDid` |
+| Method not implemented (`did:foo:bar`, `did:example:…`) | `internalError` | `methodNotSupported` |
+| `blockchainAccountId` (CAIP-10) | `eip155:0x1:<addr>` (hex chain id) | `eip155:1:<addr>` (decimal, as CAIP-2/10 require) |
+| Cache | returned the cached object itself, so a caller's mutation poisoned later resolutions | private deep copies; optional TTL |
+
+**Expected effect on the suite (a prediction, not a measurement).** The
+`generate_implementations.py` output was regenerated into a scratch directory
+and diffed against `implementations/`; the files committed here were left
+unchanged so that they keep matching the reports. The diff is:
+
+- the three invalid-DID executions (`did:ethr_0x1234`, `did:nft:0x1:0xabc`,
+  `did:mobi:`) now carry `error: "invalidDid"`, and `did:mobi:` no longer
+  yields a document;
+- `blockchainAccountId` is in decimal CAIP-10 form.
+
+R5's six failures should therefore clear. R1-R4 are untouched, so most of the
+113 failures remain. A re-run may also *add* failures, because a guarded test
+now fires on the error results, which still carry `contentType` and the
+8-key `didDocumentMetadata` (R2/R3). The 142/142 on identifiers and documents
+is not expected to change.
+
+**Internal checker.** The S-10 fix moves exactly one item: DID Core 7.1.2
+"Unsupported DID method MUST yield a resolution error ('methodNotSupported')"
+goes from PARTIAL to PASS, and the executable score goes from 93.2 % to
+94.3 % (41 PASS, 1 PARTIAL, 2 FAIL, out of 44). The checker's scoring was not
+changed (T-7 is an author decision). With malformed DIDs now returning
+`invalidDid`, the two malformed-DID checks that T-7 says "PASS on any error"
+also return the right code.

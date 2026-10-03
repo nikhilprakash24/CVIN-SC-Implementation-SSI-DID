@@ -57,7 +57,7 @@ from vc_verifier import CredentialVerifier
 issuer = CredentialIssuer(issuer_did="did:ethr:0x123...")
 vc = issuer.issue_credential(
     credential_type="VehicleBirthCertificate",
-    subject_did="did:mobi:5YJ3E1EA0PF123456",
+    subject_did="did:ethr:0x456...",   # the holder below (S-1 binding)
     claims={"make": "Tesla", "model": "Model 3"}
 )
 
@@ -72,10 +72,17 @@ vp = wallet.create_presentation(
     domain="verifier.example.com"
 )
 
-# Verify
-verifier = CredentialVerifier()
+# Verify. The verifier must hold the issuer's status registry (a declared
+# credentialStatus that cannot be checked is invalid), must pass a
+# non-empty challenge, and only accepts credentials whose subject is the
+# presenting holder (or a configured subject->holder relation). Passing
+# trusted_issuers makes it an allow-list, did:ethr issuers included.
+verifier = CredentialVerifier(revocation_registry=issuer.revocation_registry)
 is_valid, result = verifier.verify_presentation(vp, challenge, domain)
 ```
+
+Behaviour changed in review 02 (S-1, S-2, S-4, S-5, S-6, S-7, S-9, T-3);
+see `docs/review02/PASS1_S.md`.
 
 ## Thesis Integration
 
