@@ -34,6 +34,8 @@ Usage
   #   npx hardhat node &
   #   npx hardhat run scripts/deploy.js --network localhost
   python3 scripts/experiment_pki_vs_erc1056.py [--n 50] [--warmup 3] [--no-chain]
+  # or let the script deploy a fresh registry and record its deploy gas itself:
+  python3 scripts/experiment_pki_vs_erc1056.py --rpc-url http://127.0.0.1:8546 --deploy
 """
 
 import argparse
@@ -73,8 +75,10 @@ class StandardPKIAdapter:
     def __init__(self, ca_name: str = "CVIN-Standard-CA"):
         self.ca = VehiclePKI_CA(ca_name)
         self.vehicles: Dict[str, VehiclePKIIdentity] = {}
-        # Any vehicle can act as verifier; verify_message() uses no per-vehicle state.
+        # Any vehicle can act as verifier; verify_message() uses no per-vehicle
+        # state beyond its trust anchor (the CA certificate, T-1).
         self.peer = VehiclePKIIdentity("PEER-VERIFIER")
+        self.peer.trust_ca(self.ca.ca_certificate)
 
     def register_vehicle(self, vehicle_id: str, metadata: Dict = None):
         v = VehiclePKIIdentity(vehicle_id)
@@ -204,6 +208,12 @@ def measure(backend: Backend, op: str, n: int, warmup: int,
         result = run(ctx)
         t1 = time.perf_counter_ns()
 
+        # Snapshot the RPC counter immediately after the timed region, before
+        # the untimed check() (which may itself issue RPCs, e.g. the revoke
+        # post-condition's isRevoked call). Review 02, T-6.
+        rpc_calls = backend.rpc.count if backend.rpc is not None else 0
+        rpc_methods = list(backend.rpc.methods) if backend.rpc is not None else []
+
         extra = check(ctx, result) or {}
         gas = None
         if chain_write:
@@ -211,9 +221,8 @@ def measure(backend: Backend, op: str, n: int, warmup: int,
             if receipt is None:
                 raise RuntimeError(f"{backend.name}/{op}: no receipt captured for chain write")
             gas = int(receipt.gasUsed)
-        rpc_calls = backend.rpc.count if backend.rpc is not None else 0
         if backend.rpc is not None and i == warmup:
-            extra['rpc_methods'] = list(backend.rpc.methods)
+            extra['rpc_methods'] = rpc_methods
         if i >= warmup:
             samples.append(Sample((t1 - t0) / 1e6, gas, rpc_calls, extra))
     return samples
@@ -415,11 +424,17 @@ def _sh(cmd: List[str], cwd: str = ROOT) -> Optional[str]:
 
 
 def _pkg_version(pkg: str) -> Optional[str]:
-    try:
-        with open(os.path.join(ROOT, 'node_modules', pkg, 'package.json')) as f:
-            return json.load(f).get('version')
-    except Exception:
-        return None
+    # CV2X_NODE_MODULES lets the run point at the node_modules the Hardhat node
+    # was started from when it lives outside the tree (keeps git_dirty False).
+    for base in (os.environ.get('CV2X_NODE_MODULES'), os.path.join(ROOT, 'node_modules')):
+        if not base:
+            continue
+        try:
+            with open(os.path.join(base, pkg, 'package.json')) as f:
+                return json.load(f).get('version')
+        except Exception:
+            continue
+    return None
 
 
 def cpu_model() -> Optional[str]:
@@ -581,10 +596,14 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
              "vehicle sends `updateVehicleKey(addr, newPubkey)` (1 tx; emits DIDAttributeChanged) |")
     L.append("| sign_message | ECDSA-SHA256 over canonical JSON with current pseudonym key; message carries the PEM certificate | "
              "ECDSA-SHA256 over canonical JSON with the vehicle key; message carries only the `did:ethr` string |")
-    L.append("| verify_message | parse PEM cert, CRL set lookup, validity window, issuer name check, ECDSA verify (no network) | "
-             "`getIdentityInfo` (eth_call) + event walk (eth_getLogs) to resolve the key + `isRevoked` (eth_call), then ECDSA verify |")
+    L.append("| verify_message | parse PEM cert; verify the CA's ECDSA P-256 signature on the certificate and the issuer name "
+             "against the trusted CA certificate; validity window; CRL set lookup; ECDSA verify of the message (2 ECDSA "
+             "verifies, no network) | "
+             "`getIdentityInfo` (eth_call; returns owner, `changed` pointer and the revoked flag) + event collection along "
+             "`previousChange` (eth_getLogs per hop) replayed forward to resolve the current key, then ECDSA verify. "
+             "No separate `isRevoked` call |")
     L.append("| resolve_identity | in-memory lookup of the enrollment certificate / public key | "
-             "`getIdentityInfo` (eth_call) + `previousChange` event walk (eth_getLogs per hop) |")
+             "`getIdentityInfo` (eth_call) + `previousChange` event collection (eth_getLogs per hop) + forward replay |")
     L.append("| check_revocation | in-memory CRL/flag lookup | `isRevoked` (eth_call) |")
     L.append(f"| revoke_credential | add enrollment + {PSEUDONYM_POOL} pseudonym serials to the CA's CRL set (in-memory) | "
              "vehicle sends `revokeIdentity(addr)` (1 tx) |")
@@ -594,7 +613,8 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
     L.append("1. **What the PKI baseline is.** Both PKI backends are *in-process* Python implementations "
              "(`cryptography` X.509/ECDSA P-256): the CA, the CRL and the vehicles live in the same "
              "process. There is no CA network round trip for enrollment, no OCSP responder, no CRL "
-             "download, no certificate-chain building beyond an issuer-name comparison, and the CRL is a "
+             "download, a one-level certificate chain (each certificate is checked against the CA's signature and name; "
+             "no intermediate CAs, no path building, no OCSP), and the CRL is a "
              "Python `set` whose size during this run is at most a few hundred serial numbers "
              f"({PSEUDONYM_POOL + 1} per revoked vehicle). Real IEEE 1609.2 / ETSI PKI adds network latency "
              "to enrollment, pseudonym provisioning and CRL/OCSP freshness that this baseline does not model. "
@@ -613,12 +633,17 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
     if verify_row and verify_row.get('rpc_methods'):
         methods = verify_row['rpc_methods']
         redundant = sum(1 for m in methods if m == 'eth_chainId')
+        registry = [m for m in methods if m != 'eth_chainId']
         L.append(f"   The RPC call lists above show that web3.py {env.get('web3_version')} issues an "
                  f"`eth_chainId` request around most calls ({redundant} of the {len(methods)} round trips in "
                  "`verify_message`). These are client-side redundancy, not registry work: enabling web3's "
                  "request caching (`w3.provider.cache_allowed_requests = True`) or pinning the chain id "
-                 "removes them, leaving 3 registry round trips per uncached verification (2 `eth_call` + "
-                 "1 `eth_getLogs`). The provider is measured as shipped, without that tuning.")
+                 f"removes them, leaving {len(registry)} registry round trips per uncached verification here "
+                 f"({', '.join(registry)}). In general the minimum is 1 `eth_call` (`getIdentityInfo`, which "
+                 "also carries the revoked flag) + 1 `eth_getLogs` per block in the identity's change history "
+                 "(1 for an identity with a single key event, as measured here), + 1 `eth_getBlockByNumber` only "
+                 "when a key attribute's `validTo` lies within 900 s of the verifier's clock (deciding a recent "
+                 "revocation in chain time). The provider is measured as shipped, without the chain-id tuning.")
     L.append("3. **Gas is deterministic; latency is not.** `gasUsed` depends only on the contract code, the "
              "EVM version and the transaction inputs, so the receipt value is exact and re-running with the "
              "same inputs reproduces it; no confidence interval is needed for gas. The small spread the table "
@@ -634,8 +659,8 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
              "(one registration each).")
     L.append("   - `verify_message` on the PKI side is self-contained because the certificate travels with the "
              "message; on the ERC-1056 side the message carries only the DID, so the verifier must resolve the "
-             "key and revocation status from the registry (3 RPC calls per verification in this provider, no "
-             "caching). A production verifier would cache resolved DID documents and re-validate with a single "
+             "key and revocation status from the registry (one `getIdentityInfo` call plus one `eth_getLogs` per "
+             "change-history block in this provider, no caching; see the RPC counts above). A production verifier would cache resolved DID documents and re-validate with a single "
              "`changed(identity)` call; that optimisation is not implemented here, so the ERC-1056 verify figure "
              "is the *uncached, worst-case* cost.")
     L.append("   - `revoke_credential` on the PKI side revokes every certificate of the vehicle; on the "
@@ -646,17 +671,55 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
     L.append("   - The ERC-1056 write operations are signed by the vehicle's own account "
              "(`ERC1056Registry` is `onlyOwner`); funding that account with ETH is a provisioning step done "
              "before the timer starts and is excluded from the measurements. Signature curves also differ "
-             "(P-256 for PKI, secp256k1 for ERC-1056), both with SHA-256.")
+             "(P-256 for PKI, secp256k1 for ERC-1056), both with SHA-256. OpenSSL has a constant-time optimised "
+             "P-256 implementation and only a generic one for secp256k1, so the `sign_message` gap (and the "
+             "ECDSA share of `verify_message`) reflects the library's curve implementation, not PKI vs. DID.")
     L.append("5. **Provider bugs fixed to make the experiment possible** (see the diff): the ERC-1056 provider "
              "previously returned a placeholder public key (`\"0x04...\"`) from resolution, so its "
              "`verify_message` could never succeed, and it signed `registerVehicle`/`revokeIdentity` with the "
              "deployer account, which the contract rejects (`Only owner can perform this action`). The deploy "
              "script's smoke test had the same bug. These fixes affect correctness, not the measured algorithm.")
+    L.append("   **Review 02 fixes (2026-10-03) that change numbers relative to the 2026-09-24 run:** "
+             "(T-1) both PKI verifiers now check the CA signature on the certificate (previously only the issuer "
+             "name, or nothing, so a self-signed certificate was accepted), adding one ECDSA verify to PKI "
+             "`verify_message`; (T-2) ERC-1056 key resolution replays the collected events forward, so a key "
+             "revoked with `revokeAttribute` no longer verifies; (T-5) the redundant `isRevoked` eth_call in "
+             "ERC-1056 `verify_message` is removed (the revoked flag comes from `getIdentityInfo`); (T-6) RPC "
+             "counts are snapshotted before the untimed post-check, so `revoke_credential` no longer includes the "
+             "check's `isRevoked` call.")
     L.append("6. **Single machine, single process, no concurrency.** Throughput under load, RPC contention "
              "and multi-vehicle broadcast scenarios are out of scope here.")
+    L.append("7. **The ERC-1056 column is the cv2x `ERC1056Registry`, not `EthereumDIDRegistry` (review 02, K-5).** "
+             "`cv2x-testbed/contracts/ERC1056Registry.sol` is a simplified registry modelled on ERC-1056: it has no "
+             "`*Signed` (meta-transaction) functions, uses owner-only convenience wrappers "
+             "(`registerVehicle`, `updateVehicleKey`, `revokeIdentity`), stores a whole-identity revoked flag that "
+             "ERC-1056 does not have, and its `DIDRevoked` event carries no `previousChange`, so it cuts the "
+             "event chain. Its gas and latency figures therefore describe this registry, not the reference "
+             "`EthereumDIDRegistry` measured elsewhere in the thesis (register rows #25 and #29); the two must not "
+             "be quoted interchangeably.")
     L.append("")
     with open(path, 'w') as f:
         f.write("\n".join(L))
+
+
+def deploy_registry(rpc_url: str):
+    """Deploy ERC1056Registry from the compiled artifact; return (address, receipt gasUsed)."""
+    from identity.erc1056_provider import ERC1056Provider
+    with open(os.path.join(ROOT, 'artifacts', 'contracts', 'ERC1056Registry.sol', 'ERC1056Registry.json')) as f:
+        art = json.load(f)
+    p = ERC1056Provider(rpc_url)
+    w3 = p.w3
+    tx = w3.eth.contract(abi=art['abi'], bytecode=art['bytecode']).constructor().build_transaction({
+        'from': p.account.address,
+        'nonce': w3.eth.get_transaction_count(p.account.address),
+        'gas': 3_000_000,
+        'gasPrice': w3.eth.gas_price,
+    })
+    receipt = w3.eth.wait_for_transaction_receipt(
+        w3.eth.send_raw_transaction(p._raw_tx(p.account.sign_transaction(tx))))
+    if receipt.status != 1:
+        raise RuntimeError("ERC1056Registry deployment reverted")
+    return receipt.contractAddress, int(receipt.gasUsed)
 
 
 # --------------------------------------------------------------------------
@@ -669,6 +732,9 @@ def main():
     ap.add_argument('--rpc-url', default='http://127.0.0.1:8545')
     ap.add_argument('--contract-address', default=None,
                     help='ERC1056Registry address (default: deployments/localhost.json)')
+    ap.add_argument('--deploy', action='store_true',
+                    help='deploy a fresh ERC1056Registry from artifacts/ and record its receipt gasUsed '
+                         '(instead of reading deployments/localhost.json)')
     ap.add_argument('--no-chain', action='store_true', help='skip the ERC-1056 backend')
     ap.add_argument('--out-dir', default=os.path.join(ROOT, 'results'))
     ap.add_argument('--render-only', action='store_true',
@@ -702,7 +768,10 @@ def main():
             from identity.erc1056_provider import ERC1056Provider
             address = args.contract_address
             deploy_gas = None
-            if address is None:
+            if args.deploy:
+                address, deploy_gas = deploy_registry(args.rpc_url)
+                print(f"Deployed ERC1056Registry at {address} (gasUsed {deploy_gas})")
+            elif address is None:
                 with open(os.path.join(ROOT, 'deployments', 'localhost.json')) as f:
                     dep = json.load(f)
                 address = dep['contractAddress']
