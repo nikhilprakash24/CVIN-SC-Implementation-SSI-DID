@@ -73,7 +73,7 @@ jobs:
     - name: Install dependencies
       run: |
         (cd 1_blockchain-identity && npm ci && npx hardhat compile)
-        python -m pip install eth-account coincurve cryptography web3 pytest
+        python -m pip install eth-account coincurve cryptography web3 pytest numpy
 
     - name: Start Hardhat node for cv2x-testbed on-chain tests
       shell: bash
