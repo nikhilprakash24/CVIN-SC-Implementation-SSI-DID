@@ -51,4 +51,35 @@ Not in this pass (need the author): SUMO install (S0), chapter framing edits, Se
   they touch disjoint files (`2_w3c-ssi-layer/did-resolution/` vs
   `cv2x-testbed/scripts/`, `cv2x-testbed/identity/`) and both are latency-bound.
 
-## 4. Closing sections — *(written last)*
+## 4. What was done (closing)
+
+| Item | Result | Evidence |
+|---|---|---|
+| N1 MOBI clause reconciliation | Done to the public preview; the normative body is member-only, so the conformance claim is narrowed to published concepts (SC-14) and the standard's vocabulary mapped | `docs/MOBI_VID_CHECKLIST.md` |
+| N2 Resolver conformance | Official W3C DID test suite **328/441 → 335/336**; internal checker **94.3 %**; CI floor 94.0; verified green on GitHub | `docs/conformance/` (rerun-2026-10-03), register #4/#24 |
+| N4 Freshness-k | Budget's two estimate rows now measured (0.44 / 2.70 ms); k-sweep with revocation bound; reproduced before commit | `cv2x-testbed/results/freshness_k.md`, `LATENCY_BUDGET.md`, register #29 |
+| N3 Lifecycle parity | Centralized vs MOBI VID V2 measured; writes 10³× slower on chain; attest_event non-equivalent; cached-read half untested; SC-13 closed | `cv2x-testbed/results/lifecycle_parity.md`, register #30 |
+| Dashboard / snapshot | Refreshed to today's numbers and republished | `docs/figures/` |
+
+Decisions beyond D1: **D2** — accept each delegated result only after re-running
+it here (done for N2: checker + pytest + edge inputs; N4: anchor rows on a fresh
+node; N3: render path and JSON integrity, since a full re-run needs a second node
+port); **D3** — raise the CI compliance floor to the verified level each time it
+genuinely rises (93.0 → 94.0), never to a target; **D4** — record the host-speed
+difference between runs (2.10 vs 2.80 GHz) in the register rather than normalise
+numbers across hosts.
+
+## 5. What was not done, and why
+- SUMO (S0–S3), chapter edits, Sepolia — need the author (unchanged).
+- The "equal once cached" half of M4 — no cached history client exists; it is a
+  small follow-up (reuse the freshness cache pattern for history reads).
+- Completing the MOBI checklist — needs the member text of VID I/II.
+- The single remaining DID-suite failure — a suite input vector, not a resolver
+  defect; left as documented rather than changing the vector to get 194/194.
+
+## 6. What is needed from the author
+Unchanged from the handback §4, plus one new option: request the MOBI VID I/II
+normative text (vid@dlt.mobi, or via a UBC/MOBI membership) so
+`MOBI_VID_CHECKLIST.md` can be completed clause by clause.
+
+*Closed 2026-10-03.*
