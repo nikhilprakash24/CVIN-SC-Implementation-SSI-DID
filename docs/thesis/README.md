@@ -42,7 +42,7 @@ citation set). Chapters 3–7 are grounded in the measured artifacts.
 
 ### Implementation Contributions
 1. **9 Blockchain Identity Standards + MOBI VID profile** - all implemented, tested (217 Hardhat tests), and gas-benchmarked on-chain
-2. **W3C Compliant System** - 93.2% measured compliance (executable checker, CI-gated ≥90%)
+2. **W3C Compliant System** - 94.3% (after the 2026-10-03 resolver fixes; 93.2% at the merge) measured compliance (executable checker, CI-gated ≥90%)
 3. **Real-time V2V Integration** - blockchain identity verified in the V2V message path with real cryptography (SSI warm verify 0.165 ms)
 4. **MOBI VID** - VID I birth certificate + VID II (11 lifecycle event types), on-chain `attestEvent` signature verification, AES-256-GCM VIN encryption
 
@@ -67,7 +67,7 @@ citation set). Chapters 3–7 are grounded in the measured artifacts.
 ### RQ3: W3C Compliance
 **Question**: Can blockchain identity achieve W3C SSI compliance while meeting automotive requirements?
 
-**Answer (measured, H2 supported)**: Yes — **93.2%** measured (executable checker): DID Core v1.0 93.3% (13/15), VC Data Model v2.0 93.1% (27/29). The two deviations are documented and deliberate (canonical JSON vs URDNA2015; thesis-defined cryptosuite).
+**Answer (measured, H2 supported)**: Yes — **94.3% (after the 2026-10-03 resolver fixes; 93.2% at the merge)** measured (executable checker): DID Core v1.0 93.3% (13/15), VC Data Model v2.0 93.1% (27/29). The two deviations are documented and deliberate (canonical JSON vs URDNA2015; thesis-defined cryptosuite).
 
 ### RQ4: Real-Time Feasibility
 **Question**: Are blockchain identities viable for real-time safety-critical V2V?
@@ -117,7 +117,7 @@ optional real-SUMO, and thesis writing.
 - **Figures**: 30-40
 - **Tables**: 20-30
 - **Test Cases**: 200+ — **met**: ~295 automated tests green (217 Hardhat + 28 VC + 32 MOBI VID + 12/12 use cases)
-- **W3C Compliance**: ≥90% target — **met**: 93.2% measured
+- **W3C Compliance**: ≥90% target — **met**: 94.3% (after the 2026-10-03 resolver fixes; 93.2% at the merge) measured
 
 ## Committee
 

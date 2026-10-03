@@ -14,17 +14,52 @@ Supported DID Methods:
 - did:key:  (ERC-725 Proxy Account)
 - did:mobi: (MOBI VID compliant)
 
+Resolution contract (DID Core 7.1, verified against the W3C DID test suite,
+see docs/conformance/W3C_DID_TEST_SUITE.md):
+- resolve(did)                -> didResolutionMetadata, didDocument, didDocumentMetadata
+- resolve_representation(did) -> didResolutionMetadata (+contentType), didDocumentStream,
+                                 didDocumentMetadata
+- DIDs are validated against the DID Core 3.1 ABNF before dispatch; syntax
+  errors yield error "invalidDid", unknown methods "methodNotSupported".
+- Metadata structures contain only populated properties: no "error" key on
+  success, no "contentType" for resolve(), no null placeholders, and an empty
+  didDocumentMetadata on error. Timestamps are XML Datetime in UTC without
+  sub-second precision (YYYY-MM-DDTHH:MM:SSZ).
+
 Author: Nikhil Prakash
 Thesis: MASc, UBC ECE
 """
 
 import json
 import hashlib
+import re
 import time
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from enum import Enum
+
+
+# DID Core 3.1 DID Syntax (ABNF):
+#   did                = "did:" method-name ":" method-specific-id
+#   method-name        = 1*method-char          ; method-char = %x61-7A / DIGIT
+#   method-specific-id = *( *idchar ":" ) 1*idchar
+#   idchar             = ALPHA / DIGIT / "." / "-" / "_" / pct-encoded
+#   pct-encoded        = "%" HEXDIG HEXDIG
+_IDCHAR = r"(?:[A-Za-z0-9._-]|%[0-9A-Fa-f]{2})"
+DID_SYNTAX = re.compile(
+    r"^did:(?P<method>[a-z0-9]+):"
+    r"(?P<id>(?:" + _IDCHAR + r"*:)*" + _IDCHAR + r"+)$"
+)
+
+#: The only representation this resolver produces (DID Core 6.3, JSON-LD).
+DID_LD_JSON = "application/did+ld+json"
+SUPPORTED_CONTENT_TYPES = (DID_LD_JSON,)
+
+
+def xml_datetime_now() -> str:
+    """Current time as an XML Datetime normalised to UTC, no sub-seconds (DID Core 7.1.3)."""
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 class DIDMethod(str, Enum):
@@ -43,6 +78,20 @@ class VerificationRelationship(str, Enum):
     KEY_AGREEMENT = "keyAgreement"
     CAPABILITY_INVOCATION = "capabilityInvocation"
     CAPABILITY_DELEGATION = "capabilityDelegation"
+
+
+class DIDResolutionError(Exception):
+    """
+    A resolution failure with a DID Core 7.1.2 error code.
+
+    `code` is one of the registered single-keyword values: "invalidDid",
+    "notFound", "methodNotSupported", "representationNotSupported" or
+    "internalError". `str(exc)` is the human-readable errorMessage.
+    """
+
+    def __init__(self, code: str, message: str):
+        super().__init__(message)
+        self.code = code
 
 
 @dataclass
@@ -126,19 +175,42 @@ class DIDDocument:
 
         return doc
 
+    def to_representation(self, content_type: str = DID_LD_JSON) -> str:
+        """Serialise to the JSON-LD representation (DID Core 6.3 production)."""
+        if content_type not in SUPPORTED_CONTENT_TYPES:
+            raise DIDResolutionError(
+                "representationNotSupported",
+                f"Representation '{content_type}' is not supported "
+                f"(supported: {', '.join(SUPPORTED_CONTENT_TYPES)})")
+        return json.dumps(self.to_dict())
+
 
 @dataclass
 class DIDResolutionMetadata:
-    """W3C DID Resolution metadata"""
-    contentType: str = "application/did+ld+json"
+    """
+    W3C DID Resolution metadata (DID Core 7.1.2)
+
+    `contentType` is the media type of the representation this resolver
+    produces for the document. DID Core only allows it in the serialised
+    structure when resolveRepresentation() was called, so
+    DIDResolutionResult.to_dict() omits it for resolve() results; the
+    attribute itself is kept on every successful result for callers that
+    want to know how the document would be serialised. On error it is None.
+    `error` / `errorMessage` are set only when resolution failed.
+    """
+    contentType: Optional[str] = DID_LD_JSON
     retrieved: Optional[str] = None
     error: Optional[str] = None
     errorMessage: Optional[str] = None
 
+    def to_dict(self) -> Dict:
+        """Metadata structure with only the populated properties."""
+        return {k: v for k, v in asdict(self).items() if v is not None}
+
 
 @dataclass
 class DIDDocumentMetadata:
-    """W3C DID Document metadata"""
+    """W3C DID Document metadata (DID Core 7.1.3)"""
     created: Optional[str] = None
     updated: Optional[str] = None
     deactivated: bool = False
@@ -148,21 +220,56 @@ class DIDDocumentMetadata:
     equivalentId: List[str] = field(default_factory=list)
     canonicalId: Optional[str] = None
 
+    def to_dict(self) -> Dict:
+        """
+        Metadata structure with only the populated properties.
+
+        Each 7.1.3 property is defined "if present"; unset values (None, an
+        empty equivalentId set, deactivated == False) are left out so an
+        untouched instance serialises to the empty structure that DID Core
+        requires on error.
+        """
+        out = {}
+        for key, value in asdict(self).items():
+            if value is None or value == [] or value is False:
+                continue
+            out[key] = value
+        return out
+
 
 @dataclass
 class DIDResolutionResult:
-    """W3C DID Resolution Result"""
+    """
+    W3C DID Resolution Result
+
+    `didDocumentStream` is set only by resolve_representation(); it is the
+    serialised document ("" on error). to_dict() produces the resolve()
+    output (didDocument) or the resolveRepresentation() output
+    (didDocumentStream + contentType) accordingly.
+    """
     didResolutionMetadata: DIDResolutionMetadata
     didDocument: Optional[DIDDocument]
     didDocumentMetadata: DIDDocumentMetadata
+    didDocumentStream: Optional[str] = None
+
+    @property
+    def is_representation(self) -> bool:
+        return self.didDocumentStream is not None
 
     def to_dict(self) -> Dict:
         """Convert to dictionary"""
-        return {
-            "didResolutionMetadata": asdict(self.didResolutionMetadata),
-            "didDocument": self.didDocument.to_dict() if self.didDocument else None,
-            "didDocumentMetadata": asdict(self.didDocumentMetadata)
-        }
+        resolution_metadata = self.didResolutionMetadata.to_dict()
+        if not self.is_representation:
+            # 7.1.2: contentType MUST NOT be present if resolve() was called
+            resolution_metadata.pop("contentType", None)
+
+        result = {"didResolutionMetadata": resolution_metadata}
+        if self.is_representation:
+            result["didDocumentStream"] = self.didDocumentStream
+        else:
+            result["didDocument"] = self.didDocument.to_dict() if self.didDocument else None
+        result["didDocumentMetadata"] = self.didDocumentMetadata.to_dict()
+        return result
 
 
 class DIDResolver:
@@ -196,14 +303,14 @@ class DIDResolver:
         start_time = time.time()
 
         try:
-            # Parse DID
+            # Parse DID (raises DIDResolutionError on syntax / method errors)
             method, identifier = self._parse_did(did)
 
             # Check cache
             if did in self.cache:
                 cached = self.cache[did]
                 # Update retrieval time
-                cached.didResolutionMetadata.retrieved = datetime.now(timezone.utc).isoformat()
+                cached.didResolutionMetadata.retrieved = xml_datetime_now()
                 return cached
 
             # Resolve based on method
@@ -216,22 +323,16 @@ class DIDResolver:
             elif method == DIDMethod.MOBI:
                 result = self._resolve_mobi(did, identifier)
             else:
-                # Method not supported
-                result = DIDResolutionResult(
-                    didResolutionMetadata=DIDResolutionMetadata(
-                        error="methodNotSupported",
-                        errorMessage=f"DID method '{method}' is not supported"
-                    ),
-                    didDocument=None,
-                    didDocumentMetadata=DIDDocumentMetadata()
-                )
+                # Method known but not implemented by this resolver
+                raise DIDResolutionError(
+                    "methodNotSupported",
+                    f"DID method '{method.value}' is not supported")
 
             # Set retrieval time
-            result.didResolutionMetadata.retrieved = datetime.now(timezone.utc).isoformat()
+            result.didResolutionMetadata.retrieved = xml_datetime_now()
 
             # Cache successful resolutions
-            if not result.didResolutionMetadata.error:
-                self.cache[did] = result
+            self.cache[did] = result
 
             # Log resolution time
             elapsed_ms = (time.time() - start_time) * 1000
@@ -239,30 +340,95 @@ class DIDResolver:
 
             return result
 
+        except DIDResolutionError as e:
+            return self._error_result(e.code, str(e))
+
         except Exception as e:
-            return DIDResolutionResult(
-                didResolutionMetadata=DIDResolutionMetadata(
-                    error="internalError",
-                    errorMessage=str(e)
-                ),
-                didDocument=None,
-                didDocumentMetadata=DIDDocumentMetadata()
-            )
+            return self._error_result("internalError", str(e))
+
+    def resolve_representation(self, did: str,
+                               accept: Optional[str] = None) -> DIDResolutionResult:
+        """
+        Resolve a DID to a serialised DID Document (DID Core resolveRepresentation)
+
+        Args:
+            did: The DID to resolve
+            accept: Requested media type (resolution option "accept");
+                    defaults to application/did+ld+json
+
+        Returns:
+            DIDResolutionResult whose didDocumentStream holds the
+            representation ("" on error) and whose didResolutionMetadata
+            carries its contentType
+        """
+        content_type = accept or DID_LD_JSON
+        if content_type not in SUPPORTED_CONTENT_TYPES:
+            return self._error_result(
+                "representationNotSupported",
+                f"Representation '{content_type}' is not supported "
+                f"(supported: {', '.join(SUPPORTED_CONTENT_TYPES)})",
+                representation=True)
+
+        resolved = self.resolve(did)
+        if resolved.didResolutionMetadata.error:
+            return self._error_result(
+                resolved.didResolutionMetadata.error,
+                resolved.didResolutionMetadata.errorMessage,
+                representation=True)
+
+        return DIDResolutionResult(
+            didResolutionMetadata=DIDResolutionMetadata(
+                contentType=content_type,
+                retrieved=resolved.didResolutionMetadata.retrieved
+            ),
+            didDocument=resolved.didDocument,
+            didDocumentMetadata=resolved.didDocumentMetadata,
+            didDocumentStream=resolved.didDocument.to_representation(content_type)
+        )
+
+    # DID Core spelling of the function name
+    resolveRepresentation = resolve_representation
+
+    @staticmethod
+    def _error_result(code: str, message: Optional[str],
+                      representation: bool = False) -> DIDResolutionResult:
+        """
+        Build an error result (DID Core 7.1): a single-keyword `error`, no
+        contentType, an empty document / stream and empty document metadata.
+        """
+        return DIDResolutionResult(
+            didResolutionMetadata=DIDResolutionMetadata(
+                contentType=None,
+                error=code,
+                errorMessage=message
+            ),
+            didDocument=None,
+            didDocumentMetadata=DIDDocumentMetadata(),
+            didDocumentStream="" if representation else None
+        )
 
     def _parse_did(self, did: str) -> Tuple[DIDMethod, str]:
-        """Parse DID into method and identifier"""
-        parts = did.split(":")
+        """
+        Parse DID into method and identifier
 
-        if len(parts) < 3 or parts[0] != "did":
-            raise ValueError(f"Invalid DID format: {did}")
+        Validates the DID Core 3.1 ABNF first: a string that is not a DID
+        (missing scheme, bad method-name, empty or malformed
+        method-specific-id, DID URL with path/query/fragment) is
+        "invalidDid"; a syntactically valid DID whose method this resolver
+        does not implement is "methodNotSupported".
+        """
+        match = DID_SYNTAX.match(did) if isinstance(did, str) else None
+        if match is None:
+            raise DIDResolutionError("invalidDid", f"Invalid DID format: {did}")
 
-        method = parts[1]
-        identifier = ":".join(parts[2:])  # Everything after method
+        method = match.group("method")
+        identifier = match.group("id")  # Everything after method
 
         try:
             method_enum = DIDMethod(method)
         except ValueError:
-            raise ValueError(f"Unsupported DID method: {method}")
+            raise DIDResolutionError(
+                "methodNotSupported", f"Unsupported DID method: {method}")
 
         return method_enum, identifier
 
@@ -277,10 +443,12 @@ class DIDResolver:
         parts = identifier.split(":")
         if len(parts) == 2:
             chain_id, address = parts
-        else:
+        elif len(parts) == 1:
             # Default to mainnet
             chain_id = "0x1"
             address = identifier
+        else:
+            raise DIDResolutionError("invalidDid", f"Invalid did:ethr format: {did}")
 
         # In production, would query ERC-1056 registry on blockchain
         # For thesis demo, construct minimal valid DID document
@@ -300,7 +468,7 @@ class DIDResolver:
             verificationMethod=[verification_method],
             authentication=[verification_method_id],
             assertionMethod=[verification_method_id],
-            created=datetime.now(timezone.utc).isoformat(),
+            created=xml_datetime_now(),
             versionId="1"
         )
 
@@ -321,7 +489,7 @@ class DIDResolver:
         """
         parts = identifier.split(":")
         if len(parts) != 3:
-            raise ValueError(f"Invalid did:nft format: {did}")
+            raise DIDResolutionError("invalidDid", f"Invalid did:nft format: {did}")
 
         chain_id, contract_address, token_id = parts
 
@@ -347,7 +515,7 @@ class DIDResolver:
             verificationMethod=[verification_method],
             authentication=[verification_method_id],
             service=[service],
-            created=datetime.now(timezone.utc).isoformat(),
+            created=xml_datetime_now(),
             versionId="1"
         )
 
@@ -368,9 +536,11 @@ class DIDResolver:
         parts = identifier.split(":")
         if len(parts) == 2:
             chain_id, proxy_address = parts
-        else:
+        elif len(parts) == 1:
             chain_id = "0x1"
             proxy_address = identifier
+        else:
+            raise DIDResolutionError("invalidDid", f"Invalid did:key format: {did}")
 
         verification_method_id = f"{did}#keys-1"
 
@@ -387,7 +557,7 @@ class DIDResolver:
             authentication=[verification_method_id],
             assertionMethod=[verification_method_id],
             capabilityInvocation=[verification_method_id],
-            created=datetime.now(timezone.utc).isoformat()
+            created=xml_datetime_now()
         )
 
         return DIDResolutionResult(
@@ -405,6 +575,9 @@ class DIDResolver:
         Format: did:mobi:<vin>
         Example: did:mobi:5YJ3E1EA0PF123456
         """
+        if ":" in identifier:
+            raise DIDResolutionError("invalidDid", f"Invalid did:mobi format: {did}")
+
         vin = identifier
 
         # MOBI VID uses VIN as identifier
@@ -438,7 +611,7 @@ class DIDResolver:
             verificationMethod=[verification_method],
             authentication=[verification_method_id],
             service=services,
-            created=datetime.now(timezone.utc).isoformat(),
+            created=xml_datetime_now(),
             alsoKnownAs=[f"vin:{vin}"]
         )
 

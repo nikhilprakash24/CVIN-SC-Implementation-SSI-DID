@@ -13,6 +13,11 @@ not: 113 of 299 DID Resolution assertions fail, all traceable to five defects
 in `DIDResolutionMetadata` / `DIDDocumentMetadata` and in error handling. DID
 URL dereferencing could not be tested because the project has no dereferencer.
 
+**Update 2026-10-03.** The five defects were fixed in `did_resolver.py` and
+the suite was re-run on the same commit and harness: 335/336 (resolution
+193/194, the other suites unchanged at 142/142). Sections 1-5 are kept as the
+record of the 2026-09-24 run; section 7 has the re-run.
+
 ## 1. Suite under test
 
 | Item | Value |
@@ -51,7 +56,8 @@ python3 docs/conformance/generate_implementations.py docs/conformance/implementa
 | `implementations/cvin-resolver-mobi.json` | resolver executions: `resolve`, `resolveRepresentation`, `did:mobi:` (trailing colon, invalid per ABNF) | `resolve()` output |
 | `implementations/cvin-resolver-nft.json` | resolver executions: `resolve`, `resolveRepresentation`, `did:nft:0x1:0xabc` (missing tokenId) | `resolve()` output |
 
-Mapping rules (see the script's docstring):
+Mapping rules as of the 2026-09-24 run (the generator was updated for the
+re-run; section 7.2 lists what changed):
 
 * `didDocumentDataModel.properties` = `didDocument` minus `@context`;
   `representationSpecificEntries` = `{"@context": ...}`;
@@ -285,3 +291,108 @@ internal 75 % should not be presented as if it were an external result.
 | `reports/did-spec-test-run.latest.json` | sanitized result set that the HTML report was generated from |
 | `reports/globals-path-run-cvin-detailed-results.json` | the discarded `globals`-path run, with failure messages |
 | `internal/w3c_compliance_report.json` | output of `cv2x-testbed/scripts/w3c_compliance_checker.py` for the comparison in section 5 |
+| `reports/rerun-2026-10-03/jest-cvin/cvin-cli-<suite>.json` / `.txt` | raw jest `--json` results and verbose transcripts of the re-run (section 7) |
+| `reports/rerun-2026-10-03/did-implementation-report.html`, `did-spec-test-run.latest.json` | the suite's HTML report and its sanitized input, re-run |
+| `reports/rerun-2026-10-03/internal/w3c_compliance_report.json` | output of the (now executable) internal checker after the fixes (section 7.4) |
+
+## 7. Re-run after fixes (2026-10-03)
+
+### 7.1 What was changed in `did_resolver.py`
+
+All five root causes of section 4 were addressed in
+`2_w3c-ssi-layer/did-resolution/did_resolver.py`; nothing else in the
+resolver's public API changed (`resolve(did)` still returns a
+`DIDResolutionResult` with `.didDocument` / `.didResolutionMetadata` /
+`.didDocumentMetadata` and `to_dict()`, the cache and `create_did()` are
+unchanged).
+
+| Root cause | Fix |
+|---|---|
+| R1 `error` / `errorMessage` always present | `DIDResolutionMetadata.to_dict()` emits only populated properties. Failures are raised internally as `DIDResolutionError(code, message)` and turned into a result with a single-keyword `error` (`invalidDid`, `methodNotSupported`, `representationNotSupported`, `internalError`), `didDocument: null` and empty `didDocumentMetadata`. |
+| R2 `contentType` on `resolve()` | `DIDResolutionResult.to_dict()` drops `contentType` unless the result came from the new `resolve_representation(did, accept=None)` (alias `resolveRepresentation`), which serialises the document (`didDocumentStream`, `json.dumps` of the data model) and sets `contentType: application/did+ld+json`; any other `accept` is `representationNotSupported` with an empty stream. The in-process attribute `didResolutionMetadata.contentType` is kept on successful `resolve()` results (the internal checker reads it) but is never serialised for `resolve()`. |
+| R3 null-placeholder document metadata | `DIDDocumentMetadata.to_dict()` omits `None`, empty `equivalentId` and `deactivated == False`, so an untouched instance serialises to `{}`; successful results carry `created` (and `versionId` for `did:ethr`) only. No `canonicalId` is emitted. |
+| R4 timestamp format | `created` and `retrieved` are produced by `xml_datetime_now()` -> `YYYY-MM-DDTHH:MM:SSZ` (UTC, no sub-seconds). |
+| R5 no syntax validation | `_parse_did` matches the DID Core 3.1 ABNF (`did:` + `[a-z0-9]+` method-name + `method-specific-id = *( *idchar ":" ) 1*idchar`, `idchar = ALPHA / DIGIT / "." / "-" / "_" / pct-encoded`) before dispatch: non-matching input (`did:ethr_0x1234`, `did:mobi:`, `not-a-did`, DID URLs with `#`/`?`/`/`) is `invalidDid`; a valid DID with an unimplemented method (`did:web:...`, `did:example:...`) is `methodNotSupported`. Method-specific rules (`did:nft` needs chainId:contract:tokenId, `did:mobi` a single VIN segment, `did:ethr`/`did:key` one or two segments) are also reported as `invalidDid`. |
+
+### 7.2 Generator and run
+
+`generate_implementations.py` now records the `resolveRepresentation`
+executions and the method files' per-content-type block from
+`resolve_representation()` (stream + `contentType`), and the `resolve`
+executions from `resolve()`; the success check tests for the *absence* of
+`error`. The three DIDs, the four error inputs and the ten executions are the
+same as on 2026-09-24. Suite commit, Node/jest versions, registration and
+runner are unchanged (sections 1, 2.2, 2.3); Python 3.11.15.
+
+### 7.3 Results
+
+Per suite (jest-CLI run, `reports/rerun-2026-10-03/jest-cvin/cvin-cli-<suite>.json`):
+
+| DID Core section / suite | Tests | Passed | Failed | 2026-09-24 (passed/tests) |
+|---|---|---|---|---|
+| 3.1 Identifier syntax (`did-identifier`) | 3 | 3 | 0 | 3/3 |
+| 5.x Core properties + 7.3 metadata structure (`did-core-properties`) | 88 | 88 | 0 | 88/88 |
+| 6.1 / 6.3.1 Production (`did-production`) | 48 | 48 | 0 | 48/48 |
+| 6.3.2 Consumption (`did-consumption`) | 3 | 3 | 0 | 3/3 |
+| 7.1 DID Resolution (`did-resolution`) | 194 | 193 | 1 | 186/299 |
+| 7.2 DID URL Dereferencing | - | - | - | not run (no dereferencer, unchanged) |
+| **Total** | **336** | **335** | **1** | **328/441** |
+
+Per implementation, DID Resolution suite:
+
+| Resolver file | Executions | Tests | Passed | Failed | 2026-09-24 |
+|---|---|---|---|---|---|
+| `cvin-resolver-ethr.json` | 4 | 78 | 78 | 0 | 77/119 |
+| `cvin-resolver-mobi.json` | 3 | 58 | 58 | 0 | 52/90 |
+| `cvin-resolver-nft.json` | 3 | 58 | 57 | 1 | 57/90 |
+
+The number of resolution tests fell from 299 to 194 because the suite
+registers several `it()` blocks only when the corresponding key is present
+in the recorded output (`error` -> "single keyword" test; `contentType` ->
+two media-type tests; each `didDocumentMetadata` property -> its format
+test). On 2026-09-24 every execution carried `error`, `contentType` and all
+eight metadata keys, so every one of those tests was instantiated (and most
+failed); now they are instantiated only where the key legitimately appears.
+The 17 normative statements that failed in section 4 all pass wherever they
+are now evaluated: the "if the resolution is successful ..." tests that were
+previously skipped because `error` was always present (section 3, last
+paragraph) are now actually exercised and pass.
+
+### 7.4 Remaining failure
+
+One test fails, in `cvin-resolver-nft.json`, execution `did:nft:0x1:0xabc`
+(registered as `invalidDidErrorOutcome`):
+
+| Test (DID Core 7.1.2) | Assertion |
+|---|---|
+| invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax. | `expect(did).not.toBeValidDid()` - received `"did:nft:0x1:0xabc"` |
+
+The resolver's output for this input is conformant (`error: "invalidDid"`,
+`didDocument: null`, `didDocumentMetadata: {}`; the first two assertions of
+the same test pass). The suite's third assertion requires the *input* to
+violate the generic 3.1 ABNF, and `did:nft:0x1:0xabc` does not: it violates
+only the `did:nft` method rule (missing tokenId). DID Core 7.1.2 defines
+`invalidDid` as "does not conform to valid syntax" and the DID Resolution
+specification applies it to method-specific syntax as well, so the resolver
+keeps reporting `invalidDid` for this case. This is a mismatch between the
+registered vector and the suite's narrower test, not a resolver defect; the
+vector was kept so that the executions are identical to the 2026-09-24 run.
+(Replacing it with an input that is invalid under the generic ABNF, for
+example the trailing-colon form `did:nft:0x1:0xabc:`, would remove the
+failure; the generic-ABNF path is already covered by `did:ethr_0x1234` and
+`did:mobi:`, both of which pass.)
+
+No other failures remain: R1-R5 produce zero failures.
+
+### 7.5 Project checks after the fixes
+
+| Check | Before | After |
+|---|---|---|
+| `cv2x-testbed/scripts/w3c_compliance_checker.py` (executable score) | 93.2 % (40 PASS / 2 FAIL / 2 PARTIAL of 44) | **94.3 %** (41 PASS / 2 FAIL / 1 PARTIAL of 44); DID Core 14/15 (96.7 %). The 7.1.2 "unsupported method -> `methodNotSupported`" item moved from PARTIAL to PASS. Remaining PARTIAL: `did:mobi` placeholder key material; remaining FAILs: the two documented VC deviations (canonicalization, cryptosuite). Report: `reports/rerun-2026-10-03/internal/w3c_compliance_report.json`. |
+| `python -m pytest 2_w3c-ssi-layer -q` | 60 passed | 60 passed |
+| `docs/conformance/generate_implementations.py` | - | regenerates the six `implementations/cvin-*.json` files from the fixed resolver (the registered inputs of section 7.3) |
+
+The internal checker's 7.1.2 metadata item still reads
+`didResolutionMetadata.contentType` on `resolve()` results; it passes because
+the attribute is kept in-process (section 7.1, R2) even though it is no
+longer serialised for `resolve()`.

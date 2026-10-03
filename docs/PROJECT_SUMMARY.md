@@ -33,8 +33,8 @@ intended to be thesis-grade on its own before parallel research is merged.
 |---|---|---|
 | **VC layer** | `pytest 2_w3c-ssi-layer/verifiable-credentials/tests/` | ✅ **28/28 passed** (0.55s) **[verified]** |
 | **DID resolver** | `did_resolver.py`; `docs/figures/resolution_latency_M0.json` | ✅ valid W3C DID Document; in-process resolve **0.009 ms median / 0.013 ms p95 cold, 0.002 ms warm** (M0, N=30 per method) **[verified]** |
-| **W3C compliance (internal)** | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ **93.2%** on the merged trunk (the analysis lineage's updated checker, which counts its two documented Data-Integrity deviations as FAIL by design; 89.6% on the pre-merge checker) **[verified, self-scored]** |
-| **W3C DID conformance (external)** | `docs/conformance/W3C_DID_TEST_SUITE.md` | ✅ **328/441 (74.4%)** on w3c/did-test-suite `939b31d`; identifier, properties, production, consumption 142/142; resolution 186/299 — 113 failures in 5 fixable metadata root causes **[verified externally]** |
+| **W3C compliance (internal)** | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ **94.3%** after the 2026-10-03 resolver fixes (93.2% at the merge; the analysis lineage's checker, which counts its two documented Data-Integrity deviations as FAIL by design; 89.6% on the pre-merge checker) **[verified, self-scored]** |
+| **W3C DID conformance (external)** | `docs/conformance/W3C_DID_TEST_SUITE.md` | ✅ **335/336** on w3c/did-test-suite `939b31d` after the 2026-10-03 resolver fixes (328/441 before); resolution 193/194; the single remaining failure is a suite-vector quirk **[verified externally]** |
 | **Contract compile** | `1_blockchain-identity` Hardhat compile | ✅ **31 contracts compile** (after fix, see §2.1) **[verified]** |
 | **Contract tests** | `1_blockchain-identity` Hardhat test | ✅ **219 passing / 0 failing** on the merged trunk (47 contracts, all nine standards + MOBI VID + security scenarios; 47/47 before the merge, see §2.3) **[verified]** |
 | **Python suites** | `2_w3c-ssi-layer/**/tests` | ✅ **60 passed** (VC layer 28, MOBI VID I/II, VIN cipher) **[verified]** |

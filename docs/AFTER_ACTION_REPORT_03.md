@@ -42,6 +42,7 @@ Not in this pass (need the author): SUMO install (S0), chapter framing edits, Se
   mapped. `docs/MOBI_VID_CHECKLIST.md` written: coverage map against the TOC,
   vocabulary mapping, thesis changes. N1 done to the extent the public text allows.
 - N2, N4 delegated (resolver conformance; freshness-k measurement) — running.
+- N2 done and accepted here: official suite 328/441 → **335/336** (resolution 193/194; the one failure is a suite vector generically valid under the 3.1 ABNF), internal checker 93.2% → **94.3%**, VC tests 60/60 unchanged; malformed DIDs now yield `invalidDid`, unknown methods `methodNotSupported`, success results carry no error keys, `resolveRepresentation` exists. CI floor raised 93.0 → 94.0; register #4/#24, summary and README updated.
 
 ## 3. Decisions
 - **D1** — follow the handback order for N1 but run N2 and N4 concurrently, because

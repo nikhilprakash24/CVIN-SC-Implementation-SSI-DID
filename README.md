@@ -33,7 +33,7 @@
 ### Hypotheses
 
 - **H1** — Minimal identity standards (e.g. ERC-1056) are substantially cheaper to create than heavyweight account standards. **SUPPORTED** — the ratio depends on the operation definition: ~10× against ERC-721/725 when ERC-1056 creation is the bare `createIdentity` (52,594 gas, evm cancun) and ERC-721 creation is VIN-bound `mintVehicle` (542,378); **≈7×** when both sides bind the VIN (`createVehicleDID` 78,068). See `docs/MEASUREMENT_CONDITIONS.md` #6/#25.
-- **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (93.2% measured).**
+- **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (94.3% measured; external W3C DID test suite 335/336).**
 - **H3** — Off-chain credential verification meets the real-time V2V latency budget (100 ms). **SUPPORTED (0.165 ms warm).**
 - **H4** — MOBI VID generalizes across identity backends. **SUPPORTED** (5-backend realization sweep; birth + lifecycle native on all, multi-party attestation native on claim-capable backends — a documented fidelity gradient).
 - **H5** — A hybrid design can sit on the security/performance frontier. **SUPPORTED (CVIN-Combined).**
@@ -166,7 +166,7 @@ Findings: no standard dominates (a security/performance frontier — **H5**); on
 | Hypothesis | Status |
 |---|---|
 | H1 — minimal standards substantially cheaper to create (~10× bare, ≈7× VIN-bound) | ✅ Supported |
-| H2 — ≥90% W3C compliance | ✅ Supported (93.2%) |
+| H2 — ≥90% W3C compliance | ✅ Supported (94.3% internal; 335/336 external DID suite) |
 | H3 — off-chain verify meets V2V budget | ✅ Supported (0.165 ms warm) |
 | H4 — MOBI VID across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
 | H5 — hybrid on the frontier | ✅ Supported (CVIN-Combined) |
