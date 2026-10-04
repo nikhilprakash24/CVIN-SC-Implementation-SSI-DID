@@ -52,6 +52,7 @@ REVIEW = {
     ("erc-735", "Revocation / status"): ("implemented", "sub-identity revocation only: removeClaim revokes a claim; no identity-level revocation — reviewed from L1 observation"),
     ("erc-1056-uport", "Claims / credentials"): ("not-applicable", "no on-chain claim storage; SVC_CREDENTIAL_SERVICE is a service-endpoint attribute and credentials are off-chain W3C VCs (SSI layer) — the on/off-chain asymmetry the thesis discusses"),
     ("erc-1056-vehicle", "Claims / credentials"): ("not-applicable", "no on-chain claim function; credentials are off-chain W3C VCs issued/verified by erc1056_provider.py — the on/off-chain asymmetry the thesis discusses"),
+    ("erc-725", "Delegated / signed (off-chain-authorised) execution"): ("implemented", "execute() exists but is a stub that only emits Executed and performs no call (defect log D23); the L1 signed-op gas is the cost of an event — reviewed from the S7 demo"),
     ("erc-725", "Token economics (approvals, royalties, payments)"): ("not-applicable", "approve() is an unimplemented stub in the basic ERC-725 proxy; the identity is a contract account, not a token"),
 }
 

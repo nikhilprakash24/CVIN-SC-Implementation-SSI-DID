@@ -70,8 +70,9 @@ families:
   - Executed
   - execute
   measured: []
-  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
-  reviewed: false
+  reason: execute() exists but is a stub that only emits Executed and performs no call (defect log D23); the L1
+    signed-op gas is the cost of an event — reviewed from the S7 demo
+  reviewed: true
 - name: Lifecycle events / history
   stance: not-applicable
   functions: []
