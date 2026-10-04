@@ -8,7 +8,7 @@
  * a soulbound BIRTH_CERT. Because an issuer-mediated re-binding (issuerTransferCredential of the
  * BIRTH_CERT) moves the identity to another address, the holder address is not a stable handle.
  * This adapter therefore uses the contract's own uniqueness index as the id:
- *   id = keccak256(bytes(vin))  (bytes32 hex)  ->  vinHashToVehicle(id) = current vehicle address.
+ *   id = keccak256(bytes(String(vin).toUpperCase()))  (bytes32 hex)  ->  vinHashToVehicle(id) = current vehicle address.
  * Every method dereferences the current holder on-chain; resolve() reports it as `vehicleAddress`.
  *
  * Method -> contract function mapping (cited by the thesis as the per-option asymmetry note):

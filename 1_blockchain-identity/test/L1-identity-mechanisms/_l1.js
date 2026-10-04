@@ -59,7 +59,7 @@ function options() {
 
 /** 17-character VIN (ISO 3779) derived from the slug, like sandbox/grand/smoke.js. */
 function vinFor(slug) {
-  return (`VIN${slug.replace(/[^A-Z0-9]/gi, '').toUpperCase()}` + '0'.repeat(17)).slice(0, 17);
+  return (`CVN${slug.replace(/[^A-Z0-9]/gi, '').toUpperCase()}` + '0'.repeat(17)).slice(0, 17);
 }
 
 /**

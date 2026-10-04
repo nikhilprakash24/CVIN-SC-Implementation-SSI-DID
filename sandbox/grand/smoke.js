@@ -23,7 +23,7 @@ async function main() {
       assertImplements(a, slug);
       const d = await a.deploy();
       // VINs are 17 characters (ISO 3779); some options validate the length.
-      const vin = (`VIN${slug.replace(/[^A-Z0-9]/gi, '').toUpperCase()}` + '0000000000000000').slice(0, 17);
+      const vin = (`CVN${slug.replace(/[^A-Z0-9]/gi, '').toUpperCase()}` + '0000000000000000').slice(0, 17);
       const c = await a.create({ vin, owner: vehicleOwner.address });
       const id = c.id;
       const rows = [

@@ -139,9 +139,11 @@ contract CVINVehicleLSP8 {
         return _ownedTokens[tokenOwner];
     }
 
-    /// @notice Compute the tokenId for a VIN (keccak256 of the VIN string)
+    /// @notice Compute the tokenId for a VIN: keccak256 of the NORMALISED VIN string
+    ///         (upper-cased, ISO 3779 shape checked — see _normalizeVIN), so a
+    ///         lower-cased VIN resolves to the same tokenId as its upper-cased form.
     function tokenIdForVIN(string calldata vin) public pure returns (bytes32) {
-        return keccak256(bytes(vin));
+        return keccak256(bytes(_normalizeVIN(vin)));
     }
 
     function exists(bytes32 tokenId) public view returns (bool) {
@@ -162,19 +164,62 @@ contract CVINVehicleLSP8 {
     {
         require(vehicleOwner != address(0), "LSP8: mint to zero address");
         require(bytes(vin).length > 0, "LSP8: empty VIN");
-        tokenId = keccak256(bytes(vin));
+        // D13: normalise (upper-case) and validate the ISO 3779 shape before hashing, so
+        // "1hgbh41jxmn109186" and "1HGBH41JXMN109186" derive the same tokenId.
+        string memory normalizedVIN = _normalizeVIN(vin);
+        tokenId = keccak256(bytes(normalizedVIN));
         require(_tokenOwners[tokenId] == address(0), "LSP8: tokenId already minted");
 
         _addTokenTo(vehicleOwner, tokenId);
         _existingTokens += 1;
 
-        _tokenIdData[tokenId][DATA_KEY_VIN] = bytes(vin);
-        emit TokenIdDataChanged(tokenId, DATA_KEY_VIN, bytes(vin));
-        emit DataChanged(DATA_KEY_VIN, bytes(vin));
+        _tokenIdData[tokenId][DATA_KEY_VIN] = bytes(normalizedVIN);
+        emit TokenIdDataChanged(tokenId, DATA_KEY_VIN, bytes(normalizedVIN));
+        emit DataChanged(DATA_KEY_VIN, bytes(normalizedVIN));
 
         emit Transfer(msg.sender, address(0), vehicleOwner, tokenId, true, "");
-        emit VehicleMinted(tokenId, vin, vehicleOwner);
+        emit VehicleMinted(tokenId, normalizedVIN, vehicleOwner);
     }
+
+    // ============ VIN normalisation ============
+
+    /**
+     * @dev ISO 3779 VIN normalisation and shape validation (defect D13).
+     *      - exactly 17 characters;
+     *      - lower-case ASCII letters are upper-cased before the VIN is stored or used
+     *        as a key, so the same physical VIN cannot mint a second identity by case;
+     *      - after upper-casing every character must be in [A-HJ-NPR-Z0-9]: the letters
+     *        I, O and Q are excluded by ISO 3779 (confusable with 1 and 0).
+     *      The ISO 3779 / FMVSS 115 check digit (position 9) is intentionally NOT
+     *      enforced: it is mandatory only in North America, and the fixture VINs used
+     *      across the test suites and demos do not carry a valid check digit.
+     *      The same helper (identical logic) lives in CVINVehicleNFT and
+     *      CVINVehicleCredential1155; Solidity has no shared stdlib here.
+     * @param vin Raw VIN as supplied by the caller (memory; mutated in place)
+     * @return The normalised, validated VIN
+     */
+    function _normalizeVIN(string memory vin) internal pure returns (string memory) {
+        bytes memory b = bytes(vin);
+        require(b.length == 17, "LSP8: invalid VIN length");
+        bytes32 word = bytes32(b); // one memory read for all 17 characters (bytes 17..31 are zero padding)
+        for (uint256 i = 0; i < 17; ++i) {
+            uint256 c = uint8(word[i]);
+            if (((_VIN_LOWER_AZ >> c) & 1) == 1) {
+                c -= 0x20; // 'a'..'z' -> 'A'..'Z'
+                b[i] = bytes1(uint8(c)); // written back only when the character actually changes
+            }
+            require(((_VIN_ALLOWED >> c) & 1) == 1, "LSP8: invalid VIN character");
+        }
+        return string(b);
+    }
+
+    /// @dev Character-set bitmaps over the ASCII byte value (bit c set <=> byte c is in the set).
+    ///      _VIN_ALLOWED: '0'..'9' (0x30..0x39) and 'A'..'Z' (0x41..0x5A) minus I (0x49), O (0x4F), Q (0x51).
+    ///      _VIN_LOWER_AZ: 'a'..'z' (0x61..0x7A), the only characters normalisation rewrites.
+    uint256 private constant _VIN_ALLOWED =
+        (uint256(0x3FF) << 0x30)
+        | ((((uint256(1) << 26) - 1) << 0x41) & ~((uint256(1) << 0x49) | (uint256(1) << 0x4F) | (uint256(1) << 0x51)));
+    uint256 private constant _VIN_LOWER_AZ = ((uint256(1) << 26) - 1) << 0x61;
 
     // ============ Transfer (LSP8 signature) ============
 
