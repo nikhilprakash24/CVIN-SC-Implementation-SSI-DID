@@ -17,7 +17,11 @@ async function run(ctx) {
     const entries = await adapter.prepareThroughputSenders(senders);
     const burstRows = [];
     for (let b = 0; b < bursts; b++) {
-      const nonces = await Promise.all(entries.map((e) => ctx.ethers.provider.getTransactionCount(e.sender.address, "latest")));
+      // Nonces are keyed by sender address: substrates with a single writing
+      // authority (LSP8) share one sender across entries.
+      const nonceOf = new Map();
+      for (const e of entries) if (!nonceOf.has(e.sender.address)) nonceOf.set(e.sender.address, await ctx.ethers.provider.getTransactionCount(e.sender.address, "latest"));
+      const nextNonce = (addr) => { const n = nonceOf.get(addr); nonceOf.set(addr, n + 1); return n; };
       await np.send("evm_setAutomine", [false]);
       const t0 = process.hrtime.bigint();
       // Fixed gas/fee fields so the client makes no estimateGas/feeData round-trips:
@@ -25,7 +29,7 @@ async function run(ctx) {
       const fees = { gasLimit: 500000n, maxFeePerGas: 100_000_000_000n, maxPriorityFeePerGas: 1_000_000_000n, type: 2 };
       const txs = [];
       for (let i = 0; i < burstPerSender; i++) {
-        for (let s = 0; s < entries.length; s++) txs.push(await adapter.throughputOp(entries[s], b * burstPerSender + i, { ...fees, nonce: nonces[s]++ }));
+        for (let s = 0; s < entries.length; s++) txs.push(await adapter.throughputOp(entries[s], b * burstPerSender + i, { ...fees, nonce: nextNonce(entries[s].sender.address) }));
       }
       const t1 = process.hrtime.bigint();
       let blocks = 0;

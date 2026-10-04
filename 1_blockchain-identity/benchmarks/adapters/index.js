@@ -3,6 +3,12 @@ const { ERC1056Adapter } = require("./erc1056.adapter");
 const { ERC1056WrapperAdapter } = require("./erc1056w.adapter");
 const { ERC721Adapter } = require("./erc721.adapter");
 const { ERC725Adapter } = require("./erc725.adapter");
+const { ERC735Adapter } = require("./erc735.adapter");
+const { ERC1155Adapter } = require("./erc1155.adapter");
+const { ERC725XYAdapter } = require("./erc725xy.adapter");
+const { LSP8Adapter } = require("./lsp8.adapter");
+const { ERC4337Adapter } = require("./erc4337.adapter");
+const { CVINCombinedAdapter } = require("./cvin.adapter");
 
 // Column order of every comparison table. Substrates without an adapter on the
 // trunk are listed so tables print an explicit "not implemented" cell (audit F1).
@@ -19,6 +25,6 @@ const ALL_SUBSTRATES = [
   { id: "cvin", label: "CVIN-Combined" },
 ];
 
-const ADAPTERS = { erc1056: ERC1056Adapter, erc1056w: ERC1056WrapperAdapter, erc721: ERC721Adapter, erc725: ERC725Adapter };
+const ADAPTERS = { erc1056: ERC1056Adapter, erc1056w: ERC1056WrapperAdapter, erc721: ERC721Adapter, erc725: ERC725Adapter, erc735: ERC735Adapter, erc1155: ERC1155Adapter, erc725xy: ERC725XYAdapter, lsp8: LSP8Adapter, erc4337: ERC4337Adapter, cvin: CVINCombinedAdapter };
 
 module.exports = { ADAPTERS, ALL_SUBSTRATES };

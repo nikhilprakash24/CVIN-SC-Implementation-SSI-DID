@@ -95,9 +95,12 @@ async function freshOwner(ctx) {
 async function freshIssuer(ctx, adapter) {
   const issuer = await freshOwner(ctx);
   await adapter.prepareIssuer(issuer);
-  const signingKey = freshKey(ctx);
-  const r = await adapter.anchorIssuerKey(issuer, signingKey);
-  for (const t of r.txs) await t.wait();
+  // Substrates where the issuer key is the issuer's own address have nothing to anchor (V1 n/a).
+  if (adapter.supports("V1_issuer_key_anchor")) {
+    const signingKey = freshKey(ctx);
+    const r = await adapter.anchorIssuerKey(issuer, signingKey);
+    for (const t of r.txs) await t.wait();
+  }
   return issuer;
 }
 

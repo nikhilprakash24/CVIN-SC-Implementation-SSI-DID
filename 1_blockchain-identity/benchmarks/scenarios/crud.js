@@ -37,10 +37,13 @@ async function run(ctx) {
 
     await tx("C1_create_identity", async () => { const o = await freshOwner(ctx); return { fn: () => adapter.createIdentity(vehicle(), o) }; });
     await tx("C2_create_with_attributes", async () => { const o = await freshOwner(ctx); return { fn: () => adapter.createIdentityWithAttributes(vehicle(), o) }; });
-    await tx("U1_rotate_controller", async () => { const h = await setupIdentity(); return { fn: () => adapter.rotateController(h, actors.newOwner) }; });
+    // ERC-1155 re-binds the BIRTH_CERT to the receiver, who may hold none (K-13): such
+    // adapters declare freshReceiverPerIteration; all others keep the fixed receiver.
+    const receiver = async () => (adapter.freshReceiverPerIteration ? freshOwner(ctx) : actors.newOwner);
+    await tx("U1_rotate_controller", async () => { const h = await setupIdentity(); const to = await receiver(); return { fn: () => adapter.rotateController(h, to) }; });
     await tx("U2_add_delegate", async () => { const h = await setupIdentity(); const k = freshKey(ctx); return { fn: () => adapter.addDelegate(h, k, P.ttlSeconds) }; });
     await tx("U3_set_attribute", async () => { const h = await setupIdentity(); return { fn: () => adapter.setAttribute(h, P.attributeName, P.attributeValue) }; });
-    await tx("U4_transfer_vehicle", async () => { const h = await setupIdentity(); return { fn: () => adapter.transferVehicle(h, actors.newOwner) }; });
+    await tx("U4_transfer_vehicle", async () => { const h = await setupIdentity(); const to = await receiver(); return { fn: () => adapter.transferVehicle(h, to) }; });
     await tx("U5_meta_tx", async () => { const h = await setupIdentity(); return { fn: () => adapter.metaTxSetAttribute(h, P.attributeName, P.attributeValue, actors.verifier) }; });
     await tx("D1_revoke_delegate", async () => {
       const h = await setupIdentity(); const k = freshKey(ctx);
@@ -70,7 +73,7 @@ async function run(ctx) {
     // ---- reads on one identity with realistic state (own issuer: V6 is independent of N) ----
     const h = await setupIdentity();
     const k = freshKey(ctx);
-    await (await adapter.addDelegate(h, k, P.ttlSeconds)).txs.at(-1).wait();
+    if (adapter.supports("U2_add_delegate")) await (await adapter.addDelegate(h, k, P.ttlSeconds)).txs.at(-1).wait();
     await (await adapter.setAttribute(h, P.attributeName, P.attributeValue)).txs.at(-1).wait();
     const readIssuer = await freshIssuer(ctx, adapter);
     const c = credHash(ctx, adapterId, "read");

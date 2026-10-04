@@ -215,3 +215,15 @@ including all lifecycle events, was identical. Re-running the same commit after 
 - The two moved cells are the ERC-721 ops whose cost already shows a within-run cold/warm
   receiver spread (§5.D row for `59405ff`, H-3); the cause of the +12/+25 under 2.29.1 was
   not investigated further because the pinned toolchain removes it.
+
+### 5.F Run identity under rebases: the harness tree hash
+
+A run is stamped with its commit, but on a branch that several sessions push to, a rebase
+rewrites that commit while leaving the measured code untouched. Since run `24d8007`
+`meta.json` therefore also records `harnessTree` = `git rev-parse <commit>:1_blockchain-identity`
+and `contractsTree` (the `contracts/` subtree). Rule: a run is the run of record for any
+commit whose `harnessTree` equals the run's; a commit that changes anything under
+`1_blockchain-identity` (contracts, harness, lockfile, config) changes the hash and needs a
+new run. Chapters cite the run id; the register may add the tree hash when the stamped
+commit is no longer reachable. Verification: `git rev-parse HEAD:1_blockchain-identity`
+must print the value in `results/metrics/latest/meta.json`.
