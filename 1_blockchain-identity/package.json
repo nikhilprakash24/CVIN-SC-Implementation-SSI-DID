@@ -26,7 +26,8 @@
     "metrics": "hardhat run benchmarks/run.js",
     "metrics:quick": "METRICS_N=5 METRICS_WARMUP=1 METRICS_SCALE_N=0,100 METRICS_SCALE_H=1,10 hardhat run benchmarks/run.js",
     "metrics:report": "node benchmarks/report.js",
-    "test:conformance": "hardhat test test/benchmarks/adapters.conformance.test.js"
+    "test:conformance": "hardhat test test/benchmarks/adapters.conformance.test.js",
+    "metrics:analyze": "node analysis/analysis.js"
   },
   "keywords": [
     "blockchain",

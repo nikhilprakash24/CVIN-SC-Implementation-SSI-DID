@@ -167,6 +167,23 @@ The six columns below that existed before are byte-identical to run `bca0899`. R
 
 Conformance gate: 87 passing / 23 declared n/a; full Hardhat suite 351 / 23.
 
+### 3.8 Analysis layer and the H5 frontier (`npm run metrics:analyze`, run `0eef6af`; `results/metrics/latest/ANALYSIS.md`, register #36)
+
+`analysis/analysis.js` computes, from the run of record only: **A1** cost ratios vs ERC-1056, **A2** the capability matrix (core ops supported: ERC-1056 17/17; wrapper, ERC-721, ERC-725, ERC-4337, CVIN 16/17; ERC-1155 14; ERC-725xy, LSP8 13; ERC-735 12), and **A3/A4** the H5 dominance analysis over six declared criteria — lifetime gas ↓, zero→nonzero SSTOREs ↓, R3 RPC calls at h = 50 ↓, R3 median ms after the lifecycle ↓, core ops supported ↑, O(1) on-chain credential check ↑ (a design property, assigned per adapter and declared with the table).
+
+| Criterion set | Pareto frontier |
+|---|---|
+| cost only (lifetime gas, SSTOREs) | **ERC-1056, ERC-1056 wrapper** — every other substrate is dominated |
+| cost + read path (+ R3 RPC, R3 ms) | ERC-1056, ERC-1056 wrapper, **ERC-1155, ERC-725xy** |
+| all six criteria | ERC-1056, ERC-1056 wrapper, ERC-721, ERC-1155, ERC-725xy, ERC-4337 |
+
+Readings for the thesis:
+
+1. **H5 as written ("no single standard dominates; the hybrid sits on the frontier") is half right.** No substrate dominates all others on the six criteria, so a frontier exists — but **CVIN-Combined is not on it**: ERC-4337 is at least as good on every criterion (lifetime 2.22 M vs 2.53 M, 37 vs 81 slots, 61 vs 107 RPC, 8.3 vs 12.8 ms, 16/17 core ops, on-chain check yes) and strictly better on four. On cost alone the hybrid is dominated by six substrates. If the hybrid is to be the thesis's recommendation, it needs either a cheaper credential representation (Status List bits instead of stored claims, handback §5.3a) or a criterion the current six do not capture (e.g. verifiability by *other contracts* with issuer-signature assurance at add time, which ERC-4337's attribute store does not give).
+2. **ERC-1056 is the only substrate on every frontier**, in both modes. Its single weakness is the read path (112 RPC / 20 ms after a long history); the wrapper halves that at a 4 % lifetime cost.
+3. **ERC-1155 and ERC-725xy enter the frontier only through the read path** (3 and 2 RPC, flat in history) — and both carry `†` lifetime totals (no delegate primitive), so the "cost + read" frontier should be read on the full-coverage subset first, where it is ERC-1056 (both modes) alone.
+4. ERC-725 and ERC-735 are dominated on every criterion set; ERC-735 by three substrates on all six. Nothing in the data recommends either as a vehicle-identity substrate.
+
 ---
 
 ## 4. Audit F-items status (from `docs/AUDIT_01_ORIGINAL_GOALS.md`)

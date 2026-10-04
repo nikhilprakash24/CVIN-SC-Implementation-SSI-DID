@@ -269,6 +269,16 @@ A substrate is "in the study" when its adapter passes `benchmarks/adapters/confo
 
 ---
 
+## 6a. Analysis layer (`npm run metrics:analyze`)
+
+`1_blockchain-identity/analysis/analysis.js` (outside `benchmarks/`, so it is not part of the measured code whose hashes identify a run, §5.F of the conditions) is a pure function of a run directory and writes `ANALYSIS.md`, `analysis.json` and `tables/analysis_*.{md,csv,tex}`:
+
+- **A1 ratios** — each substrate's C1/C2/U3/U4/V3/V5 gas, lifetime gas, zero→nonzero SSTOREs and transaction count as a multiple of the ERC-1056 baseline; `†` marks lifetime totals that exclude `n/a` events (lower bounds, not like-for-like).
+- **A2 capability matrix** — ✓/✗ per catalogue op per substrate from the `supported` flags, with the count of core ops supported. A ✗ is a property of the standard's primitives (or of the representative implementation, stated in §2.2a/b), and a finding in its own right.
+- **A3 dominance (H5)** — six criteria: lifetime gas ↓, zero→nonzero SSTOREs ↓, R3 RPC calls at the largest measured history ↓, R3 median ms after the lifecycle ↓, core ops supported ↑, O(1) on-chain credential check ↑. The last is a design property assigned per adapter (storage-based substrates and the hybrid: yes; event-log substrates: no) and is declared with the table. A substrate is *dominated* on a criterion set if another is at least as good on every criterion in the set and strictly better on one; the table lists who dominates whom for three sets (cost only; cost + read path; all six) and A4 names the Pareto frontier for each.
+
+Rules: the analysis never re-measures; it reads the run of record. Because dominance on "cost only" with ERC-1155's lower-bound lifetime (†) would overstate ERC-1155, A4 lists which substrates have full-coverage totals; the thesis compares frontier membership on the full-coverage subset first.
+
 ## 7. Qualitative axis — W3C DID Method Rubric
 
 To be comparable with Fdhila et al. (2021) and Schäffner, each substrate is scored on the W3C DID Method Rubric criteria used by those works. `benchmarks/rubric/did-method-rubric.json` holds, per criterion, per substrate: `score`, `evidence` (a file/line or a measured value), `assessor`, `date`. Criteria (rubric §§ as named in the W3C document): rulemaking, enforcement, open contribution, open participation, security (key rotation, deactivation, DID-doc integrity), privacy (correlation, DID-doc PII, herd privacy), interoperability (DID Core conformance, resolver availability), scalability (throughput, storage), cost (transaction cost per op — **this is where L1 numbers enter**), decentralisation of operation, sustainability.
