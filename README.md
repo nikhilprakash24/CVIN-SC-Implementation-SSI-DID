@@ -5,7 +5,7 @@
 [![UBC](https://img.shields.io/badge/Institution-UBC-blue.svg)](https://www.ubc.ca/)
 [![Thesis](https://img.shields.io/badge/Type-MASc%20Thesis-green.svg)](https://www.ubc.ca/)
 
-> **Status:** v0.8.0 ("Rigor & Ground-Truth Hardening"), working toward 0.9.0. **559 automated tests green** (293 Hardhat incl. 43 strictly-asserted attack scenarios + 254 Python across the VC layer, DID resolver, MOBI VID and the cv2x testbed + 12/12 lifecycle use cases), all run in CI with no skips. **W3C compliance 94.3%** (executable checker, internal and self-scored; CI floor 93.0%). Review 02 (2026-10-03/04, `docs/REVIEW_02_CODEBASE.md`) fixed all 3 Critical and 14 of 15 High findings (the remaining one, restating H1, is the author's decision); numbers below follow its re-runs. All implementation phases built and tested; remaining work is public-testnet (Sepolia) validation, optional real-SUMO, and thesis writing.
+> **Status:** v0.8.0 ("Rigor & Ground-Truth Hardening"), working toward 0.9.0. **559 automated tests green** (293 Hardhat incl. 43 strictly-asserted attack scenarios + 254 Python across the VC layer, DID resolver, MOBI VID and the cv2x testbed + 12/12 lifecycle use cases), all run in CI with no skips. **W3C compliance 94.3%** (executable checker, internal and self-scored; CI floor 93.0%). Review 02 (2026-10-03/04, `docs/REVIEW_02_CODEBASE.md`) fixed all 3 Critical and 15 of 16 High findings (including three found by its own re-reviews) (the remaining one, restating H1, is the author's decision); numbers below follow its re-runs. All implementation phases built and tested; remaining work is public-testnet (Sepolia) validation, optional real-SUMO, and thesis writing.
 
 ---
 
