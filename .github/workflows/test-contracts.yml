@@ -35,5 +35,24 @@ jobs:
     - name: Compile contracts
       run: npx hardhat compile
 
+    - name: Check the MOBI contract copies are byte-identical (plan S0)
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: |
+        for c in ERC1056Registry MOBIVIDRegistry MOBIVIDRegistryV2; do
+          cmp "1_blockchain-identity/contracts/MOBI/$c.sol" "cv2x-testbed/contracts/$c.sol" \
+            || { echo "::error::$c.sol differs between 1_blockchain-identity/contracts/MOBI and cv2x-testbed/contracts"; exit 1; }
+        done
+        echo "MOBI copies identical"
+
+    - name: Check the feature-asymmetry matrix is up to date (plan S0)
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: |
+        python3 4_comparison-framework/feature-matrix/make_feature_matrix.py > /dev/null
+        git diff --exit-code -- docs/FEATURE_ASYMMETRY_MATRIX.md \
+          || { echo "::error::docs/FEATURE_ASYMMETRY_MATRIX.md is stale: run the generator and commit"; exit 1; }
+        echo "feature matrix up to date"
+
     - name: Run tests
       run: npx hardhat test

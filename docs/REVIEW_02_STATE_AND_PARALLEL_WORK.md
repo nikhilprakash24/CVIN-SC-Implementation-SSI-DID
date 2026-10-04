@@ -16,7 +16,7 @@ repository and are outside this review.
 
 | Generation | Where | What | Status |
 |---|---|---|---|
-| **G1 — research copies** (Nov 2025, from the CVIN-ID-SCs clone) | `1_blockchain-identity/ERC721/`, `ERC725/`, `ERC1056/*.md`, `ERC725xy/README.md` | 4 Solidity files + Truffle-era tests + the ERC-1056 comparison notes | not compiled, not run; **source material** |
+| **G1 — research copies** (Nov 2025, from the CVIN-ID-SCs clone) | `1_blockchain-identity/_research-copies/` (ERC721, ERC725, ERC725xy, ERC1056 notes, ERC1055; archived 2026-10-04, plan S0) | 4 Solidity files + Truffle-era tests + the ERC-1056 comparison notes | not compiled, not run; **source material** |
 | **G2 — the Hardhat tree** (Nov 2025 → Sep 2026, incl. the merged analysis lineage) | `1_blockchain-identity/contracts/` (17 `.sol`, 10 options), `test/` (14 files, 219 tests incl. 68 security scenarios), `scripts/` (deploy, `benchmark_gas.js`, `benchmark_scaling.js`) | the **canonical** contracts and the gas/scaling results of record | compiled, green, CI-gated |
 | **G3 — the testbed copies** (Nov 2025) | `cv2x-testbed/contracts/` (`ERC1056Registry.sol`, `MOBIVIDRegistry.sol`, `MOBIVIDRegistryV2.sol`, solc 0.8.20) + `scripts/deploy*.js` | the contracts the **Python providers and experiments** talk to | compiled separately, used by #21/#29/#30 |
 

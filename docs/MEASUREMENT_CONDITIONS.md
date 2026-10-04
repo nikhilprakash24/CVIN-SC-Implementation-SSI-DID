@@ -35,8 +35,21 @@ Rules that follow from the tags:
 - Figures from the unmerged bundle lineage are cited as *"bundle lineage,
   unverified on trunk"* until re-executed here.
 
-Current trunk results of record: `docs/figures/results_snapshot.json`
-(commit `708302a`).
+Current trunk results of record: `docs/figures/results_snapshot.json`.
+
+### 1.1 Option naming: the two ERC-1056 variants (decision of 2026-10-04, plan S0)
+
+Two different contracts on the trunk are both called "ERC-1056". From this date every
+figure names the variant:
+
+| Sub-option | Contract | Character | Measured in |
+|---|---|---|---|
+| **ERC-1056 / uPort-style** | `1_blockchain-identity/contracts/ERC1056/EthereumDIDRegistry.sol` (+ `CVINVehicleDIDRegistry` wrapper) | implicit identities (creation is free), `changeOwner(Signed)`, delegates with `validTo`, attributes, `changed()` linked list — the DIF `ethr-did-registry` lineage | #1–#3 (wrapper gas), #25 (nine-standard table), scaling, security harness |
+| **ERC-1056 / vehicle profile** | `cv2x-testbed/contracts/ERC1056Registry.sol` (mirrored in `1_blockchain-identity/contracts/MOBI/`) | explicit `registerVehicle`, `isRevoked` / `revokeIdentity`, `getIdentityInfo`, `lastChanged` — the testbed's vehicle-specific profile, also the base the MOBI VID registries extend | #21 (PKI vs ERC-1056), #29 (freshness-k), #30 (lifecycle parity, as MOBI's base) |
+
+Both are kept deliberately: the pair is a within-standard asymmetry case (implicit vs
+explicit creation on the same event model). A cross-variant comparison is a planned
+L1 sandbox result (plan S3). Chapter text must not mix the two under one name.
 
 ---
 

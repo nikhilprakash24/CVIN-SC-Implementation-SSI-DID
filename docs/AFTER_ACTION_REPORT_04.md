@@ -52,7 +52,10 @@ the two parallel streams that are now one trunk. The notebook index remains requ
   steps S0–S10 each with a "done when", three author decisions, risks and guards.
 - D5 done: `docs/META_COMMENTARY_2026-10.md`; the bundle-era `META_COMMENTARY.md` marked
   historical with pointers.
-- 2026-10-04 — resumed after a date roll; tree intact; D6: commit, push, hand over.
+- 2026-10-04 — resumed after a date roll; tree intact; D6: design step committed (`852a508`).
+- **Implementation step S0** (author said "continue"; plan §3 decisions taken at their recommended defaults, recorded as D-B/D-C/D-D below): the two ERC-1056 variants named as sub-options in `MEASUREMENT_CONDITIONS.md` §1.1 with their measurement provenance; research copies archived under `1_blockchain-identity/_research-copies/` with a README (references were descriptive only; Hardhat sources unaffected); two CI checks added to the contract workflow — MOBI copies byte-identical (verified identical today), feature matrix not stale (regenerated in CI and diffed). Both checks validated locally before push.
+
+- **D-B** keep both ERC-1056 variants as named sub-options (default). **D-C** archive the research copies (default). **D-D** asymmetry discussion as a chapter-6 section (default). All reversible on the author's word.
 
 ## 4. Closing of the design step
 
