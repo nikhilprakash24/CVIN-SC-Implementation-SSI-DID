@@ -15,8 +15,8 @@ provenance and must not be cited in chapters.
 | Question | Canonical file | Notes |
 |---|---|---|
 | What is the argument of the thesis, and how should it be written? | `COMPOSITION.md` | master through-line + writing discipline; unchanged by the merge |
-| What is measured, under what conditions, and is each number verified? | `docs/MEASUREMENT_CONDITIONS.md` | condition tags M0/M1/M2 and the claim register (#1–#28); **the only place a chapter should look up a number's status** |
-| What are the results of record? | `4_comparison-framework/results/` (nine-standard gas, scaling, MOBI backends, V2V latency), `cv2x-testbed/results/` (PKI vs ERC-1056), `docs/figures/results_snapshot.json` (trunk verification snapshot), `docs/conformance/` (external W3C DID test suite) | files, not prose |
+| What is measured, under what conditions, and is each number verified? | `docs/MEASUREMENT_CONDITIONS.md` | condition tags M0/M1/M2 and the claim register (#1–#31; #29–#31 and §5 are the metrics harness, tag M1-H); **the only place a chapter should look up a number's status** |
+| What are the results of record? | `4_comparison-framework/results/` (nine-standard gas, scaling, MOBI backends, V2V latency), `1_blockchain-identity/results/metrics/latest/` (operation-catalogue / lifecycle / scale / read-path harness, run-stamped `meta.json`), `cv2x-testbed/results/` (PKI vs ERC-1056), `docs/figures/results_snapshot.json` (trunk verification snapshot), `docs/conformance/` (external W3C DID test suite) | files, not prose |
 | Where do the measured results appear as thesis text? | `docs/thesis/chapter5-results/` | the measured anchor for chapter 5 |
 | What exists in the repository and does it run? | `docs/PROJECT_SUMMARY.md` | inventory + verification table; supersedes `MASTER_UPDATE.md` §2 and `INVENTORY.md` for status |
 | What did the work drift from, and what does an examiner ask? | `docs/AUDIT_01_ORIGINAL_GOALS.md` | goal register, findings F1–F10 with closure notes; `docs/RESEARCH_AUDIT.md` remains the **validity-threat** audit (§4 items) and is complementary, not superseded |
@@ -29,6 +29,8 @@ provenance and must not be cited in chapters.
 | What is the plan and what is needed from the author? | `docs/AFTER_ACTION_REPORT.md` (integration) + `META_COMMENTARY.md` (living handoff) | `MASTER_UPDATE.md` §5–§7 were the pre-merge version of the same lists |
 | What was this research originally asked to be, and how is it to be done? | `docs/ORIGINAL_PROMPT_AND_DIRECTION.md` | verbatim original direction (A), the author's working directives (B), and where each stands (C) |
 | How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-09-30.md` | the single file to read first when picking the work up |
+| How is a substrate measured operation by operation (CRUD and beyond), and what did it show? | `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md` (method: 18-op catalogue, scenarios, falsifiers) + `HANDOFF-DATA-COLLECTION-FRAMEWORK.md` (results and hypothesis verdicts) | harness in `1_blockchain-identity/benchmarks/`; numbers via register #29–#31 only |
+| What did the code-level review find, and what was fixed? | `docs/REVIEW_02_CODEBASE.md` (findings K/H/S/T/Q), `docs/PLAN_REVIEW_02.md`, `docs/review02/PASS*_*.md` (per-stream changes), `docs/AFTER_ACTION_REPORT_03.md` | review 2, 2026-10-03; complements `AUDIT_01` (claims) and `RESEARCH_AUDIT` (validity) |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 
