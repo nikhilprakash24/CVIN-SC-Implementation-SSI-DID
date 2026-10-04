@@ -280,6 +280,26 @@ describe("MOBI VID Registry V1 (birth certificates)", function () {
     });
   });
 
+  // K-15 (REVIEW_02): getVehicleDID left out the "0x" before the address
+  // (did:ethr:0x7a69:7099…), which did:ethr and did_resolver.py reject.
+  describe("K-15: getVehicleDID emits a well-formed did:ethr", function () {
+    it("returns did:ethr:0x<chainId hex>:0x<40 lowercase hex address>", async function () {
+      const { registry, vehicle } = await loadFixture(deployV1Fixture);
+      const { chainId } = await ethers.provider.getNetwork();
+      expect(chainId).to.equal(31337n);
+      const did = await registry.getVehicleDID(vehicle.address);
+      expect(did).to.equal(`did:ethr:0x7a69:${vehicle.address.toLowerCase()}`);
+      expect(did).to.match(/^did:ethr:0x[0-9a-f]+:0x[0-9a-f]{40}$/);
+      expect(did.length).to.equal("did:ethr:0x7a69:".length + 42);
+    });
+
+    it("zero-pads addresses with leading zero nibbles to 40 hex digits", async function () {
+      const { registry } = await loadFixture(deployV1Fixture);
+      const addr = "0x000000000000000000000000000000000000beef";
+      expect(await registry.getVehicleDID(addr)).to.equal(`did:ethr:0x7a69:${addr}`);
+    });
+  });
+
   // K-4 (REVIEW_02): registerVehicleBirth overwrote owners[] with no check, so
   // an authorised manufacturer could take over any existing did:ethr or
   // re-birth a revoked one.
