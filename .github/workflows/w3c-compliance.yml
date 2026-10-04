@@ -75,6 +75,17 @@ jobs:
         (cd 1_blockchain-identity && npm ci && npx hardhat compile)
         python -m pip install eth-account coincurve cryptography web3 pytest numpy
 
+    - name: Testbed artifacts match a fresh compile
+      # Review 02 R2-H2: the tracked cv2x-testbed/artifacts (loaded by the #21/#22
+      # experiment and the testbed tests without a compile step) were once stale.
+      # Compiles the testbed contracts with its own config (solc 0.8.20) and
+      # fails if any tracked ABI/bytecode differs.
+      shell: bash
+      run: |
+        ln -sfn ../1_blockchain-identity/node_modules cv2x-testbed/node_modules
+        (cd cv2x-testbed && node scripts/check_artifacts_fresh.js)
+        rm cv2x-testbed/node_modules
+
     - name: Start Hardhat node for cv2x-testbed on-chain tests
       shell: bash
       run: |
