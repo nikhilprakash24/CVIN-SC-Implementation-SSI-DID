@@ -19,6 +19,7 @@ from typing import Dict, Tuple, Optional
 from datetime import datetime, timedelta
 from eth_account import Account
 from web3 import Web3
+from eth_abi import decode as _abi_decode
 
 try:  # web3 >= 7 renamed the PoA middleware
     from web3.middleware import ExtraDataToPOAMiddleware as _poa_middleware
@@ -62,7 +63,8 @@ class ERC1056Provider(IdentityProvider):
         web3_provider_url: str = "http://127.0.0.1:8545",
         contract_address: Optional[str] = None,
         private_key: Optional[str] = None,
-        refresh_every: Optional[int] = 1
+        refresh_every: Optional[int] = 1,
+        refresh_mode: str = 'full'
     ):
         super().__init__(IdentityType.ERC1056_DID)
 
@@ -105,7 +107,10 @@ class ERC1056Provider(IdentityProvider):
         # Freshness-k verifier cache (review §5.1, LATENCY_BUDGET.md §4).
         # See set_refresh_every(). k = 1 (the default) is the uncached
         # behaviour measured in claim #21: every verify reads the chain.
-        self.set_refresh_every(refresh_every)
+        # refresh_mode 'full' (default, the #32 code path) re-resolves at every
+        # refresh; 'probe' issues one getIdentityInfo eth_call and re-resolves
+        # only when the identity's state moved (see set_refresh_every).
+        self.set_refresh_every(refresh_every, refresh_mode)
 
         # Local storage (for performance)
         self.vehicles = {}  # vehicle_id -> vehicle data
@@ -130,7 +135,9 @@ class ERC1056Provider(IdentityProvider):
     # Freshness-k: refresh the sender's key/revocation state every k messages
     # ------------------------------------------------------------------
 
-    def set_refresh_every(self, k: Optional[int]) -> None:
+    REFRESH_MODES = ('full', 'probe')
+
+    def set_refresh_every(self, k: Optional[int], mode: Optional[str] = None) -> None:
         """
         Set how often `verify_message` re-reads a sender's key and revocation
         state from the registry, counted in messages PER SENDER (the
@@ -142,41 +149,126 @@ class ERC1056Provider(IdentityProvider):
                     messages 2..k use the cache, message k+1 resolves again;
           k = None  resolve once per sender, never refresh (k = infinity).
 
+        `mode` selects what a refresh does (None keeps the current mode;
+        the constructor default is 'full'):
+
+          'full'   a full resolution: getIdentityInfo + the eth_getLogs walk
+                   (the #32 code path, unchanged);
+          'probe'  ONE eth_call of getIdentityInfo (owner, changed block,
+                   revoked flag, revokedAt) on raw calldata. If owner, the
+                   `changed` block and the revoked flag equal the cached ones,
+                   the cached state is kept (and its counter restarts);
+                   otherwise a full resolution runs, reusing the probe's
+                   getIdentityInfo result. Every registry write to an identity
+                   (owner/delegate/attribute change, updateVehicleKey,
+                   revokeIdentity) bumps `changed`, so the probe sees each of
+                   them. A cached key whose validTo lies within CLOCK_SKEW_S of
+                   the wall clock is never kept on a probe (time-based expiry
+                   does not move `changed`): a full resolution runs instead.
+                   With k = 1 in this mode the state is cached but probed on
+                   every message.
+
         Every message counts toward k once it has passed the T-9 freshness /
-        replay check (which runs first and is identical for every k),
-        whether or not its signature then verifies.
+        replay check (which runs first and is identical for every k and
+        mode), whether or not its signature then verifies.
 
         SECURITY TRADE-OFF (staleness bound): with k > 1 a revocation or key
         rotation on chain is seen only at the sender's next refresh, so up to
         k - 1 messages from that sender may still verify after the
         revocation is mined (unbounded for k = None). With k = 1 none do.
-        Changing k clears the cache.
+        The bound is the same in both modes. Changing k or mode clears the
+        cache.
         """
         if k is not None:
             k = int(k)
             if k < 1:
                 raise ValueError("refresh_every must be >= 1 or None (infinity)")
+        if mode is None:
+            mode = getattr(self, 'refresh_mode', 'full')
+        if mode not in self.REFRESH_MODES:
+            raise ValueError(f"refresh_mode must be one of {self.REFRESH_MODES}")
         self.refresh_every = k
+        self.refresh_mode = mode
         self._sender_state = {}   # canonical DID -> [identity_data, uses]
-        self.chain_refreshes = 0  # resolutions issued by verify_message
+        self.chain_refreshes = 0  # refreshes issued by verify_message (full or probe)
+        self.chain_probes = 0     # probe mode: refreshes answered by the probe alone
+        self.full_resolutions = 0  # full resolutions issued by verify_message
         self.cache_hits = 0       # verifies served from the cache
+
+    def _caching(self) -> bool:
+        """True when verify_message keeps per-sender state (k > 1, or probe mode)."""
+        return self.refresh_every != 1 or self.refresh_mode == 'probe'
 
     def _sender_identity(self, signer_key: str, vehicle_address: str, metrics):
         """Key/revocation state of a sender for verify_message, per refresh_every."""
         k = self.refresh_every
-        if k != 1:
-            entry = self._sender_state.get(signer_key)
-            if entry is not None and (k is None or entry[1] < k):
-                entry[1] += 1
-                self.cache_hits += 1
-                metrics.resolution_time_ms = 0.0
-                return entry[0]
-        identity_data, resolution_time = self.resolve_identity_from_address(vehicle_address)
-        metrics.resolution_time_ms = resolution_time
+        entry = self._sender_state.get(signer_key) if self._caching() else None
+        if entry is not None and k != 1 and (k is None or entry[1] < k):
+            entry[1] += 1
+            self.cache_hits += 1
+            metrics.resolution_time_ms = 0.0
+            return entry[0]
+        start = time.time()
         self.chain_refreshes += 1
-        if k != 1 and identity_data:
+        info = None
+        if self.refresh_mode == 'probe' and entry is not None:
+            info = self._probe_identity_info(vehicle_address)
+            cached = entry[0]
+            if info is not None and self._probe_unchanged(cached, info):
+                entry[1] = 1
+                self.chain_probes += 1
+                metrics.resolution_time_ms = (time.time() - start) * 1000
+                return cached
+        if info is None:
+            identity_data, resolution_time = self.resolve_identity_from_address(vehicle_address)
+            metrics.resolution_time_ms = resolution_time   # as in #32
+        else:
+            identity_data, _ = self.resolve_identity_from_address(vehicle_address, identity_info=info)
+            metrics.resolution_time_ms = (time.time() - start) * 1000   # probe + resolution
+        self.full_resolutions += 1
+        if self._caching() and identity_data:
             self._sender_state[signer_key] = [identity_data, 1]
+        else:
+            self._sender_state.pop(signer_key, None)
         return identity_data
+
+    @staticmethod
+    def _probe_unchanged(cached: Dict, info: Tuple) -> bool:
+        """The probe's getIdentityInfo equals the cached state and the cached key is not near expiry."""
+        owner, last_changed, is_revoked, _revoked_at = info
+        if (int(last_changed) != int(cached.get('last_changed', -1))
+                or bool(is_revoked) != bool(cached.get('is_revoked'))
+                or str(owner).lower() != str(cached.get('owner', '')).lower()):
+            return False
+        valid_to = cached.get('public_key_valid_to')
+        if valid_to is not None and int(valid_to) <= int(time.time()) + CLOCK_SKEW_S:
+            return False   # time-based expiry does not move `changed`: re-resolve
+        return True
+
+    def _probe_identity_info(self, address: str):
+        """
+        One eth_call of getIdentityInfo(address) on pre-encoded calldata, sent
+        as a single JSON-RPC request (no eth_chainId from web3's contract
+        wrapper / middleware): returns
+        (owner, changed, revoked, revokedAt), or None on error.
+        """
+        try:
+            checksum = Web3.to_checksum_address(address)
+            fn = self.contract.functions.getIdentityInfo(checksum)
+            data = fn._encode_transaction_data()
+            # Straight to the HTTP provider: web3's middleware would add two
+            # eth_chainId requests around an eth_call.
+            resp = self.w3.provider.make_request(
+                'eth_call', [{'to': self.contract.address, 'data': data}, 'latest'])
+            if 'error' in resp:
+                raise RuntimeError(resp['error'])
+            raw = Web3.to_bytes(hexstr=resp['result'])
+            owner, changed, revoked, revoked_at = _abi_decode(
+                ['address', 'uint256', 'bool', 'uint256'], bytes(raw))
+            return Web3.to_checksum_address(owner), int(changed), bool(revoked), int(revoked_at)
+        except Exception as e:
+            print(f"Probe error: {e}")
+            return None
 
     def _local_chain_id(self) -> int:
         """Chain id of the connected node, cached (set in __init__)."""
@@ -596,7 +688,7 @@ class ERC1056Provider(IdentityProvider):
                     ec.SECP256K1(),
                     public_key_bytes
                 )
-                if self.refresh_every != 1:
+                if self._caching():
                     identity_data['_public_key_obj'] = public_key   # cached with the state
 
             # Verify signature (covers the generation time)
@@ -742,17 +834,23 @@ class ERC1056Provider(IdentityProvider):
         vehicle_address = self.vehicles[vehicle_id]['address']
         return self.resolve_identity_from_address(vehicle_address)
 
-    def resolve_identity_from_address(self, address: str) -> Tuple[Optional[Dict], float]:
-        """Resolve identity from Ethereum address"""
+    def resolve_identity_from_address(self, address: str,
+                                      identity_info: Optional[Tuple] = None) -> Tuple[Optional[Dict], float]:
+        """Resolve identity from Ethereum address.
+
+        `identity_info` (owner, changed, revoked, revokedAt) is a
+        getIdentityInfo result already read for this address (the probe-mode
+        refresh passes it); when None it is read here (1 eth_call).
+        """
         start_time = time.time()
 
         try:
             checksum = Web3.to_checksum_address(address)
 
             # 1 eth_call: registry state for this identity
-            owner, last_changed, is_revoked, revoked_at = self.contract.functions.getIdentityInfo(
-                checksum
-            ).call()
+            if identity_info is None:
+                identity_info = self.contract.functions.getIdentityInfo(checksum).call()
+            owner, last_changed, is_revoked, revoked_at = identity_info
 
             # ERC-1056 resolution: collect the identity's events along the
             # `previousChange` linked list (1 eth_getLogs per hop), then replay

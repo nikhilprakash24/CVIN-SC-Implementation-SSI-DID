@@ -40,14 +40,27 @@ Part 2, staleness bound: for each k, fresh senders are registered, a verifier
   the phases is k - 1 (0 for k = 1). Two further messages after the first
   rejection must also be rejected.
 
-Outputs (cv2x-testbed/results/)
-  freshness_k.json  environment, config, raw samples, staleness trials
-  freshness_k.csv   one row per k
-  freshness_k.md    tables + caveats
-  freshness_k.png   P*(0.5) and t vs k, measured and analytic (if matplotlib)
+Refresh mode (--refresh-mode, after-action report 05 stream G-K)
+  full   (default) a refresh is a full resolution (getIdentityInfo + eth_getLogs);
+         the #32 code path and run of record.
+  probe  a refresh is ONE getIdentityInfo eth_call; the full resolution runs only
+         when the identity's owner / `changed` block / revoked flag moved. The
+         constants then read t_chain = t_chain_probe, and a direct probe
+         micro-benchmark is reported alongside the isRevoked reference.
+  With --rotation, Part 3 rotates the sender's key (updateVehicleKey) mid-stream:
+  the new key's messages are rejected until the sender's next refresh (same
+  phase prediction), and an old-key message is rejected after it.
+
+Outputs (cv2x-testbed/results/, base name --out-name, default freshness_k)
+  <name>.json  environment, config, raw samples, staleness trials
+  <name>.csv   one row per k
+  <name>.md    tables + caveats
+  <name>.png   P*(0.5) and t vs k, measured and analytic (if matplotlib)
 
 Usage
   python3 scripts/experiment_freshness_k.py --rpc-url http://127.0.0.1:8554 --deploy
+  python3 scripts/experiment_freshness_k.py --rpc-url ... --deploy --refresh-mode probe \
+      --rotation --out-name freshness_k_probe
 """
 
 import argparse
@@ -98,8 +111,8 @@ def t_eff(t_local: float, t_chain: float, k: Optional[int]) -> float:
     return t_local if k is None else t_local + t_chain / k
 
 
-def make_verifier(rpc_url: str, address: str, k: Optional[int]) -> ERC1056Provider:
-    v = ERC1056Provider(rpc_url, contract_address=address, refresh_every=k)
+def make_verifier(rpc_url: str, address: str, k: Optional[int], mode: str = 'full') -> ERC1056Provider:
+    v = ERC1056Provider(rpc_url, contract_address=address, refresh_every=k, refresh_mode=mode)
     H.configure_freshness(v)          # identical T-9 policy for every k
     return v
 
@@ -108,14 +121,15 @@ def make_verifier(rpc_url: str, address: str, k: Optional[int]) -> ERC1056Provid
 # Part 1: latency per k
 # --------------------------------------------------------------------------
 def run_latency(signer: ERC1056Provider, sender: str, rpc_url: str, address: str,
-                k: Optional[int], n: int, warmup: int) -> Dict[str, Any]:
-    verifier = make_verifier(rpc_url, address, k)
+                k: Optional[int], n: int, warmup: int, mode: str = 'full') -> Dict[str, Any]:
+    verifier = make_verifier(rpc_url, address, k, mode)
     backend = H.Backend(f'erc1056_k{k_label(k)}', verifier, True, H.RPCCounter(verifier.w3))
     counter = {'i': 0}
 
     def prepare(i):
         counter['i'] = i
-        return (signer.sign_message(sender, H.make_bsm(5000 + i)), verifier.chain_refreshes)
+        return (signer.sign_message(sender, H.make_bsm(5000 + i)), verifier.chain_refreshes,
+                verifier.full_resolutions)
 
     def run(ctx):
         return verifier.verify_message(ctx[0])
@@ -124,6 +138,7 @@ def run_latency(signer: ERC1056Provider, sender: str, rpc_url: str, address: str
         if r[0] is not True:
             H._fail(f"k={k_label(k)}: genuine message rejected")
         return {'refreshed': verifier.chain_refreshes > ctx[1],
+                'full_resolution': verifier.full_resolutions > ctx[2],
                 'resolution_ms': float(r[1].resolution_time_ms or 0.0)}
 
     samples = H.measure(backend, 'verify_message', n, warmup, prepare, run, check)
@@ -132,7 +147,10 @@ def run_latency(signer: ERC1056Provider, sender: str, rpc_url: str, address: str
     cached = [x for x in samples if not x.extra.get('refreshed')]
     s.update({
         'k': k_label(k),
+        'refresh_mode': mode,
         'refreshes_in_window': len(refreshed),
+        'full_resolutions_in_window': sum(1 for x in samples if x.extra.get('full_resolution')),
+        'probe_only_refreshes_in_window': sum(1 for x in refreshed if not x.extra.get('full_resolution')),
         'cached_in_window': len(cached),
         'refresh_median_ms': float(np.median([x.elapsed_ms for x in refreshed])) if refreshed else None,
         'cached_median_ms': float(np.median([x.elapsed_ms for x in cached])) if cached else None,
@@ -162,8 +180,8 @@ def predicted_after(k: Optional[int], m_pre: int) -> Optional[int]:
 
 
 def run_staleness(signer: ERC1056Provider, rpc_url: str, address: str, k: Optional[int],
-                  run_tag: str, inf_cap: int, trials_min: int = 5) -> Dict[str, Any]:
-    verifier = make_verifier(rpc_url, address, k)
+                  run_tag: str, inf_cap: int, trials_min: int = 5, mode: str = 'full') -> Dict[str, Any]:
+    verifier = make_verifier(rpc_url, address, k, mode)
     if k is None:
         phases = [1, 5, 25]
     else:
@@ -172,7 +190,7 @@ def run_staleness(signer: ERC1056Provider, rpc_url: str, address: str, k: Option
     trials = []
     seq = 0
     for m_pre in phases:
-        vid = f"FK_STALE_{run_tag}_k{k_label(k)}_m{m_pre}"
+        vid = f"FK_STALE_{run_tag}_{mode}_k{k_label(k)}_m{m_pre}"
         signer.fund_vehicle_account(vid, H.FUND_WEI)
         signer.register_vehicle(vid, H.VEHICLE_METADATA)
         for _ in range(m_pre):
@@ -221,10 +239,83 @@ def run_staleness(signer: ERC1056Provider, rpc_url: str, address: str, k: Option
     return out
 
 
+def run_rotation(signer: ERC1056Provider, rpc_url: str, address: str, k: Optional[int],
+                 run_tag: str, inf_cap: int, trials_min: int = 5, mode: str = 'full') -> Dict[str, Any]:
+    """
+    Key rotation mid-stream (updateVehicleKey, receipt awaited). After the
+    rotation the signer signs with the NEW key; the verifier's cached OLD key
+    rejects those until its next refresh. Counted: new-key messages rejected
+    before the first acceptance (prediction k - 1 - ((m_pre - 1) mod k), as for
+    revocation). After the first acceptance one message signed with the OLD
+    key must be rejected (the refresh replaced the key).
+    """
+    verifier = make_verifier(rpc_url, address, k, mode)
+    phases = [1, 5, 25] if k is None else [r + 1 for r in range(max(k, trials_min))]
+    cap = inf_cap if k is None else k + 5
+    trials = []
+    seq = 10 ** 6
+    for m_pre in phases:
+        vid = f"FK_ROT_{run_tag}_{mode}_k{k_label(k)}_m{m_pre}"
+        signer.fund_vehicle_account(vid, H.FUND_WEI)
+        signer.register_vehicle(vid, H.VEHICLE_METADATA)
+        for _ in range(m_pre):
+            seq += 1
+            if verifier.verify_message(signer.sign_message(vid, H.make_bsm(seq)))[0] is not True:
+                H._fail(f"rotation k={k_label(k)}: pre-rotation message rejected")
+        old_key = signer.vehicles[vid]['private_key']
+        signer.update_credential(vid, {'rotate_key': True})      # mined (receipt awaited)
+        rejected_before_accept = 0
+        first_accept_at = None
+        for j in range(cap):
+            seq += 1
+            if verifier.verify_message(signer.sign_message(vid, H.make_bsm(seq)))[0]:
+                first_accept_at = j + 1
+                break
+            rejected_before_accept += 1
+        old_key_rejected = None
+        if first_accept_at is not None:
+            new_key = signer.vehicles[vid]['private_key']
+            signer.vehicles[vid]['private_key'] = old_key
+            seq += 1
+            old_key_rejected = verifier.verify_message(signer.sign_message(vid, H.make_bsm(seq)))[0] is False
+            signer.vehicles[vid]['private_key'] = new_key
+        pred = predicted_after(k, m_pre)
+        trials.append({'m_pre': m_pre, 'new_key_rejected_before_refresh': rejected_before_accept,
+                       'predicted': pred, 'first_accept_at_message': first_accept_at, 'cap': cap,
+                       'capped': first_accept_at is None, 'old_key_rejected_after_refresh': old_key_rejected})
+    observed = [t['new_key_rejected_before_refresh'] for t in trials]
+    bound = None if k is None else k - 1
+    out = {
+        'k': k_label(k), 'refresh_mode': mode, 'trials': trials,
+        'max_stale_messages': max(observed), 'bound_k_minus_1': bound,
+        'within_bound': (bound is not None and max(observed) <= bound),
+        'matches_prediction': (k is not None and all(t['new_key_rejected_before_refresh'] == t['predicted']
+                                                      for t in trials)),
+        'all_old_key_rejected': all(t['old_key_rejected_after_refresh'] for t in trials
+                                    if t['old_key_rejected_after_refresh'] is not None),
+    }
+    print(f"  rotation k={k_label(k):>4}: new-key messages rejected before refresh {observed} "
+          f"(bound {bound if bound is not None else 'none'})")
+    return out
+
+
+def measure_probe(rpc_url: str, address: str, sender_addr: str, n: int, warmup: int) -> Dict[str, Any]:
+    """Direct micro-benchmark of the probe-mode refresh call (one raw getIdentityInfo eth_call)."""
+    p = make_verifier(rpc_url, address, 1, 'probe')
+    b = H.Backend('erc1056_probe', p, True, H.RPCCounter(p.w3))
+    r = H.summarize(H.measure(
+        b, 'getIdentityInfo_probe', n, warmup, prepare=lambda i: sender_addr,
+        run=lambda a: p._probe_identity_info(a),
+        check=lambda a, r: {} if (r is not None and r[2] is False) else H._fail("probe failed / revoked")))
+    r.pop('gas_samples', None)
+    return r
+
+
 # --------------------------------------------------------------------------
 # Derived figures
 # --------------------------------------------------------------------------
-def derive(rows: List[Dict[str, Any]], one_call: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def derive(rows: List[Dict[str, Any]], one_call: Optional[Dict[str, Any]] = None,
+           probe: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     by_k = {r['k']: r for r in rows}
     if 'inf' not in by_k or '1' not in by_k:
         raise RuntimeError("constants need both k=1 and k=inf")
@@ -271,12 +362,17 @@ def derive(rows: List[Dict[str, Any]], one_call: Optional[Dict[str, Any]] = None
         'latency_budget_constants': {'t_local_ms': LB_T_LOCAL_MS, 't_chain_ms': LB_T_CHAIN_MS},
         'k_for_Pstar_0.5_ge_100_this_run': knee,
         'k_for_Pstar_0.5_ge_100_latency_budget': lb_knee,
+        'probe_reference': probe,
+        't_chain_probe_direct_ms': float(probe['median_ms']) if probe else None,
+        'k_for_Pstar_0.5_ge_100_probe_direct': (float(probe['median_ms']) / (0.5 - t_local)
+                                                if probe and t_local < 0.5 else None),
         'per_k': table,
     }
 
 
-CSV_COLUMNS = ['k', 'n', 'median_ms', 'p95_ms', 'mean_ms', 'min_ms', 'max_ms', 'stdev_ms',
-               'refreshes_in_window', 'cached_in_window', 'refresh_median_ms', 'cached_median_ms',
+CSV_COLUMNS = ['k', 'refresh_mode', 'n', 'median_ms', 'p95_ms', 'mean_ms', 'min_ms', 'max_ms', 'stdev_ms',
+               'refreshes_in_window', 'full_resolutions_in_window', 'probe_only_refreshes_in_window',
+               'cached_in_window', 'refresh_median_ms', 'cached_median_ms',
                'refresh_rpc_median', 'cached_rpc_max', 'rpc_calls_mean',
                'analytic_this_run_ms', 'analytic_latency_budget_ms',
                'P*(0.5)_measured_mean', 'P*(0.5)_measured_median', 'P*(0.5)_analytic_this_run',
@@ -308,8 +404,16 @@ def fmt(x, d=3):
     return '-' if x is None else (f"{x:.{d}f}" if isinstance(x, float) else str(x))
 
 
-def write_md(path, env, cfg, rows, derived, stale):
-    L = ["# Freshness-k: ERC-1056 verify with the sender's chain state refreshed every k messages\n",
+def write_md(path, env, cfg, rows, derived, stale, rotation=None):
+    mode = cfg.get('refresh_mode', 'full')
+    L = ["# Freshness-k: ERC-1056 verify with the sender's chain state refreshed every k messages"
+         + (" (refresh mode: one-call probe)" if mode == 'probe' else "") + "\n",
+         f"**Refresh mode: `{mode}`.** " + (
+             "A refresh is ONE `getIdentityInfo` eth_call on raw calldata (owner, `changed` block, revoked "
+             "flag); the full resolution (`eth_getLogs` walk) runs only when one of them moved or the cached "
+             "key nears its validTo. With k = 1 in this mode the state is cached and probed on every message. "
+             "t_chain below is therefore t_chain_probe.\n" if mode == 'probe' else
+             "A refresh is a full resolution (`getIdentityInfo` + `eth_getLogs`), the #32 code path.\n"),
          "Generated by `scripts/experiment_freshness_k.py` (a sibling of `experiment_pki_vs_erc1056.py`, reusing its "
          "harness; the #21 results are untouched). Verifier: `ERC1056Provider(refresh_every=k)`; k = 1 is the "
          "uncached #21 path, k = inf resolves once per sender. The T-9 freshness/replay policy is installed "
@@ -327,13 +431,14 @@ def write_md(path, env, cfg, rows, derived, stale):
     L.append("")
     L.append("## 1. Latency per k (ms)\n")
     L.append("| k | n | median | p95 | mean (amortised) | min | max | refreshes in window | cached median | "
-             "refresh median | RPCs per refresh | RPCs per cached verify (max) |")
-    L.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
+             "refresh median | RPCs per refresh | RPCs per cached verify (max) | full resolutions in window |")
+    L.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
     for r in rows:
         L.append(f"| {r['k']} | {r['n']} | {fmt(r['median_ms'])} | {fmt(r['p95_ms'])} | {fmt(r['mean_ms'])} | "
                  f"{fmt(r['min_ms'])} | {fmt(r['max_ms'])} | {r['refreshes_in_window']} | "
                  f"{fmt(r['cached_median_ms'])} | {fmt(r['refresh_median_ms'])} | "
-                 f"{fmt(r['refresh_rpc_median'], 0)} | {fmt(r['cached_rpc_max'])} |")
+                 f"{fmt(r['refresh_rpc_median'], 0)} | {fmt(r['cached_rpc_max'])} | "
+                 f"{r.get('full_resolutions_in_window', '-')} |")
     L.append("")
     L.append("## 2. Measured vs analytic t_eff = t_local + t_chain / k\n")
     L.append(f"Constants recomputed from this run: **t_local = {derived['t_local_ms']:.3f} ms** "
@@ -365,9 +470,14 @@ def write_md(path, env, cfg, rows, derived, stale):
         for e in derived['per_k']:
             L.append(f"| {e['k']} | {fmt(e['analytic_one_call_refresh_ms'])} | {e['P*(0.5)_analytic_one_call_refresh']} |")
         L.append("")
-        L.append(f"With a one-call refresh, analytic P*(0.5) reaches 100 at k ≈ "
-                 f"{fmt(derived['k_for_Pstar_0.5_ge_100_one_call_refresh'], 1)} (not measured: that verifier is not "
-                 "implemented).\n")
+        L.append(f"With a one-call refresh costing one `isRevoked` call, analytic P*(0.5) reaches 100 at k ≈ "
+                 f"{fmt(derived['k_for_Pstar_0.5_ge_100_one_call_refresh'], 1)} (the FOLLOWUP_FD prediction).\n")
+    pr = derived.get('probe_reference')
+    if pr:
+        L.append(f"**Probe micro-benchmark (this run).** The probe-mode refresh call alone (one raw `getIdentityInfo` "
+                 f"eth_call, decoded locally) costs **{pr['median_ms']:.3f} / {pr['p95_ms']:.3f} ms** (median / p95, "
+                 f"n = {pr['n']}, {fmt(pr['rpc_calls_median'], 0)} RPC). With it, analytic P*(0.5) reaches 100 at "
+                 f"k ≈ {fmt(derived['k_for_Pstar_0.5_ge_100_probe_direct'], 1)}.\n")
     L.append("P*(f) = floor(f · 100 ms / t) (LATENCY_BUDGET.md §2). The **mean** is the amortised per-message cost "
              "(one refresh every k messages), which is the quantity the analytic curve and P* (a throughput "
              "bound) refer to; the median of a k > 1 run is the cached cost because most messages are cached, "
@@ -408,6 +518,25 @@ def write_md(path, env, cfg, rows, derived, stale):
              "vehicle's messages being accepted (0.4 s at k = 5, 2.4 s at k = 25). With k = 1 none are. "
              "With k = inf a revocation is never seen by a verifier that has already cached the sender. The T-9 "
              "freshness window (1.0 s) bounds message *age*, not state staleness: the two are independent.\n")
+    if rotation:
+        L.append("## 3b. Staleness bound: key rotation mid-stream\n")
+        L.append("For each trial a fresh sender is registered; a verifier with refresh k accepts m_pre messages; the "
+                 "sender's key is rotated (`updateVehicleKey`, receipt awaited) and the signer switches to the new key. "
+                 "**Stale** counts new-key messages rejected (because the verifier still holds the old key) before the "
+                 "first acceptance; prediction as for revocation. After that acceptance one message signed with the "
+                 "OLD key must be rejected.\n")
+        L.append("| k | trials | stale messages per trial (m_pre = 1, 2, ...) | max | bound k − 1 | within bound | "
+                 "equals prediction | old key rejected after refresh |")
+        L.append("|---|---:|---|---:|---:|:---:|:---:|:---:|")
+        for s_ in rotation:
+            obs = ", ".join(str(t['new_key_rejected_before_refresh']) + ("+ (cap)" if t['capped'] else "")
+                            for t in s_['trials'])
+            bound = s_['bound_k_minus_1']
+            L.append(f"| {s_['k']} | {len(s_['trials'])} | {obs} | {s_['max_stale_messages']} | "
+                     f"{bound if bound is not None else 'none (unbounded)'} | "
+                     f"{s_['within_bound'] if bound is not None else 'n/a'} | "
+                     f"{s_['matches_prediction'] if bound is not None else 'n/a'} | {s_['all_old_key_rejected']} |")
+        L.append("")
     L.append("## Caveats\n")
     L.append("1. **Hardhat local (M1).** The refresh cost t_chain is a localhost JSON-RPC + Hardhat EVM round "
              "trip set (see `refresh_rpc_median`); on a public network a refresh costs tens of ms or more, so "
@@ -421,8 +550,8 @@ def write_md(path, env, cfg, rows, derived, stale):
     L.append("4. **k order.** The k values were run in the order listed, each with a fresh verifier (own HTTP "
              "session); node-state drift across the sweep is not randomised.")
     L.append("5. **Revocation semantics.** The staleness test revokes the whole identity (`revokeIdentity`). A key "
-             "rotation is subject to the same bound (the cached key is used until the next refresh); it was not "
-             "measured separately.")
+             "rotation is subject to the same bound (the cached key is used until the next refresh); " +
+             ("it is measured in §3b." if rotation else "it was not measured separately."))
     L.append("6. **k = 1 path.** The k = 1 verify is the #21 code path plus one counter increment and one "
              "comparison (the cache dispatch), i.e. nanoseconds against milliseconds.")
     L.append("")
@@ -430,7 +559,7 @@ def write_md(path, env, cfg, rows, derived, stale):
         f.write("\n".join(L))
 
 
-def write_png(path, derived) -> Optional[str]:
+def write_png(path, derived, mode: str = 'full') -> Optional[str]:
     try:
         import matplotlib
         matplotlib.use('Agg')
@@ -466,7 +595,7 @@ def write_png(path, derived) -> Optional[str]:
     a2.set_xlabel('k (rightmost = ∞)'); a2.set_ylabel('P*(0.5) neighbours per 100 ms')
     a2.set_xticks(allx); a2.set_xticklabels([str(x) for x in xs] + (['∞'] if len(allx) > len(xs) else []))
     a2.legend(fontsize=7)
-    fig.suptitle('Freshness-k: ERC-1056 verify, Hardhat local (M1)', fontsize=10)
+    fig.suptitle(f'Freshness-k: ERC-1056 verify, refresh mode {mode}, Hardhat local (M1)', fontsize=10)
     fig.tight_layout()
     fig.savefig(path, dpi=150)
     plt.close(fig)
@@ -485,7 +614,11 @@ def main():
     ap.add_argument('--inf-cap', type=int, default=50, help='post-revocation messages tried for k = inf')
     ap.add_argument('--out-dir', default=os.path.join(ROOT, 'results'))
     ap.add_argument('--out-name', default='freshness_k')
+    ap.add_argument('--refresh-mode', choices=ERC1056Provider.REFRESH_MODES, default='full',
+                    help="'full' (default, #32 code path) or 'probe' (one getIdentityInfo eth_call per refresh)")
+    ap.add_argument('--rotation', action='store_true', help='also run Part 3, key rotation mid-stream')
     args = ap.parse_args()
+    mode = args.refresh_mode
     if args.n < 50:
         ap.error('--n must be >= 50')
     ks = parse_ks(args.ks)
@@ -525,7 +658,7 @@ def main():
     signer.register_vehicle(sender, H.VEHICLE_METADATA)
 
     print("\n=== Part 1: latency ===")
-    rows = [run_latency(signer, sender, args.rpc_url, address, k, args.n, args.warmup) for k in ks]
+    rows = [run_latency(signer, sender, args.rpc_url, address, k, args.n, args.warmup, mode) for k in ks]
     # Reference: one registry eth_call (isRevoked), the refresh cost LATENCY_BUDGET §4 assumed
     # ("one changed() freshness call per message"); not what this provider's refresh does.
     ref_p = make_verifier(args.rpc_url, address, 1)
@@ -537,24 +670,32 @@ def main():
         check=lambda a, r: {} if r[0] is False else H._fail("live sender reported revoked")))
     ref.pop('gas_samples', None)
     print(f"  one eth_call (isRevoked): median={ref['median_ms']:.3f} p95={ref['p95_ms']:.3f} ms")
-    derived = derive(rows, ref)
+    probe = measure_probe(args.rpc_url, address, sender_addr, args.n, args.warmup)
+    print(f"  probe (raw getIdentityInfo): median={probe['median_ms']:.3f} p95={probe['p95_ms']:.3f} ms; "
+          f"RPCs {probe['rpc_calls_median']}")
+    derived = derive(rows, ref, probe)
     print("\n=== Part 2: staleness ===")
-    stale = [run_staleness(signer, args.rpc_url, address, k, run_tag, args.inf_cap) for k in ks]
+    stale = [run_staleness(signer, args.rpc_url, address, k, run_tag, args.inf_cap, mode=mode) for k in ks]
+    rotation = None
+    if args.rotation:
+        print("\n=== Part 3: key rotation ===")
+        rotation = [run_rotation(signer, args.rpc_url, address, k, run_tag, args.inf_cap, mode=mode) for k in ks]
 
     cfg = {'n': args.n, 'warmup': args.warmup, 'ks': [k_label(k) for k in ks], 'run_tag': run_tag,
            'budget_ms': BUDGET_MS, 'fractions': list(FRACTIONS), 'inf_cap': args.inf_cap,
-           'refresh_semantics': 'per sender (canonical DID); message 1 resolves, messages 2..k cached, k+1 resolves'}
+           'refresh_semantics': 'per sender (canonical DID); message 1 resolves, messages 2..k cached, k+1 resolves',
+           'refresh_mode': mode, 'rotation': bool(args.rotation)}
     os.makedirs(args.out_dir, exist_ok=True)
     base = os.path.join(args.out_dir, args.out_name)
     with open(base + '.json', 'w') as f:
         json.dump({'environment': env, 'config': cfg, 'latency': rows, 'derived': derived,
-                   'staleness': stale}, f, indent=2, default=str)
+                   'staleness': stale, 'rotation': rotation}, f, indent=2, default=str)
     write_csv(base + '.csv', rows, derived, stale)
-    write_md(base + '.md', env, cfg, rows, derived, stale)
-    png_err = write_png(base + '.png', derived)
+    write_md(base + '.md', env, cfg, rows, derived, stale, rotation)
+    png_err = write_png(base + '.png', derived, mode)
     print(f"\nWrote {base}.{{json,csv,md}}" + ("" if png_err else " and .png") + (f" ({png_err})" if png_err else ""))
 
-    bad = [s['k'] for s in stale if s['bound_k_minus_1'] is not None and not s['within_bound']]
+    bad = [s['k'] for s in stale + (rotation or []) if s['bound_k_minus_1'] is not None and not s['within_bound']]
     if bad:
         print(f"STALENESS BOUND VIOLATED for k={bad}")
         sys.exit(2)
