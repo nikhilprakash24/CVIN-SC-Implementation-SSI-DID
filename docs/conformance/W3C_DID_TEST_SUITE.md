@@ -549,34 +549,34 @@ assumed a fixed inventory and was therefore wrong in its denominator; section
 8.5 had already warned that the effect had to be measured.
 
 The comparison below is test by test. Tests are matched by ancestor path,
-title and occurrence index. A `resolve` and a `resolveRepresentation`
-execution of the same DID share an ancestor path, hence the occurrence
-index.
+title and occurrence index, because a `resolve` and a
+`resolveRepresentation` execution of the same DID share an ancestor path.
+One test needed manual pairing: the `contentType` "ASCII media type" test.
+It is now generated only for the `resolveRepresentation` execution, so it is
+paired with the passing `resolveRepresentation` instance from the old run.
 
 | Old → new status | Tests |
 |---|---|
-| passed → passed | 154 |
-| failed → passed | **39** |
+| passed → passed | 157 |
+| failed → passed | **36** |
 | failed → failed | 1 (R5′) |
 | passed → failed | **0** |
-| failed → not generated | 65 |
-| passed → not generated | 40 |
+| failed → not generated | 68 |
+| passed → not generated | 37 |
 | not generated → generated | 0 |
 
 The non-resolution suites have the same inventory as before, with the same
 results.
 
-On the 336 tests present in both runs, the score went from 296 to 335.
+On the 336 tests present in both runs, the score went from 299 to 335.
 
-The 40 passing tests that are no longer generated:
+The 37 passing tests that are no longer generated:
 
 * 10 for `deactivated: false`;
 * 20 for `equivalentId: []` (two tests per execution, passed vacuously on an
   empty list);
 * 7 for "canonicalId same method" (passed vacuously when there is no
-  document);
-* 3 for the `contentType` media-type test on the `resolve` executions of the
-  successful DIDs.
+  document).
 
 None of them is lost coverage of a property the resolver emits.
 
@@ -585,11 +585,11 @@ None of them is lost coverage of a property the resolver emits.
 | Root cause | 10-04 failures | failed → passed | failed → not generated | 10-04b failures |
 |---|---|---|---|---|
 | **R1** | 22 | 16 (document empty ×3, stream empty ×3, "empty metadata structure" ×10) | 6 ("`error` single keyword", success executions) | **0** |
-| **R2** | 21 | 17 ("MUST NOT be present if resolve" ×7, "caller … MUST use this value" ×7, "ASCII media type" ×3 on resolveRepresentation) | 4 ("ASCII media type" on error executions) | **0** |
+| **R2** | 21 | 14 ("MUST NOT be present if resolve" ×7, "caller … MUST use this value" ×7) | 7 ("ASCII media type" on the 7 `resolve` executions, which have no stream) | **0** |
 | **R3** | 51 | 0 | 51 (canonicalId ×13, nextUpdate ×10, nextVersionId ×10, updated ×10, versionId ×8) | **0** |
 | **R4** | 10 | 6 (`created` on success executions) | 4 (`created: null` on error executions) | **0** |
 | **R5′** | 1 | – | – | **1** (unchanged; test vector, section 8.4) |
-| **Total** | **105** | **39** | **65** | **1** |
+| **Total** | **105** | **36** | **68** | **1** |
 
 Distinct failing normative statements: 15 → 1.
 
