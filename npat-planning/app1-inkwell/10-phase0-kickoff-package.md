@@ -248,9 +248,9 @@ Durations follow 03: Phase 0 is W1 to W2 (3 EW), Phase 1 is W3 to W6 (7 EW). Dat
 | W5 (Nov 9 to 13) | 1 | Dictionary live in the round (three-state validation, fuzzy "did you mean"); GeoNames Place list; Name list v0; personal bests per preset; local analytics events; nearby spike starts (ARCH, W5 to W6) | DATA, IOS, ARCH | Golden set: at least 95 percent correct for Thing and Animal, 85 percent for Place, zero false REJECTs for Name | Dictionary live, personal bests; spike status |
 | W6 (Nov 16 to 20) | 1 | Cold-launch harness on the SE 2nd and 3rd gen; 100 consecutive solo rounds script; keyboard focus bug bash; `IWContent` perf tests (load under 150 ms, lookup under 1 ms p99); M1 exit review | IOS, QA, GAME | All 03 Phase 1 exit criteria green; JOBS plays five rounds unprompted and asks for a sixth | First-60-seconds stopwatch demo on the SE; nearby spike keep/kill writeup |
 
-> **[QA]** Two W6 exit criteria depend on register rows A (cold launch number) and D (floor device) being closed in Phase 0. Both go on the W2 Friday agenda so W6 measures one number on one device.
+> **[QA]** Two W6 exit criteria depend on register rows A (cold launch number) and D (floor device). Both were closed in the reconciliation of 2026-10-04, so W6 measures one number on one device.
 >
-> **[ARCH]** My proposal for that agenda: 800 ms p90 to the interactive Home on the SE 3rd gen as the gate, 1.5 s never-exceed on the SE 2nd gen, measured nightly by `XCTApplicationLaunchMetric`. The row owners close it; this document does not.
+> **[ARCH]** For the record: 800 ms p90 (target 500 ms) to the interactive Home on the iPhone SE 3rd gen is the gate, 1.5 s never-exceed on the SE 2nd gen, measured nightly by `XCTApplicationLaunchMetric`. The SE 2nd gen stays in the lab as the performance floor; the SE 3rd gen is the Tier A device for gate numbers and hero-animation frame rates (05 Section 3, 03 Section 4).
 
 ---
 
@@ -346,7 +346,7 @@ Generator rules: every `ref` resolves within the file; a theme missing any seman
 
 | Check | Threshold (04 Section 12) | Verified how |
 |---|---|---|
-| Cold launch | the gate chosen under register row A (proposal: 800 ms p90 on the SE 3rd gen) | Nightly `XCTApplicationLaunchMetric` baseline must not regress more than 5 percent |
+| Cold launch | 800 ms p90 (target 500 ms) to interactive Home on the iPhone SE 3rd gen; 1.5 s never-exceed on the SE 2nd gen (register row A, decided) | Nightly `XCTApplicationLaunchMetric` baseline must not regress more than 5 percent |
 | Round frame time | 16.6 ms at 60 Hz, zero hitches over 50 ms | Any PR adding an animation attaches an Animation Hitches trace from the SE 2nd gen |
 | Dictionary | load under 150 ms, lookup under 1 ms p99 | `IWContent` perf tests when `Content/` or `IWContent` changes |
 | Memory | under 150 MB steady in a round | Nightly `XCTMemoryMetric`; PRs touching images or packs state the delta |
@@ -421,7 +421,7 @@ Rules carried from 07 Section 10: layout primitives are not themeable; every the
 | K3 | Swift 6 strict concurrency stalls the first UI feature | Medium | Medium | Any `IWFeatures` PR open more than three days in W3 | Pair IOS and ARCH on the first two features; patterns in `docs/runbooks/concurrency.md`; exceptions only via ADR-009 | IOS |
 | K4 | Figma export shape drifts and the token generator needs hand edits | Medium | Medium | Two consecutive exports hand-edited | Freeze the Section 7.5 schema at W2 Fri; replace the plugin with a script on Figma's variables API if needed | ARCH, DESIGN |
 | K5 | `IWContent` cannot build on Linux (Compression framework) | High | Low | `linux-packages` red on the first `IWContent` PR | Decoder behind a protocol; uncompressed fixtures on Linux (04 Section 2) | DATA |
-| K6 | Cold launch number and floor device still open at W6 (register rows A and D) | Medium | High | Not closed on the W2 Friday agenda | ARCH's proposal in Section 5.2 becomes the default if the row owners offer nothing better | QA, IOS |
+| K6 | Cold launch harness not measuring the decided gate (800 ms p90, SE 3rd gen; 1.5 s never-exceed, SE 2nd gen) by W6 | Low | High | No nightly `XCTApplicationLaunchMetric` baseline by end of W2 | Harness is a W2 deliverable; any slip is raised at the W2 Friday review | QA, IOS |
 | K7 | Design foundations lag code at 80 percent designer time | Medium | Medium | Fewer than six components have both frames and previews by Wed W2 | Reduce W2 to the six the Round screen needs; the rest move to W3 | DESIGN |
 | K8 | Direction gate becomes a slideshow | Low | High | Any gate asset not in TestFlight by Thu W4 | 09 Section 9 rule: a projector review did not happen; the gate moves to Monday rather than being held on slides | JOBS |
 | K9 | Second engineer under 60 percent in Phase 1 | Medium | Medium | ARCH logs under 19 hours in W3 | Move `simulate` and the nearby spike later; reopen F12 | ARCH |
@@ -483,7 +483,7 @@ Rules carried from 07 Section 10: layout primitives are not themeable; every the
 **DECISION:** The Section 7.5 token schema is frozen at W2 Friday; changes need an ADR.
 **DECISION:** W2 design-system scope is eight components.
 **DECISION:** Flag names follow `<area>.<feature>[.<variant>]` with declared flip and delete phases.
-**OPEN:** Cold launch gate and floor device (register rows A and D); QA with IOS; close W2 Friday; default proposal in Section 5.2.
+**DECISION (reconciled 2026-10-04):** Cold launch gate is 800 ms p90 on the iPhone SE 3rd gen with 1.5 s never-exceed on the SE 2nd gen; the SE 2nd gen is the performance floor and the SE 3rd gen the Tier A gate device (register rows A and D, closed).
 **OPEN:** Profanity policy for App 1 (register row G); DATA with GAME and JOBS; close before dictionary v0 in W3.
 **OPEN:** Exact Xcode version pin; IOS records it in `docs/runbooks/toolchain.md` on Monday W1 from Apple's current SDK table.
 **OPEN:** Figma plugin or REST script as the long-term token exporter; ARCH and DESIGN after two exports (K4).

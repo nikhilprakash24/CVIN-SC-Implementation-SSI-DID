@@ -20,6 +20,7 @@ Names are working titles. App 1 is **Inkwell** pending trademark clearance (rank
 | [`app1-inkwell/07-design-directions-and-aesthetics.md`](app1-inkwell/07-design-directions-and-aesthetics.md) | DESIGN | Principles, five visual directions, design system foundations, theming |
 | [`app1-inkwell/08-ux-flows-and-screens.md`](app1-inkwell/08-ux-flows-and-screens.md) | DESIGN | Sitemap, first run, every screen, flows, answer-entry and chain-screen deep dives, microcopy |
 | [`app1-inkwell/09-motion-sound-and-haptics.md`](app1-inkwell/09-motion-sound-and-haptics.md) | DESIGN | Motion principles, animation catalog, implementation stack bake-off, sound, haptics |
+| [`app1-inkwell/10-phase0-kickoff-package.md`](app1-inkwell/10-phase0-kickoff-package.md) | ARCH | Day-one package: founder sign-off sheet, accounts and tooling setup, repo skeleton, W1 to W6 plan, first Friday demos, conventions, content and design bootstrap |
 
 ### App 2: Inkwell Kids (build second)
 | File | Owner voice | What it covers |
