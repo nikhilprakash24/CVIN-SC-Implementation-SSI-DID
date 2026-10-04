@@ -1,14 +1,14 @@
 Operation,erc1056,erc1056w,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
-C1_create_identity,76808,145662,399844,656480,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-C2_create_with_attributes,366978,234587,568074,1496440,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U1_rotate_controller,51754,57188,179470,28390,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U2_add_delegate,55143,64720,48314,119852,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U3_set_attribute,35024,44677,120061,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U4_transfer_vehicle,51754,57188,182374,28390,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U5_meta_tx,62646,n/a,n/a,n/a,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-D1_revoke_delegate,32868,41888,26174,57200,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-D2_revoke_attribute,34576,n/a,n/a,57316,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-D3_deactivate_identity,34230,43809,27689,23091,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-V1_issuer_key_anchor,55143,55143,419990,119852,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-V3_anchor_status,33918,33918,142909,119996,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-V5_revoke_credential,33470,33470,125821,43388,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+C1_create_identity,76808,145662,399844,656480,1535776,103913,1730753,132515,808431,266995
+C2_create_with_attributes,366978,234587,568074,1496440,2285459,103913,1963543,370025,1153124,1006919
+U1_rotate_controller,51754,57188,179470,28390,28746,83959,28834,83412,28539,68847
+U2_add_delegate,55143,64720,48314,119852,n/a,n/a,n/a,n/a,47569,72308
+U3_set_attribute,35024,44677,120061,119996,317814,57147,95334,100573,94651,51742
+U4_transfer_vehicle,51754,57188,182374,28390,28746,83959,28834,83412,28539,68847
+U5_meta_tx,62646,n/a,n/a,n/a,n/a,n/a,n/a,n/a,141767,n/a
+D1_revoke_delegate,32868,41888,26174,57200,n/a,n/a,n/a,n/a,25429,37742
+D2_revoke_attribute,34576,n/a,n/a,57316,96611,30625,33880,37806,33469,34198
+D3_deactivate_identity,34230,43809,27689,23091,28530,37443,23182,43076,28323,51016
+V1_issuer_key_anchor,55143,55143,419990,119852,n/a,51281,49745,n/a,49151,55208
+V3_anchor_status,33918,33918,142909,119996,294628,57519,49805,54874,49211,289788
+V5_revoke_credential,33470,33470,125821,43388,92273,30997,27322,32212,26809,89972

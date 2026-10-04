@@ -5,13 +5,13 @@
 \toprule
 Operation & ERC-1056 & ERC-1056 (wrapper) & ERC-721 & ERC-725 & ERC-735 & ERC-1155 & ERC-725xy & LSP8 & ERC-4337 & CVIN-Combined \\
 \midrule
-R1\_resolve\_owner & 1 / 68 / 0.66 & 1 / 68 / 0.772 & 1 / 68 / 0.718 & 1 / 68 / 0.737 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-R2\_resolve\_by\_vin & 1 / 68 / 0.661 & 1 / 68 / 0.779 & 1 / 68 / 0.729 & n/a & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-R3\_resolve\_document & 12 / 8592 / 8.423 & 6 / 9170 / 6.075 & 7 / 2652 / 4.572 & 12 / 2800 / 9.145 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-R4\_verify\_delegate & 1 / 68 / 0.69 & 1 / 68 / 0.968 & 2 / 136 / 1.093 & 1 / 196 / 0.745 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-V6\_status\_check & 1 / 852 / 1.24 & 1 / 851 / 0.954 & 1 / 708 / 1.278 & 1 / 196 / 0.687 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+R1\_resolve\_owner & 1 / 68 / 0.904 & 1 / 68 / 1.095 & 1 / 68 / 0.927 & 1 / 68 / 0.704 & 1 / 68 / 0.85 & 1 / 68 / 0.784 & 1 / 68 / 0.735 & 2 / 136 / 1.544 & 1 / 68 / 0.645 & 1 / 68 / 0.823 \\
+R2\_resolve\_by\_vin & 1 / 68 / 0.736 & 1 / 68 / 0.976 & 1 / 68 / 0.901 & n/a & n/a & 1 / 68 / 0.964 & n/a & 1 / 68 / 0.88 & n/a & n/a \\
+R3\_resolve\_document & 12 / 8592 / 8.751 & 6 / 9170 / 6.29 & 7 / 2652 / 4.977 & 12 / 2800 / 9.265 & 3 / 11935 / 3.826 & 3 / 908 / 2.77 & 2 / 1992 / 2.329 & 3 / 2060 / 3.872 & 11 / 1964 / 4.689 & 7 / 8896 / 4.555 \\
+R4\_verify\_delegate & 1 / 68 / 0.807 & 1 / 68 / 1.198 & 2 / 136 / 1.02 & 1 / 196 / 0.835 & n/a & n/a & n/a & n/a & 1 / 68 / 0.812 & 1 / 68 / 0.899 \\
+V6\_status\_check & 1 / 852 / 2 & 1 / 851 / 1.23 & 1 / 708 / 1.227 & 1 / 196 / 0.741 & 1 / 68 / 0.832 & 1 / 68 / 0.95 & 1 / 196 / 0.787 & 1 / 196 / 1.297 & 1 / 196 / 0.675 & 1 / 68 / 0.884 \\
 \bottomrule
 \end{tabular}
-\caption{L1 — Read ops: RPC calls / bytes / median ms Run 2026-10-04T05-41-19Z\_bca0899 · commit bca0899 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30}
+\caption{L1 — Read ops: RPC calls / bytes / median ms Run 2026-10-04T09-50-29Z\_0eef6af · commit 0eef6af · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30}
 \label{tab:crud_reads}
 \end{table}

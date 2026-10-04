@@ -5,14 +5,14 @@
 \toprule
 Axis | op & ERC-1056 & ERC-1056 (wrapper) & ERC-721 & ERC-725 & ERC-735 & ERC-1155 & ERC-725xy & LSP8 & ERC-4337 & CVIN-Combined \\
 \midrule
-N=0|R3\_resolve\_document & 9.377 / 12.628 & 5.693 / 8.546 & 3.949 / 5.164 & 9.354 / 11.323 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-N=100|R3\_resolve\_document & 8.66 / 12.292 & 5.308 / 6.155 & 4.372 / 5.437 & 9.442 / 14.432 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-N=1000|R3\_resolve\_document & 11.645 / 14.593 & 7.04 / 9.245 & 3.868 / 5.077 & 7.193 / 10.999 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-h=1|R3\_resolve\_document & 10.037 / 14.587 & 6.59 / 7.543 & 3.613 / 5.438 & 10.203 / 16.268 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-h=10|R3\_resolve\_document & 21.047 / 25.573 & 12.003 / 13.702 & 8.033 / 12.499 & 14.445 / 16.467 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-h=50|R3\_resolve\_document & 77.301 / 117.713 & 43.763 / 51.596 & 28.149 / 65.459 & 40.956 / 51.772 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+N=0|R3\_resolve\_document & 8.759 / 10.213 & 4.958 / 6.284 & 4.14 / 5.657 & 8.112 / 10.624 & 3.214 / 4.039 & 2.876 / 3.572 & 3.062 / 3.663 & 4.409 / 7.618 & 5.129 / 5.855 & 5.077 / 6.323 \\
+N=100|R3\_resolve\_document & 12.442 / 15.402 & 6.584 / 15.152 & 4.577 / 5.857 & 9.412 / 10.935 & 3.321 / 6.129 & 2.416 / 2.715 & 2.806 / 3.146 & 4.438 / 7.139 & 5.364 / 7.367 & 4.089 / 5.12 \\
+N=1000|R3\_resolve\_document & 13.726 / 15.793 & 6.155 / 7.715 & 4.521 / 6.313 & 10.598 / 12.414 & 3.569 / 5.055 & 2.358 / 2.741 & 2.567 / 3.966 & 3.86 / 5.033 & 5.64 / 6.724 & 4.616 / 6.098 \\
+h=1|R3\_resolve\_document & 11.743 / 16.553 & 6.151 / 6.889 & 4.588 / 5.666 & 8.693 / 12.868 & 4.423 / 5.695 & 2.807 / 5.6 & 4.347 / 18.568 & 7.142 / 14.311 & 5.282 / 6.426 & 5.908 / 8.094 \\
+h=10|R3\_resolve\_document & 21.939 / 27.322 & 13.605 / 16.928 & 6.608 / 8.245 & 17.066 / 18.752 & 10.506 / 14.299 & 2.522 / 3.701 & 11.841 / 19.527 & 15.961 / 22.174 & 10.332 / 30.131 & 19.833 / 22.162 \\
+h=50|R3\_resolve\_document & 82.668 / 99.426 & 41.316 / 52.646 & 38.677 / 115.283 & 51.164 / 63.683 & 38.916 / 44.113 & 2.703 / 4.452 & 39.04 / 74.581 & 28.639 / 52.643 & 29.31 / 39.269 & 83.004 / 100.279 \\
 \bottomrule
 \end{tabular}
-\caption{L3 — Read latency vs N and h: median / p95 ms (in-process, 2 warm-up + 10 samples) Run 2026-10-04T05-41-19Z\_bca0899 · commit bca0899 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30}
+\caption{L3 — Read latency vs N and h: median / p95 ms (in-process, 2 warm-up + 10 samples) Run 2026-10-04T09-50-29Z\_0eef6af · commit 0eef6af · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30}
 \label{tab:scale_latency}
 \end{table}

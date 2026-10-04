@@ -1,10 +1,17 @@
 {
-  "runId": "2026-10-04T05-41-19Z_bca0899",
-  "commit": "bca0899b237ede89c7493dfad58c17d13079c8d3",
-  "commitShort": "bca0899",
+  "runId": "2026-10-04T09-50-29Z_0eef6af",
+  "commit": "0eef6af562589fbd58253f517b6ebdac0facf0db",
+  "commitShort": "0eef6af",
   "branch": "claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt",
+  "measured": {
+    "benchmarksTree": "2c821dedf6d4fbfe1b47b36f0bcfbfcfaa3d1cd9",
+    "contractsTree": "6c58b31e9a58101aac8e5d07ea0341e363077471",
+    "hardhatConfigBlob": "3c665d67e00f3d3290584dd0addf2e4e98470937",
+    "lockfileBlob": "7115e9d1ea9bd8cfe975560066c46a30cde2637c"
+  },
   "dirty": false,
-  "date": "2026-10-04T05:41:20.956Z",
+  "dirtyMeasured": false,
+  "date": "2026-10-04T09:50:30.375Z",
   "node": "v22.22.2",
   "hardhat": "2.28.6",
   "ethers": "6.17.0",
@@ -62,7 +69,13 @@
     "erc1056",
     "erc1056w",
     "erc721",
-    "erc725"
+    "erc725",
+    "erc735",
+    "erc1155",
+    "erc725xy",
+    "lsp8",
+    "erc4337",
+    "cvin"
   ],
   "derivedCostParams": {
     "gasPriceGweiL1": 20,
@@ -70,11 +83,11 @@
     "ethUSD": 3000
   },
   "scenarioSeconds": {
-    "crud": 120.35,
-    "lifecycle": 2.175,
-    "scale": 101.381,
-    "batch": 12.705,
-    "throughput": 18.122,
-    "resolve": 4.207
+    "crud": 236.078,
+    "lifecycle": 4.344,
+    "scale": 245.382,
+    "batch": 31.514,
+    "throughput": 43.003,
+    "resolve": 8.869
   }
 }

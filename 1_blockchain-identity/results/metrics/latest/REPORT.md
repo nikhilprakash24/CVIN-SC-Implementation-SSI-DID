@@ -1,6 +1,6 @@
-# CVIN metrics report — 2026-10-04T05-41-19Z_bca0899
+# CVIN metrics report — 2026-10-04T09-50-29Z_0eef6af
 
-_Run 2026-10-04T05-41-19Z_bca0899 · commit bca0899 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-04T09-50-29Z_0eef6af · commit 0eef6af · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
 
 Cells: exact gas for tx ops; `n/a` = substrate has no primitive (reportable finding); `not impl.` = adapter not on trunk yet.
 
@@ -8,229 +8,247 @@ Cells: exact gas for tx ops; `n/a` = substrate has no primitive (reportable find
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C1_create_identity | 76,808 | 145,662 | 399,844 | 656,480 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| C2_create_with_attributes | 366,978 | 234,587 | 568,074 | 1,496,440 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U1_rotate_controller | 51,754 | 57,188 | 179,470 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U2_add_delegate | 55,143 | 64,720 | 48,314 | 119,852 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U3_set_attribute | 35,024 | 44,677 | 120,061 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U4_transfer_vehicle | 51,754 | 57,188 | 182,374 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U5_meta_tx | 62,646 | n/a | n/a | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D1_revoke_delegate | 32,868 | 41,888 | 26,174 | 57,200 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D2_revoke_attribute | 34,576 | n/a | n/a | 57,316 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D3_deactivate_identity | 34,230 | 43,809 | 27,689 | 23,091 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V1_issuer_key_anchor | 55,143 | 55,143 | 419,990 | 119,852 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V3_anchor_status | 33,918 | 33,918 | 142,909 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V5_revoke_credential | 33,470 | 33,470 | 125,821 | 43,388 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| C1_create_identity | 76,808 | 145,662 | 399,844 | 656,480 | 1,535,776 | 103,913 | 1,730,753 | 132,515 | 808,431 | 266,995 |
+| C2_create_with_attributes | 366,978 | 234,587 | 568,074 | 1,496,440 | 2,285,459 | 103,913 | 1,963,543 | 370,025 | 1,153,124 | 1,006,919 |
+| U1_rotate_controller | 51,754 | 57,188 | 179,470 | 28,390 | 28,746 | 83,959 | 28,834 | 83,412 | 28,539 | 68,847 |
+| U2_add_delegate | 55,143 | 64,720 | 48,314 | 119,852 | n/a | n/a | n/a | n/a | 47,569 | 72,308 |
+| U3_set_attribute | 35,024 | 44,677 | 120,061 | 119,996 | 317,814 | 57,147 | 95,334 | 100,573 | 94,651 | 51,742 |
+| U4_transfer_vehicle | 51,754 | 57,188 | 182,374 | 28,390 | 28,746 | 83,959 | 28,834 | 83,412 | 28,539 | 68,847 |
+| U5_meta_tx | 62,646 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 141,767 | n/a |
+| D1_revoke_delegate | 32,868 | 41,888 | 26,174 | 57,200 | n/a | n/a | n/a | n/a | 25,429 | 37,742 |
+| D2_revoke_attribute | 34,576 | n/a | n/a | 57,316 | 96,611 | 30,625 | 33,880 | 37,806 | 33,469 | 34,198 |
+| D3_deactivate_identity | 34,230 | 43,809 | 27,689 | 23,091 | 28,530 | 37,443 | 23,182 | 43,076 | 28,323 | 51,016 |
+| V1_issuer_key_anchor | 55,143 | 55,143 | 419,990 | 119,852 | n/a | 51,281 | 49,745 | n/a | 49,151 | 55,208 |
+| V3_anchor_status | 33,918 | 33,918 | 142,909 | 119,996 | 294,628 | 57,519 | 49,805 | 54,874 | 49,211 | 289,788 |
+| V5_revoke_credential | 33,470 | 33,470 | 125,821 | 43,388 | 92,273 | 30,997 | 27,322 | 32,212 | 26,809 | 89,972 |
 
 ### L1 — Transactions per semantic operation
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C1_create_identity | 1 | 2 | 1 | 2 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| C2_create_with_attributes | 9 | 3 | 1 | 9 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U1_rotate_controller | 1 | 1 | 1 | 1 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U2_add_delegate | 1 | 1 | 1 | 1 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U3_set_attribute | 1 | 1 | 1 | 1 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U4_transfer_vehicle | 1 | 1 | 1 | 1 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U5_meta_tx | 1 | n/a | n/a | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D1_revoke_delegate | 1 | 1 | 1 | 1 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D2_revoke_attribute | 1 | n/a | n/a | 1 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D3_deactivate_identity | 1 | 1 | 1 | 1 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V1_issuer_key_anchor | 1 | 1 | 1 | 1 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V3_anchor_status | 1 | 1 | 1 | 1 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V5_revoke_credential | 1 | 1 | 1 | 1 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| C1_create_identity | 1 | 2 | 1 | 2 | 1 | 1 | 2 | 1 | 2 | 1 |
+| C2_create_with_attributes | 9 | 3 | 1 | 9 | 2 | 1 | 2 | 2 | 9 | 2 |
+| U1_rotate_controller | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+| U2_add_delegate | 1 | 1 | 1 | 1 | n/a | n/a | n/a | n/a | 1 | 1 |
+| U3_set_attribute | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+| U4_transfer_vehicle | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+| U5_meta_tx | 1 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 1 | n/a |
+| D1_revoke_delegate | 1 | 1 | 1 | 1 | n/a | n/a | n/a | n/a | 1 | 1 |
+| D2_revoke_attribute | 1 | n/a | n/a | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+| D3_deactivate_identity | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+| V1_issuer_key_anchor | 1 | 1 | 1 | 1 | n/a | 1 | 1 | n/a | 1 | 1 |
+| V3_anchor_status | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+| V5_revoke_credential | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 
 ### L1 — Storage writes per operation (SSTORE count / zero→nonzero SSTOREs)
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C1_create_identity | 2 / 2 | 4 / 4 | 24 / 15 | 6 / 6 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| C2_create_with_attributes | 10 / 3 | 12 / 4 | 27 / 23 | 41 / 34 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U1_rotate_controller | 2 / 1 | 1 / 1 | 13 / 6 | 1 / 0 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U2_add_delegate | 2 / 1 | 2 / 1 | 1 / 1 | 5 / 4 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U3_set_attribute | 1 / 0 | 1 / 0 | 4 / 4 | 5 / 4 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U4_transfer_vehicle | 2 / 1 | 1 / 1 | 13 / 6 | 1 / 0 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U5_meta_tx | 2 / 1 | n/a | n/a | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D1_revoke_delegate | 2 / 0 | 2 / 0 | 1 / 0 | 6 / 0 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D2_revoke_attribute | 1 / 0 | n/a | n/a | 6 / 0 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D3_deactivate_identity | 1 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V1_issuer_key_anchor | 2 / 1 | 2 / 1 | 24 / 16 | 5 / 4 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V3_anchor_status | 1 / 0 | 1 / 0 | 5 / 5 | 5 / 4 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V5_revoke_credential | 1 / 0 | 1 / 0 | 5 / 4 | 6 / 0 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| C1_create_identity | 2 / 2 | 4 / 4 | 24 / 15 | 6 / 6 | 3 / 3 | 3 / 3 | 2 / 2 | 6 / 5 | 2 / 2 | 11 / 10 |
+| C2_create_with_attributes | 10 / 3 | 12 / 4 | 27 / 23 | 41 / 34 | 34 / 34 | 3 / 3 | 11 / 11 | 13 / 11 | 9 / 9 | 42 / 41 |
+| U1_rotate_controller | 2 / 1 | 1 / 1 | 13 / 6 | 1 / 0 | 1 / 0 | 5 / 2 | 1 / 0 | 8 / 2 | 1 / 0 | 2 / 2 |
+| U2_add_delegate | 2 / 1 | 2 / 1 | 1 / 1 | 5 / 4 | n/a | n/a | n/a | n/a | 1 / 1 | 2 / 2 |
+| U3_set_attribute | 1 / 0 | 1 / 0 | 4 / 4 | 5 / 4 | 13 / 12 | 1 / 1 | 3 / 3 | 3 / 3 | 3 / 3 | 1 / 1 |
+| U4_transfer_vehicle | 2 / 1 | 1 / 1 | 13 / 6 | 1 / 0 | 1 / 0 | 5 / 2 | 1 / 0 | 8 / 2 | 1 / 0 | 2 / 2 |
+| U5_meta_tx | 2 / 1 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 4 / 4 | n/a |
+| D1_revoke_delegate | 2 / 0 | 2 / 0 | 1 / 0 | 6 / 0 | n/a | n/a | n/a | n/a | 1 / 0 | 2 / 0 |
+| D2_revoke_attribute | 1 / 0 | n/a | n/a | 6 / 0 | 14 / 1 | 1 / 0 | 3 / 0 | 3 / 0 | 3 / 0 | 1 / 0 |
+| D3_deactivate_identity | 1 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 3 / 0 | 1 / 0 | 6 / 0 | 1 / 0 | 1 / 1 |
+| V1_issuer_key_anchor | 2 / 1 | 2 / 1 | 24 / 16 | 5 / 4 | n/a | 1 / 1 | 1 / 1 | n/a | 1 / 1 | 2 / 1 |
+| V3_anchor_status | 1 / 0 | 1 / 0 | 5 / 5 | 5 / 4 | 12 / 11 | 1 / 1 | 1 / 1 | 1 / 1 | 1 / 1 | 12 / 11 |
+| V5_revoke_credential | 1 / 0 | 1 / 0 | 5 / 4 | 6 / 0 | 13 / 1 | 1 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 13 / 1 |
 
 ### L1 — Event-log bytes per operation
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C1_create_identity | 224 | 352 | 416 | 224 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| C2_create_with_attributes | 2,272 | 2,400 | 416 | 1,120 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U1_rotate_controller | 128 | 128 | 288 | 96 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U2_add_delegate | 192 | 192 | 128 | 128 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U3_set_attribute | 288 | 288 | 224 | 128 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U4_transfer_vehicle | 128 | 128 | 288 | 96 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U5_meta_tx | 288 | n/a | n/a | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D1_revoke_delegate | 192 | 192 | 128 | 64 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D2_revoke_attribute | 288 | n/a | n/a | 64 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D3_deactivate_identity | 256 | 256 | 96 | 96 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V1_issuer_key_anchor | 192 | 192 | 416 | 128 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V3_anchor_status | 256 | 256 | 256 | 128 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V5_revoke_credential | 256 | 256 | 256 | 64 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| C1_create_identity | 224 | 352 | 416 | 224 | 288 | 544 | 256 | 800 | 288 | 512 |
+| C2_create_with_attributes | 2,272 | 2,400 | 416 | 1,120 | 2,464 | 544 | 1,376 | 3,264 | 1,408 | 1,632 |
+| U1_rotate_controller | 128 | 128 | 288 | 96 | 96 | 192 | 96 | 256 | 96 | 128 |
+| U2_add_delegate | 192 | 192 | 128 | 128 | n/a | n/a | n/a | n/a | 96 | 192 |
+| U3_set_attribute | 288 | 288 | 224 | 128 | 1,024 | 352 | 192 | 416 | 192 | 288 |
+| U4_transfer_vehicle | 128 | 128 | 288 | 96 | 96 | 192 | 96 | 256 | 96 | 128 |
+| U5_meta_tx | 288 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 704 | n/a |
+| D1_revoke_delegate | 192 | 192 | 128 | 64 | n/a | n/a | n/a | n/a | 96 | 192 |
+| D2_revoke_attribute | 288 | n/a | n/a | 64 | 512 | 352 | 128 | 288 | 128 | 288 |
+| D3_deactivate_identity | 256 | 256 | 96 | 96 | 96 | 352 | 96 | 352 | 96 | 256 |
+| V1_issuer_key_anchor | 192 | 192 | 416 | 128 | n/a | 128 | 160 | n/a | 160 | 192 |
+| V3_anchor_status | 256 | 256 | 256 | 128 | 960 | 352 | 160 | 352 | 160 | 512 |
+| V5_revoke_credential | 256 | 256 | 256 | 64 | 480 | 352 | 128 | 288 | 128 | 160 |
 
 ### L1 — Calldata bytes per operation
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C1_create_identity | 516 | 584 | 420 | 2,226 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| C2_create_with_attributes | 2,244 | 1,164 | 612 | 2,926 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U1_rotate_controller | 68 | 68 | 100 | 36 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U2_add_delegate | 132 | 132 | 68 | 100 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U3_set_attribute | 228 | 228 | 164 | 100 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U4_transfer_vehicle | 68 | 68 | 100 | 36 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U5_meta_tx | 324 | n/a | n/a | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D1_revoke_delegate | 100 | 100 | 68 | 36 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D2_revoke_attribute | 196 | n/a | n/a | 36 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D3_deactivate_identity | 196 | 196 | 36 | 4 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V1_issuer_key_anchor | 132 | 132 | 452 | 100 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V3_anchor_status | 196 | 196 | 196 | 100 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V5_revoke_credential | 164 | 164 | 196 | 36 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| C1_create_identity | 516 | 584 | 420 | 2,226 | 7,375 | 132 | 7,817 | 132 | 3,749 | 452 |
+| C2_create_with_attributes | 2,244 | 1,164 | 612 | 2,926 | 8,403 | 132 | 8,841 | 1,448 | 4,673 | 1,512 |
+| U1_rotate_controller | 68 | 68 | 100 | 36 | 36 | 100 | 36 | 196 | 36 | 68 |
+| U2_add_delegate | 132 | 132 | 68 | 100 | n/a | n/a | n/a | n/a | 36 | 132 |
+| U3_set_attribute | 228 | 228 | 164 | 100 | 452 | 100 | 164 | 196 | 164 | 228 |
+| U4_transfer_vehicle | 68 | 68 | 100 | 36 | 36 | 100 | 36 | 196 | 36 | 68 |
+| U5_meta_tx | 324 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 900 | n/a |
+| D1_revoke_delegate | 100 | 100 | 68 | 36 | n/a | n/a | n/a | n/a | 36 | 100 |
+| D2_revoke_attribute | 196 | n/a | n/a | 36 | 36 | 100 | 100 | 132 | 100 | 196 |
+| D3_deactivate_identity | 196 | 196 | 36 | 4 | 36 | 100 | 4 | 100 | 36 | 196 |
+| V1_issuer_key_anchor | 132 | 132 | 452 | 100 | n/a | 68 | 132 | n/a | 132 | 132 |
+| V3_anchor_status | 196 | 196 | 196 | 100 | 420 | 100 | 132 | 164 | 132 | 452 |
+| V5_revoke_credential | 164 | 164 | 196 | 36 | 36 | 100 | 100 | 132 | 100 | 68 |
 
 ### L1 — Tx latency, median / p95 ms (local node, N=30)
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C1_create_identity | 9.352 / 11.288 | 17.171 / 27.382 | 13.244 / 16.714 | 20.976 / 25.773 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| C2_create_with_attributes | 76.181 / 90.41 | 35.982 / 62.088 | 13.709 / 18.501 | 79.203 / 97.753 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U1_rotate_controller | 7.637 / 12.972 | 8.193 / 12.345 | 10.961 / 12.365 | 7.213 / 11.439 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U2_add_delegate | 8.081 / 10.107 | 11.274 / 16.028 | 8.24 / 12.17 | 7.598 / 11.487 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U3_set_attribute | 8.654 / 11.424 | 11.531 / 15.185 | 8.932 / 12.362 | 7.843 / 9.068 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U4_transfer_vehicle | 7.909 / 9.545 | 8.872 / 12.403 | 11.663 / 17.938 | 7.022 / 7.849 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U5_meta_tx | 12.466 / 16.439 | n/a | n/a | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D1_revoke_delegate | 8.436 / 12.024 | 9.451 / 12.943 | 9.551 / 13.747 | 10.667 / 22.737 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D2_revoke_attribute | 8.378 / 10.377 | n/a | n/a | 10.913 / 19.05 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D3_deactivate_identity | 8.475 / 11.075 | 10.187 / 15.007 | 8.353 / 11.856 | 8.333 / 10.794 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V1_issuer_key_anchor | 8.293 / 11.543 | 8.158 / 10.193 | 14.337 / 22.518 | 8.303 / 11.078 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V3_anchor_status | 8.61 / 11.176 | 8.897 / 13.585 | 9.524 / 13.98 | 8.748 / 12.7 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V5_revoke_credential | 8.25 / 11.29 | 8.808 / 13.113 | 10.305 / 15.178 | 9.266 / 20.651 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| C1_create_identity | 9.924 / 14.791 | 15.022 / 21.963 | 10.832 / 12.758 | 18.353 / 22.411 | 27.93 / 37.351 | 8.326 / 10.431 | 35.981 / 41.494 | 7.698 / 9.779 | 22.811 / 27.521 | 10.418 / 15.663 |
+| C2_create_with_attributes | 73.215 / 92.719 | 34.547 / 56.458 | 11.747 / 13.894 | 69.129 / 83.848 | 40.523 / 54.88 | 7.65 / 8.459 | 50.104 / 70.231 | 23.178 / 32.248 | 73.831 / 90.497 | 22.983 / 32.453 |
+| U1_rotate_controller | 9.027 / 15.658 | 7.466 / 11.975 | 9.337 / 12.559 | 6.458 / 8.794 | 6.608 / 8.916 | 8.986 / 12.617 | 6.935 / 9.815 | 8.816 / 10.82 | 6.542 / 9.033 | 6.894 / 9.088 |
+| U2_add_delegate | 7.499 / 9.329 | 9.956 / 13.042 | 6.809 / 7.87 | 8.012 / 12.552 | n/a | n/a | n/a | n/a | 6.806 / 8.158 | 6.987 / 9.34 |
+| U3_set_attribute | 8.039 / 9.994 | 9.551 / 15.031 | 7.582 / 9.914 | 7.261 / 10.37 | 10.181 / 12.269 | 7.68 / 9.424 | 7.993 / 9.91 | 8.585 / 13.288 | 8.431 / 10.409 | 7.421 / 10.045 |
+| U4_transfer_vehicle | 6.952 / 10.313 | 7.984 / 10.726 | 9.936 / 12.336 | 7.146 / 10.799 | 6.697 / 9.459 | 9.93 / 12.03 | 7.072 / 9.317 | 10.6 / 14.893 | 6.846 / 8.031 | 7.482 / 9.374 |
+| U5_meta_tx | 11.638 / 16.429 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 15.843 / 20.373 | n/a |
+| D1_revoke_delegate | 8.63 / 10.23 | 9.213 / 12.455 | 7.497 / 11.356 | 10.3 / 20.762 | n/a | n/a | n/a | n/a | 7.686 / 10.049 | 7.542 / 8.928 |
+| D2_revoke_attribute | 8.423 / 11.628 | n/a | n/a | 10.643 / 15.663 | 11.06 / 14.136 | 7.711 / 11.423 | 8.764 / 12.491 | 9.684 / 12.93 | 8.478 / 12.14 | 7.849 / 11.597 |
+| D3_deactivate_identity | 7.662 / 9.34 | 10.069 / 14.004 | 7.908 / 10.798 | 6.778 / 9.71 | 6.811 / 8.404 | 8.874 / 15.874 | 7.09 / 8.347 | 10.038 / 13.036 | 6.598 / 9.376 | 7.922 / 10.303 |
+| V1_issuer_key_anchor | 7.192 / 8.895 | 7.282 / 8.592 | 14.865 / 19.487 | 8.489 / 11.345 | n/a | 6.96 / 8.592 | 7.812 / 10.431 | n/a | 8.349 / 11.006 | 8.571 / 14.909 |
+| V3_anchor_status | 7.636 / 10.225 | 8.392 / 14.059 | 8.276 / 11.211 | 7.776 / 11.453 | 11.758 / 15.874 | 7.842 / 9.617 | 7.816 / 11.295 | 8.694 / 11.406 | 8.223 / 11.025 | 11.815 / 15.087 |
+| V5_revoke_credential | 7.189 / 8.836 | 7.521 / 8.99 | 8.3 / 11.471 | 8.717 / 15.24 | 12.591 / 22.151 | 8.222 / 10.778 | 8.205 / 10.319 | 8.18 / 12.229 | 8.168 / 14.401 | 13.218 / 18.597 |
 
 ### L1 — Read ops: RPC calls / bytes / median ms
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| R1_resolve_owner | 1 / 68 / 0.66 | 1 / 68 / 0.772 | 1 / 68 / 0.718 | 1 / 68 / 0.737 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R2_resolve_by_vin | 1 / 68 / 0.661 | 1 / 68 / 0.779 | 1 / 68 / 0.729 | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R3_resolve_document | 12 / 8592 / 8.423 | 6 / 9170 / 6.075 | 7 / 2652 / 4.572 | 12 / 2800 / 9.145 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R4_verify_delegate | 1 / 68 / 0.69 | 1 / 68 / 0.968 | 2 / 136 / 1.093 | 1 / 196 / 0.745 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V6_status_check | 1 / 852 / 1.24 | 1 / 851 / 0.954 | 1 / 708 / 1.278 | 1 / 196 / 0.687 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R1_resolve_owner | 1 / 68 / 0.904 | 1 / 68 / 1.095 | 1 / 68 / 0.927 | 1 / 68 / 0.704 | 1 / 68 / 0.85 | 1 / 68 / 0.784 | 1 / 68 / 0.735 | 2 / 136 / 1.544 | 1 / 68 / 0.645 | 1 / 68 / 0.823 |
+| R2_resolve_by_vin | 1 / 68 / 0.736 | 1 / 68 / 0.976 | 1 / 68 / 0.901 | n/a | n/a | 1 / 68 / 0.964 | n/a | 1 / 68 / 0.88 | n/a | n/a |
+| R3_resolve_document | 12 / 8592 / 8.751 | 6 / 9170 / 6.29 | 7 / 2652 / 4.977 | 12 / 2800 / 9.265 | 3 / 11935 / 3.826 | 3 / 908 / 2.77 | 2 / 1992 / 2.329 | 3 / 2060 / 3.872 | 11 / 1964 / 4.689 | 7 / 8896 / 4.555 |
+| R4_verify_delegate | 1 / 68 / 0.807 | 1 / 68 / 1.198 | 2 / 136 / 1.02 | 1 / 196 / 0.835 | n/a | n/a | n/a | n/a | 1 / 68 / 0.812 | 1 / 68 / 0.899 |
+| V6_status_check | 1 / 852 / 2 | 1 / 851 / 1.23 | 1 / 708 / 1.227 | 1 / 196 / 0.741 | 1 / 68 / 0.832 | 1 / 68 / 0.95 | 1 / 196 / 0.787 | 1 / 196 / 1.297 | 1 / 196 / 0.675 | 1 / 68 / 0.884 |
 
 ### Deployment (shared contracts)
 
 | Substrate | Contract | Deploy gas | Bytecode bytes |
 |---|---|---:|---:|
+| CVIN-Combined | CVINCombinedIdentity | 1,490,166 | 6,645 |
 | ERC-1056 | EthereumDIDRegistry | 958,726 | 4,187 |
 | ERC-1056 | CVINVehicleDIDRegistry | 1,750,295 | 7,528 |
 | ERC-1056 (wrapper) | EthereumDIDRegistry | 958,726 | 4,187 |
 | ERC-1056 (wrapper) | CVINVehicleDIDRegistry | 1,750,295 | 7,528 |
+| ERC-1155 | CVINVehicleCredential1155 | 2,304,865 | 9,829 |
+| ERC-4337 | CVINMinimalEntryPoint | 456,294 | 1,865 |
+| ERC-4337 | CVINVehicleAccount (issuer account) | 759,088 | 3,131 |
 | ERC-721 | CVINVehicleNFT | 2,721,476 | 11,724 |
 | ERC-725 | CVIN_DID_ERC725 (issuer identity) | 519,384 | 2,043 |
+| ERC-725xy | CVINVehicleERC725XY (issuer account) | 1,680,816 | 7,397 |
+| LSP8 | CVINVehicleLSP8 | 1,614,592 | 6,827 |
 
 **Non-deterministic execution gas detected** (distinct values across iterations):
+- cvin C1_create_identity: 242541, 242567
+- cvin C2_create_with_attributes: 954155, 954103, 954129
+- cvin V3_anchor_status: 264808, 264782
+- cvin V5_revoke_credential: 68028, 68030
 - erc721 C1_create_identity: 373752, 376552
 - erc721 U1_rotate_controller: 154730, 157530
+- erc735 C2_create_with_attributes: 2088082, 2088057
+- erc735 U3_set_attribute: 292713, 292738
+- erc735 D2_revoke_attribute: 75035, 75037
+- erc735 V3_anchor_status: 270016, 270041
+- erc735 V5_revoke_credential: 70697, 70700
+- lsp8 C1_create_identity: 127571, 110471
+- lsp8 U1_rotate_controller: 57892, 60692
+- lsp8 D2_revoke_attribute: 15452, 15450, 15455
 
 ### L2 — MOBI VID lifecycle gas per event
 
 | Event | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1. VID-I birth certificate | 366,870 | 234,551 | 565,262 | 1,496,416 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 2. Issuer key anchor | 72,243 | 72,243 | 419,990 | 136,952 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 3. Registration credential anchored | 33,918 | 33,918 | 142,897 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 4. Insurance credential anchored | 33,918 | 33,918 | 125,797 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 5. Service endpoint published | 35,012 | 44,665 | 102,961 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 6. Service record 1 | 35,542 | 45,269 | 125,677 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 7. Service record 2 | 35,542 | 45,269 | 125,677 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 8. Service record 3 | 35,542 | 45,269 | 125,677 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 9. Service record 4 | 35,542 | 45,269 | 125,677 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 10. Service record 5 | 35,542 | 45,269 | 125,677 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 11. Delegate key added (k1) | 55,131 | 64,708 | 48,314 | 119,852 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 12. Key rotation (k1 to k2) | 87,987 | 106,584 | 31,214 | 192,830 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 13. Ownership transfer (resale) | 51,742 | 57,176 | 177,562 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 14. Re-registration credential | 33,918 | 33,918 | 125,797 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 15. Credential revocation (old insurance) | 33,470 | 33,470 | 125,809 | 49,218 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 16. Second ownership transfer | 34,646 | 40,084 | 179,574 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 17. End-of-life deactivation | 34,222 | 43,801 | 27,677 | 23,091 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| **Lifetime total** | 1,050,787 | 1,025,381 | 2,701,239 | 3,155,103 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| Shared deploy gas | 2,709,021 | 2,709,021 | 2,721,476 | 519,384 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| Per-identity deploy gas (in total) | 0 | 0 | 0 | 519,384 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| Lifetime + shared/1 | 3,759,808 | 3,734,402 | 5,422,715 | 3,674,487 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| Lifetime + shared/1 000 | 1,053,496 | 1,028,090 | 2,703,960 | 3,155,622 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| Lifetime + shared/1 000 000 | 1,050,790 | 1,025,384 | 2,701,242 | 3,155,104 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| 1. VID-I birth certificate | 366,870 | 234,551 | 565,262 | 1,496,416 | 2,285,484 | 103,901 | 1,963,531 | 387,113 | 1,153,112 | 1,006,857 |
+| 2. Issuer key anchor | 72,243 | 72,243 | 419,990 | 136,952 | n/a | 51,281 | 49,745 | n/a | 49,151 | 72,308 |
+| 3. Registration credential anchored | 33,918 | 33,918 | 142,897 | 119,996 | 294,653 | 57,507 | 49,805 | 54,874 | 49,211 | 289,750 |
+| 4. Insurance credential anchored | 33,918 | 33,918 | 125,797 | 119,996 | 294,628 | 57,507 | 49,805 | 54,874 | 49,211 | 289,750 |
+| 5. Service endpoint published | 35,012 | 44,665 | 102,961 | 119,996 | 317,777 | 57,135 | 95,334 | 100,573 | 94,651 | 51,730 |
+| 6. Service record 1 | 35,542 | 45,269 | 125,677 | 119,996 | 340,719 | 40,035 | 118,062 | 123,477 | 117,299 | 35,092 |
+| 7. Service record 2 | 35,542 | 45,269 | 125,677 | 119,996 | 340,719 | 40,035 | 118,062 | 123,477 | 117,299 | 35,092 |
+| 8. Service record 3 | 35,542 | 45,269 | 125,677 | 119,996 | 340,694 | 40,035 | 118,062 | 123,477 | 117,299 | 35,092 |
+| 9. Service record 4 | 35,542 | 45,269 | 125,677 | 119,996 | 340,694 | 40,035 | 118,062 | 123,477 | 117,299 | 35,092 |
+| 10. Service record 5 | 35,542 | 45,269 | 125,677 | 119,996 | 340,719 | 40,035 | 118,062 | 123,477 | 117,299 | 35,092 |
+| 11. Delegate key added (k1) | 55,131 | 64,708 | 48,314 | 119,852 | n/a | n/a | n/a | n/a | 47,569 | 55,196 |
+| 12. Key rotation (k1 to k2) | 87,987 | 106,584 | 31,214 | 192,830 | n/a | n/a | n/a | n/a | 30,469 | 92,926 |
+| 13. Ownership transfer (resale) | 51,742 | 57,176 | 177,562 | 28,390 | 28,746 | 248,734 | 28,834 | 80,600 | 28,539 | 51,735 |
+| 14. Re-registration credential | 33,918 | 33,918 | 125,797 | 119,996 | 294,628 | 57,519 | 49,805 | 54,874 | 49,211 | 289,754 |
+| 15. Credential revocation (old insurance) | 33,470 | 33,470 | 125,809 | 49,218 | 92,273 | 30,997 | 27,322 | 32,212 | 26,809 | 89,965 |
+| 16. Second ownership transfer | 34,646 | 40,084 | 179,574 | 28,390 | 28,746 | 248,782 | 28,834 | 80,612 | 28,539 | 34,639 |
+| 17. End-of-life deactivation | 34,222 | 43,801 | 27,677 | 23,091 | 28,530 | 37,443 | 23,182 | 42,141 | 28,323 | 33,908 |
+| **Lifetime total** | 1,050,787 | 1,025,381 | 2,701,239 | 3,155,103 | 5,369,010 (excl. 3 n/a) | 1,150,981 (excl. 2 n/a) | 2,956,507 (excl. 2 n/a) | 1,505,258 (excl. 3 n/a) | 2,221,290 | 2,533,978 |
+| Shared deploy gas | 2,709,021 | 2,709,021 | 2,721,476 | 519,384 | 0 | 2,304,865 | 1,680,816 | 1,614,592 | 1,215,382 | 1,490,166 |
+| Per-identity deploy gas (in total) | 0 | 0 | 0 | 519,384 | 1,535,776 | 0 | 1,680,804 | 0 | 759,076 | 0 |
+| Lifetime + shared/1 | 3,759,808 | 3,734,402 | 5,422,715 | 3,674,487 | 5,369,010 | 3,455,846 | 4,637,323 | 3,119,850 | 3,436,672 | 4,024,144 |
+| Lifetime + shared/1 000 | 1,053,496 | 1,028,090 | 2,703,960 | 3,155,622 | 5,369,010 | 1,153,286 | 2,958,188 | 1,506,873 | 2,222,505 | 2,535,468 |
+| Lifetime + shared/1 000 000 | 1,050,790 | 1,025,384 | 2,701,242 | 3,155,104 | 5,369,010 | 1,150,983 | 2,956,509 | 1,505,260 | 2,221,291 | 2,533,979 |
 
 ### L2 — Lifecycle totals: tx count / log bytes / zero→nonzero SSTOREs
 
 | Metric | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Transactions | 26 | 20 | 17 | 26 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| Log bytes | 6,464 | 6,592 | 4,288 | 3,072 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| Zero→nonzero SSTOREs | 8 | 9 | 92 | 83 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| Transactions | 26 | 20 | 17 | 26 | 15 | 21 | 16 | 15 | 25 | 19 |
+| Log bytes | 6,464 | 6,592 | 4,288 | 3,072 | 12,576 | 6,080 | 3,744 | 8,288 | 3,968 | 6,496 |
+| Zero→nonzero SSTOREs | 8 | 9 | 92 | 83 | 145 | 18 | 38 | 42 | 37 | 81 |
 
 ### L3 — Marginal cost vs population N and history h (gas; reads: RPC calls / bytes)
 
 | Axis | op | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| N=0|C2_create_with_attributes | 366,978 | 234,587 | 565,274 | 1,496,416 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=0|U3_set_attribute | 35,024 | 44,677 | 120,061 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=0|U4_transfer_vehicle | 51,754 | 57,188 | 179,574 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=0|R3_resolve_document | 12 RPC / 8434 B | 5 RPC / 8427 B | 7 RPC / 2588 B | 11 RPC / 2540 B | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=100|C2_create_with_attributes | 366,978 | 234,587 | 568,074 | 1,496,428 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=100|U3_set_attribute | 35,024 | 44,677 | 120,061 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=100|U4_transfer_vehicle | 51,754 | 57,188 | 179,574 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=100|R3_resolve_document | 12 RPC / 8444 B | 5 RPC / 8437 B | 7 RPC / 2588 B | 11 RPC / 2540 B | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=1000|C2_create_with_attributes | 366,978 | 234,587 | 568,074 | 1,496,440 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=1000|U3_set_attribute | 35,024 | 44,677 | 120,073 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=1000|U4_transfer_vehicle | 51,754 | 57,188 | 179,586 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=1000|R3_resolve_document | 12 RPC / 8454 B | 5 RPC / 8447 B | 7 RPC / 2588 B | 11 RPC / 2540 B | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=1|U3_set_attribute | 35,028 | 44,681 | 102,961 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=1|U4_transfer_vehicle | 34,658 | 40,096 | 179,574 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=1|R3_resolve_document | 14 RPC / 10005 B | 6 RPC / 9404 B | 7 RPC / 3164 B | 12 RPC / 2800 B | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=10|U3_set_attribute | 35,028 | 44,681 | 102,961 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=10|U4_transfer_vehicle | 34,658 | 40,096 | 179,574 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=10|R3_resolve_document | 32 RPC / 24153 B | 15 RPC / 18203 B | 7 RPC / 8348 B | 21 RPC / 5140 B | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=50|U3_set_attribute | 35,028 | 44,681 | 102,961 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=50|U4_transfer_vehicle | 34,658 | 40,096 | 179,574 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=50|R3_resolve_document | 112 RPC / 87033 B | 55 RPC / 57323 B | 7 RPC / 31388 B | 61 RPC / 15540 B | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| N=0|C2_create_with_attributes | 366,978 | 234,587 | 565,274 | 1,496,416 | 2,285,472 | 103,913 | 1,963,543 | 387,125 | 1,153,124 | 1,006,893 |
+| N=0|U3_set_attribute | 35,024 | 44,677 | 120,061 | 119,996 | 317,814 | 57,147 | 95,334 | 100,573 | 94,651 | 51,742 |
+| N=0|U4_transfer_vehicle | 51,754 | 57,188 | 179,574 | 28,390 | 28,746 | 138,652 | 28,834 | 80,612 | 28,539 | 51,747 |
+| N=0|R3_resolve_document | 12 RPC / 8434 B | 5 RPC / 8427 B | 7 RPC / 2588 B | 11 RPC / 2540 B | 3 RPC / 9840 B | 3 RPC / 908 B | 2 RPC / 1992 B | 3 RPC / 2060 B | 11 RPC / 1964 B | 7 RPC / 7392 B |
+| N=100|C2_create_with_attributes | 366,978 | 234,587 | 568,074 | 1,496,428 | 2,285,447 | 103,913 | 1,963,543 | 370,025 | 1,153,124 | 1,006,919 |
+| N=100|U3_set_attribute | 35,024 | 44,677 | 120,061 | 119,996 | 317,814 | 57,147 | 95,334 | 100,573 | 94,651 | 51,742 |
+| N=100|U4_transfer_vehicle | 51,754 | 57,188 | 179,574 | 28,390 | 28,746 | 138,652 | 28,834 | 80,612 | 28,539 | 51,747 |
+| N=100|R3_resolve_document | 12 RPC / 8444 B | 5 RPC / 8437 B | 7 RPC / 2588 B | 11 RPC / 2540 B | 3 RPC / 9847 B | 3 RPC / 908 B | 2 RPC / 1992 B | 3 RPC / 2060 B | 11 RPC / 1964 B | 7 RPC / 7392 B |
+| N=1000|C2_create_with_attributes | 366,978 | 234,587 | 568,074 | 1,496,440 | 2,285,459 | 103,913 | 1,963,543 | 370,025 | 1,153,124 | 1,006,843 |
+| N=1000|U3_set_attribute | 35,024 | 44,677 | 120,073 | 119,996 | 317,789 | 57,147 | 95,334 | 100,573 | 94,651 | 51,742 |
+| N=1000|U4_transfer_vehicle | 51,754 | 57,188 | 179,586 | 28,390 | 28,746 | 138,652 | 28,834 | 80,612 | 28,539 | 51,747 |
+| N=1000|R3_resolve_document | 12 RPC / 8454 B | 5 RPC / 8447 B | 7 RPC / 2588 B | 11 RPC / 2540 B | 3 RPC / 9854 B | 3 RPC / 908 B | 2 RPC / 1992 B | 3 RPC / 2060 B | 11 RPC / 1964 B | 7 RPC / 7395 B |
+| h=1|U3_set_attribute | 35,028 | 44,681 | 102,961 | 119,996 | 317,814 | 40,047 | 95,334 | 100,573 | 94,651 | 34,646 |
+| h=1|U4_transfer_vehicle | 34,658 | 40,096 | 179,574 | 28,390 | 28,746 | 138,652 | 28,834 | 80,612 | 28,539 | 34,651 |
+| h=1|R3_resolve_document | 14 RPC / 10005 B | 6 RPC / 9404 B | 7 RPC / 3164 B | 12 RPC / 2800 B | 3 RPC / 13241 B | 3 RPC / 908 B | 2 RPC / 2312 B | 3 RPC / 2380 B | 12 RPC / 2288 B | 9 RPC / 8962 B |
+| h=10|U3_set_attribute | 35,028 | 44,681 | 102,961 | 119,996 | 317,814 | 40,047 | 95,334 | 100,573 | 94,651 | 34,646 |
+| h=10|U4_transfer_vehicle | 34,658 | 40,096 | 179,574 | 28,390 | 28,746 | 138,652 | 28,834 | 80,612 | 28,539 | 34,651 |
+| h=10|R3_resolve_document | 32 RPC / 24153 B | 15 RPC / 18203 B | 7 RPC / 8348 B | 21 RPC / 5140 B | 3 RPC / 43863 B | 3 RPC / 908 B | 2 RPC / 5192 B | 3 RPC / 5260 B | 21 RPC / 5204 B | 27 RPC / 23102 B |
+| h=50|U3_set_attribute | 35,028 | 44,681 | 102,961 | 119,996 | 317,814 | 40,047 | 95,334 | 100,573 | 94,651 | 34,646 |
+| h=50|U4_transfer_vehicle | 34,658 | 40,096 | 179,574 | 28,390 | 28,746 | 138,652 | 28,834 | 80,612 | 28,539 | 34,651 |
+| h=50|R3_resolve_document | 112 RPC / 87033 B | 55 RPC / 57323 B | 7 RPC / 31388 B | 61 RPC / 15540 B | 3 RPC / 180023 B | 3 RPC / 908 B | 2 RPC / 17992 B | 3 RPC / 18060 B | 61 RPC / 18164 B | 107 RPC / 85978 B |
 
 ### L3 — Read latency vs N and h: median / p95 ms (in-process, 2 warm-up + 10 samples)
 
 | Axis | op | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| N=0|R3_resolve_document | 9.377 / 12.628 | 5.693 / 8.546 | 3.949 / 5.164 | 9.354 / 11.323 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=100|R3_resolve_document | 8.66 / 12.292 | 5.308 / 6.155 | 4.372 / 5.437 | 9.442 / 14.432 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=1000|R3_resolve_document | 11.645 / 14.593 | 7.04 / 9.245 | 3.868 / 5.077 | 7.193 / 10.999 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=1|R3_resolve_document | 10.037 / 14.587 | 6.59 / 7.543 | 3.613 / 5.438 | 10.203 / 16.268 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=10|R3_resolve_document | 21.047 / 25.573 | 12.003 / 13.702 | 8.033 / 12.499 | 14.445 / 16.467 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=50|R3_resolve_document | 77.301 / 117.713 | 43.763 / 51.596 | 28.149 / 65.459 | 40.956 / 51.772 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| N=0|R3_resolve_document | 8.759 / 10.213 | 4.958 / 6.284 | 4.14 / 5.657 | 8.112 / 10.624 | 3.214 / 4.039 | 2.876 / 3.572 | 3.062 / 3.663 | 4.409 / 7.618 | 5.129 / 5.855 | 5.077 / 6.323 |
+| N=100|R3_resolve_document | 12.442 / 15.402 | 6.584 / 15.152 | 4.577 / 5.857 | 9.412 / 10.935 | 3.321 / 6.129 | 2.416 / 2.715 | 2.806 / 3.146 | 4.438 / 7.139 | 5.364 / 7.367 | 4.089 / 5.12 |
+| N=1000|R3_resolve_document | 13.726 / 15.793 | 6.155 / 7.715 | 4.521 / 6.313 | 10.598 / 12.414 | 3.569 / 5.055 | 2.358 / 2.741 | 2.567 / 3.966 | 3.86 / 5.033 | 5.64 / 6.724 | 4.616 / 6.098 |
+| h=1|R3_resolve_document | 11.743 / 16.553 | 6.151 / 6.889 | 4.588 / 5.666 | 8.693 / 12.868 | 4.423 / 5.695 | 2.807 / 5.6 | 4.347 / 18.568 | 7.142 / 14.311 | 5.282 / 6.426 | 5.908 / 8.094 |
+| h=10|R3_resolve_document | 21.939 / 27.322 | 13.605 / 16.928 | 6.608 / 8.245 | 17.066 / 18.752 | 10.506 / 14.299 | 2.522 / 3.701 | 11.841 / 19.527 | 15.961 / 22.174 | 10.332 / 30.131 | 19.833 / 22.162 |
+| h=50|R3_resolve_document | 82.668 / 99.426 | 41.316 / 52.646 | 38.677 / 115.283 | 51.164 / 63.683 | 38.916 / 44.113 | 2.703 / 4.452 | 39.04 / 74.581 | 28.639 / 52.643 | 29.31 / 39.269 | 83.004 / 100.279 |
 
 ### L4 — Create k identities: total gas (per item) [mode]
 
 | k | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 76,808 (76,808) [sequential] | 145,662 (145,662) [sequential] | 397,044 (397,044) [sequential] | 656,480 (656,480) [sequential] | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 10 | 768,080 (76,808) [sequential] | 1,456,620 (145,662) [sequential] | 3,995,640 (399,564) [sequential] | 6,564,788 (656,479) [sequential] | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| 100 | 7,680,800 (76,808) [sequential] | 14,566,200 (145,662) [sequential] | 39,981,600 (399,816) [sequential] | 65,647,832 (656,478) [sequential] | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| 1 | 76,808 (76,808) [sequential] | 145,662 (145,662) [sequential] | 397,044 (397,044) [sequential] | 656,480 (656,480) [sequential] | 1,535,776 (1,535,776) [sequential] | 103,913 (103,913) [sequential] | 1,730,753 (1,730,753) [sequential] | 149,615 (149,615) [sequential] | 808,431 (808,431) [sequential] | 266,969 (266,969) [sequential] |
+| 10 | 768,080 (76,808) [sequential] | 1,456,620 (145,662) [sequential] | 3,995,640 (399,564) [sequential] | 6,564,788 (656,479) [sequential] | 15,357,760 (1,535,776) [sequential] | 1,039,130 (103,913) [sequential] | 17,307,530 (1,730,753) [sequential] | 1,342,250 (134,225) [sequential] | 8,084,310 (808,431) [sequential] | 2,669,756 (266,976) [sequential] |
+| 100 | 7,680,800 (76,808) [sequential] | 14,566,200 (145,662) [sequential] | 39,981,600 (399,816) [sequential] | 65,647,832 (656,478) [sequential] | 153,577,600 (1,535,776) [sequential] | 10,391,300 (103,913) [sequential] | 173,075,300 (1,730,753) [sequential] | 13,268,600 (132,686) [sequential] | 80,843,100 (808,431) [sequential] | 26,697,970 (266,980) [sequential] |
 
 ### L5 — Single-node throughput for U3 (median of 3 bursts of 200 tx)
 
 | Metric | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| tx / s (queue + mine) | 152.66 | 156.73 | 131.85 | 175.26 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| tx / s (mine only) | 2452.81 | 1177.11 | 408.93 | 1291.41 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| gas / s | 4,940,436 | 6,585,171 | 16,571,016 | 21,030,595 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| tx / s (queue + mine) | 202.24 | 166.13 | 170.27 | 191.71 | 77.55 | 184.99 | 191.85 | 168.24 | 170.40 | 183.62 |
+| tx / s (mine only) | 2723.78 | 609.26 | 834.11 | 2055.76 | 143.35 | 1224.40 | 1845.04 | 789.73 | 863.91 | 1876.42 |
+| gas / s | 6,544,882 | 6,980,109 | 21,398,842 | 23,004,350 | 24,644,122 | 7,103,833 | 18,289,224 | 16,920,184 | 16,127,835 | 6,003,288 |
 
 ### L6 — Verifier read path after lifecycle: RPC calls / bytes / median ms / p95 ms
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| R3_resolve_document | 22 / 16936 / 16.48 / 21.082 | 14 / 16328 / 11.816 / 15.563 | 7 / 5724 / 6.017 / 8.483 | 17 / 4100 / 11.977 / 15.49 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R1_resolve_owner | 1 / 68 / 0.797 / 1.806 | 1 / 68 / 1.156 / 1.926 | 1 / 68 / 0.739 / 0.952 | 1 / 68 / 0.737 / 0.879 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R4_verify_delegate | 1 / 68 / 0.869 / 1.249 | 1 / 68 / 1.655 / 3.008 | 2 / 136 / 1.158 / 1.969 | 1 / 196 / 1.075 / 1.317 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V6_status_check | 1 / 3395 / 1.42 / 2.497 | 1 / 3395 / 1.312 / 1.71 | 1 / 3268 / 2.636 / 3.544 | 1 / 196 / 0.867 / 1.088 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R3_resolve_document | 22 / 16936 / 20.306 / 30.945 | 14 / 16328 / 12.23 / 25.211 | 7 / 5724 / 6.996 / 9.434 | 17 / 4100 / 15.317 / 22.159 | 3 / 34388 / 7.619 / 9.612 | 3 / 844 / 2.625 / 3.842 | 2 / 3592 / 4.246 / 6.415 | 2 / 1992 / 3.886 / 5.333 | 16 / 3584 / 8.329 / 15.022 | 17 / 20662 / 12.796 / 16.555 |
+| R1_resolve_owner | 1 / 68 / 1.285 / 2.443 | 1 / 68 / 1.247 / 2.818 | 1 / 68 / 0.85 / 1.174 | 1 / 68 / 0.83 / 1.121 | 1 / 68 / 0.732 / 1.528 | 1 / 68 / 1.111 / 1.402 | 1 / 68 / 0.773 / 1.31 | 1 / 68 / 1.097 / 1.452 | 1 / 68 / 0.927 / 1.195 | 1 / 68 / 0.771 / 1.093 |
+| R4_verify_delegate | 1 / 68 / 1.216 / 2.006 | 1 / 68 / 1.207 / 1.554 | 2 / 136 / 1.144 / 3.084 | 1 / 196 / 0.974 / 1.255 | n/a | n/a | n/a | n/a | 1 / 68 / 0.73 / 1.012 | 1 / 68 / 1.165 / 1.603 |
+| V6_status_check | 1 / 3395 / 1.46 / 2.224 | 1 / 3395 / 1.843 / 2.834 | 1 / 3268 / 2.704 / 3.527 | 1 / 196 / 0.761 / 1.027 | 1 / 68 / 0.845 / 1.033 | 1 / 68 / 0.814 / 1.006 | 1 / 196 / 0.874 / 1.02 | 1 / 132 / 1.113 / 1.54 | 1 / 196 / 1.059 / 1.464 | 1 / 68 / 1.078 / 1.603 |

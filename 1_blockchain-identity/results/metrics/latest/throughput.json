@@ -9,63 +9,63 @@
       {
         "burst": 0,
         "txCount": 200,
-        "sendSec": 1.109532917,
-        "mineSec": 0.322240428,
-        "seconds": 1.431773345,
-        "txPerSec": 139.68691392281787,
-        "gasPerSec": 4640091.969305378,
+        "sendSec": 0.963793033,
+        "mineSec": 0.065698194,
+        "seconds": 1.029491227,
+        "txPerSec": 194.2707181515399,
+        "gasPerSec": 6453245.861414222,
         "gasTotal": 6643560,
         "blocks": 1
       },
       {
         "burst": 1,
         "txCount": 200,
-        "sendSec": 1.229069765,
-        "mineSec": 0.081049316,
-        "seconds": 1.310119081,
-        "txPerSec": 152.65787889093417,
-        "gasPerSec": 4940436.402971525,
+        "sendSec": 0.915522457,
+        "mineSec": 0.073427361,
+        "seconds": 0.988949818,
+        "txPerSec": 202.23473057962582,
+        "gasPerSec": 6544882.138802314,
         "gasTotal": 6472560,
         "blocks": 1
       },
       {
         "burst": 2,
         "txCount": 200,
-        "sendSec": 1.071577429,
-        "mineSec": 0.081539271,
-        "seconds": 1.1531167,
-        "txPerSec": 173.4429828307924,
-        "gasPerSec": 5613100.564756368,
+        "sendSec": 0.887052314,
+        "mineSec": 0.075776747,
+        "seconds": 0.962829061,
+        "txPerSec": 207.72119174745183,
+        "gasPerSec": 6722439.384284434,
         "gasTotal": 6472560,
         "blocks": 1
       }
     ],
     "txPerSec": {
       "n": 3,
-      "mean": 155.263,
-      "sd": 17.028,
-      "median": 152.658,
-      "p95": 171.364,
-      "min": 139.687,
-      "max": 173.443
+      "mean": 201.409,
+      "sd": 6.763,
+      "median": 202.235,
+      "p95": 207.173,
+      "min": 194.271,
+      "max": 207.721
     },
     "gasPerSec": {
       "n": 3,
-      "mean": 5064542.979,
-      "sd": 498235.149,
-      "median": 4940436.403,
-      "p95": 5545834.149,
-      "min": 4640091.969,
-      "max": 5613100.565
+      "mean": 6573522.462,
+      "sd": 136863.031,
+      "median": 6544882.139,
+      "p95": 6704683.66,
+      "min": 6453245.861,
+      "max": 6722439.384
     },
     "mineTxPerSec": {
       "n": 3,
-      "mean": 1847.031,
-      "sd": 1062.099,
-      "median": 2452.806,
-      "p95": 2466.151,
-      "min": 620.655,
-      "max": 2467.633
+      "mean": 2802.445,
+      "sd": 213.601,
+      "median": 2723.78,
+      "p95": 3012.179,
+      "min": 2639.332,
+      "max": 3044.224
     },
     "note": "single in-process Hardhat node; queue then mine; upper bound on execution, not a public-chain figure"
   },
@@ -79,63 +79,63 @@
       {
         "burst": 0,
         "txCount": 200,
-        "sendSec": 1.098712358,
-        "mineSec": 0.153470343,
-        "seconds": 1.252182701,
-        "txPerSec": 159.7211012740225,
-        "gasPerSec": 6710809.846909073,
+        "sendSec": 0.874711895,
+        "mineSec": 0.143311943,
+        "seconds": 1.018023838,
+        "txPerSec": 196.45905383995537,
+        "gasPerSec": 8254384.314328797,
         "gasTotal": 8403160,
         "blocks": 1
       },
       {
         "burst": 1,
         "txCount": 200,
-        "sendSec": 1.106166118,
-        "mineSec": 0.169907007,
-        "seconds": 1.276073125,
-        "txPerSec": 156.7308299828037,
-        "gasPerSec": 6585171.206391484,
+        "sendSec": 0.875605581,
+        "mineSec": 0.32826669,
+        "seconds": 1.203872271,
+        "txPerSec": 166.13058114036417,
+        "gasPerSec": 6980109.271077313,
         "gasTotal": 8403160,
         "blocks": 1
       },
       {
         "burst": 2,
         "txCount": 200,
-        "sendSec": 1.049295628,
-        "mineSec": 0.515854239,
-        "seconds": 1.565149867,
-        "txPerSec": 127.78329041636752,
-        "gasPerSec": 5368917.173476015,
+        "sendSec": 0.931900771,
+        "mineSec": 0.734695997,
+        "seconds": 1.666596768,
+        "txPerSec": 120.00503291507643,
+        "gasPerSec": 5042107.461953268,
         "gasTotal": 8403160,
         "blocks": 1
       }
     ],
     "txPerSec": {
       "n": 3,
-      "mean": 148.078,
-      "sd": 17.64,
-      "median": 156.731,
-      "p95": 159.422,
-      "min": 127.783,
-      "max": 159.721
+      "mean": 160.865,
+      "sd": 38.498,
+      "median": 166.131,
+      "p95": 193.426,
+      "min": 120.005,
+      "max": 196.459
     },
     "gasPerSec": {
       "n": 3,
-      "mean": 6221632.742,
-      "sd": 741140.437,
-      "median": 6585171.206,
-      "p95": 6698245.983,
-      "min": 5368917.173,
-      "max": 6710809.847
+      "mean": 6758867.016,
+      "sd": 1617526.428,
+      "median": 6980109.271,
+      "p95": 8126956.81,
+      "min": 5042107.462,
+      "max": 8254384.314
     },
     "mineTxPerSec": {
       "n": 3,
-      "mean": 956.001,
-      "sd": 496.178,
-      "median": 1177.114,
-      "p95": 1290.576,
-      "min": 387.706,
-      "max": 1303.183
+      "mean": 759.013,
+      "sd": 576.446,
+      "median": 609.261,
+      "p95": 1316.927,
+      "min": 272.221,
+      "max": 1395.557
     },
     "note": "single in-process Hardhat node; queue then mine; upper bound on execution, not a public-chain figure"
   },
@@ -149,63 +149,63 @@
       {
         "burst": 0,
         "txCount": 200,
-        "sendSec": 1.041229462,
-        "mineSec": 0.328226217,
-        "seconds": 1.369455679,
-        "txPerSec": 146.043426645281,
-        "gasPerSec": 18479166.860280696,
+        "sendSec": 0.879169933,
+        "mineSec": 0.570603661,
+        "seconds": 1.449773594,
+        "txPerSec": 137.95257468318877,
+        "gasPerSec": 17455415.17981324,
         "gasTotal": 25306400,
         "blocks": 1
       },
       {
         "burst": 1,
         "txCount": 200,
-        "sendSec": 1.027743536,
-        "mineSec": 0.489085604,
-        "seconds": 1.51682914,
-        "txPerSec": 131.85400697141142,
-        "gasPerSec": 16571016.034146074,
+        "sendSec": 0.93195644,
+        "mineSec": 0.177909376,
+        "seconds": 1.109865816,
+        "txPerSec": 180.20196416248575,
+        "gasPerSec": 22647242.250048723,
         "gasTotal": 25135400,
         "blocks": 1
       },
       {
         "burst": 2,
         "txCount": 200,
-        "sendSec": 1.066481299,
-        "mineSec": 0.625968397,
-        "seconds": 1.692449696,
-        "txPerSec": 118.17190222710171,
-        "gasPerSec": 14851490.156195462,
+        "sendSec": 0.934838566,
+        "mineSec": 0.239776401,
+        "seconds": 1.174614967,
+        "txPerSec": 170.26856086365535,
+        "gasPerSec": 21398841.923661612,
         "gasTotal": 25135400,
         "blocks": 1
       }
     ],
     "txPerSec": {
       "n": 3,
-      "mean": 132.023,
-      "sd": 13.937,
-      "median": 131.854,
-      "p95": 144.624,
-      "min": 118.172,
-      "max": 146.043
+      "mean": 162.808,
+      "sd": 22.091,
+      "median": 170.269,
+      "p95": 179.209,
+      "min": 137.953,
+      "max": 180.202
     },
     "gasPerSec": {
       "n": 3,
-      "mean": 16633891.017,
-      "sd": 1814655.481,
-      "median": 16571016.034,
-      "p95": 18288351.778,
-      "min": 14851490.156,
-      "max": 18479166.86
+      "mean": 20500499.785,
+      "sd": 2709987.275,
+      "median": 21398841.924,
+      "p95": 22522402.217,
+      "min": 17455415.18,
+      "max": 22647242.25
     },
     "mineTxPerSec": {
       "n": 3,
-      "mean": 445.922,
-      "sd": 148.415,
-      "median": 408.926,
-      "p95": 589.295,
-      "min": 319.505,
-      "max": 609.336
+      "mean": 769.595,
+      "sd": 390.845,
+      "median": 834.11,
+      "p95": 1095.162,
+      "min": 350.506,
+      "max": 1124.168
     },
     "note": "single in-process Hardhat node; queue then mine; upper bound on execution, not a public-chain figure"
   },
@@ -219,63 +219,483 @@
       {
         "burst": 0,
         "txCount": 200,
-        "sendSec": 0.986270258,
-        "mineSec": 0.154869124,
-        "seconds": 1.141139382,
-        "txPerSec": 175.2634280743805,
-        "gasPerSec": 21030594.841042828,
+        "sendSec": 0.957891518,
+        "mineSec": 0.127478708,
+        "seconds": 1.085370226,
+        "txPerSec": 184.26892060331863,
+        "gasPerSec": 22111201.712658737,
         "gasTotal": 23998840,
         "blocks": 1
       },
       {
         "burst": 1,
         "txCount": 200,
-        "sendSec": 1.049497909,
-        "mineSec": 0.089431041,
-        "seconds": 1.13892895,
-        "txPerSec": 175.60357913458958,
-        "gasPerSec": 21071516.357539248,
+        "sendSec": 0.947930895,
+        "mineSec": 0.095304856,
+        "seconds": 1.043235751,
+        "txPerSec": 191.71122136898467,
+        "gasPerSec": 23004349.66592704,
         "gasTotal": 23998960,
         "blocks": 1
       },
       {
         "burst": 2,
         "txCount": 200,
-        "sendSec": 0.991431635,
-        "mineSec": 0.2057898,
-        "seconds": 1.197221435,
-        "txPerSec": 167.0534741135837,
-        "gasPerSec": 20045347.751395717,
+        "sendSec": 0.91965464,
+        "mineSec": 0.097287712,
+        "seconds": 1.016942352,
+        "txPerSec": 196.6679818247947,
+        "gasPerSec": 23598899.14389169,
         "gasTotal": 23998720,
         "blocks": 1
       }
     ],
     "txPerSec": {
       "n": 3,
-      "mean": 172.64,
-      "sd": 4.841,
-      "median": 175.263,
-      "p95": 175.57,
-      "min": 167.053,
-      "max": 175.604
+      "mean": 190.883,
+      "sd": 6.241,
+      "median": 191.711,
+      "p95": 196.172,
+      "min": 184.269,
+      "max": 196.668
     },
     "gasPerSec": {
       "n": 3,
-      "mean": 20715819.65,
-      "sd": 581006.082,
-      "median": 21030594.841,
-      "p95": 21067424.206,
-      "min": 20045347.751,
-      "max": 21071516.358
+      "mean": 22904816.841,
+      "sd": 748826.415,
+      "median": 23004349.666,
+      "p95": 23539444.196,
+      "min": 22111201.713,
+      "max": 23598899.144
     },
     "mineTxPerSec": {
       "n": 3,
-      "mean": 1499.879,
-      "sd": 657.518,
-      "median": 1291.413,
-      "p95": 2141.865,
-      "min": 971.865,
-      "max": 2236.36
+      "mean": 1907.725,
+      "sd": 294.219,
+      "median": 2055.758,
+      "p95": 2094.252,
+      "min": 1568.889,
+      "max": 2098.529
+    },
+    "note": "single in-process Hardhat node; queue then mine; upper bound on execution, not a public-chain figure"
+  },
+  {
+    "adapter": "erc735",
+    "scenario": "throughput",
+    "op": "U3_set_attribute",
+    "senders": 10,
+    "txPerBurst": 200,
+    "bursts": [
+      {
+        "burst": 0,
+        "txCount": 200,
+        "sendSec": 1.183944822,
+        "mineSec": 1.395135383,
+        "seconds": 2.579080205,
+        "txPerSec": 77.54702611119455,
+        "gasPerSec": 24644122.302509006,
+        "gasTotal": 63559168,
+        "blocks": 2
+      },
+      {
+        "burst": 1,
+        "txCount": 200,
+        "sendSec": 1.131753691,
+        "mineSec": 1.389659024,
+        "seconds": 2.521412715,
+        "txPerSec": 79.32061213548691,
+        "gasPerSec": 25207858.523867246,
+        "gasTotal": 63559415,
+        "blocks": 2
+      },
+      {
+        "burst": 2,
+        "txCount": 200,
+        "sendSec": 1.216327704,
+        "mineSec": 1.735406526,
+        "seconds": 2.95173423,
+        "txPerSec": 67.75677768252191,
+        "gasPerSec": 21532752.28982929,
+        "gasTotal": 63558962,
+        "blocks": 2
+      }
+    ],
+    "txPerSec": {
+      "n": 3,
+      "mean": 74.875,
+      "sd": 6.228,
+      "median": 77.547,
+      "p95": 79.143,
+      "min": 67.757,
+      "max": 79.321
+    },
+    "gasPerSec": {
+      "n": 3,
+      "mean": 23794911.039,
+      "sd": 1979260.288,
+      "median": 24644122.303,
+      "p95": 25151484.902,
+      "min": 21532752.29,
+      "max": 25207858.524
+    },
+    "mineTxPerSec": {
+      "n": 3,
+      "mean": 134.174,
+      "sd": 16.394,
+      "median": 143.355,
+      "p95": 143.864,
+      "min": 115.247,
+      "max": 143.92
+    },
+    "note": "single in-process Hardhat node; queue then mine; upper bound on execution, not a public-chain figure"
+  },
+  {
+    "adapter": "erc1155",
+    "scenario": "throughput",
+    "op": "U3_set_attribute",
+    "senders": 10,
+    "txPerBurst": 200,
+    "bursts": [
+      {
+        "burst": 0,
+        "txCount": 200,
+        "sendSec": 0.917783208,
+        "mineSec": 0.163345835,
+        "seconds": 1.081129043,
+        "txPerSec": 184.991792880732,
+        "gasPerSec": 7103832.840054413,
+        "gasTotal": 7680160,
+        "blocks": 1
+      },
+      {
+        "burst": 1,
+        "txCount": 200,
+        "sendSec": 0.853737568,
+        "mineSec": 0.085330307,
+        "seconds": 0.939067875,
+        "txPerSec": 212.97715034709285,
+        "gasPerSec": 7996397.491501879,
+        "gasTotal": 7509160,
+        "blocks": 1
+      },
+      {
+        "burst": 2,
+        "txCount": 200,
+        "sendSec": 0.862270997,
+        "mineSec": 0.371320494,
+        "seconds": 1.233591491,
+        "txPerSec": 162.12822596390623,
+        "gasPerSec": 6087233.94639563,
+        "gasTotal": 7509160,
+        "blocks": 1
+      }
+    ],
+    "txPerSec": {
+      "n": 3,
+      "mean": 186.699,
+      "sd": 25.467,
+      "median": 184.992,
+      "p95": 210.179,
+      "min": 162.128,
+      "max": 212.977
+    },
+    "gasPerSec": {
+      "n": 3,
+      "mean": 7062488.093,
+      "sd": 955253.056,
+      "median": 7103832.84,
+      "p95": 7907141.026,
+      "min": 6087233.946,
+      "max": 7996397.492
+    },
+    "mineTxPerSec": {
+      "n": 3,
+      "mean": 1368.949,
+      "sd": 911.247,
+      "median": 1224.396,
+      "p95": 2231.889,
+      "min": 538.618,
+      "max": 2343.833
+    },
+    "note": "single in-process Hardhat node; queue then mine; upper bound on execution, not a public-chain figure"
+  },
+  {
+    "adapter": "erc725xy",
+    "scenario": "throughput",
+    "op": "U3_set_attribute",
+    "senders": 10,
+    "txPerBurst": 200,
+    "bursts": [
+      {
+        "burst": 0,
+        "txCount": 200,
+        "sendSec": 0.897103862,
+        "mineSec": 0.118913787,
+        "seconds": 1.016017649,
+        "txPerSec": 196.84697425959774,
+        "gasPerSec": 18765855.119510826,
+        "gasTotal": 19066440,
+        "blocks": 1
+      },
+      {
+        "burst": 1,
+        "txCount": 200,
+        "sendSec": 0.941541199,
+        "mineSec": 0.100961198,
+        "seconds": 1.042502397,
+        "txPerSec": 191.8460816738055,
+        "gasPerSec": 18289224.134992562,
+        "gasTotal": 19066560,
+        "blocks": 1
+      },
+      {
+        "burst": 2,
+        "txCount": 200,
+        "sendSec": 0.943580893,
+        "mineSec": 0.108398611,
+        "seconds": 1.051979504,
+        "txPerSec": 190.1177724846624,
+        "gasPerSec": 18124231.439398844,
+        "gasTotal": 19066320,
+        "blocks": 1
+      }
+    ],
+    "txPerSec": {
+      "n": 3,
+      "mean": 192.937,
+      "sd": 3.495,
+      "median": 191.846,
+      "p95": 196.347,
+      "min": 190.118,
+      "max": 196.847
+    },
+    "gasPerSec": {
+      "n": 3,
+      "mean": 18393103.565,
+      "sd": 333186.792,
+      "median": 18289224.135,
+      "p95": 18718192.021,
+      "min": 18124231.439,
+      "max": 18765855.12
+    },
+    "mineTxPerSec": {
+      "n": 3,
+      "mean": 1835.964,
+      "sd": 149.741,
+      "median": 1845.042,
+      "p95": 1967.367,
+      "min": 1681.891,
+      "max": 1980.959
+    },
+    "note": "single in-process Hardhat node; queue then mine; upper bound on execution, not a public-chain figure"
+  },
+  {
+    "adapter": "lsp8",
+    "scenario": "throughput",
+    "op": "U3_set_attribute",
+    "senders": 10,
+    "txPerBurst": 200,
+    "bursts": [
+      {
+        "burst": 0,
+        "txCount": 200,
+        "sendSec": 0.951476358,
+        "mineSec": 0.28256256,
+        "seconds": 1.234038918,
+        "txPerSec": 162.06944293470005,
+        "gasPerSec": 16299323.875942785,
+        "gasTotal": 20114000,
+        "blocks": 1
+      },
+      {
+        "burst": 1,
+        "txCount": 200,
+        "sendSec": 0.935514478,
+        "mineSec": 0.253250343,
+        "seconds": 1.188764821,
+        "txPerSec": 168.24185614086238,
+        "gasPerSec": 16920184.417200215,
+        "gasTotal": 20114120,
+        "blocks": 1
+      },
+      {
+        "burst": 2,
+        "txCount": 200,
+        "sendSec": 0.971745501,
+        "mineSec": 0.144554762,
+        "seconds": 1.116300263,
+        "txPerSec": 179.16326514383343,
+        "gasPerSec": 18018342.07755624,
+        "gasTotal": 20113880,
+        "blocks": 1
+      }
+    ],
+    "txPerSec": {
+      "n": 3,
+      "mean": 169.825,
+      "sd": 8.656,
+      "median": 168.242,
+      "p95": 178.071,
+      "min": 162.069,
+      "max": 179.163
+    },
+    "gasPerSec": {
+      "n": 3,
+      "mean": 17079283.457,
+      "sd": 870482.781,
+      "median": 16920184.417,
+      "p95": 17908526.312,
+      "min": 16299323.876,
+      "max": 18018342.078
+    },
+    "mineTxPerSec": {
+      "n": 3,
+      "mean": 960.366,
+      "sd": 368.777,
+      "median": 789.732,
+      "p95": 1324.176,
+      "min": 707.808,
+      "max": 1383.559
+    },
+    "note": "single in-process Hardhat node; queue then mine; upper bound on execution, not a public-chain figure"
+  },
+  {
+    "adapter": "erc4337",
+    "scenario": "throughput",
+    "op": "U3_set_attribute",
+    "senders": 10,
+    "txPerBurst": 200,
+    "bursts": [
+      {
+        "burst": 0,
+        "txCount": 200,
+        "sendSec": 0.957347833,
+        "mineSec": 0.231504544,
+        "seconds": 1.188852377,
+        "txPerSec": 168.2294655495314,
+        "gasPerSec": 15922784.330690708,
+        "gasTotal": 18929840,
+        "blocks": 1
+      },
+      {
+        "burst": 1,
+        "txCount": 200,
+        "sendSec": 1.001439805,
+        "mineSec": 0.073773209,
+        "seconds": 1.075213014,
+        "txPerSec": 186.00965333925916,
+        "gasPerSec": 17605776.486630213,
+        "gasTotal": 18929960,
+        "blocks": 1
+      },
+      {
+        "burst": 2,
+        "txCount": 200,
+        "sendSec": 0.939844054,
+        "mineSec": 0.233885723,
+        "seconds": 1.173729777,
+        "txPerSec": 170.39697204512518,
+        "gasPerSec": 16127834.848310236,
+        "gasTotal": 18929720,
+        "blocks": 1
+      }
+    ],
+    "txPerSec": {
+      "n": 3,
+      "mean": 174.879,
+      "sd": 9.7,
+      "median": 170.397,
+      "p95": 184.448,
+      "min": 168.229,
+      "max": 186.01
+    },
+    "gasPerSec": {
+      "n": 3,
+      "mean": 16552131.889,
+      "sd": 918224.718,
+      "median": 16127834.848,
+      "p95": 17457982.323,
+      "min": 15922784.331,
+      "max": 17605776.487
+    },
+    "mineTxPerSec": {
+      "n": 3,
+      "mean": 1476.681,
+      "sd": 1068.97,
+      "median": 863.914,
+      "p95": 2526.302,
+      "min": 855.118,
+      "max": 2711.011
+    },
+    "note": "single in-process Hardhat node; queue then mine; upper bound on execution, not a public-chain figure"
+  },
+  {
+    "adapter": "cvin",
+    "scenario": "throughput",
+    "op": "U3_set_attribute",
+    "senders": 10,
+    "txPerBurst": 200,
+    "bursts": [
+      {
+        "burst": 0,
+        "txCount": 200,
+        "sendSec": 0.982596581,
+        "mineSec": 0.106586152,
+        "seconds": 1.089182733,
+        "txPerSec": 183.62391721830576,
+        "gasPerSec": 6029438.220996844,
+        "gasTotal": 6567160,
+        "blocks": 1
+      },
+      {
+        "burst": 1,
+        "txCount": 200,
+        "sendSec": 0.994948063,
+        "mineSec": 0.07049473,
+        "seconds": 1.065442793,
+        "txPerSec": 187.71538116734905,
+        "gasPerSec": 6003288.062036756,
+        "gasTotal": 6396160,
+        "blocks": 1
+      },
+      {
+        "burst": 2,
+        "txCount": 200,
+        "sendSec": 0.995427024,
+        "mineSec": 0.203028107,
+        "seconds": 1.198455131,
+        "txPerSec": 166.88150839082184,
+        "gasPerSec": 5337004.143545195,
+        "gasTotal": 6396160,
+        "blocks": 1
+      }
+    ],
+    "txPerSec": {
+      "n": 3,
+      "mean": 179.407,
+      "sd": 11.039,
+      "median": 183.624,
+      "p95": 187.306,
+      "min": 166.882,
+      "max": 187.715
+    },
+    "gasPerSec": {
+      "n": 3,
+      "mean": 5789910.142,
+      "sd": 392445.971,
+      "median": 6003288.062,
+      "p95": 6026823.205,
+      "min": 5337004.144,
+      "max": 6029438.221
+    },
+    "mineTxPerSec": {
+      "n": 3,
+      "mean": 1899.531,
+      "sd": 926.219,
+      "median": 1876.416,
+      "p95": 2741.024,
+      "min": 985.085,
+      "max": 2837.092
     },
     "note": "single in-process Hardhat node; queue then mine; upper bound on execution, not a public-chain figure"
   }

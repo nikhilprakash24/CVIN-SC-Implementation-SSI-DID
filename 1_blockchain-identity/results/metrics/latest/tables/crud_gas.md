@@ -2,18 +2,18 @@
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C1_create_identity | 76,808 | 145,662 | 399,844 | 656,480 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| C2_create_with_attributes | 366,978 | 234,587 | 568,074 | 1,496,440 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U1_rotate_controller | 51,754 | 57,188 | 179,470 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U2_add_delegate | 55,143 | 64,720 | 48,314 | 119,852 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U3_set_attribute | 35,024 | 44,677 | 120,061 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U4_transfer_vehicle | 51,754 | 57,188 | 182,374 | 28,390 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U5_meta_tx | 62,646 | n/a | n/a | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D1_revoke_delegate | 32,868 | 41,888 | 26,174 | 57,200 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D2_revoke_attribute | 34,576 | n/a | n/a | 57,316 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D3_deactivate_identity | 34,230 | 43,809 | 27,689 | 23,091 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V1_issuer_key_anchor | 55,143 | 55,143 | 419,990 | 119,852 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V3_anchor_status | 33,918 | 33,918 | 142,909 | 119,996 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V5_revoke_credential | 33,470 | 33,470 | 125,821 | 43,388 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| C1_create_identity | 76,808 | 145,662 | 399,844 | 656,480 | 1,535,776 | 103,913 | 1,730,753 | 132,515 | 808,431 | 266,995 |
+| C2_create_with_attributes | 366,978 | 234,587 | 568,074 | 1,496,440 | 2,285,459 | 103,913 | 1,963,543 | 370,025 | 1,153,124 | 1,006,919 |
+| U1_rotate_controller | 51,754 | 57,188 | 179,470 | 28,390 | 28,746 | 83,959 | 28,834 | 83,412 | 28,539 | 68,847 |
+| U2_add_delegate | 55,143 | 64,720 | 48,314 | 119,852 | n/a | n/a | n/a | n/a | 47,569 | 72,308 |
+| U3_set_attribute | 35,024 | 44,677 | 120,061 | 119,996 | 317,814 | 57,147 | 95,334 | 100,573 | 94,651 | 51,742 |
+| U4_transfer_vehicle | 51,754 | 57,188 | 182,374 | 28,390 | 28,746 | 83,959 | 28,834 | 83,412 | 28,539 | 68,847 |
+| U5_meta_tx | 62,646 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 141,767 | n/a |
+| D1_revoke_delegate | 32,868 | 41,888 | 26,174 | 57,200 | n/a | n/a | n/a | n/a | 25,429 | 37,742 |
+| D2_revoke_attribute | 34,576 | n/a | n/a | 57,316 | 96,611 | 30,625 | 33,880 | 37,806 | 33,469 | 34,198 |
+| D3_deactivate_identity | 34,230 | 43,809 | 27,689 | 23,091 | 28,530 | 37,443 | 23,182 | 43,076 | 28,323 | 51,016 |
+| V1_issuer_key_anchor | 55,143 | 55,143 | 419,990 | 119,852 | n/a | 51,281 | 49,745 | n/a | 49,151 | 55,208 |
+| V3_anchor_status | 33,918 | 33,918 | 142,909 | 119,996 | 294,628 | 57,519 | 49,805 | 54,874 | 49,211 | 289,788 |
+| V5_revoke_credential | 33,470 | 33,470 | 125,821 | 43,388 | 92,273 | 30,997 | 27,322 | 32,212 | 26,809 | 89,972 |
 
-_Run 2026-10-04T05-41-19Z_bca0899 · commit bca0899 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-04T09-50-29Z_0eef6af · commit 0eef6af · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
