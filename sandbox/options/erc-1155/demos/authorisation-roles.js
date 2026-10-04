@@ -3,7 +3,8 @@
  * ERC-1155 — family "Authorisation / roles" (manifest: implemented, not measured). The OZ
  * AccessControl surface: DEFAULT_ADMIN_ROLE / ISSUER_ROLE, getRoleAdmin, grantRole, hasRole,
  * revokeRole, renounceRole, and the single gate (ISSUER_ROLE) that every write and every
- * non-mint/burn transfer passes through — including issuerTransferCredential.
+ * non-mint/burn transfer passes through — including issuerTransferIdentity (the only way to move
+ * an identity that still holds credentials since the D8 fix).
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-1155/demos/authorisation-roles.js
  */
 const { ethers } = global; // injected by `hardhat run` (the demos live outside the Hardhat project)
@@ -28,8 +29,8 @@ d.run(async () => {
   await d.tx('dmv-registers', 'CVINVehicleCredential1155.registerVehicle', c.connect(dmv).registerVehicle(vehicleA.address, VINS.acura), 'gate 1: registerVehicle is onlyRole(ISSUER_ROLE)');
   await d.tx('insurer-issues', 'CVINVehicleCredential1155.issueCredential', c.connect(insurer).issueCredential(vehicleA.address, 4, 1), 'gate 2: issueCredential');
   await d.tx('insurer-sets-uri', 'CVINVehicleCredential1155.setTokenURI', c.connect(insurer).setTokenURI(4, 'ipfs://insurer/policy-template.json'), 'gate 3: setTokenURI');
-  await d.tx('dmv-moves-identity', 'CVINVehicleCredential1155.issuerTransferCredential', c.connect(dmv).issuerTransferCredential(vehicleA.address, vehicleB.address, 1), 'gate 4: issuerTransferCredential (the DMV re-binds the identity to a new owner address)');
-  await d.tx('dmv-revokes-insurance', 'CVINVehicleCredential1155.revokeCredential', c.connect(dmv).revokeCredential(vehicleA.address, 4, 1), 'gate 5: revokeCredential — the DMV can revoke what the insurer issued (single flat role)');
+  await d.tx('dmv-moves-identity', 'CVINVehicleCredential1155.issuerTransferIdentity', c.connect(dmv).issuerTransferIdentity(vehicleA.address, vehicleB.address), 'gate 4: issuerTransferIdentity (the DMV re-binds the identity — BIRTH_CERT plus the insurer\'s INSURANCE_CERT — to a new owner address; since D8 the BIRTH_CERT alone cannot leave while a credential is held)');
+  await d.tx('dmv-revokes-insurance', 'CVINVehicleCredential1155.revokeCredential', c.connect(dmv).revokeCredential(vehicleB.address, 4, 1), 'gate 5: revokeCredential — OBSERVATION: the DMV can revoke what the insurer issued (single flat role, documented not changed by the D8 fix); the credential now lives at B');
   await d.view('vehicle-cannot-act', 'CVINVehicleCredential1155.hasRole', c.hasRole(ISSUER, vehicleB.address), 'the vehicle address itself holds no role: it can only receive', (v) => assert.equal(v, false));
 
   await d.reverts('renounce-bad-confirmation', 'CVINVehicleCredential1155.renounceRole', () => c.connect(insurer).renounceRole(ISSUER, admin.address), 'AccessControlBadConfirmation', 'renounceRole requires callerConfirmation == msg.sender');

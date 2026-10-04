@@ -3,8 +3,9 @@
  * ERC-1155 — family "Token economics (approvals, royalties, payments)" (manifest: implemented, not
  * measured). The ERC-1155 balance/approval surface: balanceOf, balanceOfBatch (incl. its
  * length-mismatch and zero-address guards), setApprovalForAll / isApprovedForAll and what an
- * operator approval is worth under the soulbound override (nothing, unless the operator is an
- * issuer). No royalties and no payments exist on this option.
+ * operator approval is worth under the soulbound entry points (nothing: since the D7 fix the
+ * standard transfer functions revert for everyone, issuers included). No royalties and no
+ * payments exist on this option.
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-1155/demos/token-economics.js
  */
 const { ethers } = global; // injected by `hardhat run` (the demos live outside the Hardhat project)
@@ -29,7 +30,7 @@ d.run(async () => {
   const r = await d.tx('set-approval-for-all', 'CVINVehicleCredential1155.setApprovalForAll', c.connect(vehicleA).setApprovalForAll(operator.address, true), 'standard operator approval -> ApprovalForAll');
   assert.equal(eventArgs(c, r, 'ApprovalForAll').approved, true);
   await d.view('is-approved-for-all', 'CVINVehicleCredential1155.isApprovedForAll', c.isApprovedForAll(vehicleA.address, operator.address), 'readable', (v) => assert.equal(v, true));
-  await d.reverts('operator-cannot-move', 'CVINVehicleCredential1155.safeTransferFrom', () => c.connect(operator).safeTransferFrom(vehicleA.address, vehicleB.address, 5, 1, '0x'), 'credentials are soulbound', 'approval passes the ERC-1155 check but the soulbound override rejects a non-issuer sender: approvals have no economic effect here');
+  await d.reverts('operator-cannot-move', 'CVINVehicleCredential1155.safeTransferFrom', () => c.connect(operator).safeTransferFrom(vehicleA.address, vehicleB.address, 5, 1, '0x'), 'credentials are soulbound', 'the overridden safeTransferFrom reverts before the ERC-1155 approval rule is even consulted (D7: closed for holders, operators and issuers alike): approvals have no economic effect here');
   await d.reverts('approve-zero-operator', 'CVINVehicleCredential1155.setApprovalForAll', () => c.connect(vehicleA).setApprovalForAll(ethers.ZeroAddress, true), 'ERC1155InvalidOperator', 'the only operator OZ 5.x rejects is address(0)');
   await d.tx('approve-self', 'CVINVehicleCredential1155.setApprovalForAll', c.connect(vehicleA).setApprovalForAll(vehicleA.address, true), 'OBSERVATION: OZ 5.x accepts a self-approval (the ERC-721 Monolithic variant rejects "Approve to caller"); harmless here because approvals are inert');
   await d.tx('clear-approval', 'CVINVehicleCredential1155.setApprovalForAll', c.connect(vehicleA).setApprovalForAll(operator.address, false), 'approval cleared');

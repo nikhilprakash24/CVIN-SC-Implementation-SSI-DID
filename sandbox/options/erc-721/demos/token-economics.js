@@ -4,7 +4,8 @@
  * comparison via approve only). Everything else here the comparison never touches: operator
  * approvals and approved-party transfers on all three contracts, ERC-2981 royaltyInfo on the two
  * DID variants, and the toll settlement (payToll) with real ether on CVIN_NFT_DID_ERC721 —
- * including the consequence of renounceOwnership on where the toll goes.
+ * including the D9 guard (2026-10-04): after renounceOwnership payToll reverts instead of
+ * forwarding the toll to address(0).
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-721/demos/token-economics.js
  */
 const { ethers } = global; // injected by `hardhat run` (the demos live outside the Hardhat project)
@@ -62,9 +63,9 @@ d.run(async () => {
   await d.reverts('pay-toll-nonexistent', 'CVIN_NFT_DID_ERC721.payToll', () => did.connect(vehicleOwner).payToll(9, { value: toll }), 'ERC721NonexistentToken', 'ownerOf reverts');
   await d.tx('did-renounce', 'CVIN_NFT_DID_ERC721.renounceOwnership', did.connect(deployer).renounceOwnership(), 'operator renounces: owner() == address(0)');
   const zeroBefore = await ethers.provider.getBalance(ethers.ZeroAddress);
-  await d.tx('pay-toll-after-renounce', 'CVIN_NFT_DID_ERC721.payToll', did.connect(vehicleOwner).payToll(1, { value: toll }), 'POTENTIAL DEFECT: payToll still succeeds after renounceOwnership and forwards the ether to address(0) (burned) — no owner()!=0 guard');
-  assert.equal((await ethers.provider.getBalance(ethers.ZeroAddress)) - zeroBefore, toll);
-  d.offchain('toll-burned', 'CVIN_NFT_DID_ERC721.payToll', `address(0) balance grew by ${ethers.formatEther(toll)} ETH: the vehicle paid a toll nobody can collect`);
+  await d.view('did-owner-after-renounce', 'CVIN_NFT_DID_ERC721.owner', did.owner(), 'no toll operator left', (v) => assert.equal(v, ethers.ZeroAddress));
+  await d.reverts('pay-toll-after-renounce', 'CVIN_NFT_DID_ERC721.payToll', () => did.connect(vehicleOwner).payToll(1, { value: toll }), 'no toll operator', 'FIXED (D9): payToll now checks owner() != address(0); before the fix it succeeded and forwarded the ether to address(0) (burned)');
+  await d.view('toll-not-burned', 'ethers.provider.getBalance(address(0))', ethers.provider.getBalance(ethers.ZeroAddress), `address(0) balance unchanged (still ${ethers.formatEther(zeroBefore)} ETH): the vehicle keeps its toll money until an operator exists`, (v) => assert.equal(v - zeroBefore, 0n));
 
   // ---- Monolithic: hand-rolled approvals + royalty ----
   const mono = await (await ethers.getContractFactory('CVIN_NFT_DID_ERC721_Monolithic', deployer)).deploy('CVIN Mono', 'MONO', deployer.address, 500);

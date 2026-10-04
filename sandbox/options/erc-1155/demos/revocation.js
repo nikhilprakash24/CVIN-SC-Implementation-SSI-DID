@@ -2,8 +2,9 @@
 /**
  * ERC-1155 — family "Revocation / status" (manifest: measured-in-comparison via revokeCredential).
  * Two revocation levels: burning a credential unit, and burning the BIRTH_CERT, which deregisters
- * the identity (VIN maps deleted) while leaving other credentials orphaned on the address; plus
- * issuer-side revocation with revokeRole.
+ * the identity (VIN maps deleted) — allowed only once the vehicle holds no other credential, so
+ * nothing is orphaned on the address (D8 fix, 2026-10-04); plus issuer-side revocation with
+ * revokeRole and the documented (unchanged) flat issuer model.
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-1155/demos/revocation.js
  */
 const { ethers } = global; // injected by `hardhat run` (the demos live outside the Hardhat project)
@@ -29,14 +30,18 @@ d.run(async () => {
   await d.reverts('revoke-unauthorised', 'CVINVehicleCredential1155.revokeCredential', () => c.connect(vehicleA).revokeCredential(vehicleA.address, 4, 1), 'AccessControlUnauthorizedAccount', 'the holder cannot even give a credential up (no burn for holders)');
   await d.reverts('revoke-none', 'CVINVehicleCredential1155.revokeCredential', () => c.connect(issuer).revokeCredential(vehicleA.address, 3, 1), 'insufficient credential balance', 'double revocation fails');
 
+  await d.reverts('revoke-birth-cert-blocked', 'CVINVehicleCredential1155.revokeCredential', () => c.connect(issuer).revokeCredential(vehicleA.address, 1, 1),
+    "revoke the vehicle's other credentials first", 'FIXED (D8): the BIRTH_CERT cannot be burned while the INSURANCE_CERT is still held — deregistration used to leave it orphaned on an address that is no longer a vehicle');
+  await d.view('credential-types-held', 'CVINVehicleCredential1155.credentialTypesOf', c.credentialTypesOf(vehicleA.address), 'the guard reads the per-vehicle held-type bitmap: [4] (INSURANCE_CERT) is still there', (v) => assert.deepEqual([...v], [4n]));
+  await d.tx('revoke-insurance', 'CVINVehicleCredential1155.revokeCredential', c.connect(issuer).revokeCredential(vehicleA.address, 4, 1), 'the issuer first burns the remaining credential');
   const r2 = await d.tx('revoke-birth-cert', 'CVINVehicleCredential1155.revokeCredential', c.connect(issuer).revokeCredential(vehicleA.address, 1, 1),
-    'identity-level revocation: burning the BIRTH_CERT deletes vinHashToVehicle + vehicleVIN (deregistration)');
+    'identity-level revocation: with nothing else held, burning the BIRTH_CERT deletes vinHashToVehicle + vehicleVIN (deregistration)');
   assert.equal(eventArgs(c, r2, 'CredentialRevoked').credentialType, 1n);
   await d.view('deregistered', 'CVINVehicleCredential1155.isRegistered+vehicleVIN+vinHashToVehicle', Promise.all([c.isRegistered(vehicleA.address), c.vehicleVIN(vehicleA.address), c.vinHashToVehicle(vinHash)]),
     'identity gone: not registered, VIN cleared, index cleared', (v) => assert.deepEqual(v, [false, '', ethers.ZeroAddress]));
-  await d.view('orphaned-credential', 'CVINVehicleCredential1155.hasCredential', c.hasCredential(vehicleA.address, 4), 'OBSERVATION: the INSURANCE_CERT survives deregistration — an orphaned credential on an address that is no longer a vehicle', (v) => assert.equal(v, true));
+  await d.view('no-orphan', 'CVINVehicleCredential1155.hasCredential+credentialTypesOf', Promise.all([c.hasCredential(vehicleA.address, 4), c.credentialTypesOf(vehicleA.address)]),
+    'FIXED (D8): the deregistered address holds no credential at all (invariant ii) — the issuer no longer has to remember to burn an orphan', (v) => { assert.equal(v[0], false); assert.deepEqual([...v[1]], []); });
   await d.reverts('issue-after-deregistration', 'CVINVehicleCredential1155.issueCredential', () => c.connect(issuer).issueCredential(vehicleA.address, 2, 1), 'vehicle not registered', 'no new credentials for a deregistered address');
-  await d.tx('revoke-orphan', 'CVINVehicleCredential1155.revokeCredential', c.connect(issuer).revokeCredential(vehicleA.address, 4, 1), 'the orphan can still be burned (issuer must remember to)');
   await d.tx('reregister-same-vin', 'CVINVehicleCredential1155.registerVehicle', c.connect(issuer).registerVehicle(vehicleA.address, VINS.renault), 'OBSERVATION: the same VIN can be registered again after deregistration (no permanent tombstone); the "revocation" is reversible by the issuer');
 
   const ISSUER_ROLE = await c.ISSUER_ROLE();
