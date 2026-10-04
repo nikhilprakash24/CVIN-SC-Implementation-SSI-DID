@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "CVIN Thrust 5 \u2014 V2X security-comparison matrix (executed attack suite)",
-    "generated": "2026-10-04T09:15:41Z",
+    "generated": "2026-10-04T09:16:40Z",
     "categories": [
       "impersonation",
       "replay",
@@ -35,7 +35,7 @@
         "ozVersion": "5.0.2",
         "network": "hardhat-local",
         "chainId": 31337,
-        "date": "2026-07-19T21:09:18.398Z",
+        "date": "2026-10-04T09:16:40.839Z",
         "categories": [
           "impersonation",
           "replay",
@@ -158,7 +158,7 @@
       },
       "sybil": {
         "outcome": "PARTIAL",
-        "mechanism": "permissionless per-identity contract deployment; the only Sybil barrier is deployment gas (~529k each)",
+        "mechanism": "permissionless per-identity contract deployment; the only Sybil barrier is deployment gas (exact createIdentity gas: matrix cost_proxy_gas)",
         "evidence": "attacker deployed 3/3 independent identity contracts with no authorisation. Cost-gated only, not issuer-gated. createIdentity gas (Sybil-cost proxy) = 519,384.",
         "method": "executed",
         "cost_proxy_gas": 519384
@@ -197,7 +197,7 @@
       },
       "sybil": {
         "outcome": "PARTIAL",
-        "mechanism": "permissionless per-identity contract deployment; Sybil barrier is deployment gas only (~1.40M each \u2014 the most expensive to spam)",
+        "mechanism": "permissionless per-identity contract deployment; Sybil barrier is deployment gas only (the most expensive to spam; exact createIdentity gas: matrix cost_proxy_gas)",
         "evidence": "attacker deployed 3/3 claim-holder identities unchallenged. Cost-gated only; claims themselves still need a trusted issuer signature. createIdentity gas (Sybil-cost proxy) = 1,535,776.",
         "method": "executed",
         "cost_proxy_gas": 1535776
@@ -275,7 +275,7 @@
       },
       "sybil": {
         "outcome": "PARTIAL",
-        "mechanism": "permissionless smart-account deployment; Sybil barrier is deployment gas only (~768k each)",
+        "mechanism": "permissionless smart-account deployment; Sybil barrier is deployment gas only (exact createIdentity gas: matrix cost_proxy_gas)",
         "evidence": "attacker deployed 3/3 accounts unchallenged. Cost-gated only, not issuer-gated. createIdentity gas (Sybil-cost proxy) = 759,088.",
         "method": "executed",
         "cost_proxy_gas": 759088
@@ -353,7 +353,7 @@
       },
       "sybil": {
         "outcome": "DEFENDED",
-        "mechanism": "identity creation gated by onlyAuthorizedManufacturer AND VIN-hash uniqueness; highest per-identity cost (~299k gas)",
+        "mechanism": "identity creation gated by onlyAuthorizedManufacturer AND VIN-hash uniqueness (exact createIdentity gas: matrix cost_proxy_gas)",
         "evidence": "attacker registerVehicleBirth reverted: \"VM Exception while processing transaction: reverted with reason string 'Only authorized manufacturers can register vehicles'\". Strongest Sybil resistance: manufacturer authorisation + unique-VIN enforcement. createIdentity gas (Sybil-cost proxy) = 299,143.",
         "method": "executed",
         "cost_proxy_gas": 299143
@@ -416,7 +416,7 @@
       "impersonation": {
         "outcome": "DEFENDED",
         "mechanism": "issuer signature recovered via secp256k1 and matched against the address embedded in the issuer DID (or a trusted-issuer registry)",
-        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0xd990050691aed5b25a83d413f0175bb99d01abc9 does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0x7865b6ddd459983f3c527a48bcda11c681e50a46 does not match issuer did:ethr:0x1:0x38dB1C3Df8E217082AD401E4eA0c6240Bf6a6C54']).",
+        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0x394a11d1aaee2ce96c67ff193e728ff678c3a144 does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0xe452d7d592a3e6dd2f7fba17fa46ccd7a98672c0 does not match issuer did:ethr:0x1:0x5D59d260052B53c4B93acDE64f785f8163F822A4']).",
         "method": "executed"
       },
       "replay": {
@@ -428,21 +428,21 @@
       "identity_theft": {
         "outcome": "DEFENDED",
         "mechanism": "holder binding: the VP must be signed by the key controlling the holder DID (VP proof), and the VP holder must be the credential subject (review 02 S-1); a stolen credential is unusable without the subject's key, under the subject's DID or the thief's own",
-        "evidence": "(a) thief claiming the victim's holder DID but signing with its own key: presentation rejected (errors: ['[vp_signature] presentation signed by 0x322bf887d9f3473b9eabc41b23a1925527a01aa6, not holder did:ethr:0x1:0xf9D2DC569802c17a38f1260Bd0B5706e9C8C6D4A']). (b) thief presenting the victim's credential under its OWN did:ethr, VP signed by the thief (a valid VP proof): presentation rejected (errors: [\"[holder_binding] presentation holder did:ethr:0x1:0xc05Efe661b043F5813CB04d84FCe0b4bF45573c3 is not the credential subject ['did:ethr:0x1:0xf9D2DC569802c17a38f1260Bd0B5706e9C8C6D4A']\"]). A copied/stolen credential cannot be replayed by a third party.",
+        "evidence": "(a) thief claiming the victim's holder DID but signing with its own key: presentation rejected (errors: ['[vp_signature] presentation signed by 0xb8504da456bb17bb83aadc393270269d51e6ecad, not holder did:ethr:0x1:0xba40fe48D7e02B1B8d7A2D719fde846bA2a20419']). (b) thief presenting the victim's credential under its OWN did:ethr, VP signed by the thief (a valid VP proof): presentation rejected (errors: [\"[holder_binding] presentation holder did:ethr:0x1:0xCFD9eeDa1bABc076848F4E857cB333B5D8430d7D is not the credential subject ['did:ethr:0x1:0xba40fe48D7e02B1B8d7A2D719fde846bA2a20419']\"]). A copied/stolen credential cannot be replayed by a third party.",
         "method": "executed",
         "variants": {
           "same_did_wrong_key": {
             "rejected": true,
             "errors": [
-              "[vp_signature] presentation signed by 0x322bf887d9f3473b9eabc41b23a1925527a01aa6, not holder did:ethr:0x1:0xf9D2DC569802c17a38f1260Bd0B5706e9C8C6D4A"
+              "[vp_signature] presentation signed by 0xb8504da456bb17bb83aadc393270269d51e6ecad, not holder did:ethr:0x1:0xba40fe48D7e02B1B8d7A2D719fde846bA2a20419"
             ]
           },
           "own_did": {
             "rejected": true,
-            "thief_did": "did:ethr:0x1:0xc05Efe661b043F5813CB04d84FCe0b4bF45573c3",
+            "thief_did": "did:ethr:0x1:0xCFD9eeDa1bABc076848F4E857cB333B5D8430d7D",
             "vp_proof_valid": true,
             "errors": [
-              "[holder_binding] presentation holder did:ethr:0x1:0xc05Efe661b043F5813CB04d84FCe0b4bF45573c3 is not the credential subject ['did:ethr:0x1:0xf9D2DC569802c17a38f1260Bd0B5706e9C8C6D4A']"
+              "[holder_binding] presentation holder did:ethr:0x1:0xCFD9eeDa1bABc076848F4E857cB333B5D8430d7D is not the credential subject ['did:ethr:0x1:0xba40fe48D7e02B1B8d7A2D719fde846bA2a20419']"
             ]
           }
         }
