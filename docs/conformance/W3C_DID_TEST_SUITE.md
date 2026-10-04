@@ -468,3 +468,150 @@ Net: **328/441 → 336/441** (74.4 % → 76.2 %); DID Resolution **186/299 →
 the remaining one is the R5′ test vector. What a fix of R1-R4 would score is
 not predicted here: removing `error: null` changes which guarded tests the
 suite evaluates, so it has to be measured.
+
+## 9. Re-run 2026-10-04b (stream G-R): resolver after the R1-R4 fix
+
+**Status: measured.** The suite was re-run after R1-R4 were fixed in the
+resolver (`fa5e373`, plus the message-only change `93f4331`). The suite and
+the runner were not changed. The generator needed a small adaptation (9.1),
+because the unchanged script cannot run against the fixed resolver.
+
+### 9.1 What changed in the resolver, and the one change to the generator
+
+| Root cause | Fix (`2_w3c-ssi-layer/did-resolution/did_resolver.py` @ `93f4331`) |
+|---|---|
+| **R1** | `DIDResolutionMetadata.to_dict()` (l. 164) omits `None` values. `error` / `errorMessage` appear only on failure. `DIDResolutionResult.to_dict()` no longer uses `asdict()` |
+| **R2** | `contentType` defaults to `None` (l. 159), so `resolve()` never carries it. The new `resolve_representation(did, accept)` (l. 376) returns `didDocumentStream` = `json.dumps(didDocument)` with `contentType: application/did+ld+json`. On failure the stream is empty and `contentType` is absent. An unsupported `accept` returns `representationNotSupported` |
+| **R3** | `DIDDocumentMetadata.to_dict()` (l. 187) omits `None`, an empty `equivalentId`, and `deactivated` unless it is `true`. A failed resolution gives `{}` |
+| **R4** | `xml_datetime()` (l. 137): UTC, `Z`, no fractional seconds (`2026-10-04T22:08:15Z`). Used for `created` (l. 489/551/595/646) and `retrieved` (l. 317/342/391) |
+
+The dataclass attributes are unchanged, so Python callers that read
+`result.didResolutionMetadata.error` still see `None` on success. Only the
+serialized form (`to_dict()`) changed. Unit tests:
+`tests/test_did_resolver_metadata_shape.py` (37 R1-R4 tests that fail on
+`f73e81e`, plus 10 guard tests).
+
+**Generator (`4eef1c2`).** `generate_implementations.py` did not run
+unchanged against the fixed resolver. Its success assertion
+`result["didResolutionMetadata"]["error"] is None` raises `KeyError` once
+`error` is absent. It also read `contentType` from the `resolve()` output, and
+it registered that same output as the `resolveRepresentation` execution,
+because the project had no resolveRepresentation function. The adaptation:
+
+* asserts that `error` is absent;
+* takes `supportedContentTypes`, the method file's representation entry and
+  the `resolveRepresentation` execution from `resolve_representation()`.
+
+The DIDs, the error vectors (including the R5′ vector `did:nft:0x1:0xabc`),
+the outcome mapping and the file layout are unchanged. Every value in the
+input files is still taken unchanged from the resolver.
+
+### 9.2 Conditions
+
+The procedure is the one in section 8.1, with these differences:
+
+* A fresh clone at `939b31d`, then `npm install`. The F-B clone was moved
+  aside, not reused.
+* Inputs were generated from `4eef1c2`.
+* Raw output is in the `*-2026-10-04b.*` files:
+  - `reports/jest-cvin/cvin-cli-<suite>-2026-10-04b.{json,txt}`
+  - `reports/jest-control/control-cli-<suite>-2026-10-04b.json`
+  - `reports/did-spec-test-run-2026-10-04b.json`
+  - `reports/did-implementation-report-2026-10-04b.html`
+
+Node v22.22.0 / npm 10.9.4, jest 26.6.3, Python 3.11.15. Control (WG
+example) **347/347**. The 09-24 and 10-04 files are kept unchanged.
+
+### 9.3 Results (10-04 → 10-04b)
+
+| Suite | 10-04 passed / tests | 10-04b passed / tests |
+|---|---|---|
+| 3.1 Identifier syntax | 3 / 3 | 3 / 3 |
+| 5.x Core properties + 7.3 | 88 / 88 | 88 / 88 |
+| 6.1 / 6.3.1 Production | 48 / 48 | 48 / 48 |
+| 6.3.2 Consumption | 3 / 3 | 3 / 3 |
+| 7.1 DID Resolution | 194 / 299 | **193 / 194** |
+| **Total** | **336 / 441 (76.2 %)** | **335 / 336 (99.7 %)** |
+
+| Resolver | 10-04 | 10-04b |
+|---|---|---|
+| `cvin-resolver-ethr.json` | 79 / 119 | **78 / 78** |
+| `cvin-resolver-mobi.json` | 58 / 90 | **58 / 58** |
+| `cvin-resolver-nft.json` | 57 / 90 | **57 / 58** (R5′) |
+
+**The denominator changed, and that is expected.** The suite defines many
+`it` blocks only when a property is present in the metadata, for example
+`if (didDocumentMetadata.hasOwnProperty('canonicalId'))` or `if
+(didResolutionMetadata.hasOwnProperty('error'))`. The old output emitted
+every key, null or not, so the suite generated 105 tests that do not apply
+once absent properties are omitted. The section 8.4 estimate of ≈440/441
+assumed a fixed inventory and was therefore wrong in its denominator; section
+8.5 had already warned that the effect had to be measured.
+
+The comparison below is test by test. Tests are matched by ancestor path,
+title and occurrence index, because a `resolve` and a
+`resolveRepresentation` execution of the same DID share an ancestor path.
+One test needed manual pairing: the `contentType` "ASCII media type" test.
+It is now generated only for the `resolveRepresentation` execution, so it is
+paired with the passing `resolveRepresentation` instance from the old run.
+
+| Old → new status | Tests |
+|---|---|
+| passed → passed | 157 |
+| failed → passed | **36** |
+| failed → failed | 1 (R5′) |
+| passed → failed | **0** |
+| failed → not generated | 68 |
+| passed → not generated | 37 |
+| not generated → generated | 0 |
+
+The non-resolution suites have the same inventory as before, with the same
+results.
+
+On the 336 tests present in both runs, the score went from 299 to 335.
+
+The 37 passing tests that are no longer generated:
+
+* 10 for `deactivated: false`;
+* 20 for `equivalentId: []` (two tests per execution, passed vacuously on an
+  empty list);
+* 7 for "canonicalId same method" (passed vacuously when there is no
+  document).
+
+None of them is lost coverage of a property the resolver emits.
+
+### 9.4 Root causes (10-04 → 10-04b)
+
+| Root cause | 10-04 failures | failed → passed | failed → not generated | 10-04b failures |
+|---|---|---|---|---|
+| **R1** | 22 | 16 (document empty ×3, stream empty ×3, "empty metadata structure" ×10) | 6 ("`error` single keyword", success executions) | **0** |
+| **R2** | 21 | 14 ("MUST NOT be present if resolve" ×7, "caller … MUST use this value" ×7) | 7 ("ASCII media type" on the 7 `resolve` executions, which have no stream) | **0** |
+| **R3** | 51 | 0 | 51 (canonicalId ×13, nextUpdate ×10, nextVersionId ×10, updated ×10, versionId ×8) | **0** |
+| **R4** | 10 | 6 (`created` on success executions) | 4 (`created: null` on error executions) | **0** |
+| **R5′** | 1 | – | – | **1** (unchanged; test vector, section 8.4) |
+| **Total** | **105** | **36** | **68** | **1** |
+
+Distinct failing normative statements: 15 → 1.
+
+The remaining failure is the
+`did:nft:0x1:0xabc` invalidDid test. The resolver returns `invalidDid`, but
+`expect(did).not.toBeValidDid()` fails because the vector is a valid generic
+DID. The vector was left as it is.
+
+### 9.5 Internal checker (register #4)
+
+`python3 cv2x-testbed/scripts/w3c_compliance_checker.py`:
+
+* 94.3 % before the fix (`f73e81e`).
+* 92.0 % with the R1-R4 resolver and the unchanged checker.
+* **94.3 % after `1035bcf`.**
+
+Only one check moved: DID Core 7.1.2 "Resolution MUST return DID resolution
+metadata (contentType, retrieved)". It asserted
+`contentType == "application/did+ld+json"` on `resolve()` results, which is
+the R2 defect. It went PASS → FAIL against the fixed resolver. `1035bcf`
+adapts the check to the new contract: `contentType` must be absent from
+`resolve()` and equal to `application/did+ld+json` on
+`resolve_representation()`, whose stream must parse to the resolved DID. The
+check slot, its weight and the scoring are unchanged. The 7.1.3 `created`
+check still passes (`datetime.fromisoformat` accepts `Z` on Python 3.11).

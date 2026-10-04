@@ -129,18 +129,52 @@ class DIDDocument:
         return doc
 
 
+# Media type of the only representation this resolver produces
+DID_LD_JSON = "application/did+ld+json"
+SUPPORTED_CONTENT_TYPES = (DID_LD_JSON,)
+
+
+def xml_datetime(dt: Optional[datetime] = None) -> str:
+    """
+    DID Core 7.1.3 datetime: XML Datetime normalised to UTC, without
+    sub-second precision, e.g. ``2026-10-04T05:23:42Z`` (stream G-R, R4;
+    was ``datetime.isoformat()`` with microseconds and ``+00:00``).
+    """
+    if dt is None:
+        dt = datetime.now(timezone.utc)
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 @dataclass
 class DIDResolutionMetadata:
-    """W3C DID Resolution metadata"""
-    contentType: str = "application/did+ld+json"
+    """
+    W3C DID Resolution metadata (DID Core 7.1.2).
+
+    Serialised by ``to_dict()``, which omits every property whose value is
+    absent (stream G-R): ``error`` / ``errorMessage`` appear only when
+    resolution failed (R1), ``contentType`` only on a successful
+    ``resolve_representation()`` (R2: it MUST NOT be present for
+    ``resolve()``), and no key is ever emitted with a null value (R3).
+    """
+    contentType: Optional[str] = None
     retrieved: Optional[str] = None
     error: Optional[str] = None
     errorMessage: Optional[str] = None
 
+    def to_dict(self) -> Dict:
+        return {k: v for k, v in asdict(self).items() if v is not None}
+
 
 @dataclass
 class DIDDocumentMetadata:
-    """W3C DID Document metadata"""
+    """
+    W3C DID Document metadata (DID Core 7.1.3).
+
+    ``to_dict()`` omits absent properties (stream G-R, R3): ``None`` values,
+    an empty ``equivalentId`` and ``deactivated`` unless it is ``True``
+    (the property is OPTIONAL for a DID that is not deactivated). A failed
+    resolution therefore serialises to the empty structure the spec requires.
+    """
     created: Optional[str] = None
     updated: Optional[str] = None
     deactivated: bool = False
@@ -150,20 +184,45 @@ class DIDDocumentMetadata:
     equivalentId: List[str] = field(default_factory=list)
     canonicalId: Optional[str] = None
 
+    def to_dict(self) -> Dict:
+        out = {}
+        for k, v in asdict(self).items():
+            if v is None or v == []:
+                continue
+            if k == "deactivated" and v is not True:
+                continue
+            out[k] = v
+        return out
+
 
 @dataclass
 class DIDResolutionResult:
-    """W3C DID Resolution Result"""
+    """W3C DID Resolution Result (output of resolve())"""
     didResolutionMetadata: DIDResolutionMetadata
     didDocument: Optional[DIDDocument]
     didDocumentMetadata: DIDDocumentMetadata
 
     def to_dict(self) -> Dict:
-        """Convert to dictionary"""
+        """Convert to dictionary (absent properties omitted, see above)"""
         return {
-            "didResolutionMetadata": asdict(self.didResolutionMetadata),
+            "didResolutionMetadata": self.didResolutionMetadata.to_dict(),
             "didDocument": self.didDocument.to_dict() if self.didDocument else None,
-            "didDocumentMetadata": asdict(self.didDocumentMetadata)
+            "didDocumentMetadata": self.didDocumentMetadata.to_dict()
+        }
+
+
+@dataclass
+class DIDRepresentationResult:
+    """W3C DID Resolution Result (output of resolveRepresentation())"""
+    didResolutionMetadata: DIDResolutionMetadata
+    didDocumentStream: str
+    didDocumentMetadata: DIDDocumentMetadata
+
+    def to_dict(self) -> Dict:
+        return {
+            "didResolutionMetadata": self.didResolutionMetadata.to_dict(),
+            "didDocumentStream": self.didDocumentStream,
+            "didDocumentMetadata": self.didDocumentMetadata.to_dict()
         }
 
 
@@ -255,7 +314,7 @@ class DIDResolver:
                         time.monotonic() - stored_at <= self.cache_ttl_s:
                     result = copy.deepcopy(cached)
                     result.didResolutionMetadata.retrieved = \
-                        datetime.now(timezone.utc).isoformat()
+                        xml_datetime()
                     return result
                 del self.cache[did]
 
@@ -273,14 +332,14 @@ class DIDResolver:
                 result = DIDResolutionResult(
                     didResolutionMetadata=DIDResolutionMetadata(
                         error="methodNotSupported",
-                        errorMessage=f"DID method '{method}' is not supported"
+                        errorMessage=f"DID method '{method.value}' is not supported"
                     ),
                     didDocument=None,
                     didDocumentMetadata=DIDDocumentMetadata()
                 )
 
             # Set retrieval time
-            result.didResolutionMetadata.retrieved = datetime.now(timezone.utc).isoformat()
+            result.didResolutionMetadata.retrieved = xml_datetime()
 
             # Cache successful resolutions (a private copy)
             if not result.didResolutionMetadata.error:
@@ -313,6 +372,43 @@ class DIDResolver:
                 didDocument=None,
                 didDocumentMetadata=DIDDocumentMetadata()
             )
+
+    def resolve_representation(self, did: str,
+                               accept: str = DID_LD_JSON
+                               ) -> DIDRepresentationResult:
+        """
+        DID Core 7.1 ``resolveRepresentation(did, resolutionOptions)``.
+
+        Resolves ``did`` with ``resolve()`` and serialises the document in
+        the representation named by ``accept`` (only
+        ``application/did+ld+json`` is produced). On success the resolution
+        metadata carries ``contentType``; on failure it carries ``error`` and
+        the stream is empty.
+        """
+        if accept not in SUPPORTED_CONTENT_TYPES:
+            return DIDRepresentationResult(
+                didResolutionMetadata=DIDResolutionMetadata(
+                    retrieved=xml_datetime(),
+                    error="representationNotSupported",
+                    errorMessage=f"representation {accept!r} is not supported"
+                ),
+                didDocumentStream="",
+                didDocumentMetadata=DIDDocumentMetadata()
+            )
+        result = self.resolve(did)
+        meta = result.didResolutionMetadata
+        if meta.error or result.didDocument is None:
+            return DIDRepresentationResult(
+                didResolutionMetadata=meta,
+                didDocumentStream="",
+                didDocumentMetadata=DIDDocumentMetadata()
+            )
+        meta.contentType = accept
+        return DIDRepresentationResult(
+            didResolutionMetadata=meta,
+            didDocumentStream=json.dumps(result.didDocument.to_dict()),
+            didDocumentMetadata=result.didDocumentMetadata
+        )
 
     def _parse_did(self, did: str) -> Tuple[DIDMethod, str]:
         """
@@ -390,7 +486,7 @@ class DIDResolver:
             verificationMethod=[verification_method],
             authentication=[verification_method_id],
             assertionMethod=[verification_method_id],
-            created=datetime.now(timezone.utc).isoformat(),
+            created=xml_datetime(),
             versionId="1"
         )
 
@@ -452,7 +548,7 @@ class DIDResolver:
             verificationMethod=[verification_method],
             authentication=[verification_method_id],
             service=[service],
-            created=datetime.now(timezone.utc).isoformat(),
+            created=xml_datetime(),
             versionId="1"
         )
 
@@ -496,7 +592,7 @@ class DIDResolver:
             authentication=[verification_method_id],
             assertionMethod=[verification_method_id],
             capabilityInvocation=[verification_method_id],
-            created=datetime.now(timezone.utc).isoformat()
+            created=xml_datetime()
         )
 
         return DIDResolutionResult(
@@ -547,7 +643,7 @@ class DIDResolver:
             verificationMethod=[verification_method],
             authentication=[verification_method_id],
             service=services,
-            created=datetime.now(timezone.utc).isoformat(),
+            created=xml_datetime(),
             alsoKnownAs=[f"vin:{vin}"]
         )
 

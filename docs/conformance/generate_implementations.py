@@ -9,11 +9,20 @@ needs recorded `resolve` / `resolveRepresentation` executions.
 
 Every value written here is taken UNCHANGED from
     2_w3c-ssi-layer/did-resolution/did_resolver.py :: DIDResolver.resolve(did)
-via DIDResolutionResult.to_dict(). Nothing is edited to make tests pass: the
-`error: null` / `errorMessage: null` / `retrieved` entries, the ISO-8601
-timestamps with microseconds and `+00:00`, the `null` metadata fields and the
-placeholder key material (`publicKeyHex: "0x..."`) are exactly what the
+via DIDResolutionResult.to_dict(), and (since stream G-R, 2026-10-04) from
+    DIDResolver.resolve_representation(did) via DIDRepresentationResult.to_dict()
+for the resolveRepresentation executions and the method file's representation.
+Nothing is edited to make tests pass: the metadata keys, the timestamps and
+the placeholder key material (`publicKeyHex: "0x..."`) are exactly what the
 resolver emits.
+
+G-R adaptation (the only change; inputs, vectors and mapping unchanged): the
+resolver no longer emits `error: null` or a `contentType` on resolve(), and
+it now has a resolveRepresentation function. So (a) the success assertion
+tests for an absent `error` key instead of `error is None`, and (b)
+`supportedContentTypes`, the method file's representation entry and the
+`resolveRepresentation` execution are taken from resolve_representation()
+instead of re-labelling the resolve() output.
 
 Mapping to the suite's input format (see did-example-didwg.json and
 resolver-example-didwg.json in the suite):
@@ -22,13 +31,13 @@ resolver-example-didwg.json in the suite):
   * representationSpecificEntries    = {"@context": didDocument["@context"]}
   * representation / didDocumentStream = json.dumps(didDocument), i.e. the
     same serialization the resolver CLI prints (main() -> json.dumps(to_dict()))
-  * supportedContentTypes = [didResolutionMetadata.contentType] - the resolver
-    only ever reports "application/did+ld+json".
+  * supportedContentTypes = [contentType of resolve_representation()] - the
+    resolver only ever produces "application/did+ld+json".
   * `resolve` executions use the raw resolve() output.
-  * `resolveRepresentation` executions reuse the same output with the document
-    serialized to a JSON string. The project has no separate
-    resolveRepresentation() function; its resolve() output already carries a
-    contentType, so it is registered under both function names.
+  * `resolveRepresentation` executions use the raw resolve_representation()
+    output (default accept). Before G-R the project had no such function and
+    the resolve() output, which then carried a contentType, was registered
+    under both function names.
 
 No `didParameters` (the resolver does not parse DID URL query parameters), no
 `conformingConsumers` (there is no consumer function) and no dereferencer file
@@ -84,10 +93,10 @@ def resolve(resolver, did):
     return resolver.resolve(did).to_dict()
 
 
-def method_file(method, did, result):
+def method_file(method, did, result, rep):
     doc = deepcopy(result["didDocument"])
     context = doc.pop("@context")
-    content_type = result["didResolutionMetadata"]["contentType"]
+    content_type = rep["didResolutionMetadata"]["contentType"]
     return {
         "didMethod": f"did:{method}",
         "implementation": f"CVIN did_resolver.py ({METHODS[method]['label']})",
@@ -100,15 +109,15 @@ def method_file(method, did, result):
                 "didDocumentDataModel": {
                     "representationSpecificEntries": {"@context": context}
                 },
-                "representation": json.dumps(result["didDocument"]),
-                "didDocumentMetadata": result["didDocumentMetadata"],
-                "didResolutionMetadata": result["didResolutionMetadata"],
+                "representation": rep["didDocumentStream"],
+                "didDocumentMetadata": rep["didDocumentMetadata"],
+                "didResolutionMetadata": rep["didResolutionMetadata"],
             },
         },
     }
 
 
-def resolver_file(method, did, result, resolver):
+def resolver_file(method, did, result, rep, resolver):
     executions = []
     outcomes = {
         "defaultOutcome": [],
@@ -131,16 +140,16 @@ def resolver_file(method, did, result, resolver):
         },
     })
 
-    # 1: resolveRepresentation() - same output, document serialized
-    content_type = result["didResolutionMetadata"]["contentType"]
+    # 1: resolveRepresentation()
+    content_type = rep["didResolutionMetadata"]["contentType"]
     outcomes["defaultOutcome"].append(len(executions))
     executions.append({
         "function": "resolveRepresentation",
         "input": {"did": did, "resolutionOptions": {"accept": content_type}},
         "output": {
-            "didResolutionMetadata": result["didResolutionMetadata"],
-            "didDocumentStream": json.dumps(result["didDocument"]),
-            "didDocumentMetadata": result["didDocumentMetadata"],
+            "didResolutionMetadata": rep["didResolutionMetadata"],
+            "didDocumentStream": rep["didDocumentStream"],
+            "didDocumentMetadata": rep["didDocumentMetadata"],
         },
     })
 
@@ -174,10 +183,12 @@ def main():
     written = []
     for method, cfg in METHODS.items():
         result = resolve(resolver, cfg["did"])
-        assert result["didResolutionMetadata"]["error"] is None, result
+        assert "error" not in result["didResolutionMetadata"], result
+        rep = resolver.resolve_representation(cfg["did"]).to_dict()
+        assert "error" not in rep["didResolutionMetadata"], rep
         for name, data in (
-            (f"cvin-did-{method}.json", method_file(method, cfg["did"], result)),
-            (f"cvin-resolver-{method}.json", resolver_file(method, cfg["did"], result, resolver)),
+            (f"cvin-did-{method}.json", method_file(method, cfg["did"], result, rep)),
+            (f"cvin-resolver-{method}.json", resolver_file(method, cfg["did"], result, rep, resolver)),
         ):
             path = os.path.join(out_dir, name)
             with open(path, "w") as f:
