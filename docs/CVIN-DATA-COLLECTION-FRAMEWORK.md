@@ -346,7 +346,7 @@ results/metrics/latest -> <run-id>   (symlink; the only run chapters may cite)
 | Type | Threat | Control in the design |
 |---|---|---|
 | Construct | "Cost" measured as gas only, ignoring L2 vs L1 price | gas is the invariant; USD is a labelled derived column with explicit parameters |
-| Construct | Latency on an in-process node is not V2X latency | reported as *client+EVM* latency; the V2V budget argument uses the off-chain V4 path, and a remote-RPC condition is a separate labelled run |
+| Construct | Latency on an in-process node is not V2X latency | reported as *client+EVM* latency; the V2V budget argument uses the off-chain V4 path. A second labelled condition (`M1-H/HTTP`: same harness over `npx hardhat node` on localhost, `METRICS_OUT=results/metrics-rpc --network localhost`) gives the lower bound of RPC-mediated latency; gas must be identical between the two, which is checked. Neither is a WAN figure |
 | Internal | Adapters could favour one standard by choosing cheap paths | catalogue fixed first; each adapter's realisation is listed in §2 and reviewable; conformance test enforces semantics |
 | Internal | Compiler settings differ by contract | one config for all; `meta.json` records it; run fails if a contract compiled with a different setting is loaded |
 | Internal | Warm cache / JIT | warm-up discarded; latencies are within-run only |

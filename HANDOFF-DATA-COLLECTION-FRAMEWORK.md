@@ -184,6 +184,22 @@ Readings for the thesis:
 3. **ERC-1155 and ERC-725xy enter the frontier only through the read path** (3 and 2 RPC, flat in history) — and both carry `†` lifetime totals (no delegate primitive), so the "cost + read" frontier should be read on the full-coverage subset first, where it is ERC-1056 (both modes) alone.
 4. ERC-725 and ERC-735 are dominated on every criterion set; ERC-735 by three substrates on all six. Nothing in the data recommends either as a vehicle-identity substrate.
 
+### 3.9 HTTP-RPC condition (`M1-H/HTTP`, run `2026-10-04T22-09-23Z_c3b7cb1`, `results/metrics-rpc/latest`, register #39)
+
+Same code (identical `meta.measured` hashes), same N = 30, but the harness talks to `npx hardhat node` over HTTP instead of the in-process EVM. Every gas table is byte-identical to the run of record — the only new information is how RPC-call counts turn into milliseconds once a transport exists.
+
+| R3 resolve, median / p95 ms | ERC-1056 | 1056 wrapper | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Comb. |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| after lifecycle, in-process | 20 / 31 | 12 / 25 | 7.0 / 9.4 | 15 / 22 | 7.6 / 9.6 | 2.6 / 3.8 | 4.2 / 6.4 | 3.9 / 5.3 | 8.3 / 15 | 13 / 17 |
+| after lifecycle, **HTTP** | 45 / 66 | 30 / 40 | 10 / 22 | 27 / 36 | 16 / 25 | **4.9 / 6.4** | 6.2 / 20 | 6.7 / 23 | 13 / 18 | 30 / 45 |
+| h = 50, in-process | 83 / 99 | 41 / 53 | 39 / 115 | 51 / 64 | 39 / 44 | 2.7 / 4.5 | 39 / 75 | 29 / 53 | 29 / 39 | 83 / 100 |
+| h = 50, **HTTP** | **203 / 238** | 105 / 132 | 44 / 87 | 132 / 154 | 79 / 122 | **5.3 / 6.4** | 34 / 70 | 27 / 52 | 61 / 190 | **215 / 239** |
+| RPC calls at h = 50 | 112 | 55 | 7 | 61 | 3 | 3 | 2 | 3 | 61 | 107 |
+
+Transactions: ≈2–2.5× the in-process latency (ERC-1056 U3 8.0 → 18.1 ms median; C1 9.9 → 29.7 ms); throughput 43–98 tx/s over HTTP vs 78–202 in-process (client-bound: one HTTP round trip per queued tx).
+
+**H3 verdict (second half), now measured:** on **localhost** HTTP — the lower bound of any RPC-mediated deployment — resolving an ERC-1056 or CVIN-Combined identity with 50 events of history takes 200+ ms median, twice the SAE J2945/1 100 ms budget, before any network latency. Resolution at V2V message time is therefore excluded for the event-log substrates *by their own read-path structure*, not by the network; keys must be pre-resolved and cached (the M0 path, register #21/#27). Storage-based substrates with 2–3 RPC calls stay under 10 ms (ERC-1155 5 ms) and would survive a ~30 ms provider round trip — a point in their favour the thesis must weigh against their cost and permission model. The wrapper's 105 ms is the artefact of §3.5.1 (transfers invisible to the registry), not a design win.
+
 ---
 
 ## 4. Audit F-items status (from `docs/AUDIT_01_ORIGINAL_GOALS.md`)
@@ -208,7 +224,7 @@ Readings for the thesis:
 3. ~~ERC-735, ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined adapters~~ — **done** (§3.7). Note: no substrate exposes a native batch *creation* primitive (ERC-1155's `mintBatch` is not surfaced by `registerVehicle`), so the `batch` table is sequential throughout — itself a finding. Follow-ups the data suggest: (a) a Status-List-2021 variant of CVIN-Combined so credential status is one bit, not a stored claim; (b) an ERC-1155 variant that binds VID-I attributes (per-vehicle URI) so C2 is like-for-like; (c) a delegate model for LSP8 (operators) and ERC-725xy (LSP6) if those columns are to be compared on U2/D1.
 4. **Rewrite H1** in `README.md` / `docs/RESEARCH_THRUSTS_REPORT.md` / `docs/thesis/README.md` per §3.4 so one hypothesis structure appears everywhere (audit F6).
 5. **Rubric scoring** (`benchmarks/rubric/did-method-rubric.json`): complete the empty criteria for the three substrates with file:line evidence; every substrate added later gets a column.
-6. **Remote-RPC condition run**: `npm run node` + `METRICS_*` against `localhost` network to get latencies with a real JSON-RPC round-trip (a separate, labelled conditions block).
+6. ~~Remote-RPC condition run~~ — **done** as `M1-H/HTTP` (§3.9, register #39). Still open: a public-provider (Sepolia) condition for WAN latency.
 7. **Sepolia confirmation**: one `lifecycle` per substrate on a public testnet (needs `SEPOLIA_RPC_URL`, `PRIVATE_KEY` in `.env`).
 8. Make `benchmark.yml` actually run on the branch (it triggers on `main` and cron); confirm green, add the badge.
 

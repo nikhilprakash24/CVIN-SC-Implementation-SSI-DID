@@ -1,0 +1,14 @@
+Operation,erc1056,erc1056w,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
+C1_create_identity,224,352,416,224,288,544,256,800,288,512
+C2_create_with_attributes,2272,2400,416,1120,2464,544,1376,3264,1408,1632
+U1_rotate_controller,128,128,288,96,96,192,96,256,96,128
+U2_add_delegate,192,192,128,128,n/a,n/a,n/a,n/a,96,192
+U3_set_attribute,288,288,224,128,1024,352,192,416,192,288
+U4_transfer_vehicle,128,128,288,96,96,192,96,256,96,128
+U5_meta_tx,288,n/a,n/a,n/a,n/a,n/a,n/a,n/a,704,n/a
+D1_revoke_delegate,192,192,128,64,n/a,n/a,n/a,n/a,96,192
+D2_revoke_attribute,288,n/a,n/a,64,512,352,128,288,128,288
+D3_deactivate_identity,256,256,96,96,96,352,96,352,96,256
+V1_issuer_key_anchor,192,192,416,128,n/a,128,160,n/a,160,192
+V3_anchor_status,256,256,256,128,960,352,160,352,160,512
+V5_revoke_credential,256,256,256,64,480,352,128,288,128,160
