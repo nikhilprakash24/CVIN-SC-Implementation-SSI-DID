@@ -24,5 +24,7 @@ python3 4_comparison-framework/feature-matrix/make_feature_matrix.py
 python3 sandbox/grand/make_manifests.py      # keeps reviewed flags? no — see below
 python3 sandbox/grand/run.py matrix
 ```
-Regeneration overwrites manifests; reviewed edits must be re-applied or the generator
-extended to merge them (plan S1 follow-up). Until then, review in a separate commit.
+Regeneration preserves any family a human has marked `reviewed: true`, and applies the
+generator's `REVIEW` rules (stances checked against the L1 suite's observations and the
+contract source). Review therefore happens either by editing a manifest and flipping
+`reviewed`, or by adding a rule to `make_manifests.py`.

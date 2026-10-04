@@ -24,8 +24,8 @@ families:
   functions:
   - VehicleIdentityCreated
   measured: []
-  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
-  reviewed: false
+  reason: the identity is a per-vehicle claim-holder contract; deployment is the creation — reviewed from L1 observation
+  reviewed: true
 - name: Ownership / controller change
   stance: implemented
   functions:
@@ -67,11 +67,12 @@ families:
   reason: measured via benchmark_gas.js
   reviewed: false
 - name: Revocation / status
-  stance: not-applicable
+  stance: implemented
   functions: []
   measured: []
-  reason: no function or method in this family on this option — auto; review whether the standard defines it
-  reviewed: false
+  reason: 'sub-identity revocation only: removeClaim revokes a claim; no identity-level revocation — reviewed from
+    L1 observation'
+  reviewed: true
 - name: Delegated / signed (off-chain-authorised) execution
   stance: not-applicable
   functions: []

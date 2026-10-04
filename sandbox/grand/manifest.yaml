@@ -27,7 +27,7 @@ options:
       Ownership / controller change: implemented
       Key / delegate management: measured-in-comparison
       Attributes / data store: implemented
-      Claims / credentials: implemented
+      Claims / credentials: not-applicable
       Revocation / status: implemented
       Delegated / signed (off-chain-authorised) execution: implemented
       Lifecycle events / history: implemented
@@ -45,7 +45,7 @@ options:
       Ownership / controller change: implemented
       Key / delegate management: implemented
       Attributes / data store: implemented
-      Claims / credentials: implemented
+      Claims / credentials: not-applicable
       Revocation / status: measured-in-comparison
       Delegated / signed (off-chain-authorised) execution: not-applicable
       Lifecycle events / history: measured-in-comparison
@@ -77,16 +77,16 @@ options:
     option: ERC-725
     kind: on-chain
     stances:
-      Identity creation (explicit): not-applicable
+      Identity creation (explicit): implemented
       Ownership / controller change: implemented
       Key / delegate management: measured-in-comparison
       Attributes / data store: not-applicable
       Claims / credentials: not-applicable
-      Revocation / status: not-applicable
+      Revocation / status: implemented
       Delegated / signed (off-chain-authorised) execution: implemented
       Lifecycle events / history: not-applicable
       Authorisation / roles: not-applicable
-      Token economics (approvals, royalties, payments): implemented
+      Token economics (approvals, royalties, payments): not-applicable
       VIN linkage: not-applicable
       DID / resolution helpers: not-applicable
       Off-chain creation (identity exists before any transaction): not-applicable
@@ -100,7 +100,7 @@ options:
       Key / delegate management: not-applicable
       Attributes / data store: measured-in-comparison
       Claims / credentials: not-applicable
-      Revocation / status: not-applicable
+      Revocation / status: implemented
       Delegated / signed (off-chain-authorised) execution: implemented
       Lifecycle events / history: implemented
       Authorisation / roles: not-applicable
@@ -118,7 +118,7 @@ options:
       Key / delegate management: not-applicable
       Attributes / data store: not-applicable
       Claims / credentials: measured-in-comparison
-      Revocation / status: not-applicable
+      Revocation / status: implemented
       Delegated / signed (off-chain-authorised) execution: not-applicable
       Lifecycle events / history: implemented
       Authorisation / roles: implemented

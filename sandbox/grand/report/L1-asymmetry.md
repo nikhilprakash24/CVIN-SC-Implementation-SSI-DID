@@ -1,6 +1,6 @@
 # L1 identity mechanisms — cross-option asymmetry (from tests)
 
-Generated 2026-10-04T05:39:46.515Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
+Generated 2026-10-04T05:40:36.116Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
 
 ✓ gas = the adapter ran the mechanism (exact gasUsed of the measured transaction; 0 = no transaction, e.g. implicit creation or a view) · — = NotApplicable (reason below) · ✗ = adapter error or failed assertion · · = not run
 
@@ -10,7 +10,7 @@ Generated 2026-10-04T05:39:46.515Z by `cd 1_blockchain-identity && npx hardhat t
 | controller-change | ✓ 68813 | ✓ 68842 | ✓ 51669 | ✓ 83704 | ✓ 28527 | ✓ 179562 | ✓ 28378 | ✓ 28822 | ✓ 28690 | ✓ 80576 | ✓ 35456 |
 | key-or-delegate | ✓ 72262 | ✓ 72219 | ✓ 35044 | — | ✓ 47569 | — | ✓ 137096 | — | — | — | ✓ 35265 |
 | attribute | ✓ 51576 | ✓ 52016 | ✓ 37180 | ✓ 94150 | ✓ 94471 | ✓ 120137 | — | ✓ 95166 | — | ✓ 100282 | ✓ 37463 |
-| claim | ✓ 331487 | — | — | ✓ 57115 | — | — | — | — | ✓ 314543 | ✓ 148815 | ✓ 287041 |
+| claim | ✓ 331461 | — | — | ✓ 57115 | — | — | — | — | ✓ 314543 | ✓ 148815 | ✓ 287041 |
 | revoke | ✓ 71322 | ✓ 32868 | ✓ 74823 | ✓ 37417 | — | ✓ 27677 | ✓ 41399 | ✓ 33870 | ✓ 69438 | ✓ 41838 | ✓ 74836 |
 | transfer | — | — | — | ✓ 83704 | ✓ 28527 | ✓ 179562 | — | — | — | ✓ 80576 | ✓ 179826 |
 | signed-op | — | ✓ 96053 | — | — | ✓ 69405 | — | ✓ 28358 | ✓ 76352 | — | — | — |
@@ -69,12 +69,6 @@ Per mechanism: create ok 11 / na 0 / fail 0 · controller-change ok 11 / na 0 / 
 
 Family per mechanism: create → "Identity creation (explicit)" / "Off-chain creation (identity exists before any transaction)"; controller-change → "Ownership / controller change"; key-or-delegate → "Key / delegate management"; attribute → "Attributes / data store"; claim → "Claims / credentials"; revoke → "Revocation / status"; transfer → "Token economics (approvals, royalties, payments)" / "Ownership / controller change"; signed-op → "Delegated / signed (off-chain-authorised) execution". `resolve` is adapter-synthesised for every option and is not compared.
 
-Agreements: 81 of 88. Disagreements (7; manifests were not edited):
+Agreements: 88 of 88. Disagreements (0; manifests were not edited):
 
-- **erc-725** / create: manifest says "Identity creation (explicit)" not-applicable, "Off-chain creation (identity exists before any transaction)" not-applicable, test observed ok (gas 519384; proxy deployment is the creation cost (owner = deployer of the proxy); vin=VINERC72500000000 not stored (no data store); explicit; resolved as did:erc725:0x7a69:0x71C95911E9a5D330f4D621842EC243EE1343292e)
-- **erc-1056-uport** / claim: manifest says "Claims / credentials" implemented, test observed n/a (ERC-1056 stores no claims on-chain; the Claims family is only the SVC_CREDENTIAL_SERVICE endpoint attribute (use setAttribute); credentials live off-chain)
-- **erc-1056-vehicle** / claim: manifest says "Claims / credentials" implemented, test observed n/a (no on-chain claim function; credentials are off-chain W3C VCs handled by erc1056_provider.py (update/get/revoke_credential))
-- **erc-725** / revoke: manifest says "Revocation / status" not-applicable, test observed ok (gas 41399; removeKey (key revoked; array compacted); prep: addKeyOrDelegate; document differs from pre-revoke document)
-- **erc-725xy** / revoke: manifest says "Revocation / status" not-applicable, test observed ok (gas 33870; setData(did/svc/telematics, 0x) — non-standard attribute clear, not an identity revocation; prep: setAttribute; document differs from pre-revoke document)
-- **erc-735** / revoke: manifest says "Revocation / status" not-applicable, test observed ok (gas 69438; removeClaim (claim deleted; topic index compacted); prep: addClaim; document differs from pre-revoke document)
-- **erc-725** / transfer: manifest says "Token economics (approvals, royalties, payments)" implemented, "Ownership / controller change" implemented, test observed n/a (identity is a contract account, not a token; ownership moves with transferOwnership (changeController); approve() is an unimplemented stub)
+- none

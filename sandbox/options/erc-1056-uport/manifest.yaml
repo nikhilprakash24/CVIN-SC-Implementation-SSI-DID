@@ -76,12 +76,13 @@ families:
   reason: present in the option's surface but not used by the comparison — asymmetry to discuss
   reviewed: false
 - name: Claims / credentials
-  stance: implemented
+  stance: not-applicable
   functions:
   - SVC_CREDENTIAL_SERVICE
   measured: []
-  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
-  reviewed: false
+  reason: no on-chain claim storage; SVC_CREDENTIAL_SERVICE is a service-endpoint attribute and credentials are
+    off-chain W3C VCs (SSI layer) — the on/off-chain asymmetry the thesis discusses
+  reviewed: true
 - name: Revocation / status
   stance: implemented
   functions:

@@ -48,14 +48,15 @@ families:
   reason: present in the option's surface but not used by the comparison — asymmetry to discuss
   reviewed: false
 - name: Claims / credentials
-  stance: implemented
+  stance: not-applicable
   functions:
   - get_credential
   - revoke_credential
   - update_credential
   measured: []
-  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
-  reviewed: false
+  reason: no on-chain claim function; credentials are off-chain W3C VCs issued/verified by erc1056_provider.py —
+    the on/off-chain asymmetry the thesis discusses
+  reviewed: true
 - name: Revocation / status
   stance: measured-in-comparison
   functions:

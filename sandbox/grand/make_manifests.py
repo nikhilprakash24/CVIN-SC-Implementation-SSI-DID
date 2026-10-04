@@ -38,6 +38,23 @@ OFFCHAIN_CREATION = {"erc-1056-uport": "identity is implicit in the address (Eth
                      "cvin-combined": "ERC-1056 base: identity is implicit in the address; creation costs 0 gas (S2 adapter returns implicit: true)",
                      }
 OFFCHAIN_CREATION_NA = {"erc-4337": "ERC-4337 accounts are counterfactual in principle (CREATE2 + initCode), but this harness has no account factory and CVINMinimalEntryPoint rejects initCode, so creation is an explicit deployment here (S2 finding)"}
+
+# Review rules (2026-10-04, from the L1 suite's manifest disagreements — S3 report).
+# Keyed (slug, family) -> (stance, reason). Applied after the automatic stances and
+# marked reviewed: true, because each one was checked against the adapter's observed
+# behaviour and the contract source.
+REVIEW = {
+    ("erc-725", "Identity creation (explicit)"): ("implemented", "the identity is a per-vehicle proxy contract; its deployment (519,384 gas) is the explicit creation — reviewed from L1 observation"),
+    ("erc-725xy", "Identity creation (explicit)"): ("implemented", "the identity is a per-vehicle ERC-725 X/Y contract; deployment plus the VIN data key is the creation — reviewed from L1 observation"),
+    ("erc-735", "Identity creation (explicit)"): ("implemented", "the identity is a per-vehicle claim-holder contract; deployment is the creation — reviewed from L1 observation"),
+    ("erc-725", "Revocation / status"): ("implemented", "sub-identity revocation only: removeKey revokes a key; there is no identity-level revocation — reviewed from L1 observation"),
+    ("erc-725xy", "Revocation / status"): ("implemented", "sub-identity revocation only: a data key can be cleared (setData to empty); no identity-level revocation — reviewed from L1 observation"),
+    ("erc-735", "Revocation / status"): ("implemented", "sub-identity revocation only: removeClaim revokes a claim; no identity-level revocation — reviewed from L1 observation"),
+    ("erc-1056-uport", "Claims / credentials"): ("not-applicable", "no on-chain claim storage; SVC_CREDENTIAL_SERVICE is a service-endpoint attribute and credentials are off-chain W3C VCs (SSI layer) — the on/off-chain asymmetry the thesis discusses"),
+    ("erc-1056-vehicle", "Claims / credentials"): ("not-applicable", "no on-chain claim function; credentials are off-chain W3C VCs issued/verified by erc1056_provider.py — the on/off-chain asymmetry the thesis discusses"),
+    ("erc-725", "Token economics (approvals, royalties, payments)"): ("not-applicable", "approve() is an unimplemented stub in the basic ERC-725 proxy; the identity is a contract account, not a token"),
+}
+
 PROVIDER_METHOD_RX = re.compile(r"^\s+def ([a-z][a-z0-9_]+)\(", re.M)
 
 def provider_methods(path):
@@ -82,7 +99,16 @@ for slug, (display, kind, rels, bkey, prov, regs) in OPTIONS.items():
            "benchmark_key": bkey, "experiments": regs, "benchmark_ops": ops, "families": fams,
            "surface": {"functions": len(set(fns)), "events": len(set(evs)), "provider_methods": len(pm)}}
     d = ROOT / "sandbox/options" / slug; d.mkdir(parents=True, exist_ok=True)
-    (d / "manifest.yaml").write_text(yaml.safe_dump(man, sort_keys=False, allow_unicode=True, width=110))
-    grand["options"][slug] = {"option": display, "kind": kind, "stances": {f["name"]: f["stance"] for f in fams}}
+    mp = d / "manifest.yaml"
+    if mp.exists():  # preserve stances a human has reviewed
+        prev = {f["name"]: f for f in yaml.safe_load(mp.read_text()).get("families", [])}
+        for f in man["families"]:
+            if prev.get(f["name"], {}).get("reviewed"):
+                f.update({k: prev[f["name"]][k] for k in ("stance", "reason", "reviewed") if k in prev[f["name"]]})
+    for f in man["families"]:  # generator-level review rules
+        r = REVIEW.get((slug, f["name"]))
+        if r: f.update({"stance": r[0], "reason": r[1], "reviewed": True})
+    mp.write_text(yaml.safe_dump(man, sort_keys=False, allow_unicode=True, width=110))
+    grand["options"][slug] = {"option": display, "kind": kind, "stances": {f["name"]: f["stance"] for f in man["families"]}}
 (ROOT / "sandbox/grand/manifest.yaml").write_text(yaml.safe_dump(grand, sort_keys=False, allow_unicode=True, width=110))
 print("manifests:", len(OPTIONS), "| families:", len(grand["families"]))

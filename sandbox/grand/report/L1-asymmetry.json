@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T05:39:46.515Z",
+  "generatedAt": "2026-10-04T05:40:36.116Z",
   "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
   "options": [
     "cvin-combined",
@@ -429,9 +429,9 @@
       "option": "cvin-combined",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "331487",
+      "gasUsed": "331461",
       "reason": null,
-      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x143657… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:VINCVINCOMBINED00)"
+      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x914281… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:VINCVINCOMBINED00)"
     },
     {
       "option": "erc-1056-uport",
@@ -511,7 +511,7 @@
       "outcome": "ok",
       "gasUsed": "287041",
       "reason": null,
-      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x7f4ba6ec54fac7025feb06672ae0395e22c32b7d0e9…)"
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x7fca83e59827ed6ffa16c0ded3d5ba645ac7e013902…)"
     },
     {
       "option": "cvin-combined",
@@ -751,7 +751,7 @@
       "outcome": "ok",
       "gasUsed": "76352",
       "reason": null,
-      "note": "execute(CALL, CVINExecuteTarget, 0, setValue(381329)) — real call, msg.sender==identity: true; target deploy=133519 not counted; op 'changeOwner' mapped to this demo; owner-gated by msg.sender, signature ignored; resolved as did:erc725:0x7a69:0x40a42Baf86Fc821f972Ad2aC878729063CeEF403"
+      "note": "execute(CALL, CVINExecuteTarget, 0, setValue(435795)) — real call, msg.sender==identity: true; target deploy=133519 not counted; op 'changeOwner' mapped to this demo; owner-gated by msg.sender, signature ignored; resolved as did:erc725:0x7a69:0x40a42Baf86Fc821f972Ad2aC878729063CeEF403"
     },
     {
       "option": "erc-735",
@@ -1060,58 +1060,8 @@
         "Delegated / signed (off-chain-authorised) execution"
       ]
     },
-    "agreements": 81,
+    "agreements": 88,
     "total": 88,
-    "disagreements": [
-      {
-        "option": "erc-725",
-        "mechanism": "create",
-        "agree": false,
-        "manifest": "\"Identity creation (explicit)\" not-applicable, \"Off-chain creation (identity exists before any transaction)\" not-applicable",
-        "observed": "ok (gas 519384; proxy deployment is the creation cost (owner = deployer of the proxy); vin=VINERC72500000000 not stored (no data store); explicit; resolved as did:erc725:0x7a69:0x71C95911E9a5D330f4D621842EC243EE1343292e)"
-      },
-      {
-        "option": "erc-1056-uport",
-        "mechanism": "claim",
-        "agree": false,
-        "manifest": "\"Claims / credentials\" implemented",
-        "observed": "n/a (ERC-1056 stores no claims on-chain; the Claims family is only the SVC_CREDENTIAL_SERVICE endpoint attribute (use setAttribute); credentials live off-chain)"
-      },
-      {
-        "option": "erc-1056-vehicle",
-        "mechanism": "claim",
-        "agree": false,
-        "manifest": "\"Claims / credentials\" implemented",
-        "observed": "n/a (no on-chain claim function; credentials are off-chain W3C VCs handled by erc1056_provider.py (update/get/revoke_credential))"
-      },
-      {
-        "option": "erc-725",
-        "mechanism": "revoke",
-        "agree": false,
-        "manifest": "\"Revocation / status\" not-applicable",
-        "observed": "ok (gas 41399; removeKey (key revoked; array compacted); prep: addKeyOrDelegate; document differs from pre-revoke document)"
-      },
-      {
-        "option": "erc-725xy",
-        "mechanism": "revoke",
-        "agree": false,
-        "manifest": "\"Revocation / status\" not-applicable",
-        "observed": "ok (gas 33870; setData(did/svc/telematics, 0x) — non-standard attribute clear, not an identity revocation; prep: setAttribute; document differs from pre-revoke document)"
-      },
-      {
-        "option": "erc-735",
-        "mechanism": "revoke",
-        "agree": false,
-        "manifest": "\"Revocation / status\" not-applicable",
-        "observed": "ok (gas 69438; removeClaim (claim deleted; topic index compacted); prep: addClaim; document differs from pre-revoke document)"
-      },
-      {
-        "option": "erc-725",
-        "mechanism": "transfer",
-        "agree": false,
-        "manifest": "\"Token economics (approvals, royalties, payments)\" implemented, \"Ownership / controller change\" implemented",
-        "observed": "n/a (identity is a contract account, not a token; ownership moves with transferOwnership (changeController); approve() is an unimplemented stub)"
-      }
-    ]
+    "disagreements": []
   }
 }

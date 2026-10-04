@@ -18,11 +18,12 @@ benchmark_ops:
   transferOwnership: transferOwnership of the identity contract to the new vehicle owner.
 families:
 - name: Identity creation (explicit)
-  stance: not-applicable
+  stance: implemented
   functions: []
   measured: []
-  reason: no function or method in this family on this option — auto; review whether the standard defines it
-  reviewed: false
+  reason: the identity is a per-vehicle proxy contract; its deployment (519,384 gas) is the explicit creation —
+    reviewed from L1 observation
+  reviewed: true
 - name: Ownership / controller change
   stance: implemented
   functions:
@@ -57,11 +58,12 @@ families:
   reason: no function or method in this family on this option — auto; review whether the standard defines it
   reviewed: false
 - name: Revocation / status
-  stance: not-applicable
+  stance: implemented
   functions: []
   measured: []
-  reason: no function or method in this family on this option — auto; review whether the standard defines it
-  reviewed: false
+  reason: 'sub-identity revocation only: removeKey revokes a key; there is no identity-level revocation — reviewed
+    from L1 observation'
+  reviewed: true
 - name: Delegated / signed (off-chain-authorised) execution
   stance: implemented
   functions:
@@ -83,12 +85,13 @@ families:
   reason: no function or method in this family on this option — auto; review whether the standard defines it
   reviewed: false
 - name: Token economics (approvals, royalties, payments)
-  stance: implemented
+  stance: not-applicable
   functions:
   - approve
   measured: []
-  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
-  reviewed: false
+  reason: approve() is an unimplemented stub in the basic ERC-725 proxy; the identity is a contract account, not
+    a token
+  reviewed: true
 - name: VIN linkage
   stance: not-applicable
   functions: []
