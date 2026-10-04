@@ -127,7 +127,9 @@ families:
 - name: VIN linkage
   stance: implemented
   functions:
+  - vehicleForVIN
   - vehicleVIN
+  - vinHashOf
   - vinHashToVehicle
   measured: []
   reason: present in the option's surface but not used by the comparison — asymmetry to discuss
@@ -150,6 +152,6 @@ families:
   reason: no function or method in this family on this option — auto; review whether the standard defines it
   reviewed: false
 surface:
-  functions: 29
+  functions: 31
   events: 11
   provider_methods: 0

@@ -64,6 +64,7 @@ families:
   - CLAIM_TOPIC_VIN
   - ClaimAdded
   - ClaimRemoved
+  - DIDClaimChanged
   - addClaim
   - getClaim
   - getClaimIdsByTopic
@@ -93,6 +94,7 @@ families:
   stance: implemented
   functions:
   - DIDAttributeChanged
+  - DIDClaimChanged
   - DIDDelegateChanged
   - DIDOwnerChanged
   - changed
@@ -123,6 +125,7 @@ families:
   stance: implemented
   functions:
   - DIDAttributeChanged
+  - DIDClaimChanged
   - DIDDelegateChanged
   - DIDOwnerChanged
   - identityOwner
@@ -143,5 +146,5 @@ families:
   reviewed: false
 surface:
   functions: 18
-  events: 5
+  events: 6
   provider_methods: 0

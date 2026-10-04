@@ -55,12 +55,17 @@ families:
   - ClaimRemoved
   - ClaimRequested
   - INSPECTION
+  - IssuerAuthorized
+  - IssuerRevoked
   - VIN_ATTESTATION
   - addClaim
+  - authorizeIssuer
   - claimExists
   - getClaim
   - getClaimIdsByTopic
+  - isAuthorizedIssuer
   - removeClaim
+  - revokeIssuer
   measured:
   - addClaim
   - removeClaim
@@ -68,7 +73,9 @@ families:
   reviewed: false
 - name: Revocation / status
   stance: implemented
-  functions: []
+  functions:
+  - IssuerRevoked
+  - revokeIssuer
   measured: []
   reason: 'sub-identity revocation only: removeClaim revokes a claim; no identity-level revocation — reviewed from
     L1 observation'
@@ -89,7 +96,12 @@ families:
 - name: Authorisation / roles
   stance: implemented
   functions:
+  - IssuerAuthorized
+  - IssuerRevoked
   - MANUFACTURER_CERT
+  - authorizeIssuer
+  - isAuthorizedIssuer
+  - revokeIssuer
   measured: []
   reason: present in the option's surface but not used by the comparison — asymmetry to discuss
   reviewed: false
@@ -126,6 +138,6 @@ families:
   reason: no function or method in this family on this option — auto; review whether the standard defines it
   reviewed: false
 surface:
-  functions: 14
-  events: 6
+  functions: 17
+  events: 8
   provider_methods: 0
