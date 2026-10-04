@@ -114,7 +114,7 @@ leak). No recovery (admin `deactivateVehicle` cannot reassign ownership).
 _owner`. Identity is a per-vehicle contract, transferable only by owner call
 (`transferOwnership` lacks a zero-address guard — bricking risk). No VIN on-chain
 (only key hashes) ⇒ good privacy. Permissionless deployment ⇒ Sybil is
-cost-gated only (~529k gas each). No recovery.
+cost-gated only (~519k gas each). No recovery.
 
 **ERC-735 (claim holder).** `addClaim` is `onlyOwner` **and** verifies the
 issuer's EIP-191 signature on-chain (with an EIP-2 malleability guard); a forged
@@ -122,7 +122,7 @@ issuer signature reverts `invalid issuer signature`. Replay is **partial**: the
 signature binds `address(this)+topic+data` (blocking cross-identity replay) but
 has no nonce/expiry/chainid, so a same-identity re-anchor is accepted
 (idempotent). Plaintext VIN in `string public vin` + `VehicleIdentityCreated`
-event. Most expensive to spam (~1.40M gas/identity). No recovery.
+event. Most expensive to spam (~1.54M gas/identity). No recovery.
 
 **ERC-1155 (soulbound credentials).** Registration/issuance gated by
 `ISSUER_ROLE`. **Soulbound**: a holder-initiated `safeTransferFrom` of the birth
@@ -173,8 +173,10 @@ No key recovery.
 
 **W3C VC/VP (off-chain SSI layer).** Forged/tampered credentials fail signature
 recovery against the issuer DID; a presentation replayed with a stale challenge
-fails; a stolen credential presented by a non-holder (same holder DID string,
-wrong key) fails holder-binding. Selective disclosure hides undisclosed claims,
+fails; a stolen credential presented by a non-holder fails in both variants:
+under the victim's holder DID with the wrong key (VP proof), and under the
+thief's own `did:ethr` with a valid VP signature (S-1 holder binding: the VP
+holder must be the credential subject). Selective disclosure hides undisclosed claims,
 and identities use `did:ethr`. Sybil/recovery are **partial**: issuer trust is
 governance-gated at a registry (not at DID creation), and key recovery is
 delegated to the on-chain layer (the VC layer offers credential *revocation* but

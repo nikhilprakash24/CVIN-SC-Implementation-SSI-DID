@@ -328,7 +328,7 @@ async function scenarioERC725(signers) {
   }
   out.sybil = cell(
     "PARTIAL",
-    "permissionless per-identity contract deployment; the only Sybil barrier is deployment gas (~529k each)",
+    "permissionless per-identity contract deployment; the only Sybil barrier is deployment gas (exact createIdentity gas: matrix cost_proxy_gas)",
     `attacker deployed ${deployed}/3 independent identity contracts with no authorisation. Cost-gated only, not issuer-gated.`
   );
 
@@ -422,7 +422,7 @@ async function scenarioERC735(signers) {
   }
   out.sybil = cell(
     "PARTIAL",
-    "permissionless per-identity contract deployment; Sybil barrier is deployment gas only (~1.40M each — the most expensive to spam)",
+    "permissionless per-identity contract deployment; Sybil barrier is deployment gas only (the most expensive to spam; exact createIdentity gas: matrix cost_proxy_gas)",
     `attacker deployed ${deployed}/3 claim-holder identities unchallenged. Cost-gated only; claims themselves still need a trusted issuer signature.`
   );
 
@@ -591,7 +591,7 @@ async function scenarioERC4337(signers) {
     `transferOwnership (key rotation) ok=${rot.ok}; account address (identity) unchanged. A stolen owner key can rotate itself out, but guardian recovery (below) can restore control.`
   );
 
-  // sybil: permissionless account deployment (~768k gas each).
+  // sybil: permissionless account deployment (gas: matrix cost_proxy_gas).
   const AcctA = await ethers.getContractFactory("CVINVehicleAccount", attacker);
   let deployed = 0;
   for (let i = 0; i < 3; i++) {
@@ -601,7 +601,7 @@ async function scenarioERC4337(signers) {
   }
   out.sybil = cell(
     "PARTIAL",
-    "permissionless smart-account deployment; Sybil barrier is deployment gas only (~768k each)",
+    "permissionless smart-account deployment; Sybil barrier is deployment gas only (exact createIdentity gas: matrix cost_proxy_gas)",
     `attacker deployed ${deployed}/3 accounts unchallenged. Cost-gated only, not issuer-gated.`
   );
 
@@ -774,7 +774,7 @@ async function scenarioMOBI(signers) {
   );
   out.sybil = cell(
     syb.reverted ? "DEFENDED" : "VULNERABLE",
-    "identity creation gated by onlyAuthorizedManufacturer AND VIN-hash uniqueness; highest per-identity cost (~299k gas)",
+    "identity creation gated by onlyAuthorizedManufacturer AND VIN-hash uniqueness (exact createIdentity gas: matrix cost_proxy_gas)",
     `attacker registerVehicleBirth reverted: "${syb.reason}". Strongest Sybil resistance: manufacturer authorisation + unique-VIN enforcement.`
   );
 
