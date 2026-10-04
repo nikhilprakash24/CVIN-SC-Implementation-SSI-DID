@@ -332,7 +332,7 @@ class DIDResolver:
                 result = DIDResolutionResult(
                     didResolutionMetadata=DIDResolutionMetadata(
                         error="methodNotSupported",
-                        errorMessage=f"DID method '{method}' is not supported"
+                        errorMessage=f"DID method '{method.value}' is not supported"
                     ),
                     didDocument=None,
                     didDocumentMetadata=DIDDocumentMetadata()
