@@ -115,7 +115,7 @@ Four properties recur across every variant above and explain two centuries of su
 
 ## 3. Complete game design as implemented
 
-This section is the compact but complete rule set. The App 1 phased plan contains the full acceptance criteria; the engine package implements exactly what is written here.
+This section is the compact but complete rule set. The App 1 phased plan contains the full acceptance criteria; the engine package implements exactly what is written here. The full specification, including edge cases, bots and validation, is in [02-game-design-spec](../app1-inkwell/02-game-design-spec.md).
 
 ### 3.1 Name Place Animal Thing (NPAT)
 
@@ -202,7 +202,7 @@ Solo play needs an opponent. Bots generate NPAT sheets and Word Chain turns from
 
 ### 4.1 App 1, "Inkwell": product scope
 
-App 1 is one app, two games, four ways to play. The v1.0 cut is deliberately narrow:
+App 1 is one app, two games, four ways to play. The full product brief, including the kill list, metrics and naming, is in [01-product-vision-and-brief](../app1-inkwell/01-product-vision-and-brief.md). The v1.0 cut is deliberately narrow:
 
 **In v1.0:** NPAT and Word Chain; solo vs. clock with bots; pass-and-play; nearby play over MultipeerConnectivity (delivery Phase 4, Pro); online async over Game Center turn-based (delivery Phase 5, Pro; Word Chain first, NPAT second; the pre-approved first cut if Phase 5 slips); house rules (Stop, long-word bonus, letter difficulty presets, edge-letter rules); custom categories; result cards for sharing; three themes (Paper & Ink default, Swiss Editorial free, Night Lounge in Pro at reduced scope, or 1.1 via cut-list item 3), each with its own sound and haptic pack; full accessibility (Dynamic Type, VoiceOver, Reduce Motion alternatives, Switch Control audit); one-time Pro unlock.
 
@@ -219,6 +219,8 @@ App 1 is one app, two games, four ways to play. The v1.0 cut is deliberately nar
 App 2 is a separate binary with a kid vibe, not a mode in App 1. It reuses GameEngine, Dictionary core and Persistence via Swift Packages, shares only primitive tokens with DesignSystem (its own `KidsDesignSystem` package holds everything visible), and does not link Networking or Analytics. It differs in: age bands (Sprouts 5 to 7, Explorers 8 to 10, Navigators 11 to 13) that change timers, categories, letter pool and hint density; illustrated letter cues (the letter B comes with a bear sketch, not a bare glyph); forgiving validation with phonetic matching; optional spelling help; no ads, no chat, no open social, no third-party analytics; a parental gate on anything that leaves the app; non-manipulative rewards (stickers for a sketchbook, no loot boxes, no timers that nag). It sits in the App Store Kids Category and follows guideline 1.3 (Kids Category) and 5.1.4 (Kids privacy) which prohibit third-party advertising and analytics and the transmission of personally identifiable information from Kids apps ([App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/); [Apple, Kids](https://developer.apple.com/kids/)). COPPA governs data collection from children under 13 in the United States; the FTC's six-step compliance plan is our checklist ([FTC, COPPA six-step compliance plan](https://www.ftc.gov/business-guidance/resources/childrens-online-privacy-protection-rule-six-step-compliance-plan-your-business)).
 
 > **[KIDS]** The simplest way to comply with COPPA is to collect nothing. Kids has no accounts, no cloud save by default, and no network calls except StoreKit. That is a feature, not a limitation.
+
+The Kids vision and principles are in [app2 01-vision-and-kid-design-principles](../app2-inkwell-kids/01-vision-and-kid-design-principles.md); the compliance plan is in [app2 05-safety-privacy-compliance-and-parents](../app2-inkwell-kids/05-safety-privacy-compliance-and-parents.md).
 
 ### 4.3 Relationship between App 1 and App 2
 
@@ -263,7 +265,7 @@ StoreKit 2 is used for all purchases ([Apple, In-App Purchase (StoreKit)](https:
 
 ### 4.5 App 3, the multilingual idea
 
-App 3 generalizes "letter" to a locale-aware "unit": a Spanish digraph, a Devanagari syllable with its vowel sign, a Japanese kana after normalization, a Korean syllable block, a Chinese character. It also needs localized dictionaries, localized default categories and right-to-left layout for Arabic. It is a short story plan, not a committed deliverable, and its most important output is a list of things App 1 must do now to keep the door open (never hardcode A to Z, treat the letter pool and the "last unit" extraction as pluggable). See `npat-planning/app3-multilingual/short-story-plan.md`.
+App 3 generalizes "letter" to a locale-aware "unit": a Spanish digraph, a Devanagari syllable with its vowel sign, a Japanese kana after normalization, a Korean syllable block, a Chinese character. It also needs localized dictionaries, localized default categories and right-to-left layout for Arabic. It is a short story plan, not a committed deliverable, and its most important output is a list of things App 1 must do now to keep the door open (never hardcode A to Z, treat the letter pool and the "last unit" extraction as pluggable). See [app3 short-story-plan](../app3-multilingual/short-story-plan.md).
 
 ---
 
@@ -365,7 +367,7 @@ GRDB.swift over SQLite behind a `MatchStore` protocol for local storage (match e
 | Unity / Godot | Great for particles, poor for text UI and accessibility | Poor | Overkill | No |
 | PWA then Capacitor ([Capacitor docs](https://capacitorjs.com/docs)) | Weakest feel | Weakest | Fast to prototype | Prototype only; useful for App 3 dictionary tooling |
 
-**DECISION:** Native SwiftUI-first, iOS 17.0 minimum for 1.0 (re-evaluated at 1.1 with usage data, per the delivery plan 03 Section 19.2), Swift 6 language mode on all packages ([Apple, Adopting Swift 6](https://developer.apple.com/documentation/swift/adoptingswift6)). iOS 18 features (new Game Center UI, more Live Activity surfaces, the zoom transition) are adopted with availability checks.
+**DECISION:** Native SwiftUI-first, iOS 17.0 minimum for 1.0 (re-evaluated at 1.1 with usage data, per the delivery plan 03 Section 19.2), Swift 6 language mode on all packages ([Apple, Adopting Swift 6](https://developer.apple.com/documentation/swift/adoptingswift6)). iOS 18 features (new Game Center UI, more Live Activity surfaces, the zoom transition) are adopted with availability checks. The full comparison of stacks and the "translate later" question are in [06-platform-choice-and-alternatives](../app1-inkwell/06-platform-choice-and-alternatives.md).
 
 ### 5.7 Build, test and release
 
