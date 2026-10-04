@@ -2,8 +2,8 @@
 
 | Metric | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| tx / s (queue + mine) | 147.89 | 159.05 | 125.14 | 183.75 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| tx / s (mine only) | 1652.08 | 1198.60 | 344.75 | 2394.57 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| gas / s | 4,786,272 | 6,682,651 | 15,833,689 | 22,049,416 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| tx / s (queue + mine) | 152.66 | 156.73 | 131.85 | 175.26 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| tx / s (mine only) | 2452.81 | 1177.11 | 408.93 | 1291.41 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| gas / s | 4,940,436 | 6,585,171 | 16,571,016 | 21,030,595 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 
-_Run 2026-10-04T05-31-55Z_3ea92f7 · commit 3ea92f7 (dirty) · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-04T05-41-19Z_bca0899 · commit bca0899 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_

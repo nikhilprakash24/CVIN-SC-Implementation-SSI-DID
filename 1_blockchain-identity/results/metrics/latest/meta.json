@@ -1,10 +1,10 @@
 {
-  "runId": "2026-10-04T05-31-55Z_3ea92f7",
-  "commit": "3ea92f7c4e4e1fd9bb5c4df7fc5fa5f86a6a4295",
-  "commitShort": "3ea92f7",
+  "runId": "2026-10-04T05-41-19Z_bca0899",
+  "commit": "bca0899b237ede89c7493dfad58c17d13079c8d3",
+  "commitShort": "bca0899",
   "branch": "claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt",
-  "dirty": true,
-  "date": "2026-10-04T05:31:56.783Z",
+  "dirty": false,
+  "date": "2026-10-04T05:41:20.956Z",
   "node": "v22.22.2",
   "hardhat": "2.28.6",
   "ethers": "6.17.0",
@@ -70,11 +70,11 @@
     "ethUSD": 3000
   },
   "scenarioSeconds": {
-    "crud": 112.554,
-    "lifecycle": 2.049,
-    "scale": 95.039,
-    "batch": 12.029,
-    "throughput": 17.782,
-    "resolve": 4.01
+    "crud": 120.35,
+    "lifecycle": 2.175,
+    "scale": 101.381,
+    "batch": 12.705,
+    "throughput": 18.122,
+    "resolve": 4.207
   }
 }

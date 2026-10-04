@@ -1,6 +1,6 @@
-# CVIN metrics report — 2026-10-04T05-31-55Z_3ea92f7
+# CVIN metrics report — 2026-10-04T05-41-19Z_bca0899
 
-_Run 2026-10-04T05-31-55Z_3ea92f7 · commit 3ea92f7 (dirty) · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-04T05-41-19Z_bca0899 · commit bca0899 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
 
 Cells: exact gas for tx ops; `n/a` = substrate has no primitive (reportable finding); `not impl.` = adapter not on trunk yet.
 
@@ -98,29 +98,29 @@ Cells: exact gas for tx ops; `n/a` = substrate has no primitive (reportable find
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C1_create_identity | 10.399 / 17.815 | 16.114 / 19.17 | 11.962 / 13.758 | 20.576 / 24.533 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| C2_create_with_attributes | 76.476 / 93.149 | 37.083 / 49.183 | 13.593 / 16.41 | 73.201 / 93.566 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U1_rotate_controller | 7.499 / 10.696 | 7.599 / 9.648 | 10.135 / 12.316 | 6.846 / 9.584 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U2_add_delegate | 7.569 / 9.803 | 9.35 / 11.617 | 7.199 / 7.911 | 7.303 / 8.142 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U3_set_attribute | 8.73 / 13.04 | 9.704 / 14.682 | 7.573 / 9.071 | 7.716 / 10.794 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U4_transfer_vehicle | 7.633 / 11.408 | 8.086 / 11.328 | 11.223 / 15.403 | 6.893 / 9.281 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| U5_meta_tx | 11.603 / 16.744 | n/a | n/a | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D1_revoke_delegate | 7.957 / 12.081 | 9.016 / 13.605 | 8.938 / 12.597 | 9.671 / 24.755 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D2_revoke_attribute | 8.127 / 12.592 | n/a | n/a | 9.383 / 14.172 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| D3_deactivate_identity | 7.588 / 8.526 | 9.994 / 13.122 | 8.37 / 9.046 | 7.087 / 8.715 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V1_issuer_key_anchor | 7.639 / 9.92 | 7.152 / 9.941 | 13.359 / 16.524 | 7.193 / 8.995 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V3_anchor_status | 8.503 / 11.756 | 8.541 / 10.768 | 8.918 / 12.827 | 7.219 / 9.354 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V5_revoke_credential | 7.401 / 9.063 | 8.32 / 11.37 | 8.202 / 11.121 | 8.212 / 13.357 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| C1_create_identity | 9.352 / 11.288 | 17.171 / 27.382 | 13.244 / 16.714 | 20.976 / 25.773 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| C2_create_with_attributes | 76.181 / 90.41 | 35.982 / 62.088 | 13.709 / 18.501 | 79.203 / 97.753 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| U1_rotate_controller | 7.637 / 12.972 | 8.193 / 12.345 | 10.961 / 12.365 | 7.213 / 11.439 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| U2_add_delegate | 8.081 / 10.107 | 11.274 / 16.028 | 8.24 / 12.17 | 7.598 / 11.487 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| U3_set_attribute | 8.654 / 11.424 | 11.531 / 15.185 | 8.932 / 12.362 | 7.843 / 9.068 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| U4_transfer_vehicle | 7.909 / 9.545 | 8.872 / 12.403 | 11.663 / 17.938 | 7.022 / 7.849 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| U5_meta_tx | 12.466 / 16.439 | n/a | n/a | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| D1_revoke_delegate | 8.436 / 12.024 | 9.451 / 12.943 | 9.551 / 13.747 | 10.667 / 22.737 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| D2_revoke_attribute | 8.378 / 10.377 | n/a | n/a | 10.913 / 19.05 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| D3_deactivate_identity | 8.475 / 11.075 | 10.187 / 15.007 | 8.353 / 11.856 | 8.333 / 10.794 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| V1_issuer_key_anchor | 8.293 / 11.543 | 8.158 / 10.193 | 14.337 / 22.518 | 8.303 / 11.078 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| V3_anchor_status | 8.61 / 11.176 | 8.897 / 13.585 | 9.524 / 13.98 | 8.748 / 12.7 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| V5_revoke_credential | 8.25 / 11.29 | 8.808 / 13.113 | 10.305 / 15.178 | 9.266 / 20.651 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 
 ### L1 — Read ops: RPC calls / bytes / median ms
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| R1_resolve_owner | 1 / 68 / 0.594 | 1 / 68 / 0.798 | 1 / 68 / 0.847 | 1 / 68 / 0.667 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R2_resolve_by_vin | 1 / 68 / 0.598 | 1 / 68 / 0.714 | 1 / 68 / 0.931 | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R3_resolve_document | 12 / 8592 / 7.224 | 6 / 9170 / 5.774 | 7 / 2652 / 4.215 | 12 / 2800 / 9.01 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R4_verify_delegate | 1 / 68 / 0.709 | 1 / 68 / 0.782 | 2 / 136 / 1.089 | 1 / 196 / 1.069 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V6_status_check | 1 / 852 / 1.133 | 1 / 851 / 1.006 | 1 / 708 / 1.398 | 1 / 196 / 0.856 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R1_resolve_owner | 1 / 68 / 0.66 | 1 / 68 / 0.772 | 1 / 68 / 0.718 | 1 / 68 / 0.737 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R2_resolve_by_vin | 1 / 68 / 0.661 | 1 / 68 / 0.779 | 1 / 68 / 0.729 | n/a | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R3_resolve_document | 12 / 8592 / 8.423 | 6 / 9170 / 6.075 | 7 / 2652 / 4.572 | 12 / 2800 / 9.145 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R4_verify_delegate | 1 / 68 / 0.69 | 1 / 68 / 0.968 | 2 / 136 / 1.093 | 1 / 196 / 0.745 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| V6_status_check | 1 / 852 / 1.24 | 1 / 851 / 0.954 | 1 / 708 / 1.278 | 1 / 196 / 0.687 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 
 ### Deployment (shared contracts)
 
@@ -203,12 +203,12 @@ Cells: exact gas for tx ops; `n/a` = substrate has no primitive (reportable find
 
 | Axis | op | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| N=0|R3_resolve_document | 7.488 / 8.037 | 5.72 / 7.991 | 4.576 / 5.453 | 7.473 / 8.289 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=100|R3_resolve_document | 7.296 / 8.922 | 4.927 / 5.717 | 3.683 / 7.628 | 6.32 / 7.894 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=1000|R3_resolve_document | 7.429 / 7.76 | 4.988 / 9.199 | 4.679 / 7.591 | 7.667 / 8.5 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=1|R3_resolve_document | 11.591 / 16.477 | 5.724 / 6.272 | 4.092 / 5.608 | 7.641 / 8.672 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=10|R3_resolve_document | 22.432 / 26.479 | 12.532 / 14.205 | 6.076 / 7.321 | 12.075 / 15.867 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=50|R3_resolve_document | 74.889 / 87.744 | 39.394 / 55.041 | 16.225 / 24.504 | 43.686 / 54.095 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| N=0|R3_resolve_document | 9.377 / 12.628 | 5.693 / 8.546 | 3.949 / 5.164 | 9.354 / 11.323 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| N=100|R3_resolve_document | 8.66 / 12.292 | 5.308 / 6.155 | 4.372 / 5.437 | 9.442 / 14.432 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| N=1000|R3_resolve_document | 11.645 / 14.593 | 7.04 / 9.245 | 3.868 / 5.077 | 7.193 / 10.999 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| h=1|R3_resolve_document | 10.037 / 14.587 | 6.59 / 7.543 | 3.613 / 5.438 | 10.203 / 16.268 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| h=10|R3_resolve_document | 21.047 / 25.573 | 12.003 / 13.702 | 8.033 / 12.499 | 14.445 / 16.467 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| h=50|R3_resolve_document | 77.301 / 117.713 | 43.763 / 51.596 | 28.149 / 65.459 | 40.956 / 51.772 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 
 ### L4 — Create k identities: total gas (per item) [mode]
 
@@ -222,15 +222,15 @@ Cells: exact gas for tx ops; `n/a` = substrate has no primitive (reportable find
 
 | Metric | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| tx / s (queue + mine) | 147.89 | 159.05 | 125.14 | 183.75 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| tx / s (mine only) | 1652.08 | 1198.60 | 344.75 | 2394.57 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| gas / s | 4,786,272 | 6,682,651 | 15,833,689 | 22,049,416 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| tx / s (queue + mine) | 152.66 | 156.73 | 131.85 | 175.26 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| tx / s (mine only) | 2452.81 | 1177.11 | 408.93 | 1291.41 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| gas / s | 4,940,436 | 6,585,171 | 16,571,016 | 21,030,595 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 
 ### L6 — Verifier read path after lifecycle: RPC calls / bytes / median ms / p95 ms
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| R3_resolve_document | 22 / 16936 / 14.863 / 16.243 | 14 / 16328 / 10.937 / 16.314 | 7 / 5724 / 6.201 / 8.454 | 17 / 4100 / 12.314 / 17.162 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R1_resolve_owner | 1 / 68 / 0.696 / 0.996 | 1 / 68 / 0.762 / 0.991 | 1 / 68 / 0.642 / 0.829 | 1 / 68 / 0.807 / 2.246 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R4_verify_delegate | 1 / 68 / 0.83 / 1.013 | 1 / 68 / 1.038 / 1.45 | 2 / 136 / 1.195 / 1.859 | 1 / 196 / 0.807 / 1.701 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V6_status_check | 1 / 3395 / 1.308 / 2.108 | 1 / 3395 / 1.56 / 2.131 | 1 / 3268 / 2.68 / 3.272 | 1 / 196 / 0.762 / 1.26 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R3_resolve_document | 22 / 16936 / 16.48 / 21.082 | 14 / 16328 / 11.816 / 15.563 | 7 / 5724 / 6.017 / 8.483 | 17 / 4100 / 11.977 / 15.49 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R1_resolve_owner | 1 / 68 / 0.797 / 1.806 | 1 / 68 / 1.156 / 1.926 | 1 / 68 / 0.739 / 0.952 | 1 / 68 / 0.737 / 0.879 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R4_verify_delegate | 1 / 68 / 0.869 / 1.249 | 1 / 68 / 1.655 / 3.008 | 2 / 136 / 1.158 / 1.969 | 1 / 196 / 1.075 / 1.317 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| V6_status_check | 1 / 3395 / 1.42 / 2.497 | 1 / 3395 / 1.312 / 1.71 | 1 / 3268 / 2.636 / 3.544 | 1 / 196 / 0.867 / 1.088 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |

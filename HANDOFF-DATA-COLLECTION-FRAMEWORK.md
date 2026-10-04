@@ -41,7 +41,7 @@ npm run metrics:quick
 
 Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit give byte-identical gas tables. This has been true only since review 02 (H-1, H-3): before it, random wallets and a shared issuer moved some cells between runs. Latencies are in-process client + EVM and reproduce in distribution only.
 
-## 3. Headline results (run of record now `2026-10-04T05-31-55Z_3ea92f7`, clean tree, locked toolchain; its ERC-1056 / ERC-721 / ERC-725 columns are byte-identical to `59405ff` quoted below, and it adds the ERC-1056 wrapper column of §3.6; full tables in `results/metrics/latest/`)
+## 3. Headline results (run of record now `2026-10-04T05-41-19Z_bca0899`, clean tree, locked toolchain; its ERC-1056 / ERC-721 / ERC-725 columns are byte-identical to `59405ff` quoted below, and it adds the ERC-1056 wrapper column of §3.6; full tables in `results/metrics/latest/`)
 
 > **Corrected in review 02** (`docs/REVIEW_02_CODEBASE.md` H-1–H-8, `docs/review02/PASS1_H.md`). The previous run `3b786c2` and the figures this section printed for it are superseded (`MEASUREMENT_CONDITIONS.md` §5.D).
 
@@ -98,7 +98,7 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 4. Latencies are **in-process** Hardhat; they measure client + EVM only. Never compare them with the Python HTTP-RPC numbers without saying so.
 5. **Toolchain must be the lockfile's.** A run with Hardhat 2.29.1 (unpinned `npm install`) moved two cells by +12 / +25 gas (ERC-721 U1, U4) against the run of record; `npm ci` (Hardhat 2.28.6) reproduced every shared cell byte-for-byte. Always `npm ci`; `meta.json` records the versions.
 
-### 3.6 ERC-1056 wrapper-controlled mode (`erc1056w`, added 2026-10-04, run `3ea92f7`)
+### 3.6 ERC-1056 wrapper-controlled mode (`erc1056w`, added 2026-10-04, run `bca0899`)
 
 | Op | pure `erc1056` | wrapper `erc1056w` | vs ERC-721 / ERC-725 (wrapper) |
 |---|---:|---:|---|
@@ -117,7 +117,7 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 | R3 resolve after lifecycle | 22 RPC / 13.5 ms | 14 RPC / 10.9 ms | vs 7 / 6.5 ms, 17 / 12.1 ms |
 | R3 at history h = 50 | 112 RPC / 75 ms | 55 RPC / 39 ms | vs 7 / 16 ms, 61 / 44 ms |
 
-Reading: the wrapper indirection costs ~9–10k gas per mutation (external call + `vehicleOwnerOf` gate) and pays back only where it collapses transactions (C2: −132k). Lifetime improves 2.4%, so the best-case ERC-1056 ratios are 2.6× / 3.1× — H1's verdict (§3.4) does not change. The cheaper resolution in wrapper mode is a side-effect of the fidelity gap in §3.5.1 (ownership transfers leave no registry event), not an efficiency gain. Conformance: `npm run test:conformance` 39 passing / 5 pending; full suite 285 passing / 6 pending.
+Reading: the wrapper indirection costs ~9–10k gas per mutation (external call + `vehicleOwnerOf` gate) and pays back only where it collapses transactions (C2: −132k). Lifetime improves 2.4%, so the best-case ERC-1056 ratios are 2.6× / 3.1× — H1's verdict (§3.4) does not change. The cheaper resolution in wrapper mode is a side-effect of the fidelity gap in §3.5.1 (ownership transfers leave no registry event), not an efficiency gain. Conformance: `npm run test:conformance` 39 passing / 5 pending; full suite 302 passing / 6 pending.
 
 ---
 
@@ -138,7 +138,7 @@ Reading: the wrapper indirection costs ~9–10k gas per mutation (external call 
 
 ## 5. Next steps, in priority order
 
-1. ~~`erc1056w` adapter~~ — **done** (`3ea92f7`, §3.6). Follow-up decision: should the wrapper emit (or forward) `DIDOwnerChanged` on ownership transfer so did:ethr resolvers see the vehicle owner? Either implement, or document the gap in the T2 compliance discussion.
+1. ~~`erc1056w` adapter~~ — **done** (`2439cd0`, §3.6). Follow-up decision: should the wrapper emit (or forward) `DIDOwnerChanged` on ownership transfer so did:ethr resolvers see the vehicle owner? Either implement, or document the gap in the T2 compliance discussion.
 2. **PKI-vs-ERC-1056 script** (`cv2x-testbed/scripts/benchmark_pki_vs_erc1056.py`, closes F2; ~3 h). Map `C2→register_vehicle, V2→sign, V4→verify, V5→revoke, V6→check_revocation, R3→resolve`; N = 30; one CSV; label the HTTP-RPC condition.
 3. **ERC-735 adapter + contract** (claims on top of the ERC-725 identity; next in the roadmap). Then ERC-1155 (first substrate with a *native batch* primitive — the `batch` scenario will finally have a `native` row), ERC-725xy, LSP8, ERC-4337, CVIN-Combined (ERC-1056 anchor + Status List + ERC-1155 credential tokens).
 4. **Rewrite H1** in `README.md` / `docs/RESEARCH_THRUSTS_REPORT.md` / `docs/thesis/README.md` per §3.4 so one hypothesis structure appears everywhere (audit F6).
@@ -158,4 +158,4 @@ Reading: the wrapper indirection costs ~9–10k gas per mutation (external call 
 - Rebased the v1 handoff commit onto the trunk that had moved (`084edfd`: build fixed to solc 0.8.24, tests 47/47, audit + project summary).
 - Wrote methodology and conditions documents; built harness; three adapters passed conformance; smoke runs surfaced and fixed: `setVehicleAttributes` unreachable in direct mode (→ pure did:ethr C2), one-address-one-DID iteration collision (→ fresh funded owner per identity), Hardhat automine nonce rejection (→ queue-then-mine throughput), ethers `estimateGas` dominating the queue phase (→ fixed fee overrides), RPC counting through `provider.send`, dataset off-by-one at N = 1 000, varying string lengths (→ fixed-width payloads).
 - Full run committed as `results/metrics/latest`; pushed.
-- 2026-10-04: added `erc1056w` on top of the review-02 harness; its conformance run exposed the one-address-one-DID collision in the test's C1/C2 (fixed: C1 uses its own wallet) and that "expire now" cannot stand in for attribute revocation (D2 declared n/a). Re-ran all six scenarios for four substrates; found and documented the toolchain-pinning effect (§3.5.5); `results/metrics/latest` is run `3ea92f7`.
+- 2026-10-04: added `erc1056w` on top of the review-02 harness; its conformance run exposed the one-address-one-DID collision in the test's C1/C2 (fixed: C1 uses its own wallet) and that "expire now" cannot stand in for attribute revocation (D2 declared n/a). Re-ran all six scenarios for four substrates; found and documented the toolchain-pinning effect (§3.5.5); `results/metrics/latest` is run `bca0899`.

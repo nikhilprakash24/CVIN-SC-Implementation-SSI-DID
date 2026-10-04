@@ -5,14 +5,14 @@
 \toprule
 Axis | op & ERC-1056 & ERC-1056 (wrapper) & ERC-721 & ERC-725 & ERC-735 & ERC-1155 & ERC-725xy & LSP8 & ERC-4337 & CVIN-Combined \\
 \midrule
-N=0|R3\_resolve\_document & 7.488 / 8.037 & 5.72 / 7.991 & 4.576 / 5.453 & 7.473 / 8.289 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-N=100|R3\_resolve\_document & 7.296 / 8.922 & 4.927 / 5.717 & 3.683 / 7.628 & 6.32 / 7.894 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-N=1000|R3\_resolve\_document & 7.429 / 7.76 & 4.988 / 9.199 & 4.679 / 7.591 & 7.667 / 8.5 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-h=1|R3\_resolve\_document & 11.591 / 16.477 & 5.724 / 6.272 & 4.092 / 5.608 & 7.641 / 8.672 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-h=10|R3\_resolve\_document & 22.432 / 26.479 & 12.532 / 14.205 & 6.076 / 7.321 & 12.075 / 15.867 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
-h=50|R3\_resolve\_document & 74.889 / 87.744 & 39.394 / 55.041 & 16.225 / 24.504 & 43.686 / 54.095 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+N=0|R3\_resolve\_document & 9.377 / 12.628 & 5.693 / 8.546 & 3.949 / 5.164 & 9.354 / 11.323 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+N=100|R3\_resolve\_document & 8.66 / 12.292 & 5.308 / 6.155 & 4.372 / 5.437 & 9.442 / 14.432 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+N=1000|R3\_resolve\_document & 11.645 / 14.593 & 7.04 / 9.245 & 3.868 / 5.077 & 7.193 / 10.999 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+h=1|R3\_resolve\_document & 10.037 / 14.587 & 6.59 / 7.543 & 3.613 / 5.438 & 10.203 / 16.268 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+h=10|R3\_resolve\_document & 21.047 / 25.573 & 12.003 / 13.702 & 8.033 / 12.499 & 14.445 / 16.467 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
+h=50|R3\_resolve\_document & 77.301 / 117.713 & 43.763 / 51.596 & 28.149 / 65.459 & 40.956 / 51.772 & not impl. & not impl. & not impl. & not impl. & not impl. & not impl. \\
 \bottomrule
 \end{tabular}
-\caption{L3 — Read latency vs N and h: median / p95 ms (in-process, 2 warm-up + 10 samples) Run 2026-10-04T05-31-55Z\_3ea92f7 · commit 3ea92f7 (dirty) · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30}
+\caption{L3 — Read latency vs N and h: median / p95 ms (in-process, 2 warm-up + 10 samples) Run 2026-10-04T05-41-19Z\_bca0899 · commit bca0899 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30}
 \label{tab:scale_latency}
 \end{table}

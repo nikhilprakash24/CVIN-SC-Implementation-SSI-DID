@@ -6,4 +6,4 @@
 | Log bytes | 6,464 | 6,592 | 4,288 | 3,072 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 | Zero→nonzero SSTOREs | 8 | 9 | 92 | 83 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 
-_Run 2026-10-04T05-31-55Z_3ea92f7 · commit 3ea92f7 (dirty) · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-04T05-41-19Z_bca0899 · commit bca0899 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_

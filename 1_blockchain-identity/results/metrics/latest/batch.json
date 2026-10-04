@@ -7,7 +7,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 8.883625,
+    "latencyMs": 9.966497,
     "gasUsed": 76808,
     "gasIntrinsic": 23712,
     "gasExecution": 53096,
@@ -20,7 +20,7 @@
     "evmSteps": 1103,
     "deploysContract": false,
     "gasPerItem": 76808,
-    "latencyPerItemMs": 8.883625
+    "latencyPerItemMs": 9.966497
   },
   {
     "adapter": "erc1056",
@@ -30,7 +30,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 10,
-    "latencyMs": 99.922927,
+    "latencyMs": 110.796508,
     "gasUsed": 768080,
     "gasIntrinsic": 237120,
     "gasExecution": 530960,
@@ -43,7 +43,7 @@
     "evmSteps": 11030,
     "deploysContract": false,
     "gasPerItem": 76808,
-    "latencyPerItemMs": 9.9922927
+    "latencyPerItemMs": 11.0796508
   },
   {
     "adapter": "erc1056",
@@ -53,7 +53,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 100,
-    "latencyMs": 907.106012,
+    "latencyMs": 982.265599,
     "gasUsed": 7680800,
     "gasIntrinsic": 2371200,
     "gasExecution": 5309600,
@@ -66,7 +66,7 @@
     "evmSteps": 110300,
     "deploysContract": false,
     "gasPerItem": 76808,
-    "latencyPerItemMs": 9.07106012
+    "latencyPerItemMs": 9.82265599
   },
   {
     "adapter": "erc1056w",
@@ -76,7 +76,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 2,
-    "latencyMs": 19.261939,
+    "latencyMs": 17.104674,
     "gasUsed": 145662,
     "gasIntrinsic": 45512,
     "gasExecution": 100150,
@@ -89,7 +89,7 @@
     "evmSteps": 1373,
     "deploysContract": false,
     "gasPerItem": 145662,
-    "latencyPerItemMs": 19.261939
+    "latencyPerItemMs": 17.104674
   },
   {
     "adapter": "erc1056w",
@@ -99,7 +99,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 20,
-    "latencyMs": 160.738602,
+    "latencyMs": 155.978461,
     "gasUsed": 1456620,
     "gasIntrinsic": 455120,
     "gasExecution": 1001500,
@@ -112,7 +112,7 @@
     "evmSteps": 13730,
     "deploysContract": false,
     "gasPerItem": 145662,
-    "latencyPerItemMs": 16.0738602
+    "latencyPerItemMs": 15.597846100000002
   },
   {
     "adapter": "erc1056w",
@@ -122,7 +122,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 200,
-    "latencyMs": 1753.315819,
+    "latencyMs": 1848.129137,
     "gasUsed": 14566200,
     "gasIntrinsic": 4551200,
     "gasExecution": 10015000,
@@ -135,7 +135,7 @@
     "evmSteps": 137300,
     "deploysContract": false,
     "gasPerItem": 145662,
-    "latencyPerItemMs": 17.533158189999998
+    "latencyPerItemMs": 18.481291369999997
   },
   {
     "adapter": "erc721",
@@ -145,7 +145,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 1,
-    "latencyMs": 11.920305,
+    "latencyMs": 16.940279,
     "gasUsed": 397044,
     "gasIntrinsic": 23292,
     "gasExecution": 373752,
@@ -158,7 +158,7 @@
     "evmSteps": 2437,
     "deploysContract": false,
     "gasPerItem": 397044,
-    "latencyPerItemMs": 11.920305
+    "latencyPerItemMs": 16.940279
   },
   {
     "adapter": "erc721",
@@ -168,7 +168,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 10,
-    "latencyMs": 153.596168,
+    "latencyMs": 124.589108,
     "gasUsed": 3995640,
     "gasIntrinsic": 232920,
     "gasExecution": 3762720,
@@ -181,7 +181,7 @@
     "evmSteps": 24370,
     "deploysContract": false,
     "gasPerItem": 399564,
-    "latencyPerItemMs": 15.359616800000001
+    "latencyPerItemMs": 12.4589108
   },
   {
     "adapter": "erc721",
@@ -191,7 +191,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 100,
-    "latencyMs": 1298.113611,
+    "latencyMs": 1422.735952,
     "gasUsed": 39981600,
     "gasIntrinsic": 2329200,
     "gasExecution": 37652400,
@@ -204,7 +204,7 @@
     "evmSteps": 243700,
     "deploysContract": false,
     "gasPerItem": 399816,
-    "latencyPerItemMs": 12.98113611
+    "latencyPerItemMs": 14.22735952
   },
   {
     "adapter": "erc725",
@@ -214,7 +214,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 2,
-    "latencyMs": 20.358993,
+    "latencyMs": 20.388412,
     "gasUsed": 656480,
     "gasIntrinsic": 108538,
     "gasExecution": 547942,
@@ -227,7 +227,7 @@
     "evmSteps": 228,
     "deploysContract": true,
     "gasPerItem": 656480,
-    "latencyPerItemMs": 20.358993
+    "latencyPerItemMs": 20.388412
   },
   {
     "adapter": "erc725",
@@ -237,7 +237,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 20,
-    "latencyMs": 183.641021,
+    "latencyMs": 227.255185,
     "gasUsed": 6564788,
     "gasIntrinsic": 1085368,
     "gasExecution": 5479420,
@@ -250,7 +250,7 @@
     "evmSteps": 2280,
     "deploysContract": true,
     "gasPerItem": 656479,
-    "latencyPerItemMs": 18.3641021
+    "latencyPerItemMs": 22.7255185
   },
   {
     "adapter": "erc725",
@@ -260,7 +260,7 @@
     "mode": "sequential",
     "kind": "tx",
     "txCount": 200,
-    "latencyMs": 2057.745394,
+    "latencyMs": 2185.937965,
     "gasUsed": 65647832,
     "gasIntrinsic": 10853632,
     "gasExecution": 54794200,
@@ -273,6 +273,6 @@
     "evmSteps": 22800,
     "deploysContract": true,
     "gasPerItem": 656478,
-    "latencyPerItemMs": 20.57745394
+    "latencyPerItemMs": 21.85937965
   }
 ]

@@ -199,12 +199,12 @@ not have, so the two latency columns are **not** directly comparable and must be
 ### 5.E Toolchain pinning (M1-H), observed 2026-10-04
 
 Gas is EVM-defined, but the node that executes it is not version-free. A harness run on
-commit `3ea92f7` with an **unpinned** `npm install` (Hardhat 2.29.1, Node 22.22.2) moved two
+commit `3ea92f7` (pre-rebase hash of `2439cd0`; identical `1_blockchain-identity` tree) with an **unpinned** `npm install` (Hardhat 2.29.1, Node 22.22.2) moved two
 cells against the run of record `59405ff` (Hardhat 2.28.6): ERC-721 `U1_rotate_controller`
 179,470 → 179,482 (+12) and `U4_transfer_vehicle` 182,374 → 182,399 (+25); every other cell,
 including all lifecycle events, was identical. Re-running the same commit after `npm ci`
 (lockfile toolchain) reproduced the run of record byte-for-byte in all shared columns
-(run `2026-10-04T05-31-55Z_3ea92f7`, now `results/metrics/latest`). Rules:
+(run `2026-10-04T05-41-19Z_bca0899`, now `results/metrics/latest`). Rules:
 
 - M1-H runs are valid only from `npm ci`; `meta.json` records `hardhat` and `node`, and a
   chapter may cite a run only if those match the lockfile.
