@@ -46,4 +46,41 @@ register, update the defect log, close.
 
 - **D-F** — revocation is terminal: every mutator, including `revokeDelegate`/`revokeAttribute`, reverts for a revoked identity (the agent offered a looser variant; rejected — clean-up after revocation would re-open the change list a resolver relies on).
 
-## 4. Closing — *(written last)*
+- **F7 (D25) done**: `CVINVehicleClaimHolder` gains `authorizeIssuer`/`revokeIssuer`/`isAuthorizedIssuer` (owner-only; the owner is exempt as self-issuer); `addClaim` checks signature → issuer authorised → topic-1 VIN binding (`_encodesHolderVin`). 14 regression tests. Every caller updated (ERC-735 adapter appends the VIN to topic-1 data before signing and authorises a non-owner issuer; security fixture; gas and scaling benchmarks; security-scenario script). Deploy +227,534 gas; D25c (raw-digest vs EIP-191) recorded in the NatSpec as the author's decision, recommendation EIP-191.
+- **Results of record re-executed** (`2b38536`): nine-standard gas table, feature matrix and manifests regenerated from the fixed ABIs; 22 of 55 cells moved, each listed with its delta in `gas_moved_by_defect_fixes_2026-10-04.json`; register #25 annotated, #31 added; README and thesis-README figures refreshed (`3a7a4ec`). CI green.
+- **Demos updated** (`5778651` ERC-735 by me; `eed6bfc` the other seven options, delegated): 16 demos had asserted the defective behaviour (step ids ending `-DEFECT`, `-CUT`, `not-blocked-*`); each now asserts the fix and is labelled "FIXED (Dnn)". One stale narrative found beyond the list: the JS mirror of `verify_message` in `mobi-vid/demos/offchain-messaging.js` still accepted an impostor — corrected to the D11 semantics. Acceptance: 67/67 demos under those options exit 0 with `ok:true`.
+- **Grand run on the fixed trunk** (`eed6bfc`): ALL OK — smoke 11/11 adapters, L1 99, L1+L2 366, L3+L4 87, demos 92/92 with 1,688 steps and 66 flagged observations (was 319 / 81 / 1,625 steps / 87 flagged before the pass: +47 Hardhat and +6 Python regression tests, +63 demo steps, 21 fewer flags because the flagged defects are now asserted reverts).
+- Defect log updated (§B statuses with commits; new §C: every open item with the decision it needs); session manifest Pass 6; handback addendum 0c.
+
+## 4. Closing
+
+**What was fixed.** Seven of the nine high-severity defects: D10, D11, D13, D18, D21, D22,
+D25a/b. Each landed under rule §0: 47 Hardhat + 6 Python regression tests, demos green,
+grand runner green, results of record re-executed. D16 is partly fixed as a consequence of
+D21. Two high items remain open and are now unblocked: **D7** (ERC-1155 BIRTH_CERT moved by
+a standard transfer, mechanical fix) and **D11b** (the vehicle key is never anchored
+on-chain; it needed the D21 registry first).
+
+**What the fixes cost, and why that is a result.** The chain-side fixes moved 22 of the
+55 gas cells; the largest is ERC-735's deployment (+227,534 for the issuer registry) and the
+smallest the +2.7–3.4k a VIN alphabet check adds to a mint. The pre-fix table priced a
+surface that accepted impostor issuers, duplicate VINs and severed resolution lists. The
+comparison chapter should say so: *veracity has a gas price, and the nine-standard table
+now includes it.* That is the asymmetry section's security column made numerical.
+
+**What I changed my mind about.** The agent that fixed D21 proposed letting `revokeDelegate`
+and `revokeAttribute` run after revocation ("clean-up"). I rejected it (D-F): any mutation
+after `DIDRevoked` re-opens the `changed()` list a resolver follows, and the revocation
+record would no longer be the list's head. The cost is that a revoked identity is frozen with
+whatever attributes it had; the resolver reports it as deactivated, which is the DID Core
+semantics anyway.
+
+**What I did not do.** No open **M** item was touched; they need author decisions and are
+tabulated in `DEFECT_LOG.md` §C with the decision each one needs. The external W3C DID
+test suite was not re-run against a registry-minted `did:ethr` (D10 follow-up); the resolver
+fixtures it runs on were already conformant and the fix is in the registry's string builder,
+but the claim "conformant end to end from this registry" is not yet evidenced. The
+chapter-5 tables still quote July gas values (known since Pass 3).
+
+**Trunk at close:** `eed6bfc` + this closing commit; tree clean after push; CI to be
+confirmed on the closing commit (read below in the handback).

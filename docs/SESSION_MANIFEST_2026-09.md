@@ -80,3 +80,18 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/DEFECT_LOG.md` | 26 latent defects with severity, status, treatment | what the sandbox found |
 | `docs/thesis/chapter6-discussion/section-feature-asymmetry.md` | draft section: union vs intersection, three axes, asymmetry budget | S10 |
 | Contract fix `CVINVehicleCredential1155` self-transfer guard + regression test; `_research-copies/` archive; CI identity/freshness checks; `js-yaml` dev dependency | hygiene the steps required | — |
+
+## Pass 6 — Fixing the high-severity defects (2026-10-04)
+
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_05.md` | Report 05: the rule every fix had to meet, the plan F1–F7, the per-fix log, decisions D-E/D-F, closing | opened before the first fix, closed after the grand run |
+| `cv2x-testbed/identity/mobi_vid_provider.py` (`f87f8c4`) + `sandbox/py-suites/L3-ssi/test_mobi_provider_key_binding.py` | D11: verification bound to the registered key, not the key in the message; 6 chain-free tests | the MOBI V2V security claim depended on it |
+| `ERC1056Registry.sol` (both copies, byte-identical), `CVINCombinedIdentity.sol`, `CVINVehicleDIDRegistry.sol`, `MOBIVIDRegistry.sol` (`65a143f`) + 18 regression tests | D21 (revocation terminal, `previousChange` on `DIDRevoked`), D22 (`DIDClaimChanged`), D18 (100-year validity; birth record reachable), D10 (`0x` in `did:ethr`) | resolution correctness and conformance |
+| `CVINVehicleNFT.sol`, `CVINVehicleCredential1155.sol`, `CVINVehicleLSP8.sol` (`241642e`) + 15 regression tests; `_l1.js`/`smoke.js` VIN prefix; ERC-1155 adapter | D13: one `_normalizeVIN` (upper-case, ISO 3779 alphabet, no check digit) in every mint and lookup path | Sybil-adjacent duplicate identities |
+| `CVINVehicleClaimHolder.sol` (`ad470b6`) + 14 regression tests; adapter, security fixture, benchmark scripts | D25a/b: issuer registry and VIN binding of topic-1 claims; D25c recorded as a design decision | claim veracity |
+| `4_comparison-framework/results/gas_benchmark.json`, `gas_comparison.{csv,tex}`, `gas_moved_by_defect_fixes_2026-10-04.json` (`2b38536`) | results of record re-executed after the fixes; 22 of 55 cells moved, each listed with its delta | decision D-E: numbers must describe the code |
+| `docs/MEASUREMENT_CONDITIONS.md` #25 note, #31; README gas table; `docs/thesis/README.md` figures (`3a7a4ec`) | the register and the two READMEs quote the 2026-10-04 values | no stale number left in a document that cites gas |
+| 92 demos + 8 READMEs under `sandbox/options/` (`5778651`, `eed6bfc`) | steps that asserted the defective behaviour now assert the fix; READMEs split fixed from still-open | the demos are the chapter's evidence of the surface |
+| `docs/DEFECT_LOG.md` §B statuses, new §C (open items with the decision each needs) | the log reflects the fix pass | the chapter cites the log |
+| `sandbox/grand/report/*` (regenerated) | the grand run on the fixed trunk | the chapter's data |

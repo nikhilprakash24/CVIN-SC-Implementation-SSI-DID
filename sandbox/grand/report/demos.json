@@ -5,23 +5,23 @@
     "family": "attributes",
     "ok": true,
     "steps": 13,
-    "gas_total": 1849305,
+    "gas_total": 1898518,
     "flagged": 1,
-    "seconds": 1.9
+    "seconds": 2.0
    },
    {
     "family": "authorisation-roles",
     "ok": true,
     "steps": 13,
-    "gas_total": 2057147,
+    "gas_total": 2110568,
     "flagged": 2,
-    "seconds": 1.7
+    "seconds": 2.0
    },
    {
     "family": "claims",
     "ok": true,
     "steps": 29,
-    "gas_total": 2656771,
+    "gas_total": 2714425,
     "flagged": 1,
     "seconds": 2.6
    },
@@ -29,55 +29,55 @@
     "family": "controller",
     "ok": true,
     "steps": 14,
-    "gas_total": 1816329,
+    "gas_total": 1867473,
     "flagged": 0,
-    "seconds": 1.9
+    "seconds": 1.7
    },
    {
     "family": "did-resolution",
     "ok": true,
     "steps": 12,
-    "gas_total": 2091042,
+    "gas_total": 2142619,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 2.5
    },
    {
     "family": "keys-delegates",
     "ok": true,
     "steps": 13,
-    "gas_total": 1583972,
+    "gas_total": 1630869,
     "flagged": 1,
-    "seconds": 1.9
+    "seconds": 1.8
    },
    {
     "family": "lifecycle-history",
     "ok": true,
-    "steps": 13,
-    "gas_total": 1824439,
-    "flagged": 1,
+    "steps": 14,
+    "gas_total": 1875531,
+    "flagged": 0,
     "seconds": 2.5
    },
    {
     "family": "offchain-creation",
     "ok": true,
     "steps": 11,
-    "gas_total": 1646287,
+    "gas_total": 1695512,
     "flagged": 0,
-    "seconds": 1.9
+    "seconds": 1.8
    },
    {
     "family": "revocation",
     "ok": true,
     "steps": 15,
-    "gas_total": 2256201,
+    "gas_total": 2313471,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 2.5
    },
    {
     "family": "vin-linkage",
     "ok": true,
     "steps": 10,
-    "gas_total": 1972932,
+    "gas_total": 2024459,
     "flagged": 0,
     "seconds": 1.8
    }
@@ -86,48 +86,48 @@
    {
     "family": "attributes",
     "ok": true,
-    "steps": 28,
-    "gas_total": 3110117,
-    "flagged": 2,
-    "seconds": 2.5
+    "steps": 31,
+    "gas_total": 3207967,
+    "flagged": 0,
+    "seconds": 2.7
    },
    {
     "family": "authorisation-roles",
     "ok": true,
     "steps": 13,
-    "gas_total": 2825536,
+    "gas_total": 2839940,
     "flagged": 1,
-    "seconds": 1.9
+    "seconds": 1.7
    },
    {
     "family": "controller",
     "ok": true,
     "steps": 30,
-    "gas_total": 3182650,
+    "gas_total": 3197110,
     "flagged": 1,
-    "seconds": 2.3
+    "seconds": 2.6
    },
    {
     "family": "creation",
     "ok": true,
     "steps": 15,
-    "gas_total": 2881476,
+    "gas_total": 2895902,
     "flagged": 0,
-    "seconds": 1.8
+    "seconds": 1.7
    },
    {
     "family": "did-resolution",
     "ok": true,
     "steps": 14,
-    "gas_total": 2893347,
+    "gas_total": 2907751,
     "flagged": 0,
-    "seconds": 2.3
+    "seconds": 2.6
    },
    {
     "family": "keys-delegates",
     "ok": true,
     "steps": 22,
-    "gas_total": 3141268,
+    "gas_total": 3155670,
     "flagged": 0,
     "seconds": 2.0
    },
@@ -135,41 +135,41 @@
     "family": "lifecycle-history",
     "ok": true,
     "steps": 13,
-    "gas_total": 2978277,
+    "gas_total": 2992681,
     "flagged": 0,
-    "seconds": 2.0
+    "seconds": 2.7
    },
    {
     "family": "offchain-creation",
     "ok": true,
     "steps": 13,
-    "gas_total": 2858695,
+    "gas_total": 2873099,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 1.7
    },
    {
     "family": "revocation",
     "ok": true,
     "steps": 21,
-    "gas_total": 3379633,
+    "gas_total": 3394059,
     "flagged": 2,
-    "seconds": 2.0
+    "seconds": 2.4
    },
    {
     "family": "signed-execution",
     "ok": true,
     "steps": 13,
-    "gas_total": 1253949,
+    "gas_total": 1253973,
     "flagged": 0,
-    "seconds": 2.3
+    "seconds": 1.9
    },
    {
     "family": "vin-linkage",
     "ok": true,
     "steps": 15,
-    "gas_total": 2863870,
+    "gas_total": 2878296,
     "flagged": 2,
-    "seconds": 1.8
+    "seconds": 2.5
    }
   ],
   "erc-1056-vehicle": [
@@ -177,73 +177,73 @@
     "family": "attributes",
     "ok": true,
     "steps": 10,
-    "gas_total": 972579,
-    "flagged": 1,
-    "seconds": 2.2
+    "gas_total": 949706,
+    "flagged": 0,
+    "seconds": 2.0
    },
    {
     "family": "claims",
     "ok": true,
     "steps": 10,
-    "gas_total": 756396,
+    "gas_total": 764425,
     "flagged": 0,
-    "seconds": 2.0
+    "seconds": 2.4
    },
    {
     "family": "controller",
     "ok": true,
     "steps": 13,
-    "gas_total": 837610,
+    "gas_total": 850065,
     "flagged": 1,
-    "seconds": 2.3
+    "seconds": 1.9
    },
    {
     "family": "creation",
     "ok": true,
     "steps": 13,
-    "gas_total": 975070,
+    "gas_total": 985891,
     "flagged": 1,
-    "seconds": 1.9
+    "seconds": 2.6
    },
    {
     "family": "did-resolution",
     "ok": true,
     "steps": 11,
-    "gas_total": 828404,
+    "gas_total": 836433,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 1.8
    },
    {
     "family": "keys-delegates",
     "ok": true,
     "steps": 11,
-    "gas_total": 896831,
+    "gas_total": 909286,
     "flagged": 1,
-    "seconds": 1.6
+    "seconds": 2.4
    },
    {
     "family": "lifecycle-history",
     "ok": true,
     "steps": 13,
-    "gas_total": 954226,
-    "flagged": 1,
-    "seconds": 2.3
+    "gas_total": 965015,
+    "flagged": 0,
+    "seconds": 1.7
    },
    {
     "family": "offchain-messaging",
     "ok": true,
     "steps": 10,
-    "gas_total": 831219,
+    "gas_total": 839795,
     "flagged": 1,
-    "seconds": 1.8
+    "seconds": 2.6
    },
    {
     "family": "revocation",
     "ok": true,
-    "steps": 22,
-    "gas_total": 1058251,
-    "flagged": 2,
-    "seconds": 2.4
+    "steps": 24,
+    "gas_total": 981757,
+    "flagged": 0,
+    "seconds": 1.8
    }
   ],
   "erc-1155": [
@@ -253,71 +253,71 @@
     "steps": 13,
     "gas_total": 213637,
     "flagged": 2,
-    "seconds": 1.7
+    "seconds": 2.3
    },
    {
     "family": "authorisation-roles",
     "ok": true,
     "steps": 19,
-    "gas_total": 551229,
+    "gas_total": 554696,
     "flagged": 1,
-    "seconds": 2.4
+    "seconds": 1.9
    },
    {
     "family": "claims",
     "ok": true,
     "steps": 24,
-    "gas_total": 537693,
+    "gas_total": 537935,
     "flagged": 3,
-    "seconds": 2.3
+    "seconds": 2.4
    },
    {
     "family": "controller",
     "ok": true,
     "steps": 27,
-    "gas_total": 607297,
+    "gas_total": 607628,
     "flagged": 3,
-    "seconds": 2.1
+    "seconds": 1.8
    },
    {
     "family": "creation",
     "ok": true,
-    "steps": 18,
-    "gas_total": 311487,
-    "flagged": 1,
-    "seconds": 1.9
+    "steps": 20,
+    "gas_total": 214476,
+    "flagged": 0,
+    "seconds": 2.4
    },
    {
     "family": "lifecycle-history",
     "ok": true,
     "steps": 14,
-    "gas_total": 470610,
+    "gas_total": 474121,
     "flagged": 0,
-    "seconds": 2.3
+    "seconds": 1.7
    },
    {
     "family": "revocation",
     "ok": true,
     "steps": 16,
-    "gas_total": 340694,
+    "gas_total": 344157,
     "flagged": 3,
-    "seconds": 2.0
+    "seconds": 2.6
    },
    {
     "family": "token-economics",
     "ok": true,
     "steps": 13,
-    "gas_total": 117357,
+    "gas_total": 117423,
     "flagged": 2,
-    "seconds": 2.3
+    "seconds": 1.8
    },
    {
     "family": "vin-linkage",
     "ok": true,
-    "steps": 11,
-    "gas_total": 224993,
-    "flagged": 1,
-    "seconds": 1.8
+    "steps": 14,
+    "gas_total": 228411,
+    "flagged": 0,
+    "seconds": 2.4
    }
   ],
   "erc-4337": [
@@ -327,15 +327,15 @@
     "steps": 15,
     "gas_total": 302272,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 1.6
    },
    {
     "family": "controller",
     "ok": true,
     "steps": 21,
-    "gas_total": 257650,
+    "gas_total": 257662,
     "flagged": 0,
-    "seconds": 2.0
+    "seconds": 2.4
    },
    {
     "family": "creation",
@@ -343,7 +343,7 @@
     "steps": 14,
     "gas_total": 21062,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 2.5
    },
    {
     "family": "keys-delegates",
@@ -351,7 +351,7 @@
     "steps": 19,
     "gas_total": 205742,
     "flagged": 1,
-    "seconds": 1.8
+    "seconds": 1.9
    },
    {
     "family": "lifecycle-history",
@@ -359,7 +359,7 @@
     "steps": 15,
     "gas_total": 295592,
     "flagged": 0,
-    "seconds": 2.3
+    "seconds": 2.5
    },
    {
     "family": "signed-execution",
@@ -367,7 +367,7 @@
     "steps": 25,
     "gas_total": 258512,
     "flagged": 0,
-    "seconds": 2.0
+    "seconds": 2.1
    }
   ],
   "erc-721": [
@@ -375,17 +375,17 @@
     "family": "attributes",
     "ok": true,
     "steps": 24,
-    "gas_total": 451954,
+    "gas_total": 451966,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 1.9
    },
    {
     "family": "authorisation-roles",
     "ok": true,
     "steps": 22,
-    "gas_total": 856635,
+    "gas_total": 859358,
     "flagged": 2,
-    "seconds": 1.9
+    "seconds": 2.5
    },
    {
     "family": "controller",
@@ -393,15 +393,15 @@
     "steps": 37,
     "gas_total": 1103280,
     "flagged": 0,
-    "seconds": 2.5
+    "seconds": 1.7
    },
    {
     "family": "creation",
     "ok": true,
     "steps": 38,
-    "gas_total": 1278637,
+    "gas_total": 1284083,
     "flagged": 0,
-    "seconds": 1.8
+    "seconds": 2.4
    },
    {
     "family": "did-resolution",
@@ -409,7 +409,7 @@
     "steps": 8,
     "gas_total": 0,
     "flagged": 0,
-    "seconds": 2.6
+    "seconds": 2.0
    },
    {
     "family": "lifecycle-history",
@@ -417,7 +417,7 @@
     "steps": 18,
     "gas_total": 568094,
     "flagged": 0,
-    "seconds": 1.8
+    "seconds": 2.4
    },
    {
     "family": "revocation",
@@ -425,7 +425,7 @@
     "steps": 16,
     "gas_total": 338694,
     "flagged": 2,
-    "seconds": 2.5
+    "seconds": 1.9
    },
    {
     "family": "token-economics",
@@ -433,15 +433,15 @@
     "steps": 43,
     "gas_total": 1005301,
     "flagged": 1,
-    "seconds": 2.0
+    "seconds": 2.8
    },
    {
     "family": "vin-linkage",
     "ok": true,
-    "steps": 13,
-    "gas_total": 1000824,
-    "flagged": 2,
-    "seconds": 2.5
+    "steps": 15,
+    "gas_total": 500311,
+    "flagged": 0,
+    "seconds": 1.7
    }
   ],
   "erc-725": [
@@ -451,7 +451,7 @@
     "steps": 14,
     "gas_total": 1250683,
     "flagged": 2,
-    "seconds": 1.9
+    "seconds": 2.5
    },
    {
     "family": "creation",
@@ -459,7 +459,7 @@
     "steps": 9,
     "gas_total": 1586542,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 1.7
    },
    {
     "family": "keys-delegates",
@@ -467,15 +467,15 @@
     "steps": 19,
     "gas_total": 1335239,
     "flagged": 3,
-    "seconds": 1.8
+    "seconds": 2.5
    },
    {
     "family": "revocation",
     "ok": true,
     "steps": 19,
-    "gas_total": 1506195,
+    "gas_total": 1506207,
     "flagged": 1,
-    "seconds": 2.5
+    "seconds": 1.9
    },
    {
     "family": "signed-execution",
@@ -483,7 +483,7 @@
     "steps": 13,
     "gas_total": 814929,
     "flagged": 1,
-    "seconds": 1.9
+    "seconds": 2.5
    }
   ],
   "erc-725xy": [
@@ -493,7 +493,7 @@
     "steps": 22,
     "gas_total": 2108814,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 1.9
    },
    {
     "family": "controller",
@@ -501,7 +501,7 @@
     "steps": 13,
     "gas_total": 1782757,
     "flagged": 0,
-    "seconds": 1.8
+    "seconds": 2.3
    },
    {
     "family": "creation",
@@ -509,7 +509,7 @@
     "steps": 17,
     "gas_total": 3841206,
     "flagged": 0,
-    "seconds": 2.3
+    "seconds": 1.8
    },
    {
     "family": "lifecycle-history",
@@ -517,7 +517,7 @@
     "steps": 14,
     "gas_total": 2118489,
     "flagged": 0,
-    "seconds": 1.8
+    "seconds": 2.3
    },
    {
     "family": "revocation",
@@ -525,7 +525,7 @@
     "steps": 13,
     "gas_total": 1958402,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 1.7
    },
    {
     "family": "signed-execution",
@@ -533,7 +533,7 @@
     "steps": 34,
     "gas_total": 3833449,
     "flagged": 1,
-    "seconds": 2.0
+    "seconds": 2.3
    },
    {
     "family": "vin-linkage",
@@ -541,65 +541,65 @@
     "steps": 12,
     "gas_total": 1879105,
     "flagged": 1,
-    "seconds": 2.2
+    "seconds": 2.5
    }
   ],
   "erc-735": [
    {
     "family": "authorisation-roles",
     "ok": true,
-    "steps": 12,
-    "gas_total": 2220361,
-    "flagged": 1,
-    "seconds": 1.8
+    "steps": 27,
+    "gas_total": 2525599,
+    "flagged": 0,
+    "seconds": 1.9
    },
    {
     "family": "claims",
     "ok": true,
-    "steps": 32,
-    "gas_total": 3039122,
+    "steps": 41,
+    "gas_total": 3802320,
     "flagged": 0,
-    "seconds": 2.5
+    "seconds": 2.6
    },
    {
     "family": "controller",
     "ok": true,
-    "steps": 12,
-    "gas_total": 1762157,
+    "steps": 16,
+    "gas_total": 2067053,
     "flagged": 0,
-    "seconds": 2.2
+    "seconds": 1.7
    },
    {
     "family": "creation",
     "ok": true,
-    "steps": 11,
-    "gas_total": 4142884,
+    "steps": 12,
+    "gas_total": 4825552,
     "flagged": 0,
-    "seconds": 2.5
+    "seconds": 2.4
    },
    {
     "family": "lifecycle-history",
     "ok": true,
-    "steps": 10,
-    "gas_total": 1876922,
+    "steps": 11,
+    "gas_total": 2160516,
     "flagged": 0,
-    "seconds": 1.8
+    "seconds": 1.7
    },
    {
     "family": "revocation",
     "ok": true,
-    "steps": 16,
-    "gas_total": 2359216,
+    "steps": 23,
+    "gas_total": 2765798,
     "flagged": 0,
     "seconds": 2.4
    },
    {
     "family": "vin-linkage",
     "ok": true,
-    "steps": 10,
-    "gas_total": 1892869,
-    "flagged": 1,
-    "seconds": 2.0
+    "steps": 17,
+    "gas_total": 2228352,
+    "flagged": 0,
+    "seconds": 1.9
    }
   ],
   "lsp8": [
@@ -607,15 +607,15 @@
     "family": "attributes",
     "ok": true,
     "steps": 18,
-    "gas_total": 324109,
+    "gas_total": 324188,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 2.5
    },
    {
     "family": "claims",
     "ok": true,
     "steps": 14,
-    "gas_total": 384621,
+    "gas_total": 384605,
     "flagged": 1,
     "seconds": 1.8
    },
@@ -623,31 +623,31 @@
     "family": "controller",
     "ok": true,
     "steps": 21,
-    "gas_total": 419657,
+    "gas_total": 422584,
     "flagged": 1,
-    "seconds": 2.4
+    "seconds": 2.5
    },
    {
     "family": "creation",
     "ok": true,
-    "steps": 25,
-    "gas_total": 551840,
-    "flagged": 1,
-    "seconds": 1.9
+    "steps": 26,
+    "gas_total": 425935,
+    "flagged": 0,
+    "seconds": 1.8
    },
    {
     "family": "lifecycle-history",
     "ok": true,
     "steps": 16,
-    "gas_total": 471697,
+    "gas_total": 471683,
     "flagged": 0,
-    "seconds": 2.5
+    "seconds": 2.7
    },
    {
     "family": "revocation",
     "ok": true,
     "steps": 16,
-    "gas_total": 247040,
+    "gas_total": 249986,
     "flagged": 2,
     "seconds": 1.8
    },
@@ -655,17 +655,17 @@
     "family": "token-economics",
     "ok": true,
     "steps": 14,
-    "gas_total": 417662,
+    "gas_total": 423650,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 2.3
    },
    {
     "family": "vin-linkage",
     "ok": true,
-    "steps": 11,
-    "gas_total": 322391,
-    "flagged": 3,
-    "seconds": 1.8
+    "steps": 12,
+    "gas_total": 190303,
+    "flagged": 1,
+    "seconds": 1.9
    }
   ],
   "mobi-vid": [
@@ -673,9 +673,9 @@
     "family": "attributes",
     "ok": true,
     "steps": 17,
-    "gas_total": 360162,
+    "gas_total": 331333,
     "flagged": 1,
-    "seconds": 2.3
+    "seconds": 2.5
    },
    {
     "family": "authorisation-roles",
@@ -683,70 +683,70 @@
     "steps": 29,
     "gas_total": 532575,
     "flagged": 3,
-    "seconds": 1.9
+    "seconds": 2.0
    },
    {
     "family": "claims",
     "ok": true,
     "steps": 48,
-    "gas_total": 4435544,
+    "gas_total": 4435568,
     "flagged": 3,
     "seconds": 2.8
    },
    {
     "family": "controller",
     "ok": true,
-    "steps": 24,
-    "gas_total": 710966,
-    "flagged": 3,
-    "seconds": 1.9
+    "steps": 25,
+    "gas_total": 678896,
+    "flagged": 2,
+    "seconds": 1.8
    },
    {
     "family": "creation",
     "ok": true,
     "steps": 28,
-    "gas_total": 1066669,
+    "gas_total": 1066705,
     "flagged": 2,
-    "seconds": 2.5
+    "seconds": 2.2
    },
    {
     "family": "did-resolution",
     "ok": true,
     "steps": 10,
     "gas_total": 0,
-    "flagged": 2,
-    "seconds": 2.1
+    "flagged": 1,
+    "seconds": 2.6
    },
    {
     "family": "keys-delegates",
     "ok": true,
     "steps": 20,
-    "gas_total": 315414,
+    "gas_total": 287769,
     "flagged": 3,
-    "seconds": 1.9
+    "seconds": 1.8
    },
    {
     "family": "lifecycle-history",
     "ok": true,
     "steps": 28,
-    "gas_total": 2105094,
+    "gas_total": 2105307,
     "flagged": 0,
-    "seconds": 2.4
+    "seconds": 2.6
    },
    {
     "family": "offchain-messaging",
     "ok": true,
-    "steps": 11,
+    "steps": 13,
     "gas_total": 35253,
-    "flagged": 1,
-    "seconds": 2.0
+    "flagged": 0,
+    "seconds": 1.9
    },
    {
     "family": "revocation",
     "ok": true,
-    "steps": 27,
-    "gas_total": 593805,
-    "flagged": 3,
+    "steps": 28,
+    "gas_total": 455157,
+    "flagged": 1,
     "seconds": 2.6
    },
    {
@@ -755,7 +755,7 @@
     "steps": 10,
     "gas_total": 643133,
     "flagged": 1,
-    "seconds": 1.8
+    "seconds": 1.9
    }
   ]
  },
@@ -766,7 +766,7 @@
    "step": "deploy-registry",
    "fn": "CVINCombinedIdentity.constructor",
    "onchain": true,
-   "gasUsed": "1325604",
+   "gasUsed": "1372501",
    "note": "shared hybrid registry"
   },
   {
@@ -784,7 +784,7 @@
    "step": "setAttribute-rotate",
    "fn": "CVINCombinedIdentity.setAttribute",
    "onchain": true,
-   "gasUsed": "34272",
+   "gasUsed": "34260",
    "note": "key rotation = publish the next value; the previous one stays valid until its validTo or an explicit revoke"
   },
   {
@@ -847,7 +847,7 @@
    "step": "vin-as-claim",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "269311",
+   "gasUsed": "271639",
    "note": "\u2026 versus anchored as an issuer-signed, stored claim: the hybrid lets the owner choose per datum"
   },
   {
@@ -857,7 +857,7 @@
    "fn": "CVINCombinedIdentity.setAttribute",
    "onchain": true,
    "gasUsed": "0",
-   "note": "same 17-byte VIN: attribute 33678 gas (unreadable on-chain, no issuer) vs claim 269311 gas (8.0x; O(1) readable, issuer-verified) \u2014 the trade-off the hybrid is built on"
+   "note": "same 17-byte VIN: attribute 33678 gas (unreadable on-chain, no issuer) vs claim 271639 gas (8.1x; O(1) readable, issuer-verified) \u2014 the trade-off the hybrid is built on"
   },
   {
    "option": "cvin-combined",
@@ -883,7 +883,7 @@
    "step": "deploy-registry",
    "fn": "CVINCombinedIdentity.constructor",
    "onchain": true,
-   "gasUsed": "1325604",
+   "gasUsed": "1372501",
    "note": "shared hybrid registry: no admin, no roles, no issuer list"
   },
   {
@@ -919,7 +919,7 @@
    "step": "owner-anchors-oem-claim",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "352335",
+   "gasUsed": "354677",
    "note": "type approval anchored under the OEM's address"
   },
   {
@@ -928,7 +928,7 @@
    "step": "owner-anchors-impostor-claim",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "297572",
+   "gasUsed": "299862",
    "note": "OBSERVATION: a second MANUFACTURER claim from a random key is accepted \u2014 the contract validates signatures, not authority"
   },
   {
@@ -973,7 +973,7 @@
    "step": "owner-removes-impostor",
    "fn": "CVINCombinedIdentity.removeClaim",
    "onchain": true,
-   "gasUsed": "81636",
+   "gasUsed": "83528",
    "note": "the holder curates its own claim set"
   },
   {
@@ -1000,7 +1000,7 @@
    "step": "deploy-registry",
    "fn": "CVINCombinedIdentity.constructor",
    "onchain": true,
-   "gasUsed": "1325604",
+   "gasUsed": "1372501",
    "note": "shared hybrid registry"
   },
   {
@@ -1063,7 +1063,7 @@
    "step": "addClaim-MANUFACTURER",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "375001",
+   "gasUsed": "377367",
    "note": "MEASURED (benchmark addDelegateOrClaim; L1 claim 331,461): ecrecover at add time + full claim stored under claims[identity][claimId] + topic index + changed pointer; ClaimAdded"
   },
   {
@@ -1073,7 +1073,7 @@
    "fn": "CVINCombinedIdentity.getClaim",
    "onchain": true,
    "gasUsed": "0",
-   "note": "getClaim(identity, 0xf825e6bd\u2026) -> topic=2 scheme=1 issuer=0x35fB5809\u2026 data=71B uri=ipfs://QmTypeApproval: O(1), no re-verification"
+   "note": "getClaim(identity, 0x5e720a5f\u2026) -> topic=2 scheme=1 issuer=0x38e0280C\u2026 data=71B uri=ipfs://QmTypeApproval: O(1), no re-verification"
   },
   {
    "option": "cvin-combined",
@@ -1099,7 +1099,7 @@
    "step": "addClaim-INSPECTION",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "269450",
+   "gasUsed": "271778",
    "note": "periodic inspection by a second issuer"
   },
   {
@@ -1108,7 +1108,7 @@
    "step": "addClaim-INSPECTION-update",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "76918",
+   "gasUsed": "76420",
    "note": "MEASURED (benchmark updateAttribute analogue): re-add for the same (issuer, topic) overwrites in place; topic index not duplicated; emits ClaimAdded again (the hybrid has no ClaimChanged event)"
   },
   {
@@ -1126,7 +1126,7 @@
    "step": "addClaim-VIN",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "269285",
+   "gasUsed": "271613",
    "note": "VIN attestation (topic 1) by the manufacturer"
   },
   {
@@ -1216,7 +1216,7 @@
    "step": "removeClaim-by-owner",
    "fn": "CVINCombinedIdentity.removeClaim",
    "onchain": true,
-   "gasUsed": "71322",
+   "gasUsed": "73215",
    "note": "MEASURED (benchmark revoke = removeClaim): delete + topic-index swap-and-pop + changed pointer; storage refund; ClaimRemoved"
   },
   {
@@ -1243,8 +1243,8 @@
    "step": "adapter-addClaim",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "269191",
-   "note": "adapter (own random issuer wallet, raw digest): addClaim topic=3 CLAIM_TOPIC_INSPECTION issuer=0x5C3cef\u2026 (adapter-signed raw digest)"
+   "gasUsed": "271531",
+   "note": "adapter (own random issuer wallet, raw digest): addClaim topic=3 CLAIM_TOPIC_INSPECTION issuer=0xCbb209\u2026 (adapter-signed raw digest)"
   },
   {
    "option": "cvin-combined",
@@ -1261,7 +1261,7 @@
    "step": "deploy-registry",
    "fn": "CVINCombinedIdentity.constructor",
    "onchain": true,
-   "gasUsed": "1325604",
+   "gasUsed": "1372501",
    "note": "single shared hybrid registry (ERC-1056 events + ERC-735 claim storage)"
   },
   {
@@ -1270,7 +1270,7 @@
    "step": "addClaim-VIN",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "286385",
+   "gasUsed": "288739",
    "note": "a stored claim, to show that ownership gates the claim side too"
   },
   {
@@ -1342,7 +1342,7 @@
    "step": "new-controller-removes-old-claim",
    "fn": "CVINCombinedIdentity.removeClaim",
    "onchain": true,
-   "gasUsed": "71325",
+   "gasUsed": "73218",
    "note": "the new controller manages claims anchored under the previous one"
   },
   {
@@ -1387,7 +1387,7 @@
    "step": "deploy-registry",
    "fn": "CVINCombinedIdentity.constructor",
    "onchain": true,
-   "gasUsed": "1325604",
+   "gasUsed": "1372501",
    "note": "shared hybrid registry"
   },
   {
@@ -1414,7 +1414,7 @@
    "step": "create-anchorVin",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "306806",
+   "gasUsed": "309146",
    "note": "VIN claim"
   },
   {
@@ -1450,7 +1450,7 @@
    "step": "addClaim-manufacturer",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "334902",
+   "gasUsed": "337242",
    "note": "stored claim"
   },
   {
@@ -1495,7 +1495,7 @@
    "step": "deploy-registry",
    "fn": "CVINCombinedIdentity.constructor",
    "onchain": true,
-   "gasUsed": "1325604",
+   "gasUsed": "1372501",
    "note": "shared hybrid registry"
   },
   {
@@ -1523,7 +1523,7 @@
    "fn": "CVINCombinedIdentity.delegates",
    "onchain": true,
    "gasUsed": "0",
-   "note": "delegates[id][sigAuth][delegate] == 1791096151 (== event validTo 1791096151): STORED, so an RSU contract can check it"
+   "note": "delegates[id][sigAuth][delegate] == 1791108166 (== event validTo 1791108166): STORED, so an RSU contract can check it"
   },
   {
    "option": "cvin-combined",
@@ -1568,7 +1568,7 @@
    "fn": "CVINCombinedIdentity.delegates",
    "onchain": true,
    "gasUsed": "0",
-   "note": "delegates[...] == 1791097053 == revocation timestamp: OBSERVATION \u2014 the slot is not cleared (no refund) and a resolver must treat validTo <= now as revoked rather than looking for 0"
+   "note": "delegates[...] == 1791109068 == revocation timestamp: OBSERVATION \u2014 the slot is not cleared (no refund) and a resolver must treat validTo <= now as revoked rather than looking for 0"
   },
   {
    "option": "cvin-combined",
@@ -1612,7 +1612,7 @@
    "step": "deploy-registry",
    "fn": "CVINCombinedIdentity.constructor",
    "onchain": true,
-   "gasUsed": "1325604",
+   "gasUsed": "1372501",
    "note": "shared hybrid registry"
   },
   {
@@ -1657,8 +1657,8 @@
    "step": "h3-addClaim",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "269263",
-   "note": "ERC-735 side: ClaimAdded (NO previousChange field) and changed := this block"
+   "gasUsed": "271565",
+   "note": "ERC-735 side: ClaimAdded (no previousChange field) + DIDClaimChanged(identity, claimId, topic, removed=false, previousChange) and changed := this block"
   },
   {
    "option": "cvin-combined",
@@ -1667,16 +1667,16 @@
    "fn": "CVINCombinedIdentity.changed",
    "onchain": true,
    "gasUsed": "0",
-   "note": "changed == 4 == addClaim block 4: the pointer moved to a block that holds no ERC-1056 event"
+   "note": "changed == 4 == addClaim block 4: the pointer moved to a block that holds no classic ERC-1056 event, but DIDClaimChanged.previousChange == 3 (the addDelegate block) keeps it on the list"
   },
   {
    "option": "cvin-combined",
    "family": "lifecycle-history",
-   "step": "walk-cut-by-claim",
+   "step": "walk-through-claim",
    "fn": "CVINCombinedIdentity.changed",
    "onchain": true,
    "gasUsed": "0",
-   "note": "walk from head: events=[] cut at block 4: POTENTIAL DEFECT \u2014 a did:ethr resolver following previousChange finds NOTHING; the 2 earlier ERC-1056 events are unreachable by pointer (the S2 adapter falls back to a range scan)"
+   "note": "walk from head: events=[DIDClaimChanged(added)@4, DIDDelegateChanged@3, DIDAttributeChanged@2] cut=null: FIXED (D22) \u2014 a did:ethr resolver following previousChange passes through the claim block and reaches all 3 events down to genesis; formerly the claim block carried no linked event, the walk found NOTHING and the S2 adapter had to range-scan"
   },
   {
    "option": "cvin-combined",
@@ -1690,11 +1690,11 @@
   {
    "option": "cvin-combined",
    "family": "lifecycle-history",
-   "step": "walk-resumes-then-cuts",
+   "step": "walk-through-owner-change",
    "fn": "CVINCombinedIdentity.changed",
    "onchain": true,
    "gasUsed": "0",
-   "note": "walk: DIDOwnerChanged@5 -> cut at 4: \u2026 so the walk sees DIDOwnerChanged, follows previousChange into the claim block, and stops there again"
+   "note": "walk: DIDOwnerChanged@5, DIDClaimChanged(added)@4, DIDDelegateChanged@3, DIDAttributeChanged@2 -> cut=null: \u2026 so the walk sees DIDOwnerChanged, follows previousChange into the claim block, and continues from DIDClaimChanged.previousChange to the earlier ERC-1056 events"
   },
   {
    "option": "cvin-combined",
@@ -1702,8 +1702,17 @@
    "step": "h5-removeClaim",
    "fn": "CVINCombinedIdentity.removeClaim",
    "onchain": true,
-   "gasUsed": "71325",
-   "note": "removeClaim also bumps changed without an ERC-1056 event"
+   "gasUsed": "73218",
+   "note": "removeClaim bumps changed and emits DIDClaimChanged(removed=true, previousChange) next to ClaimRemoved"
+  },
+  {
+   "option": "cvin-combined",
+   "family": "lifecycle-history",
+   "step": "walk-full-history",
+   "fn": "CVINCombinedIdentity.changed",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "walk after removeClaim: DIDClaimChanged(removed)@6, DIDOwnerChanged@5, DIDClaimChanged(added)@4, DIDDelegateChanged@3, DIDAttributeChanged@2 -> 5 events, no gap (blocks 2/3/4/5/6)"
   },
   {
    "option": "cvin-combined",
@@ -1712,16 +1721,16 @@
    "fn": "CVINCombinedIdentity.getClaimIdsByTopic",
    "onchain": true,
    "gasUsed": "0",
-   "note": "ClaimAdded/ClaimRemoved ARE indexed by identity (2 found by filter) but carry no previousChange: a hybrid resolver must merge two event families and cannot use one linked list \u2014 the thesis should state the resolver contract"
+   "note": "ClaimAdded/ClaimRemoved ARE indexed by identity (2 found by filter) and still carry no previousChange themselves; the D22 DIDClaimChanged marker is what links them into the one list, so a hybrid resolver walks one chain and reads the ERC-735 payload from the sibling ClaimAdded/ClaimRemoved log in the same block"
   },
   {
    "option": "cvin-combined",
    "family": "lifecycle-history",
-   "step": "adapter-resolve-fallback",
+   "step": "adapter-resolve",
    "fn": "adapter.resolve",
    "onchain": true,
    "gasUsed": "0",
-   "note": "adapter.resolve reconstructs events=3 ownerHistory=1 via its range-scan fallback (blocks 2/3/5)"
+   "note": "adapter.resolve reconstructs the 3 ERC-1056 events and ownerHistory=1 (blocks 2/3/5); its pre-fix range-scan fallback is now redundant"
   },
   {
    "option": "cvin-combined",
@@ -1729,7 +1738,7 @@
    "step": "deploy-registry",
    "fn": "CVINCombinedIdentity.constructor",
    "onchain": true,
-   "gasUsed": "1325604",
+   "gasUsed": "1372501",
    "note": "shared hybrid registry"
   },
   {
@@ -1739,7 +1748,7 @@
    "fn": "offchain:secp256k1-keygen",
    "onchain": false,
    "gasUsed": "0",
-   "note": "vehicle key pair generated offline -> identity 0x6c046FCB\u2026; no transaction"
+   "note": "vehicle key pair generated offline -> identity 0xDAAF2988\u2026; no transaction"
   },
   {
    "option": "cvin-combined",
@@ -1748,7 +1757,7 @@
    "fn": "CVINCombinedIdentity.identityOwner",
    "onchain": true,
    "gasUsed": "0",
-   "note": "identityOwner(fresh) == 0x6c046FCB\u2026 (itself)"
+   "note": "identityOwner(fresh) == 0xDAAF2988\u2026 (itself)"
   },
   {
    "option": "cvin-combined",
@@ -1801,7 +1810,7 @@
    "step": "first-tx-is-addClaim",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "286411",
+   "gasUsed": "288739",
    "note": "the identity's FIRST transaction anchors the pre-signed VIN claim: no registration precedes it"
   },
   {
@@ -1820,7 +1829,7 @@
    "fn": "CVINCombinedIdentity.identityOwner",
    "onchain": true,
    "gasUsed": "0",
-   "note": "creation cost ladder: implicit 0 | first setAttribute 34272 (the comparison's \"create\") | first addClaim 286411 (a trusted identity) \u2014 only the middle is measured"
+   "note": "creation cost ladder: implicit 0 | first setAttribute 34272 (the comparison's \"create\") | first addClaim 288739 (a trusted identity) \u2014 only the middle is measured"
   },
   {
    "option": "cvin-combined",
@@ -1828,7 +1837,7 @@
    "step": "deploy-registry",
    "fn": "CVINCombinedIdentity.constructor",
    "onchain": true,
-   "gasUsed": "1325604",
+   "gasUsed": "1372501",
    "note": "shared hybrid registry"
   },
   {
@@ -1855,7 +1864,7 @@
    "step": "addClaim-inspection",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "269263",
+   "gasUsed": "271591",
    "note": "to revoke (owner-side)"
   },
   {
@@ -1864,7 +1873,7 @@
    "step": "addClaim-manufacturer",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "269225",
+   "gasUsed": "271591",
    "note": "to revoke (issuer-side)"
   },
   {
@@ -1891,7 +1900,7 @@
    "step": "removeClaim-owner-side",
    "fn": "CVINCombinedIdentity.removeClaim",
    "onchain": true,
-   "gasUsed": "71312",
+   "gasUsed": "73215",
    "note": "MEASURED (benchmark revoke = removeClaim): delete struct + index pop; refund makes it cheaper than revokeDelegate despite more work"
   },
   {
@@ -1909,7 +1918,7 @@
    "step": "removeClaim-issuer-side",
    "fn": "CVINCombinedIdentity.removeClaim",
    "onchain": true,
-   "gasUsed": "71347",
+   "gasUsed": "73240",
    "note": "issuer-side revocation: the manufacturer withdraws its type approval without the owner (msg.sender == claim.issuer)"
   },
   {
@@ -1928,7 +1937,7 @@
    "fn": "CVINCombinedIdentity.removeClaim",
    "onchain": true,
    "gasUsed": "0",
-   "note": "revocation costs: attribute 33850 | delegate 37720 | claim(owner) 71312 | claim(issuer) 71347 \u2014 the comparison reports only revokeDelegate"
+   "note": "revocation costs: attribute 33850 | delegate 37720 | claim(owner) 73215 | claim(issuer) 73240 \u2014 the comparison reports only revokeDelegate"
   },
   {
    "option": "cvin-combined",
@@ -1954,7 +1963,7 @@
    "step": "adapter-revoke-last",
    "fn": "CVINCombinedIdentity.removeClaim",
    "onchain": true,
-   "gasUsed": "71322",
+   "gasUsed": "73205",
    "note": "adapter.revoke(id) after an adapter addClaim -> removeClaim (storage refund applies)"
   },
   {
@@ -1963,7 +1972,7 @@
    "step": "deploy-registry",
    "fn": "CVINCombinedIdentity.constructor",
    "onchain": true,
-   "gasUsed": "1325604",
+   "gasUsed": "1372501",
    "note": "shared hybrid registry"
   },
   {
@@ -1981,8 +1990,8 @@
    "step": "create-anchorVin",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "306844",
-   "note": "adapter.create({ anchorVin }): identity implicit (0 gas); VIN anchored as CLAIM_TOPIC_VIN claim = 306844 \u2014 identity still implicit, the VIN is a manufacturer-signed claim"
+   "gasUsed": "309146",
+   "note": "adapter.create({ anchorVin }): identity implicit (0 gas); VIN anchored as CLAIM_TOPIC_VIN claim = 309146 \u2014 identity still implicit, the VIN is a manufacturer-signed claim"
   },
   {
    "option": "cvin-combined",
@@ -1991,7 +2000,7 @@
    "fn": "CVINCombinedIdentity.getClaim",
    "onchain": true,
    "gasUsed": "0",
-   "note": "getClaim -> topic=1 issuer=0xD7812bFb\u2026 data=\"1HGCM82633A004352\" uri=cvin:vin: any contract can read the attested VIN and who attested it"
+   "note": "getClaim -> topic=1 issuer=0x881540f7\u2026 data=\"1HGCM82633A004352\" uri=cvin:vin: any contract can read the attested VIN and who attested it"
   },
   {
    "option": "cvin-combined",
@@ -2018,7 +2027,7 @@
    "fn": "CVINCombinedIdentity.setAttribute",
    "onchain": true,
    "gasUsed": "0",
-   "note": "claim 306844 gas (issuer-signed, stored, O(1) verifiable) vs attribute 33678 gas (self-asserted, event-only): the hybrid's defining choice; the comparison measures addClaim but never frames it as VIN anchoring"
+   "note": "claim 309146 gas (issuer-signed, stored, O(1) verifiable) vs attribute 33678 gas (self-asserted, event-only): the hybrid's defining choice; the comparison measures addClaim but never frames it as VIN anchoring"
   },
   {
    "option": "cvin-combined",
@@ -2035,7 +2044,7 @@
    "step": "same-vin-second-identity",
    "fn": "CVINCombinedIdentity.addClaim",
    "onchain": true,
-   "gasUsed": "306806",
+   "gasUsed": "309134",
    "note": "the same manufacturer key attests the SAME VIN for a second identity 0x3C44CdDd\u2026: accepted \u2014 the issuer, not the chain, must keep VINs unique"
   },
   {
@@ -2062,7 +2071,7 @@
    "step": "deploy-wrapper",
    "fn": "CVINVehicleDIDRegistry.constructor",
    "onchain": true,
-   "gasUsed": "1715174",
+   "gasUsed": "1729556",
    "note": "VIN wrapper"
   },
   {
@@ -2071,8 +2080,8 @@
    "step": "createVehicleDID",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77996",
-   "note": "vehicle 1HGCM82633A004352 -> DID 0x8459EAaE\u2026"
+   "gasUsed": "78018",
+   "note": "vehicle 1HGCM82633A004352 -> DID 0x7789E532\u2026"
   },
   {
    "option": "erc-1056-uport",
@@ -2252,7 +2261,7 @@
    "fn": "EthereumDIDRegistry.setAttribute",
    "onchain": true,
    "gasUsed": "34038",
-   "note": "the wrapper's DID_VIN name used directly with a finite 30-year validity: this is the working way to publish the birth record (see the defect two steps below)"
+   "note": "the wrapper's DID_VIN name used directly with a finite 30-year validity: the owner can publish single birth attributes without the wrapper (the bundle below does all eight at once)"
   },
   {
    "option": "erc-1056-uport",
@@ -2266,11 +2275,38 @@
   {
    "option": "erc-1056-uport",
    "family": "attributes",
-   "step": "setVehicleAttributes-overflow-DEFECT",
-   "fn": "CVINVehicleDIDRegistry.setVehicleAttributes",
+   "step": "const-PERMANENT_ATTRIBUTE_VALIDITY",
+   "fn": "CVINVehicleDIDRegistry.PERMANENT_ATTRIBUTE_VALIDITY",
    "onchain": true,
    "gasUsed": "0",
-   "note": "reverted as expected (\"panic code 0x11\"): POTENTIAL DEFECT: the bundle passes validity = type(uint256).max and EthereumDIDRegistry.setAttribute computes block.timestamp + validity, which overflows under Solidity 0.8 checked arithmetic \u2014 setVehicleAttributes can never succeed; the 8-attribute birth record (DID_VIN \u2026 DID_AUTONOMY_LEVEL) is unreachable through the wrapper"
+   "note": "PERMANENT_ATTRIBUTE_VALIDITY = 3153600000 s (100 years): the bounded \"permanent\" validity the bundle uses since the D18 fix (same constant as MOBIVIDRegistry)"
+  },
+  {
+   "option": "erc-1056-uport",
+   "family": "attributes",
+   "step": "setVehicleAttributes-bundle",
+   "fn": "CVINVehicleDIDRegistry.setVehicleAttributes",
+   "onchain": true,
+   "gasUsed": "83446",
+   "note": "FIXED (D18): the bundle now passes validity = PERMANENT_ATTRIBUTE_VALIDITY (100 y) instead of type(uint256).max, so EthereumDIDRegistry.setAttribute's block.timestamp + validity no longer overflows (formerly panic 0x11 on every call and the 8-attribute birth record was unreachable through the wrapper); 8 DIDAttributeChanged events in one transaction \u2014 gasUsed recorded on this line"
+  },
+  {
+   "option": "erc-1056-uport",
+   "family": "attributes",
+   "step": "bundle-events",
+   "fn": "EthereumDIDRegistry.DIDAttributeChanged",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "the bundle emitted 8 DIDAttributeChanged events (DID_VIN \u2026 DID_AUTONOMY_LEVEL), each validTo = 1791107286 + 3153600000; year and manufacturingDate are abi.encodePacked integers, the rest UTF-8 strings"
+  },
+  {
+   "option": "erc-1056-uport",
+   "family": "attributes",
+   "step": "adapter-resolve-birth-record",
+   "fn": "adapter.resolve",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "adapter.resolve lists all 8 did/vehicle/* attributes in the DID document (vehicle.attributes): vin=1HGCM82633A004352, make=Honda, model=Accord, year=0x07d3, color=Silver, engineNumber=K24A4-2003-0471, manufacturingDate=0x000000000000000000000000000000000000000000000000000000003e122f80, autonomyLevel=L0 \u2014 the birth record is reachable end to end"
   },
   {
    "option": "erc-1056-uport",
@@ -2314,7 +2350,7 @@
    "step": "deploy-wrapper",
    "fn": "CVINVehicleDIDRegistry.constructor",
    "onchain": true,
-   "gasUsed": "1715174",
+   "gasUsed": "1729556",
    "note": "VIN wrapper: constructor makes msg.sender owner AND first authorized manufacturer"
   },
   {
@@ -2368,7 +2404,7 @@
    "step": "oem-create-after-grant",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77936",
+   "gasUsed": "77958",
    "note": "OEM creates the VIN-bound DID"
   },
   {
@@ -2431,7 +2467,7 @@
    "step": "deploy-wrapper",
    "fn": "CVINVehicleDIDRegistry.constructor",
    "onchain": true,
-   "gasUsed": "1715174",
+   "gasUsed": "1729556",
    "note": "VIN wrapper"
   },
   {
@@ -2440,8 +2476,8 @@
    "step": "createVehicleDID",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77996",
-   "note": "vehicle 1HGCM82633A004352 bound to DID 0xb07632c3\u2026"
+   "gasUsed": "78018",
+   "note": "vehicle 1HGCM82633A004352 bound to DID 0xdA780ad3\u2026"
   },
   {
    "option": "erc-1056-uport",
@@ -2459,7 +2495,7 @@
    "fn": "EthereumDIDRegistry.identityOwner",
    "onchain": true,
    "gasUsed": "0",
-   "note": "identityOwner == 0xb07632c3\u2026 (self)"
+   "note": "identityOwner == 0xdA780ad3\u2026 (self)"
   },
   {
    "option": "erc-1056-uport",
@@ -2486,7 +2522,7 @@
    "fn": "CVINVehicleDIDRegistry.vehicleOwnerOf",
    "onchain": true,
    "gasUsed": "0",
-   "note": "vehicleOwnerOf == 0xb07632c3\u2026: while the wrapper does not control the DID, the ERC-1056 identityOwner is authoritative"
+   "note": "vehicleOwnerOf == 0xdA780ad3\u2026: while the wrapper does not control the DID, the ERC-1056 identityOwner is authoritative"
   },
   {
    "option": "erc-1056-uport",
@@ -2495,7 +2531,7 @@
    "fn": "CVINVehicleDIDRegistry.getVehicleOwner",
    "onchain": true,
    "gasUsed": "0",
-   "note": "getVehicleOwner == 0xb07632c3\u2026 (alias of vehicleOwnerOf)"
+   "note": "getVehicleOwner == 0xdA780ad3\u2026 (alias of vehicleOwnerOf)"
   },
   {
    "option": "erc-1056-uport",
@@ -2503,7 +2539,7 @@
    "step": "changeOwnerSigned",
    "fn": "EthereumDIDRegistry.changeOwnerSigned",
    "onchain": true,
-   "gasUsed": "96041",
+   "gasUsed": "96053",
    "note": "meta-transaction relayed by deployer (gas payer) and signed by the controller over keccak256(0x19||0x00||registry||nonce||identity||\"changeOwner\"||newOwner) with NO EIP-191 prefix; measured by L1 signed-op only"
   },
   {
@@ -2513,7 +2549,7 @@
    "fn": "EthereumDIDRegistry.identityOwner",
    "onchain": true,
    "gasUsed": "0",
-   "note": "identityOwner == 0x3C44CdDd\u2026 (newOwner); the DID (0xb07632c3\u2026) is unchanged: controller rotation, not identifier change"
+   "note": "identityOwner == 0x3C44CdDd\u2026 (newOwner); the DID (0xdA780ad3\u2026) is unchanged: controller rotation, not identifier change"
   },
   {
    "option": "erc-1056-uport",
@@ -2567,7 +2603,7 @@
    "fn": "CVINVehicleDIDRegistry.vehicleOwnerOf",
    "onchain": true,
    "gasUsed": "0",
-   "note": "vehicleOwnerOf == 0xb07632c3\u2026: wrapper controls the DID, so vehicleOwners[did] (default: the DID itself) is authoritative"
+   "note": "vehicleOwnerOf == 0xdA780ad3\u2026: wrapper controls the DID, so vehicleOwners[did] (default: the DID itself) is authoritative"
   },
   {
    "option": "erc-1056-uport",
@@ -2629,7 +2665,7 @@
    "step": "createVehicleDID-2",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77936",
+   "gasUsed": "77958",
    "note": "second vehicle WBA3A5C58DF586741 -> DID 0x70997970\u2026"
   },
   {
@@ -2647,7 +2683,7 @@
    "step": "updateOwnershipMapping",
    "fn": "CVINVehicleDIDRegistry.updateOwnershipMapping",
    "onchain": true,
-   "gasUsed": "61461",
+   "gasUsed": "61483",
    "note": "anyone may call it once identityOwner(old) == new: the VIN is re-pointed to the buyer's address, i.e. the vehicle gets a NEW DID (identifier not stable); not measured"
   },
   {
@@ -2701,7 +2737,7 @@
    "step": "deploy-wrapper",
    "fn": "CVINVehicleDIDRegistry.constructor",
    "onchain": true,
-   "gasUsed": "1715174",
+   "gasUsed": "1729556",
    "note": "VIN wrapper; deployer becomes contract owner and first authorized manufacturer (not measured)"
   },
   {
@@ -2737,7 +2773,7 @@
    "step": "createVehicleDID",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77996",
+   "gasUsed": "78018",
    "note": "explicit creation by an authorized manufacturer: stores vin<->DID (2 SSTOREs) and emits VehicleDIDCreated; the DID is the owner address; NOT measured in the comparison"
   },
   {
@@ -2818,7 +2854,7 @@
    "step": "adapter-create-explicit",
    "fn": "adapter.create",
    "onchain": true,
-   "gasUsed": "77780",
+   "gasUsed": "77802",
    "note": "adapter explicit path (createVehicleDID): createVehicleDID vin=WBA3A5C58DF586741; implicit 0-gas path also available"
   },
   {
@@ -2827,8 +2863,8 @@
    "step": "deploy",
    "fn": "CVINVehicleDIDRegistry.constructor",
    "onchain": true,
-   "gasUsed": "2673900",
-   "note": "adapter.deploy: registry=958726 wrapper=1715174"
+   "gasUsed": "2688282",
+   "note": "adapter.deploy: registry=958726 wrapper=1729556"
   },
   {
    "option": "erc-1056-uport",
@@ -2854,7 +2890,7 @@
    "step": "create",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77792",
+   "gasUsed": "77814",
    "note": "createVehicleDID vin=1HGCM82633A004352; implicit 0-gas path also available"
   },
   {
@@ -2962,7 +2998,7 @@
    "step": "deploy-wrapper",
    "fn": "CVINVehicleDIDRegistry.constructor",
    "onchain": true,
-   "gasUsed": "1715174",
+   "gasUsed": "1729556",
    "note": "VIN wrapper"
   },
   {
@@ -2971,8 +3007,8 @@
    "step": "createVehicleDID",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77996",
-   "note": "vehicle 1HGCM82633A004352 -> DID 0x1c66989c\u2026"
+   "gasUsed": "78018",
+   "note": "vehicle 1HGCM82633A004352 -> DID 0x8Ac81fFc\u2026"
   },
   {
    "option": "erc-1056-uport",
@@ -3008,7 +3044,7 @@
    "fn": "EthereumDIDRegistry.delegates",
    "onchain": true,
    "gasUsed": "0",
-   "note": "delegates[did][veriKey][delegate] == 1791098875 == event validTo (1791098875); unlike attributes, delegates ARE stored so other contracts can check them"
+   "note": "delegates[did][veriKey][delegate] == 1791110890 == event validTo (1791110890); unlike attributes, delegates ARE stored so other contracts can check them"
   },
   {
    "option": "erc-1056-uport",
@@ -3043,7 +3079,7 @@
    "step": "addDelegateSigned",
    "fn": "EthereumDIDRegistry.addDelegateSigned",
    "onchain": true,
-   "gasUsed": "82678",
+   "gasUsed": "82666",
    "note": "sigAuth delegate for 1 year added by a relayer; raw-digest secp256k1 signature (no EIP-191), nonce consumed; not measured"
   },
   {
@@ -3079,7 +3115,7 @@
    "step": "revokeDelegateSigned",
    "fn": "EthereumDIDRegistry.revokeDelegateSigned",
    "onchain": true,
-   "gasUsed": "43301",
+   "gasUsed": "43289",
    "note": "signed revocation relayed by deployer"
   },
   {
@@ -3115,7 +3151,7 @@
    "step": "addVerificationDelegate",
    "fn": "CVINVehicleDIDRegistry.addVerificationDelegate",
    "onchain": true,
-   "gasUsed": "64664",
+   "gasUsed": "64686",
    "note": "wrapper-mediated addDelegate (one extra external call); not measured"
   },
   {
@@ -3160,7 +3196,7 @@
    "step": "deploy-wrapper",
    "fn": "CVINVehicleDIDRegistry.constructor",
    "onchain": true,
-   "gasUsed": "1715174",
+   "gasUsed": "1729556",
    "note": "VIN wrapper"
   },
   {
@@ -3169,7 +3205,7 @@
    "step": "createVehicleDID",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77996",
+   "gasUsed": "78018",
    "note": "wrapper creation"
   },
   {
@@ -3277,7 +3313,7 @@
    "step": "deploy-wrapper",
    "fn": "CVINVehicleDIDRegistry.constructor",
    "onchain": true,
-   "gasUsed": "1715174",
+   "gasUsed": "1729556",
    "note": "VIN wrapper (only needed for the explicit path)"
   },
   {
@@ -3287,7 +3323,7 @@
    "fn": "offchain:secp256k1-keygen",
    "onchain": false,
    "gasUsed": "0",
-   "note": "vehicle generates a secp256k1 key pair offline -> address 0x2aF5C19C\u2026; this address IS the DID (did:ethr:\u2026:0x2aF5C19C\u2026); no transaction, no gas"
+   "note": "vehicle generates a secp256k1 key pair offline -> address 0x71E89676\u2026; this address IS the DID (did:ethr:\u2026:0x71E89676\u2026); no transaction, no gas"
   },
   {
    "option": "erc-1056-uport",
@@ -3296,7 +3332,7 @@
    "fn": "EthereumDIDRegistry.identityOwner",
    "onchain": true,
    "gasUsed": "0",
-   "note": "identityOwner(fresh) == 0x2aF5C19C\u2026 (itself): the registry answers for an address it has never seen"
+   "note": "identityOwner(fresh) == 0x71E89676\u2026 (itself): the registry answers for an address it has never seen"
   },
   {
    "option": "erc-1056-uport",
@@ -3367,7 +3403,7 @@
    "step": "explicit-alternative",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77876",
+   "gasUsed": "77898",
    "note": "explicit VIN-bound alternative for contrast: 0 vs setAttribute-as-create vs createVehicleDID"
   },
   {
@@ -3377,7 +3413,7 @@
    "fn": "EthereumDIDRegistry.identityOwner",
    "onchain": true,
    "gasUsed": "0",
-   "note": "creation cost ladder for the same identity: implicit 0 | first setAttribute 34700 | createVehicleDID 77876 (wrapper storage) \u2014 only the middle one is in the comparison"
+   "note": "creation cost ladder for the same identity: implicit 0 | first setAttribute 34700 | createVehicleDID 77898 (wrapper storage) \u2014 only the middle one is in the comparison"
   },
   {
    "option": "erc-1056-uport",
@@ -3394,7 +3430,7 @@
    "step": "deploy-wrapper",
    "fn": "CVINVehicleDIDRegistry.constructor",
    "onchain": true,
-   "gasUsed": "1715174",
+   "gasUsed": "1729556",
    "note": "VIN wrapper"
   },
   {
@@ -3403,8 +3439,8 @@
    "step": "createVehicleDID",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77972",
-   "note": "vehicle 5YJ3E1EA7KF317000 -> DID 0x91E8C8bD\u2026"
+   "gasUsed": "77994",
+   "note": "vehicle 5YJ3E1EA7KF317000 -> DID 0x49540cBb\u2026"
   },
   {
    "option": "erc-1056-uport",
@@ -3521,7 +3557,7 @@
    "fn": "EthereumDIDRegistry.identityOwner",
    "onchain": true,
    "gasUsed": "0",
-   "note": "\u2026 but identityOwner falls back to the DID itself (0x91E8C8bD\u2026): OBSERVATION \u2014 changeOwner(did, 0) RESTORES self-control instead of locking the identity; ERC-1056 has no identity-level revocation (the comparison's \"revoke\" is attribute revocation)"
+   "note": "\u2026 but identityOwner falls back to the DID itself (0x49540cBb\u2026): OBSERVATION \u2014 changeOwner(did, 0) RESTORES self-control instead of locking the identity; ERC-1056 has no identity-level revocation (the comparison's \"revoke\" is attribute revocation)"
   },
   {
    "option": "erc-1056-uport",
@@ -3547,7 +3583,7 @@
    "step": "addVerificationDelegate",
    "fn": "CVINVehicleDIDRegistry.addVerificationDelegate",
    "onchain": true,
-   "gasUsed": "64664",
+   "gasUsed": "64686",
    "note": "wrapper-mediated add"
   },
   {
@@ -3593,7 +3629,7 @@
    "fn": "EthereumDIDRegistry.nonce",
    "onchain": true,
    "gasUsed": "0",
-   "note": "nonce[0x70Ee7c15\u2026] == 0; the nonce is keyed by the OWNER address, not the identity"
+   "note": "nonce[0x707Cf3ab\u2026] == 0; the nonce is keyed by the OWNER address, not the identity"
   },
   {
    "option": "erc-1056-uport",
@@ -3601,7 +3637,7 @@
    "step": "setAttributeSigned",
    "fn": "EthereumDIDRegistry.setAttributeSigned",
    "onchain": true,
-   "gasUsed": "79400",
+   "gasUsed": "79412",
    "note": "nonce 0 consumed; vehicle key publication paid by the relayer (not measured)"
   },
   {
@@ -3646,7 +3682,7 @@
    "step": "revokeAttributeSigned",
    "fn": "EthereumDIDRegistry.revokeAttributeSigned",
    "onchain": true,
-   "gasUsed": "45091",
+   "gasUsed": "45103",
    "note": "nonce 3 consumed (not measured)"
   },
   {
@@ -3700,7 +3736,7 @@
    "step": "deploy-wrapper",
    "fn": "CVINVehicleDIDRegistry.constructor",
    "onchain": true,
-   "gasUsed": "1715174",
+   "gasUsed": "1729556",
    "note": "VIN wrapper holds the two mappings"
   },
   {
@@ -3718,7 +3754,7 @@
    "step": "createVehicleDID",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "77996",
+   "gasUsed": "78018",
    "note": "binds 1HGCM82633A004352 <-> 0x70997970\u2026 (2 SSTOREs: vinToDID + didToVIN)"
   },
   {
@@ -3790,7 +3826,7 @@
    "step": "createVehicleDID-same-owner",
    "fn": "CVINVehicleDIDRegistry.createVehicleDID",
    "onchain": true,
-   "gasUsed": "60836",
+   "gasUsed": "60858",
    "note": "a second VIN bound to the SAME owner address succeeds (VIN uniqueness is checked, DID uniqueness is not)"
   },
   {
@@ -3826,7 +3862,7 @@
    "step": "deploy-registry",
    "fn": "ERC1056Registry.constructor",
    "onchain": true,
-   "gasUsed": "701757",
+   "gasUsed": "709770",
    "note": "shared registry"
   },
   {
@@ -3835,7 +3871,7 @@
    "step": "registerVehicle",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "54639",
+   "gasUsed": "54655",
    "note": "vehicle registers"
   },
   {
@@ -3880,7 +3916,7 @@
    "step": "revokeAttribute",
    "fn": "ERC1056Registry.revokeAttribute",
    "onchain": true,
-   "gasUsed": "34420",
+   "gasUsed": "36633",
    "note": "emits DIDAttributeChanged(validTo = block.timestamp) (\"expired now\"), not validTo = 0 as in the uPort registry; measured under #21/#29 revoke family"
   },
   {
@@ -3889,7 +3925,7 @@
    "step": "revokeIdentity",
    "fn": "ERC1056Registry.revokeIdentity",
    "onchain": true,
-   "gasUsed": "74823",
+   "gasUsed": "75370",
    "note": "decommission the vehicle"
   },
   {
@@ -3907,8 +3943,8 @@
    "step": "revokeAttribute-after-revoke",
    "fn": "ERC1056Registry.revokeAttribute",
    "onchain": true,
-   "gasUsed": "33662",
-   "note": "OBSERVATION: revocations of attributes remain possible after identity revocation (clean-up allowed)"
+   "gasUsed": "0",
+   "note": "reverted as expected (\"Identity is revoked\"): FIXED (D21, decision D-F): revocation is terminal \u2014 attribute revocation is blocked too (formerly clean-up stayed possible after identity revocation); a resolver treats every attribute of a revoked identity as void via isRevoked"
   },
   {
    "option": "erc-1056-vehicle",
@@ -3916,7 +3952,7 @@
    "step": "deploy-registry",
    "fn": "ERC1056Registry.constructor",
    "onchain": true,
-   "gasUsed": "701757",
+   "gasUsed": "709770",
    "note": "shared registry"
   },
   {
@@ -3925,7 +3961,7 @@
    "step": "registerVehicle-anchor",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "54639",
+   "gasUsed": "54655",
    "note": "the ONLY on-chain part of the Claims family: the verification key a VC verifier resolves to check the vehicle's signature"
   },
   {
@@ -3998,7 +4034,7 @@
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
    "gasUsed": "0",
-   "note": "verifier replays 1 DIDAttributeChanged event(s) to obtain the vehicle key (validTo=1822631286); automation: the chain enforces nothing about the credential itself"
+   "note": "verifier replays 1 DIDAttributeChanged event(s) to obtain the vehicle key (validTo=1822643302); automation: the chain enforces nothing about the credential itself"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4006,7 +4042,7 @@
    "step": "deploy-registry",
    "fn": "ERC1056Registry.constructor",
    "onchain": true,
-   "gasUsed": "701757",
+   "gasUsed": "709770",
    "note": "shared registry"
   },
   {
@@ -4015,7 +4051,7 @@
    "step": "registerVehicle",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "54639",
+   "gasUsed": "54655",
    "note": "vehicle registers itself"
   },
   {
@@ -4051,7 +4087,7 @@
    "step": "changeOwner",
    "fn": "ERC1056Registry.changeOwner",
    "onchain": true,
-   "gasUsed": "51669",
+   "gasUsed": "53882",
    "note": "controller rotation (vehicle sale / key compromise): 1 SSTORE + DIDOwnerChanged; the identifier (vehicle address) is unchanged; not measured by #21/#29 (L1 controller-change: 51,669 gas)"
   },
   {
@@ -4096,7 +4132,7 @@
    "step": "changeOwner-to-zero",
    "fn": "ERC1056Registry.changeOwner",
    "onchain": true,
-   "gasUsed": "29545",
+   "gasUsed": "31758",
    "note": "setting the owner to address(0) \u2026"
   },
   {
@@ -4123,7 +4159,7 @@
    "step": "deploy-registry",
    "fn": "ERC1056Registry.constructor",
    "onchain": true,
-   "gasUsed": "701757",
+   "gasUsed": "709770",
    "note": "single shared registry (cv2x-testbed deploy.js deploys the same bytecode)"
   },
   {
@@ -4150,7 +4186,7 @@
    "step": "registerVehicle",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "54639",
+   "gasUsed": "54655",
    "note": "MEASURED (#21/#29 create): sent by the vehicle account; = one setAttribute(\"did/pub/secp256k1/veriKey/base64\", 65-byte uncompressed secp256k1 key, 1 year) + changed pointer; VIN 1HGCM82633A004352 is NOT anchored (VIN linkage N/A)"
   },
   {
@@ -4160,7 +4196,7 @@
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
    "gasUsed": "0",
-   "note": "DIDAttributeChanged(name=keccak256(\"did/pub/secp256k1/veriKey/base64\"), value=65 bytes, validTo=1822631292, previousChange=0)"
+   "note": "DIDAttributeChanged(name=keccak256(\"did/pub/secp256k1/veriKey/base64\"), value=65 bytes, validTo=1822643307, previousChange=0)"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4177,7 +4213,7 @@
    "step": "registerVehicle-again-same-owner",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "37539",
+   "gasUsed": "37555",
    "note": "OBSERVATION: re-registering is allowed while the identity still owns itself (the \"already registered\" guard only checks for an explicit owner, not for a prior registration) \u2014 it simply publishes the key again"
   },
   {
@@ -4186,7 +4222,7 @@
    "step": "changeOwner",
    "fn": "ERC1056Registry.changeOwner",
    "onchain": true,
-   "gasUsed": "51669",
+   "gasUsed": "53882",
    "note": "give the identity an explicit owner"
   },
   {
@@ -4204,7 +4240,7 @@
    "step": "revokeIdentity",
    "fn": "ERC1056Registry.revokeIdentity",
    "onchain": true,
-   "gasUsed": "74827",
+   "gasUsed": "75374",
    "note": "decommission"
   },
   {
@@ -4222,7 +4258,7 @@
    "step": "adapter-create",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "54639",
+   "gasUsed": "54655",
    "note": "adapter.create for a second vehicle: registerVehicle sent by the vehicle account (1-year did/pub/secp256k1/veriKey/base64); vin=WBA3A5C58DF586741 not anchored (VIN linkage N/A)"
   },
   {
@@ -4240,7 +4276,7 @@
    "step": "deploy-registry",
    "fn": "ERC1056Registry.constructor",
    "onchain": true,
-   "gasUsed": "701757",
+   "gasUsed": "709770",
    "note": "shared registry"
   },
   {
@@ -4258,7 +4294,7 @@
    "step": "registerVehicle",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "54639",
+   "gasUsed": "54655",
    "note": "registerVehicle sent by the vehicle account (1-year did/pub/secp256k1/veriKey/base64); vin=1HGCM82633A004352 not anchored (VIN linkage N/A)"
   },
   {
@@ -4339,7 +4375,7 @@
    "step": "deploy-registry",
    "fn": "ERC1056Registry.constructor",
    "onchain": true,
-   "gasUsed": "701757",
+   "gasUsed": "709770",
    "note": "shared registry"
   },
   {
@@ -4348,7 +4384,7 @@
    "step": "registerVehicle",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "54639",
+   "gasUsed": "54655",
    "note": "vehicle registers its first key"
   },
   {
@@ -4384,7 +4420,7 @@
    "step": "revokeDelegate",
    "fn": "ERC1056Registry.revokeDelegate",
    "onchain": true,
-   "gasUsed": "32528",
+   "gasUsed": "34741",
    "note": "emits DIDDelegateChanged(validTo = block.timestamp) \u2014 \"expired now\", unlike the uPort registry which emits validTo = 0; resolvers must treat validTo <= now as revoked"
   },
   {
@@ -4394,7 +4430,7 @@
    "fn": "ERC1056Registry.revokeDelegate",
    "onchain": true,
    "gasUsed": "0",
-   "note": "revocation event validTo=1791095298 == block.timestamp 1791095298"
+   "note": "revocation event validTo=1791107314 == block.timestamp 1791107314"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4429,7 +4465,7 @@
    "step": "revokeAttribute-old-key",
    "fn": "ERC1056Registry.revokeAttribute",
    "onchain": true,
-   "gasUsed": "35178",
+   "gasUsed": "37391",
    "note": "the missing half of the rotation: revoke the previous key explicitly"
   },
   {
@@ -4438,7 +4474,7 @@
    "step": "deploy-registry",
    "fn": "ERC1056Registry.constructor",
    "onchain": true,
-   "gasUsed": "701757",
+   "gasUsed": "709770",
    "note": "shared registry"
   },
   {
@@ -4456,7 +4492,7 @@
    "step": "op1-registerVehicle",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "54639",
+   "gasUsed": "54655",
    "note": "history entry 1"
   },
   {
@@ -4483,7 +4519,7 @@
    "step": "op4-changeOwner",
    "fn": "ERC1056Registry.changeOwner",
    "onchain": true,
-   "gasUsed": "51669",
+   "gasUsed": "53882",
    "note": "history entry 4"
   },
   {
@@ -4519,35 +4555,35 @@
    "step": "op5-revokeIdentity",
    "fn": "ERC1056Registry.revokeIdentity",
    "onchain": true,
-   "gasUsed": "74827",
-   "note": "history entry 5: DIDRevoked(identity, revokedAt) \u2014 NOTE: this event has no previousChange field"
+   "gasUsed": "75374",
+   "note": "history entry 5: DIDRevoked(identity, revokedAt, previousChange) \u2014 the previousChange field was added by the D21 fix"
   },
   {
    "option": "erc-1056-vehicle",
    "family": "lifecycle-history",
-   "step": "walk-after-revoke-CUT",
+   "step": "walk-after-revoke",
    "fn": "ERC1056Registry.changed",
    "onchain": true,
    "gasUsed": "0",
-   "note": "walk from the new head: DIDRevoked@6 -> cut=true: POTENTIAL DEFECT \u2014 changed now points at a block whose only event (DIDRevoked) carries no previousChange, so the did:ethr linked list is severed and the 4 earlier events are unreachable by pointer-walking; a resolver must fall back to a full range scan (the S2 adapter does exactly that)"
+   "note": "walk from the new head: DIDRevoked@6, DIDOwnerChanged@5, DIDAttributeChanged@4, DIDDelegateChanged@3, DIDAttributeChanged@2 -> stopped at 0, cut=false: FIXED (D21) \u2014 DIDRevoked.previousChange == 5 (block of op4), so the did:ethr linked list continues through the revocation and all 5 events are reachable by pointer-walking from changed(); formerly DIDRevoked carried no previousChange and the walk found only the revoke block (the S2 adapter had to range-scan)"
   },
   {
    "option": "erc-1056-vehicle",
    "family": "lifecycle-history",
-   "step": "fallback-range-scan",
+   "step": "range-scan-cross-check",
    "fn": "ERC1056Registry.changed",
    "onchain": true,
    "gasUsed": "0",
-   "note": "fallback scan of DIDAttributeChanged(id) over the whole chain finds 2 events \u2014 O(chain) instead of O(#changes)"
+   "note": "a full range scan of DIDAttributeChanged(id) finds 2 event(s), the same as the pointer walk \u2014 the O(chain) fallback is no longer needed for correctness"
   },
   {
    "option": "erc-1056-vehicle",
    "family": "lifecycle-history",
-   "step": "adapter-resolve-after-cut",
+   "step": "adapter-resolve-after-revoke",
    "fn": "adapter.resolve",
    "onchain": true,
    "gasUsed": "0",
-   "note": "adapter.resolve (with its DIDRevoked fallback) still reconstructs events=5, revoked=true, controller=0x3C44CdDd\u2026"
+   "note": "adapter.resolve reconstructs events=5, revoked=true, controller=0x3C44CdDd\u2026 (its pre-fix DIDRevoked fallback is now redundant but harmless)"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4555,7 +4591,7 @@
    "step": "deploy-registry",
    "fn": "ERC1056Registry.constructor",
    "onchain": true,
-   "gasUsed": "701757",
+   "gasUsed": "709770",
    "note": "shared registry"
   },
   {
@@ -4564,7 +4600,7 @@
    "step": "registerVehicle",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "54639",
+   "gasUsed": "54655",
    "note": "vehicle registered once; everything below is gas-free"
   },
   {
@@ -4574,7 +4610,7 @@
    "fn": "offchain:cv2x-testbed/identity/erc1056_provider.py#sign_message",
    "onchain": false,
    "gasUsed": "0",
-   "note": "vehicle signs the BSM JSON with EIP-191 personal_sign (keccak256(\"\\x19Ethereum Signed Message:\\n\" + len + msg)), 65-byte secp256k1 signature, 0.56 ms in-process; mirrors sign_message (line 405)"
+   "note": "vehicle signs the BSM JSON with EIP-191 personal_sign (keccak256(\"\\x19Ethereum Signed Message:\\n\" + len + msg)), 65-byte secp256k1 signature, 0.68 ms in-process; mirrors sign_message (line 405)"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4583,7 +4619,7 @@
    "fn": "offchain:cv2x-testbed/identity/erc1056_provider.py#verify_message",
    "onchain": false,
    "gasUsed": "0",
-   "note": "receiver recovers signer 0x70997970\u2026 from the signature (32.58 ms, no chain access); mirrors verify_message (line 439) step 1"
+   "note": "receiver recovers signer 0x70997970\u2026 from the signature (27.53 ms, no chain access); mirrors verify_message (line 439) step 1"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4627,7 +4663,7 @@
    "step": "revokeIdentity",
    "fn": "ERC1056Registry.revokeIdentity",
    "onchain": true,
-   "gasUsed": "74823",
+   "gasUsed": "75370",
    "note": "vehicle decommissioned"
   },
   {
@@ -4645,7 +4681,7 @@
    "step": "deploy-registry",
    "fn": "ERC1056Registry.constructor",
    "onchain": true,
-   "gasUsed": "701757",
+   "gasUsed": "709770",
    "note": "shared registry"
   },
   {
@@ -4654,7 +4690,7 @@
    "step": "registerVehicle",
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
-   "gasUsed": "54639",
+   "gasUsed": "54655",
    "note": "vehicle registers"
   },
   {
@@ -4681,7 +4717,7 @@
    "step": "revokeAttribute",
    "fn": "ERC1056Registry.revokeAttribute",
    "onchain": true,
-   "gasUsed": "33674",
+   "gasUsed": "35887",
    "note": "attribute revocation (validTo = now); listed under the measured Revocation family"
   },
   {
@@ -4690,7 +4726,7 @@
    "step": "revokeDelegate",
    "fn": "ERC1056Registry.revokeDelegate",
    "onchain": true,
-   "gasUsed": "32528",
+   "gasUsed": "34741",
    "note": "delegate revocation (validTo = now)"
   },
   {
@@ -4717,8 +4753,8 @@
    "step": "revokeIdentity",
    "fn": "ERC1056Registry.revokeIdentity",
    "onchain": true,
-   "gasUsed": "74823",
-   "note": "MEASURED (#21/#29 revoke): 2 SSTOREs (revoked flag + revokedAt) + DIDRevoked + changed pointer; the identity-level kill switch the uPort registry lacks"
+   "gasUsed": "75370",
+   "note": "MEASURED (#21/#29 revoke): 2 SSTOREs (revoked flag + revokedAt) + DIDRevoked(identity, revokedAt, previousChange) + changed pointer; the identity-level kill switch the uPort registry lacks"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4745,7 +4781,7 @@
    "fn": "ERC1056Registry.revokedAt",
    "onchain": true,
    "gasUsed": "0",
-   "note": "revokedAt == 1791095307 (block timestamp of decommissioning)"
+   "note": "revokedAt == 1791107323 (block timestamp of decommissioning)"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4754,7 +4790,7 @@
    "fn": "ERC1056Registry.getIdentityInfo",
    "onchain": true,
    "gasUsed": "0",
-   "note": "getIdentityInfo -> owner=0x70997970\u2026 lastChanged=8 isRevoked=true revokedAt=1791095307"
+   "note": "getIdentityInfo -> owner=0x70997970\u2026 lastChanged=8 isRevoked=true revokedAt=1791107323"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4798,8 +4834,8 @@
    "step": "changeOwner-after-revoke",
    "fn": "ERC1056Registry.changeOwner",
    "onchain": true,
-   "gasUsed": "51669",
-   "note": "OBSERVATION: changeOwner is NOT gated by the revoked flag \u2014 a decommissioned identity can still be transferred (and the new owner can revoke it again)"
+   "gasUsed": "0",
+   "note": "reverted as expected (\"Identity is revoked\"): FIXED (D21): changeOwner is now gated by the revoked flag \u2014 a decommissioned identity cannot change hands (formerly it could, and the new owner could revoke it again)"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4807,8 +4843,26 @@
    "step": "revokeIdentity-again",
    "fn": "ERC1056Registry.revokeIdentity",
    "onchain": true,
-   "gasUsed": "37827",
-   "note": "OBSERVATION: revokeIdentity is not idempotent-guarded: a second call succeeds and OVERWRITES revokedAt with a later timestamp (audit trail of the original decommissioning time survives only in the first DIDRevoked event)"
+   "gasUsed": "0",
+   "note": "reverted as expected (\"Identity already revoked\"): FIXED (D21): revokeIdentity is single-shot \u2014 a second call reverts instead of overwriting revokedAt (formerly it succeeded and moved the timestamp)"
+  },
+  {
+   "option": "erc-1056-vehicle",
+   "family": "revocation",
+   "step": "revokeAttribute-after-revoke",
+   "fn": "ERC1056Registry.revokeAttribute",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"Identity is revoked\"): FIXED (D21): revocation is terminal \u2014 even attribute/delegate clean-up reverts; the last state before DIDRevoked is frozen"
+  },
+  {
+   "option": "erc-1056-vehicle",
+   "family": "revocation",
+   "step": "revokedAt-frozen",
+   "fn": "ERC1056Registry.revokedAt",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "revokedAt == 1791107323: unchanged by the rejected second revocation (FIXED D21: the original decommissioning time is the only one)"
   },
   {
    "option": "erc-1056-vehicle",
@@ -5014,7 +5068,7 @@
    "step": "dmv-registers",
    "fn": "CVINVehicleCredential1155.registerVehicle",
    "onchain": true,
-   "gasUsed": "103881",
+   "gasUsed": "107238",
    "note": "gate 1: registerVehicle is onlyRole(ISSUER_ROLE)"
   },
   {
@@ -5023,7 +5077,7 @@
    "step": "insurer-issues",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "57115",
+   "gasUsed": "57137",
    "note": "gate 2: issueCredential"
   },
   {
@@ -5041,7 +5095,7 @@
    "step": "dmv-moves-identity",
    "fn": "CVINVehicleCredential1155.issuerTransferCredential",
    "onchain": true,
-   "gasUsed": "83704",
+   "gasUsed": "83748",
    "note": "gate 4: issuerTransferCredential (the DMV re-binds the identity to a new owner address)"
   },
   {
@@ -5050,7 +5104,7 @@
    "step": "dmv-revokes-insurance",
    "fn": "CVINVehicleCredential1155.revokeCredential",
    "onchain": true,
-   "gasUsed": "30625",
+   "gasUsed": "30647",
    "note": "gate 5: revokeCredential \u2014 the DMV can revoke what the insurer issued (single flat role)"
   },
   {
@@ -5086,7 +5140,7 @@
    "step": "revoke-dmv",
    "fn": "CVINVehicleCredential1155.revokeRole",
    "onchain": true,
-   "gasUsed": "29774",
+   "gasUsed": "29796",
    "note": "admin revokes the DMV -> RoleRevoked"
   },
   {
@@ -5158,7 +5212,7 @@
    "step": "issue-inspection",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "57115",
+   "gasUsed": "57137",
    "note": "MEASURED (addDelegateOrClaim): mint 1 INSPECTION_CERT -> CredentialIssued + TransferSingle; the chain records WHO issued, not what was inspected"
   },
   {
@@ -5176,7 +5230,7 @@
    "step": "issue-registration",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "57115",
+   "gasUsed": "57137",
    "note": "REGISTRATION credential"
   },
   {
@@ -5185,7 +5239,7 @@
    "step": "issue-insurance",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "57115",
+   "gasUsed": "57137",
    "note": "INSURANCE_CERT credential"
   },
   {
@@ -5194,7 +5248,7 @@
    "step": "issue-badges-multi",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "57115",
+   "gasUsed": "57137",
    "note": "FUNGIBLE claim: 4 MAINTENANCE_BADGE units in one mint (ERC-1155 amount semantics; a count, not four distinct records)"
   },
   {
@@ -5203,7 +5257,7 @@
    "step": "issue-inspection-again",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "40015",
+   "gasUsed": "40037",
    "note": "a second inspection just increments the balance to 2 \u2014 no date, no expiry, no per-inspection identity"
   },
   {
@@ -5212,7 +5266,7 @@
    "step": "issue-custom-type",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "57115",
+   "gasUsed": "57137",
    "note": "OBSERVATION: undeclared type 7 is accepted (open type space)"
   },
   {
@@ -5275,7 +5329,7 @@
    "step": "inspector-issues-insurance",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "40015",
+   "gasUsed": "40037",
    "note": "OBSERVATION: the inspector can now also issue INSURANCE_CERT \u2014 the chain cannot tell issuers apart by competence"
   },
   {
@@ -5284,7 +5338,7 @@
    "step": "issuer-transfer-credential",
    "fn": "CVINVehicleCredential1155.issuerTransferCredential",
    "onchain": true,
-   "gasUsed": "54757",
+   "gasUsed": "54801",
    "note": "issuer moves ALL 4 badges to vehicle B (e.g. after a VIN re-binding); non-BIRTH types do not touch the VIN maps"
   },
   {
@@ -5302,7 +5356,7 @@
    "step": "revoke-one-inspection",
    "fn": "CVINVehicleCredential1155.revokeCredential",
    "onchain": true,
-   "gasUsed": "35425",
+   "gasUsed": "35447",
    "note": "MEASURED (revoke): burn 1 unit -> CredentialRevoked + TransferSingle(to=0); one of the two inspections is gone, which one is undefined"
   },
   {
@@ -5329,7 +5383,7 @@
    "step": "any-issuer-revokes",
    "fn": "CVINVehicleCredential1155.revokeCredential",
    "onchain": true,
-   "gasUsed": "30625",
+   "gasUsed": "30647",
    "note": "OBSERVATION: any ISSUER_ROLE holder can revoke credentials issued by another issuer (no issuer binding per credential)"
   },
   {
@@ -5374,7 +5428,7 @@
    "step": "approve-operator",
    "fn": "CVINVehicleCredential1155.setApprovalForAll",
    "onchain": true,
-   "gasUsed": "46423",
+   "gasUsed": "46445",
    "note": "holder names a (non-issuer) operator"
   },
   {
@@ -5401,7 +5455,7 @@
    "step": "approve-issuer",
    "fn": "CVINVehicleCredential1155.setApprovalForAll",
    "onchain": true,
-   "gasUsed": "46423",
+   "gasUsed": "46445",
    "note": "holder approves the issuer as operator"
   },
   {
@@ -5410,7 +5464,7 @@
    "step": "issuer-std-transfer",
    "fn": "CVINVehicleCredential1155.safeTransferFrom",
    "onchain": true,
-   "gasUsed": "61952",
+   "gasUsed": "61996",
    "note": "issuer (role + operator) moves one MAINTENANCE_BADGE via the STANDARD function -> TransferSingle"
   },
   {
@@ -5446,7 +5500,7 @@
    "step": "std-transfer-to-contract",
    "fn": "CVINVehicleCredential1155.safeTransferFrom",
    "onchain": true,
-   "gasUsed": "58311",
+   "gasUsed": "58355",
    "note": "contract recipient: OZ calls onERC1155Received and requires the selector back (echo receiver accepts)"
   },
   {
@@ -5455,7 +5509,7 @@
    "step": "approve-issuer-b",
    "fn": "CVINVehicleCredential1155.setApprovalForAll",
    "onchain": true,
-   "gasUsed": "46423",
+   "gasUsed": "46445",
    "note": "B approves the issuer as operator too"
   },
   {
@@ -5473,7 +5527,7 @@
    "step": "std-transfer-birth-cert",
    "fn": "CVINVehicleCredential1155.safeTransferFrom",
    "onchain": true,
-   "gasUsed": "57164",
+   "gasUsed": "57208",
    "note": "POTENTIAL DEFECT: the identity token moves through the standard path, but vehicleVIN/vinHashToVehicle are only updated in issuerTransferCredential"
   },
   {
@@ -5500,7 +5554,7 @@
    "step": "move-back-issuer-mediated",
    "fn": "CVINVehicleCredential1155.issuerTransferCredential",
    "onchain": true,
-   "gasUsed": "80749",
+   "gasUsed": "80794",
    "note": "repair path: issuerTransferCredential re-binds vehicleVIN[to]=vehicleVIN[from] (empty!) and vinHashToVehicle[keccak(\"\")]=A \u2014 the original VIN is NOT restored"
   },
   {
@@ -5554,7 +5608,7 @@
    "step": "issuer-transfer-birth-cert",
    "fn": "CVINVehicleCredential1155.issuerTransferCredential",
    "onchain": true,
-   "gasUsed": "83716",
+   "gasUsed": "83760",
    "note": "MEASURED (transferOwnership/controller-change): BIRTH_CERT moves and vehicleVIN + vinHashToVehicle are re-bound to the buyer (identity address changes)"
   },
   {
@@ -5572,7 +5626,7 @@
    "step": "issuer-transfer-registration",
    "fn": "CVINVehicleCredential1155.issuerTransferCredential",
    "onchain": true,
-   "gasUsed": "54769",
+   "gasUsed": "54813",
    "note": "other credential types move separately (whole balance of that type); the sale needs one tx per held type"
   },
   {
@@ -5591,7 +5645,7 @@
    "fn": "CVINVehicleCredential1155.constructor",
    "onchain": false,
    "gasUsed": "0",
-   "note": "shared multi-token registry deployed, gasUsed=2298640; deployer = DEFAULT_ADMIN + ISSUER (measured as deployRegistry)"
+   "note": "shared multi-token registry deployed, gasUsed=2380231; deployer = DEFAULT_ADMIN + ISSUER (measured as deployRegistry)"
   },
   {
    "option": "erc-1155",
@@ -5626,7 +5680,7 @@
    "step": "register-vehicle",
    "fn": "CVINVehicleCredential1155.registerVehicle",
    "onchain": true,
-   "gasUsed": "103881",
+   "gasUsed": "107238",
    "note": "MEASURED (createIdentity): issuer mints 1 BIRTH_CERT to the vehicle address and writes vehicleVIN + vinHashToVehicle"
   },
   {
@@ -5699,16 +5753,34 @@
    "fn": "CVINVehicleCredential1155.registerVehicle",
    "onchain": false,
    "gasUsed": "0",
-   "note": "reverts \"empty VIN\" \u2014 only emptiness is checked: NOT the 17-char length (unlike CVINVehicleNFT)"
+   "note": "reverts \"empty VIN\" \u2014 the emptiness guard fires first; the ISO 3779 shape check (17 chars, no I/O/Q, upper-cased) follows it since the D13 fix"
   },
   {
    "option": "erc-1155",
    "family": "creation",
    "step": "register-short-vin",
    "fn": "CVINVehicleCredential1155.registerVehicle",
-   "onchain": true,
-   "gasUsed": "103725",
-   "note": "OBSERVATION: a 5-character \"VIN\" is accepted \u2014 no ISO 3779 validation on this option"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"invalid VIN length\" \u2014 FIXED (D13): a 5-character \"VIN\" is rejected \u2014 ISO 3779 length is enforced on this option too (formerly accepted)"
+  },
+  {
+   "option": "erc-1155",
+   "family": "creation",
+   "step": "register-invalid-char",
+   "fn": "CVINVehicleCredential1155.registerVehicle",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"invalid VIN character\" \u2014 FIXED (D13): the letters I, O and Q are rejected (check digit intentionally not enforced)"
+  },
+  {
+   "option": "erc-1155",
+   "family": "creation",
+   "step": "register-lowercase-twin",
+   "fn": "CVINVehicleCredential1155.registerVehicle",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"VIN already registered\" \u2014 FIXED (D13): the VIN is upper-cased before hashing, so the lower-cased twin collides with the registered VIN"
   },
   {
    "option": "erc-1155",
@@ -5734,7 +5806,7 @@
    "step": "register-second",
    "fn": "CVINVehicleCredential1155.registerVehicle",
    "onchain": true,
-   "gasUsed": "103881",
+   "gasUsed": "107238",
    "note": "a second real vehicle"
   },
   {
@@ -5744,7 +5816,7 @@
    "fn": "CVINVehicleCredential1155.balanceOfBatch",
    "onchain": false,
    "gasUsed": "0",
-   "note": "ERC-1155 batch read: three identities exist"
+   "note": "ERC-1155 batch read: two identities exist (vehicleB holds none \u2014 every one of its malformed registrations was rejected)"
   },
   {
    "option": "erc-1155",
@@ -5752,7 +5824,7 @@
    "step": "register",
    "fn": "CVINVehicleCredential1155.registerVehicle",
    "onchain": true,
-   "gasUsed": "103881",
+   "gasUsed": "107238",
    "note": "lifecycle: birth"
   },
   {
@@ -5770,7 +5842,7 @@
    "step": "inspection-1",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "57115",
+   "gasUsed": "57137",
    "note": "lifecycle: inspection by issuer 2"
   },
   {
@@ -5779,7 +5851,7 @@
    "step": "insurance",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "57115",
+   "gasUsed": "57137",
    "note": "lifecycle: insurance"
   },
   {
@@ -5788,7 +5860,7 @@
    "step": "inspection-revoked",
    "fn": "CVINVehicleCredential1155.revokeCredential",
    "onchain": true,
-   "gasUsed": "30625",
+   "gasUsed": "30647",
    "note": "lifecycle: inspection revoked by issuer 1"
   },
   {
@@ -5797,7 +5869,7 @@
    "step": "inspection-2",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "57115",
+   "gasUsed": "57137",
    "note": "lifecycle: re-inspection"
   },
   {
@@ -5806,7 +5878,7 @@
    "step": "sale",
    "fn": "CVINVehicleCredential1155.issuerTransferCredential",
    "onchain": true,
-   "gasUsed": "83704",
+   "gasUsed": "83748",
    "note": "lifecycle: identity re-bound to the buyer"
   },
   {
@@ -5815,7 +5887,7 @@
    "step": "issuer-2-revoked",
    "fn": "CVINVehicleCredential1155.revokeRole",
    "onchain": true,
-   "gasUsed": "29774",
+   "gasUsed": "29796",
    "note": "lifecycle: issuer 2 loses its role (RoleRevoked)"
   },
   {
@@ -5887,7 +5959,7 @@
    "step": "revoke-credential",
    "fn": "CVINVehicleCredential1155.revokeCredential",
    "onchain": true,
-   "gasUsed": "30625",
+   "gasUsed": "30647",
    "note": "MEASURED (revoke): burn the inspection credential -> CredentialRevoked; status = balance now 0 (no tombstone, no reason, no timestamp on-chain)"
   },
   {
@@ -5923,7 +5995,7 @@
    "step": "revoke-birth-cert",
    "fn": "CVINVehicleCredential1155.revokeCredential",
    "onchain": true,
-   "gasUsed": "37417",
+   "gasUsed": "37435",
    "note": "identity-level revocation: burning the BIRTH_CERT deletes vinHashToVehicle + vehicleVIN (deregistration)"
   },
   {
@@ -5959,7 +6031,7 @@
    "step": "revoke-orphan",
    "fn": "CVINVehicleCredential1155.revokeCredential",
    "onchain": true,
-   "gasUsed": "30625",
+   "gasUsed": "30647",
    "note": "the orphan can still be burned (issuer must remember to)"
   },
   {
@@ -5968,7 +6040,7 @@
    "step": "reregister-same-vin",
    "fn": "CVINVehicleCredential1155.registerVehicle",
    "onchain": true,
-   "gasUsed": "103881",
+   "gasUsed": "107238",
    "note": "OBSERVATION: the same VIN can be registered again after deregistration (no permanent tombstone); the \"revocation\" is reversible by the issuer"
   },
   {
@@ -5986,7 +6058,7 @@
    "step": "issuer-2-issues",
    "fn": "CVINVehicleCredential1155.issueCredential",
    "onchain": true,
-   "gasUsed": "57115",
+   "gasUsed": "57137",
    "note": "issuer 2 issues an inspection"
   },
   {
@@ -5995,7 +6067,7 @@
    "step": "revoke-role",
    "fn": "CVINVehicleCredential1155.revokeRole",
    "onchain": true,
-   "gasUsed": "29762",
+   "gasUsed": "29784",
    "note": "issuer-side revocation -> RoleRevoked"
   },
   {
@@ -6067,7 +6139,7 @@
    "step": "set-approval-for-all",
    "fn": "CVINVehicleCredential1155.setApprovalForAll",
    "onchain": true,
-   "gasUsed": "46423",
+   "gasUsed": "46445",
    "note": "standard operator approval -> ApprovalForAll"
   },
   {
@@ -6103,7 +6175,7 @@
    "step": "approve-self",
    "fn": "CVINVehicleCredential1155.setApprovalForAll",
    "onchain": true,
-   "gasUsed": "46423",
+   "gasUsed": "46445",
    "note": "OBSERVATION: OZ 5.x accepts a self-approval (the ERC-721 Monolithic variant rejects \"Approve to caller\"); harmless here because approvals are inert"
   },
   {
@@ -6112,7 +6184,7 @@
    "step": "clear-approval",
    "fn": "CVINVehicleCredential1155.setApprovalForAll",
    "onchain": true,
-   "gasUsed": "24511",
+   "gasUsed": "24533",
    "note": "approval cleared"
   },
   {
@@ -6139,7 +6211,7 @@
    "step": "register",
    "fn": "CVINVehicleCredential1155.registerVehicle",
    "onchain": true,
-   "gasUsed": "103881",
+   "gasUsed": "107238",
    "note": "registration writes both indexes"
   },
   {
@@ -6194,7 +6266,34 @@
    "fn": "CVINVehicleCredential1155.vinHashToVehicle",
    "onchain": false,
    "gasUsed": "0",
-   "note": "OBSERVATION: no normalisation; a lower-cased VIN hashes differently and could be registered as a second identity"
+   "note": "the RAW mapping getter is keyed by keccak256 of the NORMALISED (upper-case) VIN, so a caller who hashes the lower-cased string itself misses \u2014 auto-generated getters cannot normalise; use vinHashOf / vehicleForVIN (next steps), which do"
+  },
+  {
+   "option": "erc-1155",
+   "family": "vin-linkage",
+   "step": "vin-hash-of-lowercase",
+   "fn": "CVINVehicleCredential1155.vinHashOf",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "FIXED (D13): the contract-side hash helper upper-cases first, so the lower-cased VIN hashes to the registered key"
+  },
+  {
+   "option": "erc-1155",
+   "family": "vin-linkage",
+   "step": "vehicle-for-vin-lowercase",
+   "fn": "CVINVehicleCredential1155.vehicleForVIN",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "FIXED (D13): case-insensitive VIN -> vehicle lookup finds the registered identity"
+  },
+  {
+   "option": "erc-1155",
+   "family": "vin-linkage",
+   "step": "register-lowercase-twin",
+   "fn": "CVINVehicleCredential1155.registerVehicle",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"VIN already registered\" \u2014 FIXED (D13): the lower-cased VIN can no longer be registered as a second identity"
   },
   {
    "option": "erc-1155",
@@ -6202,7 +6301,7 @@
    "step": "rebind",
    "fn": "CVINVehicleCredential1155.issuerTransferCredential",
    "onchain": true,
-   "gasUsed": "83704",
+   "gasUsed": "83748",
    "note": "issuer-mediated re-binding moves both indexes"
   },
   {
@@ -6220,7 +6319,7 @@
    "step": "deregister",
    "fn": "CVINVehicleCredential1155.revokeCredential",
    "onchain": true,
-   "gasUsed": "37408",
+   "gasUsed": "37425",
    "note": "burning the BIRTH_CERT clears both indexes"
   },
   {
@@ -6409,7 +6508,7 @@
    "step": "rotate-direct",
    "fn": "CVINVehicleAccount.transferOwnership",
    "onchain": true,
-   "gasUsed": "28527",
+   "gasUsed": "28539",
    "note": "MEASURED (transferOwnership): direct call by the owner key; identity address unchanged -> OwnershipTransferred"
   },
   {
@@ -6572,7 +6671,7 @@
    "fn": "off-chain keygen",
    "onchain": false,
    "gasUsed": "0",
-   "note": "vehicle signing key 0x65bfa8d16B47A858d359Aad0AB939913C43DCA2d generated off-chain; it holds no ETH and never sends a transaction itself"
+   "note": "vehicle signing key 0x86e94a0D21E36dBd68EE7cC5FF7544656a5e6630 generated off-chain; it holds no ETH and never sends a transaction itself"
   },
   {
    "option": "erc-4337",
@@ -6995,7 +7094,7 @@
    "fn": "CVINVehicleAccount.constructor",
    "onchain": false,
    "gasUsed": "0",
-   "note": "account 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 owned by an unfunded off-chain key 0x585Ddbb56dE5E7E3Ed96Ed9445c96c25C8f342d8; account funded with 1 ETH; bundler = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+   "note": "account 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 owned by an unfunded off-chain key 0xbfDd9d5092c822a038A7635fDe9adeD3cFA96e10; account funded with 1 ETH; bundler = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
   },
   {
    "option": "erc-4337",
@@ -7363,7 +7462,7 @@
    "step": "record-entry-overwrite",
    "fn": "CVIN_NFT_DID_ERC721.recordEntry",
    "onchain": true,
-   "gasUsed": "32573",
+   "gasUsed": "32585",
    "note": "second entry overwrites the first"
   },
   {
@@ -7534,7 +7633,7 @@
    "step": "new-manufacturer-mints",
    "fn": "CVINVehicleNFT.mintVehicle",
    "onchain": true,
-   "gasUsed": "497504",
+   "gasUsed": "500227",
    "note": "the gate works: freshly granted manufacturer creates an identity"
   },
   {
@@ -7967,7 +8066,7 @@
    "fn": "CVINVehicleNFT.constructor",
    "onchain": false,
    "gasUsed": "0",
-   "note": "shared collection deployed, gasUsed=2721476; deployer gets DEFAULT_ADMIN_ROLE + MANUFACTURER_ROLE (measured as deployRegistry)"
+   "note": "shared collection deployed, gasUsed=2787288; deployer gets DEFAULT_ADMIN_ROLE + MANUFACTURER_ROLE (measured as deployRegistry)"
   },
   {
    "option": "erc-721",
@@ -8029,7 +8128,7 @@
    "step": "mint-vehicle",
    "fn": "CVINVehicleNFT.mintVehicle",
    "onchain": true,
-   "gasUsed": "542426",
+   "gasUsed": "545149",
    "note": "MEASURED (createIdentity): manufacturer mints tokenId 1, binds VIN both ways, stores metadata struct + initial transfer record"
   },
   {
@@ -8047,7 +8146,7 @@
    "step": "mint-second",
    "fn": "CVINVehicleNFT.mintVehicle",
    "onchain": true,
-   "gasUsed": "545190",
+   "gasUsed": "547913",
    "note": "second identity (tokenId 2) so the enumeration views have two entries"
   },
   {
@@ -8309,7 +8408,7 @@
    "fn": "CVINVehicleNFT.constructor",
    "onchain": false,
    "gasUsed": "0",
-   "note": "deployed through the adapter (gas 2721476, setup 51666)"
+   "note": "deployed through the adapter (gas 2787288, setup 51666)"
   },
   {
    "option": "erc-721",
@@ -8318,7 +8417,7 @@
    "fn": "CVINVehicleNFT.mintVehicle",
    "onchain": false,
    "gasUsed": "0",
-   "note": "adapter.create -> id 1 (gas 542474)"
+   "note": "adapter.create -> id 1 (gas 545197)"
   },
   {
    "option": "erc-721",
@@ -9073,7 +9172,7 @@
    "step": "mint",
    "fn": "CVINVehicleNFT.mintVehicle",
    "onchain": true,
-   "gasUsed": "497588",
+   "gasUsed": "500311",
    "note": "mint writes vinToTokenId[vin]=1 and tokenIdToVIN[1]=vin (plain-text VIN on-chain: no privacy)"
   },
   {
@@ -9155,16 +9254,16 @@
    "fn": "CVINVehicleNFT.vinToTokenId",
    "onchain": false,
    "gasUsed": "0",
-   "note": "OBSERVATION: no normalisation \u2014 a lower-cased VIN is a different key (and could be minted as a second identity for the same vehicle)"
+   "note": "the RAW public mapping getter is still case-sensitive: Solidity auto-generated getters cannot normalise, and the mapping is keyed by the normalised (upper-case) VIN only \u2014 read through getTokenIdFromVIN, which normalises (next steps)"
   },
   {
    "option": "erc-721",
    "family": "vin-linkage",
    "step": "mint-lowercase-twin",
    "fn": "CVINVehicleNFT.mintVehicle",
-   "onchain": true,
-   "gasUsed": "503236",
-   "note": "POTENTIAL DEFECT confirmed: the same physical VIN in lower case mints a second identity (tokenId 2); ISO 3779 VINs are case-insensitive and exclude I/O/Q, none of which is checked"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"VIN already minted\" \u2014 FIXED (D13): mintVehicle upper-cases the VIN before the uniqueness check, so the same physical VIN in lower case is the SAME identity and cannot be minted twice (formerly it minted tokenId 2)"
   },
   {
    "option": "erc-721",
@@ -9173,7 +9272,25 @@
    "fn": "CVINVehicleNFT.getTokenIdFromVIN",
    "onchain": false,
    "gasUsed": "0",
-   "note": "two tokens now claim one vehicle"
+   "note": "FIXED (D13): the checked getter normalises too \u2014 the lower-cased lookup finds the ORIGINAL token (1), so one vehicle has one token"
+  },
+  {
+   "option": "erc-721",
+   "family": "vin-linkage",
+   "step": "mint-invalid-char",
+   "fn": "CVINVehicleNFT.mintVehicle",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"invalid VIN character\" \u2014 FIXED (D13): ISO 3779 shape is enforced \u2014 I, O and Q are rejected (17-char length was already checked; the check digit is intentionally not enforced)"
+  },
+  {
+   "option": "erc-721",
+   "family": "vin-linkage",
+   "step": "total-after",
+   "fn": "CVINVehicleNFT.totalSupply",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "still exactly one token for the one vehicle"
   },
   {
    "option": "erc-721",
@@ -9380,7 +9497,7 @@
    "fn": "CVIN_SCBasedAccOrID_DID_ERC725Basic.transferOwnership",
    "onchain": true,
    "gasUsed": "547774",
-   "note": "owner without a local signer: deploy by deployer + transferOwnership: proxy deployment is the creation cost (owner = deployer of the proxy); vin=1HGCM82633A004352 not stored (no data store); +transferOwnership(0x3c60AC\u2026)=28390"
+   "note": "owner without a local signer: deploy by deployer + transferOwnership: proxy deployment is the creation cost (owner = deployer of the proxy); vin=1HGCM82633A004352 not stored (no data store); +transferOwnership(0xACF471\u2026)=28390"
   },
   {
    "option": "erc-725",
@@ -9488,7 +9605,7 @@
    "fn": "CVIN_SCBasedAccOrID_DID_ERC725Basic.getKeys",
    "onchain": true,
    "gasUsed": "0",
-   "note": "getKeys() -> 3; order after swap-and-pop: 0x7ceb5878\u2026, 0x2ba162ee\u2026, 0x41df7d4f\u2026 (last element moved into the hole: enumeration order is not stable)"
+   "note": "getKeys() -> 3; order after swap-and-pop: 0x7ceb5878\u2026, 0xd4fa1d03\u2026, 0x41df7d4f\u2026 (last element moved into the hole: enumeration order is not stable)"
   },
   {
    "option": "erc-725",
@@ -9586,7 +9703,7 @@
    "step": "addKey-1",
    "fn": "CVIN_SCBasedAccOrID_DID_ERC725Basic.addKey",
    "onchain": true,
-   "gasUsed": "119984",
+   "gasUsed": "119996",
    "note": "filler ACTION key #1 so removeKey has to scan a 7-element array"
   },
   {
@@ -9595,7 +9712,7 @@
    "step": "addKey-2",
    "fn": "CVIN_SCBasedAccOrID_DID_ERC725Basic.addKey",
    "onchain": true,
-   "gasUsed": "119984",
+   "gasUsed": "119996",
    "note": "filler ACTION key #2 so removeKey has to scan a 7-element array"
   },
   {
@@ -9613,7 +9730,7 @@
    "step": "addKey-4",
    "fn": "CVIN_SCBasedAccOrID_DID_ERC725Basic.addKey",
    "onchain": true,
-   "gasUsed": "119996",
+   "gasUsed": "119984",
    "note": "filler ACTION key #4 so removeKey has to scan a 7-element array"
   },
   {
@@ -10865,7 +10982,7 @@
    "fn": "CVINVehicleERC725XY.execute",
    "onchain": true,
    "gasUsed": "76340",
-   "note": "adapter: execute(CALL, CVINExecuteTarget, 0, setValue(375310)) \u2014 real call, msg.sender==identity: true; target deploy=133519 not counted; owner-gated by msg.sender, signature ignored"
+   "note": "adapter: execute(CALL, CVINExecuteTarget, 0, setValue(391792)) \u2014 real call, msg.sender==identity: true; target deploy=133519 not counted; owner-gated by msg.sender, signature ignored"
   },
   {
    "option": "erc-725xy",
@@ -10981,7 +11098,7 @@
    "step": "deploy-identity",
    "fn": "CVINVehicleClaimHolder.constructor",
    "onchain": true,
-   "gasUsed": "1371394",
+   "gasUsed": "1598928",
    "note": "per-vehicle claim holder"
   },
   {
@@ -11005,11 +11122,74 @@
   {
    "option": "erc-735",
    "family": "authorisation-roles",
+   "step": "isAuthorizedIssuer-before",
+   "fn": "CVINVehicleClaimHolder.isAuthorizedIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "isAuthorizedIssuer(manufacturer, MANUFACTURER_CERT) == false: the registry is empty at birth \u2014 no issuer may anchor anything until the owner admits it"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "authorizeIssuer-by-stranger",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"caller is not the owner\"): the registry is MANAGEMENT-key state: only the owner admits issuers (an issuer cannot admit itself)"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "authorizeIssuer-zero",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"issuer is zero address\"): guard"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "authorizeIssuer-manufacturer",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 the owner admits the OEM for MANUFACTURER_CERT only (IssuerAuthorized event; one cold SSTORE)"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "isAuthorizedIssuer-after",
+   "fn": "CVINVehicleClaimHolder.isAuthorizedIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "isAuthorizedIssuer(manufacturer, MANUFACTURER_CERT) == true"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "isAuthorizedIssuer-other-topic",
+   "fn": "CVINVehicleClaimHolder.isAuthorizedIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "isAuthorizedIssuer(manufacturer, INSPECTION) == false: authorisation is (issuer, topic)-scoped \u2014 an OEM is not thereby an inspector"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "authorizeIssuer-twice",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"issuer already authorized\"): idempotence guard: every IssuerAuthorized event marks a real state change"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
    "step": "issuer-cannot-self-anchor",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
    "gasUsed": "0",
-   "note": "reverted as expected (\"caller is not the owner\"): a valid issuer signature does not grant write access: anchoring is the holder's decision (consent)"
+   "note": "reverted as expected (\"caller is not the owner\"): a valid signature from an AUTHORISED issuer still does not grant write access: anchoring is the holder's decision (consent)"
   },
   {
    "option": "erc-735",
@@ -11017,8 +11197,8 @@
    "step": "owner-anchors-manufacturer-cert",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "358653",
-   "note": "the owner anchors the manufacturer certificate; the chain checks the signature, NOT that the signer is a real OEM"
+   "gasUsed": "361212",
+   "note": "the owner anchors the manufacturer certificate; the chain checks the signature AND that the signer is on the holder's registry for this topic (D25a)"
   },
   {
    "option": "erc-735",
@@ -11026,8 +11206,8 @@
    "step": "anyone-can-be-a-manufacturer",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "320742",
-   "note": "OBSERVATION: a second MANUFACTURER_CERT signed by a random address is accepted \u2014 no issuer registry/whitelist exists; veracity (is this issuer an OEM?) is entirely the verifier's off-chain trust decision"
+   "gasUsed": "0",
+   "note": "reverted as expected (\"issuer not authorized for topic\"): FIXED (D25a): a second MANUFACTURER_CERT validly signed by a random address is REJECTED \u2014 formerly it was accepted and two competing certificates coexisted; the signature check passes (who signed) but the registry check fails (may they sign). Whether a registered issuer is a REAL OEM remains the owner's decision when admitting it"
   },
   {
    "option": "erc-735",
@@ -11036,7 +11216,34 @@
    "fn": "CVINVehicleClaimHolder.getClaimIdsByTopic",
    "onchain": true,
    "gasUsed": "0",
-   "note": "getClaimIdsByTopic(MANUFACTURER_CERT) -> 2 competing certificates; a verifier must pick by issuer address"
+   "note": "getClaimIdsByTopic(MANUFACTURER_CERT) -> 1 certificate: a verifier no longer has to pick between competing issuers by address"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "self-issued-claim",
+   "fn": "CVINVehicleClaimHolder.addClaim",
+   "onchain": true,
+   "gasUsed": "321231",
+   "note": "D25a exemption: a claim signed by the OWNER about its own vehicle needs no registry entry (the ERC-735 draft lets an identity issue claims about itself); a verifier sees issuer == owner and reads it as SELF-ASSERTED, not attested"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "isAuthorizedIssuer-owner",
+   "fn": "CVINVehicleClaimHolder.isAuthorizedIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "isAuthorizedIssuer(owner, MANUFACTURER_CERT) == false: the exemption is NOT reflected in the registry \u2014 isAuthorizedIssuer answers only \"is this address whitelisted\""
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "owner-removes-self-issued",
+   "fn": "CVINVehicleClaimHolder.removeClaim",
+   "onchain": true,
+   "gasUsed": "84400",
+   "note": "the owner withdraws its self-asserted certificate (owner-side removal)"
   },
   {
    "option": "erc-735",
@@ -11045,16 +11252,61 @@
    "fn": "CVINVehicleClaimHolder.removeClaim",
    "onchain": true,
    "gasUsed": "0",
-   "note": "reverted as expected (\"caller is not owner nor issuer\"): issuer role is per-claim: the fake issuer cannot touch the OEM claim"
+   "note": "reverted as expected (\"caller is not owner nor issuer\"): issuer role is per-claim: a third party cannot touch the OEM claim"
   },
   {
    "option": "erc-735",
    "family": "authorisation-roles",
-   "step": "issuer-withdraws-own",
-   "fn": "CVINVehicleClaimHolder.removeClaim",
+   "step": "revokeIssuer-by-stranger",
+   "fn": "CVINVehicleClaimHolder.revokeIssuer",
    "onchain": true,
-   "gasUsed": "84481",
-   "note": "but may withdraw its own"
+   "gasUsed": "0",
+   "note": "reverted as expected (\"caller is not the owner\"): owner-only, like authorizeIssuer"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "revokeIssuer-unknown",
+   "fn": "CVINVehicleClaimHolder.revokeIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"issuer not authorized\"): guard: cannot revoke an issuer that was never admitted (every IssuerRevoked event marks a real state change)"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "revokeIssuer-manufacturer",
+   "fn": "CVINVehicleClaimHolder.revokeIssuer",
+   "onchain": true,
+   "gasUsed": "26420",
+   "note": "the owner withdraws the OEM's right to issue MANUFACTURER_CERT (IssuerRevoked; storage refund)"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "isAuthorizedIssuer-revoked",
+   "fn": "CVINVehicleClaimHolder.isAuthorizedIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "isAuthorizedIssuer(manufacturer, MANUFACTURER_CERT) == false"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "claim-survives-revokeIssuer",
+   "fn": "CVINVehicleClaimHolder.claimExists",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "claimExists(manufacturer, MANUFACTURER_CERT) == true: revoking an ISSUER is forward-looking \u2014 the certificate it already issued stays until removeClaim (contrast: removeClaim revokes a CLAIM)"
+  },
+  {
+   "option": "erc-735",
+   "family": "authorisation-roles",
+   "step": "addClaim-after-revokeIssuer",
+   "fn": "CVINVehicleClaimHolder.addClaim",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"issuer not authorized for topic\"): a LATER claim (here: the in-place update of the same (issuer, topic)) by the revoked OEM is rejected even though its signature is valid"
   },
   {
    "option": "erc-735",
@@ -11063,7 +11315,7 @@
    "fn": "CVINVehicleClaimHolder.removeClaim",
    "onchain": true,
    "gasUsed": "85091",
-   "note": "issuer-side withdrawal by the OEM"
+   "note": "issuer-side withdrawal by the (now revoked) OEM: the per-claim removal right is tied to the CLAIM's issuer field, not to the registry"
   },
   {
    "option": "erc-735",
@@ -11081,7 +11333,7 @@
    "fn": "CVINVehicleClaimHolder.claimExists",
    "onchain": true,
    "gasUsed": "0",
-   "note": "roles on-chain: owner (anchor/remove/transfer), issuer-of-claim (remove own). Not on-chain: issuer accreditation, manufacturer registry, inspector licensing \u2014 the comparison measures none of this family"
+   "note": "roles on-chain: owner (anchor/remove/transfer, admit/revoke issuers per topic), registered issuer (sign claims on its topic), issuer-of-claim (remove own), owner-as-issuer (self-asserted claims without registry entry). Not on-chain: whether a registered issuer is an accredited OEM/inspector \u2014 the owner's admission decision replaces the verifier's address-picking; the comparison measures none of this family"
   },
   {
    "option": "erc-735",
@@ -11089,7 +11341,7 @@
    "step": "deploy-identity",
    "fn": "CVINVehicleClaimHolder.constructor",
    "onchain": true,
-   "gasUsed": "1371394",
+   "gasUsed": "1598928",
    "note": "per-vehicle claim holder"
   },
   {
@@ -11149,11 +11401,65 @@
   {
    "option": "erc-735",
    "family": "claims",
+   "step": "addClaim-unauthorised-issuer",
+   "fn": "CVINVehicleClaimHolder.addClaim",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"issuer not authorized for topic\"): FIXED (D25a): a validly signed claim from an issuer the owner has not admitted for this topic is rejected \u2014 formerly any key could sign a MANUFACTURER_CERT"
+  },
+  {
+   "option": "erc-735",
+   "family": "claims",
+   "step": "authorizeIssuer-manufacturer-MANUFACTURER_CERT",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 owner admits manufacturer for MANUFACTURER_CERT (IssuerAuthorized)"
+  },
+  {
+   "option": "erc-735",
+   "family": "claims",
+   "step": "authorizeIssuer-inspector-INSPECTION",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 owner admits inspector for INSPECTION (IssuerAuthorized)"
+  },
+  {
+   "option": "erc-735",
+   "family": "claims",
+   "step": "authorizeIssuer-insurer-INSURANCE",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 owner admits insurer for INSURANCE (IssuerAuthorized)"
+  },
+  {
+   "option": "erc-735",
+   "family": "claims",
+   "step": "authorizeIssuer-manufacturer-VIN_ATTESTATION",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 owner admits manufacturer for VIN_ATTESTATION (IssuerAuthorized)"
+  },
+  {
+   "option": "erc-735",
+   "family": "claims",
+   "step": "isAuthorizedIssuer",
+   "fn": "CVINVehicleClaimHolder.isAuthorizedIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "isAuthorizedIssuer(inspector, INSPECTION) == true; (inspector, INSURANCE) == false: the whitelist is (issuer, topic)-scoped"
+  },
+  {
+   "option": "erc-735",
+   "family": "claims",
    "step": "addClaim-by-non-owner",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
    "gasUsed": "0",
-   "note": "reverted as expected (\"caller is not the owner\"): even the ISSUER cannot push a claim: the holder (owner) anchors it \u2014 self-sovereign consent"
+   "note": "reverted as expected (\"caller is not the owner\"): even the (authorised) ISSUER cannot push a claim: the holder (owner) anchors it \u2014 self-sovereign consent"
   },
   {
    "option": "erc-735",
@@ -11161,8 +11467,8 @@
    "step": "addClaim-MANUFACTURER_CERT",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "358915",
-   "note": "MEASURED (benchmark addDelegateOrClaim; L1 claim 314,543): ecrecover at add time + full claim stored (92 bytes data + 65-byte sig + uri)"
+   "gasUsed": "361474",
+   "note": "MEASURED (benchmark addDelegateOrClaim; L1 claim 314,543, pre-D25): ecrecover at add time + registry SLOAD (D25a) + full claim stored (92 bytes data + 65-byte sig + uri)"
   },
   {
    "option": "erc-735",
@@ -11197,7 +11503,7 @@
    "step": "addClaim-INSPECTION",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "269474",
+   "gasUsed": "272033",
    "note": "periodic inspection by a second issuer"
   },
   {
@@ -11206,7 +11512,7 @@
    "step": "addClaim-INSURANCE",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "290273",
+   "gasUsed": "292832",
    "note": "insurance cover by a third issuer"
   },
   {
@@ -11224,7 +11530,7 @@
    "step": "addClaim-INSPECTION-update",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "68979",
+   "gasUsed": "71538",
    "note": "MEASURED (benchmark updateAttribute = re-add same (issuer, topic)): warm rewrite, ClaimChanged instead of ClaimAdded, topic index unchanged"
   },
   {
@@ -11252,7 +11558,16 @@
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
    "gasUsed": "0",
-   "note": "reverted as expected (\"invalid issuer signature\"): a RAW secp256k1 signature over the digest (no EIP-191 prefix, the CVIN-Combined convention) is rejected here \u2014 the two claim contracts use incompatible signing conventions"
+   "note": "reverted as expected (\"invalid issuer signature\"): a RAW secp256k1 signature over the digest (no EIP-191 prefix, the CVIN-Combined convention) is rejected here \u2014 D25c: documented in _recoverSigner, NOT changed by the D25 fix"
+  },
+  {
+   "option": "erc-735",
+   "family": "claims",
+   "step": "signature-scheme-D25c",
+   "fn": "offchain:issuer-signing",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "D25c (recorded, not fixed): this contract ecrecovers the EIP-191-prefixed digest and rejects a raw one; CVINCombinedIdentity._recoverRawDigest does the opposite, so one issuer signature is not portable between the two claim contracts. Unifying the scheme (AFTER_ACTION_REPORT_05 \u00a71 F7 recommends EIP-191, matching the VC layer and the ERC-4337 account) is a design decision left to the author"
   },
   {
    "option": "erc-735",
@@ -11296,8 +11611,26 @@
    "step": "addClaim-VIN_ATTESTATION",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "269293",
-   "note": "the valid VIN attestation finally anchored"
+   "gasUsed": "274921",
+   "note": "the valid VIN attestation finally anchored (authorised issuer, payload ends in this holder's VIN \u2014 D25b, see vin-linkage)"
+  },
+  {
+   "option": "erc-735",
+   "family": "claims",
+   "step": "addClaim-self-issued",
+   "fn": "CVINVehicleClaimHolder.addClaim",
+   "onchain": true,
+   "gasUsed": "252518",
+   "note": "D25a exemption: issuer == owner needs no registry entry (the ERC-735 draft lets an identity issue claims about itself); a verifier reads issuer == owner as self-asserted"
+  },
+  {
+   "option": "erc-735",
+   "family": "claims",
+   "step": "removeClaim-self-issued",
+   "fn": "CVINVehicleClaimHolder.removeClaim",
+   "onchain": true,
+   "gasUsed": "71455",
+   "note": "and withdraws it again"
   },
   {
    "option": "erc-735",
@@ -11351,7 +11684,7 @@
    "fn": "CVINVehicleClaimHolder.getClaim",
    "onchain": true,
    "gasUsed": "0",
-   "note": "automation: the chain verifies issuer signatures at anchoring time, so later verifiers trust getClaim without crypto; what it cannot check: that the issuer is a legitimate authority (no issuer registry) or that the claim is still current (no expiry field) \u2014 those stay off-chain"
+   "note": "automation: the chain verifies issuer signatures at anchoring time AND (D25a) that the issuer is on the holder's per-topic registry \u2014 or is the owner itself \u2014, so later verifiers trust getClaim without crypto and without re-checking the issuer against a whitelist; what it still cannot check: that a registered issuer is a genuinely accredited authority (the owner decides whom to admit \u2014 there is no global/OEM-level registry) or that the claim is still current (no expiry field) \u2014 those stay off-chain"
   },
   {
    "option": "erc-735",
@@ -11359,7 +11692,7 @@
    "step": "adapter-addClaim",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "269201",
+   "gasUsed": "271760",
    "note": "adapter: addClaim topic=3 INSPECTION issuer=0x976EA7\u2026 (adapter-signed, EIP-191)"
   },
   {
@@ -11377,8 +11710,17 @@
    "step": "deploy-identity",
    "fn": "CVINVehicleClaimHolder.constructor",
    "onchain": true,
-   "gasUsed": "1371394",
+   "gasUsed": "1598928",
    "note": "per-vehicle claim holder"
+  },
+  {
+   "option": "erc-735",
+   "family": "controller",
+   "step": "authorizeIssuer-manufacturer",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 the first owner admits the OEM for MANUFACTURER_CERT"
   },
   {
    "option": "erc-735",
@@ -11386,7 +11728,7 @@
    "step": "addClaim-manufacturer",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "290009",
+   "gasUsed": "292568",
    "note": "a claim anchored by the first owner (to show it survives the sale)"
   },
   {
@@ -11422,7 +11764,7 @@
    "step": "transferOwnership",
    "fn": "CVINVehicleClaimHolder.transferOwnership",
    "onchain": true,
-   "gasUsed": "28690",
+   "gasUsed": "28756",
    "note": "MEASURED (benchmark transferOwnership; L1 controller-change 28,690): vehicle sale = owner rotation; OwnershipTransferred"
   },
   {
@@ -11442,6 +11784,24 @@
    "onchain": true,
    "gasUsed": "0",
    "note": "claimExists(manufacturer, MANUFACTURER_CERT) == true: claims belong to the identity, not to the owner"
+  },
+  {
+   "option": "erc-735",
+   "family": "controller",
+   "step": "issuer-authorisation-survives",
+   "fn": "CVINVehicleClaimHolder.isAuthorizedIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "isAuthorizedIssuer(manufacturer, MANUFACTURER_CERT) == true: D25a authorisations belong to the VEHICLE too \u2014 they survive the sale; the buyer may revokeIssuer"
+  },
+  {
+   "option": "erc-735",
+   "family": "controller",
+   "step": "old-owner-cannot-revoke-issuer",
+   "fn": "CVINVehicleClaimHolder.revokeIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"caller is not the owner\"): the registry is MANAGEMENT-key state: the seller can no longer admit or revoke issuers"
   },
   {
    "option": "erc-735",
@@ -11473,6 +11833,15 @@
   {
    "option": "erc-735",
    "family": "controller",
+   "step": "new-owner-revokes-issuer",
+   "fn": "CVINVehicleClaimHolder.revokeIssuer",
+   "onchain": true,
+   "gasUsed": "26420",
+   "note": "\u2026 and withdraw the seller-era issuer authorisation (IssuerRevoked)"
+  },
+  {
+   "option": "erc-735",
+   "family": "controller",
    "step": "no-renounce",
    "fn": "CVINVehicleClaimHolder.owner",
    "onchain": true,
@@ -11494,7 +11863,7 @@
    "step": "deploy-identity",
    "fn": "CVINVehicleClaimHolder.constructor",
    "onchain": true,
-   "gasUsed": "1371394",
+   "gasUsed": "1598928",
    "note": "MEASURED (createIdentity = claim-holder deployment; L1 create 1,371,394): identity id = 0x71C95911\u2026; constructor stores vin + keccak256(vin), owner = msg.sender"
   },
   {
@@ -11545,11 +11914,20 @@
   {
    "option": "erc-735",
    "family": "creation",
+   "step": "no-issuers-at-birth",
+   "fn": "CVINVehicleClaimHolder.isAuthorizedIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "isAuthorizedIssuer(deployer, VIN_ATTESTATION) == false: the D25a issuer registry is empty at creation \u2014 the owner must authorizeIssuer(issuer, topic) before any third-party claim can be anchored (self-issued claims excepted)"
+  },
+  {
+   "option": "erc-735",
+   "family": "creation",
    "step": "bytecode-size",
    "fn": "CVINVehicleClaimHolder.constructor",
    "onchain": true,
    "gasUsed": "0",
-   "note": "runtime bytecode 5708 bytes per vehicle; the VIN string costs 1 extra slot (<=31 bytes)"
+   "note": "runtime bytecode 6760 bytes per vehicle; the VIN string costs 1 extra slot (<=31 bytes)"
   },
   {
    "option": "erc-735",
@@ -11557,7 +11935,7 @@
    "step": "adapter-create",
    "fn": "CVINVehicleClaimHolder.constructor",
    "onchain": true,
-   "gasUsed": "1371394",
+   "gasUsed": "1598928",
    "note": "adapter.create: claim-holder deployment is the creation cost (vin=WBA3A5C58DF586741 stored in constructor)"
   },
   {
@@ -11566,8 +11944,8 @@
    "step": "adapter-create-foreign-owner",
    "fn": "CVINVehicleClaimHolder.transferOwnership",
    "onchain": true,
-   "gasUsed": "1400096",
-   "note": "owner without local signer -> deploy + transferOwnership: claim-holder deployment is the creation cost (vin=5YJ3E1EA7KF317000 stored in constructor); +transferOwnership(0x5DD98E\u2026)=28702"
+   "gasUsed": "1627696",
+   "note": "owner without local signer -> deploy + transferOwnership: claim-holder deployment is the creation cost (vin=5YJ3E1EA7KF317000 stored in constructor); +transferOwnership(0x138D18\u2026)=28768"
   },
   {
    "option": "erc-735",
@@ -11584,8 +11962,17 @@
    "step": "deploy-identity",
    "fn": "CVINVehicleClaimHolder.constructor",
    "onchain": true,
-   "gasUsed": "1371394",
+   "gasUsed": "1598928",
    "note": "history entry 0: VehicleIdentityCreated + OwnershipTransferred(0, owner)"
+  },
+  {
+   "option": "erc-735",
+   "family": "lifecycle-history",
+   "step": "h0-authorizeIssuer",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 history entry 0b: IssuerAuthorized(inspector, INSPECTION)"
   },
   {
    "option": "erc-735",
@@ -11593,7 +11980,7 @@
    "step": "h1-addClaim",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "269449",
+   "gasUsed": "272008",
    "note": "first anchoring"
   },
   {
@@ -11602,7 +11989,7 @@
    "step": "h2-addClaim-update",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "68954",
+   "gasUsed": "71513",
    "note": "yearly re-inspection: same (issuer, topic) -> update in place"
   },
   {
@@ -11620,7 +12007,7 @@
    "step": "h3-transferOwnership",
    "fn": "CVINVehicleClaimHolder.transferOwnership",
    "onchain": true,
-   "gasUsed": "28690",
+   "gasUsed": "28756",
    "note": "sale"
   },
   {
@@ -11629,8 +12016,8 @@
    "step": "h4-addClaim-update-by-buyer",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "68906",
-   "note": "the new owner anchors the next (failed) inspection \u2014 the holder changed, the issuer did not"
+   "gasUsed": "71465",
+   "note": "the new owner anchors the next (failed) inspection \u2014 the holder changed, the issuer did not, and its D25a authorisation survived the sale (no re-authorizeIssuer needed)"
   },
   {
    "option": "erc-735",
@@ -11648,7 +12035,7 @@
    "fn": "CVINVehicleClaimHolder.getClaimIdsByTopic",
    "onchain": true,
    "gasUsed": "0",
-   "note": "log scan: ClaimRequested=1 ClaimAdded=1 ClaimChanged=2 ClaimRemoved=1 OwnershipTransferred=2; inspection timeline: ClaimAdded@2:APK:2024-03-01:PASS:odo=120000 -> ClaimChanged@3:APK:2025-03-05:PASS:odo=141500 -> ClaimChanged@5:APK:2026-03-02:FAIL:brakes -> ClaimRemoved@6:APK:2026-03-02:FAIL:brakes"
+   "note": "log scan: IssuerAuthorized=1 ClaimRequested=1 ClaimAdded=1 ClaimChanged=2 ClaimRemoved=1 OwnershipTransferred=2; inspection timeline: ClaimAdded@3:APK:2024-03-01:PASS:odo=120000 -> ClaimChanged@4:APK:2025-03-05:PASS:odo=141500 -> ClaimChanged@6:APK:2026-03-02:FAIL:brakes -> ClaimRemoved@7:APK:2026-03-02:FAIL:brakes (D25a adds IssuerAuthorized/IssuerRevoked as trust-policy history: who the holder recognised, and when)"
   },
   {
    "option": "erc-735",
@@ -11674,8 +12061,17 @@
    "step": "deploy-identity",
    "fn": "CVINVehicleClaimHolder.constructor",
    "onchain": true,
-   "gasUsed": "1371394",
+   "gasUsed": "1598928",
    "note": "per-vehicle claim holder"
+  },
+  {
+   "option": "erc-735",
+   "family": "revocation",
+   "step": "authorizeIssuer-0",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 issuer #0 0x976EA740\u2026 admitted for INSPECTION"
   },
   {
    "option": "erc-735",
@@ -11683,8 +12079,17 @@
    "step": "addClaim-INSPECTION-0",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "269270",
+   "gasUsed": "271829",
    "note": "inspection claim #0 by 0x976EA740\u2026"
+  },
+  {
+   "option": "erc-735",
+   "family": "revocation",
+   "step": "authorizeIssuer-1",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 issuer #1 0x14dC7996\u2026 admitted for INSPECTION"
   },
   {
    "option": "erc-735",
@@ -11692,8 +12097,17 @@
    "step": "addClaim-INSPECTION-1",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "252145",
+   "gasUsed": "254704",
    "note": "inspection claim #1 by 0x14dC7996\u2026"
+  },
+  {
+   "option": "erc-735",
+   "family": "revocation",
+   "step": "authorizeIssuer-2",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 issuer #2 0x9965507D\u2026 admitted for INSPECTION"
   },
   {
    "option": "erc-735",
@@ -11701,7 +12115,7 @@
    "step": "addClaim-INSPECTION-2",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "252145",
+   "gasUsed": "254704",
    "note": "inspection claim #2 by 0x9965507D\u2026"
   },
   {
@@ -11779,6 +12193,42 @@
   {
    "option": "erc-735",
    "family": "revocation",
+   "step": "revokeIssuer-manufacturer",
+   "fn": "CVINVehicleClaimHolder.revokeIssuer",
+   "onchain": true,
+   "gasUsed": "26420",
+   "note": "D25a: the holder withdraws issuer #2's right to issue INSPECTION claims (IssuerRevoked)"
+  },
+  {
+   "option": "erc-735",
+   "family": "revocation",
+   "step": "isAuthorizedIssuer-after-revoke",
+   "fn": "CVINVehicleClaimHolder.isAuthorizedIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "isAuthorizedIssuer(issuer #2, INSPECTION) == false"
+  },
+  {
+   "option": "erc-735",
+   "family": "revocation",
+   "step": "claim-survives-revokeIssuer",
+   "fn": "CVINVehicleClaimHolder.claimExists",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "claimExists(issuer #2, INSPECTION) == true: revokeIssuer is FORWARD-LOOKING \u2014 the claim it already issued stays live until removeClaim; revoking an issuer is not revoking its claims"
+  },
+  {
+   "option": "erc-735",
+   "family": "revocation",
+   "step": "addClaim-after-revokeIssuer",
+   "fn": "CVINVehicleClaimHolder.addClaim",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"issuer not authorized for topic\"): a later claim (or in-place update) by the revoked issuer is rejected despite a valid signature"
+  },
+  {
+   "option": "erc-735",
+   "family": "revocation",
    "step": "no-expiry",
    "fn": "CVINVehicleClaimHolder.getClaim",
    "onchain": true,
@@ -11810,7 +12260,7 @@
    "fn": "CVINVehicleClaimHolder.removeClaim",
    "onchain": true,
    "gasUsed": "69438",
-   "note": "adapter.revoke({ id, issuer, topic }) -> removeClaim (claim deleted; topic index compacted)"
+   "note": "adapter.revoke({ id, issuer, topic }) -> removeClaim (claim deleted; topic index compacted) (the revoked issuer's surviving claim is removed by the owner \u2014 the two revocation levels compose)"
   },
   {
    "option": "erc-735",
@@ -11818,7 +12268,7 @@
    "step": "deploy-identity",
    "fn": "CVINVehicleClaimHolder.constructor",
    "onchain": true,
-   "gasUsed": "1371394",
+   "gasUsed": "1598928",
    "note": "VIN 1HGCM82633A004352 fixed at deployment"
   },
   {
@@ -11860,11 +12310,38 @@
   {
    "option": "erc-735",
    "family": "vin-linkage",
+   "step": "addClaim-VIN_ATTESTATION-unauthorised",
+   "fn": "CVINVehicleClaimHolder.addClaim",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"issuer not authorized for topic\"): D25a: a correct VIN attestation from an OEM the owner has not admitted is rejected \u2014 the registry check precedes the VIN check"
+  },
+  {
+   "option": "erc-735",
+   "family": "vin-linkage",
+   "step": "authorizeIssuer-manufacturer",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "D25: issuers must be authorised per topic \u2014 the owner admits the OEM for VIN_ATTESTATION"
+  },
+  {
+   "option": "erc-735",
+   "family": "vin-linkage",
+   "step": "isAuthorizedIssuer",
+   "fn": "CVINVehicleClaimHolder.isAuthorizedIssuer",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "isAuthorizedIssuer(manufacturer, VIN_ATTESTATION) == true"
+  },
+  {
+   "option": "erc-735",
+   "family": "vin-linkage",
    "step": "addClaim-VIN_ATTESTATION",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "269293",
-   "note": "manufacturer attests the VIN: the signature binds (this contract address, topic 1, VIN bytes) \u2014 the attestation is non-transferable to another contract"
+   "gasUsed": "274921",
+   "note": "manufacturer attests the VIN: the signature binds (this contract address, topic 1, VIN bytes) \u2014 the attestation is non-transferable to another contract; the bare bytes(vin) payload satisfies the D25b trailing-bytes rule"
   },
   {
    "option": "erc-735",
@@ -11873,7 +12350,7 @@
    "fn": "CVINVehicleClaimHolder.getClaim",
    "onchain": true,
    "gasUsed": "0",
-   "note": "claim data \"1HGCM82633A004352\" == vin() true: a verifier cross-checks the attested VIN against the self-asserted one (the contract does NOT enforce equality)"
+   "note": "claim data \"1HGCM82633A004352\" == vin() true: FIXED (D25b) \u2014 the contract now enforces this equality at addClaim time, so a verifier may trust any stored topic-1 claim to name THIS vehicle's VIN"
   },
   {
    "option": "erc-735",
@@ -11881,8 +12358,44 @@
    "step": "addClaim-VIN_ATTESTATION-mismatch",
    "fn": "CVINVehicleClaimHolder.addClaim",
    "onchain": true,
-   "gasUsed": "252182",
-   "note": "OBSERVATION: an attestation for a DIFFERENT VIN is accepted on this identity \u2014 addClaim does not compare data with vin() even on topic 1; the verifier must"
+   "gasUsed": "0",
+   "note": "reverted as expected (\"VIN attestation does not match holder VIN\"): FIXED (D25b): an attestation for a DIFFERENT VIN is REJECTED on this identity even from the authorised OEM \u2014 formerly addClaim accepted any topic-1 payload and the verifier had to compare it with vin()"
+  },
+  {
+   "option": "erc-735",
+   "family": "vin-linkage",
+   "step": "addClaim-VIN_ATTESTATION-truncated",
+   "fn": "CVINVehicleClaimHolder.addClaim",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"VIN attestation does not match holder VIN\"): D25b encoding rule: a payload shorter than bytes(vin).length cannot encode the VIN"
+  },
+  {
+   "option": "erc-735",
+   "family": "vin-linkage",
+   "step": "addClaim-VIN_ATTESTATION-suffixed",
+   "fn": "CVINVehicleClaimHolder.addClaim",
+   "onchain": true,
+   "gasUsed": "0",
+   "note": "reverted as expected (\"VIN attestation does not match holder VIN\"): D25b encoding rule: the VIN must be the TRAILING field \u2014 a VIN followed by further bytes is rejected (structured JSON/ABI payloads belong on the other topics)"
+  },
+  {
+   "option": "erc-735",
+   "family": "vin-linkage",
+   "step": "authorizeIssuer-second-attester",
+   "fn": "CVINVehicleClaimHolder.authorizeIssuer",
+   "onchain": true,
+   "gasUsed": "48317",
+   "note": "a second attester (e.g. the registration authority) admitted for VIN_ATTESTATION"
+  },
+  {
+   "option": "erc-735",
+   "family": "vin-linkage",
+   "step": "addClaim-VIN_ATTESTATION-prefixed",
+   "fn": "CVINVehicleClaimHolder.addClaim",
+   "onchain": true,
+   "gasUsed": "257869",
+   "note": "D25b encoding rule: an application prefix BEFORE the VIN (\"VIN:\" + vin, as the L2 test and the gas benchmark use) is accepted \u2014 only the trailing bytes(vin).length bytes are compared with vinHash"
   },
   {
    "option": "erc-735",
@@ -11891,7 +12404,7 @@
    "fn": "CVINVehicleClaimHolder.vin",
    "onchain": true,
    "gasUsed": "0",
-   "note": "a second claim holder 0x663F3ad6\u2026 deployed with the SAME VIN: per-vehicle contracts cannot enforce VIN uniqueness; only the manufacturer attestation (which binds the contract address) disambiguates"
+   "note": "a second claim holder 0x663F3ad6\u2026 deployed with the SAME VIN: per-vehicle contracts cannot enforce VIN uniqueness (D25b binds a topic-1 claim to ITS holder's VIN, not the VIN to one holder); only the manufacturer attestation (which binds the contract address) disambiguates"
   },
   {
    "option": "erc-735",
@@ -11935,7 +12448,7 @@
    "step": "set-registration",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "55015",
+   "gasUsed": "55034",
    "note": "MEASURED (updateAttribute): authority writes a per-token key -> TokenIdDataChanged(tokenId, key, value) + DataChanged(key, value)"
   },
   {
@@ -11953,7 +12466,7 @@
    "step": "set-custom-key",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "77003",
+   "gasUsed": "77004",
    "note": "custom key with a 32-byte uint value (odometer)"
   },
   {
@@ -11962,7 +12475,7 @@
    "step": "overwrite",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "40130",
+   "gasUsed": "40113",
    "note": "overwrite: only the latest value is stored; no validity window, no history"
   },
   {
@@ -11989,7 +12502,7 @@
    "step": "set-batch",
    "fn": "CVINVehicleLSP8.setDataBatchForTokenIds",
    "onchain": true,
-   "gasUsed": "119812",
+   "gasUsed": "119869",
    "note": "batch write across two tokens in one tx (one TokenIdDataChanged + DataChanged per entry)"
   },
   {
@@ -12034,7 +12547,7 @@
    "step": "clear",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "32149",
+   "gasUsed": "32168",
    "note": "clearing = writing empty bytes; a verifier cannot distinguish \"never set\" from \"cleared\" without the log"
   },
   {
@@ -12097,7 +12610,7 @@
    "step": "store-attestation",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "307447",
+   "gasUsed": "307448",
    "note": "MEASURED (addDelegateOrClaim analogue): the AUTHORITY (not the inspector) stores abi.encode(payload, signature) under DATA_KEY_INSPECTION \u2014 the chain checks who wrote, not who signed"
   },
   {
@@ -12124,7 +12637,7 @@
    "step": "store-forged-attestation",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "77174",
+   "gasUsed": "77157",
    "note": "OBSERVATION: a payload with a signature by a random key over unrelated data is stored without complaint \u2014 veracity is entirely off-chain"
   },
   {
@@ -12152,7 +12665,7 @@
    "fn": "adapter.addClaim -> setDataForTokenId(DATA_KEY_INSPECTION)",
    "onchain": false,
    "gasUsed": "0",
-   "note": "adapter path re-stores the genuine attestation (gas 77174); claimId 0xa106a5da716ed1f60e\u2026"
+   "note": "adapter path re-stores the genuine attestation (gas 77157); claimId 0xa106a5da716ed1f60e\u2026"
   },
   {
    "option": "lsp8",
@@ -12161,7 +12674,7 @@
    "fn": "adapter.addClaim -> setDataForTokenId(keccak256(\"CVIN_CLAIM/insurance\"))",
    "onchain": false,
    "gasUsed": "0",
-   "note": "non-inspection topics get a derived key (gas 148635); one slot per topic, so a second insurance claim overwrites the first"
+   "note": "non-inspection topics get a derived key (gas 148636); one slot per topic, so a second insurance claim overwrites the first"
   },
   {
    "option": "lsp8",
@@ -12170,7 +12683,7 @@
    "fn": "adapter.revoke(claimId) -> setDataForTokenId(key, 0x)",
    "onchain": false,
    "gasUsed": "0",
-   "note": "revocation = clearing the slot (gas 74087); no revocation event distinct from a data change"
+   "note": "revocation = clearing the slot (gas 74088); no revocation event distinct from a data change"
   },
   {
    "option": "lsp8",
@@ -12277,7 +12790,7 @@
    "step": "transfer-force-true",
    "fn": "CVINVehicleLSP8.transfer",
    "onchain": true,
-   "gasUsed": "91846",
+   "gasUsed": "91814",
    "note": "MEASURED (transferOwnership): owner moves vehicle 1 to the buyer with force=true and a data payload -> Transfer(operator, from, to, tokenId, force, data)"
   },
   {
@@ -12304,7 +12817,7 @@
    "step": "transfer-force-false-to-contract",
    "fn": "CVINVehicleLSP8.transfer",
    "onchain": true,
-   "gasUsed": "83236",
+   "gasUsed": "83204",
    "note": "force=false to a contract passes the code-length check; NO LSP1 universalReceiver call is made (hook omitted in this implementation)"
   },
   {
@@ -12322,7 +12835,7 @@
    "step": "transfer-force-false-to-collection",
    "fn": "CVINVehicleLSP8.transfer",
    "onchain": true,
-   "gasUsed": "80736",
+   "gasUsed": "80704",
    "note": "OBSERVATION: force=false to the collection contract itself also succeeds \u2014 without LSP1 probing the force flag cannot protect against a recipient that can never move the token (vehicle 3 is now stuck)"
   },
   {
@@ -12358,7 +12871,7 @@
    "step": "new-authority-mint",
    "fn": "CVINVehicleLSP8.mintVehicle",
    "onchain": true,
-   "gasUsed": "135118",
+   "gasUsed": "138141",
    "note": "new authority mints"
   },
   {
@@ -12386,7 +12899,7 @@
    "fn": "CVINVehicleLSP8.constructor",
    "onchain": false,
    "gasUsed": "0",
-   "note": "collection deployed, gasUsed=1592737; deployer = issuing authority (owner), OwnershipTransferred(0, authority); measured as deployRegistry"
+   "note": "collection deployed, gasUsed=1647805; deployer = issuing authority (owner), OwnershipTransferred(0, authority); measured as deployRegistry"
   },
   {
    "option": "lsp8",
@@ -12431,7 +12944,7 @@
    "fn": "CVINVehicleLSP8.tokenIdForVIN",
    "onchain": false,
    "gasUsed": "0",
-   "note": "pure: tokenId = keccak256(bytes(VIN)) \u2014 the identifier is known before the mint (LSP8_TOKENID_FORMAT hash)"
+   "note": "pure: tokenId = keccak256(bytes(normalised VIN)) \u2014 the identifier is known before the mint (LSP8_TOKENID_FORMAT hash); since D13 the VIN is upper-cased and ISO 3779-checked first"
   },
   {
    "option": "lsp8",
@@ -12467,7 +12980,7 @@
    "fn": "CVINVehicleLSP8.mintVehicle",
    "onchain": false,
    "gasUsed": "0",
-   "note": "reverts \"empty VIN\" \u2014 only emptiness is checked, not the 17-char ISO length"
+   "note": "reverts \"empty VIN\" \u2014 the emptiness guard fires first; the ISO 3779 shape check (17 chars, no I/O/Q, upper-cased) follows it since the D13 fix"
   },
   {
    "option": "lsp8",
@@ -12475,7 +12988,7 @@
    "step": "mint-vehicle",
    "fn": "CVINVehicleLSP8.mintVehicle",
    "onchain": true,
-   "gasUsed": "149430",
+   "gasUsed": "152453",
    "note": "MEASURED (createIdentity): mints tokenId=keccak(VIN) to the owner and stores the VIN under DATA_KEY_VIN"
   },
   {
@@ -12556,7 +13069,7 @@
    "step": "mint-fleet-1",
    "fn": "CVINVehicleLSP8.mintVehicle",
    "onchain": true,
-   "gasUsed": "132318",
+   "gasUsed": "135341",
    "note": "fleet vehicle 1"
   },
   {
@@ -12565,7 +13078,7 @@
    "step": "mint-fleet-2",
    "fn": "CVINVehicleLSP8.mintVehicle",
    "onchain": true,
-   "gasUsed": "135118",
+   "gasUsed": "138141",
    "note": "fleet vehicle 2"
   },
   {
@@ -12573,9 +13086,18 @@
    "family": "creation",
    "step": "mint-short-vin",
    "fn": "CVINVehicleLSP8.mintVehicle",
-   "onchain": true,
-   "gasUsed": "134974",
-   "note": "OBSERVATION: a 5-character \"VIN\" is accepted (no ISO 3779 validation)"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"invalid VIN length\" \u2014 FIXED (D13): a 5-character \"VIN\" is rejected \u2014 ISO 3779 length is enforced (formerly accepted as a fourth identity)"
+  },
+  {
+   "option": "lsp8",
+   "family": "creation",
+   "step": "mint-invalid-char",
+   "fn": "CVINVehicleLSP8.mintVehicle",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"invalid VIN character\" \u2014 FIXED (D13): the letters I, O and Q are rejected (check digit intentionally not enforced)"
   },
   {
    "option": "lsp8",
@@ -12584,16 +13106,16 @@
    "fn": "CVINVehicleLSP8.tokenIdsOf",
    "onchain": false,
    "gasUsed": "0",
-   "note": "three ids for the fleet"
+   "note": "two ids for the fleet (the malformed mints were rejected)"
   },
   {
    "option": "lsp8",
    "family": "creation",
-   "step": "total-supply-4",
+   "step": "total-supply-3",
    "fn": "CVINVehicleLSP8.totalSupply",
    "onchain": false,
    "gasUsed": "0",
-   "note": "four identities"
+   "note": "three identities"
   },
   {
    "option": "lsp8",
@@ -12619,7 +13141,7 @@
    "step": "registration",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "54871",
+   "gasUsed": "54890",
    "note": "life: registered"
   },
   {
@@ -12628,7 +13150,7 @@
    "step": "odometer-1",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "76991",
+   "gasUsed": "76992",
    "note": "life: odometer 15000"
   },
   {
@@ -12637,7 +13159,7 @@
    "step": "inspection",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "54907",
+   "gasUsed": "54926",
    "note": "life: inspection"
   },
   {
@@ -12646,7 +13168,7 @@
    "step": "odometer-2",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "40118",
+   "gasUsed": "40101",
    "note": "life: odometer 62000"
   },
   {
@@ -12655,7 +13177,7 @@
    "step": "sale",
    "fn": "CVINVehicleLSP8.transfer",
    "onchain": true,
-   "gasUsed": "80564",
+   "gasUsed": "80532",
    "note": "life: sold"
   },
   {
@@ -12664,7 +13186,7 @@
    "step": "odometer-3",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "40118",
+   "gasUsed": "40101",
    "note": "life: odometer ROLLBACK to 40000 (accepted \u2014 latest value wins)"
   },
   {
@@ -12673,7 +13195,7 @@
    "step": "re-registration",
    "fn": "CVINVehicleLSP8.setDataBatchForTokenIds",
    "onchain": true,
-   "gasUsed": "53158",
+   "gasUsed": "53196",
    "note": "life: re-registered and re-inspected in one batch"
   },
   {
@@ -12691,7 +13213,7 @@
    "step": "end-of-life",
    "fn": "CVINVehicleLSP8.revokeVehicle",
    "onchain": true,
-   "gasUsed": "42249",
+   "gasUsed": "42224",
    "note": "life: owner burns the identity"
   },
   {
@@ -12781,7 +13303,7 @@
    "step": "revoke-by-authority",
    "fn": "CVINVehicleLSP8.revokeVehicle",
    "onchain": true,
-   "gasUsed": "50912",
+   "gasUsed": "50886",
    "note": "MEASURED (revoke): authority burns vehicle 1 -> Transfer(authority, owner, 0, tokenId, force=true, data) + VehicleRevoked(tokenId, previousOwner)"
   },
   {
@@ -12835,7 +13357,7 @@
    "step": "remint-same-vin",
    "fn": "CVINVehicleLSP8.mintVehicle",
    "onchain": true,
-   "gasUsed": "112430",
+   "gasUsed": "115453",
    "note": "POTENTIAL DEFECT: the same VIN can be minted again after revocation (same tokenId) and INHERITS the old inspection attestation"
   },
   {
@@ -12853,7 +13375,7 @@
    "step": "revoke-by-owner",
    "fn": "CVINVehicleLSP8.revokeVehicle",
    "onchain": true,
-   "gasUsed": "41860",
+   "gasUsed": "41835",
    "note": "self-revocation: the token owner may burn its own identity (sovereign exit) \u2014 the authority is not needed"
   },
   {
@@ -12871,7 +13393,7 @@
    "step": "revoke-again-by-authority",
    "fn": "CVINVehicleLSP8.revokeVehicle",
    "onchain": true,
-   "gasUsed": "41838",
+   "gasUsed": "41812",
    "note": "authority revokes the re-minted token"
   },
   {
@@ -12916,7 +13438,7 @@
    "step": "mint-1",
    "fn": "CVINVehicleLSP8.mintVehicle",
    "onchain": true,
-   "gasUsed": "149430",
+   "gasUsed": "152453",
    "note": "supply +1"
   },
   {
@@ -12925,7 +13447,7 @@
    "step": "mint-2",
    "fn": "CVINVehicleLSP8.mintVehicle",
    "onchain": true,
-   "gasUsed": "135130",
+   "gasUsed": "138153",
    "note": "supply +1"
   },
   {
@@ -12952,7 +13474,7 @@
    "step": "transfer",
    "fn": "CVINVehicleLSP8.transfer",
    "onchain": true,
-   "gasUsed": "91264",
+   "gasUsed": "91232",
    "note": "a transfer moves a balance unit, supply unchanged"
   },
   {
@@ -12970,7 +13492,7 @@
    "step": "burn",
    "fn": "CVINVehicleLSP8.revokeVehicle",
    "onchain": true,
-   "gasUsed": "41838",
+   "gasUsed": "41812",
    "note": "a burn decrements supply and the holder balance"
   },
   {
@@ -13034,7 +13556,7 @@
    "fn": "CVINVehicleLSP8.tokenIdForVIN",
    "onchain": false,
    "gasUsed": "0",
-   "note": "structural link: tokenId = keccak256(bytes(VIN)), a pure function \u2014 any verifier can derive the identifier from the VIN without a lookup table"
+   "note": "structural link: tokenId = keccak256(bytes(normalised VIN)), a pure function \u2014 any verifier can derive the identifier from the VIN without a lookup table (an off-chain verifier must upper-case before hashing, as the contract does since D13)"
   },
   {
    "option": "lsp8",
@@ -13042,7 +13564,7 @@
    "step": "mint",
    "fn": "CVINVehicleLSP8.mintVehicle",
    "onchain": true,
-   "gasUsed": "149430",
+   "gasUsed": "152453",
    "note": "mint stores the plain-text VIN under DATA_KEY_VIN (second link)"
   },
   {
@@ -13088,16 +13610,25 @@
    "fn": "CVINVehicleLSP8.tokenIdForVIN",
    "onchain": false,
    "gasUsed": "0",
-   "note": "OBSERVATION: no normalisation \u2014 the lower-cased VIN is a different tokenId"
+   "note": "FIXED (D13): tokenIdForVIN upper-cases before hashing, so the lower-cased VIN derives the SAME tokenId (formerly a different one)"
   },
   {
    "option": "lsp8",
    "family": "vin-linkage",
    "step": "mint-lowercase-twin",
    "fn": "CVINVehicleLSP8.mintVehicle",
-   "onchain": true,
-   "gasUsed": "135130",
-   "note": "POTENTIAL DEFECT confirmed: the same physical VIN in lower case mints a second identity"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"tokenId already minted\" \u2014 FIXED (D13): the same physical VIN in lower case collides with the minted tokenId and cannot mint a second identity"
+  },
+  {
+   "option": "lsp8",
+   "family": "vin-linkage",
+   "step": "invalid-char-vin",
+   "fn": "CVINVehicleLSP8.tokenIdForVIN",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"invalid VIN character\" \u2014 FIXED (D13): even the pure derivation rejects an ISO 3779-invalid VIN (I/O/Q), so no tokenId exists for it"
   },
   {
    "option": "lsp8",
@@ -13105,7 +13636,7 @@
    "step": "overwrite-vin-key",
    "fn": "CVINVehicleLSP8.setDataForTokenId",
    "onchain": true,
-   "gasUsed": "37831",
+   "gasUsed": "37850",
    "note": "POTENTIAL DEFECT: DATA_KEY_VIN is an ordinary key \u2014 the authority can overwrite it, so the stored VIN no longer hashes to the tokenId"
   },
   {
@@ -13204,7 +13735,7 @@
    "step": "revoke-attribute",
    "fn": "MOBIVIDRegistryV2.revokeAttribute",
    "onchain": true,
-   "gasUsed": "33549",
+   "gasUsed": "35762",
    "note": "revocation = DIDAttributeChanged with validTo = now; the VALUE must be repeated (the contract cannot look it up)"
   },
   {
@@ -13213,7 +13744,7 @@
    "step": "revoke-wrong-value",
    "fn": "MOBIVIDRegistryV2.revokeAttribute",
    "onchain": true,
-   "gasUsed": "33705",
+   "gasUsed": "35918",
    "note": "OBSERVATION: revoking with a DIFFERENT value is accepted; a replayer keyed by name alone will treat the key as revoked, one keyed by (name,value) will not \u2014 ambiguity left to the resolver"
   },
   {
@@ -13249,7 +13780,7 @@
    "step": "revoke-identity",
    "fn": "MOBIVIDRegistryV2.revokeIdentity",
    "onchain": true,
-   "gasUsed": "74836",
+   "gasUsed": "75382",
    "note": "decommission"
   },
   {
@@ -13266,9 +13797,9 @@
    "family": "attributes",
    "step": "revoke-after-revoke",
    "fn": "MOBIVIDRegistryV2.revokeAttribute",
-   "onchain": true,
-   "gasUsed": "33801",
-   "note": "attribute revocation still allowed (cleanup)"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"Identity is revoked\" \u2014 FIXED (D21, decision D-F): revocation is terminal \u2014 attribute clean-up is blocked as well (formerly allowed); a resolver voids all attributes of a revoked identity via isRevoked"
   },
   {
    "option": "mobi-vid",
@@ -13538,7 +14069,7 @@
    "fn": "MOBIVIDRegistryV2.registerVehicleBirth",
    "onchain": false,
    "gasUsed": "0",
-   "note": "vehicle 0x3f48924e\u2026 born; 8 issuer accounts prepared"
+   "note": "vehicle 0x15Db1ff6\u2026 born; 8 issuer accounts prepared"
   },
   {
    "option": "mobi-vid",
@@ -13816,7 +14347,7 @@
    "step": "attest-event",
    "fn": "MOBIVIDRegistryV2.attestEvent",
    "onchain": true,
-   "gasUsed": "192671",
+   "gasUsed": "192683",
    "note": "MEASURED (attestEvent): ECDSA.recover(toEthSignedMessageHash(digest), sig) must equal msg.sender; attestation {attester, role, signature, timestamp} stored -> EventAttested"
   },
   {
@@ -13915,7 +14446,7 @@
    "step": "attest-same-party-twice",
    "fn": "MOBIVIDRegistryV2.attestEvent",
    "onchain": true,
-   "gasUsed": "175571",
+   "gasUsed": "175583",
    "note": "OBSERVATION: the same attester can attest the same event repeatedly with the same signature (no per-attester dedup; the signature has no nonce)"
   },
   {
@@ -13970,7 +14501,7 @@
    "fn": "MOBIVIDRegistryV2.registerVehicleBirth",
    "onchain": false,
    "gasUsed": "0",
-   "note": "vehicle 0x32D466c1\u2026 born to firstOwner"
+   "note": "vehicle 0x51938326\u2026 born to firstOwner"
   },
   {
    "option": "mobi-vid",
@@ -14023,7 +14554,7 @@
    "step": "change-owner",
    "fn": "MOBIVIDRegistryV2.changeOwner",
    "onchain": true,
-   "gasUsed": "35456",
+   "gasUsed": "37669",
    "note": "MEASURED as controller-change: plain ERC-1056 changeOwner \u2014 only DIDOwnerChanged, NO OwnershipTransfer record, no odometer"
   },
   {
@@ -14086,7 +14617,7 @@
    "step": "transfer-vehicle-ownership",
    "fn": "MOBIVIDRegistryV2.transferVehicleOwnership",
    "onchain": true,
-   "gasUsed": "199834",
+   "gasUsed": "200047",
    "note": "MEASURED (transferOwnership): appends OwnershipTransfer{from,to,timestamp,block,odometer,authority}, then changeOwner -> VehicleOwnershipTransferred + DIDOwnerChanged"
   },
   {
@@ -14095,7 +14626,7 @@
    "step": "transfer-again",
    "fn": "MOBIVIDRegistryV2.transferVehicleOwnership",
    "onchain": true,
-   "gasUsed": "182734",
+   "gasUsed": "182947",
    "note": "second sale, higher odometer"
   },
   {
@@ -14104,7 +14635,7 @@
    "step": "transfer-rollback",
    "fn": "MOBIVIDRegistryV2.transferVehicleOwnership",
    "onchain": true,
-   "gasUsed": "182638",
+   "gasUsed": "182851",
    "note": "OBSERVATION: a LOWER odometer than the previous transfer is accepted (no monotonicity check) \u2014 fraud detection is left to the verifier"
   },
   {
@@ -14158,7 +14689,7 @@
    "step": "revoke-identity",
    "fn": "MOBIVIDRegistryV2.revokeIdentity",
    "onchain": true,
-   "gasUsed": "74836",
+   "gasUsed": "75382",
    "note": "owner decommissions the identity"
   },
   {
@@ -14175,9 +14706,18 @@
    "family": "controller",
    "step": "change-owner-after-revoke",
    "fn": "MOBIVIDRegistryV2.changeOwner",
-   "onchain": true,
-   "gasUsed": "35468",
-   "note": "OBSERVATION: the inherited changeOwner has NO revoked check \u2014 a decommissioned identity can still change hands at the ERC-1056 level"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"Identity is revoked\" \u2014 FIXED (D21): the inherited changeOwner now checks the revoked flag \u2014 a decommissioned identity cannot change hands at the ERC-1056 level either (formerly it could)"
+  },
+  {
+   "option": "mobi-vid",
+   "family": "controller",
+   "step": "owner-frozen-after-revoke",
+   "fn": "MOBIVIDRegistryV2.identityOwner",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "the owner at decommissioning time is frozen"
   },
   {
    "option": "mobi-vid",
@@ -14186,7 +14726,7 @@
    "fn": "MOBIVIDRegistryV2.constructor",
    "onchain": false,
    "gasUsed": "0",
-   "note": "registry deployed, gasUsed=3952603; deployer = registryAuthority + auto-authorised manufacturer (ManufacturerAuthorized); allowedIssuers matrix initialised; measured as deployRegistry"
+   "note": "registry deployed, gasUsed=3966355; deployer = registryAuthority + auto-authorised manufacturer (ManufacturerAuthorized); allowedIssuers matrix initialised; measured as deployRegistry"
   },
   {
    "option": "mobi-vid",
@@ -14195,7 +14735,7 @@
    "fn": "off-chain SHA-256 + AES-256-GCM",
    "onchain": false,
    "gasUsed": "0",
-   "note": "vehicle identity = fresh secp256k1 key 0xC85e3d0D\u2026; vinHash = SHA-256(VIN || 16-byte salt || identity); VIN encrypted with a random AES key (only the owner can decrypt); birthCertHash = SHA-256(certificate JSON)"
+   "note": "vehicle identity = fresh secp256k1 key 0x321ce027\u2026; vinHash = SHA-256(VIN || 16-byte salt || identity); VIN encrypted with a random AES key (only the owner can decrypt); birthCertHash = SHA-256(certificate JSON)"
   },
   {
    "option": "mobi-vid",
@@ -14221,7 +14761,7 @@
    "step": "register-birth",
    "fn": "MOBIVIDRegistryV2.registerVehicleBirth",
    "onchain": true,
-   "gasUsed": "366774",
+   "gasUsed": "366750",
    "note": "MEASURED (createIdentity): manufacturer writes the VID I birth certificate struct, the vinHash index and owners[identity]=firstOwner -> VehicleBirthRegistered + DIDOwnerChanged"
   },
   {
@@ -14401,7 +14941,7 @@
    "step": "register-vehicle-erc1056",
    "fn": "MOBIVIDRegistryV2.registerVehicle",
    "onchain": true,
-   "gasUsed": "54319",
+   "gasUsed": "54349",
    "note": "MEASURED (registerVehicle): the inherited ERC-1056 convenience path \u2014 the identity registers ITSELF by publishing a veriKey attribute (1-year validity); no birth certificate, no manufacturer"
   },
   {
@@ -14419,7 +14959,7 @@
    "step": "register-vehicle-again",
    "fn": "MOBIVIDRegistryV2.registerVehicle",
    "onchain": true,
-   "gasUsed": "37219",
+   "gasUsed": "37249",
    "note": "OBSERVATION: \"Identity already registered\" never triggers while the identity still owns itself (registerVehicle only sets an attribute), so it can be repeated"
   },
   {
@@ -14438,7 +14978,7 @@
    "fn": "adapter.deploy + adapter.create",
    "onchain": false,
    "gasUsed": "0",
-   "note": "registry (gas 3952603, setup 48236); identity 0x0EF53c20b0489DE430Dc70D9117b59f5410E9cBb derived by the adapter from the VIN (key-less DID) owned by vehicleOwner"
+   "note": "registry (gas 3966355, setup 48236); identity 0x0EF53c20b0489DE430Dc70D9117b59f5410E9cBb derived by the adapter from the VIN (key-less DID) owned by vehicleOwner"
   },
   {
    "option": "mobi-vid",
@@ -14447,7 +14987,7 @@
    "fn": "MOBIVIDRegistryV2.getVehicleDID",
    "onchain": false,
    "gasUsed": "0",
-   "note": "POTENTIAL DEFECT: returns did:ethr:0x<chainId hex>:<40 hex chars> WITHOUT the 0x prefix on the address (_toHexString(value,20) adds none), which is not a conformant did:ethr identifier; the adapter's resolve() copies it verbatim"
+   "note": "FIXED (D10): returns did:ethr:0x<chainId hex>:0x<40 lowercase hex> \u2014 the 0x prefix on the address is now present, so the string is a conformant did:ethr identifier (formerly _toHexString(value,20) added none); the adapter's resolve() copies it verbatim"
   },
   {
    "option": "mobi-vid",
@@ -14528,7 +15068,7 @@
    "fn": "MOBIVIDRegistryV2.registerVehicleBirth",
    "onchain": false,
    "gasUsed": "0",
-   "note": "vehicle 0x1FB8bb2a\u2026 owned by 0x70997970\u2026"
+   "note": "vehicle 0x5008096e\u2026 owned by 0x70997970\u2026"
   },
   {
    "option": "mobi-vid",
@@ -14608,7 +15148,7 @@
    "step": "revoke-delegate",
    "fn": "MOBIVIDRegistryV2.revokeDelegate",
    "onchain": true,
-   "gasUsed": "32629",
+   "gasUsed": "34842",
    "note": "MEASURED-adjacent: revocation = DIDDelegateChanged with validTo = now (the same event shape; \"revoked\" is just \"expired\")"
   },
   {
@@ -14617,7 +15157,7 @@
    "step": "revoke-never-added",
    "fn": "MOBIVIDRegistryV2.revokeDelegate",
    "onchain": true,
-   "gasUsed": "32629",
+   "gasUsed": "34842",
    "note": "OBSERVATION: revoking a delegate that was never added succeeds (event-only, no state to check)"
   },
   {
@@ -14671,7 +15211,7 @@
    "step": "revoke-identity",
    "fn": "MOBIVIDRegistryV2.revokeIdentity",
    "onchain": true,
-   "gasUsed": "74836",
+   "gasUsed": "75382",
    "note": "decommission"
   },
   {
@@ -14697,9 +15237,9 @@
    "family": "keys-delegates",
    "step": "revoke-delegate-after-revoke",
    "fn": "MOBIVIDRegistryV2.revokeDelegate",
-   "onchain": true,
-   "gasUsed": "32617",
-   "note": "revocations stay possible after decommissioning (sensible: cleanup)"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"Identity is revoked\" \u2014 FIXED (D21, decision D-F): revocation is terminal \u2014 delegate clean-up is blocked after decommissioning (formerly allowed); the verifier's replay must consult isRevoked, which voids every delegate at once"
   },
   {
    "option": "mobi-vid",
@@ -14752,7 +15292,7 @@
    "step": "sale-40000",
    "fn": "MOBIVIDRegistryV2.transferVehicleOwnership",
    "onchain": true,
-   "gasUsed": "199702",
+   "gasUsed": "199915",
    "note": "life: sold at 40000 km (odometer goes into the OwnershipTransfer record, NOT into the lifecycle events)"
   },
   {
@@ -14960,7 +15500,7 @@
    "fn": "MOBIVIDRegistryV2.registerVehicleBirth",
    "onchain": false,
    "gasUsed": "0",
-   "note": "vehicle did:ethr:0x7a69:0xa6b6f21141f6d81ec516477f8f17f5f89914e88b born (key held by the vehicle, ERC-1056 owner = 0x70997970\u2026)"
+   "note": "vehicle did:ethr:0x7a69:0x07d28b5aba714522fed1e5bdbf58982e41d8f131 born (key held by the vehicle, ERC-1056 owner = 0x70997970\u2026)"
   },
   {
    "option": "mobi-vid",
@@ -14978,7 +15518,7 @@
    "fn": "provider.verify_message (mirrored)",
    "onchain": false,
    "gasUsed": "0",
-   "note": "verifier re-hashes the message and checks the signature against signed_message.public_key \u2014 a pure off-chain hot path (no RPC); cost is one hash + one ECDSA verify"
+   "note": "verifier looks the REGISTERED key up by vehicle_did, rejects a mismatching embedded public_key, re-hashes the message and checks the signature against the registered key \u2014 still a pure off-chain hot path (no RPC unless a contract is attached for isRevoked); cost is one lookup + one hash + one ECDSA verify"
   },
   {
    "option": "mobi-vid",
@@ -14992,11 +15532,29 @@
   {
    "option": "mobi-vid",
    "family": "offchain-messaging",
-   "step": "verify-impostor-passes",
+   "step": "verify-impostor-rejected",
    "fn": "provider.verify_message (mirrored)",
    "onchain": false,
    "gasUsed": "0",
-   "note": "POTENTIAL DEFECT: an impostor signs the same BSM with its OWN key and embeds its OWN public key while claiming the vehicle's DID \u2014 the provider's check passes because it never binds public_key to vehicle_did (no chain lookup)"
+   "note": "FIXED (D11): an impostor signs the same BSM with its OWN key and embeds its OWN public key while claiming the vehicle's DID \u2014 rejected, because the key is bound to vehicle_did through the registration record (formerly the check verified against the embedded key and passed); D11b (anchoring the key on-chain so a verifier without the record can bind too) is still open"
+  },
+  {
+   "option": "mobi-vid",
+   "family": "offchain-messaging",
+   "step": "verify-impostor-no-key-rejected",
+   "fn": "provider.verify_message (mirrored)",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "omitting public_key does not help: the signature is checked against the registered key only"
+  },
+  {
+   "option": "mobi-vid",
+   "family": "offchain-messaging",
+   "step": "verify-unknown-vehicle-rejected",
+   "fn": "provider.verify_message (mirrored)",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "a DID with no registration record is rejected (no key to bind to)"
   },
   {
    "option": "mobi-vid",
@@ -15014,7 +15572,7 @@
    "fn": "MOBIVIDRegistryV2.identityOwner + DIDDelegateChanged replay",
    "onchain": false,
    "gasUsed": "0",
-   "note": "recovered signer 0xaD941263\u2026 is neither the owner, the identity, nor a valid sigAuth delegate -> REJECT (what verify_message should have done)"
+   "note": "recovered signer 0x24FB7518\u2026 is neither the owner, the identity, nor a valid sigAuth delegate -> REJECT (the same verdict as the fixed verify_message, reached from chain state alone \u2014 what D11b will give a verifier that holds no registration record)"
   },
   {
    "option": "mobi-vid",
@@ -15076,7 +15634,7 @@
    "step": "decommission-event",
    "fn": "MOBIVIDRegistryV2.recordLifecycleEvent",
    "onchain": true,
-   "gasUsed": "326566",
+   "gasUsed": "326554",
    "note": "VID II DECOMMISSION event recorded by the DMV"
   },
   {
@@ -15103,7 +15661,7 @@
    "step": "revoke-identity",
    "fn": "MOBIVIDRegistryV2.revokeIdentity",
    "onchain": true,
-   "gasUsed": "74836",
+   "gasUsed": "75370",
    "note": "MEASURED (revoke): revoked=true, revokedAt=now, DIDRevoked(identity, revokedAt), changed bumped"
   },
   {
@@ -15181,47 +15739,56 @@
   {
    "option": "mobi-vid",
    "family": "revocation",
-   "step": "not-blocked-change-owner",
+   "step": "blocked-change-owner",
    "fn": "MOBIVIDRegistryV2.changeOwner",
-   "onchain": true,
-   "gasUsed": "35456",
-   "note": "OBSERVATION: not blocked \u2014 ERC-1056 changeOwner ignores the revoked flag"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"Identity is revoked\" \u2014 FIXED (D21): the inherited ERC-1056 changeOwner is gated by the revoked flag (formerly a decommissioned identity could still change hands)"
   },
   {
    "option": "mobi-vid",
    "family": "revocation",
-   "step": "not-blocked-revoke-delegate",
+   "step": "blocked-revoke-delegate",
    "fn": "MOBIVIDRegistryV2.revokeDelegate",
-   "onchain": true,
-   "gasUsed": "32629",
-   "note": "fine-grained revocation still works (cleanup)"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"Identity is revoked\" \u2014 FIXED (D21, decision D-F): revocation is terminal \u2014 even delegate clean-up reverts (formerly allowed)"
   },
   {
    "option": "mobi-vid",
    "family": "revocation",
-   "step": "not-blocked-revoke-attribute",
+   "step": "blocked-revoke-attribute",
    "fn": "MOBIVIDRegistryV2.revokeAttribute",
-   "onchain": true,
-   "gasUsed": "33249",
-   "note": "fine-grained revocation still works (cleanup)"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"Identity is revoked\" \u2014 FIXED (D21, decision D-F): attribute clean-up reverts too; isRevoked voids everything at once"
   },
   {
    "option": "mobi-vid",
    "family": "revocation",
    "step": "revoke-twice",
    "fn": "MOBIVIDRegistryV2.revokeIdentity",
-   "onchain": true,
-   "gasUsed": "37836",
-   "note": "OBSERVATION: a second revokeIdentity is accepted and OVERWRITES revokedAt (the \"permanent\" timestamp can be moved forward by the new owner)"
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "reverts \"Identity already revoked\" \u2014 FIXED (D21): a second revokeIdentity reverts (formerly it was accepted and OVERWROTE revokedAt, so the \"permanent\" timestamp could be moved forward)"
   },
   {
    "option": "mobi-vid",
    "family": "revocation",
-   "step": "revoked-at-moved",
+   "step": "revoked-at-frozen",
    "fn": "MOBIVIDRegistryV2.revokedAt",
    "onchain": false,
    "gasUsed": "0",
-   "note": "revokedAt now later than the first revocation"
+   "note": "revokedAt is still the first (and only) revocation time"
+  },
+  {
+   "option": "mobi-vid",
+   "family": "revocation",
+   "step": "owner-frozen",
+   "fn": "MOBIVIDRegistryV2.identityOwner",
+   "onchain": false,
+   "gasUsed": "0",
+   "note": "the last owner before decommissioning is frozen on-chain"
   },
   {
    "option": "mobi-vid",
@@ -15230,7 +15797,7 @@
    "fn": "MOBIVIDRegistryV2",
    "onchain": false,
    "gasUsed": "0",
-   "note": "there is no un-revoke: the flag is one-way (unlike ERC-1155 deregistration which can be re-registered)"
+   "note": "there is no un-revoke: the flag is one-way and terminal (unlike ERC-1155 deregistration which can be re-registered)"
   },
   {
    "option": "mobi-vid",
@@ -15302,7 +15869,7 @@
    "fn": "off-chain SHA-256 vs keccak256",
    "onchain": false,
    "gasUsed": "0",
-   "note": "provider convention: SHA-256(VIN || salt || identity) = 0xcd7a64bdfa\u2026; adapter convention: keccak256(VIN) = 0x9aa162729e\u2026; the contract accepts any non-zero bytes32"
+   "note": "provider convention: SHA-256(VIN || salt || identity) = 0xf572677069\u2026; adapter convention: keccak256(VIN) = 0x9aa162729e\u2026; the contract accepts any non-zero bytes32"
   },
   {
    "option": "mobi-vid",
