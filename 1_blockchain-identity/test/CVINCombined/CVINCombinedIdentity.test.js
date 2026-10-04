@@ -429,7 +429,57 @@ describe("CVINCombinedIdentity (ERC-1056 + ERC-735 hybrid)", function () {
                 ).to.emit(registry, "ClaimAdded");
             });
 
-            it("owner self-removal is not a revocation; the owner may re-anchor the claim", async function () {
+            // Pass 2 re-review: the owner could pre-empt revocation by removing
+            // the claim first (issuer removeClaim then reverts "claim not found").
+            it("K-2 bypass: owner pre-removes, issuer revokeClaimContent, owner re-add reverts", async function () {
+                await registry.connect(identity).removeClaim(identity.address, claimId);
+                await expect(registry.connect(issuerSigner).removeClaim(identity.address, claimId))
+                    .to.be.revertedWith("CVINCombined: claim not found");
+                await registry.connect(issuerSigner).revokeClaimContent(identity.address, CLAIM_TOPIC_VIN, vinData);
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri)
+                ).to.be.revertedWith("CVINCombined: claim revoked by issuer");
+                expect(await registry.hasValidClaim(identity.address, CLAIM_TOPIC_VIN, issuerWallet.address)).to.be.false;
+            });
+
+            it("revokeClaimContent on an anchored claim records the revocation and removes it", async function () {
+                await expect(registry.connect(issuerSigner).revokeClaimContent(identity.address, CLAIM_TOPIC_VIN, vinData))
+                    .to.emit(registry, "ClaimRemoved")
+                    .withArgs(claimId, identity.address, CLAIM_TOPIC_VIN, issuerWallet.address);
+                expect(await registry.hasValidClaim(identity.address, CLAIM_TOPIC_VIN, issuerWallet.address)).to.be.false;
+                expect(await registry.getClaimIdsByTopic(identity.address, CLAIM_TOPIC_VIN)).to.have.lengthOf(0);
+            });
+
+            it("revokeClaimContent by a third party cannot touch another issuer's claim", async function () {
+                await registry.connect(attacker).revokeClaimContent(identity.address, CLAIM_TOPIC_VIN, vinData);
+                expect(await registry.hasValidClaim(identity.address, CLAIM_TOPIC_VIN, issuerWallet.address)).to.be.true;
+                await registry.connect(identity).removeClaim(identity.address, claimId);
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri)
+                ).to.emit(registry, "ClaimAdded");
+            });
+
+            it("revokeClaimContent of old content leaves a re-issued (different data) claim anchored", async function () {
+                const newData = ethers.toUtf8Bytes("1HGCM82633A004353");
+                const newSig = await signClaim(identity.address, CLAIM_TOPIC_VIN, newData);
+                await registry
+                    .connect(identity)
+                    .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, newSig, newData, claimUri);
+                await registry.connect(issuerSigner).revokeClaimContent(identity.address, CLAIM_TOPIC_VIN, vinData);
+                const anchored = await registry.getClaim(identity.address, claimId);
+                expect(anchored.data).to.equal(ethers.hexlify(newData));
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri)
+                ).to.be.revertedWith("CVINCombined: claim revoked by issuer");
+            });
+
+            it("owner self-removal is not a revocation; the owner may re-anchor the claim (issuer has not revoked)", async function () {
                 await registry.connect(identity).removeClaim(identity.address, claimId);
                 await expect(
                     registry
