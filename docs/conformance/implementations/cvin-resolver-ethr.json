@@ -26,10 +26,7 @@
       },
       "output": {
         "didResolutionMetadata": {
-          "contentType": "application/did+ld+json",
-          "retrieved": "2026-10-04T09:13:24.128247+00:00",
-          "error": null,
-          "errorMessage": null
+          "retrieved": "2026-10-04T22:08:26Z"
         },
         "didDocument": {
           "@context": [
@@ -54,14 +51,8 @@
           ]
         },
         "didDocumentMetadata": {
-          "created": "2026-10-04T09:13:24.128206+00:00",
-          "updated": null,
-          "deactivated": false,
-          "versionId": "1",
-          "nextUpdate": null,
-          "nextVersionId": null,
-          "equivalentId": [],
-          "canonicalId": null
+          "created": "2026-10-04T22:08:26Z",
+          "versionId": "1"
         }
       }
     },
@@ -76,20 +67,12 @@
       "output": {
         "didResolutionMetadata": {
           "contentType": "application/did+ld+json",
-          "retrieved": "2026-10-04T09:13:24.128247+00:00",
-          "error": null,
-          "errorMessage": null
+          "retrieved": "2026-10-04T22:08:26Z"
         },
         "didDocumentStream": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"controller\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"verificationMethod\": [{\"id\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678\", \"blockchainAccountId\": \"eip155:1:0x1234567890abcdef1234567890abcdef12345678\"}], \"authentication\": [\"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\"], \"assertionMethod\": [\"did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678#controller\"]}",
         "didDocumentMetadata": {
-          "created": "2026-10-04T09:13:24.128206+00:00",
-          "updated": null,
-          "deactivated": false,
-          "versionId": "1",
-          "nextUpdate": null,
-          "nextVersionId": null,
-          "equivalentId": [],
-          "canonicalId": null
+          "created": "2026-10-04T22:08:26Z",
+          "versionId": "1"
         }
       }
     },
@@ -101,22 +84,11 @@
       },
       "output": {
         "didResolutionMetadata": {
-          "contentType": "application/did+ld+json",
-          "retrieved": null,
           "error": "invalidDid",
           "errorMessage": "Invalid DID format: did:ethr_0x1234"
         },
         "didDocument": null,
-        "didDocumentMetadata": {
-          "created": null,
-          "updated": null,
-          "deactivated": false,
-          "versionId": null,
-          "nextUpdate": null,
-          "nextVersionId": null,
-          "equivalentId": [],
-          "canonicalId": null
-        }
+        "didDocumentMetadata": {}
       }
     },
     {
@@ -127,22 +99,12 @@
       },
       "output": {
         "didResolutionMetadata": {
-          "contentType": "application/did+ld+json",
-          "retrieved": "2026-10-04T09:13:24.128536+00:00",
+          "retrieved": "2026-10-04T22:08:26Z",
           "error": "methodNotSupported",
-          "errorMessage": "DID method 'DIDMethod.WEB' is not supported"
+          "errorMessage": "DID method 'web' is not supported"
         },
         "didDocument": null,
-        "didDocumentMetadata": {
-          "created": null,
-          "updated": null,
-          "deactivated": false,
-          "versionId": null,
-          "nextUpdate": null,
-          "nextVersionId": null,
-          "equivalentId": [],
-          "canonicalId": null
-        }
+        "didDocumentMetadata": {}
       }
     }
   ]
