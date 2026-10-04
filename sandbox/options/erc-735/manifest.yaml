@@ -1,0 +1,130 @@
+option: ERC-735
+slug: erc-735
+kind: on-chain
+contracts:
+- 1_blockchain-identity/contracts/ERC735/CVINVehicleClaimHolder.sol
+provider: null
+benchmark_key: ERC-735
+experiments: []
+benchmark_ops:
+  deployRegistry: 'No shared registry in ERC-735: each vehicle identity is its own claim-holder contract. Deployment
+    cost is counted under createIdentity.'
+  createIdentity: Per-vehicle claim-holder contract deployment (constructor stores VIN + vinHash, deployer becomes
+    owner). Paid once per identity.
+  addDelegateOrClaim: 'addClaim (new claim, ClaimAdded): stores full signed claim on-chain after verifying the issuer''s
+    EIP-191 signature over (identity, topic, data) via ecrecover. Delegates are not part of ERC-735.'
+  updateAttribute: 'No key/attribute model in ERC-735. Measured closest analogue: re-adding a claim for the same
+    (issuer, topic) updates it in place (ClaimChanged, warm same-size rewrite of data/signature/URI).'
+  revoke: 'removeClaim (owner or issuer): deletes the claim struct and compacts the topic index (ClaimRemoved, storage
+    refund applies).'
+  transferOwnership: transferOwnership of the per-vehicle claim-holder contract to the new vehicle owner.
+families:
+- name: Identity creation (explicit)
+  stance: implemented
+  functions:
+  - VehicleIdentityCreated
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Ownership / controller change
+  stance: implemented
+  functions:
+  - OwnershipTransferred
+  - owner
+  - transferOwnership
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Key / delegate management
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Attributes / data store
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Claims / credentials
+  stance: measured-in-comparison
+  functions:
+  - ClaimAdded
+  - ClaimChanged
+  - ClaimRemoved
+  - ClaimRequested
+  - INSPECTION
+  - VIN_ATTESTATION
+  - addClaim
+  - claimExists
+  - getClaim
+  - getClaimIdsByTopic
+  - removeClaim
+  measured:
+  - addClaim
+  - removeClaim
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Revocation / status
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Lifecycle events / history
+  stance: implemented
+  functions:
+  - ClaimChanged
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Authorisation / roles
+  stance: implemented
+  functions:
+  - MANUFACTURER_CERT
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: VIN linkage
+  stance: implemented
+  functions:
+  - VIN_ATTESTATION
+  - vin
+  - vinHash
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: DID / resolution helpers
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: not-applicable
+  functions: []
+  reason: creation requires a transaction (mint or deployment) — auto; review
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+surface:
+  functions: 14
+  events: 6
+  provider_methods: 0

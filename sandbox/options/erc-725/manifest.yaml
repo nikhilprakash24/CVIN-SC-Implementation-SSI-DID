@@ -1,0 +1,118 @@
+option: ERC-725
+slug: erc-725
+kind: on-chain
+contracts:
+- 1_blockchain-identity/contracts/ERC725/CVIN_DID_ERC725.sol
+provider: null
+benchmark_key: ERC-725
+experiments: []
+benchmark_ops:
+  deployRegistry: 'No shared registry in ERC-725: each identity is its own proxy-account contract. Deployment cost
+    is counted under createIdentity.'
+  createIdentity: Per-vehicle identity contract deployment (proxy account); deployer becomes owner/management key.
+    Paid once per identity.
+  updateAttribute: 'addKey(purpose=1 MANAGEMENT, type=1 ECDSA): key rotation/addition stored in contract state.'
+  addDelegateOrClaim: addKey(purpose=3 CLAIM signer key). Full on-chain claim storage lives in the companion ERC-735
+    claim holder, benchmarked separately as ERC-735.
+  revoke: 'removeKey: deletes key and compacts the key array (cost grows with number of stored keys).'
+  transferOwnership: transferOwnership of the identity contract to the new vehicle owner.
+families:
+- name: Identity creation (explicit)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Ownership / controller change
+  stance: implemented
+  functions:
+  - OwnershipTransferred
+  - owner
+  - renounceOwnership
+  - transferOwnership
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Key / delegate management
+  stance: measured-in-comparison
+  functions:
+  - addKey
+  - getKey
+  - getKeys
+  - removeKey
+  measured:
+  - addKey
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Attributes / data store
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Claims / credentials
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Revocation / status
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: implemented
+  functions:
+  - Executed
+  - execute
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Lifecycle events / history
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Authorisation / roles
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: implemented
+  functions:
+  - approve
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: VIN linkage
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: DID / resolution helpers
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: not-applicable
+  functions: []
+  reason: creation requires a transaction (mint or deployment) — auto; review
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+surface:
+  functions: 9
+  events: 4
+  provider_methods: 0

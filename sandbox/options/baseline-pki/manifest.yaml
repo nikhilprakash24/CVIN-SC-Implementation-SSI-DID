@@ -1,0 +1,110 @@
+option: 'Baseline: IEEE 1609.2-style PKI (in-process)'
+slug: baseline-pki
+kind: off-chain
+contracts: []
+provider: cv2x-testbed/identity/standard/pki_identity.py
+benchmark_key: null
+experiments:
+- '#21'
+- '#29'
+benchmark_ops: {}
+families:
+- name: Identity creation (explicit)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Ownership / controller change
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Key / delegate management
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Attributes / data store
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Claims / credentials
+  stance: implemented
+  functions:
+  - issue_enrollment_certificate
+  - issue_pseudonym_certificate
+  - request_enrollment_certificate
+  - request_pseudonym_certificates
+  - revoke_certificate
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Revocation / status
+  stance: implemented
+  functions:
+  - revoke_certificate
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Lifecycle events / history
+  stance: implemented
+  functions:
+  - record_metric
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Authorisation / roles
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: VIN linkage
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: DID / resolution helpers
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: implemented
+  functions: []
+  reason: 'in-process baseline: creation is a local record, no transaction'
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: measured-in-comparison
+  functions:
+  - get_current_pseudonym
+  - sign_message
+  - verify_message
+  measured:
+  - sign_message
+  - verify_message
+  reason: 'measured via #21, #29'
+  reviewed: false
+surface:
+  functions: 0
+  events: 0
+  provider_methods: 12

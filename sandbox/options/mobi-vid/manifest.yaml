@@ -1,0 +1,226 @@
+option: MOBI VID I + II (application profile)
+slug: mobi-vid
+kind: on-chain
+contracts:
+- 1_blockchain-identity/contracts/MOBI/MOBIVIDRegistry.sol
+- 1_blockchain-identity/contracts/MOBI/MOBIVIDRegistryV2.sol
+provider: cv2x-testbed/identity/mobi_vid_provider.py
+benchmark_key: MOBI-VID-V2
+experiments:
+- '#30'
+benchmark_ops:
+  deployRegistry: Single shared registry (V2 = ERC-1056 base + MOBI VID I birth certificates + VID II lifecycle
+    events); deployer becomes registry authority + authorized manufacturer.
+  createIdentity: 'registerVehicleBirth (MOBI VID I birth certificate): VIN hash + encrypted VIN + cert hash + first
+    owner. birthAttributes left empty to avoid known V1 validity-overflow bug.'
+  updateAttribute: 'recordLifecycleEvent (MOBI VID II, MAINTENANCE): stores full event struct + VC hash + counters
+    on-chain. Issuer authorization excluded as setup.'
+  addDelegateOrClaim: 'Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim
+    analogue, 65-byte signature stored) measured separately: 192683 gas.'
+  transferOwnership: 'transferVehicleOwnership: appends odometer-stamped ownership record + ERC-1056 changeOwner.
+    Called by current owner.'
+  revoke: 'revokeIdentity (inherited ERC-1056 extension): permanently flags the vehicle DID as revoked (decommissioning).'
+families:
+- name: Identity creation (explicit)
+  stance: measured-in-comparison
+  functions:
+  - VehicleBirthRegistered
+  - getVehicleBirth
+  - registerVehicle
+  - registerVehicleBirth
+  - register_vehicle
+  - register_vehicle_birth
+  - vehicleBirths
+  measured:
+  - registerVehicle
+  - registerVehicleBirth
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Ownership / controller change
+  stance: measured-in-comparison
+  functions:
+  - DIDOwnerChanged
+  - VehicleOwnershipTransferred
+  - changeOwner
+  - getOwnershipHistory
+  - getOwnershipHistoryCount
+  - identityOwner
+  - owners
+  - ownershipHistory
+  - transferVehicleOwnership
+  measured:
+  - transferVehicleOwnership
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Key / delegate management
+  stance: measured-in-comparison
+  functions:
+  - DIDDelegateChanged
+  - addDelegate
+  - revokeDelegate
+  measured:
+  - addDelegate
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Attributes / data store
+  stance: implemented
+  functions:
+  - DIDAttributeChanged
+  - PERMANENT_ATTRIBUTE_VALIDITY
+  - revokeAttribute
+  - setAttribute
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Claims / credentials
+  stance: measured-in-comparison
+  functions:
+  - EventAttested
+  - IssuerAuthorizationRevoked
+  - IssuerAuthorized
+  - allowedIssuers
+  - attestEvent
+  - authorizeIssuer
+  - authorizedIssuers
+  - eventAttestations
+  - getEventAttestations
+  - get_credential
+  - isAuthorizedIssuer
+  - revokeIssuerAuthorization
+  - revoke_credential
+  - update_credential
+  measured:
+  - attestEvent
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Revocation / status
+  stance: measured-in-comparison
+  functions:
+  - DIDRevoked
+  - IssuerAuthorizationRevoked
+  - ManufacturerAuthorizationRevoked
+  - check_revocation_status
+  - isRevoked
+  - revokeAttribute
+  - revokeDelegate
+  - revokeIdentity
+  - revokeIssuerAuthorization
+  - revokeManufacturerAuthorization
+  - revoke_credential
+  - revoked
+  - revokedAt
+  measured:
+  - isRevoked
+  - revokeIdentity
+  - revoked
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: implemented
+  functions:
+  - nonce
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Lifecycle events / history
+  stance: measured-in-comparison
+  functions:
+  - DIDAttributeChanged
+  - DIDDelegateChanged
+  - DIDOwnerChanged
+  - EventAttested
+  - LifecycleEventRecorded
+  - attestEvent
+  - changed
+  - eventAttestations
+  - eventTypeCount
+  - getCompleteHistory
+  - getEvent
+  - getEventAttestations
+  - getEventTypeCount
+  - getEventsByType
+  - getOdometerHistory
+  - getOwnershipHistory
+  - getOwnershipHistoryCount
+  - getVehicleEvents
+  - lastChanged
+  - lifecycleEvents
+  - lookupByVINHash
+  - ownershipHistory
+  - recordLifecycleEvent
+  - vehicleEventCount
+  - vehicleEventIds
+  measured:
+  - attestEvent
+  - changed
+  - getCompleteHistory
+  - recordLifecycleEvent
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Authorisation / roles
+  stance: implemented
+  functions:
+  - IssuerAuthorizationRevoked
+  - IssuerAuthorized
+  - ManufacturerAuthorizationRevoked
+  - ManufacturerAuthorized
+  - allowedIssuers
+  - authorizeIssuer
+  - authorizeManufacturer
+  - authorizedIssuers
+  - authorizedManufacturers
+  - isAuthorizedIssuer
+  - registryAuthority
+  - revokeIssuerAuthorization
+  - revokeManufacturerAuthorization
+  - transferRegistryAuthority
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: VIN linkage
+  stance: implemented
+  functions:
+  - export_vin_key
+  - lookupByVINHash
+  - vinHashToIdentity
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: DID / resolution helpers
+  stance: measured-in-comparison
+  functions:
+  - DIDAttributeChanged
+  - DIDDelegateChanged
+  - DIDOwnerChanged
+  - DIDRevoked
+  - getIdentityInfo
+  - getVehicleDID
+  - identityOwner
+  - resolve_identity
+  measured:
+  - getIdentityInfo
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: not-applicable
+  functions: []
+  reason: creation requires a transaction (mint or deployment) — auto; review
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: implemented
+  functions:
+  - sign_message
+  - verify_message
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+surface:
+  functions: 54
+  events: 12
+  provider_methods: 11

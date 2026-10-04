@@ -1,0 +1,143 @@
+option: ERC-4337
+slug: erc-4337
+kind: on-chain
+contracts:
+- 1_blockchain-identity/contracts/ERC4337/CVINVehicleAccount.sol
+- 1_blockchain-identity/contracts/ERC4337/CVINMinimalEntryPoint.sol
+provider: null
+benchmark_key: ERC-4337
+experiments: []
+benchmark_ops:
+  deployRegistry: 'CVINMinimalEntryPoint deployment (shared infrastructure, analogous to a registry). NOTE: minimal
+    research harness, not the canonical v0.7 EntryPoint - no bundler batching, paymasters, deposits or gas accounting.'
+  createIdentity: 'Per-vehicle smart-account deployment (identity creation): the account address is the stable vehicle
+    identifier; the signing key can rotate without changing it. Direct deploy - no initCode/AccountFactory counterfactual
+    deployment.'
+  updateAttribute: setAttribute called DIRECTLY by the owner key (ERC-725Y-flavoured attribute store, cold slot
+    first write).
+  updateAttributeVia4337: 'Same setAttribute routed as a PackedUserOperation through the EntryPoint (handleOp ->
+    validateUserOp [ecrecover] -> execute -> self-call). Indirection overhead vs direct call: 46830 gas. EXCLUDES
+    real-world bundler overhead (mempool, handleOps batching, paymaster, deposit/refund accounting).'
+  addDelegateOrClaim: 'setGuardian: designates a social-recovery guardian (recovery-delegate analogue; recovery
+    capability unique to contract accounts). No on-chain claim model in ERC-4337.'
+  transferOwnership: transferOwnership = signing-key rotation; the identity (account address) is unchanged. Guardian-driven
+    recoverOwner measured separately (see revoke notes).
+  revoke: 'setGuardian(0): revokes the recovery guardian (delegate-revocation analogue; storage clear, refund applies).
+    ERC-4337 has no identity-level revocation - the account contract persists. Guardian recoverOwner (social recovery,
+    new signing key installed by guardian) measured separately: 30952 gas.'
+families:
+- name: Identity creation (explicit)
+  stance: implemented
+  functions:
+  - VehicleAccountCreated
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Ownership / controller change
+  stance: measured-in-comparison
+  functions:
+  - OwnerRecovered
+  - OwnershipTransferred
+  - owner
+  - recoverOwner
+  - transferOwnership
+  measured:
+  - recoverOwner
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Key / delegate management
+  stance: measured-in-comparison
+  functions:
+  - GuardianChanged
+  - OwnerRecovered
+  - guardian
+  - recoverOwner
+  - setGuardian
+  measured:
+  - guardian
+  - recoverOwner
+  - setGuardian
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Attributes / data store
+  stance: implemented
+  functions:
+  - AttributeChanged
+  - entryPoint
+  - getAttribute
+  - setAttribute
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Claims / credentials
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Revocation / status
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: implemented
+  functions:
+  - Executed
+  - UserOperationHandled
+  - execute
+  - getUserOpHash
+  - handleOp
+  - nonces
+  - validateUserOp
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Lifecycle events / history
+  stance: implemented
+  functions:
+  - AttributeChanged
+  - GuardianChanged
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Authorisation / roles
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: VIN linkage
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: DID / resolution helpers
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: implemented
+  functions: []
+  reason: the account address is counterfactual (CREATE2) and can receive credentials before deployment
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+surface:
+  functions: 13
+  events: 7
+  provider_methods: 0

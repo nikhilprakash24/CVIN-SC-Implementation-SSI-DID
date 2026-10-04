@@ -1,0 +1,184 @@
+option: ERC-1056 / uPort-style
+slug: erc-1056-uport
+kind: on-chain
+contracts:
+- 1_blockchain-identity/contracts/ERC1056/EthereumDIDRegistry.sol
+- 1_blockchain-identity/contracts/ERC1056/CVINVehicleDIDRegistry.sol
+provider: null
+benchmark_key: ERC-1056
+experiments: []
+benchmark_ops:
+  deployRegistry: Single shared registry for all identities (deployed once per network).
+  createIdentity: 'Identity exists implicitly (every address is a DID, zero-cost). Measured: first setAttribute
+    publishing a verification key.'
+  updateAttribute: setAttribute rotating the published key (event-only storage; DID document built off-chain from
+    event history).
+  addDelegateOrClaim: addDelegate(veriKey) with 1-year validity. On-chain claims are not part of ERC-1056.
+  revoke: revokeAttribute of the published key. revokeDelegate is also supported at similar cost.
+  transferOwnership: 'changeOwner: rotates the controlling key of the DID (identifier itself is stable).'
+families:
+- name: Identity creation (explicit)
+  stance: implemented
+  functions:
+  - VehicleDIDCreated
+  - createVehicleDID
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Ownership / controller change
+  stance: implemented
+  functions:
+  - DIDOwnerChanged
+  - VehicleOwnershipTransferred
+  - changeOwner
+  - changeOwnerSigned
+  - getVehicleOwner
+  - identityOwner
+  - owner
+  - owners
+  - transferVehicleOwnership
+  - updateOwnershipMapping
+  - vehicleOwnerOf
+  - vehicleOwners
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Key / delegate management
+  stance: measured-in-comparison
+  functions:
+  - DELEGATE_SIGAUTH
+  - DELEGATE_VERIKEY
+  - DIDDelegateChanged
+  - addDelegate
+  - addDelegateSigned
+  - addVerificationDelegate
+  - delegates
+  - isValidDelegate
+  - revokeDelegate
+  - revokeDelegateSigned
+  - revokeVerificationDelegate
+  - validDelegate
+  measured:
+  - addDelegate
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Attributes / data store
+  stance: implemented
+  functions:
+  - DIDAttributeChanged
+  - DID_MANUFACTURING_DATE
+  - revokeAttribute
+  - revokeAttributeSigned
+  - setAttribute
+  - setAttributeSigned
+  - setVehicleAttributes
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Claims / credentials
+  stance: implemented
+  functions:
+  - SVC_CREDENTIAL_SERVICE
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Revocation / status
+  stance: implemented
+  functions:
+  - revokeAttribute
+  - revokeAttributeSigned
+  - revokeDelegate
+  - revokeDelegateSigned
+  - revokeVerificationDelegate
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: implemented
+  functions:
+  - addDelegateSigned
+  - changeOwnerSigned
+  - nonce
+  - revokeAttributeSigned
+  - revokeDelegateSigned
+  - setAttributeSigned
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Lifecycle events / history
+  stance: implemented
+  functions:
+  - DIDAttributeChanged
+  - DIDDelegateChanged
+  - DIDOwnerChanged
+  - changed
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Authorisation / roles
+  stance: implemented
+  functions:
+  - ManufacturerAuthorized
+  - authorizedManufacturers
+  - setAuthorizedManufacturer
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: VIN linkage
+  stance: implemented
+  functions:
+  - DID_VIN
+  - didToVIN
+  - getDIDFromVIN
+  - getVINFromDID
+  - vinToDID
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: DID / resolution helpers
+  stance: implemented
+  functions:
+  - DIDAttributeChanged
+  - DIDDelegateChanged
+  - DIDOwnerChanged
+  - DID_AUTONOMY_LEVEL
+  - DID_COLOR
+  - DID_ENGINE
+  - DID_MAKE
+  - DID_MANUFACTURING_DATE
+  - DID_MODEL
+  - DID_VIN
+  - DID_YEAR
+  - VehicleDIDCreated
+  - createVehicleDID
+  - didRegistry
+  - didToVIN
+  - getDIDFromVIN
+  - getVINFromDID
+  - identityOwner
+  - vinToDID
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: implemented
+  functions: []
+  reason: identity is implicit in the address (EthereumDIDRegistry identityOwner defaults to the identity itself);
+    creation costs 0 gas
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+surface:
+  functions: 48
+  events: 6
+  provider_methods: 0

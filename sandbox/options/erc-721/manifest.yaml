@@ -1,0 +1,177 @@
+option: ERC-721
+slug: erc-721
+kind: on-chain
+contracts:
+- 1_blockchain-identity/contracts/ERC721/CVINVehicleNFT.sol
+- 1_blockchain-identity/contracts/ERC721/CVIN_NFT_DID_ERC721.sol
+- 1_blockchain-identity/contracts/ERC721/CVIN_NFT_DID_ERC721_Monolithic.sol
+provider: null
+benchmark_key: ERC-721
+experiments: []
+benchmark_ops:
+  deployRegistry: Single shared NFT contract; deployer receives DEFAULT_ADMIN_ROLE and MANUFACTURER_ROLE in constructor.
+  createIdentity: 'mintVehicle (manufacturer-only): mints NFT, stores VIN mapping + on-chain metadata struct + initial
+    transfer record.'
+  updateAttribute: 'No key/attribute model in ERC-721. Measured closest analogue: addServiceRecord appending a metadata
+    URI (role grant excluded as setup).'
+  addDelegateOrClaim: 'approve(): delegates TRANSFER rights only - not a verification-key delegation or identity
+    claim as in DID standards.'
+  transferOwnership: 'transferFrom: token transfer with on-chain transfer-history bookkeeping (contract overrides
+    _update).'
+  revoke: 'deactivateVehicle (admin-only): marks identity inactive; token itself is not burned.'
+families:
+- name: Identity creation (explicit)
+  stance: measured-in-comparison
+  functions:
+  - VehicleMinted
+  - mint
+  - mintVehicle
+  measured:
+  - mintVehicle
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Ownership / controller change
+  stance: implemented
+  functions:
+  - OwnershipTransferred
+  - getOwnershipChain
+  - getVehiclesByOwner
+  - owner
+  - ownerOf
+  - renounceOwnership
+  - safeTransferFrom
+  - tokenOfOwnerByIndex
+  - transferFrom
+  - transferOwnership
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Key / delegate management
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Attributes / data store
+  stance: implemented
+  functions:
+  - BatchMetadataUpdate
+  - EntryRecorded
+  - MetadataUpdate
+  - ServiceRecordAdded
+  - addServiceRecord
+  - getEntryTimestamp
+  - getServiceRecords
+  - recordEntry
+  - serviceRecords
+  - tokenURI
+  - vehicleMetadata
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Claims / credentials
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Revocation / status
+  stance: implemented
+  functions:
+  - RoleRevoked
+  - isVehicleActive
+  - revokeRole
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Lifecycle events / history
+  stance: implemented
+  functions:
+  - EntryRecorded
+  - RoleAdminChanged
+  - ServiceRecordAdded
+  - addServiceRecord
+  - getServiceRecords
+  - getTransferHistory
+  - recordEntry
+  - serviceRecords
+  - transferHistory
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Authorisation / roles
+  stance: implemented
+  functions:
+  - DEFAULT_ADMIN_ROLE
+  - INSPECTOR_ROLE
+  - MANUFACTURER_ROLE
+  - RoleAdminChanged
+  - RoleGranted
+  - RoleRevoked
+  - SERVICE_CENTER_ROLE
+  - getRoleAdmin
+  - grantInspectorRole
+  - grantManufacturerRole
+  - grantRole
+  - grantServiceCenterRole
+  - hasRole
+  - renounceRole
+  - revokeRole
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: measured-in-comparison
+  functions:
+  - Approval
+  - ApprovalForAll
+  - approve
+  - balanceOf
+  - getApproved
+  - isApprovedForAll
+  - payToll
+  - royaltyInfo
+  - setApprovalForAll
+  - totalSupply
+  measured:
+  - approve
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: VIN linkage
+  stance: implemented
+  functions:
+  - getTokenIdFromVIN
+  - getVINFromTokenId
+  - tokenIdToVIN
+  - vinToTokenId
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: DID / resolution helpers
+  stance: implemented
+  functions:
+  - getVehicleDID
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: not-applicable
+  functions: []
+  reason: creation requires a transaction (mint or deployment) — auto; review
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+surface:
+  functions: 52
+  events: 15
+  provider_methods: 0

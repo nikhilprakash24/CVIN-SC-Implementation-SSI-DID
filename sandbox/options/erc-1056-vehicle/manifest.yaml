@@ -1,0 +1,145 @@
+option: ERC-1056 / vehicle profile
+slug: erc-1056-vehicle
+kind: on-chain
+contracts:
+- 1_blockchain-identity/contracts/MOBI/ERC1056Registry.sol
+provider: cv2x-testbed/identity/erc1056_provider.py
+benchmark_key: null
+experiments:
+- '#21'
+- '#29'
+benchmark_ops: {}
+families:
+- name: Identity creation (explicit)
+  stance: measured-in-comparison
+  functions:
+  - registerVehicle
+  - register_vehicle
+  measured:
+  - registerVehicle
+  reason: 'measured via #21, #29'
+  reviewed: false
+- name: Ownership / controller change
+  stance: implemented
+  functions:
+  - DIDOwnerChanged
+  - changeOwner
+  - identityOwner
+  - owners
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Key / delegate management
+  stance: implemented
+  functions:
+  - DIDDelegateChanged
+  - addDelegate
+  - revokeDelegate
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Attributes / data store
+  stance: implemented
+  functions:
+  - DIDAttributeChanged
+  - revokeAttribute
+  - setAttribute
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Claims / credentials
+  stance: implemented
+  functions:
+  - get_credential
+  - revoke_credential
+  - update_credential
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Revocation / status
+  stance: measured-in-comparison
+  functions:
+  - DIDRevoked
+  - check_revocation_status
+  - check_revocation_status_by_address
+  - isRevoked
+  - revokeAttribute
+  - revokeDelegate
+  - revokeIdentity
+  - revoke_credential
+  - revoked
+  - revokedAt
+  measured:
+  - isRevoked
+  - revokeIdentity
+  reason: 'measured via #21, #29'
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: implemented
+  functions:
+  - nonce
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Lifecycle events / history
+  stance: measured-in-comparison
+  functions:
+  - DIDAttributeChanged
+  - DIDDelegateChanged
+  - DIDOwnerChanged
+  - changed
+  - lastChanged
+  measured:
+  - changed
+  reason: 'measured via #21, #29'
+  reviewed: false
+- name: Authorisation / roles
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: VIN linkage
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: DID / resolution helpers
+  stance: measured-in-comparison
+  functions:
+  - DIDAttributeChanged
+  - DIDDelegateChanged
+  - DIDOwnerChanged
+  - DIDRevoked
+  - getIdentityInfo
+  - identityOwner
+  - resolve_identity
+  - resolve_identity_from_address
+  measured:
+  - getIdentityInfo
+  reason: 'measured via #21, #29'
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: not-applicable
+  functions: []
+  reason: creation requires a transaction (mint or deployment) — auto; review
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: implemented
+  functions:
+  - sign_message
+  - verify_message
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+surface:
+  functions: 17
+  events: 4
+  provider_methods: 15

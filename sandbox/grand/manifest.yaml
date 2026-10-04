@@ -1,0 +1,255 @@
+generated_from:
+- 1_blockchain-identity/artifacts
+- 4_comparison-framework/results/gas_benchmark.json
+- cv2x-testbed/identity/*
+- cv2x-testbed/scripts/experiment_*.py
+families:
+- Identity creation (explicit)
+- Ownership / controller change
+- Key / delegate management
+- Attributes / data store
+- Claims / credentials
+- Revocation / status
+- Delegated / signed (off-chain-authorised) execution
+- Lifecycle events / history
+- Authorisation / roles
+- Token economics (approvals, royalties, payments)
+- VIN linkage
+- DID / resolution helpers
+- Off-chain creation (identity exists before any transaction)
+- Message signing / verification (off-chain hot path)
+options:
+  erc-1056-uport:
+    option: ERC-1056 / uPort-style
+    kind: on-chain
+    stances:
+      Identity creation (explicit): implemented
+      Ownership / controller change: implemented
+      Key / delegate management: measured-in-comparison
+      Attributes / data store: implemented
+      Claims / credentials: implemented
+      Revocation / status: implemented
+      Delegated / signed (off-chain-authorised) execution: implemented
+      Lifecycle events / history: implemented
+      Authorisation / roles: implemented
+      Token economics (approvals, royalties, payments): not-applicable
+      VIN linkage: implemented
+      DID / resolution helpers: implemented
+      Off-chain creation (identity exists before any transaction): implemented
+      Message signing / verification (off-chain hot path): not-applicable
+  erc-1056-vehicle:
+    option: ERC-1056 / vehicle profile
+    kind: on-chain
+    stances:
+      Identity creation (explicit): measured-in-comparison
+      Ownership / controller change: implemented
+      Key / delegate management: implemented
+      Attributes / data store: implemented
+      Claims / credentials: implemented
+      Revocation / status: measured-in-comparison
+      Delegated / signed (off-chain-authorised) execution: implemented
+      Lifecycle events / history: measured-in-comparison
+      Authorisation / roles: not-applicable
+      Token economics (approvals, royalties, payments): not-applicable
+      VIN linkage: not-applicable
+      DID / resolution helpers: measured-in-comparison
+      Off-chain creation (identity exists before any transaction): not-applicable
+      Message signing / verification (off-chain hot path): implemented
+  erc-721:
+    option: ERC-721
+    kind: on-chain
+    stances:
+      Identity creation (explicit): measured-in-comparison
+      Ownership / controller change: implemented
+      Key / delegate management: not-applicable
+      Attributes / data store: implemented
+      Claims / credentials: not-applicable
+      Revocation / status: implemented
+      Delegated / signed (off-chain-authorised) execution: not-applicable
+      Lifecycle events / history: implemented
+      Authorisation / roles: implemented
+      Token economics (approvals, royalties, payments): measured-in-comparison
+      VIN linkage: implemented
+      DID / resolution helpers: implemented
+      Off-chain creation (identity exists before any transaction): not-applicable
+      Message signing / verification (off-chain hot path): not-applicable
+  erc-725:
+    option: ERC-725
+    kind: on-chain
+    stances:
+      Identity creation (explicit): not-applicable
+      Ownership / controller change: implemented
+      Key / delegate management: measured-in-comparison
+      Attributes / data store: not-applicable
+      Claims / credentials: not-applicable
+      Revocation / status: not-applicable
+      Delegated / signed (off-chain-authorised) execution: implemented
+      Lifecycle events / history: not-applicable
+      Authorisation / roles: not-applicable
+      Token economics (approvals, royalties, payments): implemented
+      VIN linkage: not-applicable
+      DID / resolution helpers: not-applicable
+      Off-chain creation (identity exists before any transaction): not-applicable
+      Message signing / verification (off-chain hot path): not-applicable
+  erc-725xy:
+    option: ERC-725xy
+    kind: on-chain
+    stances:
+      Identity creation (explicit): implemented
+      Ownership / controller change: implemented
+      Key / delegate management: implemented
+      Attributes / data store: measured-in-comparison
+      Claims / credentials: not-applicable
+      Revocation / status: not-applicable
+      Delegated / signed (off-chain-authorised) execution: implemented
+      Lifecycle events / history: implemented
+      Authorisation / roles: not-applicable
+      Token economics (approvals, royalties, payments): not-applicable
+      VIN linkage: implemented
+      DID / resolution helpers: not-applicable
+      Off-chain creation (identity exists before any transaction): not-applicable
+      Message signing / verification (off-chain hot path): not-applicable
+  erc-735:
+    option: ERC-735
+    kind: on-chain
+    stances:
+      Identity creation (explicit): implemented
+      Ownership / controller change: implemented
+      Key / delegate management: not-applicable
+      Attributes / data store: not-applicable
+      Claims / credentials: measured-in-comparison
+      Revocation / status: not-applicable
+      Delegated / signed (off-chain-authorised) execution: not-applicable
+      Lifecycle events / history: implemented
+      Authorisation / roles: implemented
+      Token economics (approvals, royalties, payments): not-applicable
+      VIN linkage: implemented
+      DID / resolution helpers: not-applicable
+      Off-chain creation (identity exists before any transaction): not-applicable
+      Message signing / verification (off-chain hot path): not-applicable
+  erc-1155:
+    option: ERC-1155
+    kind: on-chain
+    stances:
+      Identity creation (explicit): measured-in-comparison
+      Ownership / controller change: implemented
+      Key / delegate management: not-applicable
+      Attributes / data store: implemented
+      Claims / credentials: measured-in-comparison
+      Revocation / status: measured-in-comparison
+      Delegated / signed (off-chain-authorised) execution: not-applicable
+      Lifecycle events / history: implemented
+      Authorisation / roles: implemented
+      Token economics (approvals, royalties, payments): implemented
+      VIN linkage: implemented
+      DID / resolution helpers: not-applicable
+      Off-chain creation (identity exists before any transaction): not-applicable
+      Message signing / verification (off-chain hot path): not-applicable
+  erc-4337:
+    option: ERC-4337
+    kind: on-chain
+    stances:
+      Identity creation (explicit): implemented
+      Ownership / controller change: measured-in-comparison
+      Key / delegate management: measured-in-comparison
+      Attributes / data store: implemented
+      Claims / credentials: not-applicable
+      Revocation / status: not-applicable
+      Delegated / signed (off-chain-authorised) execution: implemented
+      Lifecycle events / history: implemented
+      Authorisation / roles: not-applicable
+      Token economics (approvals, royalties, payments): not-applicable
+      VIN linkage: not-applicable
+      DID / resolution helpers: not-applicable
+      Off-chain creation (identity exists before any transaction): implemented
+      Message signing / verification (off-chain hot path): not-applicable
+  lsp8:
+    option: LSP8
+    kind: on-chain
+    stances:
+      Identity creation (explicit): measured-in-comparison
+      Ownership / controller change: implemented
+      Key / delegate management: not-applicable
+      Attributes / data store: implemented
+      Claims / credentials: implemented
+      Revocation / status: measured-in-comparison
+      Delegated / signed (off-chain-authorised) execution: not-applicable
+      Lifecycle events / history: implemented
+      Authorisation / roles: not-applicable
+      Token economics (approvals, royalties, payments): implemented
+      VIN linkage: implemented
+      DID / resolution helpers: not-applicable
+      Off-chain creation (identity exists before any transaction): not-applicable
+      Message signing / verification (off-chain hot path): not-applicable
+  cvin-combined:
+    option: CVIN-Combined (ERC-1056 + ERC-735 hybrid)
+    kind: on-chain
+    stances:
+      Identity creation (explicit): not-applicable
+      Ownership / controller change: measured-in-comparison
+      Key / delegate management: measured-in-comparison
+      Attributes / data store: implemented
+      Claims / credentials: measured-in-comparison
+      Revocation / status: measured-in-comparison
+      Delegated / signed (off-chain-authorised) execution: not-applicable
+      Lifecycle events / history: implemented
+      Authorisation / roles: implemented
+      Token economics (approvals, royalties, payments): not-applicable
+      VIN linkage: implemented
+      DID / resolution helpers: implemented
+      Off-chain creation (identity exists before any transaction): not-applicable
+      Message signing / verification (off-chain hot path): not-applicable
+  mobi-vid:
+    option: MOBI VID I + II (application profile)
+    kind: on-chain
+    stances:
+      Identity creation (explicit): measured-in-comparison
+      Ownership / controller change: measured-in-comparison
+      Key / delegate management: measured-in-comparison
+      Attributes / data store: implemented
+      Claims / credentials: measured-in-comparison
+      Revocation / status: measured-in-comparison
+      Delegated / signed (off-chain-authorised) execution: implemented
+      Lifecycle events / history: measured-in-comparison
+      Authorisation / roles: implemented
+      Token economics (approvals, royalties, payments): not-applicable
+      VIN linkage: implemented
+      DID / resolution helpers: measured-in-comparison
+      Off-chain creation (identity exists before any transaction): not-applicable
+      Message signing / verification (off-chain hot path): implemented
+  baseline-pki:
+    option: 'Baseline: IEEE 1609.2-style PKI (in-process)'
+    kind: off-chain
+    stances:
+      Identity creation (explicit): not-applicable
+      Ownership / controller change: not-applicable
+      Key / delegate management: not-applicable
+      Attributes / data store: not-applicable
+      Claims / credentials: implemented
+      Revocation / status: implemented
+      Delegated / signed (off-chain-authorised) execution: not-applicable
+      Lifecycle events / history: implemented
+      Authorisation / roles: not-applicable
+      Token economics (approvals, royalties, payments): not-applicable
+      VIN linkage: not-applicable
+      DID / resolution helpers: not-applicable
+      Off-chain creation (identity exists before any transaction): implemented
+      Message signing / verification (off-chain hot path): measured-in-comparison
+  baseline-centralized:
+    option: 'Baseline: centralized registry (in-process)'
+    kind: off-chain
+    stances:
+      Identity creation (explicit): measured-in-comparison
+      Ownership / controller change: measured-in-comparison
+      Key / delegate management: not-applicable
+      Attributes / data store: not-applicable
+      Claims / credentials: implemented
+      Revocation / status: implemented
+      Delegated / signed (off-chain-authorised) execution: not-applicable
+      Lifecycle events / history: measured-in-comparison
+      Authorisation / roles: implemented
+      Token economics (approvals, royalties, payments): not-applicable
+      VIN linkage: implemented
+      DID / resolution helpers: not-applicable
+      Off-chain creation (identity exists before any transaction): implemented
+      Message signing / verification (off-chain hot path): not-applicable

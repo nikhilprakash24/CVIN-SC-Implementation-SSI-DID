@@ -1,0 +1,136 @@
+option: ERC-725xy
+slug: erc-725xy
+kind: on-chain
+contracts:
+- 1_blockchain-identity/contracts/ERC725xy/CVINVehicleERC725XY.sol
+- 1_blockchain-identity/contracts/ERC725xy/CVINExecuteTarget.sol
+provider: null
+benchmark_key: ERC-725xy
+experiments: []
+benchmark_ops:
+  deployRegistry: 'No shared registry in ERC-725: each identity is its own ERC-725 smart-account contract. Deployment
+    cost is counted under createIdentity.'
+  createIdentity: Per-vehicle ERC-725 (X+Y) smart-account deployment (proxy account); constructor sets the deployer
+    as owner/controlling key. Paid once per identity. Heavier than the ERC-725 'basic' variant because it bundles
+    the full ERC-725X generic executor and ERC-725Y data store.
+  updateAttribute: 'ERC-725Y setData(bytes32,bytes): writes the vehicle VIN attribute into the generic key/value
+    store (cold slot first write, DataChanged event).'
+  addDelegateOrClaim: ERC-725 has no native delegate or on-chain claim model. Verification-key delegation lives
+    in ERC-1056 and on-chain claims in the companion ERC-735 claim holder (both benchmarked separately).
+  revoke: 'ERC-725 has no identity-level revocation primitive: the account contract persists. Individual attributes
+    can be cleared via setData(key, "0x") and control can be renounced via renounceOwnership, but neither is a standard
+    revoke operation.'
+  transferOwnership: transferOwnership of the ERC-725 account = controlling-key rotation; the identity (account
+    address) is unchanged.
+families:
+- name: Identity creation (explicit)
+  stance: implemented
+  functions:
+  - ContractCreated
+  - OPERATION_CREATE
+  - OPERATION_CREATE2
+  - setVehicleBirthAttributes
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Ownership / controller change
+  stance: implemented
+  functions:
+  - OwnershipTransferred
+  - owner
+  - renounceOwnership
+  - transferOwnership
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Key / delegate management
+  stance: implemented
+  functions:
+  - OPERATION_DELEGATECALL
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Attributes / data store
+  stance: measured-in-comparison
+  functions:
+  - ValueSet
+  - getData
+  - getDataBatch
+  - setData
+  - setDataBatch
+  - setValue
+  - setVehicleBirthAttributes
+  - value
+  measured:
+  - setData
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Claims / credentials
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Revocation / status
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: implemented
+  functions:
+  - Executed
+  - execute
+  - executeBatch
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Lifecycle events / history
+  stance: implemented
+  functions:
+  - DataChanged
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Authorisation / roles
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: VIN linkage
+  stance: implemented
+  functions:
+  - VIN_KEY
+  - getVehicleVIN
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: DID / resolution helpers
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: not-applicable
+  functions: []
+  reason: creation requires a transaction (mint or deployment) — auto; review
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+surface:
+  functions: 25
+  events: 5
+  provider_methods: 0
