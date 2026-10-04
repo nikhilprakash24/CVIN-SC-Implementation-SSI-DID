@@ -41,7 +41,7 @@ npm run metrics:quick
 
 Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit give byte-identical gas tables. This has been true only since review 02 (H-1, H-3): before it, random wallets and a shared issuer moved some cells between runs. Latencies are in-process client + EVM and reproduce in distribution only.
 
-## 3. Headline results (run of record now `2026-10-04T05-41-19Z_bca0899`, clean tree, locked toolchain; its ERC-1056 / ERC-721 / ERC-725 columns are byte-identical to `59405ff` quoted below, and it adds the ERC-1056 wrapper column of §3.6; full tables in `results/metrics/latest/`)
+## 3. Headline results (run of record: the ten-substrate run of §3.7; §3.1–3.6 quote the earlier three- and four-column runs `59405ff` / `bca0899`, whose cells are byte-identical in the current run; full tables in `results/metrics/latest/`)
 
 > **Corrected in review 02** (`docs/REVIEW_02_CODEBASE.md` H-1–H-8, `docs/review02/PASS1_H.md`). The previous run `3b786c2` and the figures this section printed for it are superseded (`MEASUREMENT_CONDITIONS.md` §5.D).
 
@@ -119,13 +119,61 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 
 Reading: the wrapper indirection costs ~9–10k gas per mutation (external call + `vehicleOwnerOf` gate) and pays back only where it collapses transactions (C2: −132k). Lifetime improves 2.4%, so the best-case ERC-1056 ratios are 2.6× / 3.1× — H1's verdict (§3.4) does not change. The cheaper resolution in wrapper mode is a side-effect of the fidelity gap in §3.5.1 (ownership transfers leave no registry event), not an efficiency gain. Conformance: `npm run test:conformance` 39 passing / 5 pending; full suite 302 passing / 6 pending.
 
+### 3.7 All nine standards (added 2026-10-04; ten columns — run of record stamped on harness tree `65057d71aec4837914fe11f325b7c089beabba45`, see `MEASUREMENT_CONDITIONS.md` §5.F; register rows #34–#35)
+
+The six columns below that existed before are byte-identical to run `bca0899`. Realisations for the new substrates: framework §2.2a (ERC-735, ERC-1155) and §2.2b (ERC-725xy, LSP8, ERC-4337, CVIN-Combined). `n/a` = no primitive on that substrate (a result, not a gap in the harness).
+
+**L1 gas (exact), catalogue ops × substrates**
+
+| Op | ERC-1056 | 1056 wrapper | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Comb. |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| C1 create | **76,808** | 145,662 | 399,844 | 656,480 | 1,535,776 | 103,913 | 1,730,753 | 132,515 | 808,431 | 266,995 |
+| C2 create + VID-I | 366,978 (9 tx) | 234,587 (3) | 568,074 (1) | 1,496,440 (9) | 2,285,459 (2) | **103,913** (1, attrs off-chain) | 1,963,543 (2) | 370,025 (2) | 1,153,124 (9) | 1,006,919 (2) |
+| U1 rotate / U4 transfer | 51,754 | 57,188 | 179,470 / 182,374 | 28,390 | 28,746 | 83,959 | 28,834 | 83,412 | 28,539 | 68,847 |
+| U2 add delegate | 55,143 | 64,720 | 48,314 | 119,852 | n/a | n/a | n/a | n/a | 47,569 (guardian) | 72,308 |
+| U3 set attribute | **35,024** | 44,677 | 120,061 | 119,996 | 317,814 | 57,147 (badge, no payload) | 95,334 | 100,573 | 94,651 | 51,742 |
+| U5 meta-tx | 62,646 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | **141,767** (EntryPoint) | n/a |
+| D1 revoke delegate | 32,868 | 41,888 | 26,174 | 57,200 | n/a | n/a | n/a | n/a | 25,429 | 37,742 |
+| D2 revoke attribute | 34,576 | n/a | n/a | 57,316 | 96,611 | 30,625 | 33,880 | 37,806 | 33,469 | 34,198 |
+| D3 deactivate | 34,230 | 43,809 | 27,689 | 23,091 | 28,530 | 37,443 | 23,182 | 43,076 | 28,323 | 51,016 |
+| V1 issuer key anchor | 55,143 | 55,143 | 419,990 | 119,852 | n/a | 51,281 | 49,745 | n/a | 49,151 | 55,208 |
+| V3 anchor credential | **33,918** | 33,918 | 142,909 | 119,996 | 294,628 | 57,519 | 49,805 | 54,874 | 49,211 | 289,788 |
+| V5 revoke credential | 33,470 | 33,470 | 125,821 | 43,388 | 92,273 | 30,997 | **27,322** | 32,212 | 26,809 | 89,972 |
+
+**L2 lifetime (17 MOBI VID events)**
+
+| | ERC-1056 | 1056 wrapper | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Comb. |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Lifetime gas | **1,050,787** | 1,025,381 | 2,701,239 | 3,155,103 | 5,369,010 (excl. 3 n/a) | 1,150,981 (excl. 2 n/a) | 2,956,507 (excl. 2 n/a) | 1,505,258 (excl. 3 n/a) | 2,221,290 | 2,533,978 |
+| Per-identity deploy (in total) | 0 | 0 | 0 | 519,384 | 1,535,776 | 0 | 1,680,804 | 0 | 759,076 | 0 |
+| Transactions | 26 | 20 | 17 | 26 | 15 | 21 | 16 | 15 | 25 | 19 |
+| Zero→nonzero SSTOREs | **8** | 9 | 92 | 83 | 145 | 18 | 38 | 42 | 37 | 81 |
+| Log bytes | 6,464 | 6,592 | 4,288 | 3,072 | 12,576 | 6,080 | 3,744 | 8,288 | 3,968 | 6,496 |
+| R3 resolve after lifecycle (RPC / ms) | 22 / 16.5 | 14 / 12.6 | 7 / 6.9 | 17 / 15.5 | 3 / 7.4 | **3 / 2.7** | 2 / 4.3 | 2 / 4.4 | 16 / 8.0 | 17 / 13.0 |
+| R3 at h = 50 (RPC / ms) | 112 / 77 | 55 / 51 | 7 / 40 | 61 / 48 | 3 / 39 | **3 / 2.9** | 2 / 37 | 3 / 22 | 61 / 30 | 107 / 84 |
+| Throughput, queue+mine (tx/s) | 174 | 124 | 135 | 197 | 76 | 185 | 145 | 162 | 161 | 184 |
+
+**Readings (facts, not conclusions)**
+
+1. **ERC-1056 is the cheapest substrate on every lifetime figure and on C1, U3, V3**, but the margin is not uniform: 1.10× over ERC-1155, 1.43× over LSP8, 2.1× over ERC-4337, 2.4× over the CVIN-Combined hybrid, 2.6× over ERC-721, 3.0× over ERC-725, 5.1× over ERC-735. H1's "≥10×" holds for no pair; even "an order of magnitude cheaper than rich-state standards" is true only for ERC-735 on C2 and ERC-725xy/ERC-735 on C1 (contract-per-identity deployment).
+2. **ERC-1155 is the only near-peer, and not like-for-like**: it stores no per-vehicle attributes (C2 = C1), has no delegate keys, and its lifetime excludes 2 n/a events. Its read path is the cheapest of all (3 RPC, 2.7 ms, flat in history). This is the substrate the thesis must argue against most carefully.
+3. **The CVIN-Combined hybrid costs 2.4× its ERC-1056 base** because every credential is an on-chain claim with a stored signature (V3 289,788 vs 33,918; 81 vs 8 slots). What the hybrid buys is O(1) **on-chain** verifiability (`hasValidClaim`) for contracts; its off-chain resolution still walks the event chain (107 RPC at h = 50). H5's "hybrid on the Pareto frontier" needs the on-chain-verifiability axis to be stated explicitly, or the data refute it on cost alone.
+4. **Contract-per-identity standards pay their identity up front**: ERC-735 1.54 M, ERC-725xy 1.73 M (incl. VIN write), ERC-4337 0.81 M, ERC-725 0.66 M per vehicle, then cheap rotation (28–29k). Over a 17-event life this is 2.1–5.1× ERC-1056; the apportioned fleet rows in `lifecycle_gas` show the shared-registry standards' deployment vanishing at 1 000 vehicles while per-identity deployment never does.
+5. **Event-log resolution is the price of event-log cheapness**: the two event-based substrates (ERC-1056, CVIN) are the only ones whose read path grows linearly with history (112 / 107 RPC, 77 / 84 ms at h = 50); storage-based substrates stay at 2–7 RPC. This is H3's second half, measured.
+6. **ERC-4337's meta-transaction costs +47,116 over the direct call** (141,767 vs 94,651), matching the nine-standard gas table's +46,830 (register #25) — an independent consistency check between the two instruments.
+7. Within-run execution-gas spreads (all deterministic between runs): signature-bearing ops on ERC-735 and CVIN (±25 gas, ECDSA zero bytes), ERC-721 C1/U1 (first mint, cold receiver), LSP8 C1 (first mint pays the collection counter's cold slot, +17,100).
+
+**Verdict update (framework §8).** H1 as written is refuted on the full set; the defensible statement is: *"ERC-1056 has the lowest lifetime cost and persistent footprint of the nine standards (1.1–5.1×), at the cost of a resolution path linear in identity history."* H4 (event-log cheapest for VID-II events) holds against every storage-based standard except ERC-1155's badge issuance (57k vs 35k for U3 — ERC-1155 wins none) — holds. H5 holds trivially (ERC-1155 dominates reads, ERC-1056 writes, ERC-725-family rotation) but the hybrid is not on the cost frontier.
+
+Conformance gate: 87 passing / 23 declared n/a; full Hardhat suite 351 / 23.
+
 ---
 
 ## 4. Audit F-items status (from `docs/AUDIT_01_ORIGINAL_GOALS.md`)
 
 | Item | Status after this session |
 |---|---|
-| F1 nine standards claimed, three on trunk | unchanged in substance; tables now print `not impl.` cells explicitly so the gap is visible, not hidden |
+| F1 nine standards claimed, three on trunk | **closed for the harness (2026-10-04)**: all nine standards (ten adapters) run the identical catalogue; no `not impl.` cell remains in `results/metrics/latest` (§3.7) |
 | F2 no PKI baseline number | **closed on the trunk**: `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py`, register #21 (re-run in review 02) |
 | F3 three values for one quantity | **closed**: `MEASUREMENT_CONDITIONS.md` + superseded-numbers table |
 | F4 reproducibility asserted while broken | conformance gate + harness in CI (`benchmark.yml`, `metrics-harness` job), **green on GitHub** since review 02 enabled the workflow on `claude/**` pushes |
@@ -140,7 +188,7 @@ Reading: the wrapper indirection costs ~9–10k gas per mutation (external call 
 
 1. ~~`erc1056w` adapter~~ — **done** (`2439cd0`, §3.6). Follow-up decision: should the wrapper emit (or forward) `DIDOwnerChanged` on ownership transfer so did:ethr resolvers see the vehicle owner? Either implement, or document the gap in the T2 compliance discussion.
 2. **PKI-vs-ERC-1056 script** (`cv2x-testbed/scripts/benchmark_pki_vs_erc1056.py`, closes F2; ~3 h). Map `C2→register_vehicle, V2→sign, V4→verify, V5→revoke, V6→check_revocation, R3→resolve`; N = 30; one CSV; label the HTTP-RPC condition.
-3. **ERC-735 adapter + contract** (claims on top of the ERC-725 identity; next in the roadmap). Then ERC-1155 (first substrate with a *native batch* primitive — the `batch` scenario will finally have a `native` row), ERC-725xy, LSP8, ERC-4337, CVIN-Combined (ERC-1056 anchor + Status List + ERC-1155 credential tokens).
+3. ~~ERC-735, ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined adapters~~ — **done** (§3.7). Note: no substrate exposes a native batch *creation* primitive (ERC-1155's `mintBatch` is not surfaced by `registerVehicle`), so the `batch` table is sequential throughout — itself a finding. Follow-ups the data suggest: (a) a Status-List-2021 variant of CVIN-Combined so credential status is one bit, not a stored claim; (b) an ERC-1155 variant that binds VID-I attributes (per-vehicle URI) so C2 is like-for-like; (c) a delegate model for LSP8 (operators) and ERC-725xy (LSP6) if those columns are to be compared on U2/D1.
 4. **Rewrite H1** in `README.md` / `docs/RESEARCH_THRUSTS_REPORT.md` / `docs/thesis/README.md` per §3.4 so one hypothesis structure appears everywhere (audit F6).
 5. **Rubric scoring** (`benchmarks/rubric/did-method-rubric.json`): complete the empty criteria for the three substrates with file:line evidence; every substrate added later gets a column.
 6. **Remote-RPC condition run**: `npm run node` + `METRICS_*` against `localhost` network to get latencies with a real JSON-RPC round-trip (a separate, labelled conditions block).
@@ -158,4 +206,5 @@ Reading: the wrapper indirection costs ~9–10k gas per mutation (external call 
 - Rebased the v1 handoff commit onto the trunk that had moved (`084edfd`: build fixed to solc 0.8.24, tests 47/47, audit + project summary).
 - Wrote methodology and conditions documents; built harness; three adapters passed conformance; smoke runs surfaced and fixed: `setVehicleAttributes` unreachable in direct mode (→ pure did:ethr C2), one-address-one-DID iteration collision (→ fresh funded owner per identity), Hardhat automine nonce rejection (→ queue-then-mine throughput), ethers `estimateGas` dominating the queue phase (→ fixed fee overrides), RPC counting through `provider.send`, dataset off-by-one at N = 1 000, varying string lengths (→ fixed-width payloads).
 - Full run committed as `results/metrics/latest`; pushed.
+- 2026-10-04 (later): added adapters for ERC-735, ERC-1155, ERC-725xy, LSP8, ERC-4337 and CVIN-Combined; the harness now records `n/a` lifecycle events and excludes them from totals, uses a fresh receiver where a substrate needs one (ERC-1155 K-13), keys throughput nonces by sender (LSP8's single authority) and stamps runs with the `1_blockchain-identity` tree hash (§5.F of the conditions). Gate 87 / 23, suite 351 / 23. Two adapter bugs found by the gate before any number was recorded: ERC-1155 transfer left credentials on the old address (now re-binds every held type), CVIN resolver dropped events with `previousChange = 0`.
 - 2026-10-04: added `erc1056w` on top of the review-02 harness; its conformance run exposed the one-address-one-DID collision in the test's C1/C2 (fixed: C1 uses its own wallet) and that "expire now" cannot stand in for attribute revocation (D2 declared n/a). Re-ran all six scenarios for four substrates; found and documented the toolchain-pinning effect (§3.5.5); `results/metrics/latest` is run `bca0899`.
