@@ -14,6 +14,7 @@ runs it.
 """
 
 import sys
+import time
 import uuid
 import warnings
 from pathlib import Path
@@ -69,7 +70,7 @@ class TestSumoSelfIssuedCredential:
             validity_days=365)
         layer.wallets["attacker"] = {"account": attacker, "did": did,
                                      "credential": cred}
-        pkg, _ = layer.sign("attacker", {"msgID": "DENM",
+        pkg, _ = layer.sign("attacker", {"msgID": "DENM", "timestamp": time.time(),
                                          "event": "hard-brake", "speed": 0})
         ok, _, cold = layer.verify("victim", pkg)
         assert cold
@@ -84,13 +85,13 @@ class TestSumoSelfIssuedCredential:
             "V2VSafetyCredential", did, {"vin": "FAKE"}, validity_days=365)
         layer.wallets["self"] = {"account": attacker, "did": did,
                                  "credential": cred}
-        pkg, _ = layer.sign("self", {"msgID": "BSM", "speed": 10})
+        pkg, _ = layer.sign("self", {"msgID": "BSM", "speed": 10, "timestamp": time.time()})
         assert layer.verify("victim", pkg)[0] is False
 
     def test_consortium_enrolled_vehicle_still_verifies(self, sumo):
         layer = sumo.SSIIdentityLayer()
         layer.enroll("legit", VIN, "Tesla", "M3", 2024)
-        pkg, _ = layer.sign("legit", {"msgID": "BSM", "speed": 10})
+        pkg, _ = layer.sign("legit", {"msgID": "BSM", "speed": 10, "timestamp": time.time()})
         ok, _, cold = layer.verify("rx", pkg)
         assert ok and cold
         ok, _, cold = layer.verify("rx", pkg)
@@ -100,7 +101,7 @@ class TestSumoSelfIssuedCredential:
         layer = sumo.SSIIdentityLayer()
         wallet = layer.enroll("legit", VIN, "Tesla", "M3", 2024)
         layer.issuer.revoke_credential(wallet["credential"].id, "decommissioned")
-        pkg, _ = layer.sign("legit", {"msgID": "BSM", "speed": 10})
+        pkg, _ = layer.sign("legit", {"msgID": "BSM", "speed": 10, "timestamp": time.time()})
         assert layer.verify("rx", pkg)[0] is False
 
 

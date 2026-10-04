@@ -84,6 +84,25 @@ is_valid, result = verifier.verify_presentation(vp, challenge, domain)
 Behaviour changed in review 02 (S-1, S-2, S-4, S-5, S-6, S-7, S-9, T-3);
 see `docs/review02/PASS1_S.md`.
 
+### Key binding is offline, non-rotating (review 02, S-3)
+
+By default the verifier binds a `did:ethr` / `did:key` DID to **the address
+inside the DID**. The DID is not resolved, so on-chain key rotation,
+ERC-1056 delegates, owner changes and deactivation are invisible: a
+rotated-out or compromised original key keeps verifying for that DID. This is
+the offline verification the thesis measures, not did:ethr resolution.
+
+- `CredentialVerifier(chain_id=31337)` rejects issuers and holders whose DID
+  names another chain (`did:ethr:0x1:A` and `did:ethr:0x7a69:A` are different
+  identities). A bare `did:ethr:<address>` counts as chain 1 (mainnet), as
+  `did-resolution/did_resolver.py` resolves it. Without `chain_id` there is
+  no chain check.
+- `CredentialVerifier(did_resolver=DIDResolver())` (any object with
+  `resolve(did)`) additionally requires the signer to be a key of the
+  resolved document under `assertionMethod` (VC) or `authentication` (VP).
+  The binding is then as fresh as the resolver; the repository's
+  `DIDResolver` synthesises documents without reading the chain.
+
 ## Thesis Integration
 
 This implementation is used across all 10 use cases and integrates with:

@@ -111,7 +111,10 @@ def main():
     print(f"  SSI layer: {CV2X_ROOT}/sumo/sumo_identity_integration.py")
     print(f"  {args.intervals} timed intervals/P, {args.warmup} warmup/P\n")
 
-    layer = SSIIdentityLayer()
+    # BSM timestamps are simulation time; the layer checks them against this
+    # simulation clock (review 02, T-9), advanced with the message stream.
+    sim_now = [0.0]
+    layer = SSIIdentityLayer(clock=lambda: sim_now[0])
     senders = [f"veh_{i:03d}" for i in range(P_MAX)]
     for s in senders:
         layer.enroll(s, "5YJ3E1EA0PF12345" + s[-1], "Tesla", "Model 3", 2024)
@@ -122,6 +125,7 @@ def main():
         pkg, _ = layer.sign(s, build_bsm(s, 0, 0.0))
         ok, _, cold = layer.verify(RECEIVER, pkg)
         assert ok and cold, f"cold warm-up failed for {s}"
+    sim_now[0] = 0.1
     for s in senders:  # confirm warm path is now active
         pkg, _ = layer.sign(s, build_bsm(s, 1, 0.1))
         ok, _, cold = layer.verify(RECEIVER, pkg)
@@ -133,6 +137,7 @@ def main():
         subset = senders[:P]
 
         # Warmup intervals (untimed).
+        sim_now[0] = 0.1
         for w in range(args.warmup):
             pkgs = [layer.sign(s, build_bsm(s, 100 + w, 0.1))[0] for s in subset]
             for pkg in pkgs:
@@ -142,6 +147,7 @@ def main():
         per_msg = []
         for it in range(args.intervals):
             # Sign P fresh BSMs OUTSIDE the timed region.
+            sim_now[0] = it * 0.1
             pkgs = [layer.sign(s, build_bsm(s, 1000 + it, it * 0.1))[0]
                     for s in subset]
             t0 = time.perf_counter()

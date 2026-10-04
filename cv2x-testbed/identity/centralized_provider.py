@@ -25,6 +25,7 @@ from cryptography import x509
 from cryptography.x509.oid import NameOID
 import json
 
+from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
 from identity.base import (
     IdentityProvider,
     IdentityType,
@@ -59,6 +60,10 @@ class CentralizedIdentityProvider(IdentityProvider):
 
         # Certificate transparency log (simplified)
         self.ct_log = []
+
+        # Freshness window + replay cache for verify_message (review 02, T-9).
+        # On by default; see identity/freshness.py for the default window.
+        self.freshness = FreshnessPolicy()
 
         # Performance tracking
         self._init_ca()
@@ -249,7 +254,11 @@ class CentralizedIdentityProvider(IdentityProvider):
         return pool
 
     def sign_message(self, vehicle_id: str, message: Dict) -> Dict:
-        """Sign V2X message with current pseudonym"""
+        """Sign V2X message with current pseudonym.
+
+        The signature covers the message AND its generation time
+        (`freshness.signed_bytes`, review 02 T-9).
+        """
         start_time = time.time()
 
         if vehicle_id not in self.vehicles:
@@ -268,8 +277,9 @@ class CentralizedIdentityProvider(IdentityProvider):
             vehicle['current_pseudonym_idx'] = (pseudonym_idx + 1) % len(vehicle['pseudonym_pool'])
             pseudonym = vehicle['pseudonym_pool'][vehicle['current_pseudonym_idx']]
 
-        # Serialize message
-        message_bytes = json.dumps(message, sort_keys=True).encode()
+        # Serialize message + generation time
+        timestamp = generation_timestamp()
+        message_bytes = signed_bytes(message, timestamp)
 
         # Sign with pseudonym private key
         signature = pseudonym['private_key'].sign(
@@ -289,7 +299,7 @@ class CentralizedIdentityProvider(IdentityProvider):
             'message': message,
             'signature': signature.hex(),
             'certificate': cert_pem,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': timestamp,
             'identity_type': 'centralized_pki'
         }
 
@@ -304,8 +314,10 @@ class CentralizedIdentityProvider(IdentityProvider):
     def verify_message(self, signed_message: Dict) -> Tuple[bool, IdentityMetrics]:
         """
         Verify signed message: CRL lookup, certificate validity window, CA
-        signature on the certificate (plus issuer name), then the message
-        signature under the certificate key. Any failure returns False.
+        signature on the certificate (plus issuer name), freshness of the
+        signed generation time and the replay cache (`self.freshness`, review
+        02 T-9), then the message signature over message + generation time
+        under the certificate key. Any failure returns False.
         """
         start_time = time.time()
         metrics = IdentityMetrics()
@@ -340,8 +352,14 @@ class CentralizedIdentityProvider(IdentityProvider):
             # that copied the CA subject. Raises on mismatch.
             cert.verify_directly_issued_by(self.ca_certificate)
 
-            # Verify signature
-            message_bytes = json.dumps(message, sort_keys=True).encode()
+            # Freshness window + replay cache (T-9)
+            timestamp = signed_message.get('timestamp')
+            message_bytes = signed_bytes(message, timestamp)
+            if self.freshness.check(timestamp, cert.serial_number, message_bytes) is not None:
+                metrics.verification_time_ms = (time.time() - start_time) * 1000
+                return False, metrics
+
+            # Verify signature (covers the generation time)
             public_key = cert.public_key()
 
             public_key.verify(
@@ -349,6 +367,7 @@ class CentralizedIdentityProvider(IdentityProvider):
                 message_bytes,
                 ec.ECDSA(hashes.SHA256())
             )
+            self.freshness.accept(cert.serial_number, message_bytes, timestamp)
 
             # Success
             elapsed = (time.time() - start_time) * 1000

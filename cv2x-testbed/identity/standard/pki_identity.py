@@ -15,6 +15,13 @@ from cryptography import x509
 from cryptography.x509.oid import NameOID, ExtensionOID
 import json
 
+try:
+    from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
+except ImportError:  # run as a script from identity/standard/
+    import os as _os, sys as _sys
+    _sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', '..'))
+    from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
+
 
 class VehiclePKIIdentity:
     """
@@ -31,6 +38,9 @@ class VehiclePKIIdentity:
         self.current_pseudonym_index = 0
         self.certificate_revocation_list = set()
         self.trust_anchor = None  # CA certificate used to verify peers' certificates
+        # Freshness window + replay cache applied when this identity verifies
+        # peers' messages (review 02, T-9). On by default.
+        self.freshness = FreshnessPolicy()
 
     def generate_keypair(self):
         """Generate ECDSA P-256 keypair for vehicle."""
@@ -148,13 +158,18 @@ class VehiclePKIIdentity:
         Args:
             message: V2X message dictionary (BSM, DENM, etc.)
 
+        The signature covers the message AND its generation time
+        (`freshness.signed_bytes`); before review 02 (T-9) the timestamp was
+        unsigned and could be rewritten.
+
         Returns:
             dict: Signed message with certificate chain
         """
         pseudonym = self.get_current_pseudonym()
 
-        # Serialize message for signing
-        message_bytes = json.dumps(message, sort_keys=True).encode()
+        # Serialize message + generation time for signing
+        timestamp = generation_timestamp()
+        message_bytes = signed_bytes(message, timestamp)
 
         # Sign with pseudonym private key
         signature = pseudonym['private_key'].sign(
@@ -172,7 +187,7 @@ class VehiclePKIIdentity:
             'certificate': pseudonym['certificate'].public_bytes(
                 serialization.Encoding.PEM
             ).decode(),
-            'timestamp': datetime.utcnow().isoformat()
+            'timestamp': timestamp
         }
 
         return signed_message
@@ -192,7 +207,12 @@ class VehiclePKIIdentity:
              public key (an ECDSA P-256 verify);
           2. the certificate validity window;
           3. the CRL (serial-number set);
-          4. the message signature under the certificate's public key.
+          4. freshness (review 02, T-9): the signed generation time lies in
+             `self.freshness`'s window and, with the replay cache on, the
+             (certificate serial, signed bytes) pair was not accepted before;
+          5. the message signature over message + generation time under the
+             certificate's public key. Only then is the message recorded in
+             the replay cache.
 
         Args:
             signed_message: Signed message package
@@ -236,8 +256,13 @@ class VehiclePKIIdentity:
             if now < cert.not_valid_before or now > cert.not_valid_after:
                 return False, (time.time() - start_time) * 1000
 
-            # Verify signature
-            message_bytes = json.dumps(message, sort_keys=True).encode()
+            # Freshness window + replay cache (T-9)
+            timestamp = signed_message.get('timestamp')
+            message_bytes = signed_bytes(message, timestamp)
+            if self.freshness.check(timestamp, cert_serial, message_bytes) is not None:
+                return False, (time.time() - start_time) * 1000
+
+            # Verify signature (covers the generation time)
             public_key = cert.public_key()
 
             public_key.verify(
@@ -245,6 +270,7 @@ class VehiclePKIIdentity:
                 message_bytes,
                 ec.ECDSA(hashes.SHA256())
             )
+            self.freshness.accept(cert_serial, message_bytes, timestamp)
 
             verification_time = (time.time() - start_time) * 1000
             return True, verification_time

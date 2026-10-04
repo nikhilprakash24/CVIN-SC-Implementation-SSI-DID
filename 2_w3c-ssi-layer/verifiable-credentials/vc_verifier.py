@@ -8,6 +8,29 @@ the signer's Ethereum address is recovered from the secp256k1 signature and
 compared against the address embedded in the issuer/holder DID (did:ethr,
 did:key) or against a trusted-issuer registry (did:mobi and others).
 
+KEY BINDING IS OFFLINE AND NON-ROTATING (review 02, S-3) -- read before
+relying on it:
+  * By default the signing key of a did:ethr / did:key DID is taken to be
+    the address IN the DID. The DID is not resolved, so key rotation,
+    delegates (ERC-1056 `veriKey`/`sigAuth`), owner changes and DID
+    deactivation recorded on-chain are invisible: a rotated-out or
+    compromised original key stays valid for that DID, and a newly added
+    key is not accepted. This is the "offline verification" the thesis
+    measures; it is not did:ethr resolution.
+  * The DID's chain id is checked only when the verifier is configured
+    with `chain_id=`. Then a DID for another chain is rejected
+    (did:ethr:0x1:A and did:ethr:0x7a69:A are different identities). A bare
+    did:ethr:<address> / did:key:<address> means chain 1 (mainnet), as
+    did-resolution/did_resolver.py treats it.
+  * Optional hook: pass `did_resolver=` (anything with `.resolve(did)`
+    returning a DID resolution result, e.g. DIDResolver). The signer must
+    then be a key listed in the resolved document under the proof's
+    verification relationship (assertionMethod for a VC, authentication
+    for a VP), and the proof's verificationMethod must be listed there.
+    The binding is then exactly as fresh as the resolver (the repository's
+    DIDResolver synthesises the document from the DID and does not read
+    the chain, so with it the hook adds structure checks, not rotation).
+
 Check pipeline for a credential:
   1. structure   — required VC DM 2.0 properties present
   2. schema      — claims validate against the registered schema
@@ -40,6 +63,7 @@ Author: Nikhil Prakash
 Thesis: MASc, UBC ECE
 """
 
+import re
 import secrets
 import time
 from collections.abc import Mapping
@@ -179,6 +203,78 @@ def address_from_did(did: str) -> Optional[str]:
     return None
 
 
+# did:ethr network names -> EIP-155 chain id. Same table and rules as
+# did-resolution/did_resolver.parse_chain_id; a test asserts they agree.
+_ETHR_NETWORKS = {
+    "mainnet": 1, "ropsten": 3, "rinkeby": 4, "goerli": 5,
+    "sepolia": 11155111, "dev": 1337, "development": 1337,
+}
+
+
+def chain_id_of(did: str) -> Optional[int]:
+    """
+    EIP-155 chain id of an address-bearing did:ethr / did:key DID (S-3).
+
+    ``did:<m>:<chain>:<address>`` -> the chain (hex ``0x7a69``, decimal
+    ``31337`` or a did:ethr network name); bare ``did:<m>:<address>`` -> 1
+    (mainnet), as DIDResolver resolves it. Returns None for other methods.
+    Raises ValueError for a malformed chain component.
+    """
+    if not isinstance(did, str):
+        return None
+    parts = did.split(":")
+    if len(parts) < 3 or parts[0] != "did" or parts[1] not in ("ethr", "key"):
+        return None
+    if len(parts) == 3:
+        return 1
+    if len(parts) != 4:
+        raise ValueError(f"unexpected {parts[1]} DID shape: {did}")
+    chain = parts[2]
+    if re.fullmatch(r"0x[0-9a-fA-F]+", chain):
+        return int(chain, 16)
+    if re.fullmatch(r"[0-9]+", chain):
+        return int(chain)
+    if chain in _ETHR_NETWORKS:
+        return _ETHR_NETWORKS[chain]
+    raise ValueError(f"invalid chain id {chain!r} in {did}")
+
+
+def _document_keys(resolution: Any, relationship: str
+                   ) -> Tuple[Optional[str], List[str], set]:
+    """
+    (error, method ids under `relationship`, addresses of those methods)
+    from a DID resolution result (object with didDocument /
+    didResolutionMetadata, or its dict form).
+    """
+    if hasattr(resolution, "to_dict"):
+        resolution = resolution.to_dict()
+    if not isinstance(resolution, Mapping):
+        return "resolver returned no result", [], set()
+    meta = resolution.get("didResolutionMetadata") or {}
+    if isinstance(meta, Mapping) and meta.get("error"):
+        return f"{meta.get('error')}: {meta.get('errorMessage')}", [], set()
+    doc = resolution.get("didDocument")
+    if hasattr(doc, "to_dict"):
+        doc = doc.to_dict()
+    if not isinstance(doc, Mapping):
+        return "no DID document", [], set()
+    if doc.get("deactivated"):
+        return "DID is deactivated", [], set()
+    methods = {vm.get("id"): vm for vm in doc.get("verificationMethod") or []
+               if isinstance(vm, Mapping)}
+    ids, addresses = [], set()
+    for entry in doc.get(relationship) or []:
+        vm = entry if isinstance(entry, Mapping) else methods.get(entry)
+        vm_id = entry.get("id") if isinstance(entry, Mapping) else entry
+        ids.append(vm_id)
+        if not isinstance(vm, Mapping):
+            continue
+        account = vm.get("blockchainAccountId") or vm.get("ethereumAddress")
+        if isinstance(account, str):
+            addresses.add(account.split(":")[-1].lower())
+    return None, ids, addresses
+
+
 def did_of(verification_method: Any) -> Optional[str]:
     """The DID part of a verificationMethod DID URL (strip #fragment)."""
     if not isinstance(verification_method, str) or \
@@ -222,6 +318,15 @@ class CredentialVerifier:
         max_proof_age_s: optional bound on the age of a VP proof's
             ``created`` (and on its being in the future).
         strict_schema: False downgrades schema violations to warnings.
+        chain_id: optional EIP-155 chain id (int) this verifier serves
+            (S-3). When set, a did:ethr / did:key issuer or holder on any
+            other chain is rejected; a bare did:ethr:<address> counts as
+            chain 1, as DIDResolver resolves it. None = no chain check.
+        did_resolver: optional object with ``resolve(did)`` (e.g.
+            DIDResolver). When set, the recovered signer must be a key of
+            the resolved DID document under the proof's relationship. When
+            None (default) the key binding is the OFFLINE, NON-ROTATING
+            "address in the DID" rule described in the module docstring.
     """
 
     REQUIRED_VC_PROPERTIES = ("@context", "type", "issuer",
@@ -239,7 +344,9 @@ class CredentialVerifier:
                  = None,
                  allow_bearer_credentials: bool = False,
                  nonce_store: Optional[NonceStore] = None,
-                 max_proof_age_s: Optional[float] = None):
+                 max_proof_age_s: Optional[float] = None,
+                 chain_id: Optional[int] = None,
+                 did_resolver: Any = None):
         self._status_registries: Dict[str, RevocationRegistry] = {}
         if isinstance(revocation_registry, RevocationRegistry):
             revocation_registry = [revocation_registry]
@@ -263,6 +370,11 @@ class CredentialVerifier:
         # used by legacy demo callers whose claims predate the registered
         # schemas. Signature/temporal/revocation checks are never relaxed.
         self.strict_schema = strict_schema
+        if chain_id is not None and (isinstance(chain_id, bool)
+                                     or not isinstance(chain_id, int)):
+            raise TypeError("chain_id must be an int (EIP-155 chain id)")
+        self.chain_id = chain_id
+        self.did_resolver = did_resolver
 
     # ------------------------------------------------------------------
     # Configuration helpers
@@ -272,6 +384,12 @@ class CredentialVerifier:
         """Make a status registry available, keyed by its registry_id."""
         if not isinstance(registry, RevocationRegistry):
             raise TypeError(f"not a RevocationRegistry: {registry!r}")
+        existing = self._status_registries.get(registry.registry_id)
+        if existing is not None and existing is not registry:
+            # A second registry under the same id would silently replace the
+            # first and change which revocations are seen (review 02 Pass 2).
+            raise ValueError(f"a different status registry with id "
+                             f"{registry.registry_id!r} is already configured")
         self._status_registries[registry.registry_id] = registry
 
     @property
@@ -512,6 +630,39 @@ class CredentialVerifier:
             except ValueError as exc:
                 result.fail(check, f"invalid proof 'created': {exc}")
 
+    def _key_binding_failure(self, did: Any, recovered: str,
+                             relationship: str,
+                             verification_method: Any) -> Optional[str]:
+        """
+        S-3 checks on top of the address match: the DID's chain (when
+        `chain_id` is configured) and, when a `did_resolver` is configured,
+        membership of the signer in the resolved document. Returns a failure
+        message or None.
+        """
+        if self.chain_id is not None:
+            try:
+                did_chain = chain_id_of(did)
+            except ValueError as exc:
+                return str(exc)
+            if did_chain is not None and did_chain != self.chain_id:
+                return (f"{did} is on chain {did_chain}; this verifier "
+                        f"accepts chain {self.chain_id} only")
+        if self.did_resolver is not None:
+            try:
+                resolution = self.did_resolver.resolve(did)
+            except Exception as exc:
+                return f"DID resolution failed: {type(exc).__name__}: {exc}"
+            error, ids, addresses = _document_keys(resolution, relationship)
+            if error:
+                return f"DID resolution of {did} failed: {error}"
+            if verification_method not in ids:
+                return (f"verificationMethod {verification_method!r} is not "
+                        f"a {relationship} method of {did}")
+            if recovered not in addresses:
+                return (f"signer {recovered} is not a {relationship} key of "
+                        f"the resolved document of {did}")
+        return None
+
     def _check_signature(self, vc: Dict[str, Any],
                          result: VerificationResult) -> None:
         proof = vc.get("proof")
@@ -560,6 +711,11 @@ class CredentialVerifier:
             result.fail("signature",
                         f"recovered signer {recovered} does not match "
                         f"issuer {issuer_did}")
+        binding = self._key_binding_failure(
+            issuer_did, recovered, "assertionMethod",
+            proof.get("verificationMethod"))
+        if binding:
+            result.fail("signature", binding)
         result.ok("signature")
 
     def _check_disclosures(self, vc: Dict[str, Any],
@@ -750,7 +906,13 @@ class CredentialVerifier:
                                f"presentation signed by {recovered}, "
                                f"not holder {holder_did}")
             else:
-                vp_result.ok("vp_signature")
+                binding = self._key_binding_failure(
+                    holder_did, recovered, "authentication",
+                    proof.get("verificationMethod"))
+                if binding:
+                    vp_result.fail("vp_signature", binding)
+                else:
+                    vp_result.ok("vp_signature")
         except Exception as exc:
             vp_result.fail("vp_signature", f"recovery failed: {exc}")
 

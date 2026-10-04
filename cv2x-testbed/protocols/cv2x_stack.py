@@ -493,7 +493,12 @@ class CV2XStack:
             crl: Certificate Revocation List (for PKI)
 
         Returns:
-            Tuple of (success, result_info)
+            Tuple of (success, result_info). With an identity manager, a
+            message whose signature (or freshness, T-9) check fails is NOT a
+            success: success is False, rx_info['success'] is False and
+            rx_info['signature_valid'] is False (review 02, T-9). A signed
+            message received without an identity manager to check it is
+            delivered unverified (signature_valid absent), as before.
         """
         # PHY layer reception
         message_bytes, rx_info = self.phy_layer.receive(
@@ -528,9 +533,12 @@ class CV2XStack:
                 self.stats['total_latency'] += rx_info['latency_ms']
 
             rx_info['message'] = message_data
-            rx_info['success'] = True
+            # Gate success on the signature check (review 02, T-9): an
+            # invalid message is received but must not count as a success.
+            success = rx_info.get('signature_valid', True) is True
+            rx_info['success'] = success
 
-            return True, rx_info
+            return success, rx_info
 
         except Exception as e:
             return False, {'error': str(e)}

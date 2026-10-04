@@ -489,12 +489,14 @@ class IdentityBenchmark:
             # Create signed message
             vehicle_id = f"VERIFY_TEST_{identity_type.value}"
             provider.register_vehicle(vehicle_id)
-            signed_message = provider.sign_message(vehicle_id, test_message)
-
             times = []
             success_count = 0
 
             for i in range(num_verifications):
+                # A fresh signed message per verification: re-verifying one
+                # packet would be a replay, which the providers reject since
+                # review 02 (T-9). Signing is outside the timed verify.
+                signed_message = provider.sign_message(vehicle_id, test_message)
                 is_valid, metrics = provider.verify_message(signed_message)
 
                 if is_valid:
