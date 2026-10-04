@@ -29,8 +29,8 @@ Three design rules follow from the audit (F1–F10):
 | `erc1056w` | same contracts, **wrapper-controlled mode** (controller hands ERC-1056 control to the wrapper at creation; all mutations via the wrapper, which tracks the vehicle owner) | as above | event log | ✅ | `adapters/erc1056w.adapter.js` |
 | `erc721` | ERC-721 CVINVehicleNFT | token *is* the identity; one contract, many tokens | rich storage (metadata struct, transfer history array, service-record array) | ✅ | `adapters/erc721.adapter.js` |
 | `erc725` | ERC-725 CVIN_DID_ERC725 (proxy/key-manager) | **one contract per identity** | storage (key map + key array) | ✅ | `adapters/erc725.adapter.js` |
-| `erc735` | ERC-735 claim holder (on top of ERC-725) | contract per identity | storage (claim map by topic) | ⏳ | `adapters/erc735.adapter.js` |
-| `erc1155` | ERC-1155 multi-token credentials | token-type per credential schema | storage (balances) | ⏳ | |
+| `erc735` | ERC-735 CVINVehicleClaimHolder (owner plays the ERC-734 MANAGEMENT key) | **one contract per identity**; claims = issuer-signed, owner-anchored | storage (claim struct incl. signature + data, topic index) | ✅ | `adapters/erc735.adapter.js` |
+| `erc1155` | ERC-1155 CVINVehicleCredential1155 | the **vehicle address** is the identity; balances = credentials (soulbound) | storage (balances, VIN maps) | ✅ | `adapters/erc1155.adapter.js` |
 | `erc725xy` | ERC-725 X/Y (LSP0-style generic data store) | contract per identity | storage (ERC725Y key/value) | ⏳ | |
 | `lsp8` | LUKSO LSP8 identifiable digital asset | token per identity, universal receiver | storage | ⏳ | |
 | `erc4337` | ERC-4337 smart account (EntryPoint + UserOperation) | account per identity | storage + bundler indirection | ⏳ | |
@@ -92,6 +92,29 @@ Credentials are W3C VCs issued **off-chain** by `2_w3c-ssi-layer/verifiable-cred
 | `V4_verify_credential` | READ | Verifier: resolve issuer key (R3/R4) + check status + verify signature | core | `validDelegate` + status read + off-chain ECDSA | `ownerOf` + status read + ECDSA | `getKey` + status read + ECDSA |
 | `V5_revoke_credential` | DELETE | Issuer revokes | core | `revokeAttribute` (event) or Status-List bit flip | `deactivate` / URI overwrite | `removeKey` |
 | `V6_status_check` | READ | Is credential C revoked? | core | event walk or status-list read | view | view |
+
+### 2.2a Realisations on the substrates added 2026-10-04
+
+| Op | ERC-735 (`erc735`) | ERC-1155 (`erc1155`) |
+|---|---|---|
+| C1 | deploy `CVINVehicleClaimHolder(vin)` by the owner (1 tx, CREATE) | `registerVehicle(vehicle, vin)` by an ISSUER (mints BIRTH_CERT) |
+| C2 | C1 + one manufacturer-signed `MANUFACTURER_CERT` claim carrying the ABI-encoded VID-I fields (2 tx) | **= C1**: no per-vehicle attribute store (`uri` is per credential *type*); VID-I attributes stay off-chain — a reportable gap |
+| R1 | `owner()` | vehicle address if `isRegistered`, else 0x0 |
+| R2 | n/a (no on-chain VIN index) | `vinHashToVehicle` |
+| R3 | `owner`, `vin`, then **event-log replay** of `ClaimAdded/Changed/Removed` (claims are not enumerable on-chain) | `vehicleVIN` + `balanceOfBatch` over the 5 types + `uri` |
+| R4 / U2 / D1 | n/a — no key management (the draft's ERC-734 is absent; owner is the only key) | n/a — no key management; soulbound tokens give operators no power |
+| U1 / U4 | `transferOwnership` | issuer re-binds BIRTH_CERT **and every credential type held** to the new address (`issuerTransferCredential` is one type per tx → 1 + #types tx) |
+| U3 | owner **self-signed** claim, topic = keccak(name), data = value (signature verified on-chain) | `issueCredential(vehicle, MAINTENANCE_BADGE, 1)` by the service centre — payload not storable |
+| U5 | n/a | n/a |
+| D2 | owner `removeClaim` | burn one MAINTENANCE_BADGE |
+| D3 | `transferOwnership(0xdEaD)` (no deactivate primitive; claims stay readable) | burn BIRTH_CERT (deregisters, clears VIN maps) |
+| V1 | n/a — the issuer key is the issuer EOA | `grantRole(ISSUER_ROLE, key)` by the admin |
+| V3 | issuer signs (identity, topic = uint(credHash), data = credHash); **owner** anchors with `addClaim` | `issueCredential(vehicle, uint(credHash), 1)` by the issuer — each credential is its own token type |
+| V5 | issuer `removeClaim` (sticky revocation) | issuer `revokeCredential` (burn) |
+| V6 | `claimExists(issuer, topic)` | `hasCredential(vehicle, type)` |
+| batch | none (sequential) | none exposed (`mintBatch` exists in ERC-1155 but the contract has no batch registration) — sequential |
+
+Lifecycle events whose primitive a substrate lacks (2, 11, 12 for both) are recorded as `n/a` and excluded from that substrate's lifetime total, which then says "excl. k n/a".
 
 ### 2.3 "Beyond CRUD" — per-operation dimensions recorded for every op
 
@@ -321,7 +344,8 @@ results/metrics/latest -> <run-id>   (symlink; the only run chapters may cite)
 - [x] Adapters: ERC-1056 (pure), ERC-1056 (wrapper), ERC-721, ERC-725 (+ conformance test)
 - [x] Scenarios: crud, lifecycle, scale, batch, throughput, resolve
 - [x] First trunk-traceable run committed under `results/metrics/latest`
-- [ ] Adapters: ERC-735, ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined (each: contract → adapter → conformance → run)
+- [x] Adapters: ERC-735, ERC-1155 (contracts from the review-02 trunk; conformance green; §2.2a)
+- [ ] Adapters: ERC-725xy, LSP8, ERC-4337, CVIN-Combined (each: adapter → conformance → run)
 - [ ] Python: `benchmark_pki_vs_erc1056.py` (closes F2)
 - [ ] Rubric scored for all substrates with evidence cells
 - [ ] External W3C DID test-suite run (closes F5)

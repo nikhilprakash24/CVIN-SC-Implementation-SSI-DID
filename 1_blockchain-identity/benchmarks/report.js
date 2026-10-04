@@ -93,7 +93,7 @@ function buildReport(runDir) {
     const cellFn = (r, a) => {
       if (!adaptersRun.includes(a)) return NOT_IMPL;
       const l = idx[a]; if (!l) return null;
-      if (r === "TOTAL") return l.lifetimeGas;
+      if (r === "TOTAL") return l.skippedEvents && l.skippedEvents.length ? `${l.lifetimeGas.toLocaleString("en-US")} (excl. ${l.skippedEvents.length} n/a)` : l.lifetimeGas;
       if (r === "SHARED_DEPLOY") return l.sharedDeployGas;
       if (r === "PER_IDENTITY_DEPLOY") return l.perIdentityDeployGas;
       if (String(r).startsWith("FLEET_")) return l.apportioned[r.slice(6)];

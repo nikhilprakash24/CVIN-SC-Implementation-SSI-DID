@@ -16,6 +16,8 @@ describe("Benchmark adapter conformance", function () {
       case "erc1056": case "erc1056w": return doc.attributes[keccak256(toUtf8Bytes(name))] === hexlify(toUtf8Bytes(value));
       case "erc721": return doc.serviceRecords.includes(value);
       case "erc725": return doc.keys.some((k) => k.key === keccak256(toUtf8Bytes(`attr:${name}:${value}`)));
+      case "erc735": return doc.claims.some((c) => c.topic === BigInt(keccak256(toUtf8Bytes(name))).toString() && c.data === hexlify(toUtf8Bytes(value)));
+      case "erc1155": return doc.credentials.MAINTENANCE_BADGE > 0; // payload not storable: presence of the badge
       default: throw new Error(`no attribute probe for ${id}`);
     }
   }
@@ -34,7 +36,7 @@ describe("Benchmark adapter conformance", function () {
         actors = makeActors(hre.ethers);
         adapter = new Adapter({ ethers: hre.ethers, actors, dataset, payloads: PAYLOADS });
         const deployed = await adapter.deploy();
-        expect(deployed.length).to.be.greaterThan(0);
+        expect(deployed).to.be.an("array"); // may be empty: contract-per-identity substrates (ERC-735) have no shared contract
       });
 
       it("C1/C2 create identity", async function () {
@@ -50,12 +52,13 @@ describe("Benchmark adapter conformance", function () {
         if (!adapter.supports("R2_resolve_by_vin")) return this.skip();
         const v = await adapter.resolveByVin(dataset[1].vin);
         // Q-13: equality with the identity that was created for this VIN, not just non-zero.
-        const expected = id === "erc1056" || id === "erc1056w" ? actors.vehicleOwner.address : id === "erc721" ? h.tokenId : undefined;
+        const expected = id === "erc1056" || id === "erc1056w" || id === "erc1155" ? actors.vehicleOwner.address : id === "erc721" ? h.tokenId : undefined;
         expect(expected !== undefined, `no R2 expectation for ${id}`).to.equal(true);
         expect(v).to.equal(expected);
       });
 
       it("U2/R4/D1 delegate lifecycle; R3 drops a revoked delegate", async function () {
+        if (!adapter.supports("U2_add_delegate")) return this.skip();
         key = hre.ethers.Wallet.createRandom();
         expect(await adapter.verifyDelegate(h, key)).to.equal(false);
         await wait(await adapter.addDelegate(h, key, PAYLOADS.ttlSeconds));
@@ -68,6 +71,7 @@ describe("Benchmark adapter conformance", function () {
       });
 
       it("rotateDelegate: new key valid, old key invalid (H-2)", async function () {
+        if (!adapter.supports("U2_add_delegate")) return this.skip();
         const k1 = hre.ethers.Wallet.createRandom();
         const k2 = hre.ethers.Wallet.createRandom();
         await wait(await adapter.addDelegate(h, k1, PAYLOADS.ttlSeconds));
@@ -103,7 +107,7 @@ describe("Benchmark adapter conformance", function () {
       });
 
       it("V1/V3/V6/V5 credential anchor + status", async function () {
-        await wait(await adapter.anchorIssuerKey(actors.issuer, actors.delegateKey));
+        if (adapter.supports("V1_issuer_key_anchor")) await wait(await adapter.anchorIssuerKey(actors.issuer, actors.delegateKey));
         const c = hre.ethers.keccak256(hre.ethers.toUtf8Bytes("cred-" + id));
         await wait(await adapter.anchorStatus(h, c));
         expect(await adapter.statusCheck(h, c)).to.equal("active");
@@ -114,7 +118,7 @@ describe("Benchmark adapter conformance", function () {
       it("V1/V3/V5 with a separate issuer (prepareIssuer) do not touch the default issuer", async function () {
         const iss = actors.extras[0];
         await adapter.prepareIssuer(iss);
-        await wait(await adapter.anchorIssuerKey(iss, actors.extras[1]));
+        if (adapter.supports("V1_issuer_key_anchor")) await wait(await adapter.anchorIssuerKey(iss, actors.extras[1]));
         const c = hre.ethers.keccak256(hre.ethers.toUtf8Bytes("cred2-" + id));
         await wait(await adapter.anchorStatus(h, c, iss));
         expect(await adapter.statusCheck(h, c, iss)).to.equal("active");
@@ -137,8 +141,10 @@ describe("Benchmark adapter conformance", function () {
           expect(doc.attributes[keccak256(toUtf8Bytes(PAYLOADS.deactivatedName))]).to.equal(hexlify(toUtf8Bytes("true")));
         } else if (id === "erc721") {
           expect((await adapter.resolveDocument(h)).attributes.active).to.equal(false);
-        } else if (id === "erc725") {
+        } else if (id === "erc725" || id === "erc1155") {
           expect(await adapter.resolveOwner(h)).to.equal(ZeroAddress);
+        } else if (id === "erc735") {
+          expect(await adapter.resolveOwner(h)).to.equal("0x000000000000000000000000000000000000dEaD");
         } else {
           throw new Error(`no D3 post-state check for ${id}`);
         }
