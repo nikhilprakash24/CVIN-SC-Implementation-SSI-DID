@@ -13,6 +13,12 @@ not: 113 of 299 DID Resolution assertions fail, all traceable to five defects
 in `DIDResolutionMetadata` / `DIDDocumentMetadata` and in error handling. DID
 URL dereferencing could not be tested because the project has no dereferencer.
 
+**Update 2026-10-04 (section 8).** Re-run on the same suite commit after the
+review-02 S-10 resolver fix: **336/441** (was 328/441); DID Resolution
+**194/299** (was 186/299), 105 failures. R5 is cleared in the resolver (one
+residual failure is a test-vector issue, R5'); R1-R4 remain. No new failures.
+Sections 3-5 describe the 2026-09-24 run and are kept as recorded.
+
 ## 1. Suite under test
 
 | Item | Value |
@@ -118,7 +124,7 @@ way, all `toBeInfraMap`. Through the jest-CLI path the same example passes
 resolution 166/299) is therefore **not** used; every extra failure in it is a
 `toBeInfraMap` artifact. All numbers below are from the jest-CLI run.
 
-## 3. Results
+## 3. Results (2026-09-24 run)
 
 Per suite (jest-CLI run, `reports/jest-cvin/cvin-cli-<suite>.json`):
 
@@ -274,7 +280,7 @@ internal 75 % should not be presented as if it were an external result.
 | `W3C_DID_TEST_SUITE.md` | this document |
 | `generate_implementations.py` | generates the suite input files from `did_resolver.py` |
 | `implementations/cvin-did-{ethr,mobi,nft}.json` | DID method entries (registered in did-identifier, did-core-properties, did-production, did-consumption) |
-| `implementations/cvin-resolver-{ethr,mobi,nft}.json` | resolver entries (registered in did-resolution) |
+| `implementations/cvin-resolver-{ethr,mobi,nft}.json` | resolver entries (registered in did-resolution). Since `f646e88` / 2026-10-04 these are the post-S-10 inputs of the section 8 run; the 2026-09-24 inputs are at `ed62314` |
 | `suite-run/run-cvin-cli.js` | jest-CLI runner used for the reported numbers (CVIN and control modes) |
 | `suite-run/run-cvin.js` | runner through the suite's `services/runSuite.js` (`globals` path; affected by the `toBeInfraMap` realm artifact, kept for transparency) |
 | `suite-run/cli-to-report.js` | converts jest `--json` output into the suite's report input format |
@@ -284,6 +290,9 @@ internal 75 % should not be presented as if it were an external result.
 | `reports/did-implementation-report.html` | the suite's own HTML report (`report/generate-report.js`) built from the CVIN jest-CLI results (identifier, core-properties, production, resolution) |
 | `reports/did-spec-test-run.latest.json` | sanitized result set that the HTML report was generated from |
 | `reports/globals-path-run-cvin-detailed-results.json` | the discarded `globals`-path run, with failure messages |
+| `reports/jest-cvin/cvin-cli-<suite>-2026-10-04.{json,txt}` | raw jest results of the section 8 re-run (CVIN) |
+| `reports/jest-control/control-cli-<suite>-2026-10-04.json` | control run on the section 8 harness (347/347) |
+| `reports/did-implementation-report-2026-10-04.html`, `reports/did-spec-test-run-2026-10-04.json` | suite HTML report and its sanitized input for the section 8 re-run |
 | `internal/w3c_compliance_report.json` | output of `cv2x-testbed/scripts/w3c_compliance_checker.py` for the comparison in section 5 |
 
 ## 7. Review 02 (2026-10-03): S-10 and changes since this run
@@ -338,3 +347,124 @@ goes from PARTIAL to PASS, and the executable score goes from 93.2 % to
 changed (T-7 is an author decision). With malformed DIDs now returning
 `invalidDid`, the two malformed-DID checks that T-7 says "PASS on any error"
 also return the right code.
+
+**Correction (2026-10-04).** The sentence above that the committed files "were
+left unchanged" stopped being true in commit `f646e88` (Pass 2 re-review),
+which regenerated `implementations/` after S-10. From then until the re-run in
+section 8 the committed inputs did not match the 2026-09-24 reports. The exact
+inputs of the 2026-09-24 run are recoverable with
+`git show ed62314:docs/conformance/implementations/<file>`.
+
+## 8. Re-run 2026-10-04 (review 02 follow-up F-B): resolver after S-10
+
+**Status: measured.** The suite was re-run against the current resolver
+(`did_resolver.py` as of `bd18057`, "S-10: resolver returns cache copies and
+correct DID error codes"; repository tree `d2e6a58`). Neither the resolver nor
+the suite was changed for this run.
+
+### 8.1 Conditions (identical procedure to sections 2-3)
+
+| Item | 2026-09-24 run | 2026-10-04 re-run |
+|---|---|---|
+| Suite | `w3c/did-test-suite` @ `939b31d07d5b…` | same commit (fresh clone, `git checkout 939b31d`) |
+| Install | `npm install` (lerna bootstrap) | same; jest 26.6.3, jest-did-matcher 0.0.1 resolved from the lockfile (npm rewrote the three `package-lock.json` files, as in any fresh install) |
+| Runtime | Node v22.22.2, npm 10.9.7 | Node **v22.22.0**, npm **10.9.4** (container image; patch-level difference only) |
+| Inputs | `generate_implementations.py` @ `ed62314` inputs | `python3 docs/conformance/generate_implementations.py docs/conformance/implementations` (same script, unchanged); diff to the `f646e88` files is timestamps only |
+| Registration / runner | `suite-run/run-cvin-cli.js cvin` and `control` (jest CLI, narrowed `default.js`, restored afterwards) | same files, unchanged |
+| Python | 3.11.15 | 3.11.15 |
+| Harness check | control 347/347 | control **347/347** (identifier 6/6, core properties 58/58, production 106/106, consumption 42/42, resolution 135/135) |
+
+The test inventory is identical: every one of the 441 CVIN tests in the new
+run has the same ancestor path and title as a test in the old run, and vice
+versa. The comparison below is therefore test-by-test.
+
+Raw output: `reports/jest-cvin/cvin-cli-<suite>-2026-10-04.{json,txt}`,
+`reports/jest-control/control-cli-<suite>-2026-10-04.json`,
+`reports/did-spec-test-run-2026-10-04.json` and
+`reports/did-implementation-report-2026-10-04.html` (suite HTML report built
+with `cli-to-report.js` + `report/generate-report.js`). The 2026-09-24 files
+are kept unchanged next to them.
+
+### 8.2 Totals and per suite (old → new)
+
+| DID Core section / suite | Tests | Passed 09-24 | Passed 10-04 | Failed 09-24 | Failed 10-04 |
+|---|---|---|---|---|---|
+| 3.1 Identifier syntax | 3 | 3 | 3 | 0 | 0 |
+| 5.x Core properties + 7.3 | 88 | 88 | 88 | 0 | 0 |
+| 6.1 / 6.3.1 Production | 48 | 48 | 48 | 0 | 0 |
+| 6.3.2 Consumption | 3 | 3 | 3 | 0 | 0 |
+| 7.1 DID Resolution | 299 | 186 | **194** | 113 | **105** |
+| **Total** | **441** | **328 (74.4 %)** | **336 (76.2 %)** | **113** | **105** |
+
+Per resolver (DID Resolution suite):
+
+| Resolver file | Tests | 09-24 passed / failed | 10-04 passed / failed | Δ |
+|---|---|---|---|---|
+| `cvin-resolver-ethr.json` | 119 | 77 / 42 | **79 / 40** | +2 |
+| `cvin-resolver-mobi.json` | 90 | 52 / 38 | **58 / 32** | +6 |
+| `cvin-resolver-nft.json` | 90 | 57 / 33 | **57 / 33** | 0 |
+
+Distinct failing normative statements: 17 → 15.
+
+### 8.3 The eight tests that changed (all failed → passed; none passed → failed)
+
+| Resolver | Execution | Test | Why it now passes |
+|---|---|---|---|
+| ethr | `did:ethr_0x1234` | 7.1 "This input is REQUIRED and the value MUST be a conformant DID" | error is now `invalidDid`, so the suite's guard (`did-resolution.js:10`: `error !== 'invalidDid'` ⇒ input must be a valid DID) no longer applies |
+| ethr | `did:ethr_0x1234` | 7.1.2 invalidDid | `invalidDid` instead of `internalError` |
+| mobi | `did:mobi:` | 7.1 "This input is REQUIRED …" | as for ethr |
+| mobi | `did:mobi:` | 7.1.2 invalidDid | `invalidDid` instead of a resolved document |
+| mobi | `did:mobi:` | 7.1 "If the resolution is not successful, this structure MUST contain an error property" | `error` is now a non-empty string |
+| mobi | `did:mobi:` | 7.1 "If the resolution is unsuccessful, this value [didDocument] MUST be empty" | `didDocument` is now `null` (was counted under R1) |
+| mobi | `did:mobi:` | 7.1.2 "The value of this property [error] MUST be a single keyword ASCII string" | `"invalidDid"` instead of `null` (was counted under R1) |
+| mobi | `did:mobi:` | 7.1.3 canonicalId "MUST be produced by … the same DID Method" | no longer evaluated against a document whose `canonicalId` is `null` (was counted under R3) |
+
+### 8.4 Root causes, updated
+
+Counts are failures in the 2026-10-04 run; line numbers refer to
+`2_w3c-ssi-layer/did-resolution/did_resolver.py` at `bd18057`.
+
+| Root cause | Location | Failures 09-24 | Failures 10-04 | Status |
+|---|---|---|---|---|
+| **R1** `error: null` / `errorMessage: null` always present, so every successful resolution is judged unsuccessful | `DIDResolutionMetadata` defaults, lines 137-138; serialised unconditionally by `asdict()` in `to_dict()`, line 164 | 24 | **22** | open (−2: the `did:mobi:` execution is now a real error, so its two R1 failures went away. Remaining: 12 on the six successful executions (document not empty ×3, stream not empty ×3, `error` not a string ×6) and the 10 "MUST be an empty metadata structure" failures, of which the 4 on error executions are really R3, kept here for comparability with section 4) |
+| **R2** `contentType` emitted on `resolve()`, including on errors | default `"application/did+ld+json"`, line 135 | 21 | **21** | open, unchanged |
+| **R3** `didDocumentMetadata` is a fixed 8-key structure with `null` placeholders, never empty on error | `DIDDocumentMetadata` dataclass, lines 142-151; `asdict()` line 166; error paths build `DIDDocumentMetadata()` at lines 279, 305, 314 | 52 | **51** | open (−1, `did:mobi:` canonicalId, see 8.3) |
+| **R4** `created` / `retrieved` not XML Datetime (`isoformat()` with microseconds and `+00:00`) | `created=` at lines 393, 455, 499, 550; `retrieved` at lines 258, 283 | 10 | **10** | open, unchanged |
+| **R5** syntax errors not reported as `invalidDid`; `did:mobi:` resolved | was `_parse_did` → `internalError` | 6 | **1** | **cleared in the resolver** (S-10). The one remaining failure is R5′ below |
+| **R5′** (new attribution, not a new failure) the `did:nft` invalid-DID test vector is syntactically valid DID | `docs/conformance/generate_implementations.py` line 76 (`"did:nft:0x1:0xabc"` registered as `invalidDidErrorOutcome`) | (1, counted in R5) | **1** | test-vector issue, not a resolver defect |
+| **Total** | | **113** | **105** | |
+
+**R5′ in detail.** For `did:nft:0x1:0xabc` the resolver now returns
+`invalidDid` (`_resolve_nft`, lines 426-428: a `did:nft` needs three
+segments). The suite's invalidDid test (`suites/did-resolution/did-resolution.js:157-160`
+at `939b31d`) asserts three things: the code is `invalidDid` (now passes),
+**and** `expect(did).not.toBeValidDid()`, **and** an empty document. The
+second assertion fails because `did:nft:0x1:0xabc` conforms to the generic
+DID Core 3.1 ABNF; it is only invalid under the `did:nft` method's own syntax.
+The suite reads `invalidDid` as "violates the generic DID syntax"; the
+resolver uses it for method-specific syntax as well (which the DID Resolution
+specification permits). In the 2026-09-24 run the same test failed one
+assertion earlier (`internalError` ≠ `invalidDid`), so it was counted under
+R5. It is not a resolver defect. It would clear only if the registered vector
+were changed to a DID that violates the generic ABNF; that was not done here,
+because changing the test inputs would change what is measured.
+
+**No new failures.** No test that passed on 2026-09-24 fails now, and no new
+failure message appears in any suite.
+
+### 8.5 Did the section 7 prediction hold?
+
+| Prediction (section 7) | Outcome |
+|---|---|
+| "R5's six failures should therefore clear" | **Mostly.** 5 of 6 cleared. The sixth (`did:nft:0x1:0xabc`) now fails on a different assertion of the same test (R5′, a vector issue, not the resolver). |
+| "R1-R4 are untouched, so most of the 113 failures remain" | **Held.** R2 and R4 are unchanged; R1 and R3 lost 2 and 1 failures as a side effect of `did:mobi:` becoming a real error. 105 of 113 remain. |
+| "A re-run may also *add* failures" (guarded tests firing on error results carrying `contentType` and the 8-key metadata) | **Did not happen.** Because of R1, the suite already treated *every* execution, including the old `did:mobi:` "success", as unsuccessful (`hasOwnProperty('error')` is true for `error: null`), so the error-guarded tests were already firing on all 10 executions in the old run. There was nothing left to newly trigger. |
+| "The 142/142 on identifiers and documents is not expected to change" | **Held.** 142/142. The CAIP-10 decimal chain-id change is not examined by any suite test (`blockchainAccountId` is not checked), so it moved no number. |
+
+Net: **328/441 → 336/441** (74.4 % → 76.2 %); DID Resolution **186/299 →
+194/299**; ethr 77 → 79/119, mobi 52 → 58/90, nft 57 → 57/90. 104 of the
+105 remaining failures come from R1-R4 in the metadata dataclasses
+(`DIDResolutionMetadata`, `DIDDocumentMetadata`) and the timestamp format;
+the remaining one is the R5′ test vector. What a fix of R1-R4 would score is
+not predicted here: removing `error: null` changes which guarded tests the
+suite evaluates, so it has to be measured.
