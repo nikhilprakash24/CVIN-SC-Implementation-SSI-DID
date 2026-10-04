@@ -35,7 +35,7 @@ Usage:
     python3 sumo_identity_integration.py             # with SUMO installed
     python3 sumo_identity_integration.py --gui       # with SUMO GUI
 
-Results are written to results/v2v_latency.json.
+Results are written to results/v2v_latency.json (override with --results PATH).
 """
 
 import sys
@@ -950,6 +950,9 @@ def main():
                         help="Vehicle count in --simulate mode (default: 50)")
     parser.add_argument("--seed", type=int, default=42,
                         help="Random seed for mock mobility (default: 42)")
+    parser.add_argument("--results", type=Path, default=None,
+                        help="Where to write the results JSON "
+                             "(default: results/v2v_latency.json next to this script)")
     args = parser.parse_args()
 
     integration = SUMOIdentityIntegration(
@@ -957,6 +960,7 @@ def main():
         use_gui=args.gui,
         num_vehicles=args.vehicles,
         seed=args.seed,
+        results_path=args.results,
     )
     integration.run_simulation(duration_seconds=args.duration)
 

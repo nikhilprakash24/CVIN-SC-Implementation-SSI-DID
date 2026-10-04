@@ -1582,6 +1582,25 @@ def use_case_12_end_of_life_decommission():
 
 # ============ MAIN ============
 
+# (number, name, function) — each function raises on failure and returns None on
+# success. Module-level so the pytest suite (sandbox/py-suites/L4-exemplar-interactions)
+# parametrises over exactly the list the CLI runner executes.
+USE_CASES = [
+    ("1", "Vehicle Manufacturing & Birth Registration", use_case_1_manufacturing),
+    ("2", "Regular Maintenance Service", use_case_2_maintenance),
+    ("3", "Ownership Transfer (Used Car Sale)", use_case_3_used_car_sale),
+    ("4", "Insurance Claim (Accident)", use_case_4_insurance_claim),
+    ("5", "Manufacturer Recall", use_case_5_manufacturer_recall),
+    ("6", "Cross-Border Vehicle Import", use_case_6_cross_border),
+    ("7", "Fleet Management", use_case_7_fleet_management),
+    ("8", "Emissions Testing & Compliance", use_case_8_emissions),
+    ("9", "Vehicle Theft & Recovery", use_case_9_theft_recovery),
+    ("10", "Autonomous Vehicle Data Sharing", use_case_10_autonomous_data),
+    ("11", "Dealership-Mediated Sale (Trade-In + Certified Resale)", use_case_11_dealership_sale),
+    ("12", "End-of-Life Decommission", use_case_12_end_of_life_decommission),
+]
+
+
 def main():
     """Run all use cases, track pass/fail honestly, exit nonzero on failure"""
     print("="*80)
@@ -1593,23 +1612,8 @@ def main():
     print()
     print("="*80)
 
-    use_cases = [
-        ("1", "Vehicle Manufacturing & Birth Registration", use_case_1_manufacturing),
-        ("2", "Regular Maintenance Service", use_case_2_maintenance),
-        ("3", "Ownership Transfer (Used Car Sale)", use_case_3_used_car_sale),
-        ("4", "Insurance Claim (Accident)", use_case_4_insurance_claim),
-        ("5", "Manufacturer Recall", use_case_5_manufacturer_recall),
-        ("6", "Cross-Border Vehicle Import", use_case_6_cross_border),
-        ("7", "Fleet Management", use_case_7_fleet_management),
-        ("8", "Emissions Testing & Compliance", use_case_8_emissions),
-        ("9", "Vehicle Theft & Recovery", use_case_9_theft_recovery),
-        ("10", "Autonomous Vehicle Data Sharing", use_case_10_autonomous_data),
-        ("11", "Dealership-Mediated Sale (Trade-In + Certified Resale)", use_case_11_dealership_sale),
-        ("12", "End-of-Life Decommission", use_case_12_end_of_life_decommission),
-    ]
-
     results = []  # (num, name, passed, error)
-    for num, name, func in use_cases:
+    for num, name, func in USE_CASES:
         try:
             func()
             results.append((num, name, True, None))
