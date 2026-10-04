@@ -15,14 +15,14 @@
 | ERC-725xy | `CVINVehicleERC725XY` | 21 | 7 | 14 | 4 |
 | ERC-725xy | `CVINExecuteTarget` | 4 | 1 | 3 | 1 |
 | ERC-735 | `CVINVehicleClaimHolder` | 17 | 5 | 12 | 8 |
-| ERC-1155 | `CVINVehicleCredential1155` | 31 | 11 | 20 | 11 |
+| ERC-1155 | `CVINVehicleCredential1155` | 34 | 10 | 24 | 12 |
 | ERC-4337 | `CVINVehicleAccount` | 10 | 6 | 4 | 6 |
 | ERC-4337 | `CVINMinimalEntryPoint` | 3 | 1 | 2 | 1 |
 | LSP8 | `CVINVehicleLSP8` | 21 | 6 | 15 | 6 |
 | CVIN-Combined | `CVINCombinedIdentity` | 18 | 7 | 11 | 6 |
 | MOBI-VID (I+II) | `ERC1056Registry` | 17 | 8 | 9 | 4 |
-| MOBI-VID (I+II) | `MOBIVIDRegistry` | 35 | 13 | 22 | 8 |
-| MOBI-VID (I+II) | `MOBIVIDRegistryV2` | 54 | 17 | 37 | 12 |
+| MOBI-VID (I+II) | `MOBIVIDRegistry` | 38 | 14 | 24 | 9 |
+| MOBI-VID (I+II) | `MOBIVIDRegistryV2` | 57 | 18 | 39 | 13 |
 
 ## 2. Capability families × option (count of matching functions/events; the names are listed in §3)
 
@@ -31,12 +31,12 @@
 | Identity creation (explicit) | **2** | **3** | — | **4** | **1** | **4** | **1** | **2** | — | **5** |
 | Ownership / controller change | **12** | **10** | **4** | **4** | **3** | **2** | **5** | **4** | **3** | **9** |
 | Key / delegate management | **12** | — | **4** | — | — | — | **5** | — | **5** | **3** |
-| Attributes / data store | **8** | **11** | — | **8** | — | **4** | **4** | **4** | **3** | **4** |
-| Claims / credentials | **1** | — | — | — | **16** | **9** | — | **1** | **11** | **11** |
+| Attributes / data store | **8** | **11** | — | **8** | — | **4** | **4** | **4** | **3** | **5** |
+| Claims / credentials | **1** | — | — | — | **16** | **12** | — | **1** | **11** | **11** |
 | Revocation / status | **5** | **3** | — | — | **2** | **4** | — | **2** | **2** | **11** |
 | Delegated / signed (off-chain-authorised) execution | **5** | — | **2** | **3** | — | — | **6** | — | — | — |
 | Lifecycle events / history | **4** | **9** | — | **1** | **1** | **1** | **2** | **2** | **5** | **25** |
-| Authorisation / roles | **3** | **15** | — | — | **6** | **11** | — | — | **1** | **14** |
+| Authorisation / roles | **3** | **15** | — | — | **6** | **12** | — | — | **1** | **14** |
 | Token economics (approvals, royalties, payments) | — | **10** | **1** | — | — | **5** | — | **2** | — | — |
 | VIN linkage | **5** | **4** | — | **2** | **3** | **4** | — | **2** | **1** | **2** |
 | DID / resolution helpers | **19** | **1** | — | — | — | — | — | — | **5** | **7** |
@@ -114,13 +114,13 @@ Heuristics (name regex, case-insensitive) — auditable:
 - **Identity creation (explicit):** `BIRTH_CERT`, `VehicleRegistered`, `isRegistered`, `registerVehicle`
 - **Ownership / controller change:** `safeBatchTransferFrom`, `safeTransferFrom`
 - **Attributes / data store:** `CredentialURIUpdated`, `URI`, `setTokenURI`, `uri`
-- **Claims / credentials:** `CredentialIssued`, `CredentialRevoked`, `CredentialURIUpdated`, `INSPECTION_CERT`, `ISSUER_ROLE`, `hasCredential`, `issueCredential`, `issuerTransferCredential`, `revokeCredential`
+- **Claims / credentials:** `CredentialIssued`, `CredentialRevoked`, `CredentialURIUpdated`, `INSPECTION_CERT`, `ISSUER_ROLE`, `MAX_CREDENTIAL_TYPE`, `credentialTypesOf`, `hasCredential`, `issueCredential`, `issuerTransferCredential`, `issuerTransferIdentity`, `revokeCredential`
 - **Revocation / status:** `CredentialRevoked`, `RoleRevoked`, `revokeCredential`, `revokeRole`
 - **Lifecycle events / history:** `RoleAdminChanged`
-- **Authorisation / roles:** `DEFAULT_ADMIN_ROLE`, `ISSUER_ROLE`, `RoleAdminChanged`, `RoleGranted`, `RoleRevoked`, `getRoleAdmin`, `grantRole`, `hasRole`, `issuerTransferCredential`, `renounceRole`, `revokeRole`
+- **Authorisation / roles:** `DEFAULT_ADMIN_ROLE`, `ISSUER_ROLE`, `RoleAdminChanged`, `RoleGranted`, `RoleRevoked`, `getRoleAdmin`, `grantRole`, `hasRole`, `issuerTransferCredential`, `issuerTransferIdentity`, `renounceRole`, `revokeRole`
 - **Token economics (approvals, royalties, payments):** `ApprovalForAll`, `balanceOf`, `balanceOfBatch`, `isApprovedForAll`, `setApprovalForAll`
 - **VIN linkage:** `vehicleForVIN`, `vehicleVIN`, `vinHashOf`, `vinHashToVehicle`
-- *Unclassified:* `INSURANCE_CERT`, `MAINTENANCE_BADGE`, `REGISTRATION`, `TransferBatch`, `TransferSingle`, `supportsInterface`
+- *Unclassified:* `INSURANCE_CERT`, `IdentityRebound`, `MAINTENANCE_BADGE`, `REGISTRATION`, `TransferBatch`, `TransferSingle`, `supportsInterface`
 
 ### ERC-4337
 - **Identity creation (explicit):** `VehicleAccountCreated`
@@ -158,14 +158,14 @@ Heuristics (name regex, case-insensitive) — auditable:
 - **Identity creation (explicit):** `VehicleBirthRegistered`, `getVehicleBirth`, `registerVehicle`, `registerVehicleBirth`, `vehicleBirths`
 - **Ownership / controller change:** `DIDOwnerChanged`, `VehicleOwnershipTransferred`, `changeOwner`, `getOwnershipHistory`, `getOwnershipHistoryCount`, `identityOwner`, `owners`, `ownershipHistory`, `transferVehicleOwnership`
 - **Key / delegate management:** `DIDDelegateChanged`, `addDelegate`, `revokeDelegate`
-- **Attributes / data store:** `DIDAttributeChanged`, `PERMANENT_ATTRIBUTE_VALIDITY`, `revokeAttribute`, `setAttribute`
+- **Attributes / data store:** `DIDAttributeChanged`, `PERMANENT_ATTRIBUTE_VALIDITY`, `VEHICLE_KEY_ATTRIBUTE`, `revokeAttribute`, `setAttribute`
 - **Claims / credentials:** `EventAttested`, `IssuerAuthorizationRevoked`, `IssuerAuthorized`, `allowedIssuers`, `attestEvent`, `authorizeIssuer`, `authorizedIssuers`, `eventAttestations`, `getEventAttestations`, `isAuthorizedIssuer`, `revokeIssuerAuthorization`
 - **Revocation / status:** `DIDRevoked`, `IssuerAuthorizationRevoked`, `ManufacturerAuthorizationRevoked`, `isRevoked`, `revokeAttribute`, `revokeDelegate`, `revokeIdentity`, `revokeIssuerAuthorization`, `revokeManufacturerAuthorization`, `revoked`, `revokedAt`
 - **Lifecycle events / history:** `DIDAttributeChanged`, `DIDDelegateChanged`, `DIDOwnerChanged`, `EventAttested`, `LifecycleEventRecorded`, `attestEvent`, `changed`, `eventAttestations`, `eventTypeCount`, `getCompleteHistory`, `getEvent`, `getEventAttestations`, `getEventTypeCount`, `getEventsByType`, `getOdometerHistory`, `getOwnershipHistory`, `getOwnershipHistoryCount`, `getVehicleEvents`, `lastChanged`, `lifecycleEvents`, `lookupByVINHash`, `ownershipHistory`, `recordLifecycleEvent`, `vehicleEventCount`, `vehicleEventIds`
 - **Authorisation / roles:** `IssuerAuthorizationRevoked`, `IssuerAuthorized`, `ManufacturerAuthorizationRevoked`, `ManufacturerAuthorized`, `allowedIssuers`, `authorizeIssuer`, `authorizeManufacturer`, `authorizedIssuers`, `authorizedManufacturers`, `isAuthorizedIssuer`, `registryAuthority`, `revokeIssuerAuthorization`, `revokeManufacturerAuthorization`, `transferRegistryAuthority`
 - **VIN linkage:** `lookupByVINHash`, `vinHashToIdentity`
 - **DID / resolution helpers:** `DIDAttributeChanged`, `DIDDelegateChanged`, `DIDOwnerChanged`, `DIDRevoked`, `getIdentityInfo`, `getVehicleDID`, `identityOwner`
-- *Unclassified:* `getVehicleInfo`, `nonce`, `updateVehicleKey`, `vehicleExists`
+- *Unclassified:* `VehicleKeyAnchored`, `anchorVehicleKey`, `getVehicleInfo`, `nonce`, `updateVehicleKey`, `vehicleExists`, `vehicleKeyAnchored`
 
 ## 4. What this matrix is and is not
 

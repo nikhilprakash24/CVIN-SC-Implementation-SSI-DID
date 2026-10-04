@@ -543,7 +543,7 @@ async function benchmarkERC1155(signers) {
       credential.issuerTransferCredential(vehicle.address, newVehicleAddress.address, BIRTH_CERT)
     ),
     1,
-    "issuerTransferCredential of the BIRTH_CERT: re-binds VIN + registration mappings to the new vehicle address. Credentials are soulbound - holder-initiated transfers revert by design."
+    "issuerTransferCredential of the BIRTH_CERT on a vehicle holding nothing else: re-binds VIN + registration mappings to the new vehicle address. Credentials are soulbound - the standard transfer entry points revert for everyone (D7 fix); an identity that still holds credentials moves atomically through issuerTransferIdentity (not benchmarked: its cost grows with the number of held types)."
   );
 
   return results;

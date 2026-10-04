@@ -1,0 +1,38 @@
+# After-Action Report 06 — The Remaining High-Severity Defects and the Conformance Follow-up
+
+**Author:** Nikhil Prakash (MASc, UBC ECE)
+**Opened:** 2026-10-04, after Report 05 closed; updated per step; closed at the end
+**Trunk at start:** `a764387`, clean, CI green
+**Input:** `docs/DEFECT_LOG.md` §C and the "next executable" list in the handback addendum 0c.
+The author said "continue".
+
+## 0. Rule for every step
+Unchanged from Report 05 §0: a fix lands only with a regression test in the layer that
+owns the path, the affected demos green, the grand runner green, and every result of
+record the fix moves regenerated or annotated (register row, delta file).
+
+## 1. Plan
+
+| # | Item | What is done | Regression test owner | Results moved |
+|---|---|---|---|---|
+| G1 | D7 / D8 — ERC-1155 BIRTH_CERT moved by a standard transfer does not re-bind the VIN; standard transfers reach unregistered addresses; burning the BIRTH_CERT orphans the other credentials; any issuer revokes any issuer's credential | override `_update` so the BIRTH_CERT is soulbound to the standard path (only `issuerTransferCredential` moves it and re-binds); block standard transfers to unregistered addresses; block burning a BIRTH_CERT while other credentials exist; revocation restricted to the issuing issuer or the admin | L2 ERC1155 suite + one security-harness scenario | ERC-1155 gas cells (transfer/revoke; register #31 extended) |
+| G2 | D11b — the vehicle key is never anchored on-chain | at registration the provider publishes `did/pub/Secp256k1/veriKey/hex` as an ERC-1056 attribute from the identity's controller; `verify_message` falls back to the on-chain attribute when no local record exists | L3 pytest (chain-free for the fallback logic) + an L4 Hardhat-backed test if the harness is cheap | none in the nine-standard table (MOBI column is an application profile; the registration gas is recorded as a note) |
+| G3 | D9 — `payToll` after `renounceOwnership` burns the toll | guard `owner() != address(0)` | L2 ERC721 suite | none |
+| G4 | D10 follow-up — the external W3C DID test suite has only run on the resolver's own fixtures | mint a `did:ethr` from `MOBIVIDRegistry` on a Hardhat node, resolve it through the resolver, feed the result to the suite's implementation files, re-run | `docs/conformance/` write-up and raw report | conformance row (register #4 note) |
+| G5 | Chapter-5 tables quote July gas values | regenerate from the 2026-10-04 `gas_benchmark.json`; mark the re-execution note resolved | — | the chapter tables (register #25/#31 are the sources) |
+
+Order: G1 and G3 together (contracts; one compile); G2 after (Python; the ERC-1056
+attribute path exists since D18/D21); G4 and G5 after the chain is settled.
+
+## 2. Execution log
+- 2026-10-04 — report opened; state check (tree clean at `a764387`); code read for G1/G3 requested.
+- **G1 (D7/D8) designed and landed.** Reading the callers showed the real problem was structural, not a missing `require`: the adapter, the benchmark, the security script and six demos all moved the BIRTH_CERT *alone*, and nothing on-chain knew which other credentials a vehicle held. Fix in `CVINVehicleCredential1155`: (i) the standard `safeTransferFrom` / `safeBatchTransferFrom` entry points are overridden to revert for everyone — no transient flag, no sender check; the issuer paths call the internal transfers directly (D7); (ii) a per-vehicle **bitmap of held credential types** maintained in `_update`, which requires credential types ≤ 255 (`MAX_CREDENTIAL_TYPE`) — the price of making the held set enumerable on-chain (decision D-G); (iii) `issuerTransferCredential`: non-BIRTH types only to a registered vehicle, the BIRTH_CERT alone only when nothing else is held; (iv) new `issuerTransferIdentity(from, to)` moves the BIRTH_CERT and every held type in one `TransferBatch` and re-binds the VIN (`IdentityRebound` event); (v) `revokeCredential(BIRTH_CERT)` refuses while other credentials are held (no orphans); (vi) `setTokenURI` emits the standard `URI` event. The flat issuer role (any issuer may revoke another's credential) is documented, not fixed, because a fungible balance carries no issuer. 13 regression tests; two older L2 tests that asserted the old behaviour updated; L1 99/99 and the smoke still pass with the adapter now using `issuerTransferIdentity` and revoking held credentials before the BIRTH_CERT. Gas: `issuerTransferCredential(BIRTH_CERT)` 86,298 on a clean vehicle; `issuerTransferIdentity` with two held types 164,830 (register #31 to be extended after the benchmark re-execution).
+- **G3 (D9) landed**: `payToll` reverts "no toll operator (ownership renounced)"; 2 regression tests (toll reaches the operator; after renounce the revert returns the ether).
+- **G2 (D11b) landed.** `MOBIVIDRegistry.anchorVehicleKey(identity, publicKey)` publishes the key as the ERC-1056 attribute `did/pub/secp256k1/veriKey/base64` (decision D-H: the name `registerVehicle`, `updateVehicleKey` and both resolvers already use, so one walk finds the key whichever path wrote it) with the 100-year validity; the registering manufacturer may anchor once and only before the first sale, the owner at any time. Both contract copies byte-identical; 4 L2 regression tests including a JS re-implementation of the resolver walk (2 hops through an unrelated later attribute). Provider: the key pair is generated *before* the birth and anchored right after it (second transaction, 69.7–69.9 k gas); `verify_message` falls back to the on-chain attribute (walk from `lastChanged`, cached) when it holds no local record. **Found on the way:** the provider's inline bootstrap ABI lacked `isRevoked`, so the D11 fix's on-chain revocation check could never have run through it — the provider now loads the compiled Hardhat artifact (cv2x-testbed/artifacts) first, and `deploy_contract` takes its bytecode from the same artifact (the `_bytecode.txt` it expected does not exist in the tree). 7 chain-free L3 tests (94 Python total); `scripts/test_mobi_vid.py` passes end to end against a Hardhat node; a separate acceptance script verified that a *second* provider with empty local state verifies a message through the real walk, rejects an impostor, and sees the on-chain revocation. `keys-delegates.js` exercises the new surface (MOBIVIDRegistryV2 57/57); manifests and matrix regenerated.
+
+## 3. Decisions
+- **D-G** — ERC-1155 credential types are bounded to 1..255 so that the set a vehicle holds is a per-vehicle bitmap the contract can enumerate (`credentialTypesOf`) and move atomically (`issuerTransferIdentity`). The alternative (an array of distinct types per vehicle) costs ~60 k gas on first issuance of a type versus ~22 k for the bitmap, and an open type space is not a property any demo or experiment relied on (the widest type used anywhere is 7). This is a model constraint and is stated in the contract NatSpec.
+- **D-H** — the anchored MOBI vehicle key uses the attribute name `did/pub/secp256k1/veriKey/base64` already used by `registerVehicle`, `updateVehicleKey`, the ERC-1056 provider and the DID resolver, rather than a new `…/hex` name, so that every existing walk finds it; the value is the raw 65-byte point (as it already was for `registerVehicle`), the "base64" in the name being historical. The manufacturer's power to anchor is one-shot and ends at the first sale.
+- **D-I** — the standard ERC-1155 transfer entry points are closed outright rather than gated: a gate that admits "issuer who is also an approved operator" is exactly what D7 exploited, and no caller in the tree used the standard path legitimately.
+
+## 4. Closing — *(written last)*

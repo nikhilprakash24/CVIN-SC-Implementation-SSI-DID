@@ -49,6 +49,20 @@ d.run(async () => {
   assert.deepEqual(valid, [telematicsKey.address]);
   d.offchain('replay-delegates', 'MOBIVIDRegistryV2.DIDDelegateChanged (logs)', `${logs.length} delegate events; latest validTo per (type, delegate) wins: currently valid = [telematics sigAuth]; backup revoked, 1-second one expired — this replay IS the verifier's "is this key authorised" check`);
 
+  // ---- D11b: anchoring the vehicle's verification key on-chain (FIXED 2026-10-04) ----
+  const birthKey = ethers.concat(['0x04', ethers.randomBytes(64)]); // uncompressed secp256k1 point, as the provider publishes it
+  await d.view('vehicle-key-attribute', 'MOBIVIDRegistryV2.VEHICLE_KEY_ATTRIBUTE', reg.VEHICLE_KEY_ATTRIBUTE(), 'the attribute name the anchored key is published under — shared with updateVehicleKey and the testbed resolvers', (v) => assert.equal(v, ethers.id('did/pub/secp256k1/veriKey/base64')));
+  await d.view('key-not-anchored-yet', 'MOBIVIDRegistryV2.vehicleKeyAnchored', reg.vehicleKeyAnchored(vehicle), 'before the fix this was the permanent state: the signing key lived only in the provider process', (v) => assert.equal(v, false));
+  await d.reverts('anchor-key-stranger', 'MOBIVIDRegistryV2.anchorVehicleKey', () => reg.connect(stranger).anchorVehicleKey(vehicle, birthKey), 'Only the identity owner or the registering manufacturer', 'FIXED (D11b): only the owner or the registering manufacturer may publish the key');
+  await d.reverts('anchor-key-bad-length', 'MOBIVIDRegistryV2.anchorVehicleKey', () => reg.connect(authority).anchorVehicleKey(vehicle, '0x0102'), 'Invalid secp256k1 public key length', '33- or 65-byte points only');
+  const rk = await d.tx('anchor-key-manufacturer', 'MOBIVIDRegistryV2.anchorVehicleKey', reg.connect(authority).anchorVehicleKey(vehicle, birthKey),
+    'FIXED (D11b): the registering manufacturer anchors the birth key once, in the birth session -> DIDAttributeChanged(veriKey, 100-year validTo, previousChange) + VehicleKeyAnchored; the provider does this right after registerVehicleBirth');
+  const ek = eventArgs(reg, rk, 'DIDAttributeChanged'); assert.equal(ek.name, ethers.id('did/pub/secp256k1/veriKey/base64')); assert.equal(ek.value, ethers.hexlify(birthKey));
+  assert.equal(eventArgs(reg, rk, 'VehicleKeyAnchored').anchoredBy, authority.address);
+  await d.view('key-anchored', 'MOBIVIDRegistryV2.vehicleKeyAnchored', reg.vehicleKeyAnchored(vehicle), 'a verifier with no off-chain record can now resolve the key by walking changed()', (v) => assert.equal(v, true));
+  await d.reverts('anchor-key-manufacturer-again', 'MOBIVIDRegistryV2.anchorVehicleKey', () => reg.connect(authority).anchorVehicleKey(vehicle, birthKey), 'Vehicle key already anchored', 'the manufacturer has no standing power over the key: once only');
+  await d.tx('anchor-key-owner-rotation', 'MOBIVIDRegistryV2.anchorVehicleKey', reg.connect(owner).anchorVehicleKey(vehicle, ethers.concat(['0x02', ethers.randomBytes(32)])), 'the owner may re-anchor at any time (lifetime-validity rotation; the newest valid attribute wins in the walk)');
+
   const newPub = ethers.toUtf8Bytes('BASE64PUBKEY-ROTATED-2026-10-04');
   await d.reverts('update-key-unauthorised', 'MOBIVIDRegistryV2.updateVehicleKey', () => reg.connect(stranger).updateVehicleKey(vehicle, newPub), 'Only owner can perform this action', 'owner-only');
   const r3 = await d.tx('update-vehicle-key', 'MOBIVIDRegistryV2.updateVehicleKey', reg.connect(owner).updateVehicleKey(vehicle, newPub), 'key rotation helper: publishes a new did/pub/secp256k1/veriKey/base64 attribute (1 year); the old key attribute is NOT revoked (comment in source: "for simplicity")');

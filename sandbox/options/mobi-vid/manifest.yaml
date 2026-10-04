@@ -67,6 +67,7 @@ families:
   functions:
   - DIDAttributeChanged
   - PERMANENT_ATTRIBUTE_VALIDITY
+  - VEHICLE_KEY_ATTRIBUTE
   - revokeAttribute
   - setAttribute
   measured: []
@@ -220,6 +221,6 @@ families:
   reason: present in the option's surface but not used by the comparison — asymmetry to discuss
   reviewed: false
 surface:
-  functions: 54
-  events: 12
+  functions: 57
+  events: 13
   provider_methods: 11

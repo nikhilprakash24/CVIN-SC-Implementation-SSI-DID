@@ -63,9 +63,12 @@ families:
   - CredentialURIUpdated
   - INSPECTION_CERT
   - ISSUER_ROLE
+  - MAX_CREDENTIAL_TYPE
+  - credentialTypesOf
   - hasCredential
   - issueCredential
   - issuerTransferCredential
+  - issuerTransferIdentity
   - revokeCredential
   measured:
   - issueCredential
@@ -108,6 +111,7 @@ families:
   - grantRole
   - hasRole
   - issuerTransferCredential
+  - issuerTransferIdentity
   - renounceRole
   - revokeRole
   measured: []
@@ -152,6 +156,6 @@ families:
   reason: no function or method in this family on this option — auto; review whether the standard defines it
   reviewed: false
 surface:
-  functions: 31
-  events: 11
+  functions: 34
+  events: 12
   provider_methods: 0

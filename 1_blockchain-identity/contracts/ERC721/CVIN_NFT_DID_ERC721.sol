@@ -71,8 +71,12 @@ contract CVIN_NFT_DID_ERC721 is ERC721, ERC721URIStorage, Ownable, ERC2981 {
     function payToll(uint256 tokenId) public payable {
         require(ownerOf(tokenId) == msg.sender, "CVIN_NFT: caller is not vehicle owner");
         require(msg.value > 0, "CVIN_NFT: toll must be greater than zero");
+        // D9 (docs/DEFECT_LOG.md, fixed 2026-10-04): after renounceOwnership the toll was
+        // forwarded to address(0) and burned. With no operator there is nobody to pay.
+        address operator = owner();
+        require(operator != address(0), "CVIN_NFT: no toll operator (ownership renounced)");
 
-        (bool sent, ) = payable(owner()).call{value: msg.value}("");
+        (bool sent, ) = payable(operator).call{value: msg.value}("");
         require(sent, "CVIN_NFT: toll transfer failed");
 
         emit TollPaid(tokenId, msg.sender, msg.value);

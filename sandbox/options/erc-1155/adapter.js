@@ -17,10 +17,10 @@
  *                                                          to the deployer (no further setup needed).
  *   create            registerVehicle(vehicle=owner, vin) [ISSUER_ROLE]  mints 1 soulbound BIRTH_CERT to the
  *                                                          owner address and binds vehicleVIN / vinHashToVehicle.
- *   changeController  issuerTransferCredential(current, newController, BIRTH_CERT) [ISSUER_ROLE]
- *                                                          re-binds the VIN index to the new address; the identity
- *                                                          ADDRESS changes (holder == identity). No-op if already held
- *                                                          (a from==to call would delete the VIN mapping on-chain).
+ *   changeController  issuerTransferIdentity(current, newController) [ISSUER_ROLE]  (since the D7 fix, 2026-10-04)
+ *                                                          moves the BIRTH_CERT together with every held credential
+ *                                                          type and re-binds the VIN index; the identity ADDRESS
+ *                                                          changes (holder == identity). No-op if already held.
  *   addKeyOrDelegate  NotApplicable                       ERC-1155 has no key / delegate model (approvals only).
  *   setAttribute      setTokenURI(BIRTH_CERT, value)      [ISSUER_ROLE]  closest write: a COLLECTION-WIDE per-credential-
  *                                                          type metadata URI; not per-identity, `key` not representable.
@@ -28,11 +28,13 @@
  *                                                          topic 1 (BIRTH_CERT, reserved for registerVehicle) is mapped
  *                                                          to INSPECTION_CERT. `data`/`signature` have no on-chain form.
  *                                                          Returns claimId = "<id>:<credentialType>".
- *   revoke(id)        revokeCredential(vehicle, BIRTH_CERT, 1) [ISSUER_ROLE]  burns the birth cert = deregisters the
- *                                                          identity (VIN mappings deleted on-chain).
+ *   revoke(id)        revokeCredential(vehicle, t, balance) for every held type t (credentialTypesOf), then
+ *                                                          revokeCredential(vehicle, BIRTH_CERT, 1) [ISSUER_ROLE]: since the
+ *                                                          D8 fix the BIRTH_CERT cannot be burned while other credentials
+ *                                                          are held (no orphans), so deregistration is N+1 transactions.
  *   revoke(claimId)   revokeCredential(vehicle, credentialType, 1) [ISSUER_ROLE]  burns one credential unit.
- *   transfer          issuerTransferCredential(current, to, BIRTH_CERT) (== changeController). Credentials are
- *                                                          SOULBOUND: holder-initiated safeTransferFrom reverts by design.
+ *   transfer          issuerTransferIdentity(current, to) (== changeController). Credentials are SOULBOUND: the
+ *                                                          standard safeTransferFrom / safeBatchTransferFrom revert for everyone.
  *   resolve           vinHashToVehicle, vehicleVIN, isRegistered, balanceOfBatch(1..5), uri(1..5)  (views only)
  *   signedOp          NotApplicable                       no signed / meta-transaction entry point.
  */
@@ -98,11 +100,12 @@ class Erc1155Adapter {
   async _rebind(id, to, label) {
     const from = await this._vehicleOf(id);
     if (from.toLowerCase() === to.toLowerCase()) {
-      return { ok: true, gasUsed: 0n, note: `no-op: ${to} already holds the BIRTH_CERT (a from==to issuerTransferCredential would delete the VIN mapping)` };
+      return { ok: true, gasUsed: 0n, note: `no-op: ${to} already holds the BIRTH_CERT` };
     }
-    const tx = await this._issuer().issuerTransferCredential(from, to, BIRTH_CERT);
+    const held = await this.contract.credentialTypesOf(from);
+    const tx = await this._issuer().issuerTransferIdentity(from, to);
     const receipt = await tx.wait();
-    return { ok: true, receipt, gasUsed: receipt.gasUsed, note: `${label}: issuer-mediated BIRTH_CERT re-binding ${from} -> ${to} (soulbound; holder cannot self-transfer)` };
+    return { ok: true, receipt, gasUsed: receipt.gasUsed, note: `${label}: issuer-mediated whole-identity re-binding ${from} -> ${to} (BIRTH_CERT + ${held.length} credential type(s); soulbound, holder cannot self-transfer)` };
   }
 
   async changeController(id, newController) { return this._rebind(id, newController, 'changeController'); }
@@ -135,9 +138,18 @@ class Erc1155Adapter {
       return { ok: true, receipt, gasUsed: receipt.gasUsed, note: `revokeCredential(type=${type}) burn` };
     }
     const vehicle = await this._vehicleOf(s);
+    // D8: the BIRTH_CERT cannot be burned while the vehicle holds other credentials.
+    const held = await this.contract.credentialTypesOf(vehicle);
+    let gasUsed = 0n;
+    for (const t of held) {
+      const bal = await this.contract.balanceOf(vehicle, t);
+      const r = await (await this._issuer().revokeCredential(vehicle, t, bal)).wait();
+      gasUsed += r.gasUsed;
+    }
     const tx = await this._issuer().revokeCredential(vehicle, BIRTH_CERT, 1n);
     const receipt = await tx.wait();
-    return { ok: true, receipt, gasUsed: receipt.gasUsed, note: 'revokeCredential(BIRTH_CERT) burn = identity deregistered (VIN mappings deleted)' };
+    gasUsed += receipt.gasUsed;
+    return { ok: true, receipt, gasUsed, note: `revokeCredential(BIRTH_CERT) burn = identity deregistered (VIN mappings deleted); ${held.length} other credential type(s) revoked first (D8 invariant)` };
   }
 
   async transfer(id, to) { return this._rebind(id, to, 'transfer'); }
@@ -188,9 +200,9 @@ class Erc1155Adapter {
       capabilities: true,
       notes: [
         'id = keccak256(vin) (contract vinHashToVehicle index) because the identity address itself changes on issuerTransferCredential.',
-        'transfer == changeController == issuerTransferCredential(BIRTH_CERT): soulbound, issuer-mediated only.',
+        'transfer == changeController == issuerTransferIdentity: BIRTH_CERT + every held credential move atomically (D7 fix); soulbound, issuer-mediated only.',
         'setAttribute == setTokenURI(BIRTH_CERT): collection-wide per-credential-type URI, not per identity.',
-        'addClaim == issueCredential; revoke(id) burns BIRTH_CERT (deregisters), revoke("<id>:<type>") burns that credential.',
+        'addClaim == issueCredential; revoke(id) burns every held credential then the BIRTH_CERT (D8: no orphans), revoke("<id>:<type>") burns that credential.',
       ],
     };
   }

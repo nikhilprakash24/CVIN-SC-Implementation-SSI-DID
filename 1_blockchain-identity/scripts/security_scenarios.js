@@ -476,7 +476,7 @@ async function scenarioERC1155(signers) {
   );
   out.identity_theft = cell(
     theft.reverted ? "DEFENDED" : "VULNERABLE",
-    "soulbound: _update blocks transfers between non-zero addresses unless msg.sender holds ISSUER_ROLE",
+    "soulbound: the standard safeTransferFrom / safeBatchTransferFrom entry points revert for everyone (D7 fix); only the issuer re-binding paths move credentials",
     `holder safeTransferFrom of BIRTH_CERT reverted: "${theft.reason}". A stolen vehicle key cannot move the identity token; only an issuer can re-bind it.`
   );
 
@@ -488,15 +488,18 @@ async function scenarioERC1155(signers) {
     `attacker self-register reverted: "${syb.reason}". Sybil cost = issuer authorisation.`
   );
 
-  // recovery: issuer-mediated re-binding of the birth cert to a fresh address.
+  // recovery: issuer-mediated re-binding of the whole identity (birth cert + the inspection
+  // credential issued above) to a fresh address — since the D7/D8 fix the BIRTH_CERT cannot
+  // leave an address that still holds credentials except through issuerTransferIdentity.
   const rec = await expectSuccess(
-    cred.connect(deployer).issuerTransferCredential(vehicle.address, newVehicle.address, BIRTH_CERT)
+    cred.connect(deployer).issuerTransferIdentity(vehicle.address, newVehicle.address)
   );
   const newBal = await cred.balanceOf(newVehicle.address, BIRTH_CERT);
+  const newInsp = await cred.balanceOf(newVehicle.address, INSPECTION);
   out.recovery = cell(
-    rec.ok && newBal === 1n ? "PARTIAL" : "VULNERABLE",
-    "issuer-mediated recovery: ISSUER_ROLE can issuerTransferCredential the BIRTH_CERT to a new vehicle address (re-binds VIN)",
-    `issuer re-bound identity to ${newVehicle.address}; balanceOf(new, BIRTH_CERT)=${newBal}. Recovery depends on a trusted issuer, not the key holder.`
+    rec.ok && newBal === 1n && newInsp === 1n ? "PARTIAL" : "VULNERABLE",
+    "issuer-mediated recovery: ISSUER_ROLE can issuerTransferIdentity the BIRTH_CERT and every held credential to a new vehicle address (re-binds VIN)",
+    `issuer re-bound identity to ${newVehicle.address}; balanceOf(new, BIRTH_CERT)=${newBal}, INSPECTION=${newInsp}. Recovery depends on a trusted issuer, not the key holder.`
   );
 
   // privacy: VIN plaintext in public vehicleVIN mapping + VehicleRegistered event.

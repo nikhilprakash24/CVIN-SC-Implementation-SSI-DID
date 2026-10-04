@@ -165,8 +165,11 @@ describe("CVINVehicleCredential1155 (ERC-1155 multi-token credentials)", functio
             expect(await credential.hasCredential(vehicle.address, INSURANCE_CERT)).to.be.false;
         });
 
-        it("burning the BIRTH_CERT deregisters the vehicle identity", async function () {
+        it("burning the BIRTH_CERT deregisters the vehicle identity (after its other credentials are revoked — D8)", async function () {
             const vinHash = ethers.keccak256(ethers.toUtf8Bytes(TEST_VIN));
+            await expect(credential.connect(issuer).revokeCredential(vehicle.address, BIRTH_CERT, 1))
+                .to.be.revertedWith("CVIN1155: revoke the vehicle's other credentials first");
+            await credential.connect(issuer).revokeCredential(vehicle.address, INSURANCE_CERT, 1);
             await credential.connect(issuer).revokeCredential(vehicle.address, BIRTH_CERT, 1);
 
             expect(await credential.isRegistered(vehicle.address)).to.be.false;
@@ -210,16 +213,23 @@ describe("CVINVehicleCredential1155 (ERC-1155 multi-token credentials)", functio
         it("issuer-mediated transfer re-binds the identity to a new vehicle address (gas sanity)", async function () {
             const vinHash = ethers.keccak256(ethers.toUtf8Bytes(TEST_VIN));
 
+            // D7/D8: the vehicle also holds a REGISTRATION credential, so the BIRTH_CERT may not
+            // move on its own; the whole identity moves through issuerTransferIdentity.
+            await expect(
+                credential.connect(issuer).issuerTransferCredential(vehicle.address, newVehicleAddress.address, BIRTH_CERT)
+            ).to.be.revertedWith("CVIN1155: identity holds other credentials (use issuerTransferIdentity)");
             const tx = await credential
                 .connect(issuer)
-                .issuerTransferCredential(vehicle.address, newVehicleAddress.address, BIRTH_CERT);
+                .issuerTransferIdentity(vehicle.address, newVehicleAddress.address);
             const receipt = await tx.wait();
-            console.log(`        [gas] ERC-1155 issuerTransferCredential (ownership transfer): ${receipt.gasUsed.toString()}`);
+            console.log(`        [gas] ERC-1155 issuerTransferIdentity (ownership transfer, BIRTH_CERT + REGISTRATION): ${receipt.gasUsed.toString()}`);
 
             expect(await credential.isRegistered(vehicle.address)).to.be.false;
             expect(await credential.isRegistered(newVehicleAddress.address)).to.be.true;
             expect(await credential.vehicleVIN(newVehicleAddress.address)).to.equal(TEST_VIN);
             expect(await credential.vinHashToVehicle(vinHash)).to.equal(newVehicleAddress.address);
+            expect(await credential.hasCredential(newVehicleAddress.address, REGISTRATION)).to.be.true;
+            expect(await credential.hasCredential(vehicle.address, REGISTRATION)).to.be.false;
         });
 
         it("rejects issuerTransferCredential from a non-issuer", async function () {
