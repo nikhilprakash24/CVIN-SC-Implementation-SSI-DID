@@ -25,7 +25,7 @@
  * call. Where relevant we also assert the protected state was not mutated.
  *
  * The accumulated matrix is written to
- *   ../../../4_comparison-framework/security-analysis/results/attack_results.json
+ *   <repo>/4_comparison-framework/security-analysis/results/attack_results.json
  * by the after() hook in securityScenarios.test.js.
  */
 
@@ -125,7 +125,8 @@ function writeMatrix(metadata) {
   const output = { ...RESULTS, metadata: { ...metadata, attacks: ATTACKS } };
   const outDir = path.resolve(
     __dirname,
-    "../../../4_comparison-framework/security-analysis/results"
+    // test/L2-identity-system/security -> repository root is four levels up (S4 layering)
+    "../../../../4_comparison-framework/security-analysis/results"
   );
   fs.mkdirSync(outDir, { recursive: true });
   const outFile = path.join(outDir, "attack_results.json");
