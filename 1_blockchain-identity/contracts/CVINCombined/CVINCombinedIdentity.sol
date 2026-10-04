@@ -64,7 +64,11 @@ contract CVINCombinedIdentity {
     /// @dev delegates[identity][delegateType][delegate] = validity expiry timestamp.
     mapping(address => mapping(bytes32 => mapping(address => uint256))) public delegates;
 
-    /// @dev Block number of the identity's last change (event-log linked list).
+    /// @dev Block number of the identity's last DID event (DIDOwnerChanged,
+    ///      DIDDelegateChanged, DIDAttributeChanged): the head of the ERC-1056
+    ///      changed -> previousChange event-log linked list. Claim add/remove
+    ///      does not touch it (REVIEW_02 K-6), so a resolver walking the chain
+    ///      never lands on a block that holds only a claim event.
     mapping(address => uint256) public changed;
 
     // ============ ERC-735-style claim state ============
@@ -266,7 +270,9 @@ contract CVINCombinedIdentity {
         });
 
         emit ClaimAdded(claimId, identity, topic, scheme, issuer, signature, data, uri);
-        changed[identity] = block.number;
+        // changed[] is deliberately NOT advanced (REVIEW_02 K-6): it is the
+        // ERC-1056 DID-event chain head, and ClaimAdded carries no
+        // previousChange. Claim history is indexed by its own events.
     }
 
     /// @notice Remove a claim (identity owner or the claim's issuer).
@@ -304,7 +310,7 @@ contract CVINCombinedIdentity {
         }
 
         emit ClaimRemoved(claimId, identity, claim.topic, claim.issuer);
-        changed[identity] = block.number;
+        // changed[] is not advanced (K-6), see addClaim.
     }
 
     /// @notice O(1) claim lookup for on-chain verifiers.
