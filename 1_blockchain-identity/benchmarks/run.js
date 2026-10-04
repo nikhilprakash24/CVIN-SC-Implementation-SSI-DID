@@ -60,6 +60,10 @@ async function main() {
   const latestBlock = await hre.ethers.provider.getBlock("latest");
   const meta = {
     runId, commit: git("rev-parse HEAD"), commitShort: sha, branch: git("rev-parse --abbrev-ref HEAD"),
+    // Tree hashes survive a rebase that touches nothing under 1_blockchain-identity:
+    // a run is reproducible from any commit whose harnessTree equals this value.
+    harnessTree: git("rev-parse HEAD:1_blockchain-identity"),
+    contractsTree: git("rev-parse HEAD:1_blockchain-identity/contracts"),
     dirty: (git("status --porcelain") || "").length > 0,
     date: new Date().toISOString(),
     node: process.version, hardhat: require("hardhat/package.json").version, ethers: hre.ethers.version,
