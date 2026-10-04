@@ -35,7 +35,7 @@ def run_pki_benchmark():
     vehicle.request_pseudonym_certificates(ca, count=20)
 
     # Run benchmark
-    benchmark = IdentitySystemBenchmark("PKI-Benchmark")
+    benchmark = IdentitySystemBenchmark("PKI-Benchmark", ca=ca)
     metrics = benchmark.run_full_benchmark(vehicle, "PKI")
 
     return metrics
