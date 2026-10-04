@@ -2,7 +2,7 @@
 % Requires \usepackage{booktabs}. \dag is standard LaTeX.
 \begin{table}[htbp]
   \centering
-  \caption{Realization of MOBI VID's three canonical operations across blockchain identity backends (rows: backends). Each operation cell reports the measured \texttt{gasUsed} of one transaction using the backend's native primitives on the existing contract; a dagger (\dag) marks a non-native / approximate mapping (the backend genuinely lacks the concept, so the figure is the closest honest analogue, not a faithful realization). The final column is the fidelity score: the count of the five MOBI VID concepts (birth anchoring, lifecycle events, multi-party attestation, verifiable claims, revocation) the backend supports natively. Measured on a local Hardhat network (chain id 31337) with Solidity 0.8.24 (optimizer, 200 runs, via-IR) and OpenZeppelin 5.0.2, 2026-10-03.}
+  \caption{Realization of MOBI VID's three canonical operations across blockchain identity backends (rows: backends). Each operation cell reports the measured \texttt{gasUsed} of one transaction using the backend's native primitives on the existing contract; a dagger (\dag) marks a non-native / approximate mapping (the backend genuinely lacks the concept, so the figure is the closest honest analogue, not a faithful realization). The final column is the fidelity score: the count of the five MOBI VID concepts (birth anchoring, lifecycle events, multi-party attestation, verifiable claims, revocation) the backend supports natively. Measured on a local Hardhat network (chain id 31337) with Solidity 0.8.24 (optimizer, 200 runs, via-IR) and OpenZeppelin 5.0.2, 2026-10-04.}
   \label{tab:mobi-vid-backends}
   \footnotesize
   \setlength{\tabcolsep}{5pt}
@@ -12,10 +12,10 @@
     Backend & Birth attestation (VID I) & Lifecycle event (VID II) & Third-party attestation & Fidelity ($/5$) \\
     \midrule
     ERC-1056 & 51,944 & 34,928 & 61,501\,\dag & 3/5 \\
-    ERC-735 & 292,661 & 292,696 & 292,708 & 5/5 \\
+    ERC-735 & 292,683 & 292,718 & 292,730 & 5/5 \\
     ERC-1155 & 103,913 & 57,147 & 57,147\,\dag & 3/5 \\
-    CVIN-Combined & 51,742 & 34,666 & 337,323 & 5/5 \\
-    MOBI-VID-V2 & 299,143 & 306,941 & 192,683 & 5/5 \\
+    CVIN-Combined & 51,766 & 34,690 & 332,527 & 5/5 \\
+    MOBI-VID-V2 & 299,143 & 307,166 & 192,683 & 5/5 \\
     \bottomrule
   \end{tabular}}
 \end{table}
