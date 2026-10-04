@@ -26,6 +26,7 @@ Outputs (written to ./results/):
   - onchain_security.json   (produced by the Hardhat script)
   - security_matrix.json    (merged standards x threat-categories matrix)
   - security_comparison.tex (booktabs LaTeX table for the thesis)
+  - security_matrix.csv     (flat outcome table + Sybil-cost proxy gas)
 
 Threat categories (columns):
   impersonation, replay, identity_theft, sybil, recovery, privacy
@@ -376,6 +377,28 @@ def generate_latex(matrix):
     return "\n".join(lines) + "\n"
 
 
+def write_matrix_csv(matrix, path):
+    """Flat CSV of the matrix: one row per standard (plus the off-chain SSI
+    row), one outcome column per threat category (``*`` suffix = reasoned),
+    plus the Sybil-cost proxy gas."""
+    import csv
+    rows = [(std, matrix["standards"][std]) for std in STD_ORDER]
+    rows.append(("W3C-VC/VP", matrix["offchain_ssi"]["W3C-VC/VP"]))
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f, lineterminator="\n")
+        w.writerow(["standard"] + CATEGORIES + ["sybil_cost_proxy_gas"])
+        for std, cells in rows:
+            out = []
+            for cat in CATEGORIES:
+                c = cells[cat]
+                out.append(c["outcome"] + ("*" if c.get("method") == "reasoned" else ""))
+            gas = cells["sybil"].get("cost_proxy_gas")
+            w.writerow([std] + out + ["" if gas is None else gas])
+        w.writerow([])
+        w.writerow(["Legend", "* = reasoned (structural absence from verified source); others executed",
+                    "sybil_cost_proxy_gas = createIdentity gasUsed from 4_comparison-framework/results/gas_benchmark.json"])
+
+
 # ---------------------------------------------------------------------------
 # Console rendering
 # ---------------------------------------------------------------------------
@@ -434,9 +457,13 @@ def main():
     with open(tex_path, "w") as f:
         f.write(generate_latex(matrix))
 
+    csv_path = os.path.join(RESULTS_DIR, "security_matrix.csv")
+    write_matrix_csv(matrix, csv_path)
+
     print_matrix(matrix)
     print(f"\nWrote {matrix_path}")
     print(f"Wrote {tex_path}")
+    print(f"Wrote {csv_path}")
 
 
 if __name__ == "__main__":

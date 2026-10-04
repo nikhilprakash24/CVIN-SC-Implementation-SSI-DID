@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "CVIN Thrust 5 \u2014 V2X security-comparison matrix (executed attack suite)",
-    "generated": "2026-07-19T21:09:18Z",
+    "generated": "2026-10-04T09:14:25Z",
     "categories": [
       "impersonation",
       "replay",
@@ -81,9 +81,9 @@
       "sybil": {
         "outcome": "VULNERABLE",
         "mechanism": "no issuer gating; every Ethereum address is already a DID (zero-cost implicit creation)",
-        "evidence": "attacker created 5/5 independent DIDs unchallenged. Identity creation is permissionless and effectively free. createIdentity gas (Sybil-cost proxy) = 52,612.",
+        "evidence": "attacker created 5/5 independent DIDs unchallenged. Identity creation is permissionless and effectively free. createIdentity gas (Sybil-cost proxy) = 52,594.",
         "method": "executed",
-        "cost_proxy_gas": 52612
+        "cost_proxy_gas": 52594
       },
       "recovery": {
         "outcome": "VULNERABLE",
@@ -120,9 +120,9 @@
       "sybil": {
         "outcome": "DEFENDED",
         "mechanism": "identity minting gated by MANUFACTURER_ROLE; unprivileged attacker cannot create identities",
-        "evidence": "attacker self-mint reverted: \"VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0xeefb95e842a3287179d933b4460be539a1d5af11aa8b325bb45c5c8dc92de4ed\")'\". Sybil cost = manufacturer authorisation, not just gas. createIdentity gas (Sybil-cost proxy) = 542,429.",
+        "evidence": "attacker self-mint reverted: \"VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0xeefb95e842a3287179d933b4460be539a1d5af11aa8b325bb45c5c8dc92de4ed\")'\". Sybil cost = manufacturer authorisation, not just gas. createIdentity gas (Sybil-cost proxy) = 542,378.",
         "method": "executed",
-        "cost_proxy_gas": 542429
+        "cost_proxy_gas": 542378
       },
       "recovery": {
         "outcome": "VULNERABLE",
@@ -159,9 +159,9 @@
       "sybil": {
         "outcome": "PARTIAL",
         "mechanism": "permissionless per-identity contract deployment; the only Sybil barrier is deployment gas (~529k each)",
-        "evidence": "attacker deployed 3/3 independent identity contracts with no authorisation. Cost-gated only, not issuer-gated. createIdentity gas (Sybil-cost proxy) = 528,647.",
+        "evidence": "attacker deployed 3/3 independent identity contracts with no authorisation. Cost-gated only, not issuer-gated. createIdentity gas (Sybil-cost proxy) = 519,384.",
         "method": "executed",
-        "cost_proxy_gas": 528647
+        "cost_proxy_gas": 519384
       },
       "recovery": {
         "outcome": "VULNERABLE",
@@ -198,9 +198,9 @@
       "sybil": {
         "outcome": "PARTIAL",
         "mechanism": "permissionless per-identity contract deployment; Sybil barrier is deployment gas only (~1.40M each \u2014 the most expensive to spam)",
-        "evidence": "attacker deployed 3/3 claim-holder identities unchallenged. Cost-gated only; claims themselves still need a trusted issuer signature. createIdentity gas (Sybil-cost proxy) = 1,404,108.",
+        "evidence": "attacker deployed 3/3 claim-holder identities unchallenged. Cost-gated only; claims themselves still need a trusted issuer signature. createIdentity gas (Sybil-cost proxy) = 1,535,776.",
         "method": "executed",
-        "cost_proxy_gas": 1404108
+        "cost_proxy_gas": 1535776
       },
       "recovery": {
         "outcome": "VULNERABLE",
@@ -237,9 +237,9 @@
       "sybil": {
         "outcome": "DEFENDED",
         "mechanism": "identity registration gated by ISSUER_ROLE",
-        "evidence": "attacker self-register reverted: \"VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122\")'\". Sybil cost = issuer authorisation. createIdentity gas (Sybil-cost proxy) = 103,905.",
+        "evidence": "attacker self-register reverted: \"VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122\")'\". Sybil cost = issuer authorisation. createIdentity gas (Sybil-cost proxy) = 103,913.",
         "method": "executed",
-        "cost_proxy_gas": 103905
+        "cost_proxy_gas": 103913
       },
       "recovery": {
         "outcome": "PARTIAL",
@@ -276,9 +276,9 @@
       "sybil": {
         "outcome": "PARTIAL",
         "mechanism": "permissionless smart-account deployment; Sybil barrier is deployment gas only (~768k each)",
-        "evidence": "attacker deployed 3/3 accounts unchallenged. Cost-gated only, not issuer-gated. createIdentity gas (Sybil-cost proxy) = 768,204.",
+        "evidence": "attacker deployed 3/3 accounts unchallenged. Cost-gated only, not issuer-gated. createIdentity gas (Sybil-cost proxy) = 759,088.",
         "method": "executed",
-        "cost_proxy_gas": 768204
+        "cost_proxy_gas": 759088
       },
       "recovery": {
         "outcome": "DEFENDED",
@@ -315,9 +315,9 @@
       "sybil": {
         "outcome": "DEFENDED",
         "mechanism": "identity minting gated by the issuing authority (onlyOwner)",
-        "evidence": "attacker self-mint reverted: \"VM Exception while processing transaction: reverted with reason string 'LSP8: caller is not the contract owner'\". Sybil cost = authority authorisation. createIdentity gas (Sybil-cost proxy) = 149,352.",
+        "evidence": "attacker self-mint reverted: \"VM Exception while processing transaction: reverted with reason string 'LSP8: caller is not the contract owner'\". Sybil cost = authority authorisation. createIdentity gas (Sybil-cost proxy) = 149,615.",
         "method": "executed",
-        "cost_proxy_gas": 149352
+        "cost_proxy_gas": 149615
       },
       "recovery": {
         "outcome": "PARTIAL",
@@ -354,9 +354,9 @@
       "sybil": {
         "outcome": "DEFENDED",
         "mechanism": "identity creation gated by onlyAuthorizedManufacturer AND VIN-hash uniqueness; highest per-identity cost (~299k gas)",
-        "evidence": "attacker registerVehicleBirth reverted: \"VM Exception while processing transaction: reverted with reason string 'Only authorized manufacturers can register vehicles'\". Strongest Sybil resistance: manufacturer authorisation + unique-VIN enforcement. createIdentity gas (Sybil-cost proxy) = 298,923.",
+        "evidence": "attacker registerVehicleBirth reverted: \"VM Exception while processing transaction: reverted with reason string 'Only authorized manufacturers can register vehicles'\". Strongest Sybil resistance: manufacturer authorisation + unique-VIN enforcement. createIdentity gas (Sybil-cost proxy) = 299,143.",
         "method": "executed",
-        "cost_proxy_gas": 298923
+        "cost_proxy_gas": 299143
       },
       "recovery": {
         "outcome": "VULNERABLE",
@@ -393,9 +393,9 @@
       "sybil": {
         "outcome": "VULNERABLE",
         "mechanism": "ERC-1056 side: every address is an implicit identity; no issuer gating; near-zero creation cost (~52k first attribute write)",
-        "evidence": "attacker created 5/5 independent identities unchallenged. Safety-critical CLAIMS still need a trusted issuer signature, but base identities are free/permissionless. createIdentity gas (Sybil-cost proxy) = 52,178.",
+        "evidence": "attacker created 5/5 independent identities unchallenged. Safety-critical CLAIMS still need a trusted issuer signature, but base identities are free/permissionless. createIdentity gas (Sybil-cost proxy) = 52,216.",
         "method": "executed",
-        "cost_proxy_gas": 52178
+        "cost_proxy_gas": 52216
       },
       "recovery": {
         "outcome": "VULNERABLE",
@@ -416,7 +416,7 @@
       "impersonation": {
         "outcome": "DEFENDED",
         "mechanism": "issuer signature recovered via secp256k1 and matched against the address embedded in the issuer DID (or a trusted-issuer registry)",
-        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0xe776abdafd78b60105ca2ee5771e4b2942c1c26f does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0x5df7e065b88eaa926022fd2a8a3cdeac86426085 does not match issuer did:ethr:0x1:0x1400fd79029AcCBCE5D0fC8451f5019943524756']).",
+        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0x0465e1586157bed3c544bd0d513a625c04fafa42 does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0xad6ad99de770dd5afac304a66e1cf4401c3016cd does not match issuer did:ethr:0x1:0x316327CB2D94CE79D654194f53E0b056Fe9B975d']).",
         "method": "executed"
       },
       "replay": {
@@ -428,7 +428,7 @@
       "identity_theft": {
         "outcome": "DEFENDED",
         "mechanism": "holder binding: the VP must be signed by the key controlling the holder DID; a stolen credential is unusable without the holder key",
-        "evidence": "thief (same holder DID, wrong key) presentation rejected (errors: ['[vp_signature] presentation signed by 0x457e188501e278de1db8d3d8441aa5010b1e5ac0, not holder did:ethr:0x1:0x89eC0077566156E63Ae27e7956dB34b4B38Bc115']). A copied/stolen credential cannot be replayed by a third party.",
+        "evidence": "thief (same holder DID, wrong key) presentation rejected (errors: ['[vp_signature] presentation signed by 0xaf32b113b13c2f3ba97aa4806b3b0b419e0490e4, not holder did:ethr:0x1:0xF3a8333939C5c2a9c2AFE1d0F61909eC1A7d0Fba']). A copied/stolen credential cannot be replayed by a third party.",
         "method": "executed"
       },
       "sybil": {

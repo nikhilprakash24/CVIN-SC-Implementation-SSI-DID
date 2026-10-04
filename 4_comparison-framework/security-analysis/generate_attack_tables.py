@@ -10,10 +10,16 @@ thesis-ready security tables:
   ./results/attack_results.tex  - LaTeX booktabs tabular
 
 Layout mirrors the gas-comparison table: STANDARDS AS ROWS, attack scenarios as
-columns. Each cell is the REAL observed attack outcome recorded on-chain:
-  DEFENDED   - the malicious transaction reverted (defense held)
-  VULNERABLE - the malicious transaction succeeded (a finding)
-  N/A        - the attack does not apply to the standard's identity model
+columns. Each cell is the REAL observed attack outcome recorded on-chain,
+classified by the strict harness (test/security/attackHarness.js):
+  DEFENDED          - the malicious transaction reverted WITH the documented
+                      expected reason / custom error (args included) of the
+                      named defense (cell field `expectedRevert`)
+  UNEXPECTED-REVERT - it reverted, but for another reason (not counted as
+                      defended)
+  FAILED-TO-RUN     - the attack threw a non-revert error and never executed
+  VULNERABLE        - the malicious transaction was mined (a finding)
+  N/A               - the attack does not apply to the standard's identity model
 A "Defended" summary column reports defended / applicable per standard.
 
 Usage:
@@ -34,6 +40,8 @@ DEFAULT_INPUT = RESULTS_DIR / "attack_results.json"
 OUTCOME_DISPLAY = {
     "DEFENDED": "DEFENDED",
     "VULNERABLE": "VULNERABLE",
+    "UNEXPECTED-REVERT": "UNEXPECTED-REVERT",
+    "FAILED-TO-RUN": "FAILED-TO-RUN",
     "N/A": "—",  # em dash, matching the gas table's unsupported marker
 }
 
@@ -132,7 +140,9 @@ def write_csv(data, standards, attacks, metadata, out_path: Path):
         writer.writerow([])
         writer.writerow([
             "Legend",
-            "DEFENDED = malicious tx reverted",
+            "DEFENDED = malicious tx reverted with the documented expected reason/custom error of the named defense",
+            "UNEXPECTED-REVERT = reverted for another reason (not counted as defended)",
+            "FAILED-TO-RUN = attack threw a non-revert error and never executed",
             "VULNERABLE = malicious tx mined",
             "— = attack N/A to this standard's model",
         ])
@@ -160,7 +170,9 @@ def write_tex(data, standards, attacks, metadata, out_path: Path):
         "(rows: standards, columns: attack scenarios). "
         "Each cell is the real observed outcome of executing a concrete "
         "adversarial transaction against the deployed contract: "
-        "\\checkmark{} = DEFENDED (the malicious transaction reverted), "
+        "\\checkmark{} = DEFENDED (the malicious transaction reverted with the "
+        "documented expected revert reason or custom error of the named defense; "
+        "a revert for any other reason is not counted as defended), "
         "$\\times$ = VULNERABLE (it was mined), "
         "\\textemdash{} = attack not applicable to the standard's identity model. "
         "The final column reports defended attacks out of those applicable. "
