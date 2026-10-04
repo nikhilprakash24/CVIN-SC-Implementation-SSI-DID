@@ -17,5 +17,16 @@ cv2x-testbed/scripts/comparison_results.json
 # Benchmark harness: only the promoted latest run is tracked
 1_blockchain-identity/results/metrics/runs/
 
+# cv2x-testbed Hardhat output (REVIEW_02 Q-9). Only artifacts/contracts/** is
+# tracked: the Python providers, tests/conftest.py and
+# experiment_pki_vs_erc1056.py --deploy load those three registry artifacts
+# without a compile step. Regenerate them with `npx hardhat compile` in
+# cv2x-testbed (solc 0.8.20, optimizer 200, no viaIR, evm paris) whenever
+# cv2x-testbed/contracts/*.sol changes. Everything else Hardhat writes there
+# (build-info, library artifacts such as @openzeppelin/) is build output.
+cv2x-testbed/artifacts/*
+!cv2x-testbed/artifacts/contracts/
+cv2x-testbed/cache/
+
 # Claude Code agent worktrees (local only)
 .claude/worktrees/

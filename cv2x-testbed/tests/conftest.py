@@ -44,10 +44,10 @@ def load_artifact(name: str) -> dict:
     """
     Compiled contract from $CV2X_TEST_ARTIFACTS_DIR (default cv2x-testbed/artifacts).
 
-    NOTE: the tracked artifacts/contracts/MOBIVIDRegistry.sol artifact predates
-    the source fix in bddbc42 (registerVehicleBirth overflows with it; review
-    02 Q-9), so the on-chain MOBI tests need a fresh `npx hardhat compile`
-    output. The tracked ERC1056Registry artifact matches its source.
+    The tracked artifacts/contracts/** were regenerated from the current
+    contracts/*.sol (review 02 Q-9, after the P1-K K-3/K-4 fixes) with the
+    testbed's own compiler settings (solc 0.8.20, optimizer 200, evm paris).
+    Re-run `npx hardhat compile` here whenever a contract source changes.
     """
     base = os.environ.get('CV2X_TEST_ARTIFACTS_DIR', os.path.join(ROOT, 'artifacts'))
     with open(os.path.join(base, 'contracts', f'{name}.sol', f'{name}.json')) as f:
