@@ -28,7 +28,7 @@ provenance and must not be cited in chapters.
 | Where did each idea, decision and source come from? | `PROVENANCE.md`, `SOURCES.md`, `docs/DEVELOPMENT_HISTORY.md`, `docs/artifacts/` (provenance dossiers, `docs/ARTIFACTS_MANIFEST.md`) | attribution: hypotheses, thrusts and design decisions are the author's |
 | What is the plan and what is needed from the author? | `docs/AFTER_ACTION_REPORT.md` (integration) + `META_COMMENTARY.md` (living handoff) | `MASTER_UPDATE.md` §5–§7 were the pre-merge version of the same lists |
 | What was this research originally asked to be, and how is it to be done? | `docs/ORIGINAL_PROMPT_AND_DIRECTION.md` | verbatim original direction (A), the author's working directives (B), and where each stands (C) |
-| How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-09-30.md` | the single file to read first when picking the work up |
+| How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-10-04.md` | the single file to read first when picking the work up (supersedes `HANDBACK_2026-09-30.md`) |
 | How is a substrate measured operation by operation (CRUD and beyond), and what did it show? | `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md` (method: 18-op catalogue, scenarios, falsifiers) + `HANDOFF-DATA-COLLECTION-FRAMEWORK.md` (results and hypothesis verdicts) | harness in `1_blockchain-identity/benchmarks/`; numbers via register #29–#31 only |
 | What did the code-level review find, and what was fixed? | `docs/REVIEW_02_CODEBASE.md` (findings K/H/S/T/Q), `docs/PLAN_REVIEW_02.md`, `docs/review02/PASS*_*.md` (per-stream changes), `docs/AFTER_ACTION_REPORT_03.md` | review 2, 2026-10-03; complements `AUDIT_01` (claims) and `RESEARCH_AUDIT` (validity) |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
