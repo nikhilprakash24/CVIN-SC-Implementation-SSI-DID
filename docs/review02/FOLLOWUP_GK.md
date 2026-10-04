@@ -1,3 +1,5 @@
+> **Register numbering (applied 2026-10-04):** the rows proposed below as #36 and #37 were entered as **#37** (probe refresh) and **#38** (M5); a parallel session had already taken #36.
+
 # Follow-up stream G-K: one-call freshness-k refresh and M5 pseudonym pool
 
 **Date:** 2026-10-04 · **Author:** Nikhil Prakash

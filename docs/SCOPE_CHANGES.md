@@ -1,44 +1,16 @@
-# Scope Change Log
 
-**Author:** Nikhil Prakash (MASc, UBC ECE)
-**Started:** 2026-09-24 (closes audit finding F10)
 
-Scope moves in a research master's are normal; unrecorded scope moves are a
-liability at the defence. Every entry here has a date, what changed, why,
-where the decision is evidenced, and how the thesis will treat it. Where the
-reason has been **reconstructed** from the repository history rather than
-recorded at the time, it says so, and the author should confirm or correct
-it.
-
-| ID | Date | Item | Change | Reason | Evidence | Thesis treatment |
-|---|---|---|---|---|---|---|
-| SC-01 | 2025-11 → 2026-09 | Position-falsification detection (>95 % accuracy), roadmap success criterion | **Deferred** | *Reconstructed:* misbehaviour detection is kinematic-plausibility / ML work, a separate research field; it has no identity-layer contribution and would not discriminate between the identity standards under comparison. | `CV2X_REALISTIC_ROADMAP.md` §Success Criteria (target); no implementation in any commit | Future work, ch. 7; mention in ch. 3 scope as "misbehaviour detection assumed external" |
-| SC-02 | 2025-11 → 2026-09 | Privacy analysis ("does blockchain expose more data than centralized?") | **Deferred, partially subsumed** | *Reconstructed:* VC layer and MOBI VID were prioritised on the critical path (`RESEARCH_THRUSTS_REPORT.md` §3). VIN hashing in MOBI VID and the selective-disclosure design address part of it, but no adversary-observation analysis was written. | roadmap RQ3; `MOBI_VID2_SSI_DESIGN.md`; VC layer selective disclosure | Add a bounded "on-chain observability" section to the security chapter (what a passive chain observer learns per standard); full linkability analysis → future work |
-| SC-03 | 2025-11 → 2026-09 | V2 design questions 8–10: optimal PKI–DID hybrid, ML misbehaviour detection, 5G NR-V2X feasibility | **Demoted to future work** | PhD-scale; not required to test H1–H5. | `cv2x-testbed/V2_DESIGN.md` §Research Questions | Ch. 7 future work, explicitly |
-| SC-04 | 2026-09-24 | Contribution claims "first comprehensive comparison" / "first working implementation" | **Rewording pending** | Priority claims invite literature counter-examples (e.g. Springer 2025 SSI V2V authentication chapter). | `docs/AUDIT_01_ORIGINAL_GOALS.md` §1.3, §4 | Reword to "measured, domain-constrained, reproducible" |
-| SC-05 | 2026-09-24 | "Throughput" in RQ1 | **Decision pending** | Nothing on the trunk measures TPS; either measure per-registry throughput on Hardhat/Sepolia or remove the word from RQ1. | audit §4 | Decide before ch. 3 is frozen |
-| SC-06 | 2026-09-24 | W3C VC Data Model version | **Decision pending — facts established** | The code is mixed: the `https://www.w3.org/2018/credentials/v1` context (VC DM 1.1) is emitted in three places and `https://www.w3.org/ns/credentials/v2` (VC DM 2.0) in one. The pre-merge checker scored against v1.1; the merged (analysis-lineage) checker scores against **v2.0** (27/29), so the instrument has already moved to 2.0 while some emitted contexts have not. Recommendation: migrate to 2.0 (the current W3C Recommendation), update the checker's clause list, and re-score — or keep 1.1 and drop every "2.0" mention. | `grep` over `2_w3c-ssi-layer`, `cv2x-testbed/identity`; `w3c_compliance_checker.py` lines 7/40/305 | Whichever is chosen, one version everywhere and the checker re-run |
-| SC-07 | 2026-09-24 | Nine standards → three on the canonical trunk | **Resolved the same day: analysis lineage merged** (`7118b83`, 53 commits) | ERC-735, 1155, LSP8, 4337, CVIN-Combined and the 725xy contract were only in the bundle lineage; after the merge all nine compile (47 contracts) and 219 Hardhat tests pass on the trunk. | audit F1; merge commit; `AFTER_ACTION_REPORT.md` §3 | Chapters may cite nine, with the claim register's operation definitions (#6, #25) |
-| SC-08 | 2026-09-24 | `CVIN_NFT_DID_ERC721` interface | **Extended** with `recordEntry`, `getEntryTimestamp`, `payToll` | ERC-721 tests were written against these functions; no contract revision ever had them. Added so the toll use case is exercisable. Changes the ERC-721 deployment size (1,325,111 gas). | commit `708302a` | Note in ch. 4 implementation; ERC-721 gas figures are for the extended contract |
-| SC-09 | 2026-09-24 | `CVINVehicleDIDRegistry` ownership model | **Corrected** (`vehicleOwnerOf`, `transferVehicleOwnership`) | Service-endpoint and delegate functions were unreachable by construction. Behaviour-preserving for existing flows; +34 gas on `createVehicleDID`. | commit `708302a`; `PROJECT_SUMMARY.md` §2.3 | Report as an implementation finding in ch. 4 |
-| SC-10 | 2026-09-24 | Compliance gate in CI | **Floor set to verified level (89.0 %)**, target 90 % logged | A >90 % gate would fail on the first run at 89.6 %; the gate must catch regressions, not encode an aspiration. | `.github/workflows/w3c-compliance.yml`; green run [36066006689](https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/actions/runs/36066006689) at `ed85dfd` | State in ch. 5 that 90 % is the target and 89.6 % the achieved value |
-| SC-11 | 2026-09-24 | `cv2x-testbed` ERC-1056 and centralized providers | **Corrected** to make the PKI-vs-ERC-1056 experiment runnable | Placeholder key resolution (`"0x04..."`) made blockchain verification impossible; deployer-signed vehicle transactions were rejected by `onlyOwner`; `update_credential` was a no-op; web3 v7/eth-account ≥0.13 API drift. | commit `1d4ad07`; `PROJECT_SUMMARY.md` §2.3 item 4 | Report as an implementation finding in ch. 4; all earlier V2V-blockchain latency claims on this trunk are void and replaced by claim-register #21 |
-| SC-12 | 2026-09-25 | VID I three-tier VIN privacy — the zero-knowledge proof-of-VIN tier | **Deferred to future work** | `MOBI_VID1_TECHNICAL_SPEC.md` specified hash on-chain, encrypted VIN off-chain, and a ZK proof of VIN ownership; the first two are built and tested (VIN cipher), the ZK tier was never started and is not needed to test H1–H5. | `docs/REVIEW_CV2X_TESTBED_LINEAGE.md` §3.2 | State the two built tiers in ch. 4; ZK tier in ch. 7 future work |
-| SC-13 | 2026-09-25 | Lifecycle-parity comparison against the centralized registry (VID II design's "fair comparison") | **Pending — planned as M4** | `centralized_vehicle_registry.py` exists with birth/lifecycle/ownership parity, but the PKI-vs-ERC-1056 experiment compares lifecycle operations against the IEEE 1609.2-style PKI provider, not this registry. | review §3.3; `docs/PLAN_MOBI_SUMO.md` M4 | Run M4 before ch. 5 is frozen; until then say the parity baseline is built but unmeasured |
-
-Add entries above this line as decisions are made. Do not edit past entries;
-append a correction entry instead.
-
-> **SC-13 — closed 2026-10-04 (stream F-D).** The lifecycle-parity comparison against
-> `centralized_vehicle_registry.py` was run as pre-registered (M4, PLAN_MOBI_SUMO §A.2): birth,
-> lifecycle event, ownership transfer, history query, n = 50, single full run. Results:
-> `cv2x-testbed/results/lifecycle_parity.*`; register row #33.
+> **SC-02 — partially closed 2026-10-04 (stream G-K, M5).** A bounded on-chain observability analysis for
+> pseudonymity was run as pre-registered (PLAN_MOBI_SUMO §A.2): `4_comparison-framework/results/pseudonym_pool.*`,
+> register row #38.
 >
-> **Verdicts as measured:**
-> - the centralized registry is ≥10× faster for all three writes (PASS);
-> - "equal for history queries once cached" FAILS on the pre-fixed [0.5, 2] band. The cached MOBI
->   history is faster than the centralized query, and the gap is a serialisation artefact.
+> - **The 20-delegate pool on the standard ERC-1056 registry is fully linkable.** A passive observer needs one
+>   `eth_getLogs` by identity topic. The pool costs ≈1.10 M gas per 5-minute epoch, not the pre-registered ≈1.44 M
+>   (gas claim FAIL).
+> - **Per-pseudonym `did:ethr` identities are not linkable by that query.** They cost 0 gas while they need no
+>   on-chain attribute.
+> - **Once an attribute is written,** pseudonyms are re-linked by their funding transactions when self-funded, or
+>   share a relayer's anonymity set when relayed. Either way they cost more than the pool.
 >
-> **Chapter 5 should report both verdicts** (pending the author's chapter pass), stating that the centralized baseline is in-process, so the
-> write ratios are upper bounds on its advantage, and giving the post-hoc re-statement of the history
-> claim, labelled as post hoc.
+> **Still deferred:** radio/timing/position linkability, group revocation for implicit pseudonyms, and a measured
+> SCMS baseline. These stay future work.

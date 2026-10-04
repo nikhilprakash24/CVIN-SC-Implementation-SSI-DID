@@ -90,6 +90,11 @@ This is the design point to evaluate under SUMO.
 > superseded. The security cost is measured too: a revocation takes effect after at most k − 1
 > further messages from that sender (0 / 4 / 24 for k = 1 / 5 / 25), so at 10 Hz and k = 146 a
 > revoked key is honoured for up to ≈14.5 s.
+>
+> **Update (register #37).** A one-call probe refresh cuts t_chain to ≈2.8 ms while keeping the k − 1
+> staleness bound. But on a second host, with t_local ≈ 0.5 ms, **no k reaches P*(0.5) = 100 in either
+> mode** (k = ∞ gives ≈80). The knee is therefore host-dependent and must always be quoted with its
+> t_local.
 
 ## 5. Caveats
 
