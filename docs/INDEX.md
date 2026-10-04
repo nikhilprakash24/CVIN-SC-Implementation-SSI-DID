@@ -29,6 +29,10 @@ provenance and must not be cited in chapters.
 | What is the plan and what is needed from the author? | `docs/AFTER_ACTION_REPORT.md` (integration) + `META_COMMENTARY.md` (living handoff) | `MASTER_UPDATE.md` §5–§7 were the pre-merge version of the same lists |
 | What was this research originally asked to be, and how is it to be done? | `docs/ORIGINAL_PROMPT_AND_DIRECTION.md` | verbatim original direction (A), the author's working directives (B), and where each stands (C) |
 | How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-09-30.md` | the single file to read first when picking the work up |
+| What can each identity option actually do, from code? | `docs/FEATURE_ASYMMETRY_MATRIX.md` | generated from the compiled ABIs by `4_comparison-framework/feature-matrix/make_feature_matrix.py`; interpretation in Review 02 §4 |
+| What is the state of all the work as one picture (three contract generations, the ERC-1056 fork, coverage by layer)? | `docs/REVIEW_02_STATE_AND_PARALLEL_WORK.md` | the clean review of 2026-10-03 |
+| How do the grand sandbox, per-option sandboxes and the L1–L4 suites get built? | `docs/PLAN_SANDBOX_AND_SUITES.md` | steps S0–S10 with acceptance checks |
+| Thinking out loud, October 2026 | `docs/META_COMMENTARY_2026-10.md` | the asymmetry as the thesis; brainstorm; what to do first |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 
