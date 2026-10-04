@@ -98,7 +98,6 @@ families:
   functions:
   - addDelegateSigned
   - changeOwnerSigned
-  - nonce
   - revokeAttributeSigned
   - revokeDelegateSigned
   - setAttributeSigned

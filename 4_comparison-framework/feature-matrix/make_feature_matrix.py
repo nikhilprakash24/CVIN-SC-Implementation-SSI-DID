@@ -31,11 +31,11 @@ OPTIONS = {
 FAMILIES = [
     ("Identity creation (explicit)", r"(create|register|mint|registervehicle|birth)"),
     ("Ownership / controller change", r"(changeowner|transferownership|transfervehicle|transferfrom|safetransfer|owner)"),
-    ("Key / delegate management", r"(delegate|addkey|removekey|getkey|guardian|recover|rotat)"),
+    ("Key / delegate management", r"(delegate(?!call)|addkey|removekey|getkey|guardian|recover|rotat)"),
     ("Attributes / data store", r"(attribute|setdata|getdata|uri|metadata|servicerecord|entry|value)"),
     ("Claims / credentials", r"(claim|credential|attest|issue|inspection|certif)"),
     ("Revocation / status", r"(revoke|revoc|isrevoked|active|decommission|burn)"),
-    ("Delegated / signed (off-chain-authorised) execution", r"(signed|signature|permit|userop|handleop|validateuserop|execute|nonce)"),
+    ("Delegated / signed (off-chain-authorised) execution", r"(signed|signature|permit|userop|handleop|validateuserop|execute)"),
     ("Lifecycle events / history", r"(event|history|lifecycle|odometer|record|lookup|changed|lastchanged|previouschange)"),
     ("Authorisation / roles", r"(authori|role|grant|issuer|manufacturer|onlyowner)"),
     ("Token economics (approvals, royalties, payments)", r"(approve|approval|royalty|paytoll|price|fee|balanceof|totalsupply)"),

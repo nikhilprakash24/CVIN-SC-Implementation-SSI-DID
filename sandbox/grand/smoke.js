@@ -22,7 +22,9 @@ async function main() {
     try {
       assertImplements(a, slug);
       const d = await a.deploy();
-      const c = await a.create({ vin: `VIN${slug.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(0, 10)}00001`, owner: vehicleOwner.address });
+      // VINs are 17 characters (ISO 3779); some options validate the length.
+      const vin = (`VIN${slug.replace(/[^A-Z0-9]/gi, '').toUpperCase()}` + '0000000000000000').slice(0, 17);
+      const c = await a.create({ vin, owner: vehicleOwner.address });
       const id = c.id;
       const rows = [
         ['deploy', d], ['create', c],
@@ -41,7 +43,7 @@ async function main() {
         console.log(`  ${m.padEnd(18)} ${tag}`);
       }
       const caps = a.capabilities();
-      const undeclared = Object.keys(METHODS).filter((m) => !(m in caps));
+      const undeclared = Object.keys(METHODS).filter((m) => m !== 'capabilities' && !(m in caps));
       if (undeclared.length) { console.log(`  capabilities() missing: ${undeclared.join(', ')}`); failures++; }
     } catch (e) { console.log(`\n== ${slug}\n  FAILED: ${e.message}`); failures++; }
   }

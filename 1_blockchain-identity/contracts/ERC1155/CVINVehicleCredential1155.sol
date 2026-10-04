@@ -138,6 +138,9 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
         address to,
         uint256 credentialType
     ) external onlyRole(ISSUER_ROLE) {
+        // Found by the S2 sandbox smoke run (2026-10-04): a self-transfer deleted the
+        // VIN mapping after re-writing it. Transfers to the same holder are rejected.
+        require(from != to, "CVIN1155: transfer to same holder");
         uint256 amount = balanceOf(from, credentialType);
         require(amount > 0, "CVIN1155: nothing to transfer");
         _safeTransferFrom(from, to, credentialType, amount, "");

@@ -35,7 +35,9 @@ OPTIONS = {  # slug: (display, kind, contract artifacts, benchmark key, provider
     "baseline-centralized": ("Baseline: centralized registry (in-process)", "off-chain", [], None, "cv2x-testbed/identity/centralized_vehicle_registry.py", ["#21", "#30"]),
 }
 OFFCHAIN_CREATION = {"erc-1056-uport": "identity is implicit in the address (EthereumDIDRegistry identityOwner defaults to the identity itself); creation costs 0 gas",
-                     "erc-4337": "the account address is counterfactual (CREATE2) and can receive credentials before deployment"}
+                     "cvin-combined": "ERC-1056 base: identity is implicit in the address; creation costs 0 gas (S2 adapter returns implicit: true)",
+                     }
+OFFCHAIN_CREATION_NA = {"erc-4337": "ERC-4337 accounts are counterfactual in principle (CREATE2 + initCode), but this harness has no account factory and CVINMinimalEntryPoint rejects initCode, so creation is an explicit deployment here (S2 finding)"}
 PROVIDER_METHOD_RX = re.compile(r"^\s+def ([a-z][a-z0-9_]+)\(", re.M)
 
 def provider_methods(path):
@@ -65,6 +67,7 @@ for slug, (display, kind, rels, bkey, prov, regs) in OPTIONS.items():
     for label, rx in FAMILIES + EXTRA:
         if label.startswith("Off-chain creation"):
             if slug in OFFCHAIN_CREATION: fams.append({"name": label, "stance": "implemented", "functions": [], "reason": OFFCHAIN_CREATION[slug], "reviewed": False})
+            elif slug in OFFCHAIN_CREATION_NA: fams.append({"name": label, "stance": "not-applicable", "functions": [], "reason": OFFCHAIN_CREATION_NA[slug], "reviewed": False})
             elif kind == "off-chain": fams.append({"name": label, "stance": "implemented", "functions": [], "reason": "in-process baseline: creation is a local record, no transaction", "reviewed": False})
             else: fams.append({"name": label, "stance": "not-applicable", "functions": [], "reason": "creation requires a transaction (mint or deployment) — auto; review", "reviewed": False})
             continue

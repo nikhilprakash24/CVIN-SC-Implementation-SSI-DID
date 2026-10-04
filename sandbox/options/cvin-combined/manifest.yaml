@@ -130,9 +130,10 @@ families:
   reason: present in the option's surface but not used by the comparison — asymmetry to discuss
   reviewed: false
 - name: Off-chain creation (identity exists before any transaction)
-  stance: not-applicable
+  stance: implemented
   functions: []
-  reason: creation requires a transaction (mint or deployment) — auto; review
+  reason: 'ERC-1056 base: identity is implicit in the address; creation costs 0 gas (S2 adapter returns implicit:
+    true)'
   reviewed: false
 - name: Message signing / verification (off-chain hot path)
   stance: not-applicable

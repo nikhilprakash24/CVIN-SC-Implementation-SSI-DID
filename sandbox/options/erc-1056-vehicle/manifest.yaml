@@ -75,11 +75,10 @@ families:
   reason: 'measured via #21, #29'
   reviewed: false
 - name: Delegated / signed (off-chain-authorised) execution
-  stance: implemented
-  functions:
-  - nonce
+  stance: not-applicable
+  functions: []
   measured: []
-  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
   reviewed: false
 - name: Lifecycle events / history
   stance: measured-in-comparison

@@ -89,7 +89,6 @@ families:
   - execute
   - getUserOpHash
   - handleOp
-  - nonces
   - validateUserOp
   measured: []
   reason: present in the option's surface but not used by the comparison — asymmetry to discuss
@@ -127,9 +126,10 @@ families:
   reason: no function or method in this family on this option — auto; review whether the standard defines it
   reviewed: false
 - name: Off-chain creation (identity exists before any transaction)
-  stance: implemented
+  stance: not-applicable
   functions: []
-  reason: the account address is counterfactual (CREATE2) and can receive credentials before deployment
+  reason: ERC-4337 accounts are counterfactual in principle (CREATE2 + initCode), but this harness has no account
+    factory and CVINMinimalEntryPoint rejects initCode, so creation is an explicit deployment here (S2 finding)
   reviewed: false
 - name: Message signing / verification (off-chain hot path)
   stance: not-applicable

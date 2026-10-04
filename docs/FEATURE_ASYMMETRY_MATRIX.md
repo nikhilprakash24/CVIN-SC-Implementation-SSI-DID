@@ -30,11 +30,11 @@
 |---|---|---|---|---|---|---|---|---|---|---|
 | Identity creation (explicit) | **2** | **3** | — | **4** | **1** | **4** | **1** | **2** | — | **5** |
 | Ownership / controller change | **12** | **10** | **4** | **4** | **3** | **2** | **5** | **4** | **3** | **9** |
-| Key / delegate management | **12** | — | **4** | **1** | — | — | **5** | — | **5** | **3** |
+| Key / delegate management | **12** | — | **4** | — | — | — | **5** | — | **5** | **3** |
 | Attributes / data store | **7** | **11** | — | **8** | — | **4** | **4** | **4** | **3** | **4** |
 | Claims / credentials | **1** | — | — | — | **11** | **9** | — | **1** | **10** | **11** |
 | Revocation / status | **5** | **3** | — | — | — | **4** | — | **2** | **2** | **11** |
-| Delegated / signed (off-chain-authorised) execution | **6** | — | **2** | **3** | — | — | **7** | — | — | **1** |
+| Delegated / signed (off-chain-authorised) execution | **5** | — | **2** | **3** | — | — | **6** | — | — | — |
 | Lifecycle events / history | **4** | **9** | — | **1** | **1** | **1** | **2** | **2** | **4** | **25** |
 | Authorisation / roles | **3** | **15** | — | — | **1** | **11** | — | — | **1** | **14** |
 | Token economics (approvals, royalties, payments) | — | **10** | **1** | — | — | **5** | — | **2** | — | — |
@@ -45,11 +45,11 @@ Heuristics (name regex, case-insensitive) — auditable:
 
 - Identity creation (explicit): `(create|register|mint|registervehicle|birth)`
 - Ownership / controller change: `(changeowner|transferownership|transfervehicle|transferfrom|safetransfer|owner)`
-- Key / delegate management: `(delegate|addkey|removekey|getkey|guardian|recover|rotat)`
+- Key / delegate management: `(delegate(?!call)|addkey|removekey|getkey|guardian|recover|rotat)`
 - Attributes / data store: `(attribute|setdata|getdata|uri|metadata|servicerecord|entry|value)`
 - Claims / credentials: `(claim|credential|attest|issue|inspection|certif)`
 - Revocation / status: `(revoke|revoc|isrevoked|active|decommission|burn)`
-- Delegated / signed (off-chain-authorised) execution: `(signed|signature|permit|userop|handleop|validateuserop|execute|nonce)`
+- Delegated / signed (off-chain-authorised) execution: `(signed|signature|permit|userop|handleop|validateuserop|execute)`
 - Lifecycle events / history: `(event|history|lifecycle|odometer|record|lookup|changed|lastchanged|previouschange)`
 - Authorisation / roles: `(authori|role|grant|issuer|manufacturer|onlyowner)`
 - Token economics (approvals, royalties, payments): `(approve|approval|royalty|paytoll|price|fee|balanceof|totalsupply)`
@@ -65,12 +65,12 @@ Heuristics (name regex, case-insensitive) — auditable:
 - **Attributes / data store:** `DIDAttributeChanged`, `DID_MANUFACTURING_DATE`, `revokeAttribute`, `revokeAttributeSigned`, `setAttribute`, `setAttributeSigned`, `setVehicleAttributes`
 - **Claims / credentials:** `SVC_CREDENTIAL_SERVICE`
 - **Revocation / status:** `revokeAttribute`, `revokeAttributeSigned`, `revokeDelegate`, `revokeDelegateSigned`, `revokeVerificationDelegate`
-- **Delegated / signed (off-chain-authorised) execution:** `addDelegateSigned`, `changeOwnerSigned`, `nonce`, `revokeAttributeSigned`, `revokeDelegateSigned`, `setAttributeSigned`
+- **Delegated / signed (off-chain-authorised) execution:** `addDelegateSigned`, `changeOwnerSigned`, `revokeAttributeSigned`, `revokeDelegateSigned`, `setAttributeSigned`
 - **Lifecycle events / history:** `DIDAttributeChanged`, `DIDDelegateChanged`, `DIDOwnerChanged`, `changed`
 - **Authorisation / roles:** `ManufacturerAuthorized`, `authorizedManufacturers`, `setAuthorizedManufacturer`
 - **VIN linkage:** `DID_VIN`, `didToVIN`, `getDIDFromVIN`, `getVINFromDID`, `vinToDID`
 - **DID / resolution helpers:** `DIDAttributeChanged`, `DIDDelegateChanged`, `DIDOwnerChanged`, `DID_AUTONOMY_LEVEL`, `DID_COLOR`, `DID_ENGINE`, `DID_MAKE`, `DID_MANUFACTURING_DATE`, `DID_MODEL`, `DID_VIN`, `DID_YEAR`, `VehicleDIDCreated`, `createVehicleDID`, `didRegistry`, `didToVIN`, `getDIDFromVIN`, `getVINFromDID`, `identityOwner`, `vinToDID`
-- *Unclassified:* `SVC_MESSAGING`, `SVC_TELEMETRY`, `setServiceEndpoint`
+- *Unclassified:* `SVC_MESSAGING`, `SVC_TELEMETRY`, `nonce`, `setServiceEndpoint`
 
 ### ERC-721
 - **Identity creation (explicit):** `VehicleMinted`, `mint`, `mintVehicle`
@@ -94,12 +94,11 @@ Heuristics (name regex, case-insensitive) — auditable:
 ### ERC-725xy
 - **Identity creation (explicit):** `ContractCreated`, `OPERATION_CREATE`, `OPERATION_CREATE2`, `setVehicleBirthAttributes`
 - **Ownership / controller change:** `OwnershipTransferred`, `owner`, `renounceOwnership`, `transferOwnership`
-- **Key / delegate management:** `OPERATION_DELEGATECALL`
 - **Attributes / data store:** `ValueSet`, `getData`, `getDataBatch`, `setData`, `setDataBatch`, `setValue`, `setVehicleBirthAttributes`, `value`
 - **Delegated / signed (off-chain-authorised) execution:** `Executed`, `execute`, `executeBatch`
 - **Lifecycle events / history:** `DataChanged`
 - **VIN linkage:** `VIN_KEY`, `getVehicleVIN`
-- *Unclassified:* `MAKE_KEY`, `MODEL_KEY`, `OPERATION_CALL`, `OPERATION_STATICCALL`, `YEAR_KEY`, `lastCaller`, `supportsInterface`, `willRevert`
+- *Unclassified:* `MAKE_KEY`, `MODEL_KEY`, `OPERATION_CALL`, `OPERATION_DELEGATECALL`, `OPERATION_STATICCALL`, `YEAR_KEY`, `lastCaller`, `supportsInterface`, `willRevert`
 
 ### ERC-735
 - **Identity creation (explicit):** `VehicleIdentityCreated`
@@ -127,8 +126,9 @@ Heuristics (name regex, case-insensitive) — auditable:
 - **Ownership / controller change:** `OwnerRecovered`, `OwnershipTransferred`, `owner`, `recoverOwner`, `transferOwnership`
 - **Key / delegate management:** `GuardianChanged`, `OwnerRecovered`, `guardian`, `recoverOwner`, `setGuardian`
 - **Attributes / data store:** `AttributeChanged`, `entryPoint`, `getAttribute`, `setAttribute`
-- **Delegated / signed (off-chain-authorised) execution:** `Executed`, `UserOperationHandled`, `execute`, `getUserOpHash`, `handleOp`, `nonces`, `validateUserOp`
+- **Delegated / signed (off-chain-authorised) execution:** `Executed`, `UserOperationHandled`, `execute`, `getUserOpHash`, `handleOp`, `validateUserOp`
 - **Lifecycle events / history:** `AttributeChanged`, `GuardianChanged`
+- *Unclassified:* `nonces`
 
 ### LSP8
 - **Identity creation (explicit):** `VehicleMinted`, `mintVehicle`
@@ -160,12 +160,11 @@ Heuristics (name regex, case-insensitive) — auditable:
 - **Attributes / data store:** `DIDAttributeChanged`, `PERMANENT_ATTRIBUTE_VALIDITY`, `revokeAttribute`, `setAttribute`
 - **Claims / credentials:** `EventAttested`, `IssuerAuthorizationRevoked`, `IssuerAuthorized`, `allowedIssuers`, `attestEvent`, `authorizeIssuer`, `authorizedIssuers`, `eventAttestations`, `getEventAttestations`, `isAuthorizedIssuer`, `revokeIssuerAuthorization`
 - **Revocation / status:** `DIDRevoked`, `IssuerAuthorizationRevoked`, `ManufacturerAuthorizationRevoked`, `isRevoked`, `revokeAttribute`, `revokeDelegate`, `revokeIdentity`, `revokeIssuerAuthorization`, `revokeManufacturerAuthorization`, `revoked`, `revokedAt`
-- **Delegated / signed (off-chain-authorised) execution:** `nonce`
 - **Lifecycle events / history:** `DIDAttributeChanged`, `DIDDelegateChanged`, `DIDOwnerChanged`, `EventAttested`, `LifecycleEventRecorded`, `attestEvent`, `changed`, `eventAttestations`, `eventTypeCount`, `getCompleteHistory`, `getEvent`, `getEventAttestations`, `getEventTypeCount`, `getEventsByType`, `getOdometerHistory`, `getOwnershipHistory`, `getOwnershipHistoryCount`, `getVehicleEvents`, `lastChanged`, `lifecycleEvents`, `lookupByVINHash`, `ownershipHistory`, `recordLifecycleEvent`, `vehicleEventCount`, `vehicleEventIds`
 - **Authorisation / roles:** `IssuerAuthorizationRevoked`, `IssuerAuthorized`, `ManufacturerAuthorizationRevoked`, `ManufacturerAuthorized`, `allowedIssuers`, `authorizeIssuer`, `authorizeManufacturer`, `authorizedIssuers`, `authorizedManufacturers`, `isAuthorizedIssuer`, `registryAuthority`, `revokeIssuerAuthorization`, `revokeManufacturerAuthorization`, `transferRegistryAuthority`
 - **VIN linkage:** `lookupByVINHash`, `vinHashToIdentity`
 - **DID / resolution helpers:** `DIDAttributeChanged`, `DIDDelegateChanged`, `DIDOwnerChanged`, `DIDRevoked`, `getIdentityInfo`, `getVehicleDID`, `identityOwner`
-- *Unclassified:* `getVehicleInfo`, `updateVehicleKey`, `vehicleExists`
+- *Unclassified:* `getVehicleInfo`, `nonce`, `updateVehicleKey`, `vehicleExists`
 
 ## 4. What this matrix is and is not
 

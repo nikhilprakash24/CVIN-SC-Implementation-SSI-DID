@@ -47,7 +47,7 @@ options:
       Attributes / data store: implemented
       Claims / credentials: implemented
       Revocation / status: measured-in-comparison
-      Delegated / signed (off-chain-authorised) execution: implemented
+      Delegated / signed (off-chain-authorised) execution: not-applicable
       Lifecycle events / history: measured-in-comparison
       Authorisation / roles: not-applicable
       Token economics (approvals, royalties, payments): not-applicable
@@ -97,7 +97,7 @@ options:
     stances:
       Identity creation (explicit): implemented
       Ownership / controller change: implemented
-      Key / delegate management: implemented
+      Key / delegate management: not-applicable
       Attributes / data store: measured-in-comparison
       Claims / credentials: not-applicable
       Revocation / status: not-applicable
@@ -161,7 +161,7 @@ options:
       Token economics (approvals, royalties, payments): not-applicable
       VIN linkage: not-applicable
       DID / resolution helpers: not-applicable
-      Off-chain creation (identity exists before any transaction): implemented
+      Off-chain creation (identity exists before any transaction): not-applicable
       Message signing / verification (off-chain hot path): not-applicable
   lsp8:
     option: LSP8
@@ -197,7 +197,7 @@ options:
       Token economics (approvals, royalties, payments): not-applicable
       VIN linkage: implemented
       DID / resolution helpers: implemented
-      Off-chain creation (identity exists before any transaction): not-applicable
+      Off-chain creation (identity exists before any transaction): implemented
       Message signing / verification (off-chain hot path): not-applicable
   mobi-vid:
     option: MOBI VID I + II (application profile)
@@ -209,7 +209,7 @@ options:
       Attributes / data store: implemented
       Claims / credentials: measured-in-comparison
       Revocation / status: measured-in-comparison
-      Delegated / signed (off-chain-authorised) execution: implemented
+      Delegated / signed (off-chain-authorised) execution: not-applicable
       Lifecycle events / history: measured-in-comparison
       Authorisation / roles: implemented
       Token economics (approvals, royalties, payments): not-applicable
