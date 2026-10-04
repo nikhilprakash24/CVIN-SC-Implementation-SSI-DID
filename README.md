@@ -34,7 +34,7 @@
 
 - **H1** — Minimal identity standards (e.g. ERC-1056) are substantially cheaper to create than heavyweight account standards. **SUPPORTED** — the ratio depends on the operation definition: ~10× against ERC-721/725 when ERC-1056 creation is the bare `createIdentity` (52,594 gas, evm cancun) and ERC-721 creation is VIN-bound `mintVehicle` (542,378); **≈7×** when both sides bind the VIN (`createVehicleDID` 78,068). See `docs/MEASUREMENT_CONDITIONS.md` #6/#25. **Over a full MOBI VID lifecycle** (metrics harness, register #30) ERC-1056 is cheapest by **2.6× (ERC-721) and 3.0× (ERC-725)**, not 10×; restating H1 accordingly is pending the author's framing decision.
 - **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (94.3% measured, internal checker; external W3C DID suite 328/441, register #24).**
-- **H3** — Off-chain credential verification meets the real-time V2V latency budget (100 ms). **SUPPORTED (0.165 ms warm; register status B, i.e. not yet re-executed on the merged trunk).**
+- **H3** — Off-chain credential verification meets the real-time V2V latency budget (100 ms). **SUPPORTED (0.153 ms warm, cached/off-chain verify; register #27. Uncached ERC-1056 verify is 9.7 ms; see the freshness-k frontier, #32).**
 - **H4** — MOBI VID generalizes across identity backends. **SUPPORTED** (5-backend realization sweep; birth + lifecycle native on all, multi-party attestation native on claim-capable backends — a documented fidelity gradient).
 - **H5** — A hybrid design can sit on the security/performance frontier. **SUPPORTED (CVIN-Combined).**
 
@@ -120,7 +120,7 @@ All 9 standards implemented as Hardhat contracts and benchmarked on-chain (hardh
 
 ## 📊 Key Results (Measured)
 
-All numbers below are measured from the repository; each has a row in `docs/MEASUREMENT_CONDITIONS.md`, and rows with status **B** (V2V latency, scaling) have not yet been re-executed on the merged trunk. Gas is **Hardhat-local**, solc 0.8.24, OpenZeppelin 5.0.2 — deterministic and verified byte-identical across N=30 runs (CI width 0).
+All numbers below are measured from the repository; each has a row in `docs/MEASUREMENT_CONDITIONS.md` (all re-executed on the merged trunk 2026-10-03/04). Gas is **Hardhat-local**, solc 0.8.24, OpenZeppelin 5.0.2 — deterministic and verified byte-identical across N=30 runs (CI width 0).
 
 ### Gas — create identity (RQ1 / H1)
 
@@ -144,9 +144,9 @@ All numbers below are measured from the repository; each has a row in `docs/MEAS
 
 | Path | Median latency (ms) |
 |---|---|
-| SSI (blockchain credential), warm verify | **0.165** [0.162, 0.168] |
-| SSI, cold (full VC verify) | 0.400 [0.392, 0.405] |
-| PKI baseline, warm | 0.102 [0.101, 0.104] |
+| SSI (blockchain credential), warm verify | **0.153** [0.151, 0.154] |
+| SSI, cold (full VC verify) | 0.399 [0.381, 0.411] |
+| PKI baseline, warm | 0.094 [0.093, 0.095] |
 
 1.65M verifications; 90 failures = exactly the 3 injected attacks × 30 runs. **H3 supported** — roughly a 600× margin to the 100 ms V2V budget. *Caveat: excludes radio/MAC/network-stack latency; mobility is simulated (no SUMO binary required).*
 
@@ -167,7 +167,7 @@ Findings: no standard dominates (a security/performance frontier — **H5**); on
 |---|---|
 | H1 — minimal standards substantially cheaper to create (~10× bare, ≈7× VIN-bound) | ✅ Supported |
 | H2 — ≥90% W3C compliance | ✅ Supported (94.3%) |
-| H3 — off-chain verify meets V2V budget | ✅ Supported (0.165 ms warm) |
+| H3 — off-chain verify meets V2V budget | ✅ Supported (0.153 ms warm, cached; uncached on-chain verify needs freshness-k caching, #32) |
 | H4 — MOBI VID across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
 | H5 — hybrid on the frontier | ✅ Supported (CVIN-Combined) |
 

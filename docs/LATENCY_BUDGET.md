@@ -104,9 +104,11 @@ This is the design point to evaluate under SUMO.
   P* by the core count for the off-chain rows but not for the RPC-bound
   rows (which serialize on the node).
 - The bundle lineage reported an off-chain warm verify of 0.165 ms
-  (N=30) and a saturation of ≈772 neighbours at 0.130 ms/neighbour; those
-  figures are consistent in shape with the rows above but are **B** (not
-  re-executed on this trunk).
+  (N=30) and a saturation of ≈772 neighbours at 0.130 ms/neighbour. Both were
+  **re-executed on this trunk 2026-10-04**: warm verify **0.153 ms [0.151, 0.154]**
+  (register #27), and **0.164 ms/neighbour, P* ≈ 609** (register #26; an
+  extrapolation beyond the tested P ≤ 80). The change from the bundle values is
+  environmental (same-host A/B), not code.
 
 ## 6. Sources
 
