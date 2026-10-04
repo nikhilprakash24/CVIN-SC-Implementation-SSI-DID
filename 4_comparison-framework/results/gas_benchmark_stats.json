@@ -2,7 +2,7 @@
   "n_runs": 30,
   "all_deterministic": true,
   "non_deterministic_cells": [],
-  "method": "Full 9-standard gas benchmark re-run N times on a fresh in-process Hardhat network each time; gasUsed aggregated per (standard, operation). EVM gas is deterministic for fixed calldata + pre-state, so identical values across runs (CI width 0) is the expected, correct reproducibility result.",
+  "method": "Full 9-standard gas benchmark re-run N times on a fresh in-process Hardhat network each time; gasUsed aggregated per (standard, operation). EVM gas is deterministic for fixed calldata + pre-state, so identical values across runs (range_min_max width 0) is the expected, correct reproducibility result. range_min_max is the observed envelope, not a CI.",
   "source_metadata": {
     "solcVersion": "0.8.24",
     "solcSettings": {
@@ -13,7 +13,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-03T23:01:41.438Z",
+    "date": "2026-10-04T05:27:33.382Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [
@@ -48,7 +48,7 @@
         "max": 958726,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           958726,
           958726
         ]
@@ -60,7 +60,7 @@
         "max": 52594,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           52594,
           52594
         ]
@@ -72,7 +72,7 @@
         "max": 35494,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           35494,
           35494
         ]
@@ -84,7 +84,7 @@
         "max": 54831,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           54831,
           54831
         ]
@@ -96,7 +96,7 @@
         "max": 35046,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           35046,
           35046
         ]
@@ -108,7 +108,7 @@
         "max": 51754,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           51754,
           51754
         ]
@@ -122,7 +122,7 @@
         "max": 2721476,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           2721476,
           2721476
         ]
@@ -134,7 +134,7 @@
         "max": 542378,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           542378,
           542378
         ]
@@ -146,7 +146,7 @@
         "max": 119737,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           119737,
           119737
         ]
@@ -158,7 +158,7 @@
         "max": 48302,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           48302,
           48302
         ]
@@ -170,7 +170,7 @@
         "max": 174670,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           174670,
           174670
         ]
@@ -182,7 +182,7 @@
         "max": 27677,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           27677,
           27677
         ]
@@ -201,7 +201,7 @@
         "max": 519384,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           519384,
           519384
         ]
@@ -213,7 +213,7 @@
         "max": 137096,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           137096,
           137096
         ]
@@ -225,7 +225,7 @@
         "max": 119996,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           119996,
           119996
         ]
@@ -237,7 +237,7 @@
         "max": 43388,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           43388,
           43388
         ]
@@ -249,7 +249,7 @@
         "max": 28390,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           28390,
           28390
         ]
@@ -268,7 +268,7 @@
         "max": 1680816,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           1680816,
           1680816
         ]
@@ -280,7 +280,7 @@
         "max": 49937,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           49937,
           49937
         ]
@@ -302,7 +302,7 @@
         "max": 28834,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           28834,
           28834
         ]
@@ -316,62 +316,62 @@
       },
       "createIdentity": {
         "n": 30,
-        "median": 1466088.0,
-        "min": 1466088,
-        "max": 1466088,
+        "median": 1535776.0,
+        "min": 1535776,
+        "max": 1535776,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          1466088,
-          1466088
+        "range_min_max": [
+          1535776,
+          1535776
         ]
       },
       "addDelegateOrClaim": {
         "n": 30,
-        "median": 292708.0,
-        "min": 292708,
-        "max": 292708,
+        "median": 292730.0,
+        "min": 292730,
+        "max": 292730,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          292708,
-          292708
+        "range_min_max": [
+          292730,
+          292730
         ]
       },
       "updateAttribute": {
         "n": 30,
-        "median": 77691.0,
-        "min": 77691,
-        "max": 77691,
+        "median": 77713.0,
+        "min": 77713,
+        "max": 77713,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          77691,
-          77691
+        "range_min_max": [
+          77713,
+          77713
         ]
       },
       "revoke": {
         "n": 30,
-        "median": 72142.0,
-        "min": 72142,
-        "max": 72142,
+        "median": 72195.0,
+        "min": 72195,
+        "max": 72195,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          72142,
-          72142
+        "range_min_max": [
+          72195,
+          72195
         ]
       },
       "transferOwnership": {
         "n": 30,
-        "median": 28724.0,
-        "min": 28724,
-        "max": 28724,
+        "median": 28746.0,
+        "min": 28746,
+        "max": 28746,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          28724,
-          28724
+        "range_min_max": [
+          28746,
+          28746
         ]
       }
     },
@@ -383,7 +383,7 @@
         "max": 2304865,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           2304865,
           2304865
         ]
@@ -395,7 +395,7 @@
         "max": 103913,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           103913,
           103913
         ]
@@ -407,7 +407,7 @@
         "max": 49130,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           49130,
           49130
         ]
@@ -419,7 +419,7 @@
         "max": 57147,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           57147,
           57147
         ]
@@ -431,7 +431,7 @@
         "max": 30625,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           30625,
           30625
         ]
@@ -443,7 +443,7 @@
         "max": 83947,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           83947,
           83947
         ]
@@ -457,7 +457,7 @@
         "max": 456294,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           456294,
           456294
         ]
@@ -469,7 +469,7 @@
         "max": 759088,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           759088,
           759088
         ]
@@ -481,7 +481,7 @@
         "max": 49343,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           49343,
           49343
         ]
@@ -493,7 +493,7 @@
         "max": 96173,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           96173,
           96173
         ]
@@ -505,7 +505,7 @@
         "max": 47557,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           47557,
           47557
         ]
@@ -517,7 +517,7 @@
         "max": 28539,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           28539,
           28539
         ]
@@ -529,7 +529,7 @@
         "max": 25429,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           25429,
           25429
         ]
@@ -538,38 +538,38 @@
     "LSP8": {
       "deployRegistry": {
         "n": 30,
-        "median": 1592737.0,
-        "min": 1592737,
-        "max": 1592737,
+        "median": 1614592.0,
+        "min": 1614592,
+        "max": 1614592,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          1592737,
-          1592737
+        "range_min_max": [
+          1614592,
+          1614592
         ]
       },
       "createIdentity": {
         "n": 30,
-        "median": 149430.0,
-        "min": 149430,
-        "max": 149430,
+        "median": 149615.0,
+        "min": 149615,
+        "max": 149615,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          149430,
-          149430
+        "range_min_max": [
+          149615,
+          149615
         ]
       },
       "updateAttribute": {
         "n": 30,
-        "median": 55051.0,
-        "min": 55051,
-        "max": 55051,
+        "median": 55114.0,
+        "min": 55114,
+        "max": 55114,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          55051,
-          55051
+        "range_min_max": [
+          55114,
+          55114
         ]
       },
       "addDelegateOrClaim": {
@@ -579,26 +579,26 @@
       },
       "transferOwnership": {
         "n": 30,
-        "median": 80576.0,
-        "min": 80576,
-        "max": 80576,
+        "median": 80600.0,
+        "min": 80600,
+        "max": 80600,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          80576,
-          80576
+        "range_min_max": [
+          80600,
+          80600
         ]
       },
       "revoke": {
         "n": 30,
-        "median": 41838.0,
-        "min": 41838,
-        "max": 41838,
+        "median": 42141.0,
+        "min": 42141,
+        "max": 42141,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          41838,
-          41838
+        "range_min_max": [
+          42141,
+          42141
         ]
       }
     },
@@ -610,7 +610,7 @@
         "max": 4025159,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           4025159,
           4025159
         ]
@@ -622,7 +622,7 @@
         "max": 299143,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           299143,
           299143
         ]
@@ -634,7 +634,7 @@
         "max": 306941,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           306941,
           306941
         ]
@@ -646,7 +646,7 @@
         "max": 35277,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           35277,
           35277
         ]
@@ -658,7 +658,7 @@
         "max": 200023,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           200023,
           200023
         ]
@@ -670,7 +670,7 @@
         "max": 75052,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           75052,
           75052
         ]
@@ -679,62 +679,62 @@
     "CVIN-Combined": {
       "deployRegistry": {
         "n": 30,
-        "median": 1421834.0,
-        "min": 1421834,
-        "max": 1421834,
+        "median": 1490166.0,
+        "min": 1490166,
+        "max": 1490166,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          1421834,
-          1421834
+        "range_min_max": [
+          1490166,
+          1490166
         ]
       },
       "createIdentity": {
         "n": 30,
-        "median": 52192.0,
-        "min": 52192,
-        "max": 52192,
+        "median": 52216.0,
+        "min": 52216,
+        "max": 52216,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          52192,
-          52192
+        "range_min_max": [
+          52216,
+          52216
         ]
       },
       "updateAttribute": {
         "n": 30,
-        "median": 35092.0,
-        "min": 35092,
-        "max": 35092,
+        "median": 35116.0,
+        "min": 35116,
+        "max": 35116,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          35092,
-          35092
+        "range_min_max": [
+          35116,
+          35116
         ]
       },
       "addDelegateOrClaim": {
         "n": 30,
-        "median": 292366.0,
-        "min": 292366,
-        "max": 292366,
+        "median": 287570.0,
+        "min": 287570,
+        "max": 287570,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          292366,
-          292366
+        "range_min_max": [
+          287570,
+          287570
         ]
       },
       "revoke": {
         "n": 30,
-        "median": 73795.0,
-        "min": 73795,
-        "max": 73795,
+        "median": 69721.0,
+        "min": 69721,
+        "max": 69721,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
-          73795,
-          73795
+        "range_min_max": [
+          69721,
+          69721
         ]
       },
       "transferOwnership": {
@@ -744,7 +744,7 @@
         "max": 51747,
         "stdev": 0.0,
         "deterministic": true,
-        "ci95": [
+        "range_min_max": [
           51747,
           51747
         ]
