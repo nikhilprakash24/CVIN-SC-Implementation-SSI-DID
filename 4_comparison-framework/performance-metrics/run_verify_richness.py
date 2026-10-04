@@ -218,6 +218,50 @@ def host_note():
     )
 
 
+def environment_header():
+    """Environment header required for latency figures
+    (docs/MEASUREMENT_CONDITIONS.md §1): CPU, Python, libraries, date, commit."""
+    import datetime as _dt
+    import importlib.metadata as _md
+    import os as _os
+    import platform as _pf
+    import subprocess as _sp
+    cpu = _pf.processor() or "n/a"
+    try:
+        with open("/proc/cpuinfo") as fh:
+            for line in fh:
+                if line.startswith("model name"):
+                    cpu = line.split(":", 1)[1].strip()
+                    break
+    except OSError:
+        pass
+    here = Path(__file__).resolve().parent
+
+    def _vcs(*a):
+        try:
+            return _sp.run(["git", *a], cwd=here, capture_output=True,
+                           text=True, check=True).stdout.strip()
+        except Exception:  # noqa: BLE001
+            return None
+    libs = {}
+    for p in ("coincurve", "eth-account", "eth-keys", "cryptography", "numpy", "web3"):
+        try:
+            libs[p] = _md.version(p)
+        except Exception:  # noqa: BLE001
+            libs[p] = None
+    status = _vcs("status", "--porcelain")
+    return {
+        "date_utc": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
+        "commit": _vcs("rev-parse", "HEAD"),
+        "tree_clean": (status == "") if status is not None else None,
+        "cpu": cpu,
+        "logical_cpus": _os.cpu_count(),
+        "platform": _pf.platform(),
+        "python": _pf.python_version(),
+        "libraries": libs,
+    }
+
+
 def main():
     ap = argparse.ArgumentParser(description="Experiment C: verification "
                                              "latency vs credential richness")
@@ -226,6 +270,7 @@ def main():
     ap.add_argument("--warmup", type=int, default=50,
                     help="untimed warmup runs per point (default 50)")
     args = ap.parse_args()
+    env = environment_header()
 
     print("Experiment C — verification latency vs credential richness")
     print(f"  VC layer: {VC_DIR}")
@@ -265,6 +310,7 @@ def main():
         "order is a least-squares fit of median latency vs N (and vs k)."
     )
     out["host_note"] = host_note()
+    out["environment_richness"] = env
     out["repeatability_caveat"] = (
         "Single host, crypto-only, warm uncontended core (thesis §5.4 / "
         "RESEARCH_AUDIT §4.5 repeatability framing). Absolute latencies are "

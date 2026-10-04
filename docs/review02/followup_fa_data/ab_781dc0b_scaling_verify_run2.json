@@ -9,40 +9,40 @@
       32
     ],
     "median_ms": [
-      0.18978,
-      0.18671,
-      0.18598,
-      0.18953,
-      0.23414,
-      0.3011
+      0.16004,
+      0.16376,
+      0.17533,
+      0.16936,
+      0.17204,
+      0.17657
     ],
     "p95_ms": [
-      0.24406,
-      0.24724,
-      0.24854,
-      0.26912,
-      0.50281,
-      0.53848
+      0.19109,
+      0.19504,
+      0.20565,
+      0.20753,
+      0.22035,
+      0.21811
     ],
     "mean_ms": [
-      0.19775,
-      0.20047,
-      0.19405,
-      0.20266,
-      0.28375,
-      0.31873
+      0.16268,
+      0.16618,
+      0.17526,
+      0.17325,
+      0.17632,
+      0.17974
     ],
     "runs_per_point": 300,
     "warmup_per_point": 50,
     "sig_check_target_ms": 10.0,
     "stays_under_target_across_range": true,
     "scaling": {
-      "slope_ms_per_unit": 0.003822,
-      "intercept_ms": 0.174409,
-      "r2": 0.9599,
-      "spread_ratio_max_over_min": 1.619,
-      "relative_slope_per_unit": 0.02191,
-      "order": "O(N) \u2014 linear marginal growth"
+      "slope_ms_per_unit": 0.00038,
+      "intercept_ms": 0.16553,
+      "r2": 0.4763,
+      "spread_ratio_max_over_min": 1.103,
+      "relative_slope_per_unit": 0.0023,
+      "order": "O(1) \u2014 effectively constant (ECDSA recovery dominates)"
     }
   },
   "selective_disclosure": {
@@ -55,35 +55,35 @@
       16
     ],
     "median_ms": [
-      0.3622,
-      0.21821,
-      0.21812,
-      0.23212,
-      0.24627
+      0.18385,
+      0.18515,
+      0.19306,
+      0.2016,
+      0.25626
     ],
     "p95_ms": [
-      0.73178,
-      0.28936,
-      0.31745,
-      0.34969,
-      0.33149
+      0.22735,
+      0.23048,
+      0.24105,
+      0.25016,
+      0.44183
     ],
     "mean_ms": [
-      0.40084,
-      0.22657,
-      0.23607,
-      0.29273,
-      0.2592
+      0.19029,
+      0.18954,
+      0.19824,
+      0.20572,
+      0.31253
     ],
     "runs_per_point": 300,
     "warmup_per_point": 50,
     "scaling": {
-      "slope_ms_per_unit": -0.003014,
-      "intercept_ms": 0.274073,
-      "r2": 0.0913,
-      "spread_ratio_max_over_min": 1.661,
-      "relative_slope_per_unit": -0.011,
-      "order": "sub-linear / weakly N-dependent"
+      "slope_ms_per_unit": 0.004811,
+      "intercept_ms": 0.174157,
+      "r2": 0.9519,
+      "spread_ratio_max_over_min": 1.394,
+      "relative_slope_per_unit": 0.02762,
+      "order": "O(N) \u2014 linear marginal growth"
     }
   },
   "method": "Real W3C VC DM 2.0 verification via the canonical VC layer (2_w3c-ssi-layer/verifiable-credentials: secp256k1 EIP-191 sign + public-key recovery, verify_credential runs structure/schema/temporal/revocation/signature/disclosure checks). For each point we warm up 50 runs then take the MEDIAN over 300 warm runs (p95 is the warm tail), timed with time.perf_counter. Credential richness varies N claims in {1,2,4,8,16,32}; selective disclosure fixes N=16 salted claim digests and discloses k in {1,2,4,8,16}. Scaling order is a least-squares fit of median latency vs N (and vs k).",
@@ -98,79 +98,45 @@
       80
     ],
     "per_interval_ms": [
-      0.81694,
-      1.60899,
-      3.18674,
-      6.39915,
-      13.13381
+      0.79325,
+      1.57279,
+      3.0359,
+      6.34044,
+      13.08188
     ],
     "per_interval_p95_ms": [
-      0.94944,
-      1.9403,
-      4.0802,
-      8.88746,
-      17.63213
+      0.91687,
+      1.89521,
+      3.39906,
+      7.42585,
+      15.71872
     ],
     "per_interval_mean_ms": [
-      0.82792,
-      1.65786,
-      3.35325,
-      6.69336,
-      13.67747
+      0.80585,
+      1.60719,
+      3.04663,
+      6.48445,
+      13.35364
     ],
     "per_message_median_ms": [
-      0.156475,
-      0.153963,
-      0.152493,
-      0.153463,
-      0.155267
+      0.151348,
+      0.150876,
+      0.146954,
+      0.151745,
+      0.153006
     ],
     "budget_ms": 100.0,
     "saturation_P": null,
-    "extrapolated_saturation_P": 609.2,
+    "extrapolated_saturation_P": 609.6,
     "fit": {
-      "slope_ms_per_neighbor": 0.164265,
-      "intercept_ms": -0.063088,
-      "r2": 0.9998
+      "slope_ms_per_neighbor": 0.164255,
+      "intercept_ms": -0.127049,
+      "r2": 0.9996
     },
     "intervals_per_point": 300,
     "warmup_per_point": 50,
-    "saturation_note": "per-interval verification stays within the 100 ms budget across the whole tested range (P<=80); saturation is beyond the tested range, extrapolated P*~=609 neighbors",
-    "environment": {
-      "date_utc": "2026-10-04T09:23:35+00:00",
-      "commit": "fd25d0529c6e652833ed491f9b2584edc5f56509",
-      "tree_clean": true,
-      "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
-      "logical_cpus": 4,
-      "platform": "Linux-6.18.44-fc-v64-x86_64-with-glibc2.39",
-      "python": "3.11.15",
-      "libraries": {
-        "coincurve": "21.0.0",
-        "eth-account": "0.14.0",
-        "eth-keys": "0.8.0",
-        "cryptography": "49.0.0",
-        "numpy": "2.4.6",
-        "web3": "8.0.0"
-      }
-    },
+    "saturation_note": "per-interval verification stays within the 100 ms budget across the whole tested range (P<=80); saturation is beyond the tested range, extrapolated P*~=610 neighbors",
     "method": "Reuses SSIIdentityLayer from sumo_identity_integration.py (real secp256k1 EIP-191 sign at sender, signature recovery + cached-peer address comparison at receiver = warm V2V verify path). One receiver verifies P pre-cached neighbors per 100 ms interval; P neighbors are signed fresh each interval OUTSIDE the timed region, and only the receiver's P verifications are timed (time.perf_counter). Reported per_interval_ms is the MEDIAN over the timed intervals. P* is the smallest P whose median exceeds 100 ms; if none within P<=80 it is extrapolated from a least-squares linear fit.",
     "honesty": "Crypto verification LOAD ONLY (RESEARCH_AUDIT \u00a74.4). Excludes radio propagation, MAC-layer contention, channel loss and queueing; BSMs are delivered in-process. This is a CPU-time saturation bound, not end-to-end V2V latency. Warm path (cached peers) only \u2014 first-contact VC verification is amortised and not included per interval."
-  },
-  "environment_richness": {
-    "date_utc": "2026-10-04T09:22:18+00:00",
-    "commit": "d78e344a79705286bf7572a0afb4218eba361c39",
-    "tree_clean": true,
-    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
-    "logical_cpus": 4,
-    "platform": "Linux-6.18.44-fc-v64-x86_64-with-glibc2.39",
-    "python": "3.11.15",
-    "libraries": {
-      "coincurve": "21.0.0",
-      "eth-account": "0.14.0",
-      "eth-keys": "0.8.0",
-      "cryptography": "49.0.0",
-      "numpy": "2.4.6",
-      "web3": "8.0.0"
-    }
   }
 }
