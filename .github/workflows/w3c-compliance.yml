@@ -117,3 +117,22 @@ jobs:
           w3c_compliance_report.json
           w3c_compliance_output.log
         if-no-files-found: error
+
+  python-layers:
+    name: Python layers L3 + L4 (sandbox/py-suites/run.sh)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Python dependencies
+      # Same packages as the VC job; the L4 use cases and the V2V harness smoke are
+      # in-process (no chain). Unpinned: see the header note.
+      run: pip install eth-account coincurve cryptography web3 pytest
+
+    - name: Run the Python layers (L3 SSI, L4 exemplar interactions, SSI-layer suites)
+      run: sandbox/py-suites/run.sh
