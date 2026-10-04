@@ -1,4 +1,4 @@
-# Inkwell — Phased Delivery Plan (Phase 0 to Phase 7)
+# Inkwell: Phased Delivery Plan (Phase 0 to Phase 7)
 
 **Document status:** Draft v0.1, 2026-10-04, owner persona: **[ARCH — Principal Architect, "Priya Raman"]**, co-owned by **[JOBS]** (scope and demos) and **[QA]** (exit criteria, release). Contributions from IOS, DESIGN, GAME, DATA, KIDS.
 

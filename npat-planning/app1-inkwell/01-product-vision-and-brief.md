@@ -1,4 +1,4 @@
-# Inkwell (working title) — Product Vision and Brief
+# Inkwell (working title): Product Vision and Brief
 
 **Document status:** Draft v0.1, 2026-10-04, owner persona: **[JOBS — Product Lead, "Theo Marr"]**. Contributors: ARCH, IOS, DESIGN, GAME, QA, DATA.
 

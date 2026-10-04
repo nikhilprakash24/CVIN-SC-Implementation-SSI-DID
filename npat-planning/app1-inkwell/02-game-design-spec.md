@@ -1,4 +1,4 @@
-# Inkwell — Game Design Specification (NPAT and Word Chain)
+# Inkwell: Game Design Specification (NPAT and Word Chain)
 
 **Document status:** Draft v0.1, 2026-10-04, owner persona: **[GAME — Game Designer, "Kenji Watanabe"]**. Heavy contributions from **[DATA]** and **[ARCH]**; comments from JOBS, DESIGN, IOS, QA, KIDS.
 
