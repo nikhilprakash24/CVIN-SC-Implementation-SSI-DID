@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "CVIN Thrust 5 \u2014 V2X security-comparison matrix (executed attack suite)",
-    "generated": "2026-10-04T09:14:25Z",
+    "generated": "2026-10-04T09:15:41Z",
     "categories": [
       "impersonation",
       "replay",
@@ -416,7 +416,7 @@
       "impersonation": {
         "outcome": "DEFENDED",
         "mechanism": "issuer signature recovered via secp256k1 and matched against the address embedded in the issuer DID (or a trusted-issuer registry)",
-        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0x0465e1586157bed3c544bd0d513a625c04fafa42 does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0xad6ad99de770dd5afac304a66e1cf4401c3016cd does not match issuer did:ethr:0x1:0x316327CB2D94CE79D654194f53E0b056Fe9B975d']).",
+        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0xd990050691aed5b25a83d413f0175bb99d01abc9 does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0x7865b6ddd459983f3c527a48bcda11c681e50a46 does not match issuer did:ethr:0x1:0x38dB1C3Df8E217082AD401E4eA0c6240Bf6a6C54']).",
         "method": "executed"
       },
       "replay": {
@@ -427,9 +427,25 @@
       },
       "identity_theft": {
         "outcome": "DEFENDED",
-        "mechanism": "holder binding: the VP must be signed by the key controlling the holder DID; a stolen credential is unusable without the holder key",
-        "evidence": "thief (same holder DID, wrong key) presentation rejected (errors: ['[vp_signature] presentation signed by 0xaf32b113b13c2f3ba97aa4806b3b0b419e0490e4, not holder did:ethr:0x1:0xF3a8333939C5c2a9c2AFE1d0F61909eC1A7d0Fba']). A copied/stolen credential cannot be replayed by a third party.",
-        "method": "executed"
+        "mechanism": "holder binding: the VP must be signed by the key controlling the holder DID (VP proof), and the VP holder must be the credential subject (review 02 S-1); a stolen credential is unusable without the subject's key, under the subject's DID or the thief's own",
+        "evidence": "(a) thief claiming the victim's holder DID but signing with its own key: presentation rejected (errors: ['[vp_signature] presentation signed by 0x322bf887d9f3473b9eabc41b23a1925527a01aa6, not holder did:ethr:0x1:0xf9D2DC569802c17a38f1260Bd0B5706e9C8C6D4A']). (b) thief presenting the victim's credential under its OWN did:ethr, VP signed by the thief (a valid VP proof): presentation rejected (errors: [\"[holder_binding] presentation holder did:ethr:0x1:0xc05Efe661b043F5813CB04d84FCe0b4bF45573c3 is not the credential subject ['did:ethr:0x1:0xf9D2DC569802c17a38f1260Bd0B5706e9C8C6D4A']\"]). A copied/stolen credential cannot be replayed by a third party.",
+        "method": "executed",
+        "variants": {
+          "same_did_wrong_key": {
+            "rejected": true,
+            "errors": [
+              "[vp_signature] presentation signed by 0x322bf887d9f3473b9eabc41b23a1925527a01aa6, not holder did:ethr:0x1:0xf9D2DC569802c17a38f1260Bd0B5706e9C8C6D4A"
+            ]
+          },
+          "own_did": {
+            "rejected": true,
+            "thief_did": "did:ethr:0x1:0xc05Efe661b043F5813CB04d84FCe0b4bF45573c3",
+            "vp_proof_valid": true,
+            "errors": [
+              "[holder_binding] presentation holder did:ethr:0x1:0xc05Efe661b043F5813CB04d84FCe0b4bF45573c3 is not the credential subject ['did:ethr:0x1:0xf9D2DC569802c17a38f1260Bd0B5706e9C8C6D4A']"
+            ]
+          }
+        }
       },
       "sybil": {
         "outcome": "PARTIAL",

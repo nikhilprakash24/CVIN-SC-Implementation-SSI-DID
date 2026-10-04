@@ -70,6 +70,44 @@ def cell(outcome, mechanism, evidence, method="executed"):
 # OFF-CHAIN attack scenarios against the W3C VC/VP (SSI) layer
 # ---------------------------------------------------------------------------
 
+def identity_theft_attacks(victim_wallet, stolen_vc, verifier):
+    """Execute both identity-theft variants against ``verifier`` and return
+    {variant: {"rejected": bool, "errors": [...]}}.
+
+    (a) same_did_wrong_key: the thief copies the credential and claims the
+        victim's holder DID, but signs the VP with its own key. Caught by the
+        VP proof check (signer != holder DID's address).
+    (b) own_did: the realistic thief presents the victim's credential under
+        the thief's OWN did:ethr, VP signed by the thief's key. The VP proof
+        is valid; only the S-1 holder binding (VP holder must be the
+        credential subject) rejects it.
+    """
+    from vc_holder import HolderWallet
+
+    results = {}
+
+    thief_a = HolderWallet(holder_did=victim_wallet.holder_did)  # same DID, different key
+    cid_a = thief_a.store_credential({"verifiableCredential": stolen_vc, "disclosures": None})
+    vp_a = thief_a.create_presentation([cid_a], challenge="nonce-live-002", domain="dmv.gov.bc.ca")
+    ok_a, rep_a = verifier.verify_presentation(vp_a, "nonce-live-002", "dmv.gov.bc.ca")
+    results["same_did_wrong_key"] = {
+        "rejected": not ok_a,
+        "errors": [e for e in rep_a["presentation"]["errors"] if "holder" in e],
+    }
+
+    thief_b = HolderWallet.with_ethr_did()  # thief's own did:ethr + own key
+    cid_b = thief_b.store_credential({"verifiableCredential": stolen_vc, "disclosures": None})
+    vp_b = thief_b.create_presentation([cid_b], challenge="nonce-live-003", domain="dmv.gov.bc.ca")
+    ok_b, rep_b = verifier.verify_presentation(vp_b, "nonce-live-003", "dmv.gov.bc.ca")
+    results["own_did"] = {
+        "rejected": not ok_b,
+        "thief_did": thief_b.holder_did,
+        "vp_proof_valid": rep_b["presentation"]["valid"],
+        "errors": [e for c in rep_b["credentials"] for e in c["errors"] if "holder_binding" in e],
+    }
+    return results
+
+
 def run_offchain_vc_attacks():
     """Execute forgery / replay / theft / privacy attacks against the real
     VC layer and return a cell dict keyed by threat category."""
@@ -130,20 +168,20 @@ def run_offchain_vc_attacks():
         f"(errors: {[e for e in replay_report['presentation']['errors'] if 'challenge' in e]}).",
     )
 
-    # ---- identity theft: a thief copies the credential into their own wallet
-    #      (same holder DID string, but the thief does NOT hold the holder key)
-    #      and tries to present it ----
-    thief = HolderWallet(holder_did=wallet.holder_did)  # same DID, different key
-    tcid = thief.store_credential({"verifiableCredential": good_vc, "disclosures": None})
-    thief_vp = thief.create_presentation([tcid], challenge="nonce-live-002", domain="dmv.gov.bc.ca")
-    thief_ok, thief_report = verifier.verify_presentation(thief_vp, "nonce-live-002", "dmv.gov.bc.ca")
+    # ---- identity theft: two thieves, both executed ----
+    theft = identity_theft_attacks(wallet, good_vc, verifier)
+    a, b = theft["same_did_wrong_key"], theft["own_did"]
     out["identity_theft"] = cell(
-        "DEFENDED" if not thief_ok else "VULNERABLE",
-        "holder binding: the VP must be signed by the key controlling the holder DID; a stolen credential is unusable without the holder key",
-        f"thief (same holder DID, wrong key) presentation rejected (errors: "
-        f"{[e for e in thief_report['presentation']['errors'] if 'holder' in e]}). "
+        "DEFENDED" if (a["rejected"] and b["rejected"]) else "VULNERABLE",
+        "holder binding: the VP must be signed by the key controlling the holder DID (VP proof), and the "
+        "VP holder must be the credential subject (review 02 S-1); a stolen credential is unusable "
+        "without the subject's key, under the subject's DID or the thief's own",
+        f"(a) thief claiming the victim's holder DID but signing with its own key: presentation rejected "
+        f"(errors: {a['errors']}). (b) thief presenting the victim's credential under its OWN did:ethr, "
+        f"VP signed by the thief (a valid VP proof): presentation rejected (errors: {b['errors']}). "
         "A copied/stolen credential cannot be replayed by a third party.",
     )
+    out["identity_theft"]["variants"] = theft
 
     # ---- sybil: credential issuance is bound to a trusted issuer key; a
     #      self-asserted issuer DID is not in the trusted registry ----
