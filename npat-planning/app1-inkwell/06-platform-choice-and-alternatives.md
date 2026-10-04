@@ -219,7 +219,7 @@ The founder's phrasing: development environment can be anything; a translation s
 
 1. **UIKit where SwiftUI is not enough**, via `UIViewRepresentable`: text input in the round screen if `TextField` focus timing proves unreliable; `UIFeedbackGenerator` fallback when Core Haptics is unavailable.
 2. **SpriteKit overlay** for ink particles (as `SpriteView` inside SwiftUI), with the Reduce Motion fallback being a static illustration. **Metal shaders via SwiftUI `.layerEffect`** for the ink-bleed on letter reveal (iOS 17+). Lottie or Rive are allowed only for authored illustrations, not for interactive state (keeps the engine-state-to-UI mapping in SwiftUI). Rive (https://rive.app/) is kept as a parallel pass for the letter-reveal animation because designers can author state machines directly; evaluate licensing and runtime size before adoption.
-3. **iOS 17 minimum at launch**, re-evaluated in the quarter before launch. If a motion feature requires iOS 18 APIs (for example newer `TextRenderer` effects or mesh gradients), and iOS 18 adoption exceeds roughly 85% of active devices by Apple's own measurement at the time (Apple publishes adoption at https://developer.apple.com/support/app-store/), raise the minimum. Supporting a version almost nobody uses costs test time and holds back the feel.
+3. **iOS 17.0 minimum at launch**, decided in the delivery plan (03, Section 19.2) and re-evaluated at 1.1 with App Store Connect usage data, not before launch. iOS 18-only motion APIs (for example newer `TextRenderer` effects, mesh gradients, the zoom transition) are adopted behind availability checks with an iOS 17 fallback. Apple publishes adoption at https://developer.apple.com/support/app-store/.
 
 > **[QA]** From a testing standpoint, each minimum OS version we keep adds a column to the device matrix. iOS 17 to 18 is one extra column; I can live with it. Below 17 is not on the table.
 
@@ -276,7 +276,7 @@ The content pipeline (DAWG files, front-coded lists, signed manifests, licenses)
 
 **DECISION:** Approved parallel passes: Rive letter-reveal (3 days), web rules sandbox (2 days, **[GAME]** only). Deferred: Kotlin conformance stub (post-launch).
 
-**OPEN:** iOS 18 minimum at launch (decide in the quarter before submission based on Apple's published adoption).
+**Closed:** iOS 18 minimum at launch was decided against in the delivery plan (03, Section 19.2): iOS 17.0 for 1.0, re-evaluate at 1.1.
 **OPEN:** Rive adoption after the parallel pass.
 **OPEN:** Whether App 2 (Kids) targets Android; if yes, start the Kotlin engine port concurrently with App 2 design, not after.
 

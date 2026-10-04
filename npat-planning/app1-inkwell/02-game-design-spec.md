@@ -34,7 +34,7 @@
 4. **The engine is deterministic.** Given the same seed and the same inputs, every device computes the same letter, the same validation and the same score. This is what makes nearby and online play possible without a server deciding anything.
 5. **Validation is a conversation, not a verdict.** The dictionary is confident where it can be and humble where it cannot. Humans always get the last word.
 
-> **[ARCH]** Pillar 4 is the architectural contract. The GameEngine package is a pure state machine: `State + Event -> State + [Effect]`, seeded random, no clocks inside. Timers, network and UI are effects handled outside. Every rule in this document must be expressible as an event or a reducer branch.
+> **[ARCH]** Pillar 4 is the architectural contract. The engine package (`IWCore` plus `IWRules` in the architecture document; "GameEngine" in the brief) is a pure state machine: `State + Event -> State + [Effect]`, seeded random, no clocks inside. Timers, network and UI are effects handled outside. Every rule in this document must be expressible as an event or a reducer branch.
 
 > **[JOBS]** Pillar 3 is the one I will fight about in every design review. Toggles exist. They are not on the first screen, the second screen or the third.
 
@@ -356,7 +356,7 @@ normalized answer
 
 Confidence levels drive the UI: HIGH accept is a check stamp; MEDIUM accept is a lighter check; UNSURE is a "?" that invites a challenge or a self-judgment; REJECT is a strike-through that the group can overturn by vote.
 
-> **[DATA]** Source lists and licenses (all permissive): ENABLE word list (public domain) for general English; SCOWL for frequency tiers (http://wordlist.aspell.net/); WordNet for noun sense checks (https://wordnet.princeton.edu/license-and-commercial-use); Wiktionary category extracts for Animals, Foods, etc. under CC BY-SA, with attribution in the app's licenses screen (https://en.wiktionary.org/wiki/Wiktionary:Copyrights); GeoNames for Places (CC BY 4.0, https://www.geonames.org/) filtered to populated places above a population threshold plus countries, regions, rivers, mountains and well-known landmarks. Names come from a curated first-name list across many cultures, which is the hardest list to get right and the one I most want to be humble about.
+> **[DATA]** Source lists and licenses (all permissive): ENABLE word list (public domain) for general English; SCOWL for frequency tiers (http://wordlist.aspell.net/); WordNet for noun sense checks (https://wordnet.princeton.edu/license-and-commercial-use); Wiktionary category extracts for Animals, Foods, etc. are CC BY-SA (https://en.wiktionary.org/wiki/Wiktionary:Copyrights) and the ShareAlike clause led ADR-007 in the architecture document to exclude Wiktionary-derived data from v1 packs, so Animals and Foods seed from WordNet hyponyms plus curation and Wikidata (CC0) is being verified for Movies and Brands; GeoNames for Places (CC BY 4.0, https://www.geonames.org/) filtered to populated places above a population threshold plus countries, regions, rivers, mountains and well-known landmarks. Names come from a curated first-name list across many cultures, which is the hardest list to get right and the one I most want to be humble about.
 
 > **[ARCH]** All lists ship on device, compressed, as a perfect-hash or FST per category. Target under 12 MB total for English. No network call is ever required to validate. Online modes only share results, never lookups.
 
@@ -418,10 +418,10 @@ Duplicates are detected before validation outcome is final, so two players who b
 
 | Category | Approx. entries | Source | Hard link letters | Notes |
 |---|---|---|---|---|
-| Animals | 4,000 | Wiktionary + WordNet, curated | X, Q, Z, J, V, Y | **Default.** Includes common names only; no Latin binomials. |
+| Animals | 4,000 | WordNet hyponyms, curated (Wiktionary excluded per ADR-007) | X, Q, Z, J, V, Y | **Default.** Includes common names only; no Latin binomials. |
 | Countries | 195 + 50 territories | ISO 3166 + curated | Q (none start with Q except Qatar), X (none), Z (Zambia, Zimbabwe) | Small list, so repeats run out fast; great for Lives mode. |
 | Cities | 6,000 | GeoNames, population over 100k plus capitals | X (Xi'an, Xalapa), Q (Quito, Quebec), Z (Zurich, Zagreb) | |
-| Foods | 3,500 | Wiktionary + curated | X (none practical), Q (quinoa, quiche), Z (zucchini, ziti) | Dishes and ingredients both count. |
+| Foods | 3,500 | WordNet hyponyms + curated (Wiktionary excluded per ADR-007) | X (none practical), Q (quinoa, quiche), Z (zucchini, ziti) | Dishes and ingredients both count. |
 | Movies | 8,000 | Curated from public lists; titles normalized, leading articles ignored | X (X-Men), Q (Quiz Show) | Titles are proper nouns; fuzzy tolerance recommended. |
 | Fruits and vegetables | 600 | Curated | Most letters hard | Kids favorite; small list. |
 | Any English word | 170,000 | ENABLE | None | Classic Shiritori feel; longest games. |
@@ -461,7 +461,7 @@ Word choice: filter by link letter, remove used words, weight by frequency tier 
 
 > **[KIDS]** For App 2, Casual is still too mean. Note that the Kids app will need a "Buddy" tier that deliberately feeds easy links and never traps. The tier table should be data, not code, so we can add it.
 
-> **[ARCH]** Agreed: tiers are a data struct (slice, delay range, failure rate, tactic weight) in the shared GameEngine package. Adding Buddy is a row.
+> **[ARCH]** Agreed: tiers are a data struct (slice, delay range, failure rate, tactic weight) in the shared `IWRules` package. Adding Buddy is a row.
 
 ## 12. Anti-cheese and fairness
 
@@ -598,7 +598,7 @@ Principle: **the first round is the tutorial.** No carousel, no video.
 
 **DECISIONS**
 
-1. GameEngine is a pure, seeded, deterministic state machine; timers, network and UI are effects.
+1. The engine (`IWCore`, with rule presets in `IWRules`) is a pure, seeded, deterministic state machine; timers, network and UI are effects.
 2. Classic NPAT scoring 10/5/0 is the default; alternates are toggles.
 3. Letter draw is availability-weighted with no repeats; Classic uses square-root flattening; exclusions are visible on the wheel.
 4. Default timers: NPAT 60 s; Word Chain 30 s pass-and-play, 15 s solo; Off is allowed.

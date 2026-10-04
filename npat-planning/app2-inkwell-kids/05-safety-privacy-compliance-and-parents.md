@@ -109,7 +109,7 @@ Apple's Kids apps page (https://developer.apple.com/app-store/kids-apps/) adds: 
 | Crash reporting? | Apple's crash reports, visible in Xcode Organizer, which rely on the device owner's opt-in to share analytics with developers. No SDK. |
 | Attribution or ad-network SDKs (SKAdNetwork)? | None. |
 | Privacy manifest | `PrivacyInfo.xcprivacy` declares `NSPrivacyTracking` false, no tracking domains, no collected data types, and required-reason API usage (for example `UserDefaults` and file timestamp APIs) with the standard reason codes (https://developer.apple.com/documentation/bundleresources/privacy-manifest-files.md). |
-| Dependency audit | The build pipeline lists every linked framework and fails if any non-Apple dynamic framework or unknown Swift package is linked. Allowed third-party packages must be source-only, offline and reviewed (for example a font or a phonetic algorithm). |
+| Dependency audit | The build pipeline lists every linked framework and fails if any non-Apple dynamic framework or unknown Swift package is linked. Allowed third-party packages must be source-only, offline and reviewed (for example a font, a phonetic algorithm, or the GRDB database library App 1 already uses in `IWPersistence`). |
 
 **DECISION:** No advertising, no third-party analytics, no third-party SDK with network behavior. Dependency audit in CI.
 
@@ -161,7 +161,7 @@ Gate policy details:
 
 What is explicitly never stored: birthdates, real names as a required field, email addresses, photos, audio, location, device identifiers, advertising identifiers, contacts, any server-side record of any kind, the text of inappropriate words a child typed.
 
-Storage technology: the shared Persistence package (SQLite or SwiftData per App 1's decision) in the app's container, protected by iOS data protection class Complete Until First User Authentication at minimum. No iCloud container entitlement in v1. Backups: the container is included in the user's own iCloud or local device backup like any app; this is the device owner's backup, not our collection, and the Trust page says so plainly.
+Storage technology: the shared Persistence package (`IWPersistence`: GRDB over SQLite behind a `MatchStore` protocol, per App 1's ADR-004) in the app's container, protected by iOS data protection class Complete Until First User Authentication at minimum. No iCloud container entitlement in v1. Backups: the container is included in the user's own iCloud or local device backup like any app; this is the device owner's backup, not our collection, and the Trust page says so plainly.
 
 > **[ARCH]** Excluding the kid profile store from backups would protect against one edge (a parent's backup containing a child's nickname) at the cost of the most common support request ("we got a new iPad and lost the stickers"). I recommend leaving it in the device backup and explaining it.
 

@@ -173,7 +173,7 @@ Sources: Lottie iOS repository and SPM note, https://github.com/airbnb/lottie-io
 - **Lottie:** allowed only for small illustrative loops (M24) where After Effects is faster than code. No Lottie for anything interactive.
 - **Rive:** skunkworks for the letter and the Pop sticker system. Not in the v1 critical path.
 
-### 5.3 Bake-off plan (Phase 1, 1.5 engineer-weeks)
+### 5.3 Bake-off plan (1.5 engineer-weeks; scheduled in the delivery plan's skunkworks track as the W7 to W8 Rive/Lottie/native bake-off and the W9 to W11 ink-shader prototype)
 
 | Step | What | Exit criterion |
 |------|------|----------------|

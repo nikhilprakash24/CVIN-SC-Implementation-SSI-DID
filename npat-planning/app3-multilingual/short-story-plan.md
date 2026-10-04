@@ -28,7 +28,7 @@ Both Inkwell games rest on one operation: take a unit of writing (in English, a 
 
 ## 3. Language-pack architecture sketch
 
-The design replaces the hardcoded idea of a letter with a `Unit` abstraction supplied by a language pack. App 1's Localization package already defines the protocol; App 3 fills it in per language.
+The design replaces the hardcoded idea of a letter with a `Unit` abstraction supplied by a language pack. App 1 defines the protocol; App 3 fills it in per language. Naming note: App 1's architecture document (04) names its packages `IWCore` (engine), `IWRules` and `IWContent` (dictionary) and does not yet list a separate Localization package; where this plan says "Localization package" and "GameEngine" or "Dictionary", read the `WritingSystem` protocol as living in `IWCore` with language packs as `IWContent` content packs, pending ARCH's decision on whether a tenth `IWLocalization` package is warranted (OPEN in the decisions register).
 
 ```swift
 protocol WritingSystem {

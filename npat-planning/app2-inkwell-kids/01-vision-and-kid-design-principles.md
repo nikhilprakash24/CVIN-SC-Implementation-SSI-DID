@@ -39,7 +39,7 @@ The founder's brief says App 2 is a separate app, not a toggle. We still owe the
 | Option | Description | Discoverability | Compliance isolation | Brand and trust | Maintenance cost |
 |---|---|---|---|---|---|
 | A. Kids mode inside App 1 | A "Kids" toggle in App 1 settings that swaps content and loosens validation | Poor: App 1 cannot use "For Kids" in metadata or appear in the Kids Category without itself meeting every Kids Category rule (App Store Review Guidelines 1.3 and 2.3.8) | Poor: the whole app inherits Kids rules, including no third-party analytics and no link-outs without a gate | Confusing: parents do not trust a "mode" in an adult game | Lowest |
-| B. Separate app, shared engines (recommended) | Second App Store listing, own bundle, own design system, same GameEngine and Dictionary packages | Excellent: listed in Kids Category with an age band, "Kids" in the name | Excellent: Kids rules apply only to App 2; App 1 keeps normal analytics and online play | Strong: a dedicated promise to parents; separate icon and store page | Medium: two targets, two release trains, shared packages absorb most logic |
+| B. Separate app, shared engines (recommended) | Second App Store listing, own bundle, own design system, same engine and dictionary packages (`IWCore`, `IWRules`, `IWContent` in the App 1 architecture document; GameEngine and Dictionary in the brief) | Excellent: listed in Kids Category with an age band, "Kids" in the name | Excellent: Kids rules apply only to App 2; App 1 keeps normal analytics and online play | Strong: a dedicated promise to parents; separate icon and store page | Medium: two targets, two release trains, shared packages absorb most logic |
 | C. Separate app, forked codebase | Copy App 1 and diverge | Excellent | Excellent | Strong | Highest: every engine bug fixed twice |
 | D. Kids-only product first, no App 1 | Skip App 1 | n/a | n/a | n/a | Rejected by founder brief: App 1 ships first |
 
@@ -229,7 +229,7 @@ App 1's working codename is "Inkwell". App 2 should be recognizably from the sam
 
 > **[DESIGN]** Brand relationship: same wordmark family (same letterforms for "Ink"), different color world, a mascot that App 1 does not have. App 1 is ink and paper for adults; App 2 is the same ink held by a smaller hand.
 
-**DECISION:** Working name remains "Inkwell Kids" in all planning documents. Shortlist for launch naming: Inkling (first choice pending trademark search), Inkwell Kids (fallback). Naming decision gate is Phase 2 in doc 03.
+**DECISION:** Working name remains "Inkwell Kids" in all planning documents. Shortlist for launch naming: Inkling (first choice pending trademark search), Inkwell Kids (fallback). Trademark search runs in Phase 2 and the naming decision is made in Phase 3 of doc 03. This also closes the App 1 brief's OPEN on "Jr." versus "Kids": "Kids" (or Inkling with "Kids" in the subtitle), never "Jr.".
 
 **OPEN:** Trademark and App Store name availability search for "Inkling".
 

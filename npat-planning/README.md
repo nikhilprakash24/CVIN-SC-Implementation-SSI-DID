@@ -4,6 +4,8 @@ Planning documents for a family of iOS word games built from two paper-and-penci
 
 Start with [`00-TEAM-CHARTER.md`](00-TEAM-CHARTER.md). It explains the three products, the eight team voices that write and argue inside every document, and the rules the documents follow.
 
+Names are working titles. App 1 is **Inkwell** pending trademark clearance (ranked fallbacks: Nib, Letterhead, Foolscap). App 2's working name is **Inkwell Kids**; its first choice for launch is **Inkling** pending a trademark search. Where documents disagree, [`00-DECISIONS-AND-OPEN-QUESTIONS.md`](00-DECISIONS-AND-OPEN-QUESTIONS.md) records the reconciled decision.
+
 ## Document map
 
 ### App 1: Inkwell (build first)

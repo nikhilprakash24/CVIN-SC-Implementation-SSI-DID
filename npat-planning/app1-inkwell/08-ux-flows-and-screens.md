@@ -105,7 +105,7 @@ Every screen lists purpose, content, primary action, states and acceptance crite
 ### 3.2 NPAT Setup
 
 - **Purpose:** configure a match without reading a manual.
-- **Content:** Players (stepper 1 to 8, names editable inline; "Solo" when 1); Mode segmented control (Solo, Pass and Play, Nearby [disabled v1 with "Soon"], Online [hidden v1]); Categories (chips: Name, Place, Animal, Thing on by default; Movie, Food, Brand, Custom); Timer (Off, Relaxed 90 s, Standard 60 s, Blitz 30 s); Rounds (3, 5, 10, Until Stopped); House rules disclosure (Stop rule, Long word bonus, Exclude X Q Z).
+- **Content:** Players (stepper 1 to 8, names editable inline; "Solo" when 1); Mode segmented control (Solo, Pass and Play, Nearby [Pro; arrives in delivery Phase 4, shown disabled with "Soon" in earlier TestFlight builds], Online [Pro; async only, delivery Phase 5, hidden until then]); Categories (chips: Name, Place, Animal, Thing on by default; Movie, Food, Brand, Custom); Timer (Off, Relaxed 120 s, Classic 60 s, Quick 45 s, Blitz 30 s, per the game design spec Section 7.1); Rounds (Quick 3, Classic 5, Long 8, Marathon 13, Until score); House rules disclosure (Stop rule, Long word bonus, Letter difficulty preset).
 - **Primary action:** "Start" pinned at bottom.
 - **States:** empty (defaults); loading (none); error (duplicate player names: inline "Two players named Sam. Add an initial?"; zero categories: Start disabled with helper); success (navigates to Round or Pass interstitial).
 - **Acceptance:** Start is reachable without scrolling at default Dynamic Type; every control has a VoiceOver label and value; changes persist as the new defaults; no setting requires more than two taps.
@@ -135,7 +135,7 @@ Detailed in section 7. Acceptance in short: complete reveal under 6 s for up to 
 
 ### 3.7 Word Chain Setup
 
-- **Content:** Mode (Solo vs Bot, Pass and Play); Category (Countries, Cities, Animals, Foods, Movies, Anything); Turn timer (Off, Relaxed 30 s, Standard 15 s, Blitz 7 s); Rules (Elimination with 1 to 3 lives, or Points to 50/100); Bot difficulty (Easy, Normal, Hard).
+- **Content:** Mode (Solo vs Bot, Pass and Play, Nearby [Pro, Phase 4]); Category (Animals default, Countries, Cities, Foods, Movies, Fruits and Vegetables, Any English word); Turn timer (Off, Relaxed 30 s, Standard 15 s, Blitz 7 s); Rules (Lives with 1 to 5 lives, Elimination, or Points with a fixed number of turns, per the game design spec Section 3.3); Bot difficulty (Casual, Clever, Ruthless).
 - **Primary action:** "Start".
 - **States:** error (none possible beyond empty names); success (first word is drawn by the app or chosen by the first player, per rules).
 - **Acceptance:** same as NPAT Setup.
@@ -158,7 +158,7 @@ Detailed in section 6.
 
 ### 3.11 Pro Paywall
 
-- **Content:** one price, what you get (Night Lounge theme, alternate icons, custom categories unlimited, future online play when available), "Unlock Pro" primary, "Restore purchases" text button, legal links. No timer, no fake discount, no "most popular" badge.
+- **Content:** one price, what you get (per the product brief: nearby and online async modes for the whole table under the host-pays rule, house rules, category packs, the Night Lounge theme and alternate icons, stats; whether custom categories are free or Pro is OPEN in the product brief), "Unlock Pro" primary, "Restore purchases" text button, legal links. No timer, no fake discount, no "most popular" badge.
 - **States:** loading (price fetch via StoreKit 2; skeleton on the price only); error (store unavailable: "The App Store is not reachable. Try again later." with Retry); success (check, close, return to the theme picker with the tile unlocked).
 - **Acceptance:** price shown in local currency from StoreKit; restore works without sign-in prompts beyond Apple's own; passes App Review guideline 3.1.1 expectations (owned by the monetization document).
 
@@ -175,7 +175,7 @@ Detailed in section 6.
 
 ### 3.14 Invite (future, hidden in v1)
 
-- Documented in flow 4.8 only. Not built in v1.
+- Documented in flow 4.8 only. Not built in v1: in 1.0, online async invitations use Game Center's own invite sheet (delivery Phase 5); the universal-link invite below is a later addition.
 
 ---
 
@@ -220,7 +220,7 @@ flowchart TD
   I -->|no| K[Match Summary]
 ```
 
-Note on the stop rule: when enabled, the first player to finish ends the round for everyone in pass-and-play by setting a shared 10 s grace timer for players who have not yet had the phone; GAME to confirm whether the grace applies per player or ends immediately (OPEN below).
+Note on the stop rule: when enabled, the first player to finish ends the round for everyone in pass-and-play by setting a shared grace timer (spec default 5 s, options 0, 5, 10 s) for players who have not yet had the phone; GAME to confirm whether the grace applies per player or ends immediately (OPEN below).
 
 ### 4.3 Word Chain solo vs bot
 
@@ -388,13 +388,13 @@ Four fields stacked, but only the focused field is full height with its label; t
 
 ### 5.4 Interaction details
 
-- **Keyboard:** standard alphabetic keyboard, autocorrect on (names and places benefit), autocapitalization words, smart punctuation off, Return key labeled "Next" on fields 1 to 3 and "Done" on field 4 via `submitLabel`. No custom keyboard.
+- **Keyboard:** standard alphabetic keyboard, autocorrect, spell checking and the predictive bar off during timed rounds (the game design spec's anti-cheese rule, Section 12; corrections happen in the reveal via the fuzzy "did you mean" path), autocapitalization words, smart punctuation off, Return key labeled "Next" on fields 1 to 3 and "Done" on field 4 via `submitLabel`. No custom keyboard.
 - **Letter display:** the letter never scrolls away. Under the keyboard-up condition the letter is allowed to shrink to 96 pt (its clamp floor) with a 200 ms animation, and grows back when the keyboard hides.
 - **Timer visibility:** ring top-right at 36 pt with numeric center; in the last 10 s the digits also appear as a thin bar under the letter so peripheral vision picks it up. "Always show numeric timer" is an accessibility setting.
 - **Auto-advance:** only on Return. Never on word boundary, never on autocorrect commit. A player who types "New York" is not advanced after "New".
 - **Submit affordance:** "Done" on the keyboard for field 4, plus a persistent "Finish" text button in the navigation bar for finishing early from any field. Both go straight to Reveal (no confirmation) when all four fields have content. If any field is blank, a non-blocking sheet asks "Submit with 2 blanks?" with "Submit" primary and "Keep writing" secondary; this sheet is suppressed when the timer has under 5 s left.
 - **Accidental dismissal:** the Round screen is not a sheet; there is no swipe-down. Back navigation is replaced by a "Quit round" text button that opens a confirmation ("Quit this round? Your answers will not count."). Interactive pop gesture is disabled on this screen. App backgrounding pauses the timer in solo and records the pause in pass-and-play (GAME: OPEN whether backgrounding in pass-and-play forfeits the turn).
-- **Paste:** allowed; pasted text is trimmed to one line.
+- **Paste:** disabled in timed rounds per the game design spec Section 12 (a small "no pasting, pencil only" ink note appears); allowed in untimed modes, trimmed to one line.
 - **Validation timing:** none while typing in v1. Live validation (green underline as you type) is a tested variant in the skunkworks track because GAME worries it changes the feel from "writing" to "being graded".
 
 > **[GAME]** Live validation is a trap. The joy of NPAT is committing and then finding out. If the app tells you mid-word that "Quito" is fine, the reveal has nothing to reveal.
@@ -491,7 +491,7 @@ Total time for 4 categories and 4 players: roughly 4 categories x (0.3 + 4 x 0.2
 ### 7.2 Challenge flow UI
 
 - Long press (or tap the small "Challenge" button under VoiceOver) opens the Challenge Sheet.
-- The sheet shows the word, the category, the dictionary verdict and reason, and vote buttons in pass-and-play ("Accept" and "Reject", majority wins, ties go to the writer) or a single "Count it anyway" or "Strike it" pair in solo.
+- The sheet shows the word, the category, the dictionary verdict and reason, and vote buttons in pass-and-play ("Accept" and "Reject", majority of non-authors wins, ties fall back to the dictionary state per the game design spec Section 9.5; with two players the challenger decides, three lost challenges remove challenge rights) or a single "Count it anyway" or "Strike it" pair in solo.
 - Resolving a challenge re-runs scoring for that category only; affected chips roll to new values; totals re-tally.
 - Challenges are recorded in the Match Summary as a small line ("1 challenge, accepted").
 
@@ -637,7 +637,7 @@ Additional conventions: player names are always used where known ("Same as Marcu
 | Player types the letter itself as an answer ("P") | Treated as blank: "Too short" | GAME |
 | Answer with trailing spaces or emoji | Normalized; emoji stripped; original shown | DATA |
 | Custom category with no dictionary | Validation is letter-only; Reveal shows no reason text and a "Custom category: on trust" footnote | DATA |
-| Stop rule triggered in pass-and-play | Players who have not had the phone get a 10 s turn; a banner "Priya stopped the round. 10 seconds." | GAME |
+| Stop rule triggered in pass-and-play | Players who have not had the phone get a short grace turn (spec default 5 s); a banner "Priya stopped the round. 5 seconds." | GAME |
 | Word Chain: no valid word exists in the category for the required letter | Bot concedes (solo); in pass-and-play the player may "Pass" once per match without losing a life, and the app draws a new starting letter | GAME |
 | Theme purchase succeeds but entitlement not reflected | "Restore purchases" row in Settings; automatic transaction listener re-grants on next launch | IOS |
 | Device rotated to landscape | v1 is portrait-locked for iPhone; iPad supports landscape with the same layouts widened | IOS |

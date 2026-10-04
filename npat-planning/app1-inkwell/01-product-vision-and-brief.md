@@ -213,7 +213,7 @@ Trademark notes below are from a quick public check and are **not** legal advice
 
 **DECISION:** Working title stays Inkwell. App Store name reservation and trademark clearance are Phase 0 tasks. Fallbacks ranked: Nib, Letterhead, Foolscap.
 
-**OPEN:** Does the Kids sibling use "Jr." or "Kids"? KIDS to recommend in the App 2 brief.
+**OPEN (closed by the App 2 brief):** Does the Kids sibling use "Jr." or "Kids"? The Kids vision document decided: never "Jr." (babyish to 11 to 13); working name Inkwell Kids, launch first choice "Inkling" with "Kids" in the subtitle, pending a trademark search.
 
 ## 9. Positioning vs. competitors
 
@@ -307,7 +307,7 @@ For people who love the paper games and are tired of being treated like a wallet
 
 **OPEN**
 
-1. Kids sibling naming ("Jr." vs. "Kids").
+1. Kids sibling naming ("Jr." vs. "Kids"): closed by the App 2 brief ("Kids", or Inkling pending trademark).
 2. Paper-companion mode (letter plus timer only) in v1 if under one engineer-week.
 3. Exact Pro price and introductory pricing.
 4. Custom categories free or Pro.

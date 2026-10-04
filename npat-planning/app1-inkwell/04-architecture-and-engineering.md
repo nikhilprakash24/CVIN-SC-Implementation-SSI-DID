@@ -272,7 +272,7 @@ A content pack is a directory with `manifest.json` (id, version, language, licen
 |------------------|------|------|-------|
 | **Ship in app bundle only** | zero infra, App Review covers content | content fixes require app updates | Phase 1 (launch) |
 | **On-Demand Resources** (Apple-hosted) | free hosting, lazy download of optional categories | tied to app version; ODR tags are awkward for versioned packs | evaluate for large optional categories (Movies, Cities) |
-| **Static HTTPS (CDN) with signed manifests** | content fixes without app review, cheap | we run a (tiny) endpoint; must sign and verify | Phase 2 |
+| **Static HTTPS (CDN) with signed manifests** | content fixes without app review, cheap | we run a (tiny) endpoint; must sign and verify | Post-launch 1.x (1.0 has zero servers per the delivery plan) |
 | **Server-side validation API** | always fresh, enables server adjudication | network dependency, cost, latency, offline break | not planned (violates P2) |
 
 Packs are signed (Ed25519 via CryptoKit); the app verifies signature and checksum before activation and falls back to the bundled pack if verification fails.
@@ -314,7 +314,7 @@ Validation is layered and always visible to players:
 1. **Format**: starts with the drawn letter (after normalization), length >= 2.
 2. **Category membership**: exact or alias match in the category list -> `valid`.
 3. **Fuzzy**: distance-1 match -> `suggested(correction)`; the player confirms.
-4. **Unknown**: not found -> `unknown`, which in pass-and-play goes to a group vote (the app does not pretend to be smarter than the room), in solo counts as invalid unless the player uses one "I insist" token per match (a **[GAME]** proposal, OPEN), and online goes to the authoritative peer.
+4. **Unknown**: not found -> `unknown`, which in pass-and-play and nearby goes to a challenge and vote of the non-authors (the app does not pretend to be smarter than the room), in solo is self-judged by the player ("Count it" / "Nope") and recorded as self-judged, and in online async is voted in match data within a 24 h window with unresolved challenges falling back to the dictionary state. This matches the game design spec (02, Sections 9.5 and 16), which supersedes the earlier "I insist token" proposal.
 
 ---
 
@@ -334,10 +334,12 @@ Validation is layered and always visible to players:
 
 | Phase | Transport | Why now | Exit criteria |
 |-------|-----------|---------|---------------|
-| **1 (launch)** | Pass-and-play + solo | Zero infra, zero accounts, proves the feel | Crash-free 99.8%, D7 retention target met (see `05-...`) |
-| **2** | Nearby (MultipeerConnectivity) | Living-room multiplayer with no accounts; biggest "party" multiplier | 8-device test session completes 20 rounds without desync in beta |
-| **3** | Game Center turn-based | Async play with friends remotely, Apple-hosted, no backend | Review passes, match completion rate > 60% in beta |
+| **1** (delivery Phases 1 to 3 in `03-...`) | Pass-and-play + solo | Zero infra, zero accounts, proves the feel | Crash-free 99.8%, D7 retention target met (see `05-...`) |
+| **2** (delivery Phase 4, in 1.0 behind Pro) | Nearby (MultipeerConnectivity) | Living-room multiplayer with no accounts; biggest "party" multiplier | 8-device test session completes 20 rounds without desync in beta |
+| **3** (delivery Phase 5, in 1.0 behind Pro; the pre-approved first cut if Phase 5 slips) | Game Center turn-based | Async play with friends remotely, Apple-hosted, no backend | Review passes, match completion rate > 60% in beta |
 | **4 (conditional)** | Game Center real-time | Only if beta asks for live remote rounds | opt-in via flag |
+
+Numbering note: the transport phases in this table are not the delivery plan's Phases 0 to 7. All three committed transports ship in 1.0 per the delivery plan (03, Section 19.1); "Phase 2" elsewhere in this document (content CDN, remote config, diagnostics endpoint) means post-launch 1.x, since 1.0 has zero servers.
 | **Skunkworks** | Custom authoritative server running `IWCore` | Needed only for ranked ladders, public rooms, or cross-platform (Android) | not before App 2 ships |
 
 > **[JOBS]** I want to kill Phase 4 right now. Live remote NPAT with four strangers is not our product. Our product is the kitchen table.
@@ -377,9 +379,9 @@ NPAT is simultaneous: everyone writes during the same countdown, then answers ar
 | **Commit-reveal, peer-verified** | During writing, each client sends a hash of its answers at submit time (commit). After the deadline, clients reveal plaintext. Any peer can verify commit == hash(reveal). Scoring is a pure function over the revealed set, so every peer computes the same result independently. | No trust needed for honesty of answers; no server | Still need someone to order "stop" and expiry events; unknown-word adjudication still needs a rule | NPAT in every online mode (layered on host-authoritative ordering) |
 | **Server-authoritative** | Server runs the reducer | Strongest | Needs the custom server from Section 7 | not in plan |
 
-**DECISION:** Host-authoritative ordering plus commit-reveal for answers. The host cannot peek at others' answers before committing its own because commits are hashes and reveals happen only after the host broadcasts `roundClosed`. Unknown words: group vote (each peer sends a vote event; majority wins; ties go to the submitter in casual presets and against in strict presets, per `IWRules`). Host migration: on host loss, the peer with the lowest `PeerID` in the last agreed membership becomes host after a 5-second timeout; its first act is to rebroadcast the last agreed log hash.
+**DECISION:** Host-authoritative ordering plus commit-reveal for answers. The host cannot peek at others' answers before committing its own because commits are hashes and reveals happen only after the host broadcasts `roundClosed`. Unknown words: group vote of the non-authors (each peer sends a vote event; majority wins; ties fall back to the dictionary state, per the game design spec Section 9.5 and `IWRules`). Host migration: on host loss, the peer with the lowest `PeerID` in the last agreed membership becomes host after a 5-second timeout; its first act is to rebroadcast the last agreed log hash.
 
-> **[GAME]** The "stop" house rule (first finisher ends the round) interacts with this. The host should accept the first `playerCalledStop` by its own receive order, then give a short grace (default 3 seconds, configurable) for in-flight submissions. That grace is a rule, so it lives in `IWRules` and shows in the lobby.
+> **[GAME]** The "stop" house rule (first finisher ends the round) interacts with this. The host should accept the first `playerCalledStop` by its own receive order, then give a short grace (default 5 seconds per the game design spec, configurable 0, 5 or 10 s) for in-flight submissions. That grace is a rule, so it lives in `IWRules` and shows in the lobby.
 
 ---
 
@@ -491,7 +493,7 @@ Budgets are enforced in CI as performance XCTests with baselines on a fixed simu
 | Question | Answer |
 |----------|--------|
 | What do we collect by default? | Nothing leaves the device by default. Local, aggregate counters only (matches played per mode, rounds, feature usage), stored in `IWAnalytics` as daily buckets, viewable by the user in Settings > "Your stats". |
-| Opt-in diagnostics | A single switch: "Share anonymous usage and crash data". When on: MetricKit payloads and aggregated counters are sent to our endpoint (Phase 2) or to Apple's own crash pipeline only (Phase 1, which is the default because the user already consented to Apple analytics sharing in iOS settings). No identifiers, no IDFA, no device fingerprint. |
+| Opt-in diagnostics | A single switch: "Share anonymous usage and crash data". When on: MetricKit payloads and aggregated counters are sent to our endpoint (post-launch 1.x, and OPEN in the delivery plan because it breaks the zero-infra promise) or to Apple's own crash pipeline only (1.0, which is the default because the user already consented to Apple analytics sharing in iOS settings). No identifiers, no IDFA, no device fingerprint. |
 | Third-party trackers | **None.** No ad SDKs. If a crash reporter SDK is adopted it must ship a privacy manifest and we must declare it (privacy manifests and required-reason APIs are mandatory for listed SDKs since May 1, 2024: https://developer.apple.com/documentation/bundleresources/privacy-manifest-files). |
 | App Privacy label (expected) | "Data Not Collected" for Phase 1 if we rely only on Apple's crash pipeline and local stats. With Game Center in Phase 3: Game Center data is handled by Apple; we still do not collect it ourselves. If an optional endpoint is enabled: "Diagnostics" and "Usage Data", "Not Linked to You", "Not used for tracking". Details: https://developer.apple.com/app-store/app-privacy-details/ |
 | Kids reuse | `IWAnalytics` has a compile-time `KidsMode` that removes the network sink entirely so App 2 cannot ship with it even by misconfiguration. |
@@ -512,12 +514,12 @@ Budgets are enforced in CI as performance XCTests with baselines on a fixed simu
 |--------|------|------|----------|
 | Compile-time flags (Swift `#if`) | zero risk, zero size | requires a build to change | used for `KidsMode`, debug menus |
 | Local runtime flags (plist in bundle + debug override UI) | ship dark features, QA toggles | cannot change post-release | **default for v1**; all phase 2+ features (Nearby, Game Center) ship dark behind flags |
-| Remote config from our static JSON (signed, same CDN as content packs) | kill switch for a transport, tune timer presets, no SDK | we host a file; must handle offline (cached last-known) | **Phase 2**, same signing as content packs |
+| Remote config from our static JSON (signed, same CDN as content packs) | kill switch for a transport, tune timer presets, no SDK | we host a file; must handle offline (cached last-known) | **Post-launch 1.x**, same signing as content packs |
 | Firebase Remote Config | mature, A/B | third-party SDK, privacy manifest, account | not adopted |
 
 Flags are typed (`enum Flag: String, CaseIterable`), default values in code, evaluation is synchronous from an in-memory snapshot loaded at launch. A flag can never gate a *saved* match's rules (rules are frozen into the match config at creation), so flipping a flag never changes an in-progress game.
 
-**DECISION:** Local typed flags with a debug menu for v1; signed remote JSON as a Phase 2 addition.
+**DECISION:** Local typed flags with a debug menu for v1; signed remote JSON as a post-launch (1.x) addition.
 
 ---
 
@@ -604,7 +606,7 @@ inkwell/
 
 | ADR | Title | Decision (summary) | Status |
 |-----|-------|--------------------|--------|
-| ADR-001 | Native SwiftUI, iOS 17 minimum | Native SwiftUI, Swift 6, iOS 17+; evaluate iOS 18 minimum at 2027 launch based on adoption; alternatives in `06-...` | Accepted |
+| ADR-001 | Native SwiftUI, iOS 17 minimum | Native SwiftUI, Swift 6, iOS 17.0 minimum for 1.0 (decided in the delivery plan, 03 Section 19.2); re-evaluate the minimum at 1.1 using App Store Connect usage data; alternatives in `06-...` | Accepted |
 | ADR-002 | Pure deterministic engine with event-sourced log | Reducer `(State, Event) -> (State, [Effect])`; log is source of truth; derived state cached | Accepted |
 | ADR-003 | Engine time is monotonic ticks | `ContinuousClock` behind protocol; `timerExpired` carries deadline tick | Accepted |
 | ADR-004 | Persistence via GRDB behind `MatchStore` | GRDB.swift, WAL, explicit SQL migrations; SwiftData as parallel pass for iCloud era | Accepted |
@@ -639,10 +641,10 @@ inkwell/
 
 ## 22. Open questions (consolidated)
 
-1. iOS 18 as minimum at launch (depends on 2027 adoption and whether we need iOS 18-only SwiftUI APIs for the motion design).
+1. Closed: iOS 17.0 is the 1.0 minimum (delivery plan, 03 Section 19.2); the minimum is re-evaluated at 1.1, not before launch.
 2. Grace window for late submissions in nearby play (Section 4).
 3. Wikidata as CC0 source for Movies/Brands (Section 6).
-4. "I insist" token for unknown words in solo mode (Section 6.6).
+4. Closed: solo unknown words are self-judged per the game design spec (02, Section 9.5); the "I insist" token is withdrawn.
 5. Game Center sign-in friction tolerance (Section 7).
 6. iCloud sync of match history and which persistence path (Section 5).
 7. Whether to adopt Sentry in production after the 30-day review (Section 16).

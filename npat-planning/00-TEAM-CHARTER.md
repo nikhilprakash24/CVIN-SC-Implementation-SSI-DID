@@ -16,7 +16,7 @@ Three products, planned in order of build priority:
 
 Plus one standalone long-form document that explains the whole game, the software, the architecture, and the team's recommendations and creative contributions with sourced examples: `master-reference/INKWELL-COMPLETE-REFERENCE.md`.
 
-Codenames are placeholders. Naming options and a recommendation live in `app1-inkwell/01-product-vision-and-brief.md` and `app2-inkwell-kids/01-vision-and-kid-design-principles.md`.
+Codenames are placeholders. Naming options and a recommendation live in `app1-inkwell/01-product-vision-and-brief.md` (Inkwell pending clearance; fallbacks Nib, Letterhead, Foolscap) and `app2-inkwell-kids/01-vision-and-kid-design-principles.md` (Inkling first choice pending trademark; Inkwell Kids fallback).
 
 ## 2. The founder's constraints, as given
 

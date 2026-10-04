@@ -26,8 +26,8 @@
 ## 1. Assumptions inherited from App 1
 
 - App 1 ships first, iOS 17+ minimum, SwiftUI-first, Swift 6 strict concurrency, Xcode 16+.
-- App 1 is organized as Swift packages: `GameEngine` (deterministic NPAT and Word Chain state machines, scoring, timers as injected event sources), `Dictionary` (word lists, validation, fuzzy matching), `DesignSystem` (tokens, components, motion), `Networking` (Game Center, nearby, any backend client), `Persistence` (local store, profiles, history), plus the app target.
-- App 1 has at least 80 percent unit coverage on `GameEngine` and a snapshot-test suite on `DesignSystem` components.
+- App 1 is organized as Swift packages: `GameEngine` (deterministic NPAT and Word Chain state machines, scoring, timers as injected event sources), `Dictionary` (word lists, validation, fuzzy matching), `DesignSystem` (tokens, components, motion), `Networking` (Game Center, nearby, any backend client), `Persistence` (local store, profiles, history), plus the app target. Naming note: this document keeps the brief's short names; App 1's architecture document (04) names them `IWCore` plus `IWRules` (GameEngine), `IWContent` (Dictionary), `IWDesignSystem`, `IWMultiplayer` (Networking), `IWPersistence`, `IWAnalytics`, `IWFeatureFlags` and `IWFeatures`. Read every short name below as its `IW` counterpart.
+- App 1 has at least 90 percent unit coverage on `GameEngine` (the App 1 definition of done; its test pyramid targets 95 percent) and a snapshot-test suite on `DesignSystem` components.
 - The team is one to two engineers plus the design director and part-time specialists.
 
 > **[ARCH]** If App 1 does not actually land with the engine as a standalone package with injected timers and injected dictionaries, App 2's plan collapses into a fork. The App 1 architecture docs must treat "GameEngine has zero UI and zero dictionary dependencies" as a hard acceptance criterion, partly because of this document.
@@ -46,7 +46,7 @@
 | `Persistence` | Shared, with a kids profile schema added | Adds `KidProfile` (nickname, avatar, band, stickers, creatures, word history, approved words). No iCloud sync for kid profiles | ARCH | Low |
 | `DesignSystem` | Forked into `KidsDesignSystem` | Shares only primitive tokens (spacing scale, radius scale, motion curve names, haptic names). Everything visible is new: type scale, palette, components, illustrations, motion tempo | DESIGN, IOS | Medium: temptation to share more than tokens |
 | `Networking` | Not linked | App 2 has no network layer in v1. Nearby play (post-launch) would link a `Nearby` module only | ARCH | None |
-| `Analytics` (if App 1 has one) | Not linked | App 2 uses no analytics SDK | ARCH | None |
+| `Analytics` (App 1's first-party `IWAnalytics`, local counters only) | Not linked | App 2 uses no analytics SDK; `IWAnalytics` also has a compile-time `KidsMode` that removes its network sink, as a second guard | ARCH | None |
 | `KidsDesignSystem` | New | Kid tokens, components (letter tiles, big keyboard, category cards, creature views, sticker book), motion presets, sound set | DESIGN, IOS | Medium |
 | `ParentalGate` | New | Gate patterns (arithmetic, hold-to-confirm, year-of-birth-style adult knowledge), gate policy, gated navigation wrapper, Ask-to-Buy awareness | IOS, KIDS | Low: small, must be exhaustive in tests |
 | `KidsContent` | New | Allow-lists per band and category, picture-hint manifests, sensitive list, license manifest, versioning | DATA, KIDS | Medium: volume of curation |
@@ -98,7 +98,7 @@ The content pipeline is shared with App 1 (same scripts, same formats) but App 2
 
 | Stage | App 1 | App 2 additions |
 |---|---|---|
-| Seed | Pull from ENABLE, SCOWL, WordNet, Wiktionary-derived category lists | Pull from age-graded lists (Dolch, Fry), children's dictionaries, name registries |
+| Seed | Pull from ENABLE, SCOWL, WordNet, GeoNames and curated category lists (Wiktionary excluded from v1 per App 1's ADR-007) | Pull from age-graded lists (Dolch, Fry), children's dictionaries, name registries |
 | Normalize | Lowercase, strip diacritics to a folded key, lemmatize | Same |
 | Filter | Profanity list removes slurs | Conservative sensitive list (broader), plus band assignment per word |
 | Review | Spot checks | Mandatory two-reviewer sign-off per word for Sprouts and Explorers; tracked in the content repo via PR review requirements |
@@ -118,9 +118,9 @@ Content is bundled in the app, never downloaded. Content updates ship as app upd
 
 | Concern | App 1 | App 2 |
 |---|---|---|
-| Third-party analytics SDK | Allowed (privacy-respecting) | None. Guideline 1.3 forbids in nearly all cases, and we do not want the "limited cases" exception |
-| Crash reporting | Third-party or Apple | Apple's crash reports via Xcode Organizer only, which depend on the user's opt-in to share analytics with developers; no SDK |
-| Product metrics | Aggregate events | None transmitted. On-device counters shown to the parent (rounds played, words learned, hints used). Nothing leaves the device |
+| Third-party analytics SDK | None in v1 (App 1 ADR-012: first-party local counters only, label "Data Not Collected") | None. Guideline 1.3 forbids in nearly all cases, and we do not want the "limited cases" exception |
+| Crash reporting | Apple (MetricKit and Xcode Organizer) in production; Sentry in TestFlight builds only (App 1 ADR-011) | Apple's crash reports via Xcode Organizer only, which depend on the user's opt-in to share analytics with developers; no SDK, not even in TestFlight |
+| Product metrics | Local aggregate counters, nothing leaves the device by default | None transmitted. On-device counters shown to the parent (rounds played, words learned, hints used). Nothing leaves the device |
 | App Store analytics | Apple App Store Connect aggregate | Same; this is Apple's data, not collected by us |
 | Privacy manifest | Required | Required; App 2's `PrivacyInfo.xcprivacy` declares no tracking, no tracking domains, and lists required-reason API usage (file timestamps, user defaults) with the standard reasons (https://developer.apple.com/documentation/bundleresources/privacy-manifest-files.md) |
 | App Privacy label | Per App 1's actual collection | "Data Not Collected" is the goal; see doc 05 for the exact plan |
@@ -143,7 +143,7 @@ Content is bundled in the app, never downloaded. Content updates ship as app upd
 | Entitlements | Game Center, iCloud possibly, network | None beyond the defaults. No Game Center, no iCloud, no push, no network |
 | Info.plist usage strings | Several | Only what we use; microphone string only if voice hint ships, and only behind the gate |
 | Review notes | Standard | Explain the parental gate, state "no third-party analytics or advertising; no data collected; no network access", point to the Trust page |
-| Release cadence | Every 2 to 3 weeks | Every 4 to 6 weeks; content-heavy; longer soak in TestFlight with family testers |
+| Release cadence | Minor release every 4 weeks (App 1 quality plan, 05 Section 10) | Every 4 to 6 weeks; content-heavy; longer soak in TestFlight with family testers |
 | TestFlight | Internal plus external | External testers are parents, who test with their children; the TestFlight build contains the same gate |
 | Localization | English first, more later | English first; Spanish second because content lists are the expensive part |
 | Device matrix | iPhone and iPad, iOS 17+ | iPhone and iPad, iOS 17+, with iPad treated as primary for Sprouts (landscape, both hands) and iPhone SE as the small-screen floor |

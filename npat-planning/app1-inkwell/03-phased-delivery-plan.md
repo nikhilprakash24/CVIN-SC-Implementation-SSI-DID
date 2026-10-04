@@ -78,7 +78,7 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 **Goal:** Everything that is boring and blocking is done before any feature work starts, so Phase 1 is pure building.
 
 **Scope in**
-- Xcode project with the app target and Swift Packages: `GameEngine`, `Dictionary`, `DesignSystem`, `Networking`, `Persistence`, `Analytics` (first-party), plus `InkwellKit` as the umbrella for App 2 reuse.
+- Xcode project with the app target and the nine Swift Packages named in the architecture document (04): `IWCore`, `IWRules`, `IWContent`, `IWDesignSystem`, `IWPersistence`, `IWMultiplayer`, `IWAnalytics` (first-party), `IWFeatureFlags`, `IWFeatures`. (The brief's short names map as GameEngine = `IWCore` + `IWRules`, Dictionary = `IWContent`, Networking = `IWMultiplayer`; there is no separate umbrella package, App 2 links the `IW*` packages directly.)
 - Swift 6 language mode on, strict concurrency enabled in the packages.
 - CI: Xcode Cloud or GitHub Actions running unit tests on every PR, UI tests nightly on a simulator matrix, a TestFlight internal build on every merge to main.
 - Design system v0 in Figma and in code: paper textures (two), ink palette, type scale (Dynamic Type mapped), spacing, motion tokens, haptic tokens, component inventory.
@@ -112,8 +112,8 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 **Goal:** A deterministic engine and a playable NPAT solo loop that already meets the first-60-seconds budget.
 
 **Scope in**
-- `GameEngine`: NPAT state machine (lobby, round, answering, reveal, challenge, committed), seeded letter draw with availability weighting and exclusions, Classic scoring, duplicate keys, ledger with replay.
-- `Dictionary` v0: ENABLE plus curated Animal list, GeoNames Place list (filtered), Name list v0; normalization pipeline; three-state validation; FST or perfect-hash storage; under 12 MB target.
+- `IWCore` and `IWRules`: NPAT state machine (lobby, round, answering, reveal, challenge, committed), seeded letter draw with availability weighting and exclusions, Classic scoring, duplicate keys, ledger with replay.
+- `IWContent` v0: ENABLE plus curated Animal list, GeoNames Place list (filtered), Name list v0; normalization pipeline; three-state validation; FST or perfect-hash storage; under 12 MB target.
 - Home screen, who's-playing (solo default), letter draw (functional animation, not final), answer sheet with keyboard handling, timer, scoring reveal (functional), self-judge for unsure answers, personal bests per preset.
 - First-party analytics events (round started, round completed, second round started) stored locally; no upload yet.
 - Performance harness: cold launch to interactive measured on the SE.
@@ -182,7 +182,7 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 **Goal:** The second game, the toolbox, and a dictionary we can freeze.
 
 **Scope in**
-- `GameEngine`: Word Chain state machine, link-letter rules including edge-letter options, Lives / Elimination / Points, per-turn timers, bot tiers as data, trap bonus.
+- `IWCore` and `IWRules`: Word Chain state machine, link-letter rules including edge-letter options, Lives / Elimination / Points, per-turn timers, bot tiers as data, trap bonus.
 - Word Chain UI: chain view with ink links, turn hand-off (pass-and-play), bot "thinking" presence, last-life treatment, elimination strike-through.
 - Categories for Word Chain: Animals, Countries, Cities, Foods, Movies, Fruits and Vegetables; "Any English word" (decide free or Pro).
 - House rules screen with all toggles from the spec matrix, one-sentence explanations, per-table persistence.
@@ -218,10 +218,10 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 **Goal:** Every phone at the table, and the first dollar.
 
 **Scope in**
-- `Networking`: MultipeerConnectivity session layer; host-authoritative event ordering; sealed answer commitments; seed broadcast; reconnection; "continue as pass-and-play" fallback.
+- `IWMultiplayer`: MultipeerConnectivity session layer; host-authoritative event ordering; sealed answer commitments; seed broadcast; reconnection; "continue as pass-and-play" fallback.
 - Nearby UI: lobby with discovered peers, join by tap, host accept, per-device countdown synced to host, combined reveal with remote challenges and votes.
 - StoreKit 2: Pro non-consumable, entitlement cache, restore, Family Sharing, refund handling via transaction updates; paywall screen (DESIGN); host-pays rule for sessions; Pro-gated features: nearby, online, house rules, extra packs, extra themes, stats.
-- Third theme (Pro): one more paper and ink combination.
+- Themes beyond the default: Swiss Editorial (free) and Night Lounge (Pro), per the design directions document (07). Note: 07 estimates these at well above the 0.5 EW budgeted here; see the OPEN on theme scope in the decisions register.
 - Stats screen: per-mode personal bests, rounds played, favorite letters.
 - Accessibility pass 1: VoiceOver labels and rotor order on every screen; timer announcements; Dynamic Type sweep; contrast audit; Switch Control navigation check on home, sheet and reveal.
 
@@ -321,7 +321,7 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 - Metrics review against the brief's targets; a written "what we learned" for JOBS.
 - 1.1 candidates, each requiring a one-page case and a demo: bespoke iPad layout; paper companion mode (if not in 1.0); designated-judge mode; reaction stamps for async; Game Center achievements; one or two new themes; Live Activity for async turns (skunkworks result).
 - Real-time online evaluation: Game Center real-time vs. a small backend; cost model; decision by W32.
-- Hand-off of shared packages to the App 2 (Kids) program; the Kids program starts its Phase 0 at W25 using `InkwellKit`.
+- Hand-off of shared packages to the App 2 (Kids) program; the Kids program starts its Phase 0 at W25 using the shared `IW*` packages.
 
 **Exit criteria:** 1.1 scope locked by W30 with JOBS; App 2 Phase 0 started.
 
@@ -437,7 +437,7 @@ R = Responsible, A = Accountable, C = Consulted, I = Informed.
 |---|---|---|---|---|---|---|---|---|
 | Scope, kill list, priorities | A/R | C | C | C | C | I | C | I |
 | Architecture, packages, engine determinism | I | A/R | C | I | C | C | C | I |
-| GameEngine rules implementation | I | A | R | I | C | C | C | I |
+| Engine rules implementation (`IWCore`, `IWRules`) | I | A | R | I | C | C | C | I |
 | Dictionary content, validation, licensing | I | C | I | I | C | A/R | C | C |
 | Visual design, motion, design system | A | I | C | R | C | I | C | C |
 | SwiftUI implementation, performance | I | C | A/R | C | I | I | C | I |
@@ -458,7 +458,7 @@ R = Responsible, A = Accountable, C = Consulted, I = Informed.
 A release (1.0 and every point release after) is done when all of the following are true:
 
 1. All P0 and P1 bugs closed; P2 count at or below the agreed cap (10 for 1.0).
-2. Unit test coverage of `GameEngine` and `Dictionary` at or above 90 percent lines; property and replay tests green.
+2. Unit test coverage of `IWCore`, `IWRules` and `IWContent` at or above 90 percent lines (the quality plan's test pyramid targets 95 percent for `IWCore` and `IWRules`); property and replay tests green.
 3. UI test suite green on the simulator matrix (iOS 17.0, 17.x latest, 18.x latest, current OS) and the first-60-seconds timing test green on the physical SE.
 4. Crash-free sessions at or above 99.7 percent across the last TestFlight build with at least 100 active testers (1.0) or at least 48 hours of internal use (point releases).
 5. Accessibility: zero critical audit items; VoiceOver, Dynamic Type (largest size), Reduce Motion, Increase Contrast and Switch Control spot-checked on every new or changed screen.
@@ -493,7 +493,7 @@ Signed by JOBS, QA, IOS and ARCH on the Monday of W23.
 - [ ] Age rating questionnaire completed; family-safe default documented in review notes.
 - [ ] In-app purchase product reviewed and attached to the version; restore purchases visible; price tier set; introductory price decision made.
 - [ ] Review notes include: demo video of nearby and async, sandbox Pro account, explanation of the challenge vote.
-- [ ] Open-source and data licenses screen complete (ENABLE, SCOWL, WordNet, Wiktionary CC BY-SA, GeoNames CC BY 4.0).
+- [ ] Open-source and data licenses screen complete (ENABLE, SCOWL, WordNet, GeoNames CC BY 4.0; Wiktionary-derived data is excluded from v1 packs per ADR-007).
 - [ ] Export compliance answered (standard encryption exemption; we use only Apple-provided TLS and Game Center).
 - [ ] Support URL and privacy policy URL live.
 
@@ -510,7 +510,7 @@ Cut from the top. Each cut names what it saves and what it costs.
 |---|---|---|---|---|
 | 1 | Online async for NPAT (keep Word Chain async, which maps directly to Game Center turns) | about 1.5 EW | Long-distance NPAT waits for 1.1 | JOBS |
 | 2 | Online async entirely | about 3 EW | Long-distance persona unserved in 1.0; Pro loses one headline feature | JOBS |
-| 3 | Third theme | 0.5 EW plus design | Pro has two themes | DESIGN |
+| 3 | Night Lounge (Pro) theme | 0.5 EW plus design | Pro ships without an exclusive theme until 1.1; Swiss Editorial stays free | DESIGN |
 | 4 | Stats screen | 0.5 EW | Personal bests shown inline only | GAME |
 | 5 | NPAT Classroom and Extended category packs (ship Classic plus one) | 1 EW content | Teacher persona gets custom categories only | DATA |
 | 6 | Movies and Cities Word Chain categories (ship Animals, Countries, Foods) | 0.5 EW content | Smaller Word Chain menu | DATA |

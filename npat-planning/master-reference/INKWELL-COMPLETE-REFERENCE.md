@@ -29,7 +29,7 @@ Inkwell is a family of native iOS word games built by a one-to-two engineer team
 | App | Codename | What it is | Status in this program |
 |---|---|---|---|
 | App 1 | Inkwell | Two classic paper-and-pencil games in one app: Name Place Animal Thing (NPAT) and Word Chain. Solo, pass-and-play, nearby and online play. | Primary deliverable. Full phased plan. |
-| App 2 | Inkwell Kids (naming open: Inkwell Jr., Little Inkwell) | A separate, kid-focused app with the same two games adapted for ages roughly 5 to 13, built on shared engine packages, compliant with COPPA and the App Store Kids Category. | Second deliverable. Full plan, ships after App 1. |
+| App 2 | Inkwell Kids (working name; "Inkling" is the first choice for launch pending a trademark search, "Inkwell Kids" the fallback; "Jr." rejected) | A separate, kid-focused app with the same two games adapted for ages roughly 5 to 13 in three bands (Sprouts 5 to 7, Explorers 8 to 10, Navigators 11 to 13), built on shared engine packages, compliant with COPPA and the App Store Kids Category. | Second deliverable. Full plan, ships after App 1. |
 | App 3 | Inkwell Worldwide (naming open) | Multilingual extension where "letter" semantics change: Spanish, French, German, Hindi, Arabic, Japanese, Korean, Chinese. | Back burner. Short story plan only. May fold into App 1 as language packs. |
 
 The founder's non-negotiable is simple to state and hard to do: the game is not technically difficult, so the bar is perfection. Aesthetics, animation and feel come first. We present design and technical choices as options with a recommendation, and we keep the losing options alive as parallel passes or skunkworks where they deserve it.
@@ -38,13 +38,13 @@ The core bets, in one paragraph each:
 
 **The games are evergreen.** Categories games have been played on paper since at least the 19th century in Germany and were commercialized as Scattergories in 1988; word chain games exist in nearly every language, from Japanese shiritori to Korean kkeunmaritgi to Chinese chengyu jielong (Section 2). They survive because they need nothing but a letter, a clock and a few people. A phone app wins if it keeps that lightness and loses if it buries it under menus, accounts and ads.
 
-**Native, SwiftUI-first, offline-first.** iOS 17 minimum, Swift 6 concurrency, Xcode 16, Swift Packages for GameEngine, Dictionary, DesignSystem, Networking and Persistence. The engine is deterministic and UI-free so it can be tested exhaustively and reused across App 1, App 2 and App 3 (Section 5). Cross-platform frameworks were evaluated honestly and rejected for this product because the whole value is in platform feel.
+**Native, SwiftUI-first, offline-first.** iOS 17.0 minimum (re-evaluated at 1.1, not before), Swift 6 concurrency, Xcode 16, Swift Packages for the engine, dictionary, design system, networking and persistence. This document uses the brief's short names (GameEngine, Dictionary, DesignSystem, Networking, Persistence); the App 1 architecture document (04) is canonical and names them `IWCore` plus `IWRules`, `IWContent`, `IWDesignSystem`, `IWMultiplayer` and `IWPersistence`, with `IWAnalytics`, `IWFeatureFlags` and `IWFeatures` alongside. The engine is deterministic and UI-free so it can be tested exhaustively and reused across App 1, App 2 and App 3 (Section 5). Cross-platform frameworks were evaluated honestly and rejected for this product because the whole value is in platform feel.
 
 **Pass-and-play is the hero.** It is the paper experience: one phone passed around a table. Nearby play via MultipeerConnectivity comes next, then online via Game Center turn-based matches, which costs us nothing in servers (Section 5.4). Online real-time is a stretch and is deliberately deferred.
 
-**Monetization: free with a one-time Pro unlock plus cosmetic themes.** No subscription for App 1, no ads anywhere, nothing but a paid-up-front option in Kids (Section 4.4).
+**Monetization: free with a one-time Pro unlock via StoreKit 2.** Themes are part of the Pro unlock in v1 (a la carte theme packs are a later option). No subscription, no ads, no consumables or currencies in App 1; Kids is paid up front with no in-app purchases in v1 (Section 4.4).
 
-**Design as a set of parallel passes.** Five visual directions are explored in the design option pack and summarized here (Section 6.2). The team's recommendation is "Ink and Paper" as the default identity with "Neon Night" as the first cosmetic theme.
+**Design as a set of parallel passes.** Five visual directions are explored in the design directions document (07) and summarized here (Section 6.2). The team's recommendation is "Paper & Ink" as the default identity, "Swiss Editorial" as the free second theme and "Night Lounge" as the Pro theme.
 
 **Twenty-plus ideas beyond the baseline**, each tied to a shipped product that proves the pattern (Section 7). The ones we endorse for v1.x are the ink wheel letter draw, the flipbook replay reel, Wordle-style shareable result cards, a daily letter without streak pressure, Live Activities for the round timer, and SharePlay for FaceTime play.
 
@@ -119,15 +119,15 @@ This section is the compact but complete rule set. The App 1 phased plan contain
 
 ### 3.1 Name Place Animal Thing (NPAT)
 
-**Setup.** 1 to 8 players. Categories default to Name, Place, Animal, Thing. Optional extra categories: Movie, Food, Brand, Song, Sport, Color, Profession, Country, City, Fruit or Vegetable, Body Part, Cartoon Character, plus custom categories (up to 10 total per game). A letter pool defaults to A to Z minus Q, X and Z (the "letter exclusion" house rule, on by default and switchable). Round timer defaults to 60 seconds with presets Relaxed (120), Standard (60), Quick (30) and Blitz (15).
+**Setup.** 1 to 8 players. Categories default to Name, Place, Animal, Thing. Optional extra categories: Movie, Food, Brand, Song, Sport, Color, Profession, Country, City, Fruit or Vegetable, Body Part, Cartoon Character, plus custom categories (3 to 8 categories per game, per the game design spec). The letter pool is A to Z; in the Classic preset nothing is excluded, but X, Q and Z are drawn rarely through availability weighting, and the Gentle preset excludes them (game design spec, Section 6). Round timer defaults to 60 seconds with presets Relaxed (120), Classic (60), Quick (45) and Blitz (30).
 
 **Round flow.**
 
 1. Letter draw: a random letter from the pool, without replacement until the pool is exhausted.
 2. Writing phase: each player fills one answer per category. In pass-and-play, players take turns on the same phone (each player's phase is timed separately and the letter stays fixed). In nearby and online, players write concurrently.
 3. Stop: the round ends when the timer expires or, if the "Stop" house rule is on, when the first player taps Stop after filling every category.
-4. Reveal and adjudication: all answers are shown side by side per category. The dictionary pre-marks each answer Valid, Unknown or Invalid. Any player can challenge; a challenge triggers a vote (majority allows). The host can overrule for pass-and-play.
-5. Scoring: 10 points for a unique valid answer, 5 if another player wrote the same valid answer (compared after normalization), 0 for blank, invalid or rejected. Optional bonus: +2 for an answer of 8 or more letters (house rule, off by default).
+4. Reveal and adjudication: all answers are shown side by side per category. The dictionary pre-marks each answer Valid, Unknown or Invalid. Any non-author can challenge; a challenge triggers a vote of the non-authors (majority decides, ties fall back to the dictionary state). A "Designated judge" house rule lets one person (teacher, parent) rule instead of a vote; whether it ships in App 1 v1 is OPEN in the game design spec.
+5. Scoring: 10 points for a unique valid answer, 5 if another player wrote the same valid answer (compared after normalization), 0 for blank, invalid or rejected. Optional "Long words" bonus: +1 per letter beyond six, capped at +5 (house rule, off by default, per the game design spec Section 5.1).
 6. Next round or end of game. A game is N rounds (default 5) or first to a target score.
 
 **Normalization for duplicates.** Case-insensitive, diacritics folded, leading articles stripped ("The Nile" equals "Nile"), whitespace and hyphens collapsed. Spelling variants within a small edit distance are flagged as "probably the same" and shown to the table for a decision, never auto-merged.
@@ -144,16 +144,16 @@ This section is the compact but complete rule set. The App 1 phased plan contain
 
 ### 3.2 Word Chain
 
-**Setup.** 1 to 8 players. One category (Countries, Cities, Animals, Foods, Movies, Names, Brands, or Any Word). Timer per turn: Off, Relaxed (30 s), Standard (15 s), Blitz (7 s). Lives per player: 1 (elimination) or 3 (default in points mode).
+**Setup.** 1 to 8 players. One category (Animals by default; Countries, Cities, Foods, Movies, Fruits and Vegetables, or Any English word). Timer per turn: Off, Relaxed (30 s, default for pass-and-play), Standard (15 s, default for solo), Blitz (7 s). Three end conditions: Lives (default, 3 lives), Elimination, or Points over a fixed number of turns.
 
 **Turn flow.**
 
 1. The required starting letter is the last letter of the previous accepted word (first turn: a random letter from the pool). In English the last letter is the last alphabetic character after normalization ("Côte d'Ivoire" ends in E).
 2. The player enters a word. The engine checks: starts with the required letter, not already used in this game, in the category dictionary or accepted by the table.
 3. Pass or fail. Fail costs a life (or eliminates). Timeout counts as fail.
-4. Points mode: 1 point per accepted word plus 1 bonus if the word is rated "rare" by the dictionary frequency band. Elimination mode: last player standing wins.
+4. Points mode: 1 point per accepted word, with optional bonuses from the game design spec Section 5.2 (long word, rare link letter +2, trap bonus +1). Elimination mode: last player standing wins.
 
-**The hard-letter problem.** Many English words end in Y, S or E and few begin with X or Q; chains naturally funnel into dead ends. Rules offered: "wild tail" (a word ending in a letter with fewer than 20 valid words in the category lets the next player choose any letter), and "no-plural" (words may not end in S by pluralizing). Both are house rules, defaults on for Blitz.
+**The hard-letter problem.** Many English words end in Y, S or E and few begin with X or Q; chains naturally funnel into dead ends. The game design spec (Section 11.2) offers three edge-letter rules: **Reroll** (default: the engine draws a new weighted link letter and says so), **Use letter** (brutal) and **Last vowel**. A "Singular link" house rule uses the singular's last letter for pluralized words. The Kids edition adds a "wildcard" (next player picks any letter) for its younger bands.
 
 ### 3.3 Validation philosophy
 
@@ -161,7 +161,7 @@ Validation has three layers, and the ordering matters:
 
 1. **Dictionary and category lists on device** (ENABLE, SCOWL and curated category lists, see Section 5.3) mark an answer Valid, Unknown or Invalid. Unknown is the normal state for proper nouns and recent brands.
 2. **Table adjudication** decides Unknown answers by vote or host ruling. This mirrors paper.
-3. **Learning**: accepted Unknown answers are stored locally as "house dictionary" entries for that device and, with opt-in, proposed upstream for curation.
+3. **Learning**: accepted Unknown answers are stored locally as "house dictionary" entries for that device. Proposing them upstream to DATA is OPEN in the game design spec (JOBS: not in v1 unless completely silent, on-device aggregation only).
 
 > **[DATA]** No offline dictionary will contain every place name or every cartoon character. The design mistake is pretending otherwise. We ship confidence levels, not verdicts, and we never show a red X without a way to override it.
 
@@ -169,19 +169,19 @@ Validation has three layers, and the ordering matters:
 
 ### 3.4 Bots
 
-Solo play needs an opponent. Bots generate NPAT sheets and Word Chain turns from the same category dictionaries with three tunings: Casual (common words, occasionally blank), Clever (mid-frequency words, rarely blank) and Expert (rare words, never blank). Bot answers are precomputed per letter and category and drawn with a seed, so a replay of the same seed produces the same bot sheet. Bots never cheat: they draw from the same dictionary the validator uses, and they take believable time (animated "thinking" dots tied to word rarity).
+Solo play needs an opponent. Bots generate NPAT sheets and Word Chain turns from the same category dictionaries with three tunings: Casual (common words, occasionally blank), Clever (mid-frequency words, rarely blank) and Ruthless (full list, fails only when no word exists, plays traps). Tiers are data rows so Kids can add a gentler one. Bot answers are precomputed per letter and category and drawn with a seed, so a replay of the same seed produces the same bot sheet. Bots never cheat: they draw from the same dictionary the validator uses, and they take believable time (animated "thinking" dots tied to word rarity).
 
 ### 3.5 Scoring summary
 
 | Event | NPAT points | Word Chain points |
 |---|---|---|
-| Unique valid answer | 10 | 1 (+1 rare bonus) |
+| Unique valid answer | 10 | 1 (+2 rare link bonus, +1 trap bonus in Points mode) |
 | Duplicate valid answer | 5 | n/a (duplicates are invalid) |
 | Blank, invalid or rejected | 0 | lose a life |
-| Long word bonus (house rule) | +2 | n/a |
-| First to Stop (house rule) | +0, but ends the round | n/a |
+| Long word bonus (house rule) | +1 per letter beyond six, max +5 | +1 per letter above six, max +4 |
+| First to Stop (house rule) | +0 by default, but ends the round | n/a |
 
-> **[GAME]** We debated a first-to-stop bonus. DECISION: no bonus. Ending the round early is already an advantage; adding points turns the game into a typing race and punishes slower typists and younger players.
+> **[GAME]** We debated a first-to-stop bonus. DECISION: no bonus by default. Ending the round early is already an advantage; adding points turns the game into a typing race and punishes slower typists and younger players. The game design spec keeps a +3 "Speed bonus" as an off-by-default toggle that exists only with the Stop rule, for groups that want the race.
 
 ### 3.6 Team debate: should the dictionary ever be the final word?
 
@@ -193,7 +193,7 @@ Solo play needs an opponent. Bots generate NPAT sheets and Word Chain turns from
 
 > **[JOBS]** Fine, but the dispute flow in async has to be one screen and one tap. If it needs a chat thread, cut it.
 
-**DECISION:** `ValidationPolicy` is a first-class engine type with two built-ins: `.table` (default for local and nearby) and `.dictionaryFinal(allowDispute: true)` (default for online async).
+**DECISION (reconciled with the game design spec, 02 Section 16):** `ValidationPolicy` is a first-class engine type. The default everywhere, including online async, is the hybrid: the dictionary auto-judges with three visible states (accept, unsure, reject), any non-author may challenge, the majority of non-authors decides, ties fall back to the dictionary state. In async the challenge window is 24 h, votes travel in match data, and an unresolved challenge falls back to the dictionary state, which is the only sense in which the dictionary is "final" online. The "Challenge mode" house rule offers Vote (default), Dictionary only, Honor system and Designated judge. The earlier `.dictionaryFinal` default for async is withdrawn so that the online game stays the same game.
 **OPEN:** Whether accepted disputes in async should feed the shared curation queue, or only the local house dictionary.
 
 ---
@@ -204,19 +204,19 @@ Solo play needs an opponent. Bots generate NPAT sheets and Word Chain turns from
 
 App 1 is one app, two games, four ways to play. The v1.0 cut is deliberately narrow:
 
-**In v1.0:** NPAT and Word Chain; solo vs. clock with bots; pass-and-play; house rules (Stop, long-word bonus, letter exclusion, wild tail); custom categories; result cards for sharing; five sound and haptic themes; full accessibility (Dynamic Type, VoiceOver, Reduce Motion alternatives, Switch Control audit); one-time Pro unlock plus two cosmetic themes.
+**In v1.0:** NPAT and Word Chain; solo vs. clock with bots; pass-and-play; nearby play over MultipeerConnectivity (delivery Phase 4, Pro); online async over Game Center turn-based (delivery Phase 5, Pro; Word Chain first, NPAT second; the pre-approved first cut if Phase 5 slips); house rules (Stop, long-word bonus, letter difficulty presets, edge-letter rules); custom categories; result cards for sharing; three themes (Paper & Ink default, Swiss Editorial free, Night Lounge in Pro), each with its own sound and haptic pack; full accessibility (Dynamic Type, VoiceOver, Reduce Motion alternatives, Switch Control audit); one-time Pro unlock.
 
-**In v1.x:** Nearby play; Game Center async; achievements and a tasteful leaderboard; Live Activity timer; daily letter; iMessage turn cards; iPad split-table.
+**In v1.x:** achievements (a global leaderboard is trimmed per the product brief; a friends-only daily-letter board is the most the team would consider); Live Activity timer; daily letter; iMessage turn cards; iPad split-table; a la carte theme packs.
 
 **Deferred to v2 or killed:** real-time online, chat of any kind, user accounts of our own, a marketplace for house rules (evaluated in Section 7, idea 15), SharePlay (kept alive as skunkworks).
 
-**Naming options.** "Inkwell" is the working name. Alternatives under consideration, with a quick App Store search as the gate: Pens Down, Letterhead, Quill, Scribble Table, Stop!, Nib, Ink & Letter. Naming criteria: pronounceable in Spanish, Hindi and German; not an existing trademark in games; works as a 7-letter-or-shorter app label.
+**Naming options.** "Inkwell" is the working name and the product brief (01, Section 8) owns the decision: keep Inkwell pending a trademark clearance and App Store name reservation in Phase 0; ranked fallbacks are Nib, Letterhead, Foolscap. "Stop!" was considered and rejected because Fanatee's "Stop" owns that term in the App Store; "Quill" and "Scribble" were rejected as crowded. Naming criteria: pronounceable in Spanish, Hindi and German; not an existing trademark in games; works as a short app label; has a natural Kids sibling.
 
-> **[JOBS]** "Pens Down" is the only one that tells you what the game feels like. "Inkwell" is the only one that tells you what the brand looks like. We pick before the App Store listing is written, not before.
+> **[JOBS]** "Inkwell" is the one that tells you what the brand looks like, and the whole visual language falls out of it. We clear it first and we pick the fallback only if the lawyer says so, before the App Store listing is written.
 
 ### 4.2 App 2, "Inkwell Kids": product scope
 
-App 2 is a separate binary with a kid vibe, not a mode in App 1. It reuses GameEngine, Dictionary and the core of DesignSystem via Swift Packages. It differs in: age bands (5 to 7, 8 to 10, 11 to 13) that change timers, categories, letter pool and hint density; illustrated letter cues (the letter B comes with a bear sketch, not a bare glyph); forgiving validation with phonetic matching; optional spelling help; no ads, no chat, no open social, no third-party analytics; a parental gate on anything that leaves the app; non-manipulative rewards (stickers for a sketchbook, no loot boxes, no timers that nag). It sits in the App Store Kids Category and follows guideline 1.3 (Kids Category) and 5.1.4 (Kids privacy) which prohibit third-party advertising and analytics and the transmission of personally identifiable information from Kids apps ([App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/); [Apple, Kids](https://developer.apple.com/kids/)). COPPA governs data collection from children under 13 in the United States; the FTC's six-step compliance plan is our checklist ([FTC, COPPA six-step compliance plan](https://www.ftc.gov/business-guidance/resources/childrens-online-privacy-protection-rule-six-step-compliance-plan-your-business)).
+App 2 is a separate binary with a kid vibe, not a mode in App 1. It reuses GameEngine, Dictionary core and Persistence via Swift Packages, shares only primitive tokens with DesignSystem (its own `KidsDesignSystem` package holds everything visible), and does not link Networking or Analytics. It differs in: age bands (Sprouts 5 to 7, Explorers 8 to 10, Navigators 11 to 13) that change timers, categories, letter pool and hint density; illustrated letter cues (the letter B comes with a bear sketch, not a bare glyph); forgiving validation with phonetic matching; optional spelling help; no ads, no chat, no open social, no third-party analytics; a parental gate on anything that leaves the app; non-manipulative rewards (stickers for a sketchbook, no loot boxes, no timers that nag). It sits in the App Store Kids Category and follows guideline 1.3 (Kids Category) and 5.1.4 (Kids privacy) which prohibit third-party advertising and analytics and the transmission of personally identifiable information from Kids apps ([App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/); [Apple, Kids](https://developer.apple.com/kids/)). COPPA governs data collection from children under 13 in the United States; the FTC's six-step compliance plan is our checklist ([FTC, COPPA six-step compliance plan](https://www.ftc.gov/business-guidance/resources/childrens-online-privacy-protection-rule-six-step-compliance-plan-your-business)).
 
 > **[KIDS]** The simplest way to comply with COPPA is to collect nothing. Kids has no accounts, no cloud save by default, and no network calls except StoreKit. That is a feature, not a limitation.
 
@@ -227,7 +227,7 @@ flowchart LR
   subgraph Shared Swift Packages
     GE[GameEngine]
     DI[Dictionary]
-    DS[DesignSystem core]
+    DS[DesignSystem: tokens shared with Kids, components App 1 only]
     PE[Persistence]
     NW[Networking]
   end
@@ -238,7 +238,7 @@ flowchart LR
   A1 --> NW
   A2[App 2 Inkwell Kids] --> GE
   A2 --> DI
-  A2 --> DS
+  A2 -. tokens only .-> DS
   A2 --> PE
   A2 -. no networking .-> NW
   A2 --> KT[KidsTheme + KidsPolicy]
@@ -252,9 +252,9 @@ The contract is: App 2 may depend on any shared package; no shared package may d
 | Option | Pros | Cons | Verdict |
 |---|---|---|---|
 | Paid up front ($3.99 to $5.99) | Clean, no IAP code, no "free" expectations | Kills trial; discovery relies on featuring | Kids app only (parents prefer it; no IAP in a 5 to 7 band) |
-| Free + one-time Pro unlock | Trial is the full local game; one purchase; honest | Need a crisp line between free and Pro | **Recommended for App 1.** Free: both games, pass-and-play, solo. Pro: nearby, online, custom categories beyond 2, themes bundle, stats. |
-| Cosmetic themes as IAP | Pure upside, no gameplay gating | Needs ongoing art | **Recommended as add-on**; Knotwords and many indie puzzle games ship a single unlock plus cosmetics ([Six Colors, Knotwords](https://sixcolors.com/post/2022/04/knotwords-offers-crossword-puzzles-without-clues/)) |
-| Subscription | Recurring revenue | Wrong for a party game; review friction; founder dislikes it | Not for v1. Parallel pass: a "Puzzle Club" for a daily mode only if App 3 or daily content materializes |
+| Free + one-time Pro unlock (StoreKit 2 non-consumable) | Trial is the full local game; one purchase; honest; host pays and guests play free in a session | Need a crisp line between free and Pro | **Decided for App 1 (product brief, 01 Section 11).** Free: both games, pass-and-play, solo, classic rules, default theme, unlimited rounds. Pro: nearby, online async, house rules, category packs, the Night Lounge theme, stats. Custom categories free or Pro is OPEN. |
+| Cosmetic themes as IAP | Pure upside, no gameplay gating | Needs ongoing art | **Folded into Pro for v1**; a la carte non-consumable theme packs are a post-launch option. Knotwords and many indie puzzle games ship a single unlock plus cosmetics ([Six Colors, Knotwords](https://sixcolors.com/post/2022/04/knotwords-offers-crossword-puzzles-without-clues/)) |
+| Subscription | Recurring revenue | Wrong for a party game; review friction; founder dislikes it | **Rejected** (product brief DECISION: no subscription). Does not survive as a parallel pass. |
 | Ads | Revenue without purchase | Destroys the feel; forbidden in Kids by guideline 1.3 | **Never** |
 
 StoreKit 2 is used for all purchases ([Apple, In-App Purchase (StoreKit)](https://developer.apple.com/documentation/storekit/in-app-purchase)); the App Store Small Business Program gives a 15% commission to developers under $1M in proceeds, which we qualify for ([Apple, Small Business Program](https://developer.apple.com/app-store/small-business-program/)). The HIG page on in-app purchase guides the purchase UI ([HIG, In-app purchase](https://developer.apple.com/design/human-interface-guidelines/in-app-purchase)).
@@ -280,12 +280,12 @@ flowchart TB
     IM[iMessage extension v1.x]
   end
   subgraph Packages
-    GE[GameEngine: rules, state machines, scoring, bots, seeds]
-    DI[Dictionary: word lists, categories, normalization, fuzzy match, profanity]
-    DS[DesignSystem: tokens, typography, motion, sound, haptics, components]
-    PE[Persistence: SwiftData models, migrations, export]
-    NW[Networking: Multipeer transport, Game Center adapter, sync protocol]
-    LO[Localization: letter units, collation, category names]
+    GE[GameEngine = IWCore + IWRules: reducer, state machines, scoring, bots, seeds]
+    DI[Dictionary = IWContent: word lists, categories, normalization, fuzzy match, profanity]
+    DS[DesignSystem = IWDesignSystem: tokens, typography, motion, sound, haptics, components]
+    PE[Persistence = IWPersistence: GRDB over SQLite, event log, migrations, export]
+    NW[Networking = IWMultiplayer: Multipeer transport, Game Center adapter, sync protocol]
+    LO[Localization: letter units, collation, category names; not yet in 04's package list, see OPEN]
   end
   A1 --> GE & DI & DS & PE & NW & LO
   A2 --> GE & DI & DS & PE & LO
@@ -325,20 +325,20 @@ States for NPAT: `lobby -> drawing -> writing -> revealing -> adjudicating -> sc
 | ENABLE word list | ~173k English words, public domain | Public domain | Base validity for "Any Word" and Thing category | 
 | SCOWL (Spell Checker Oriented Word Lists) | Size-graded English lists, includes ENABLE at level 80 | Permissive, requires copyright notice | Frequency banding (common vs. rare) ([SCOWL](https://wordlist.aspell.net/)) |
 | WordNet | Nouns with hypernyms (an "animal" is anything under the animal synset) | Princeton WordNet license, permits commercial use with notice ([WordNet license](https://wordnet.princeton.edu/license-and-commercial-use)) | Seeding Animal, Food, Profession categories |
-| Wiktionary dumps | Multilingual headwords, categories, proper nouns | CC BY-SA 3.0 (attribution and share-alike apply to derived lists) ([Wikimedia dumps](https://dumps.wikimedia.org/)) | App 3 language packs; English place names |
+| Wiktionary dumps | Multilingual headwords, categories, proper nouns | CC BY-SA (attribution and share-alike apply to derived lists) ([Wikimedia dumps](https://dumps.wikimedia.org/)) | Excluded from App 1 v1 packs (ADR-007); reserved for App 3 language packs with published derived lists. English places come from GeoNames (CC BY 4.0) instead |
 | Curated lists (ours) | Names, Places, Brands, Movies, Cartoon Characters | Ours | Proper-noun categories where open lists are weak |
 
 Storage: lists are compiled at build time into a compact trie or FST per category with a frequency byte per entry; the English pack is targeted under 6 MB on disk. Profanity filtering uses a blocklist applied to custom category names and shared result cards, never to private in-game entries (a word game that refuses "ass" as an animal is a broken word game).
 
-> **[DATA]** The share-alike clause on Wiktionary-derived lists is manageable: we publish the derived list file under the same license. It does not infect the app. Legal review confirms before the pack ships.
+> **[DATA]** The share-alike clause on Wiktionary-derived lists is manageable in principle: we publish the derived list file under the same license and it does not infect the app. For App 1 v1 we chose not to carry even that (ADR-007): shipped packs use only public-domain, MIT-like, WordNet-licensed and CC BY data. Legal review confirms before any App 3 pack ships.
 
 ### 5.4 Multiplayer options
 
 | Option | Cost | Complexity | Latency | Accounts | Verdict |
 |---|---|---|---|---|---|
 | Pass-and-play | 0 | Low | None | None | **v1.0** |
-| Nearby via MultipeerConnectivity (Wi-Fi, peer-to-peer Wi-Fi, Bluetooth) ([Apple, MultipeerConnectivity](https://developer.apple.com/documentation/multipeerconnectivity)) | 0 | Medium (discovery, host election, reconnection) | Low | None | **v1.x** |
-| Game Center turn-based (`GKTurnBasedMatch` stores and forwards match data) ([Apple, GKTurnBasedMatch](https://developer.apple.com/documentation/gamekit/gkturnbasedmatch)) | 0 | Medium | Minutes to days | Apple ID (free) | **v1.x for async** |
+| Nearby via MultipeerConnectivity (Wi-Fi, peer-to-peer Wi-Fi, Bluetooth) ([Apple, MultipeerConnectivity](https://developer.apple.com/documentation/multipeerconnectivity)) | 0 | Medium (discovery, host election, reconnection) | Low | None | **v1.0, delivery Phase 4, Pro** |
+| Game Center turn-based (`GKTurnBasedMatch` stores and forwards match data) ([Apple, GKTurnBasedMatch](https://developer.apple.com/documentation/gamekit/gkturnbasedmatch)) | 0 | Medium | Minutes to days | Apple ID (free) | **v1.0 for async, delivery Phase 5, Pro; first cut if Phase 5 slips** |
 | Game Center real-time | 0 | High | Sub-second | Apple ID | v2 stretch |
 | CloudKit public database | Free up to large quotas; private DB billed to the user's iCloud ([Apple, CloudKit](https://developer.apple.com/documentation/cloudkit)) | Medium | Seconds | iCloud | Cloud save and shared curation queue, not matchmaking |
 | Supabase (Postgres, realtime, auth) | Free tier; Pro $25/month ([Supabase pricing](https://supabase.com/pricing)) | Medium | Sub-second | Our accounts | Parallel pass for real-time online in v2 |
@@ -351,7 +351,7 @@ Storage: lists are compiled at build time into a compact trie or FST per categor
 
 ### 5.5 Persistence and sync
 
-SwiftData for local models (games, rounds, answers, house dictionary, settings) ([Apple, SwiftData](https://developer.apple.com/documentation/swiftdata)). iCloud sync of settings and house dictionary via CloudKit is optional and off by default in App 1, absent in App 2. Every game is exportable as a JSON action log, which is also the replay format.
+GRDB.swift over SQLite behind a `MatchStore` protocol for local storage (match event log, snapshots, player profiles, settings, content pack registry), per the architecture document's ADR-004; SwiftData ([Apple, SwiftData](https://developer.apple.com/documentation/swiftdata)) was evaluated and kept as a parallel pass for the iCloud era. No iCloud sync in v1 (OPEN for 1.x); absent in App 2. Every game is exportable as a JSON action log, which is also the replay format.
 
 ### 5.6 Platform choice: honest comparison
 
@@ -364,7 +364,7 @@ SwiftData for local models (games, rounds, answers, house dictionary, settings) 
 | Unity / Godot | Great for particles, poor for text UI and accessibility | Poor | Overkill | No |
 | PWA then Capacitor ([Capacitor docs](https://capacitorjs.com/docs)) | Weakest feel | Weakest | Fast to prototype | Prototype only; useful for App 3 dictionary tooling |
 
-**DECISION:** Native SwiftUI-first, iOS 17 minimum, Swift 6 language mode on all packages ([Apple, Adopting Swift 6](https://developer.apple.com/documentation/swift/adoptingswift6)). iOS 18 features (new Game Center UI, more Live Activity surfaces) are adopted with availability checks.
+**DECISION:** Native SwiftUI-first, iOS 17.0 minimum for 1.0 (re-evaluated at 1.1 with usage data, per the delivery plan 03 Section 19.2), Swift 6 language mode on all packages ([Apple, Adopting Swift 6](https://developer.apple.com/documentation/swift/adoptingswift6)). iOS 18 features (new Game Center UI, more Live Activity surfaces, the zoom transition) are adopted with availability checks.
 
 ### 5.7 Build, test and release
 
@@ -379,7 +379,7 @@ flowchart LR
   Store --> Mon[Crash and performance monitoring, MetricKit]
 ```
 
-Release trains: a two-week cadence after 1.0. Test strategy: engine has near-100% unit coverage; DesignSystem has snapshot tests at three Dynamic Type sizes and both appearances; UI tests cover the three hero flows (first run, pass-and-play round, purchase). Device matrix: iPhone SE (small screen, no Dynamic Island), iPhone 15 or 16 (Dynamic Island), iPhone Pro Max, iPad mini, iPad Pro 13, plus one device on the minimum OS ([Apple, Testing your apps in Xcode](https://developer.apple.com/documentation/xcode/testing-your-apps-in-xcode)). Crash budget: crash-free sessions above 99.8% before widening a phased release. No third-party crash SDK in Kids; MetricKit only.
+Release trains: a minor release every four weeks after 1.0, patches as needed (quality plan, 05 Section 10). Beta program and tester counts follow the quality plan (05 Section 5). Test strategy: engine has 90 percent coverage as the gate and 95 percent as the target; DesignSystem has snapshot tests at three Dynamic Type sizes and both appearances; UI tests cover the three hero flows (first run, pass-and-play round, purchase). Device matrix: iPhone SE (small screen, no Dynamic Island), iPhone 15 or 16 (Dynamic Island), iPhone Pro Max, iPad mini, iPad Pro 13, plus one device on the minimum OS ([Apple, Testing your apps in Xcode](https://developer.apple.com/documentation/xcode/testing-your-apps-in-xcode)). Crash budget: crash-free sessions above 99.8% before widening a phased release. No third-party crash SDK in Kids; MetricKit only.
 
 > **[QA]** "Ship top-to-bottom cleanly" means the App Review checklist is a document, not a memory. Privacy nutrition labels, the Kids Category checklist, and the Reduce Motion audit are gates, not tasks.
 
@@ -391,8 +391,8 @@ Release trains: a two-week cadence after 1.0. Test strategy: engine has near-100
 
 > **[QA]** Migrations worry me more than performance. Whichever we choose, the action log is the source of truth and the store is a cache we can rebuild.
 
-**DECISION:** SwiftData for the store, with the action log as canonical and a "rebuild store from logs" command in debug builds.
-**OPEN:** Whether to enable CloudKit mirroring in 1.0 or wait for 1.1 after measuring sync conflicts in TestFlight.
+**DECISION (superseded and reconciled):** this debate was settled the other way in the architecture document (04, Section 5.3, ADR-004), which is canonical: `IWPersistence` uses GRDB.swift over SQLite behind a `MatchStore` protocol, with explicit SQL migrations and WAL mode. The parts of this debate that survive are QA's point and the store design: the event log is canonical, the store is a rebuildable cache, and a "rebuild store from logs" command ships in debug builds. SwiftData is a parallel pass to be re-evaluated only when iCloud sync is scheduled.
+**OPEN:** iCloud sync of match history in 1.x (SwiftData plus CloudKit, which would mean migrating the store, versus CloudKit record mirroring from GRDB). Not in 1.0.
 
 ---
 
@@ -411,25 +411,29 @@ Release trains: a two-week cadence after 1.0. Test strategy: engine has near-100
 
 ### 6.2 The five visual directions (summary)
 
-The design option pack explores these as parallel passes; here is the summary and the recommendation.
+The design directions document (07) explores these as parallel passes and is canonical for names, palettes and the recommendation; here is the summary. (An earlier draft of this table used different labels: "Ink and Paper", "Neon Night", "Swiss Grid", "Playroom"; the names below are 07's.)
 
 | Direction | Essence | Type | Motion signature | Risk | Role |
 |---|---|---|---|---|---|
-| A. Ink and Paper | Warm off-white stock, blue-black ink, hand-lettered letter draw, subtle paper grain | A humanist serif for the letter, SF for UI | Ink bleeds in; strokes draw themselves; pages turn | Could read as "retro notebook" cliche if overdone | **Default identity** |
-| B. Neon Night | Dark field, electric letter glow, arcade energy | Geometric sans, heavy weight | Letter flickers on like a sign; score counters roll | Loud for a long session; contrast on highlights | **First cosmetic theme** |
-| C. Swiss Grid | Pure typographic, black on white, hairlines, no ornament | Grotesk | Elements slide on a strict grid; almost no easing | Can feel cold for a party game | Pro theme; also the accessibility "high legibility" base |
-| D. Playroom | Rounded shapes, saturated primaries, soft shadows | Rounded sans | Squash and stretch, bouncy springs | Overlaps with Kids and must not | Donor for App 2; not shipped in App 1 |
-| E. Letterpress Studio | Deep impressions, embossed tiles, tactile wood and metal | Slab serif | Tiles press in with heavy haptics | Expensive art; echoes the game Letterpress too closely | Skunkworks; the tactile letter tile idea (Section 7, idea 1) lives here |
+| A. Paper & Ink | Warm cream stock, blue-black fountain-pen ink, hand-written letter draw, paper grain under five percent | Handwriting face (Caveat) for the letter and headers, New York for body, SF for numerals | The letter writes itself stroke by stroke; ink bleeds and dries; pages turn | Could read as "retro notebook" cliche if overdone | **Default identity** |
+| B. Swiss Editorial | Pure typographic, black on white, hairlines, one accent, no ornament | Space Grotesk or Fraunces display, SF for UI | Type slam; numbers count with numericText | Can feel cold for a party game | **Free second theme**; its results table is borrowed into every theme; doubles as the high-legibility baseline |
+| C. Playful Pop | Rounded stickers, saturated accents per category, bouncy | SF Pro Rounded | Sticker drop; duplicates collide and bounce | Overlaps with Kids and must not; heavy illustration load; no mascot with eyes in App 1 | **Skunkworks**, parked until Kids has defined its own look (Kids chose Bright Blocks with crayon-styled characters, not this direction) |
+| D. Night Lounge | Dark glass, neon pink and cyan, bar-trivia-at-midnight | Condensed display face (licensing check) over SF | Neon flicker on; glowing chain tube | GPU cost of glow and materials; outdoor contrast; flicker must be fully disabled under Reduce Motion | **Pro theme**; offers (never forces) a blitz house-rules preset |
+| E. Quiet Minimal | Pure HIG, system materials, SF only, semantic colors | SF Pro and SF Pro Rounded | System springs, numericText roll | Indistinct; weak vibe | **Skeleton**, built first as the semantic-token reference rendering and QA baseline; never shipped as a face |
 
-**DECISION:** A is the identity; B ships as the first paid theme; C ships as a free high-legibility theme because it doubles as our accessibility baseline; D is handed to Kids; E remains a skunkworks exploration for the tile mechanic.
+The tactile embossed-tile idea ("Letterpress Studio" in the earlier draft) is not one of 07's five directions; it survives only as the tile variant of the letter draw in Section 7, idea 1, as skunkworks.
+
+**DECISION (aligned with 07):** A Paper & Ink is the identity and default; B Swiss Editorial ships free; D Night Lounge ships in the Pro unlock; C Playful Pop is parked skunkworks; E Quiet Minimal is the skeleton. The theme picker ships with exactly three tiles.
 
 > **[DESIGN]** The hardest part of A is restraint. Paper grain at 3% opacity, not 15%. One ink color, not a stationery shop. If someone describes it as "cute" we have overshot.
 
-> **[JOBS]** I want A and B demoed on a device, side by side, with the letter draw and nothing else. No slides. We decide the identity from that demo.
+> **[JOBS]** I want A and D demoed on a device, side by side, with the letter draw and nothing else. No slides. We confirm the identity from that demo at the W4 gate in the delivery plan.
 
 ### 6.3 Motion
 
-The stack: SwiftUI animations with springs as the default curve ([WWDC23, Animate with springs](https://developer.apple.com/videos/play/wwdc2023/10158/)), PhaseAnimator for multi-step beats like the letter reveal and KeyframeAnimator for choreographed sequences like the score tally ([WWDC23, Wind your way through advanced animations](https://developer.apple.com/videos/play/wwdc2023/10157/); [WWDC23, Explore SwiftUI animation](https://developer.apple.com/videos/play/wwdc2023/10156/)). SpriteKit overlays for particles (ink splatter at Stop) ([Apple, SpriteKit](https://developer.apple.com/documentation/spritekit)). Metal shaders, via SwiftUI's shader modifiers, for the ink bleed effect ([Apple, Metal](https://developer.apple.com/documentation/metal)). Rive for a few state-machine driven characters in Kids where designers iterate without an engineer; Rive's runtime files are typically far smaller than Lottie's and support interactive state machines, while Lottie remains the simplest for playback-only motion ([Rive, Rive as a Lottie alternative](https://rive.app/blog/rive-as-a-lottie-alternative); [Lottie](https://airbnb.io/lottie/)).
+The stack: SwiftUI animations with springs as the default curve ([WWDC23, Animate with springs](https://developer.apple.com/videos/play/wwdc2023/10158/)), PhaseAnimator for multi-step beats like the letter reveal and KeyframeAnimator for choreographed sequences like the score tally ([WWDC23, Wind your way through advanced animations](https://developer.apple.com/videos/play/wwdc2023/10157/); [WWDC23, Explore SwiftUI animation](https://developer.apple.com/videos/play/wwdc2023/10156/)). SpriteKit overlays for particles (ink splatter at Stop) ([Apple, SpriteKit](https://developer.apple.com/documentation/spritekit)). Metal shaders, via SwiftUI's shader modifiers, for the ink bleed effect ([Apple, Metal](https://developer.apple.com/documentation/metal)). Rive and Lottie are evaluated in the motion document's bake-off (09, Section 5) under the rule of at most one third-party animation runtime in App 1, possibly none; Rive's runtime files are typically far smaller than Lottie's and support interactive state machines, while Lottie remains the simplest for playback-only motion ([Rive, Rive as a Lottie alternative](https://rive.app/blog/rive-as-a-lottie-alternative); [Lottie](https://airbnb.io/lottie/)). Kids ships with no third-party animation runtime in v1 (Kids doc 04).
+
+The motion document (09) is the governing catalog for durations, springs and the 32 named animations; the eight-token table below is a summary and 09's values win where they differ (for example 09 specifies the letter draw at 600 ms, scaled by preset as decided in Section 6.8).
 
 Material Design is the useful contrast: its motion system specifies named easing tokens and duration ranges (short transitions near 50 to 200 ms, medium 250 to 400 ms, long 450 to 600 ms) and a shared "container transform" pattern ([Material 3, Applying easing and duration](https://m3.material.io/styles/motion/easing-and-duration/applying-easing-and-duration)). Apple's approach is physics-based (springs with duration and bounce) rather than curve-token based. We follow Apple's physics but adopt Material's discipline of a named, finite set of motion tokens in the DesignSystem package so that every animation in the app is one of about eight.
 
@@ -463,7 +467,7 @@ All haptics are optional (a single toggle) and reduce automatically when Low Pow
 
 ### 6.6 Accessibility
 
-Dynamic Type through the largest accessibility sizes, with the sheet reflowing to one category per screen when needed; VoiceOver labels and custom actions on every answer row (allow, reject, hear spelling); Reduce Motion twins for every token in the table above; color contrast at WCAG AA minimum on all themes including Neon Night; Switch Control traversal order audited on the three hero flows; captions for every sound (a visible "Stop!" when the slam plays). The HIG accessibility page and SwiftUI accessibility fundamentals are the reference ([HIG, Accessibility](https://developer.apple.com/design/human-interface-guidelines/accessibility); [Apple, SwiftUI accessibility fundamentals](https://developer.apple.com/documentation/swiftui/accessibility-fundamentals)). Touch targets follow NN/g's minimum of roughly 1 cm square, which is comfortably above Apple's 44 pt ([NN/g, Touch target size](https://www.nngroup.com/articles/touch-target-size/)). Inclusive language and imagery follow the HIG inclusion page ([HIG, Inclusion](https://developer.apple.com/design/human-interface-guidelines/inclusion)).
+Dynamic Type through the largest accessibility sizes, with the sheet reflowing to one category per screen when needed; VoiceOver labels and custom actions on every answer row (allow, reject, hear spelling); Reduce Motion twins for every token in the table above; color contrast at WCAG AA minimum on all themes including Night Lounge; Switch Control traversal order audited on the three hero flows; captions for every sound (a visible "Stop!" when the slam plays). The HIG accessibility page and SwiftUI accessibility fundamentals are the reference ([HIG, Accessibility](https://developer.apple.com/design/human-interface-guidelines/accessibility); [Apple, SwiftUI accessibility fundamentals](https://developer.apple.com/documentation/swiftui/accessibility-fundamentals)). Touch targets follow NN/g's minimum of roughly 1 cm square, which is comfortably above Apple's 44 pt ([NN/g, Touch target size](https://www.nngroup.com/articles/touch-target-size/)). Inclusive language and imagery follow the HIG inclusion page ([HIG, Inclusion](https://developer.apple.com/design/human-interface-guidelines/inclusion)).
 
 ### 6.7 Benchmarks: Apple Design Award winners we measure against
 
@@ -536,9 +540,9 @@ Each idea lists: the idea, why it fits Inkwell, a shipped product that proves th
 
 **16. Classroom mode.** A teacher preset: fixed curriculum categories (Science word, Historical figure, Country), no timers under 60 seconds, no leaderboards, a printable summary sheet of all answers for review. Lives in App 1 (teachers of 11 and up) and App 2 (younger). *Fits because* the game is already a classroom staple under every name in Section 2.1. *Proof:* Stadt Land Fluss is used in German schools as a vocabulary exercise ([Wikibooks (de), Stadt-Land-Fluss](https://de.wikibooks.org/wiki/Spiele:_Stadt-Land-Fluss)). *Effort:* 1.5 weeks. *Risk:* low. **Verdict:** v1.2.
 
-**17. Themes as cosmetic IAP.** Neon Night, Swiss Grid, and seasonal variations of Ink and Paper (a green ink, a red ink) as a theme bundle. Themes change color, type, sound set and letter-draw material; never rules. *Fits because* the founder wants aesthetics first, and players who love the look will pay for more of it. *Proof:* Knotwords sells a single unlock plus customization options ([Six Colors, Knotwords](https://sixcolors.com/post/2022/04/knotwords-offers-crossword-puzzles-without-clues/)); Two Dots changes palette per world while staying recognizable ([Wikipedia, Two Dots](https://en.wikipedia.org/wiki/Two_Dots)). *Effort:* 1 week per theme after the token system exists. *Risk:* low. **Verdict:** v1.0 with two themes.
+**17. Themes as cosmetic unlocks.** Night Lounge in the Pro unlock, Swiss Editorial free, and later seasonal variations of Paper & Ink (a green ink, a red ink) as a la carte non-consumable packs. Themes change color, type, sound set and letter-draw material; never rules (07, principle 7). *Fits because* the founder wants aesthetics first, and players who love the look will pay for more of it. *Proof:* Knotwords sells a single unlock plus customization options ([Six Colors, Knotwords](https://sixcolors.com/post/2022/04/knotwords-offers-crossword-puzzles-without-clues/)); Two Dots changes palette per world while staying recognizable ([Wikipedia, Two Dots](https://en.wikipedia.org/wiki/Two_Dots)). *Effort:* 07 estimates 2 to 5 engineer-weeks per direction beyond the shared skeleton, far above the 1 week assumed here; see the OPEN on theme scope in the decisions register. *Risk:* low on review, medium on schedule. **Verdict:** v1.0 with three themes, Night Lounge inside Pro; a la carte packs post-launch.
 
-**18. "Ink" currency versus one-time Pro.** Option A: a soft currency earned by playing and spent on themes. Option B: a single Pro purchase and direct theme purchases. *Fits:* only B fits. A currency creates the grind and the loot-box-adjacent psychology the founder and the Kids spec reject. *Proof:* Zach Gage, whose puzzle games are repeatedly ADA finalists, describes resisting dark patterns as a design principle ([Six Colors, Zach Gage interview](https://sixcolors.com/post/2024/08/interview-game-developer-zach-gage-on-pile-up-poker-and-resisting-dark-patterns/)). *Effort:* 0 extra for B. *Risk:* A carries review and reputational risk. **Verdict:** B. Currency killed.
+**18. "Ink" currency versus one-time Pro.** Option A: a soft currency earned by playing and spent on themes. Option B: a single Pro purchase and direct theme purchases. *Fits:* only B fits. A currency creates the grind and the loot-box-adjacent psychology the founder and the Kids spec reject. *Proof:* Zach Gage, whose puzzle games are repeatedly ADA finalists, describes resisting dark patterns as a design principle ([Six Colors, Zach Gage interview](https://sixcolors.com/post/2024/08/interview-game-developer-zach-gage-on-pile-up-poker-and-resisting-dark-patterns/)). *Effort:* 0 extra for B. *Risk:* A carries review and reputational risk. **Verdict:** B. The "Ink" currency is **rejected** in both apps, consistent with the product brief's "no consumables, ever" and the Kids refusal list; the same request ("ink drops") was raised and refused again in Kids doc 02.
 
 **19. Bots with personalities.** Three named bots (for example "Aunt Meera", "Professor Ödön", "Kid Tobi") whose dictionaries, blank rates and thinking times differ, with tiny ink portraits. *Fits because* solo play needs a sense of a table, and names make the 10/5 duplicate rule legible ("Meera also wrote Mango"). *Proof:* Really Bad Chess and Good Sudoku show that a personality-driven twist makes a classic approachable ([Wikipedia, Zach Gage](https://en.wikipedia.org/wiki/Zach_Gage)). *Effort:* 1 week on top of Section 3.4. *Risk:* low. **Verdict:** v1.0.
 
@@ -588,7 +592,7 @@ The highest-level checklist; each line is a release gate with an owner. Sources 
 
 | # | Check | Owner | Source |
 |---|---|---|---|
-| 1 | First run reaches a playable letter in under 20 seconds with no account, no permission prompt and no tutorial longer than one screen | JOBS | [HIG, Onboarding](https://developer.apple.com/design/human-interface-guidelines/onboarding); [NN/g, Onboarding tutorials](https://www.nngroup.com/articles/onboarding-tutorials/) |
+| 1 | First run reaches a live, editable round in under 10 seconds (the UX plan's standard; the product brief's storyboard lands it at about 5 s) with no account, no permission prompt, zero modals and no tutorial longer than one card | JOBS | [HIG, Onboarding](https://developer.apple.com/design/human-interface-guidelines/onboarding); [NN/g, Onboarding tutorials](https://www.nngroup.com/articles/onboarding-tutorials/) |
 | 2 | Every screen has one primary action; destructive actions are never adjacent to primary ones | DESIGN | [NN/g, Ten usability heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/) |
 | 3 | Feedback within 100 ms for every tap; transitions 200 to 500 ms; nothing blocks longer than 1 second without an indicator | IOS | [NN/g, Response times](https://www.nngroup.com/articles/response-times-3-important-limits/); [NN/g, Animation duration](https://www.nngroup.com/articles/animation-duration/) |
 | 4 | Motion is purposeful, consistent with the eight tokens, and has a Reduce Motion twin | DESIGN, IOS | [HIG, Motion](https://developer.apple.com/design/human-interface-guidelines/motion); [NN/g, Animation usability](https://www.nngroup.com/articles/animation-usability/) |
@@ -627,7 +631,7 @@ The highest-level checklist; each line is a release gate with an owner. Sources 
 | R6 | Game Center async feels slow or opaque to players | Medium | Medium | Clear "waiting for Priya" states; reminders via GameKit; iMessage turn cards as the parallel pass | IOS |
 | R7 | MultipeerConnectivity reliability (host drops, mixed Wi-Fi and Bluetooth) | Medium | Medium | Host election and reconnection in the Networking package; action-log resync | ARCH |
 | R8 | App Review rejection for Kids Category | Medium | High | No network except StoreKit; parental gate; review of guidelines 1.3 and 5.1.4 before submission | KIDS, QA |
-| R9 | SwiftData or CloudKit sync conflicts corrupt a game | Low | Medium | Action log canonical; store rebuildable | ARCH |
+| R9 | Store corruption or a future CloudKit sync conflict corrupts a game | Low | Medium | Event log canonical with hash chain; GRDB store rebuildable from the log; no sync in 1.0 | ARCH |
 | R10 | Reduce Motion alternatives skipped under time pressure | Medium | Medium | Alternative is part of the token; a motion token without a twin fails CI lint | IOS |
 | R11 | Performance of ink shaders on iPhone SE | Medium | Medium | Shader quality tiers by device; fall back to flat fills | IOS |
 | R12 | Monetization line (free versus Pro) set wrong | Medium | Medium | A/B via TestFlight cohorts before launch; Small Business Program keeps margins | JOBS |
@@ -637,9 +641,9 @@ The highest-level checklist; each line is a release gate with an owner. Sources 
 
 ### 9.2 Open questions across the program
 
-1. OPEN: Final name for App 1 and App 2 (Section 4.1).
+1. OPEN: Final name for App 1 (Inkwell pending clearance; fallbacks Nib, Letterhead, Foolscap) and App 2 (Inkling pending trademark; fallback Inkwell Kids).
 2. OPEN: Daily letter in 1.0 or 1.1 (Section 7.1).
-3. OPEN: CloudKit mirroring in 1.0 or 1.1 (Section 5.8).
+3. OPEN: iCloud sync of match history in 1.x; not in 1.0 (Section 5.8).
 4. OPEN: Game Center async versus iMessage turns as the primary async path (ideas 10 and 11).
 5. OPEN: Whether accepted async disputes feed shared curation (Section 3.6).
 6. OPEN: VoiceOver timing for the letter draw (Section 6.8).
@@ -656,15 +660,15 @@ The highest-level checklist; each line is a release gate with an owner. Sources 
 |---|---|
 | Action log | The ordered list of engine actions for a game; canonical record and replay source |
 | Adjudication | Deciding whether an Unknown answer counts, by table vote or host ruling |
-| Age band | Kids grouping: 5 to 7, 8 to 10, 11 to 13 |
+| Age band | Kids grouping: Sprouts 5 to 7, Explorers 8 to 10, Navigators 11 to 13 |
 | Blitz | The shortest timer preset |
 | Categories | The generic name of the NPAT family of games |
 | Design token | A named value (color, type, motion, sound) in the DesignSystem package |
 | Dictionary-final | A validation policy where the dictionary decides without a table vote |
 | Draw | The letter selection ritual at the start of a round |
-| Engine | The GameEngine Swift package: pure reducers and state machines, no UI |
+| Engine | The GameEngine Swift package (`IWCore` plus `IWRules` in the architecture document): pure reducers and state machines, no UI |
 | House dictionary | Device-local list of answers the table has accepted |
-| House rule | An optional rule variant (Stop, long-word bonus, letter exclusion, wild tail) |
+| House rule | An optional rule variant (Stop, long-word bonus, letter difficulty preset, edge-letter rule; the full matrix is in the game design spec Section 8) |
 | Kids Category | The App Store category with extra privacy rules for apps aimed at children |
 | Live Activity | Lock Screen and Dynamic Island presentation of an ongoing round |
 | Nearby | Local multiplayer over MultipeerConnectivity |
@@ -681,7 +685,7 @@ The highest-level checklist; each line is a release gate with an owner. Sources 
 | Stop | Ending a round early by the first finisher (house rule), and the slam moment |
 | Unit | The locale-aware generalization of "letter" (App 3) |
 | Validation policy | The engine value that decides who has the final word on an answer |
-| Wild tail | House rule letting the next player pick any letter after a dead-end letter |
+| Reroll (edge-letter rule) | Default Word Chain rule: after a dead-end letter the engine draws a new weighted link letter; "Use letter" and "Last vowel" are the alternatives. The Kids edition's "wildcard" lets the next player pick any letter |
 
 ---
 

@@ -2,7 +2,7 @@
 
 **Document status:** Draft v0.1, 2026-10-04. Owner: **[DESIGN — Design Director, "Sofia Lindqvist"]** with **[JOBS — Product Lead, "Theo Marr"]** as co-owner of taste decisions. Contributors: IOS, GAME, QA, ARCH.
 
-**Read this if...** you are deciding what Inkwell should look and feel like, building the DesignSystem Swift package, choosing fonts and colors, or arguing about whether the app should feel like a notebook, a magazine, a toy, a bar, or a system app. This document lays out five complete visual directions as parallel passes, compares them, recommends a default, and defines the design-system foundations (tokens, type ramp, spacing, components, states) that every direction must be expressible in. Read 08 for screens and flows, 09 for motion, sound and haptics.
+**Read this if...** you are deciding what Inkwell should look and feel like, building the `IWDesignSystem` Swift package (called DesignSystem in this document for short), choosing fonts and colors, or arguing about whether the app should feel like a notebook, a magazine, a toy, a bar, or a system app. This document lays out five complete visual directions as parallel passes, compares them, recommends a default, and defines the design-system foundations (tokens, type ramp, spacing, components, states) that every direction must be expressible in. Read 08 for screens and flows, 09 for motion, sound and haptics.
 
 ## Table of contents
 
@@ -516,6 +516,8 @@ Custom glyphs required in v1: letter die, chain link, chain broken, ink drop, ti
 
 ### 12.1 Inventory (31 components)
 
+Package column key, using the architecture document's names: "DesignSystem" is `IWDesignSystem`; "GameUI" and "Store" are feature modules inside `IWFeatures` (`NPATFeature`, `WordChainFeature`, `SettingsFeature`).
+
 | # | Component | Package | Notes |
 |---|-----------|---------|-------|
 | 1 | LetterHero | DesignSystem | the drawn letter, per-theme motion |
@@ -578,7 +580,7 @@ The app icon is a single drawn letter on the theme's canvas. Default (Paper & In
 
 ## 14. Naming options (brief)
 
-The codename is Inkwell. Candidates to test in App Store search and trademark screening: Inkwell, Scribble Round, Letterhead, Pencil Party, Quill (likely taken), Chainletter, Draw a Letter. Naming is owned by the master reference document; this document only notes that Paper & Ink is the direction most reinforced by the name Inkwell, and that Night Lounge would suit a sub-brand ("Inkwell After Dark") for the paid theme.
+The working title is Inkwell. Naming is owned by the product brief (01, Section 8), which decided: keep Inkwell pending trademark clearance in Phase 0, with fallbacks ranked Nib, Letterhead, Foolscap. This document only notes that Paper & Ink is the direction most reinforced by the name Inkwell (Nib works equally well), and that Night Lounge would suit a sub-brand ("Inkwell After Dark") for the paid theme.
 
 ---
 

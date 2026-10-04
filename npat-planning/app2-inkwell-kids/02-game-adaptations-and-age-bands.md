@@ -30,7 +30,7 @@
 
 ## 1. Design stance: same games, different tempo
 
-The rules of NPAT and Word Chain do not change. A letter is drawn; you write a name, a place, an animal, a thing. The last letter of my word starts your word. What changes for children is the tempo (slower or no clock), the surface area (big tiles, few choices), the tolerance (we accept what the child meant), and the emotional register (nothing is a failure, everything is a try). The shared GameEngine from App 1 supplies the state machine; App 2 supplies a `KidsRuleSet` configuration per band and a `KidsValidator` that wraps the App 1 dictionary with tolerance tiers.
+The rules of NPAT and Word Chain do not change. A letter is drawn; you write a name, a place, an animal, a thing. The last letter of my word starts your word. What changes for children is the tempo (slower or no clock), the surface area (big tiles, few choices), the tolerance (we accept what the child meant), and the emotional register (nothing is a failure, everything is a try). The shared engine from App 1 (`IWCore` plus `IWRules` in the architecture document; "GameEngine" in the brief) supplies the state machine; App 2 supplies a `KidsRuleSet` configuration per band and a `KidsValidator` that wraps the App 1 dictionary (`IWContent`) with tolerance tiers.
 
 > **[GAME]** The hard constraint I set for myself: a 10-year-old who learned the game here should be able to sit down with a pencil and play the real paper game with cousins. We are teaching the actual game, with training wheels that come off.
 
@@ -250,7 +250,7 @@ Bots are characters with names, personalities and visible "thinking". They make 
 
 Pass-and-play is the primary multiplayer mode. Flow: choose players (profiles with avatars), the letter is drawn, Player 1 fills in, taps "Pass to Maya", a handoff screen hides answers and shows Maya's avatar large with "Your turn, Maya!" spoken aloud, Maya taps to begin. Answers are compared only at the recap. Timers in pass-and-play are per player and pause during handoff. Up to 6 profiles.
 
-Nearby play (MultipeerConnectivity) is a Phase 4 stretch (doc 03): it transmits only answers and profile nicknames between devices on the local network, never to a server, and the nicknames go through the safety filter.
+Nearby play (MultipeerConnectivity) is a post-launch stretch, outside the 16-week plan (doc 03): it transmits only answers and profile nicknames between devices on the local network, never to a server, and the nicknames go through the safety filter.
 
 Online play does not exist in App 2.
 
@@ -302,7 +302,7 @@ Band changes happen only through the parent area. The child can never accidental
 
 ### 12.1 Allow-lists, not block-lists
 
-App 1 validates against large open dictionaries (ENABLE, SCOWL, Wiktionary-derived category lists). For App 2 the default is inverted: a word is valid only if it appears on a curated kid-safe allow-list for the category. A block-list approach cannot be made safe for children because the space of offensive or inappropriate words, phrases and near-spellings is unbounded and new ones appear constantly. An allow-list makes the safe set finite and reviewable.
+App 1 validates against large open dictionaries (ENABLE, SCOWL, WordNet-seeded and curated category lists, GeoNames; Wiktionary-derived data is excluded from App 1's v1 packs per its ADR-007). For App 2 the default is inverted: a word is valid only if it appears on a curated kid-safe allow-list for the category. A block-list approach cannot be made safe for children because the space of offensive or inappropriate words, phrases and near-spellings is unbounded and new ones appear constantly. An allow-list makes the safe set finite and reviewable.
 
 | Approach | Pros | Cons | Verdict |
 |---|---|---|---|
@@ -380,7 +380,7 @@ Scenario: a Year 2 teacher has six classroom iPads managed through Apple School 
 
 What we build for this in v1 (cheaply): a "Classroom" preset in the parent area that sets the band, disables sounds by default, enables a projector-friendly "big letter" mode so one iPad can be mirrored to a screen, and allows up to 30 named profiles with a quick "clear all profiles" action for the end of the lesson. A printable one-page teacher guide lives on the Trust page (doc 05).
 
-What we do not build in v1: a teacher dashboard, class rosters, any cloud sync, any integration with school systems. **OPEN:** whether a Phase 5 "Classroom edition" is worth a separate SKU, which would also have to consider FERPA and school procurement.
+What we do not build in v1: a teacher dashboard, class rosters, any cloud sync, any integration with school systems. **OPEN:** whether a post-launch "Classroom edition" is worth a separate SKU, which would also have to consider FERPA and school procurement.
 
 > **[JOBS]** Teachers are the best free distribution a kids app can have, and they want the thing to just work on a projected iPad. Big-letter mode is one afternoon of work and worth it.
 

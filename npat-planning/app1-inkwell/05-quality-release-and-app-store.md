@@ -61,7 +61,7 @@ Three operating rules:
 | **Accessibility audits** | Automated: XCUITest `performAccessibilityAudit()` on every screen (iOS 17+); contrast check on tokens at build time. Manual: VoiceOver script per screen, Switch Control pass, Dynamic Type at accessibility5, Reduce Motion walkthrough | Xcode Accessibility Inspector; XCTest audits; human script | Automated per PR; manual per release candidate | 0 audit failures; manual script signed off by two people | QA/IOS |
 | **Performance tests** | Launch time, round transition hitches, dictionary load, memory | `XCTApplicationLaunchMetric`, `XCTOSSignpostMetric`, `XCTMemoryMetric` with baselines | nightly on simulator; weekly on physical devices | Within budgets in Section 4 | IOS |
 | **Localization pseudo-locale tests** | Double-length pseudo-locale, RTL pseudo-locale, accented strings; truncation and clipping detection via snapshots | Xcode scheme options (Double-Length Pseudolanguage, Right-to-Left Pseudolanguage) + snapshot tests | CI | 0 clipped strings on supported sizes | QA |
-| **Device integration tests** | MultipeerConnectivity 8-device session (Phase 2); Game Center sandbox (Phase 3); haptics timing (video) | manual with scripted scenarios | per release candidate | scripted checklist complete | QA/IOS |
+| **Device integration tests** | MultipeerConnectivity 8-device session (delivery Phase 4); Game Center sandbox (delivery Phase 5); haptics timing (video) | manual with scripted scenarios | per release candidate | scripted checklist complete | QA/IOS |
 | **Exploratory and "feel" sessions** | 30-minute sessions by **[JOBS]**, **[DESIGN]**, **[GAME]** on device, weekly | none | weekly | notes filed as issues within 24 h | JOBS |
 
 > **[GAME]** Property-based testing of scoring is where I expect to find the embarrassing bugs: a 5-point shared answer that became 10 because one player capitalized differently. The normalization idempotence invariant covers that.
@@ -83,7 +83,7 @@ Three operating rules:
 
 Rules: the oldest supported iOS point release is tested on at least one physical device per release candidate. Each new iOS beta is installed on one Tier B device the week it ships so regressions are found before the public release.
 
-**OPEN:** iPad as a v1 target. **[JOBS]** says no ("one device, perfect"). **[DESIGN]** wants the large-canvas pass-and-play experience. Decision deferred to the UX plan; this matrix keeps iPad in Tier C.
+**OPEN (narrowed):** the product brief (01, kill list) decides that v1 ships a "runs well on iPad" layout with a bespoke iPad design deferred to Phase 7, and the delivery plan's device lab includes one iPad. This matrix keeps iPad in Tier C for snapshot variety, plus one physical iPad smoke pass per release candidate. What remains open is **[DESIGN]**'s large-canvas pass-and-play layout, which is a Phase 7 question.
 
 ---
 
@@ -146,18 +146,18 @@ Canonical source: App Store Review Guidelines, https://developer.apple.com/app-s
 | **2.3 Accurate Metadata** (2.3.1 hidden features, 2.3.3 screenshots reflect the app, 2.3.7 keywords/titles) | Screenshots must show the actual app; no mention of other platforms; no misleading keywords | Screenshots are captured from the real build (Fastlane `snapshot`); no competitor names in keywords; feature-flagged dark features are not mentioned in metadata | Metadata checklist |
 | **2.5.1 Public APIs** | Only public APIs | No private API; SPM dependencies audited (GRDB, snapshot testing is test-only) | Dependency list |
 | **2.5.4 Background modes** | Only for their intended purpose | No background modes requested | Info.plist |
-| **3.1.1 In-App Purchase** | Digital unlocks must use IAP; prices and content disclosed; restore purchases available | "Pro" unlock and cosmetic ink themes via StoreKit 2 non-consumables; "Restore Purchases" button in Settings; every IAP described in metadata | StoreKit configuration; screenshots of the purchase sheet |
+| **3.1.1 In-App Purchase** | Digital unlocks must use IAP; prices and content disclosed; restore purchases available | One "Pro" non-consumable via StoreKit 2 (the Pro theme is part of the unlock in v1; a la carte theme packs are a post-launch option, never consumables); "Restore Purchases" button in Settings; every IAP described in metadata | StoreKit configuration; screenshots of the purchase sheet |
 | **3.1.2 Subscriptions** | Not used in v1 | If ever introduced, full 3.1.2 compliance (clear terms, cancellation path) | n/a |
 | **3.2.2 Unacceptable business** | No artificially restricting access; no unrelated charges | Pro unlock gates only what it says | Review notes |
 | **4.0 Design / 4.2 Minimum Functionality** | Apps must be more than a repackaged website; provide lasting value | Native app with two full games, solo and multiplayer; obviously not a wrapper | n/a |
 | **4.3 Spam** | Avoid duplicates of popular apps without differentiation | NPAT and Word Chain apps exist; our differentiation is design quality, multiplayer and accessibility; metadata should articulate this | Product page copy |
-| **4.5.4 Push notifications** | Not required for use; no marketing without consent | Phase 3 only: turn reminders via Game Center; no marketing pushes | n/a in v1 |
+| **4.5.4 Push notifications** | Not required for use; no marketing without consent | Delivery Phase 5 (async) only: turn reminders via Game Center's system notifications; no push permission prompt of our own; no marketing pushes | Review notes |
 | **5.1.1 Data Collection and Storage** | Privacy policy link in metadata and in-app; consent for data collection; only request data the app needs | Privacy policy URL on the product page and in Settings; no collection by default; optional diagnostics switch with plain-language explanation | Privacy policy; screenshots of the switch |
 | **5.1.2 Data Use and Sharing** | No repurposing or selling; no tracking without ATT prompt | No tracking, no ATT prompt (none needed), no third-party sharing | Privacy label |
 | **5.1.4 Kids** | Apps aimed at kids must not include third-party analytics/advertising | App 1 is not aimed at kids; App 2 will comply fully (see App 2 plan) | n/a for App 1 |
 | **5.1.5 Location Services** | Not used | No location permission | Info.plist |
 | **5.3 Gaming, Gambling, Lotteries** | Not applicable: no real-money prizes, no contests with entry fees | "Founding Player" cosmetic is not a contest with purchase | n/a |
-| **Game Center (GameKit guidance)** | Follow Game Center UI conventions, Access Point placement, sign-in handled by system | Phase 3: use `GKAccessPoint`, never custom sign-in | Phase 3 checklist |
+| **Game Center (GameKit guidance)** | Follow Game Center UI conventions, Access Point placement, sign-in handled by system | Delivery Phase 5: use `GKAccessPoint`, never custom sign-in | Phase 5 checklist |
 
 > **[IOS]** From experience with reviews: the single most common rejection for apps like ours is 2.1 "we could not complete a purchase" because the reviewer's sandbox hit a StoreKit edge case, and 3.1.1 "restore purchases not found". Both are preventable with a StoreKit Testing configuration in the UI tests and a visible Restore button.
 >
@@ -173,9 +173,9 @@ Source: App privacy details on the App Store, https://developer.apple.com/app-st
 
 | Phase | Data types declared | Linked to user | Used for tracking | Notes |
 |-------|---------------------|----------------|-------------------|-------|
-| **Launch (pass-and-play, solo, IAP)** | **None** ("Data Not Collected") | n/a | No | StoreKit transactions are Apple's; MetricKit/Organizer crash data flows via Apple's opt-in diagnostics, which Apple does not require developers to declare when the developer receives it only through Apple's aggregated channels. Confirm against the current App Privacy details page before submission. |
-| **Phase 2 (Nearby)** | None | n/a | No | Display names are exchanged peer-to-peer and never leave the devices or reach us. |
-| **Phase 3 (Game Center)** | Game Center data is collected by Apple as part of the Game Center service; the developer declares data *the developer* collects. We collect none. If we add a Sentry/Crashlytics SDK in production: declare "Diagnostics: Crash Data, Performance Data", not linked, not for tracking, plus the SDK's privacy manifest. | Not linked | No | |
+| **Launch 1.0 (pass-and-play, solo, IAP; nearby and async ship in 1.0 too, rows below)** | **None** ("Data Not Collected") | n/a | No | StoreKit transactions are Apple's; MetricKit/Organizer crash data flows via Apple's opt-in diagnostics, which Apple does not require developers to declare when the developer receives it only through Apple's aggregated channels. Confirm against the current App Privacy details page before submission. |
+| **Nearby (delivery Phase 4)** | None | n/a | No | Display names are exchanged peer-to-peer and never leave the devices or reach us. |
+| **Game Center async (delivery Phase 5)** | Game Center data is collected by Apple as part of the Game Center service; the developer declares data *the developer* collects. We collect none. If we add a Sentry/Crashlytics SDK in production: declare "Diagnostics: Crash Data, Performance Data", not linked, not for tracking, plus the SDK's privacy manifest. | Not linked | No | |
 | **If optional diagnostics endpoint is enabled** | "Diagnostics" and "Usage Data" (aggregate counters), not linked, no tracking | Not linked | No | Requires an ADR amendment and label update. |
 
 Required-reason API audit: `UserDefaults` (reason CA92.1, app's own preferences), file timestamps if used (C617.1), disk space (none expected), system boot time (none; we use `ContinuousClock`). The app's own `PrivacyInfo.xcprivacy` lists these; GRDB does not require a manifest for our usage but we verify in each update.
@@ -241,7 +241,7 @@ App Store Connect supports **phased release for automatic updates over 7 days**:
 Policy:
 - **1.0.0 launch**: phased release does not apply to a first release (there is nothing to update from), so launch is all-at-once. Mitigation is the beta program plus a soft launch window (Section 14).
 - **Every update**: phased release ON. Watch crashes and hangs daily in Organizer and MetricKit. Pause if crash-free drops below 99.5% or if a P0 is confirmed. Resume or supersede with a hotfix.
-- **Feature flags as the second dial**: new transports (Nearby, Game Center) ship dark and are enabled through the signed remote config (Phase 2) for 10%, 50%, 100% of launches, independent of the binary rollout.
+- **Feature flags as the second dial**: from 1.x onward, new features ship dark and are enabled through the signed remote config (post-launch; 1.0 has only compile-time kill switches, see Section 12) for 10%, 50%, 100% of launches, independent of the binary rollout.
 
 ---
 
@@ -276,7 +276,7 @@ Requirements (verified for 2025-2026): the 6.9-inch iPhone screenshot size (1320
 | 5 | Word Chain in Countries, chain of five | "Chain words. Don't repeat. Don't stall." |
 | 6 | Custom categories sheet (Movies, Foods, Brands, your own) | "Your categories, your rules." |
 | 7 | Dynamic Type at accessibility3 with VoiceOver focus ring visible | "Built to be played by everyone." |
-| 8 | Nearby lobby with 6 phones discovered (Phase 2 only) | "Nearby play. No Wi-Fi password, no sign-in." |
+| 8 | Nearby lobby with 6 phones discovered (in 1.0 from delivery Phase 4) | "Nearby play. No Wi-Fi password, no sign-in." |
 | 9 | Ink themes (Pro) | "Pick your ink." |
 | 10 | Reduce Motion / calm variant of the round screen | "Calmer mode, same game." |
 
