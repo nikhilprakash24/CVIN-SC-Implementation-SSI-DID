@@ -100,7 +100,7 @@ Every screen lists purpose, content, primary action, states and acceptance crite
 - **Content:** two game cards (title, one line of recent context, drawn letter preview on NPAT, short chain preview on Word Chain), one nav-bar icon (menu: Themes, Pro, Settings).
 - **Primary action:** "Play" on each card. Secondary: "Set up".
 - **States:** empty (first run: context line says "New game"); loading (none visible; cards render from local state); error (none possible offline); success (n/a).
-- **Acceptance:** cards tappable within 400 ms of launch; both cards fully visible at AX5 Dynamic Type without scrolling on 6.1 inch screens (allowed to scroll on 5.4 inch); passes principles 2 and 3.
+- **Acceptance:** cards tappable within the cold-launch budget (800 ms p90 on iPhone SE 3rd gen, 05 Section 4); both cards fully visible at AX5 Dynamic Type without scrolling on 6.1 inch screens (allowed to scroll on 5.4 inch); passes principles 2 and 3.
 
 ### 3.2 NPAT Setup
 
@@ -129,7 +129,9 @@ Detailed in section 7. Acceptance in short: complete reveal under 6 s for up to 
 ### 3.6 Match Summary (shared by both games)
 
 - **Purpose:** celebrate, then continue.
-- **Content:** winner (or your score in solo), per-player totals, best answer of the match (longest unique), "Play again" primary, "Change setup" and "Back to Lobby" secondary, share button (renders an image card of the results).
+- **Content:** winner (or your score in solo), per-player totals, best answer of the match (longest unique), "Play again" primary, "Change setup" and "Back to Lobby" secondary, share button (renders an image card of the results). The default card is the final ledger with names and words, in the active theme; a one-tap "Spoiler-free" toggle on the share sheet renders the master reference's variant instead (letter, category icons, 10/5/0 glyph grid per player, no words) for public posting. Family-safe masking applies to both (02 edge case 34).
+
+**DECISION (reconciled 2026-10-04):** ledger with names and words by default (it is the party's record), spoiler-free variant one tap away. The master reference (idea 3, risk R4) and the delivery plan (Phase 2 scope) were aligned to this.
 - **States:** loading (image render for share is async; button shows spinner but screen is live); error (share failed: toast "Could not share. Try again."); success (confetti alternative per theme, see 09 M16).
 - **Acceptance:** "Play again" starts a new match with identical settings in one tap; share image respects the active theme and includes no personal data beyond names entered by the user.
 
@@ -393,7 +395,7 @@ Four fields stacked, but only the focused field is full height with its label; t
 - **Timer visibility:** ring top-right at 36 pt with numeric center; in the last 10 s the digits also appear as a thin bar under the letter so peripheral vision picks it up. "Always show numeric timer" is an accessibility setting.
 - **Auto-advance:** only on Return. Never on word boundary, never on autocorrect commit. A player who types "New York" is not advanced after "New".
 - **Submit affordance:** "Done" on the keyboard for field 4, plus a persistent "Finish" text button in the navigation bar for finishing early from any field. Both go straight to Reveal (no confirmation) when all four fields have content. If any field is blank, a non-blocking sheet asks "Submit with 2 blanks?" with "Submit" primary and "Keep writing" secondary; this sheet is suppressed when the timer has under 5 s left.
-- **Accidental dismissal:** the Round screen is not a sheet; there is no swipe-down. Back navigation is replaced by a "Quit round" text button that opens a confirmation ("Quit this round? Your answers will not count."). Interactive pop gesture is disabled on this screen. App backgrounding pauses the timer in solo and records the pause in pass-and-play (GAME: OPEN whether backgrounding in pass-and-play forfeits the turn).
+- **Accidental dismissal:** the Round screen is not a sheet; there is no swipe-down. Back navigation is replaced by a "Quit round" text button that opens a confirmation ("Quit this round? Your answers will not count."). Interactive pop gesture is disabled on this screen. App backgrounding pauses the timer in solo; in pass-and-play a system interruption pauses the active player and a voluntary app switch keeps the clock running with the "left the table" mark (02 Section 12; reconciled 2026-10-04).
 - **Paste:** disabled in timed rounds per the game design spec Section 12 (a small "no pasting, pencil only" ink note appears); allowed in untimed modes, trimmed to one line.
 - **Validation timing:** none while typing in v1. Live validation (green underline as you type) is a tested variant in the skunkworks track because GAME worries it changes the feel from "writing" to "being graded".
 
@@ -405,7 +407,7 @@ Four fields stacked, but only the focused field is full height with its label; t
 >
 > **DECISION:** Layout 3 default, Layout 2 at AX3+ and as a setting. No live dictionary validation. Letter-mismatch helper allowed. No swipe to dismiss; explicit Quit with confirmation.
 >
-> **OPEN:** Backgrounding during a pass-and-play turn: pause or forfeit. GAME to decide in the rules document.
+> **DECISION (reconciled 2026-10-04):** backgrounding during a pass-and-play turn neither pauses nor forfeits on a voluntary app switch: the deadline stands, the sheet auto-submits at expiry, and the "left the table" mark shows. System interruptions pause. Decided in the rules document (02 Section 12).
 
 ---
 
@@ -628,8 +630,9 @@ Additional conventions: player names are always used where known ("Same as Marcu
 |-----------|----------|-------|
 | Timer ends while the player is mid-word | The partial word is kept and validated as typed; no sheet | GAME |
 | App backgrounded during a solo round | Timer pauses; on return a small "Paused" chip shows for 1 s then the timer resumes after a 3-2-1 count | IOS |
-| App backgrounded during a pass-and-play turn | OPEN: pause or forfeit | GAME |
-| Phone call during a round | Same as background; audio session is interrupted and resumed | IOS |
+| App backgrounded during a pass-and-play turn (voluntary app switch) | Timer keeps running on the monotonic clock; sheet auto-submits at expiry; "left the table" mark on the sheet (02 Section 12) | GAME |
+| App backgrounded during a nearby or async turn | Never pauses; auto-submits at the deadline | GAME |
+| Phone call or other system interruption during a round | Solo and pass-and-play: pauses the active player, resumes with the 3-2-1 count; nearby and async: no pause. Audio session is interrupted and resumed | IOS |
 | Low Power Mode | Grain shader off, hero animations shortened by 30 percent, sound unchanged | IOS |
 | Dictionary cannot load (corrupt) | Validation falls back to "letter and non-empty" rule with a one-time toast "Word checking is unavailable. Scores are on trust." | DATA |
 | Two players same name | Inline helper in Setup; names auto-suffixed with initials if ignored | DESIGN |
@@ -657,8 +660,11 @@ Additional conventions: player names are always used where known ("Same as Marcu
 6. Timer VoiceOver announcements at 30, 20, 10, 5 to 1, and time's up.
 7. One joke in the app (bot concession).
 
+8. Share card: ledger with names and words by default, spoiler-free glyph-grid variant one tap away (reconciled with the master reference).
+9. Backgrounding per mode as in Section 11 (reconciled with 02 and 04).
+
 **OPEN**
-1. Backgrounding during a pass-and-play turn: pause or forfeit (GAME).
+1. Closed: backgrounding during a pass-and-play turn is decided in 02 Section 12 (see Section 11).
 2. Stop rule grace: 10 s per remaining player or immediate end (GAME).
 3. Whether the share image includes the drawn letter in the handwriting face for all themes or the theme's own letter style (DESIGN).
 4. Live letter-mismatch helper: ship in v1 or hold for a usability test (DESIGN, GAME).

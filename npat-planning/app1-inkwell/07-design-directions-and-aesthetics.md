@@ -286,7 +286,7 @@ This is the only direction where dark is primary. Light mode exists for daylight
 
 **Risks:** glow and blur are expensive on older GPUs and can look muddy in sunlight; neon on black fails contrast easily for secondary text; the vibe excludes kids and some adult players who want a daytime look; Reduce Motion must disable flicker completely (flicker is a photosensitivity concern).
 
-**Effort:** 4 to 5 engineer-weeks beyond skeleton (material and glow tuning, optional shader, licensed display face, sound design).
+**Effort:** 4 to 5 engineer-weeks beyond skeleton at full scope (material and glow tuning, optional shader, licensed display face, sound design). The 1.0 reduced scope (tokens, display face, static glow, S3 sound; no shader, no animated materials, no ambient drift) is about 1.25 engineer-weeks of engineering plus design time; see Section 9.
 
 > **[IOS]** Materials over animated gradients plus glow on every active element is the single most expensive combination in this document. I want a frame budget per screen before we commit; see 09 section 7. Also, a flicker animation has to be killed under Reduce Motion, not softened.
 >
@@ -376,6 +376,8 @@ Reasons: it scores highest on the founder's stated priority (vibe), it is the on
 
 **Ship as selectable themes in v1 (Pro unlock, see 08 purchase flow):** B Swiss Editorial and D Night Lounge. Both are tokens plus one bundled font and a small asset set. B is cheap and gives the serious solo player a home. D is the "party at night" theme and sells the Pro unlock.
 
+**DECISION (reconciled 2026-10-04):** the effort figures in this document are design plus engineering including asset production; the delivery plan's figures are engineering only. Reconciled with 03 Section 8: Paper & Ink and Swiss Editorial ship in 1.0 at full scope; Night Lounge ships in 1.0 at reduced scope (tokens, display face, static glow, the S3 sound pack; no CRT shader, no animated materials, no ambient drift) inside a 2 EW Phase 4 theme budget; if the W14 capacity review cannot fund it, cut-list item 3 moves Night Lounge to 1.1 as the first Pro content drop. Master idea 17 says the same. Needs founder sign-off (register F6).
+
 **Parallel pass (skunkworks, not in v1):** C Playful Pop. It is the most expensive, it collides with App 2, and the founder's "no eyes" rule removes its mascot. Keep a Figma file alive, revisit after Inkwell Kids defines its own look so the two do not converge.
 
 **Skeleton, never shipped as a theme:** E Quiet Minimal. Built first as the semantic-token reference rendering and QA baseline.
@@ -390,7 +392,7 @@ Reasons: it scores highest on the founder's stated priority (vibe), it is the on
 >
 > **DECISION:** Default A. Free theme B. Paid theme D. C parked as skunkworks. E is the skeleton. Night Lounge offers (does not force) a blitz house-rules preset on first selection.
 >
-> **OPEN:** Whether D's optional CRT scanline shader ships in v1 or waits for a performance pass. IOS to report after the bake-off in 09.
+> Closed (reconciled 2026-10-04): D's optional CRT scanline shader does not ship in 1.0 (reduced-scope Night Lounge); revisited for 1.1 after the bake-off in 09.
 
 ---
 
@@ -610,8 +612,10 @@ The working title is Inkwell. Naming is owned by the product brief (01, Section 
 6. Results table design borrowed from Swiss Editorial across all themes.
 7. No mascot with eyes in App 1.
 
+8. Night Lounge ships in 1.0 at reduced scope (no shader, no animated materials) within a 2 EW Phase 4 theme budget, or moves to 1.1 via cut-list item 3 (reconciled with 03; founder sign-off).
+
 **OPEN**
-1. CRT scanline shader in v1 or later (IOS bake-off).
+1. Closed: the CRT scanline shader is not in 1.0; revisit for 1.1 (IOS bake-off).
 2. Final licensed display face for Night Lounge versus OFL fallback (DESIGN, by end of Phase 1).
 3. Whether custom theme sounds ship with the theme or are a separate Pro feature (GAME, DESIGN).
 4. Grain: shader versus static tile, pending performance numbers (IOS).

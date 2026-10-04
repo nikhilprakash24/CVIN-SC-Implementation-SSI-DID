@@ -234,7 +234,7 @@ Nearby play via MultipeerConnectivity (3 ew), Spanish content (DATA-heavy), voic
 - Validator: golden tests of common invented spellings per band (a corpus of at least 300 kid misspellings collected from playtests and literature), false-positive tests against the sensitive list, uniqueness tests.
 - Content CI: schema, license manifest, minimum candidates per letter per category per band, collision audit, hint coverage.
 - UI: no-escape test from every kid screen; gate robustness test (random taps for 60 seconds never pass); Dynamic Type snapshots at 5 sizes; Reduce Motion snapshots; VoiceOver label audit via accessibility inspector automation.
-- Performance: cold launch under 1.5 seconds on iPhone SE; celebration frame rate 60 fps on iPad 9th generation.
+- Performance: cold launch under 800 ms p90 on iPhone SE 3rd gen and under 1.5 seconds on iPhone SE 2nd gen (App 1's reconciled budget, 05 Section 4); celebration frame rate 60 fps on iPad 9th generation.
 
 ### 9.2 Kid usability testing protocol
 
@@ -299,7 +299,7 @@ All items must be green before Phase 4 submission.
 - [ ] Crash-free sessions above 99.8 percent across the two-week TestFlight.
 - [ ] Accessibility audit: VoiceOver, Dynamic Type, Reduce Motion, Switch Control, color contrast all pass.
 - [ ] Device matrix: iPhone SE (3rd gen), iPhone 15 or 16, iPad 9th gen, iPad Air, on iOS 17 and the current iOS.
-- [ ] Cold launch under 1.5 seconds on iPhone SE.
+- [ ] Cold launch under 800 ms p90 on iPhone SE 3rd gen and under 1.5 seconds on iPhone SE 2nd gen.
 
 **Business**
 - [ ] Name and trademark cleared; icon final.

@@ -75,7 +75,11 @@ All packages live in one monorepo (`Packages/`) and are consumed by two app targ
 ```mermaid
 graph TD
   App[Inkwell app target] --> Features[IWFeatures]
-  KidsApp[InkwellKids app target] --> Features
+  KidsApp[InkwellKids app target] --> Core
+  KidsApp --> Rules
+  KidsApp --> Content
+  KidsApp --> Persist
+  KidsApp -. primitive tokens only .-> DS
   Features --> Core[IWCore]
   Features --> Rules[IWRules]
   Features --> Content[IWContent]
@@ -98,6 +102,10 @@ Rules of the graph: `IWCore`, `IWRules` and `IWContent` must never import SwiftU
 > **[DATA]** One caveat: `Compression` framework is Apple-only. On Linux I need a fallback decoder (zlib via Foundation or a tiny pure-Swift LZ4). I will keep the on-disk format decoder behind a protocol so the Linux lane can decode uncompressed fixtures.
 
 **DECISION:** Nine packages as listed. `IWCore`, `IWRules`, `IWContent` are platform-pure and built on Linux in CI.
+
+**DECISION (reconciled 2026-10-04):** the InkwellKids target does not consume `IWFeatures`; it links `IWCore`, `IWRules`, `IWContent` and `IWPersistence` directly, takes primitive tokens only from `IWDesignSystem`, and never links `IWMultiplayer` or `IWAnalytics`. Its feature code lives in the Kids packages defined in the Kids plan (app2-inkwell-kids/03 Section 2). The diagram above was amended to say so.
+
+**DECISION (reconciled 2026-10-04):** there is no tenth Localization package in 1.0. App 3's `WritingSystem` protocol (draw pool, first unit, last unit, normalization, collation, layout direction) lives in `IWCore`; the English implementation ships inside `IWContent`'s base pack; the engine never inspects a unit beyond equality. The CI test that runs the engine with a non-Latin unit set runs in the `IWCore` Linux lane. A separate `IWLocalization` package is reconsidered at App 3 Phase A. The master reference (5.1) and the App 3 plan were aligned to this.
 **OPEN:** Whether `IWFeatures` is one package with many targets or many packages. Start as one package with multiple library products; split only if compile times demand it.
 
 ---
@@ -170,7 +178,9 @@ Timers are the single most visible thing in both games and the thing most likely
 
 - On `scenePhase == .background`: record `backgroundedAt` (monotonic). Timers keep their deadlines; the app does not request background execution (there is no legitimate background mode for a party game).
 - On return: compute elapsed. If the round deadline passed while backgrounded, the engine receives `timerExpired` with `at: deadline` (not `at: now`), so the log stays consistent. The UI shows a gentle "time was up while you were away" state instead of a jarring instant round end.
-- Pass-and-play house rule option (in `IWRules`): `pauseOnBackground = true` for casual play, which appends `matchPaused`/`matchResumed` events and shifts the deadline by the pause duration. Default is `true` for pass-and-play and solo, `false` for nearby and online (where other players are waiting).
+- Pause policy (in `IWRules`, `pausePolicy` per mode): `.always` for solo (nobody to cheat), `.interruptionsOnly` for pass-and-play (a phone call, Siri or a system alert pauses the active player's turn; a voluntary app switch keeps the deadline and sets the "left the table" mark from the game design spec Section 12), `.never` for nearby and online, where other players are waiting and the sheet auto-submits at the deadline. A pause appends `matchPaused`/`matchResumed` events and shifts the deadline by the pause duration. The pass-and-play house rule "Pause on interruption" toggles between `.interruptionsOnly` (default) and `.never`.
+
+**DECISION (reconciled 2026-10-04):** backgrounding behavior is decided per mode as above; the game design spec (02 Section 12 and edge cases 12 and 13) and the UX plan (08 Section 11) now state the same policy.
 
 ### 4.2 Drift between devices
 
@@ -281,11 +291,14 @@ Packs are signed (Ed25519 via CryptoKit); the app verifies signature and checksu
 
 | Item | Budget | Measurement plan |
 |------|--------|------------------|
-| Base content pack (English, in bundle) | <= 6 MB compressed | measured on each pack build; CI fails over budget |
-| All optional English categories | <= 12 MB additional | downloaded on demand in Phase 2 |
+| Base content pack (English, in bundle: ENABLE validity set, Names, Places, Animals, Things, Foods, Countries) | <= 6 MB compressed | measured on each pack build; CI fails over budget |
+| All bundled content in 1.0 (base pack plus Movies and Cities, if they fit) | <= 12 MB compressed, hard ceiling | CI fails over budget; if Movies and Cities push the bundle over 12 MB, delivery plan cut-list item 6 applies |
+| Optional English categories beyond the bundle | <= 12 MB additional | downloaded on demand post-launch (1.x), once the static CDN exists; 1.0 has no download path |
 | Per-language pack (App 3) | <= 8 MB | per pack |
 | In-memory footprint for loaded dictionary | <= 25 MB | measured with `os_signpost` in `IWContent` perf tests |
 | Lookup latency | < 1 ms p99 on iPhone 11 class | perf test |
+
+**DECISION (reconciled 2026-10-04):** the 1.0 dictionary budget is a 6 MB base pack plus Movies and Cities in the bundle if the whole bundle stays under 12 MB compressed; the 18 MB figure in the game design spec is retired, and 02, 03 and the master reference were aligned. Measured at the W14 dictionary freeze.
 
 ### 6.5 Licensing of open word lists (verified)
 
@@ -374,12 +387,14 @@ NPAT is simultaneous: everyone writes during the same countdown, then answers ar
 
 | Model | How it works | Pros | Cons | Where used |
 |-------|--------------|------|------|-----------|
-| **Host-authoritative** | One peer (lobby creator) is the authority. It draws the letter, owns the deadline, orders submissions, judges unknowns (optionally with group vote relayed through it). Others propose events; the host accepts and broadcasts. | Simple, deterministic ordering, no consensus protocol | Host leaves = match pauses until host-migration; host can cheat (mitigated: host's own answers are committed before reveal, see below) | Nearby, Game Center real-time |
+| **Host-authoritative** | One peer (lobby creator) is the authority. It draws the letter, owns the deadline, orders submissions, judges unknowns (optionally with group vote relayed through it). Others propose events; the host accepts and broadcasts. | Simple, deterministic ordering, no consensus protocol | Host leaves = match pauses (1.0: 30 s, then pass-and-play fallback; host migration is a 1.1 candidate); host can cheat (mitigated: host's own answers are committed before reveal, see below) | Nearby, Game Center real-time |
 | **Rotating authority** | Authority rotates per round to the player whose turn it would be in Word Chain | Spreads trust | More state, more edge cases | Word Chain online |
 | **Commit-reveal, peer-verified** | During writing, each client sends a hash of its answers at submit time (commit). After the deadline, clients reveal plaintext. Any peer can verify commit == hash(reveal). Scoring is a pure function over the revealed set, so every peer computes the same result independently. | No trust needed for honesty of answers; no server | Still need someone to order "stop" and expiry events; unknown-word adjudication still needs a rule | NPAT in every online mode (layered on host-authoritative ordering) |
 | **Server-authoritative** | Server runs the reducer | Strongest | Needs the custom server from Section 7 | not in plan |
 
-**DECISION:** Host-authoritative ordering plus commit-reveal for answers. The host cannot peek at others' answers before committing its own because commits are hashes and reveals happen only after the host broadcasts `roundClosed`. Unknown words: group vote of the non-authors (each peer sends a vote event; majority wins; ties fall back to the dictionary state, per the game design spec Section 9.5 and `IWRules`). Host migration: on host loss, the peer with the lowest `PeerID` in the last agreed membership becomes host after a 5-second timeout; its first act is to rebroadcast the last agreed log hash.
+**DECISION:** Host-authoritative ordering plus commit-reveal for answers. The host cannot peek at others' answers before committing its own because commits are hashes and reveals happen only after the host broadcasts `roundClosed`. Unknown words: group vote of the non-authors (each peer sends a vote event; majority wins; ties fall back to the dictionary state, per the game design spec Section 9.5 and `IWRules`). Host loss: 1.0 ships the game design spec's behavior (02 Section 4.3): the match pauses for 30 s with a "Waiting for host" sheet while peers try to reconnect; after that the lobby offers "Continue on this phone as pass-and-play" with the ledger intact, because every peer already holds the full event log. Host migration (the peer with the lowest `PeerID` in the last agreed membership becomes host after a 5-second timeout and rebroadcasts the last agreed log hash) is designed but not built in 1.0.
+
+**DECISION (reconciled 2026-10-04):** pause-then-fallback in 1.0; host migration is the 1.1 improvement if beta shows frequent host drops. Fewer message types for the W6 spike, and it keeps the "degrade to pass-and-play without losing a point" promise. 02 and the master reference risk register were aligned.
 
 > **[GAME]** The "stop" house rule (first finisher ends the round) interacts with this. The host should accept the first `playerCalledStop` by its own receive order, then give a short grace (default 5 seconds per the game design spec, configurable 0, 5 or 10 s) for in-flight submissions. That grace is a rule, so it lives in `IWRules` and shows in the lobby.
 
@@ -459,7 +474,7 @@ Each feature exposes one public `View` and one `@Observable` model, and nothing 
 
 | Metric | Budget | Device baseline | How measured |
 |--------|--------|-----------------|--------------|
-| Cold start to interactive Home | <= 800 ms p90 (target 500 ms) | iPhone 11 / iPhone SE 3rd gen | MetricKit `applicationLaunchMetrics`, Xcode Organizer; XCTest `measure(metrics: [XCTApplicationLaunchMetric()])` |
+| Cold start to interactive Lobby | <= 800 ms p90 (target 500 ms); never above 1.5 s on the floor device | iPhone SE 3rd gen (gate); iPhone SE 2nd gen (floor); reconciled 2026-10-04 with 05 Section 4 | MetricKit `applicationLaunchMetrics`, Xcode Organizer; XCTest `measure(metrics: [XCTApplicationLaunchMetric()])` |
 | Warm resume | <= 200 ms | same | MetricKit resume time |
 | Frame time during round animations | 16.6 ms at 60 Hz; 8.3 ms on 120 Hz where available; zero hitches > 50 ms in a round | iPhone 11 at 60 Hz; iPhone 15 Pro at 120 Hz | Instruments Animation Hitches; `XCTOSSignpostMetric`; MetricKit `MXAnimationMetric` |
 | Memory, steady state in a round | <= 150 MB; never above 250 MB | iPhone SE 3 | Xcode memory gauge; MetricKit `MXMemoryMetric` |
@@ -610,12 +625,12 @@ inkwell/
 | ADR-002 | Pure deterministic engine with event-sourced log | Reducer `(State, Event) -> (State, [Effect])`; log is source of truth; derived state cached | Accepted |
 | ADR-003 | Engine time is monotonic ticks | `ContinuousClock` behind protocol; `timerExpired` carries deadline tick | Accepted |
 | ADR-004 | Persistence via GRDB behind `MatchStore` | GRDB.swift, WAL, explicit SQL migrations; SwiftData as parallel pass for iCloud era | Accepted |
-| ADR-005 | Package topology | Nine packages; `IWCore`/`IWRules`/`IWContent` platform-pure and Linux-built | Accepted |
+| ADR-005 | Package topology | Nine packages; `IWCore`/`IWRules`/`IWContent` platform-pure and Linux-built; `WritingSystem` protocol in `IWCore`, no Localization package in 1.0; InkwellKids links the pure packages directly, not `IWFeatures` | Accepted (amended 2026-10-04) |
 | ADR-006 | Content packs: format, signing, update | DAWG + front-coded lists, LZFSE, Ed25519-signed manifests; bundle-only in Phase 1, static CDN in Phase 2 | Accepted |
 | ADR-007 | Word list licensing policy | Public domain/MIT-like/WordNet/CC BY only; Wiktionary (CC BY-SA) excluded; Wikidata CC0 to verify | Accepted with OPEN |
 | ADR-008 | Multiplayer phasing and transport abstraction | Pass-and-play -> Nearby (MPC) -> Game Center turn-based; real-time as skunkworks; custom server not in 12-month plan | Accepted |
 | ADR-009 | Swift 6 strict concurrency, actor boundaries | Strict complete everywhere; `MatchSession` and `Dictionary` actors; documented `@preconcurrency` exceptions for GameKit/MPC delegates | Accepted |
-| ADR-010 | Host-authoritative ordering with commit-reveal | For simultaneous NPAT rounds in any networked mode | Accepted |
+| ADR-010 | Host-authoritative ordering with commit-reveal | For simultaneous NPAT rounds in any networked mode; host loss in 1.0 is pause then pass-and-play fallback, host migration deferred to 1.1 | Accepted (amended 2026-10-04) |
 | ADR-011 | Observability without third-party SDK in production v1 | MetricKit + Organizer in production; Sentry in TestFlight flavor; 30-day review | Accepted, time-boxed |
 | ADR-012 | Privacy posture | No trackers; opt-in diagnostics only; target label "Data Not Collected" | Accepted |
 | ADR-013 | Feature flags | Local typed flags + debug menu; signed remote JSON in Phase 2; flags never alter saved match rules | Accepted |
@@ -648,5 +663,9 @@ inkwell/
 5. Game Center sign-in friction tolerance (Section 7).
 6. iCloud sync of match history and which persistence path (Section 5).
 7. Whether to adopt Sentry in production after the 30-day review (Section 16).
+8. Closed: no Localization package in 1.0; `WritingSystem` lives in `IWCore` (Section 2).
+9. Closed: InkwellKids does not consume `IWFeatures` (Section 2).
+10. Closed: host loss in nearby is pause then pass-and-play fallback in 1.0 (Section 8).
+11. Closed: cold launch gate is 800 ms p90 on the SE 3rd gen, 1.5 s floor on the SE 2nd gen (Section 12, 05 Section 4).
 
 > **[JOBS]** Seven open questions is acceptable for v0.1. None of them block the first playable. Build the engine, build pass-and-play, make the ink feel right. Everything else waits for a demo.

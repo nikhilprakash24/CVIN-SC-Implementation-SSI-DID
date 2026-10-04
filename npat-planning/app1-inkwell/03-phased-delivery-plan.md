@@ -85,7 +85,7 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 - App Store Connect: app record created with the working name (checks name availability), bundle id, Game Center capability, in-app purchase product for Pro created in sandbox.
 - Trademark clearance request sent for "Inkwell" and two fallbacks (product brief Section 8).
 - Privacy manifest drafted; no third-party SDKs.
-- Device lab: iPhone SE (2nd gen, A13, oldest iOS 17 device class), iPhone 12, iPhone 15 or newer, one iPad; two of them for nearby testing.
+- Device lab: iPhone SE (2nd gen, A13, oldest iOS 17 device class, the performance floor), iPhone SE (3rd gen, A15, the Tier A gate device per 05 Section 3), iPhone 12, iPhone 15 or newer, one iPad; two of them for nearby testing.
 
 **Scope out:** Any game screen. Any animation beyond tokens.
 
@@ -113,10 +113,10 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 
 **Scope in**
 - `IWCore` and `IWRules`: NPAT state machine (lobby, round, answering, reveal, challenge, committed), seeded letter draw with availability weighting and exclusions, Classic scoring, duplicate keys, ledger with replay.
-- `IWContent` v0: ENABLE plus curated Animal list, GeoNames Place list (filtered), Name list v0; normalization pipeline; three-state validation; FST or perfect-hash storage; under 12 MB target.
+- `IWContent` v0: ENABLE plus curated Animal list, GeoNames Place list (filtered), Name list v0; normalization pipeline; three-state validation; FST or perfect-hash storage; base pack under 6 MB, all bundled content under 12 MB (04 Section 6.4).
 - Home screen, who's-playing (solo default), letter draw (functional animation, not final), answer sheet with keyboard handling, timer, scoring reveal (functional), self-judge for unsure answers, personal bests per preset.
 - First-party analytics events (round started, round completed, second round started) stored locally; no upload yet.
-- Performance harness: cold launch to interactive measured on the SE.
+- Performance harness: cold launch to interactive Lobby measured nightly on the SE 3rd gen (800 ms p90 gate) and the SE 2nd gen (1.5 s floor), per 05 Section 4.
 
 **Scope out:** Challenge voting (needs 2+ players), nearby, online, Pro, Word Chain, final motion.
 
@@ -126,7 +126,7 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 
 **Exit criteria / acceptance**
 - 100 consecutive solo rounds on the SE with no crash and no dropped keystroke.
-- Cold launch to interactive p90 under 1.5 s on the SE.
+- Cold launch to interactive Lobby p90 under 800 ms on the SE 3rd gen and under 1.5 s on the SE 2nd gen (05 Section 4; reconciled 2026-10-04, earlier figures in other documents were aligned to this).
 - Engine replay test: 1,000 random games replay to identical ledgers.
 - Letter distribution test: over 10,000 Classic draws, X, Q, Z each under 2 percent; no letter repeats within a game.
 - Dictionary spot check: DATA's 500-answer golden set yields at least 95 percent correct state (accept/unsure/reject) for Thing and Animal, at least 85 percent for Place, and zero false REJECTs for Name.
@@ -152,7 +152,7 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 - Haptics v1: Core Haptics patterns for stamp, heartbeat, warning ticks.
 - Themes: light paper and dark paper; chosen visual direction from Phase 1 applied everywhere.
 - "How to play" cards; first-run inline captions.
-- Share sheet: an image of the final ledger.
+- Share sheet: an image of the final ledger with names and words (default), plus a one-tap spoiler-free variant (letter, categories, 10/5/0 glyph grid, no words) for public posting; see 08 Section 3.6.
 
 **Scope out:** Word Chain, nearby, online, Pro, house rules screen (defaults only; the engine supports them).
 
@@ -202,7 +202,7 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 - Bot determinism: same seed, same bot words, verified by replay test.
 - Edge-letter rules: unit tests for X, Q, Z, digits, diacritics, plural link.
 - House rules: every toggle has a test that flips it and observes the engine change; the screen passes a Dynamic Type sweep at all sizes.
-- Dictionary v1: golden set at least 97 percent for Thing and Animal, 90 percent for Place, zero false REJECTs for Name; size under budget (ARCH 12 MB vs. DATA 18 MB resolved).
+- Dictionary v1: golden set at least 97 percent for Thing and Animal, 90 percent for Place, zero false REJECTs for Name; size under budget (base pack 6 MB, all bundled content 12 MB hard ceiling; Movies and Cities ship in the bundle only if they fit, otherwise cut-list item 6; the 18 MB figure is retired, see 04 Section 6.4).
 - No new modal in the default flow (first-60-seconds UI test still passes).
 
 **Friday demos:** W11: Word Chain pass-and-play, functional. W12: bot tiers with personalities; Fox trap. W13: house rules screen; a family table's rules persisting across launches. W14: dictionary v1 "stump the dictionary" session where the team tries to break it.
@@ -221,7 +221,7 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 - `IWMultiplayer`: MultipeerConnectivity session layer; host-authoritative event ordering; sealed answer commitments; seed broadcast; reconnection; "continue as pass-and-play" fallback.
 - Nearby UI: lobby with discovered peers, join by tap, host accept, per-device countdown synced to host, combined reveal with remote challenges and votes.
 - StoreKit 2: Pro non-consumable, entitlement cache, restore, Family Sharing, refund handling via transaction updates; paywall screen (DESIGN); host-pays rule for sessions; Pro-gated features: nearby, online, house rules, extra packs, extra themes, stats.
-- Themes beyond the default: Swiss Editorial (free) and Night Lounge (Pro), per the design directions document (07). Note: 07 estimates these at well above the 0.5 EW budgeted here; see the OPEN on theme scope in the decisions register.
+- Themes beyond the default: Swiss Editorial (free) and Night Lounge (Pro) at reduced scope, per the design directions document (07). Budget 2 EW engineering (Swiss 0.75 EW, Night Lounge 1.25 EW) instead of the 0.5 EW first written here; the 1.5 EW difference comes out of the Phase 5 and 6 buffer, which is why cut-list item 1 is expected rather than feared. Night Lounge at reduced scope means tokens, display face, static glow and the S3 sound pack; no CRT shader, no animated materials, no ambient drift. DECISION (reconciled 2026-10-04): if the W14 capacity review cannot fund the 2 EW, cut-list item 3 moves Night Lounge to 1.1 as the first Pro content drop; 07 Section 9 and master idea 17 were aligned to this. Needs founder sign-off (register F6).
 - Stats screen: per-mode personal bests, rounds played, favorite letters.
 - Accessibility pass 1: VoiceOver labels and rotor order on every screen; timer announcements; Dynamic Type sweep; contrast audit; Switch Control navigation check on home, sheet and reveal.
 
@@ -254,9 +254,9 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 **Scope in**
 - Game Center turn-based matches: NPAT parallel-round model and Word Chain direct turn model; match data schema; deadlines; challenge window of 24 h; invite via Game Center friends and share link; match list screen.
 - Notifications: Game Center turn notifications only (system-provided); no custom push, no notification permission prompt of our own.
-- TestFlight external beta: 200 to 500 testers across the five personas; feedback form; crash triage daily.
+- TestFlight external beta: Beta 1 (W19 to W20, closed, about 150 people in family and friend groups) and Beta 2 (W21 to W22, public link, 200 to 500 testers across the five personas); feedback form; crash triage daily. This is the committed beta program; 05 Section 5 now carries the same two rows and keeps its longer open beta only for the case where the date moves.
 - Accessibility pass 2: fix all audit items; verify with two external VoiceOver testers; Reduce Motion and "Motion: Minimal" setting.
-- Performance: cold launch, memory and frame-time budgets re-verified on the SE and the newest iPhone; battery check for a 30-minute nearby session.
+- Performance: cold launch, memory and frame-time budgets re-verified on both SEs (2nd gen floor, 3rd gen gate) and the newest iPhone; battery check for a 30-minute nearby session.
 - Localization readiness: strings externalized, pseudo-localization pass, RTL chrome mirroring check (App 3 preparation, no translations shipped).
 - App Store assets: screenshots in all required sizes, app preview video (the 60-second first run), description, keywords, privacy nutrition label, age rating questionnaire.
 - Rating prompt: `SKStoreReviewController` requested only after a completed multi-round session, at most once per 120 days per Apple's throttling.
@@ -319,7 +319,7 @@ Capacity check: IOS full time for 24 weeks is 24 EW; ARCH at an average of rough
 **Scope in (first 8 weeks)**
 - 1.0.1 and 1.0.2 hotfix trains (week 1 and week 3), dictionary corrections from support and overturned REJECTs.
 - Metrics review against the brief's targets; a written "what we learned" for JOBS.
-- 1.1 candidates, each requiring a one-page case and a demo: bespoke iPad layout; paper companion mode (if not in 1.0); designated-judge mode; reaction stamps for async; Game Center achievements; one or two new themes; Live Activity for async turns (skunkworks result).
+- 1.1 candidates, each requiring a one-page case and a demo: bespoke iPad layout; paper companion mode (if not in 1.0); designated-judge mode; reaction stamps for async; Game Center achievements; named bots with ink portraits (master idea 19); nearby host migration if beta shows frequent host drops; Night Lounge at full scope (or at all, if cut-list item 3 was taken); one or two new themes; Live Activity for async turns (skunkworks result).
 - Real-time online evaluation: Game Center real-time vs. a small backend; cost model; decision by W32.
 - Hand-off of shared packages to the App 2 (Kids) program; the Kids program starts its Phase 0 at W25 using the shared `IW*` packages.
 
@@ -416,7 +416,7 @@ Time-boxed explorations that run beside the critical path, mostly by the second 
 | 3 | Motion polish consumes Phase 2 and bleeds into Phase 3 | High | Medium | Time-box per moment; JOBS picks three protected moments; native-first animation to avoid tooling churn | DESIGN, JOBS |
 | 4 | Dictionary quality (false rejects, cultural gaps in Names) drives bad reviews | Medium | High | Names are never REJECTed; three-state validation; vote overturns; golden set of 2,000; 1.0.1 dictionary fixes | DATA |
 | 5 | App Review rejection under 4.3 Spam or IAP metadata | Medium | High | Review notes with demo video; distinctive product; restore button visible; privacy label matches manifest; 48-hour response plan | IOS, QA |
-| 6 | Cold launch exceeds budget on iPhone SE due to shader or dictionary load | Medium | Medium | Lazy-load dictionary; shader off the launch path; nightly launch-time test on SE | IOS |
+| 6 | Cold launch exceeds budget (800 ms p90 on SE 3rd gen, 1.5 s on SE 2nd gen) due to shader or dictionary load | Medium | Medium | Lazy-load dictionary; shader off the launch path; nightly launch-time test on both SEs | IOS |
 | 7 | Game Center match data limits or edge cases break async | Medium | Medium | Data-model spike in W14; compact encoding; cap players and rounds; async is first in the cut list | ARCH |
 | 8 | StoreKit edge cases (Family Sharing, refunds, offline entitlement) cause support load | Medium | Medium | Full sandbox matrix; StoreKit 2 transaction listener; cached entitlement with grace | IOS, QA |
 | 9 | Trademark conflict on the name after assets are made | Low | High | Clearance in Phase 0; fallbacks ranked; brand assets parameterized by name until W14 | JOBS |
@@ -462,7 +462,7 @@ A release (1.0 and every point release after) is done when all of the following 
 3. UI test suite green on the simulator matrix (iOS 17.0, 17.x latest, 18.x latest, current OS) and the first-60-seconds timing test green on the physical SE.
 4. Crash-free sessions at or above 99.7 percent across the last TestFlight build with at least 100 active testers (1.0) or at least 48 hours of internal use (point releases).
 5. Accessibility: zero critical audit items; VoiceOver, Dynamic Type (largest size), Reduce Motion, Increase Contrast and Switch Control spot-checked on every new or changed screen.
-6. Performance: cold launch p90 under 1.5 s on SE; no dropped frames in the scoring reveal on iPhone 12; memory under 150 MB in a nearby session.
+6. Performance: cold launch to interactive Lobby p90 under 800 ms on SE 3rd gen and under 1.5 s on SE 2nd gen; no dropped frames in the scoring reveal on SE 3rd gen; memory under 150 MB in a nearby session.
 7. Privacy manifest and App Store privacy label match; no third-party SDKs added without an ARCH review.
 8. Strings externalized; pseudo-localization pass has no truncation.
 9. Release notes written in plain language by JOBS or DESIGN.
@@ -510,7 +510,7 @@ Cut from the top. Each cut names what it saves and what it costs.
 |---|---|---|---|---|
 | 1 | Online async for NPAT (keep Word Chain async, which maps directly to Game Center turns) | about 1.5 EW | Long-distance NPAT waits for 1.1 | JOBS |
 | 2 | Online async entirely | about 3 EW | Long-distance persona unserved in 1.0; Pro loses one headline feature | JOBS |
-| 3 | Night Lounge (Pro) theme | 0.5 EW plus design | Pro ships without an exclusive theme until 1.1; Swiss Editorial stays free | DESIGN |
+| 3 | Night Lounge (Pro) theme, already at reduced scope (Section 8) | 1.25 EW plus design | Pro ships without an exclusive theme until 1.1, when Night Lounge is the first Pro content drop; Swiss Editorial stays free | DESIGN, with JOBS |
 | 4 | Stats screen | 0.5 EW | Personal bests shown inline only | GAME |
 | 5 | NPAT Classroom and Extended category packs (ship Classic plus one) | 1 EW content | Teacher persona gets custom categories only | DATA |
 | 6 | Movies and Cities Word Chain categories (ship Animals, Countries, Foods) | 0.5 EW content | Smaller Word Chain menu | DATA |
@@ -577,7 +577,7 @@ Never cut: the scoring reveal, the letter draw ceremony, pass-and-play, the chal
 3. Friday demo every week; a demo is a build on a phone.
 4. Skunkworks items are time-boxed and die if not demoed by their Friday.
 5. Online async in Phase 5 behind Pro, Word Chain first; real-time online deferred; async is the first pre-approved cut.
-6. iOS 17.0 minimum; current iOS is the primary target; SE 2nd gen on iOS 17 is the performance floor.
+6. iOS 17.0 minimum; current iOS is the primary target; SE 2nd gen on iOS 17 is the performance floor; SE 3rd gen is the Tier A gate device; cold launch gate is 800 ms p90 on the SE 3rd gen with 1.5 s never-exceed on the SE 2nd gen (05 Section 4).
 7. Dictionary v1 freezes at W14; later fixes ride point releases except offensive-content fixes.
 8. Date-driven schedule with a fixed quality bar; date moves pair with cuts.
 9. App 2 Phase 0 starts at W25 on the shared packages.

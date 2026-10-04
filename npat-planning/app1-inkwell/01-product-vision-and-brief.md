@@ -82,7 +82,7 @@ Nobody has built the version that a design-literate person would be proud to han
 
 > **[JOBS]** Agreed, and it costs nothing. DATA owns a "family-safe by default" dictionary profile. Explicit mode is an adult opt-in behind a toggle.
 
-> **[DATA]** Taking it. "Family-safe" means profanity and slurs excluded from the valid list, and more importantly excluded from any suggestions, bot answers or hints. Players can still type whatever they like; the app just will not validate or promote it.
+> **[DATA]** Taking it. "Family-safe" means profanity and slurs are excluded from everything the app shows or suggests: hints, "did you mean" corrections, bot answers, leaderboards and share images. Players can still type whatever they like at their own table and it scores like any other real word; the app just will not promote it or carry it outside the table. (Reconciled 2026-10-04 with the game design spec, 02 edge case 34; this line first said the app would not validate such words.)
 
 ## 4. Jobs-to-be-done
 
@@ -107,10 +107,10 @@ This is the single most important spec in the program. We treat it like a film s
 
 | Time | What the player sees | What the player does | What must be true |
 |---|---|---|---|
-| 0:00 | App icon tap. Launch screen is the paper texture that becomes the home screen; no logo splash, no loading bar. | Nothing | Cold launch to interactive under 1.5 s on an iPhone 12; under 1.0 s on current devices. |
+| 0:00 | App icon tap. Launch screen is the paper texture that becomes the home screen; no logo splash, no loading bar. | Nothing | Cold launch to interactive Lobby under 800 ms p90 on an iPhone SE 3rd gen (the release gate) and never above 1.5 s on the iPhone SE 2nd gen, the oldest supported device (05 Section 4; reconciled 2026-10-04). |
 | 0:01 | Home: a sheet of paper. Two large cards, NPAT and Word Chain, each with a one-line description and a small moving ink detail. One small "How to play" link. No login, no permission prompts, no notification ask. | Taps NPAT | Zero modals before first game. Zero. |
 | 0:03 | "Who's playing?" with one big default option: "Just me" is preselected; "Pass the phone" and "Nearby" are visible as one-tap alternatives. A single "Play" button. | Taps Play (or adds names first) | Default path is two taps from launch to a round. |
-| 0:05 | The letter draw. The alphabet rolls past like a wheel of inked tiles, slows, and lands. The letter stamps onto the paper with a haptic thud. | Watches (about 1.2 s; skippable with a tap after the first time) | The draw is the ceremony. It must feel physical. Reduce Motion variant is a simple crossfade with the same haptic. |
+| 0:05 | The letter draw. The alphabet rolls past like a wheel of inked tiles, slows, and lands. The letter stamps onto the paper with a haptic thud. | Watches (the first draw on a device is the full 1.2 s ceremony; every later draw is the 600 ms stroke-by-stroke write from 09, M01, scaled by preset; always skippable with a tap) | The draw is the ceremony. It must feel physical. Reduce Motion variant is a simple crossfade with the same haptic. |
 | 0:07 | The round. Four lines on paper: Name, Place, Animal, Thing. The keyboard is up. The timer is an ink line draining along the top edge. | Types | Keyboard appears with the first field focused. Return key advances. Autocorrect off, no predictive bar. |
 | 0:07 to 1:07 | Typing, with a small ink-dry effect as each field is confirmed. At 10 s remaining the ink line turns darker and the haptic pulses once per second. | Types, submits early or runs out | No modal on timeout. The paper simply "lifts" to reveal scoring. |
 | ~1:00 | Scoring reveal: each answer is checked off, line by line, with a stamp sound and a +10 that floats up. Total lands last. For solo, a "beat your best" line. For a group, the duplicates are revealed with a wink and the 5s appear. | Watches; can tap to speed up | The reveal is the "juice" payoff. No ad, no rating prompt, no upsell here. Ever. |
@@ -170,7 +170,7 @@ Targets are for the first 90 days after public launch, measured with on-device, 
 | Pass-and-play share of sessions in month 1 | 35 percent or more | Under 15 percent | Validates the party premise. |
 | App Store rating | 4.7 or higher with 200 or more ratings by day 90 | Under 4.3 | We ask for a rating only after a completed multi-round session, never during one. |
 | Crash-free sessions | 99.8 percent | 99.5 percent | The founder's "perfect" standard; a party app that crashes during scoring is unforgivable. |
-| Cold launch to interactive (p90, oldest supported device) | Under 1.5 s | Over 2.5 s | First-60-seconds spec. |
+| Cold launch to interactive Lobby (p90) | Under 800 ms on iPhone SE 3rd gen; under 1.5 s on iPhone SE 2nd gen | Over 1.5 s on the SE 3rd gen or over 2.5 s on the SE 2nd gen | First-60-seconds spec; 05 Section 4 is the gate. |
 | Pro conversion (if free plus Pro model) | 4 percent of D7 retained users | 1.5 percent | Comparable premium-unlock casual apps land between 2 and 5 percent. |
 | Support tickets per 1,000 downloads | Under 2 | Over 8 | Friction shows up here first. |
 
@@ -302,8 +302,10 @@ For people who love the paper games and are tired of being treated like a wallet
 3. The kill list in Section 6 is binding for v1.
 4. Working title Inkwell; trademark clearance and App Store name reservation in Phase 0; fallbacks Nib, Letterhead, Foolscap.
 5. Monetization: free plus one-time Pro unlock; no ads, no subscription, no consumables.
-6. Family-safe dictionary profile is the default in App 1; explicit content is an adult opt-in.
+6. Family-safe dictionary profile is the default in App 1; explicit content is an adult opt-in. The profile governs what the app shows and promotes; a private table's typed words are scored on their merits (02 edge case 34).
 7. Second-round rate is the headline health metric for launch.
+8. Cold launch gate: 800 ms p90 to interactive Lobby on iPhone SE 3rd gen, 1.5 s never-exceed on iPhone SE 2nd gen (05 Section 4).
+9. Letter draw: the full 1.2 s ceremony once per device, then 600 ms per draw scaled by preset, always tap-to-skip (09 M01; master 6.8).
 
 **OPEN**
 

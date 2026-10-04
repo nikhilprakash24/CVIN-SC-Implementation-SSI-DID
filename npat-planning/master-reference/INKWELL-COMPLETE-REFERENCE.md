@@ -105,7 +105,7 @@ Four properties recur across every variant above and explain two centuries of su
 | Everyone writes at once, in silence, then reveals together | Apps serialize input or hide others' answers behind a sync | Pass-and-play has a "pens down" reveal; nearby mode shows all sheets at once when the timer ends |
 | Handwriting and crossing out, personal and messy | Text fields are sterile | Ink-styled input, hand-drawn letter draw, optional PencilKit handwriting on iPad (Section 7, idea 11) |
 | The group adjudicates disputed answers | Apps auto-reject anything not in the dictionary | Dictionary advises; players vote; the host can overrule. Validation is a suggestion, not a verdict |
-| The letter draw is a tiny ritual (reciting the alphabet, rolling the die) | Apps show a letter instantly | A deliberate 1.2 second ink-wheel or tile draw with haptics (Section 7, idea 1) |
+| The letter draw is a tiny ritual (reciting the alphabet, rolling the die) | Apps show a letter instantly | A deliberate ink-wheel or tile draw with haptics: the full 1.2 second ceremony on the first draw on a device, 600 ms stroke-by-stroke thereafter (Section 7, idea 1; 09 M01) |
 | Nothing to install, nobody logs in | Account walls and permissions prompts | Zero accounts for local play; no sign-in until online play is chosen |
 | Zero notifications | Streak and re-engagement pushes | No streaks, no push by default (Section 7, idea 4) |
 
@@ -204,7 +204,7 @@ Solo play needs an opponent. Bots generate NPAT sheets and Word Chain turns from
 
 App 1 is one app, two games, four ways to play. The v1.0 cut is deliberately narrow:
 
-**In v1.0:** NPAT and Word Chain; solo vs. clock with bots; pass-and-play; nearby play over MultipeerConnectivity (delivery Phase 4, Pro); online async over Game Center turn-based (delivery Phase 5, Pro; Word Chain first, NPAT second; the pre-approved first cut if Phase 5 slips); house rules (Stop, long-word bonus, letter difficulty presets, edge-letter rules); custom categories; result cards for sharing; three themes (Paper & Ink default, Swiss Editorial free, Night Lounge in Pro), each with its own sound and haptic pack; full accessibility (Dynamic Type, VoiceOver, Reduce Motion alternatives, Switch Control audit); one-time Pro unlock.
+**In v1.0:** NPAT and Word Chain; solo vs. clock with bots; pass-and-play; nearby play over MultipeerConnectivity (delivery Phase 4, Pro); online async over Game Center turn-based (delivery Phase 5, Pro; Word Chain first, NPAT second; the pre-approved first cut if Phase 5 slips); house rules (Stop, long-word bonus, letter difficulty presets, edge-letter rules); custom categories; result cards for sharing; three themes (Paper & Ink default, Swiss Editorial free, Night Lounge in Pro at reduced scope, or 1.1 via cut-list item 3), each with its own sound and haptic pack; full accessibility (Dynamic Type, VoiceOver, Reduce Motion alternatives, Switch Control audit); one-time Pro unlock.
 
 **In v1.x:** achievements (a global leaderboard is trimmed per the product brief; a friends-only daily-letter board is the most the team would consider); Live Activity timer; daily letter; iMessage turn cards; iPad split-table; a la carte theme packs.
 
@@ -285,18 +285,19 @@ flowchart TB
     DS[DesignSystem = IWDesignSystem: tokens, typography, motion, sound, haptics, components]
     PE[Persistence = IWPersistence: GRDB over SQLite, event log, migrations, export]
     NW[Networking = IWMultiplayer: Multipeer transport, Game Center adapter, sync protocol]
-    LO[Localization: letter units, collation, category names; not yet in 04's package list, see OPEN]
+    LO[WritingSystem protocol inside IWCore; English units, collation and category names in the IWContent base pack; no separate package in 1.0]
   end
-  A1 --> GE & DI & DS & PE & NW & LO
-  A2 --> GE & DI & DS & PE & LO
+  A1 --> GE & DI & DS & PE & NW
+  A2 --> GE & DI & PE
+  A2 -. primitive tokens only .-> DS
   W --> GE & DS
   IM --> GE & DS & NW
   NW --> GE
-  GE --> LO
-  DI --> LO
+  GE --- LO
+  DI --- LO
 ```
 
-Rules of the map: `GameEngine` and `Dictionary` have no UI imports. `DesignSystem` is the only package that imports SwiftUI. `Networking` depends on `GameEngine` to serialize state, never the reverse. `Localization` is small in v1 (English alphabet) and exists so App 3 does not require refactoring.
+Rules of the map: `GameEngine` and `Dictionary` have no UI imports. `DesignSystem` is the only package that imports SwiftUI. `Networking` depends on `GameEngine` to serialize state, never the reverse. There is no Localization package in v1: the `WritingSystem` protocol lives in `IWCore` and its English implementation ships in `IWContent`'s base pack, so App 3 does not require refactoring and 04's nine-package list stands (DECISION reconciled 2026-10-04 with 04 Section 2 and the App 3 plan; a tenth package is reconsidered at App 3 Phase A).
 
 ### 5.2 The engine: deterministic state machines
 
@@ -328,7 +329,7 @@ States for NPAT: `lobby -> drawing -> writing -> revealing -> adjudicating -> sc
 | Wiktionary dumps | Multilingual headwords, categories, proper nouns | CC BY-SA (attribution and share-alike apply to derived lists) ([Wikimedia dumps](https://dumps.wikimedia.org/)) | Excluded from App 1 v1 packs (ADR-007); reserved for App 3 language packs with published derived lists. English places come from GeoNames (CC BY 4.0) instead |
 | Curated lists (ours) | Names, Places, Brands, Movies, Cartoon Characters | Ours | Proper-noun categories where open lists are weak |
 
-Storage: lists are compiled at build time into a compact trie or FST per category with a frequency byte per entry; the English pack is targeted under 6 MB on disk. Profanity filtering uses a blocklist applied to custom category names and shared result cards, never to private in-game entries (a word game that refuses "ass" as an animal is a broken word game).
+Storage: lists are compiled at build time into a compact trie or FST per category with a frequency byte per entry; the English base pack is targeted under 6 MB on disk and everything bundled in 1.0 (Movies and Cities included only if they fit) stays under a 12 MB hard ceiling (04 Section 6.4; reconciled 2026-10-04). Profanity filtering uses a blocklist applied to suggestions, hints, bot answers, custom category names and shared result cards, never to private in-game entries (a word game that refuses "ass" as an animal is a broken word game). DECISION (reconciled 2026-10-04): this is the family-safe policy for App 1, stated in the game design spec (02 edge case 34); the product brief was aligned to it.
 
 > **[DATA]** The share-alike clause on Wiktionary-derived lists is manageable in principle: we publish the derived list file under the same license and it does not infect the app. For App 1 v1 we chose not to carry even that (ADR-007): shipped packs use only public-domain, MIT-like, WordNet-licensed and CC BY data. Legal review confirms before any App 3 pack ships.
 
@@ -373,7 +374,7 @@ flowchart LR
   Dev[Feature branch] --> PR[Pull request]
   PR --> CI[CI: build all packages, unit + snapshot tests, SwiftLint]
   CI --> TF1[TestFlight internal: team, daily]
-  TF1 --> TF2[TestFlight external: 50 to 200 testers, weekly]
+  TF1 --> TF2[TestFlight external: Beta 1 about 150 testers W19 to W20, Beta 2 200 to 500 testers W21 to W22]
   TF2 --> Review[App Review checklist + privacy labels]
   Review --> Store[App Store phased release 7 days]
   Store --> Mon[Crash and performance monitoring, MetricKit]
@@ -433,7 +434,7 @@ The tactile embossed-tile idea ("Letterpress Studio" in the earlier draft) is no
 
 The stack: SwiftUI animations with springs as the default curve ([WWDC23, Animate with springs](https://developer.apple.com/videos/play/wwdc2023/10158/)), PhaseAnimator for multi-step beats like the letter reveal and KeyframeAnimator for choreographed sequences like the score tally ([WWDC23, Wind your way through advanced animations](https://developer.apple.com/videos/play/wwdc2023/10157/); [WWDC23, Explore SwiftUI animation](https://developer.apple.com/videos/play/wwdc2023/10156/)). SpriteKit overlays for particles (ink splatter at Stop) ([Apple, SpriteKit](https://developer.apple.com/documentation/spritekit)). Metal shaders, via SwiftUI's shader modifiers, for the ink bleed effect ([Apple, Metal](https://developer.apple.com/documentation/metal)). Rive and Lottie are evaluated in the motion document's bake-off (09, Section 5) under the rule of at most one third-party animation runtime in App 1, possibly none; Rive's runtime files are typically far smaller than Lottie's and support interactive state machines, while Lottie remains the simplest for playback-only motion ([Rive, Rive as a Lottie alternative](https://rive.app/blog/rive-as-a-lottie-alternative); [Lottie](https://airbnb.io/lottie/)). Kids ships with no third-party animation runtime in v1 (Kids doc 04).
 
-The motion document (09) is the governing catalog for durations, springs and the 32 named animations; the eight-token table below is a summary and 09's values win where they differ (for example 09 specifies the letter draw at 600 ms, scaled by preset as decided in Section 6.8).
+The motion document (09) is the governing catalog for durations, springs and the 32 named animations; the eight-token table below is a summary and 09's values win where they differ (for example 09 specifies the letter draw at 600 ms, 400 ms for Blitz, with the 1.2 s ceremony running once per device, as decided in Section 6.8).
 
 Material Design is the useful contrast: its motion system specifies named easing tokens and duration ranges (short transitions near 50 to 200 ms, medium 250 to 400 ms, long 450 to 600 ms) and a shared "container transform" pattern ([Material 3, Applying easing and duration](https://m3.material.io/styles/motion/easing-and-duration/applying-easing-and-duration)). Apple's approach is physics-based (springs with duration and bounce) rather than curve-token based. We follow Apple's physics but adopt Material's discipline of a named, finite set of motion tokens in the DesignSystem package so that every animation in the app is one of about eight.
 
@@ -442,7 +443,7 @@ Material Design is the useful contrast: its motion system specifies named easing
 | tap | 90 ms | spring, bounce 0 | button and key feedback |
 | settle | 250 ms | spring, bounce 0.15 | cards and sheets arriving |
 | reveal | 420 ms | spring, bounce 0.25 | answer rows appearing in the reveal |
-| draw | 1200 ms | custom keyframes | the letter draw ritual |
+| draw | 600 ms (400 ms Blitz; 1200 ms once, on the first draw on a device) | custom keyframes | the letter draw ritual |
 | stop | 180 ms | spring, bounce 0.4 plus haptic | the Stop slam |
 | tally | 600 ms | keyframes | score counters |
 | page | 350 ms | spring, bounce 0.1 | screen transitions |
@@ -497,7 +498,7 @@ The Apple Design Awards page lists all years ([Apple Design Awards](https://deve
 
 > **[JOBS]** Agreed on all three. And the second time you see the draw in a session it should already feel familiar, not like a splash screen.
 
-**DECISION:** Draw duration is 1200 ms for Relaxed and Standard, 700 ms for Quick and 400 ms for Blitz; always tap-to-skip; always a live glyph, never a rendered clip; a 120 ms cross-fade under Reduce Motion.
+**DECISION (reconciled 2026-10-04):** the first letter draw on a device is the full 1200 ms ink-wheel ceremony; every later draw is 09's M01 at 600 ms (Relaxed, Standard, Quick) and 400 ms for Blitz; always tap-to-skip; always a live glyph, never a rendered clip; a 120 ms cross-fade under Reduce Motion. The earlier 1200/700/400 schedule here is superseded; 09 is the governing catalog and is confirmed on a device at the W4 demo.
 **OPEN:** Whether the letter should be visible before the draw completes to VoiceOver users (announce immediately) or announced at the end for parity.
 
 ---
@@ -510,7 +511,7 @@ Each idea lists: the idea, why it fits Inkwell, a shipped product that proves th
 
 **2. Replay reel: the round as a hand-drawn flipbook.** Because the engine is deterministic (Section 5.2), any round can be replayed from its action log. Render it as a 6 to 10 second flipbook: letter drawn, sheets filling with ink, Stop slam, scores tallying. *Fits because* it turns a data structure we already have into the most shareable artifact in the app. *Proof:* Balatro's score tallies and NYT Games' end-of-puzzle sequences show that animating the outcome is where delight lives ([Apple Newsroom, 2025 ADA](https://www.apple.com/newsroom/2025/06/apple-unveils-winners-and-finalists-of-the-2025-apple-design-awards/)). *Effort:* 2 weeks (renderer plus video export via AVFoundation). *Risk:* medium; export performance on older devices. **Verdict:** v1.1.
 
-**3. Shareable result cards.** A static, spoiler-free card: the letter, category icons, a 10/5/0 glyph grid per player, no words. Copy as text and image. *Fits because* the game is social and the card invites the next game. *Proof:* Wordle's emoji grid, added in December 2021 after players started sharing by hand, is the single feature most credited for its viral growth and the New York Times acquisition in January 2022 ([Wikipedia, Wordle](https://en.wikipedia.org/wiki/Wordle); [NPR, 2022](https://www.npr.org/2022/01/31/1077089945/nyt-wordle)); Connections repeats the pattern with colored squares ([Wikipedia, Connections](https://en.wikipedia.org/wiki/The_New_York_Times_Connections)). *Effort:* 1 week. *Risk:* low. **Verdict:** v1.0.
+**3. Shareable result cards.** Two renderings of one card: the default is the final ledger with names and words in the active theme (the party's record, per 08 Section 3.6); one tap switches to the spoiler-free variant, the letter, category icons and a 10/5/0 glyph grid per player, no words, for public posting. Copy as text and image. DECISION (reconciled 2026-10-04): ledger by default, spoiler-free one tap away; 08 and 03 say the same. *Fits because* the game is social and the card invites the next game. *Proof:* Wordle's emoji grid, added in December 2021 after players started sharing by hand, is the single feature most credited for its viral growth and the New York Times acquisition in January 2022 ([Wikipedia, Wordle](https://en.wikipedia.org/wiki/Wordle); [NPR, 2022](https://www.npr.org/2022/01/31/1077089945/nyt-wordle)); Connections repeats the pattern with colored squares ([Wikipedia, Connections](https://en.wikipedia.org/wiki/The_New_York_Times_Connections)). *Effort:* 1 week. *Risk:* low. **Verdict:** v1.0.
 
 **4. Daily letter challenge with no streak pressure.** One letter per day, same for everyone, solo against bots, with a share card. No streak counter, no "don't break your chain" notification. Show a calendar of played days as dots, never a number to protect. *Fits because* a daily ritual gives a reason to return without the anxiety the founder wants to avoid. *Proof and counter-proof:* Duolingo documents that streaks increase retention through loss aversion ([Duolingo blog, How the streak builds habit](https://blog.duolingo.com/how-duolingo-streak-builds-habit/)); designers and users document the anxiety side ([UX Collective, Gamification gone wrong: stop the streaks](https://uxdesign.cc/gamification-gone-wrong-stop-the-streaks-c3de42618ae); [Smashing Magazine, Designing a streak system](https://www.smashingmagazine.com/2026/02/designing-streak-system-ux-psychology/)); Gentler Streak won a 2024 ADA for Social Impact precisely by reframing streaks around rest ([Apple Newsroom, 2024 ADA](https://www.apple.com/newsroom/2024/06/apple-announces-winners-of-the-2024-apple-design-awards/)). Harry Brignull's deceptive.design catalog is our checklist for what not to do ([Deceptive Design](https://www.deceptive.design/)). *Effort:* 1.5 weeks. *Risk:* low. **Verdict:** v1.1.
 
@@ -540,11 +541,11 @@ Each idea lists: the idea, why it fits Inkwell, a shipped product that proves th
 
 **16. Classroom mode.** A teacher preset: fixed curriculum categories (Science word, Historical figure, Country), no timers under 60 seconds, no leaderboards, a printable summary sheet of all answers for review. Lives in App 1 (teachers of 11 and up) and App 2 (younger). *Fits because* the game is already a classroom staple under every name in Section 2.1. *Proof:* Stadt Land Fluss is used in German schools as a vocabulary exercise ([Wikibooks (de), Stadt-Land-Fluss](https://de.wikibooks.org/wiki/Spiele:_Stadt-Land-Fluss)). *Effort:* 1.5 weeks. *Risk:* low. **Verdict:** v1.2.
 
-**17. Themes as cosmetic unlocks.** Night Lounge in the Pro unlock, Swiss Editorial free, and later seasonal variations of Paper & Ink (a green ink, a red ink) as a la carte non-consumable packs. Themes change color, type, sound set and letter-draw material; never rules (07, principle 7). *Fits because* the founder wants aesthetics first, and players who love the look will pay for more of it. *Proof:* Knotwords sells a single unlock plus customization options ([Six Colors, Knotwords](https://sixcolors.com/post/2022/04/knotwords-offers-crossword-puzzles-without-clues/)); Two Dots changes palette per world while staying recognizable ([Wikipedia, Two Dots](https://en.wikipedia.org/wiki/Two_Dots)). *Effort:* 07 estimates 2 to 5 engineer-weeks per direction beyond the shared skeleton, far above the 1 week assumed here; see the OPEN on theme scope in the decisions register. *Risk:* low on review, medium on schedule. **Verdict:** v1.0 with three themes, Night Lounge inside Pro; a la carte packs post-launch.
+**17. Themes as cosmetic unlocks.** Night Lounge in the Pro unlock, Swiss Editorial free, and later seasonal variations of Paper & Ink (a green ink, a red ink) as a la carte non-consumable packs. Themes change color, type, sound set and letter-draw material; never rules (07, principle 7). *Fits because* the founder wants aesthetics first, and players who love the look will pay for more of it. *Proof:* Knotwords sells a single unlock plus customization options ([Six Colors, Knotwords](https://sixcolors.com/post/2022/04/knotwords-offers-crossword-puzzles-without-clues/)); Two Dots changes palette per world while staying recognizable ([Wikipedia, Two Dots](https://en.wikipedia.org/wiki/Two_Dots)). *Effort:* 07 estimates 2 to 5 engineer-weeks per direction beyond the shared skeleton (design plus engineering including assets); the delivery plan funds 2 engineering weeks in Phase 4 for Swiss Editorial plus a reduced-scope Night Lounge (tokens, display face, static glow, sound; no shader, no animated materials). *Risk:* low on review, medium on schedule. **Verdict (reconciled 2026-10-04):** v1.0 with three themes, Night Lounge inside Pro at reduced scope; if the W14 capacity review cannot fund it, cut-list item 3 moves Night Lounge to 1.1 as the first Pro content drop (03 Section 8, 07 Section 9; founder sign-off, register F6). A la carte packs post-launch.
 
 **18. "Ink" currency versus one-time Pro.** Option A: a soft currency earned by playing and spent on themes. Option B: a single Pro purchase and direct theme purchases. *Fits:* only B fits. A currency creates the grind and the loot-box-adjacent psychology the founder and the Kids spec reject. *Proof:* Zach Gage, whose puzzle games are repeatedly ADA finalists, describes resisting dark patterns as a design principle ([Six Colors, Zach Gage interview](https://sixcolors.com/post/2024/08/interview-game-developer-zach-gage-on-pile-up-poker-and-resisting-dark-patterns/)). *Effort:* 0 extra for B. *Risk:* A carries review and reputational risk. **Verdict:** B. The "Ink" currency is **rejected** in both apps, consistent with the product brief's "no consumables, ever" and the Kids refusal list; the same request ("ink drops") was raised and refused again in Kids doc 02.
 
-**19. Bots with personalities.** Three named bots (for example "Aunt Meera", "Professor Ödön", "Kid Tobi") whose dictionaries, blank rates and thinking times differ, with tiny ink portraits. *Fits because* solo play needs a sense of a table, and names make the 10/5 duplicate rule legible ("Meera also wrote Mango"). *Proof:* Really Bad Chess and Good Sudoku show that a personality-driven twist makes a classic approachable ([Wikipedia, Zach Gage](https://en.wikipedia.org/wiki/Zach_Gage)). *Effort:* 1 week on top of Section 3.4. *Risk:* low. **Verdict:** v1.0.
+**19. Bots with personalities.** Three named bots (for example "Aunt Meera", "Professor Ödön", "Kid Tobi") whose dictionaries, blank rates and thinking times differ, with tiny ink portraits. *Fits because* solo play needs a sense of a table, and names make the 10/5 duplicate rule legible ("Meera also wrote Mango"). *Proof:* Really Bad Chess and Good Sudoku show that a personality-driven twist makes a classic approachable ([Wikipedia, Zach Gage](https://en.wikipedia.org/wiki/Zach_Gage)). *Effort:* 1 week on top of Section 3.4, which the 44 engineer-week plan does not contain. *Risk:* low. **Verdict (reconciled 2026-10-04):** v1.1. 1.0 ships the three data-driven tiers under their tier names (Casual, Clever, Ruthless) with the bot concession line; names and portraits need a one-page case and a demo like every other 1.1 candidate (02 Section 11.4, 03 Section 11).
 
 **20. Sound design, learned from specific games.** What exactly to learn from each:
 
@@ -569,7 +570,7 @@ Each idea lists: the idea, why it fits Inkwell, a shipped product that proves th
 
 **23. Spoken Word Chain.** Use on-device speech recognition so Word Chain can be played out loud in a car with the phone listening, confirming each word and letter with a chime. *Fits because* Word Chain is natively a spoken game ([Wikipedia, Word chain](https://en.wikipedia.org/wiki/Word_chain)). *Effort:* 2 weeks. *Risk:* medium; recognition of proper nouns and background noise. **Verdict:** skunkworks.
 
-**24. Keep A to Z out of the code.** Not a feature, a constraint: the letter pool, the "first unit" and "last unit" extraction and the collation are injected via the Localization package from day one (Section 4.5). *Effort:* 0.5 weeks now; many weeks saved later. *Risk:* none. **Verdict:** v1.0.
+**24. Keep A to Z out of the code.** Not a feature, a constraint: the letter pool, the "first unit" and "last unit" extraction and the collation are injected through the `WritingSystem` protocol in `IWCore` from day one (Section 4.5, Section 5.1). *Effort:* 0.5 weeks now; many weeks saved later. *Risk:* none. **Verdict:** v1.0.
 
 ### 7.1 Team debate: which three ideas make v1.0?
 
@@ -581,7 +582,7 @@ Each idea lists: the idea, why it fits Inkwell, a shipped product that proves th
 
 > **[ARCH]** Idea 24 costs nothing now and everything later. It is in.
 
-**DECISION:** v1.0 ships ideas 1, 3, 17, 19, 21, 22 and 24. v1.1 takes 2, 4, 5, 7, 8 and 10. v1.2 takes 13, 15 (link sharing only), 16. Parallel passes: 6, 11, 14 (Catalyst). Skunkworks: 9, 12, 23 and the tactile tile from 1. Killed: the marketplace in 15 and the currency in 18.
+**DECISION (amended 2026-10-04):** v1.0 ships ideas 1, 3, 17, 21, 22 and 24. v1.1 takes 2, 4, 5, 7, 8, 10 and 19 (named bots, moved out of 1.0 in the reconciliation). v1.2 takes 13, 15 (link sharing only), 16. Parallel passes: 6, 11, 14 (Catalyst). Skunkworks: 9, 12, 23 and the tactile tile from 1. Killed: the marketplace in 15 and the currency in 18.
 **OPEN:** Whether idea 4 (daily letter) should ship in 1.0 as the hook for result cards, given that it is the simplest reason to open the app alone.
 
 ---
@@ -626,10 +627,10 @@ The highest-level checklist; each line is a release gate with an owner. Sources 
 | R1 | Scope creep: the idea list in Section 7 leaks into v1.0 | High | High | The v1.0 list in 7.1 is frozen; every addition requires removing something | JOBS |
 | R2 | The "feel" is not reached: the letter draw and the reveal are competent but not special | Medium | High | Device demos at the end of every two-week train; a named "feel owner" (DESIGN) with veto | DESIGN |
 | R3 | Dictionary gaps make validation feel broken | High | Medium | Confidence levels not verdicts; table adjudication; house dictionary; curated proper-noun lists | DATA |
-| R4 | Proper-noun and brand categories carry trademark exposure in shared cards | Low | Medium | Share cards carry no words, only the 10/5/0 grid | DATA |
+| R4 | Proper-noun and brand categories carry trademark exposure in shared cards | Low | Medium | The default ledger card carries only words the players typed (their content, not ours) with the family-safe mask; the spoiler-free variant carries no words and is the one offered for public posting | DATA |
 | R5 | Wiktionary share-alike misunderstood | Low | Medium | Publish derived lists under the same license; legal review before the App 3 pilot | DATA |
 | R6 | Game Center async feels slow or opaque to players | Medium | Medium | Clear "waiting for Priya" states; reminders via GameKit; iMessage turn cards as the parallel pass | IOS |
-| R7 | MultipeerConnectivity reliability (host drops, mixed Wi-Fi and Bluetooth) | Medium | Medium | Host election and reconnection in the Networking package; action-log resync | ARCH |
+| R7 | MultipeerConnectivity reliability (host drops, mixed Wi-Fi and Bluetooth) | Medium | Medium | Reconnection and action-log resync in `IWMultiplayer`; on host loss, 30 s pause then "continue as pass-and-play" with the ledger intact (1.0); host election is a 1.1 candidate if beta shows frequent drops | ARCH |
 | R8 | App Review rejection for Kids Category | Medium | High | No network except StoreKit; parental gate; review of guidelines 1.3 and 5.1.4 before submission | KIDS, QA |
 | R9 | Store corruption or a future CloudKit sync conflict corrupts a game | Low | Medium | Event log canonical with hash chain; GRDB store rebuildable from the log; no sync in 1.0 | ARCH |
 | R10 | Reduce Motion alternatives skipped under time pressure | Medium | Medium | Alternative is part of the token; a motion token without a twin fails CI lint | IOS |
@@ -637,7 +638,7 @@ The highest-level checklist; each line is a release gate with an owner. Sources 
 | R12 | Monetization line (free versus Pro) set wrong | Medium | Medium | A/B via TestFlight cohorts before launch; Small Business Program keeps margins | JOBS |
 | R13 | Naming collision in the App Store | Medium | Low | Trademark and App Store search before the listing; shortlist in 4.1 | JOBS |
 | R14 | Two apps double the release burden for a two-person team | High | Medium | Shared packages; Kids ships after App 1 is stable; shared release train | QA |
-| R15 | App 3 assumptions (A to Z) baked in by accident | Medium | High later | Localization package from day one; a CI test that runs the engine with a non-Latin unit set | ARCH |
+| R15 | App 3 assumptions (A to Z) baked in by accident | Medium | High later | `WritingSystem` protocol in `IWCore` from day one; a CI test that runs the engine with a non-Latin unit set in the Linux lane | ARCH |
 
 ### 9.2 Open questions across the program
 

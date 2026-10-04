@@ -28,7 +28,7 @@ Both Inkwell games rest on one operation: take a unit of writing (in English, a 
 
 ## 3. Language-pack architecture sketch
 
-The design replaces the hardcoded idea of a letter with a `Unit` abstraction supplied by a language pack. App 1 defines the protocol; App 3 fills it in per language. Naming note: App 1's architecture document (04) names its packages `IWCore` (engine), `IWRules` and `IWContent` (dictionary) and does not yet list a separate Localization package; where this plan says "Localization package" and "GameEngine" or "Dictionary", read the `WritingSystem` protocol as living in `IWCore` with language packs as `IWContent` content packs, pending ARCH's decision on whether a tenth `IWLocalization` package is warranted (OPEN in the decisions register).
+The design replaces the hardcoded idea of a letter with a `Unit` abstraction supplied by a language pack. App 1 defines the protocol; App 3 fills it in per language. Naming note: App 1's architecture document (04) names its packages `IWCore` (engine), `IWRules` and `IWContent` (dictionary) and does not yet list a separate Localization package; where this plan says "Localization package" and "GameEngine" or "Dictionary", read the `WritingSystem` protocol as living in `IWCore` with language packs as `IWContent` content packs. DECISION (reconciled 2026-10-04): ARCH decided no tenth package in 1.0; `WritingSystem` is in `IWCore`, the English implementation is in `IWContent`'s base pack, and a separate `IWLocalization` package is reconsidered at App 3 Phase A (04 Section 2).
 
 ```swift
 protocol WritingSystem {
@@ -54,7 +54,7 @@ protocol WritingSystem {
 
 ```mermaid
 flowchart LR
-  P[Language pack: units, normalization, collation, dictionary, categories, exclusions] --> LO[Localization package]
+  P[Language pack: units, normalization, collation, dictionary, categories, exclusions] --> LO[WritingSystem protocol in IWCore, packs as IWContent content]
   LO --> GE[GameEngine]
   LO --> DI[Dictionary]
   GE --> UI[App 1 UI, mirrored when RTL]
@@ -92,7 +92,7 @@ flowchart LR
 
 **What App 1 must do now so the door stays open:**
 
-1. Never hardcode A to Z. The draw pool, first-unit and last-unit functions come from the Localization package (master reference, idea 24).
+1. Never hardcode A to Z. The draw pool, first-unit and last-unit functions come from the `WritingSystem` protocol in `IWCore` (master reference, idea 24).
 2. Iterate strings by `Character` (grapheme cluster), never by UTF-16 index.
 3. Normalize before comparing; store normalized forms alongside display forms.
 4. Use leading and trailing, never left and right, in layouts; run the RTL pseudo-locale in CI snapshots.

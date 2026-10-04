@@ -106,8 +106,10 @@ Each entry: purpose, trigger, duration, easing or spring, Reduce Motion (RM) alt
 
 | ID | Name | Purpose | Trigger | Duration | Easing / spring | Reduce Motion alternative | Implementation |
 |----|------|---------|---------|----------|-----------------|---------------------------|----------------|
-| M01 | Letter Draw | Hero: the round's letter is written stroke by stroke | Round appears; Lobby card idle preview | 0.60 s | ease.draw on path trim, per-stroke | Letter fades in over 0.18 s with no stroke motion | SwiftUI `Shape.trim` on 26 pre-authored stroke paths; fallback Rive per-letter state machine |
+| M01 | Letter Draw | Hero: the round's letter is written stroke by stroke | Round appears; Lobby card idle preview | 0.60 s base (Relaxed, Standard, Quick); 0.40 s Blitz; the first draw on a device runs the 1.2 s ink-wheel ceremony once | ease.draw on path trim, per-stroke | Letter fades in over 0.18 s with no stroke motion | SwiftUI `Shape.trim` on 26 pre-authored stroke paths; fallback Rive per-letter state machine |
 | M02 | Type Slam (Swiss) | Hero variant: letter arrives at full size | Round appears | 0.22 s | spring.snap | Fade 0.18 s | SwiftUI scale 1.08 to 1.0 |
+
+**DECISION (reconciled 2026-10-04):** M01 is 600 ms, scaled to 400 ms for Blitz, always tap-to-skip, always a live glyph; the 1.2 s ink-wheel ceremony from the product brief runs exactly once, on the first draw on a device, and is remembered per device. The product brief (01) and the master reference (6.8, motion token table) were aligned to this catalog. Confirmed on a device at the W4 direction demo; if JOBS and DESIGN change the number there, this row changes and the others follow.
 | M03 | Sticker Drop (Pop) | Hero variant: letter card falls and squashes | Round appears | 0.55 s | spring.bouncy, scaleY 0.92 on land | Fade 0.18 s | Keyframe (offsetY, scaleX, scaleY tracks) |
 | M04 | Neon Flicker (Night) | Hero variant: letter flickers to full glow | Round appears | 0.42 s | Keyframe, 3 steps at 0.08, 0.20, 0.42 | Instant on, glow static; flicker fully disabled | Keyframe (opacity, glow radius); glow via `shadow` or Shader |
 | M05 | System Roll (Minimal) | Hero variant: letter rolls in like a number | Round appears | 0.28 s | system default | numericText still allowed (it is a fade-roll); RM: plain fade | `contentTransition(.numericText())` |
@@ -289,7 +291,7 @@ Two API layers, both documented by Apple:
 | Hitches during hero animations | 0 per hero | Hitch trace in Instruments |
 | GPU time for shaders (M10, M29, M30) | under 2 ms per frame on iPhone 12 | Metal System Trace |
 | Particles (M16, M18) | 300 particles max; emitter stops at 1.2 s; node removed at 2 s | Code review and SpriteKit debug stats |
-| Cold launch to interactive Lobby | under 400 ms on iPhone 12 | XCTest launch metrics |
+| Cold launch to interactive Lobby | under 800 ms p90 on iPhone SE 3rd gen, never above 1.5 s on iPhone SE 2nd gen (05 Section 4; the earlier 400 ms on iPhone 12 figure is retired) | XCTest launch metrics, nightly |
 | Added binary size for animation runtimes | under 6 MB total | App thinning report |
 | Memory during reveal with 8 players | under 150 MB | Memory Graph |
 | Battery, 10-minute session, grain shader on | within 3 percent of shader off | Energy Log |
@@ -365,7 +367,7 @@ When to pre-render instead of animating live: any effect that is identical every
 
 1. **OPEN:** M01 implementation (SwiftUI trim versus Rive) pending bake-off step 1 and 5.
 2. **OPEN:** Grain as shader versus static PNG pending battery measurement (step 3).
-3. **OPEN:** Whether the Night Lounge CRT scanline option ships in v1 (needs its own GPU budget and a photosensitivity review).
+3. Closed (reconciled 2026-10-04): the Night Lounge CRT scanline option does not ship in 1.0; Night Lounge ships at reduced scope (tokens, display face, static glow, S3 sound; no shader, no animated materials, no ambient drift) per 03 Section 8, and the CRT option is revisited for 1.1 with its own GPU budget and a photosensitivity review.
 4. **OPEN:** Timer tick haptic default on or off; GAME suspects it adds tension, QA suspects it annoys. Resolve with a small TestFlight survey.
 5. **OPEN:** iOS 18 zoom transition (M31) requires iOS 18; the iOS 17 fallback is `matchedGeometryEffect`. Confirm whether the dual path is worth it or whether v1 ships the fallback only.
 

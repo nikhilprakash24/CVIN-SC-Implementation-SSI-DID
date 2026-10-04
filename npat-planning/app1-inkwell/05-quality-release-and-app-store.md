@@ -77,11 +77,13 @@ Three operating rules:
 | Tier | Devices (physical, owned) | OS versions | Purpose |
 |------|---------------------------|-------------|---------|
 | **A: must be flawless** | iPhone 16 Pro (120 Hz), iPhone 15, iPhone SE (3rd gen, 4.7-inch, 60 Hz) | latest iOS 18.x and iOS 26 (current major at launch) | Primary feel and performance targets; small screen; ProMotion |
-| **B: must work, minor visual tolerance** | iPhone 11 or XR (oldest common A13 class), iPhone 13 mini (smallest modern), iPhone 16 Plus/Pro Max (largest, 6.9-inch) | iOS 17.x latest point release, iOS 18.x | Lower bound on performance; smallest and largest layouts |
+| **B: must work, minor visual tolerance** | iPhone SE (2nd gen, A13, the performance floor), iPhone 11 or XR (oldest common A13 class), iPhone 13 mini (smallest modern), iPhone 16 Plus/Pro Max (largest, 6.9-inch) | iOS 17.x latest point release, iOS 18.x | Lower bound on performance; smallest and largest layouts |
 | **C: simulator only** | iPad (any current), iPhone 14, 15 Pro | current | iPad is not a v1 target but must not be broken if the app is run on iPad in compatibility mode; snapshot variety |
 | **Accessibility rigs** | Any Tier A device with VoiceOver, Switch Control (external switch), Bold Text, Increase Contrast, Reduce Motion, Dynamic Type accessibility5 | current | Manual audits |
 
 Rules: the oldest supported iOS point release is tested on at least one physical device per release candidate. Each new iOS beta is installed on one Tier B device the week it ships so regressions are found before the public release.
+
+**DECISION (reconciled 2026-10-04):** two devices, two jobs. The iPhone SE 2nd generation (A13) on iOS 17 is the performance floor: the app must never exceed the floor budgets on it, and it stays in the delivery plan's device lab (03 Section 4). The iPhone SE 3rd generation (A15) is the Tier A "flawless" device: the release-gate numbers in Section 4 and zero dropped frames in the hero animations are measured on it. The delivery plan (03), the architecture document (04) and the motion document (09) now use the same two devices.
 
 **OPEN (narrowed):** the product brief (01, kill list) decides that v1 ships a "runs well on iPad" layout with a bespoke iPad design deferred to Phase 7, and the delivery plan's device lab includes one iPad. This matrix keeps iPad in Tier C for snapshot variety, plus one physical iPad smoke pass per release candidate. What remains open is **[DESIGN]**'s large-canvas pass-and-play layout, which is a Phase 7 question.
 
@@ -93,11 +95,13 @@ Rules: the oldest supported iOS point release is tested on at least one physical
 |--------|--------------|-------------|
 | Crash-free sessions | >= 99.8% in TestFlight external beta for 7 days; >= 99.9% target in production at 30 days | Xcode Organizer crashes (opted-in users), MetricKit `MXCrashDiagnostic` |
 | Hang rate | < 0.1% of sessions with a hang > 250 ms on the main thread | MetricKit `MXHangDiagnostic`; Organizer Hangs |
-| Cold launch p90 | <= 800 ms (target 500 ms) on iPhone SE 3 | MetricKit `applicationLaunchMetrics`, XCTest launch metric |
+| Cold launch p90 to interactive Lobby | <= 800 ms (target 500 ms) on iPhone SE 3rd gen (release gate); never above 1.5 s on iPhone SE 2nd gen (floor) | MetricKit `applicationLaunchMetrics`, XCTest launch metric, nightly on both devices |
 | Hitches in a round | 0 hitches > 50 ms in a 60 s NPAT round on iPhone 11; hitch ratio < 5 ms/s on Tier A | Instruments Animation Hitches; `MXAnimationMetric` |
 | Memory steady | <= 150 MB in a round; no growth across 20 consecutive rounds (leak check) | Instruments Leaks, Allocations |
 | Binary download size | <= 40 MB | App Store Connect |
 | Battery | Energy impact "Low" for a 10-minute session | Instruments Energy |
+
+**DECISION (reconciled 2026-10-04):** the cold launch budget is one number on one device: 800 ms p90 (target 500 ms) from icon tap to an interactive Lobby on the iPhone SE 3rd generation, with 1.5 s p90 as the never-exceed floor on the iPhone SE 2nd generation. This is the Phase 1 exit criterion and the nightly CI gate. The 400 ms (09), 1.0 s and iPhone 12 (01) figures are retired, and 01, 03, 04, 08 and 09 were aligned to this line.
 | Data loss | 0 lost in-progress matches across 100 scripted force-quits and 20 simulated low-memory terminations | XCUITest with app termination |
 | Accessibility audit | 0 failures from `performAccessibilityAudit()` across all screens | XCTest |
 
@@ -112,10 +116,12 @@ TestFlight facts (verified): internal testing supports up to 100 team members wi
 | Stage | Who | Size | Duration | Entry criteria | Exit criteria |
 |-------|-----|------|----------|----------------|---------------|
 | **Internal alpha** | Team plus founder plus 5 trusted friends added as App Store Connect users | <= 15 | continuous from first playable | Build passes CI gates | n/a |
-| **Closed beta 1: "Kitchen table"** | 10 families and friend groups recruited personally (each group 3-6 people; one phone per group) | ~50 people | 3 weeks | Pass-and-play complete; crash-free >= 99.5% internal | 20 matches per group; feel survey median >= 4/5; top 5 issues fixed |
-| **Closed beta 2: "Living room"** | Beta 1 groups plus 20 new groups, each with multiple iPhones | ~150 people | 3 weeks | Nearby multiplayer behind flag; Beta App Review passed | 8-device nearby session completes 20 rounds without desync in at least 10 groups; crash-free >= 99.8% |
-| **Open beta (public TestFlight link)** | Public link shared in word-game communities and newsletter | up to 2,000 | 4 weeks | Beta 2 exits; product page draft ready | Crash-free >= 99.8% for 7 consecutive days; D7 retention >= 25% among testers who played once; no open P0/P1 |
-| **Release candidate** | Everyone above | all | 1 week | All gates | Zero P0/P1; founder sign-off on feel |
+| **Beta 1: "Kitchen table" (closed, W19 to W20)** | 30 families and friend groups recruited personally from Phase 3 onward (each group 3-6 people; the first 10 groups on one phone, the rest with multiple iPhones) | ~150 people | 2 weeks | Pass-and-play and nearby complete; Beta App Review passed; crash-free >= 99.5% internal | 20 matches per group; feel survey median >= 4/5; 8-device nearby session completes 20 rounds without desync in at least 10 groups; top 5 issues fixed |
+| **Beta 2: "Living room" (public TestFlight link, W21 to W22)** | Beta 1 groups plus a public link shared in word-game communities and the landing page | 200 to 500 | 2 weeks | Beta 1 exits; async behind flag; product page draft ready | Crash-free >= 99.8% for 7 consecutive days; second-round rate >= 80%; no open P0/P1 |
+| **Release candidate (W23)** | Everyone above | all | 1 week | All gates | Zero P0/P1; founder sign-off on feel |
+| **Extended open beta (only if the date moves)** | Public link, up to 2,000 | up to 2,000 | up to 4 weeks | Invoked only when a date move is announced under the cut list (03 Section 18) | Crash-free >= 99.8% for 7 consecutive days; D7 retention >= 25% among testers who played once |
+
+**DECISION (reconciled 2026-10-04):** the committed beta program is the delivery plan's two external betas inside Phase 5 (03 Section 9), two weeks apart, plus the release candidate week in Phase 6; the earlier eleven-week, four-stage program is folded into these rows, and its 2,000-tester open beta survives only as the extended stage that runs if the date moves. Internal alpha runs continuously from the first playable, so the launch build has been on team phones for about twenty weeks and on external phones for four.
 
 Recruiting plan for families and friend groups:
 - **[JOBS]**: "Recruit the people who already play this on paper. Parents of 8-14 year olds, college friend groups, board game night hosts." Outreach via personal network, two Reddit communities (r/boardgames, r/wordgames) only once a public link exists, and a landing page with a TestFlight public link.
@@ -257,7 +263,7 @@ Policy:
 | 6. Release manually when approved; phased release OFF for a hotfix that fixes a P0 (we want 100% immediately), ON otherwise | QA | on approval |
 | 7. Post-mortem within 3 working days; add the gate that would have caught it | QA + whoever fixed it | 3 days |
 
-> **[ARCH]** The ability to flip a flag before shipping a binary is the reason the signed remote config exists. For 1.0 we do not have it yet, so the launch build has fewer dark features and the kill switches are compile-time. That is acceptable for a build that was in beta for ten weeks.
+> **[ARCH]** The ability to flip a flag before shipping a binary is the reason the signed remote config exists. For 1.0 we do not have it yet, so the launch build has fewer dark features and the kill switches are compile-time. That is acceptable for a build that was in internal alpha from the first playable and in external beta for four weeks.
 
 ---
 
@@ -360,7 +366,7 @@ Every item is checked on a physical Tier A device before each release. Owners in
 
 **First run and navigation**
 1. First launch to first letter drawn in three taps or fewer, no account, no permission prompts. [JOBS]
-2. Cold launch under 800 ms p90 on iPhone SE 3; no splash screen that lingers after content is ready. [IOS]
+2. Cold launch to interactive Lobby under 800 ms p90 on iPhone SE 3rd gen and under 1.5 s on iPhone SE 2nd gen; no splash screen that lingers after content is ready. [IOS]
 3. No onboarding carousel; the first screen is the game. Help is discoverable, not forced. [DESIGN]
 4. Every screen has exactly one primary action, visually unmistakable. [DESIGN]
 5. The back/close affordance is always in the same place; a round has no back, only "Quit" with confirmation. [DESIGN]
@@ -451,8 +457,9 @@ Every item is checked on a physical Tier A device before each release. Owners in
 **DECISIONS**
 - Test pyramid as in Section 2; Swift Testing, XCUITest, pointfreeco snapshots; accessibility audits automated per PR and manual per RC.
 - Device matrix Tiers A/B/C; iPad in Tier C for v1.
-- Budgets: crash-free 99.8% beta gate, 99.9% production target; cold launch 800 ms p90; zero hitches over 50 ms in a round on iPhone 11.
-- Beta program in four stages with family and friend-group recruiting; Sentry in TestFlight builds only.
+- Budgets: crash-free 99.8% beta gate, 99.9% production target; cold launch 800 ms p90 to interactive Lobby on iPhone SE 3rd gen (gate), 1.5 s never-exceed on iPhone SE 2nd gen (floor); zero hitches over 50 ms in a round on iPhone 11.
+- Device roles: SE 2nd gen is the performance floor, SE 3rd gen is the Tier A flawless device (reconciled with 03 and 04).
+- Beta program: two external betas inside Phase 5 (W19 to W20 closed, W21 to W22 public link, 200 to 500 testers) plus a release candidate week, with family and friend-group recruiting; the extended open beta runs only if the date moves; Sentry in TestFlight builds only.
 - App Store checklist executed with evidence per submission; live guidelines re-read each time.
 - Privacy label "Data Not Collected" at launch; `ITSAppUsesNonExemptEncryption = NO`.
 - Four-week minor release train; trunk-based; manual release; phased release on every update; hotfix process with expedited review.

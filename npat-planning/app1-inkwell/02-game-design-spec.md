@@ -161,6 +161,8 @@ stateDiagram-v2
 - Answers are sent as a sealed blob at submit time; the host reveals all at once so nobody sees others' answers early.
 - If the host disconnects, the game pauses for 30 s with a "Waiting for host" sheet; after that the lobby offers "Continue on this phone as pass-and-play" with the scores preserved.
 
+**DECISION (reconciled 2026-10-04):** this pause-then-fallback behavior is the 1.0 host-loss design. The architecture document (04 Section 8) had specified host migration to the lowest `PeerID` after 5 s; that is now a 1.1 candidate if beta shows frequent host drops, and 04 was aligned to this line.
+
 > **[ARCH]** Deterministic engine plus host-ordered events is the whole design. We do not need consensus; we need one ordering. Peers can render locally and reconcile on the host's broadcast. The engine replays cleanly from the event log because there are no clocks inside it.
 
 > **[IOS]** MultipeerConnectivity is a mature framework, and it is also notoriously flaky in crowded RF environments and when the app backgrounds. We budget a spike (see delivery plan) and we design every nearby screen to degrade to "continue as pass-and-play" without losing a point.
@@ -358,7 +360,7 @@ Confidence levels drive the UI: HIGH accept is a check stamp; MEDIUM accept is a
 
 > **[DATA]** Source lists and licenses (all permissive): ENABLE word list (public domain) for general English; SCOWL for frequency tiers (http://wordlist.aspell.net/); WordNet for noun sense checks (https://wordnet.princeton.edu/license-and-commercial-use); Wiktionary category extracts for Animals, Foods, etc. are CC BY-SA (https://en.wiktionary.org/wiki/Wiktionary:Copyrights) and the ShareAlike clause led ADR-007 in the architecture document to exclude Wiktionary-derived data from v1 packs, so Animals and Foods seed from WordNet hyponyms plus curation and Wikidata (CC0) is being verified for Movies and Brands; GeoNames for Places (CC BY 4.0, https://www.geonames.org/) filtered to populated places above a population threshold plus countries, regions, rivers, mountains and well-known landmarks. Names come from a curated first-name list across many cultures, which is the hardest list to get right and the one I most want to be humble about.
 
-> **[ARCH]** All lists ship on device, compressed, as a perfect-hash or FST per category. Target under 12 MB total for English. No network call is ever required to validate. Online modes only share results, never lookups.
+> **[ARCH]** All lists ship on device, compressed, as a perfect-hash or FST per category. Base pack under 6 MB and everything bundled in 1.0 under 12 MB total for English, Movies and Cities included only if they fit (04 Section 6.4; reconciled 2026-10-04, the 18 MB figure is retired). No network call is ever required to validate. Online modes only share results, never lookups.
 
 ### 9.3 Proper-noun handling for Names and Places
 
@@ -463,13 +465,15 @@ Word choice: filter by link letter, remove used words, weight by frequency tier 
 
 > **[ARCH]** Agreed: tiers are a data struct (slice, delay range, failure rate, tactic weight) in the shared `IWRules` package. Adding Buddy is a row.
 
+**DECISION (reconciled 2026-10-04):** 1.0 ships the three tiers under their tier names (Casual, Clever, Ruthless) with the concession line from 08; named bots with ink portraits (master reference idea 19) are a 1.1 candidate, not in the 44 engineer-week plan. The engine is unaffected either way. The master reference and the delivery plan's 1.1 list were aligned.
+
 ## 12. Anti-cheese and fairness
 
 | Threat | Mitigation | Default |
 |---|---|---|
 | Autocorrect and predictive text completing words | Text fields disable autocorrection, spell checking and the predictive bar during rounds (UIKit `autocorrectionType = .no`, `spellCheckingType = .no`, SwiftUI `.autocorrectionDisabled()` and `textInputAutocapitalization`) | Always |
 | Paste from clipboard | Paste is disabled in answer fields during a timed round; detected paste attempts show a small "no pasting, pencil only" ink note | Always in timed modes; allowed in Off-timer modes |
-| Dictionary peeking (switching apps mid-round) | Timer keeps running in the background using wall-clock time; on return, elapsed time is deducted; if the round expired while away, the sheet is auto-submitted. A "left the table" mark appears on the player's sheet if they backgrounded for more than 5 s during a round (visible to others, no penalty by default; house rule "Away penalty" scores the round 0) | Mark on; penalty off |
+| Dictionary peeking (switching apps mid-round) | In pass-and-play, nearby and async, a voluntary app switch does not stop the clock: the deadline stands on the monotonic clock; on return, elapsed time is deducted; if the round expired while away, the sheet is auto-submitted. A "left the table" mark appears on the player's sheet if they backgrounded for more than 5 s during a round (visible to others, no penalty by default; house rule "Away penalty" scores the round 0). Solo pauses instead (nobody to cheat). System interruptions (a phone call, Siri, a system alert) are not app switches: they pause the active player in solo and pass-and-play, never in nearby or async | Mark on; penalty off |
 | Hardware keyboard or external text expansion | Allowed (accessibility), but text replacement shortcuts are disabled by setting the field's input traits | Always |
 | Siri dictation | Dictation remains available for accessibility, but is treated like typing; no special block | Always |
 | Timer manipulation by changing the device clock | Round timing uses a monotonic clock (`ContinuousClock`), not wall-clock; nearby and async use the host's or match's timestamps | Always |
@@ -478,6 +482,8 @@ Word choice: filter by link letter, remove used words, weight by frequency tier 
 | Vote brigading in async with strangers | Not applicable in v1 (invite-only online) | n/a |
 | Screenshot of the letter to a friend before the round | Nothing to be done; it is a party game | n/a |
 | Rapid-fire "Stop!" with blank sheet | "Stop!" requires every field non-empty; an invalid stop does nothing | Always |
+
+**DECISION (reconciled 2026-10-04):** backgrounding is decided per mode. Solo pauses and resumes with a 3-2-1 count. Pass-and-play pauses on system interruptions (calls, Siri, alerts) but keeps running on a voluntary app switch, with the "left the table" mark. Nearby and async never pause and auto-submit at the deadline. The "Pause on interruption" house rule covers interruptions only. 04 Section 4.1 (`pausePolicy`) and 08 Section 11 now say the same thing; the earlier "pause on background for pass-and-play" default and the OPEN in 08 are closed.
 
 > **[IOS]** Disabling paste on a text field is doable with a custom `UITextField` subclass (`canPerformAction`) or by intercepting in SwiftUI via a UIViewRepresentable. The predictive bar is controlled by `autocorrectionType`. We should verify behavior with third-party keyboards; some ignore traits. QA to include a third-party keyboard in the device matrix.
 
@@ -541,8 +547,8 @@ Principle: **the first round is the tutorial.** No carousel, no video.
 9. One of a duplicate pair is challenged and rejected: survivor becomes unique (10).
 10. Both of a duplicate pair are invalid: both score 0, no duplicate credit.
 11. Player submits an empty sheet: all 0; no perfect-sheet bonus obviously; round still counts toward the game length.
-12. Player backgrounds the app with 20 s left and returns after 60 s: sheet auto-submitted at the expiry time with whatever was typed; "left the table" mark.
-13. Phone call interrupts a pass-and-play round: round pauses for the active player only if the house rule "Pause on interruption" is on (default on for pass-and-play; off for nearby, where it auto-submits).
+12. Player backgrounds the app voluntarily with 20 s left and returns after 60 s: in pass-and-play, nearby and async the sheet is auto-submitted at the expiry time with whatever was typed, plus the "left the table" mark; in solo the round was paused and resumes with a 3-2-1 count.
+13. Phone call (or any system interruption) interrupts a pass-and-play round: the round pauses for the active player if the house rule "Pause on interruption" is on (default on for pass-and-play and always on for solo; never for nearby or async, where the sheet auto-submits at the deadline).
 14. Device clock changes mid-round: no effect (monotonic clock).
 15. Letter pool exhausted in a Marathon game with exclusions: "fresh alphabet" reset announced on screen.
 16. All letters excluded by a custom exclusion: Start button disabled with the message "Leave at least 8 letters in."
@@ -567,6 +573,8 @@ Principle: **the first round is the tutorial.** No carousel, no video.
 35. Player's name contains an emoji or is 40 characters long: names are capped at 16 grapheme clusters; emoji allowed; the ink rendering uses the system font fallback.
 36. The same person plays twice in pass-and-play by adding their name twice: allowed, with a wink ("Two Sams at the table").
 37. Pro entitlement lapses on a guest device mid-session (refund): the session continues (host-pays model); the guest's next hosted session requires Pro.
+
+**DECISION (reconciled 2026-10-04):** edge case 34 is the family-safe policy for App 1. The family-safe profile governs what the app shows and promotes, not what a private table may write: a profane word typed at the table is validated and scored like any other word; it never appears in suggestions, hints, "did you mean" corrections, bot answers, leaderboards or share images, and it is masked in anything shared unless the adult explicit toggle is on. The product brief (01 Section 3), which had said the app "will not validate" such words, and the master reference (5.3) were aligned to this.
 
 ## 16. Team debate: should a dictionary auto-judge, or should players vote?
 
@@ -605,16 +613,20 @@ Principle: **the first round is the tutorial.** No carousel, no video.
 5. House rules are stored per table and never appear in the default flow.
 6. Validation is fully on-device; three visible states; hybrid dictionary-plus-vote adjudication.
 7. Duplicate detection folds case, diacritics, whitespace, possessives and (by default) plurals and leading articles.
-8. Word Chain default is Lives mode with Reroll on dead-end letters; bot tiers are data.
+8. Word Chain default is Lives mode with Reroll on dead-end letters; bot tiers are data; named bots are a 1.1 candidate.
 9. Autocorrect, predictive text and paste are disabled in timed rounds; timing uses a monotonic clock.
 10. The scoring reveal is the protected "juice" moment; it is never cut.
+11. Nearby host loss: 30 s pause, then "continue as pass-and-play" with the ledger intact; host migration is a 1.1 candidate (reconciled with 04).
+12. Backgrounding per mode: solo pauses; pass-and-play pauses on system interruptions only and marks a voluntary app switch; nearby and async never pause (reconciled with 04 and 08).
+13. Family-safe profile: a profane word is scored like any other word at a private table and is never suggested, promoted or shown in anything shared (reconciled with 01 and the master reference).
+14. Dictionary size: 6 MB base pack, 12 MB hard ceiling for everything bundled in 1.0 (reconciled with 04).
 
 **OPEN**
 
 1. Feedback of overturned rejects to DATA (silent, on-device only).
 2. Designated-judge mode in App 1 v1.
 3. Whether "Any English word" Word Chain category should be free or Pro (large list, large download).
-4. Final size budget for on-device dictionaries (ARCH target 12 MB; DATA wants 18 MB for Movies and Cities).
+4. Closed: dictionary size budget reconciled at 6 MB base plus a 12 MB bundle ceiling (decision 14; 04 Section 6.4).
 5. Whether the "Stop!" rule should be on by default for Blitz timer presets.
 
 ---

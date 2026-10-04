@@ -20,7 +20,7 @@
 Seventeen Markdown documents were written in parallel by five writers on 2026-10-04: the README and team charter, nine App 1 documents (01 to 09), five App 2 Kids documents (01 to 05), the App 3 short story plan, and the master reference. The editor read all of them end to end, then:
 
 1. Fixed inconsistencies in place with minimal edits (Section 2, column "Resolution"), always choosing a canonical document per topic: the architecture document (04) for package names and persistence, the delivery plan (03) for phasing and iOS minimum, the product brief (01) for monetization and naming, the game design spec (02) for rules and validation, the design directions document (07) for visual direction, the Kids vision (Kids 01) for age bands.
-2. Left larger contradictions as OPEN items rather than silently choosing a side (Section 2, rows marked OPEN, and Section 4).
+2. Left thirteen larger contradictions for the team rather than silently choosing a side; the team resolved all thirteen in a reconciliation pass on 2026-10-04 (Section 2.2), and the resulting decisions are in Section 3 marked "reconciled 2.2".
 3. Collected every DECISION line, deduplicated it, and assigned a confidence: **Firm** (decided with reasoning and no contrary statement anywhere), **Provisional** (decided, but depends on a spike, a bake-off, or beta data), **Needs founder sign-off** (the team recommends, the founder decides).
 4. Collected every OPEN line with an owner persona and the phase by which it must close.
 
@@ -46,30 +46,166 @@ Confidence levels are the editor's judgment from the documents, not a vote.
 | 10 | Rules details that drifted | Master 3.1: letter exclusion of Q X Z "on by default" (02: Classic excludes nothing, weights availability); timer presets 120/60/30/15 (02: 120/60/45/30); up to 10 categories (02: 3 to 8); long-word bonus +2 at 8 letters (02: +1 per letter beyond six, max +5); Word Chain "wild tail" rule (02: Reroll default); bot tier "Expert" (02: Ruthless). 08: timer presets 90/60/30, rounds 3/5/10, bot tiers Easy/Normal/Hard, stop-rule grace 10 s (02: 5 s), 04: grace 3 s. | 02 governs. All listed values aligned in master 3.1, 3.2, 3.4, 3.5 and the glossary, and in 08 Sections 3.2, 3.7, 4.2 and 11, and 04 Section 8. | 04, 08, master |
 | 11 | Anti-cheese rules in the UX plan | 08 Section 5.4 had autocorrect on and paste allowed during rounds; 01's first-60-seconds spec and 02 Section 12 require autocorrect, predictive text and paste off in timed rounds. | 02 governs; 08 edited, with the fuzzy "did you mean" path named as where corrections happen. | 08 |
 | 12 | Word list licensing | 04 ADR-007 excludes Wiktionary-derived data from v1 packs because of ShareAlike. 02 Section 9.2 and 11.1, 03's go/no-go licenses line, Kids 02 Section 12.1, Kids 03 Section 4 and master 5.3 all still listed Wiktionary as an App 1 source. | 04 governs for App 1 v1. Each mention now notes the exclusion; Animals and Foods seed from WordNet plus curation; Wikidata CC0 is being verified for Movies and Brands; Wiktionary stays reserved for App 3 packs with published derived lists. | 02, 03, Kids 02, Kids 03, master |
-| 13 | Theme scope in the delivery plan | 03 Phase 2 shipped "light paper and dark paper" and Phase 4 a "third theme (Pro): one more paper and ink combination", with cut-list item 3 "Pro has two themes". 07 ships Paper & Ink plus Swiss Editorial (free) plus Night Lounge (Pro). | 07 governs for which themes; 03 Phase 4 scope and cut-list item 3 renamed to Swiss Editorial and Night Lounge. The effort gap is left OPEN (Section 2.2, row B). | 03 |
+| 13 | Theme scope in the delivery plan | 03 Phase 2 shipped "light paper and dark paper" and Phase 4 a "third theme (Pro): one more paper and ink combination", with cut-list item 3 "Pro has two themes". 07 ships Paper & Ink plus Swiss Editorial (free) plus Night Lounge (Pro). | 07 governs for which themes; 03 Phase 4 scope and cut-list item 3 renamed to Swiss Editorial and Night Lounge. The effort gap was resolved in Section 2.2, entry B. | 03 |
 | 14 | App 1 facts stated in Kids documents | Kids 03 said App 1 allows a third-party analytics SDK and third-party crash reporting (04: none in production; Sentry in TestFlight only; label "Data Not Collected"); App 1 coverage "at least 80 percent" (03: 90 percent gate; 05: 95 percent target); App 1 release cadence "every 2 to 3 weeks" (05: every 4 weeks; master said two weeks). Kids 02 placed nearby play in "Phase 4" and a Classroom edition in "Phase 5" of Kids 03, which has nearby as a post-launch stretch and no Phase 5. | 04, 03 and 05 govern. Kids 03 table cells corrected; master 5.7 cadence corrected to four weeks; Kids 02 phase references corrected. | Kids 02, Kids 03, master |
 | 15 | Kids reuse of DesignSystem | Master 4.2 and 4.3 said Kids reuses "the core of DesignSystem"; Kids 03 decided tokens only, with a separate `KidsDesignSystem`. Master 6.3 planned Rive for Kids characters; Kids 04 decided no third-party animation runtime in v1. | Kids 03 and Kids 04 govern. Master 4.2, 4.3 (diagram) and 6.3 edited. | master |
 | 16 | First-run time standard | Master checklist item 1 said "under 20 seconds"; 07 and 08 standardize on 10 seconds; 01's storyboard reaches a round at about 5 s. | 08 governs the acceptance test (FR-01, under 10 s on iPhone 12). Master item 1 edited. | master |
 | 17 | iPad in v1 | 05 left "iPad as a v1 target" OPEN with JOBS saying no; 01's kill list already decided "runs well on iPad" floor with bespoke deferred; 03's device lab includes an iPad. | 01 governs. 05's OPEN narrowed to the Phase 7 large-canvas question; one physical iPad smoke pass per release candidate added. | 05 |
 | 18 | Em-dashes and README links | Scan found em-dashes only in H1 titles and persona tags, which the brief permits. README's only unresolved link pointed at this file. | No prose edits needed. This file resolves the link. README and charter gained a naming sentence. | README, charter |
 
-### 2.2 Contradictions judged too large to fix silently (left OPEN)
+### 2.2 Contradictions too large to fix silently: resolved by the team
 
-| # | Topic | The contradiction | Why it is not an edit | Recommended owner and phase |
-|---|---|---|---|---|
-| A | Cold launch budget | 01: under 1.5 s on iPhone 12, under 1.0 s on current devices. 03: p90 under 1.5 s on iPhone SE 2nd gen. 04: 800 ms p90 (target 500) on iPhone 11 or SE 3rd gen. 05: 800 ms p90 on SE 3rd gen. 09: under 400 ms on iPhone 12. Five numbers, three device baselines. | A single number must be chosen against a single device, and the choice changes the Phase 1 exit criterion and the nightly CI gate. | QA with IOS, close in Phase 0. Recommendation: 800 ms p90 to interactive Lobby on the oldest Tier A device as the release gate (05), 1.5 s as the never-exceed floor on the oldest supported device (03), and retire the 400 ms and 1.0 s figures. |
-| B | Theme effort versus schedule | 07 estimates Paper & Ink at 3.5 to 4.5 EW, Swiss Editorial 2 to 2.5 EW and Night Lounge 4 to 5 EW beyond the skeleton (roughly 10 to 12 EW). 03 budgets Phase 2 "feel" at 7 EW for everything and the Pro theme at 0.5 EW. Master idea 17 assumed 1 week per theme. | Reconciling means either cutting a theme from 1.0 or adding weeks to a plan with zero slack. That is a founder-level scope call. | JOBS with DESIGN and ARCH, close in Phase 0 planning. Recommendation: Paper & Ink and Swiss Editorial in 1.0; Night Lounge reduced to a token-and-sound pass (no CRT shader, no animated glass) or moved to 1.1 as the first Pro content drop. |
-| C | Beta program length versus the 24-week calendar | 05's four-stage beta (3 + 3 + 4 + 1 weeks, up to 2,000 testers) is eleven weeks; 03 fits two external betas into Phase 5's four weeks with 200 to 500 testers. Master said 50 to 200 weekly. | The quality plan and the delivery plan cannot both be true; QA explicitly wants two betas two weeks apart as the minimum, which 03 already honors. | QA with ARCH and JOBS, close by W10. Recommendation: adopt 03's two external betas inside Phase 5 as the committed plan; treat 05's open beta stage as what happens if the date moves by the cut list, not as the baseline. |
-| D | Performance floor device | 03: iPhone SE 2nd generation (A13) on iOS 17 is the floor and is in the device lab. 04 and 05: iPhone 11 or SE 3rd generation (A15) is the baseline, SE 3 is Tier A. | Picking the device changes what "no dropped frames" means for the ink effects and what the lab buys. | IOS with QA, close in Phase 0. Recommendation: SE 2nd gen stays the launch-time floor (it is the oldest A13 class on iOS 17); SE 3rd gen is the Tier A "flawless" device for motion. |
-| E | Nearby host loss behavior | 02 and 03: on host disconnect, pause 30 s then offer "continue as pass-and-play" with the ledger intact. 04 Section 8: host migration after a 5 s timeout to the lowest `PeerID`, with log rebroadcast. | Host migration is more code and more test surface, and it changes the nearby state machine in 02. Both are defensible; one must be chosen before the W5 spike. | ARCH with GAME and IOS, close by the nearby spike (W6). Recommendation: ship 02's pause-then-fallback in 1.0 (fewer message types, matches the "degrade to pass-and-play without losing a point" promise); keep host migration as the 1.1 improvement if beta shows frequent host drops. |
-| F | Timer behavior when the app is backgrounded | 02 Section 12: the timer keeps running on wall-clock time (anti-peeking), with a "left the table" mark. 02 edge case 13 and 04 Section 4.1: pause on interruption is default on for pass-and-play and solo. 08: solo pauses; pass-and-play is OPEN. | Three statements in two documents from the same owner; the right answer may differ by mode and by "phone call" versus "switched apps", which is a rules decision. | GAME, close in Phase 1 before the first solo build. Recommendation: solo pauses (no one to cheat); pass-and-play pauses on system interruptions (calls) but keeps running on app switching with the mark; nearby and async never pause. |
-| G | Family-safe profile: reject or suppress profanity | 01 (DATA): profanity is excluded from the valid list, the app will not validate it. 02 edge case 34: a profane word is validated for scoring like any other word, never suggested or shown in share images. Master 5.3: the blocklist never applies to private in-game entries. | This is a product stance about the adult app (is "ass" a valid Animal?) with App Review and family-persona implications, and the two statements are both DATA's. | DATA with GAME and JOBS, close in Phase 1 before dictionary v0. Recommendation: 02's position (score it, never promote it, mask it in anything shared) because the family-safe promise in 01 is about what the app shows and suggests, not about policing a private table. |
-| H | Localization package | App 3 and the master reference depend on a Localization package (units, collation, category names) that 04's nine-package list does not include; App 3's seven constraints are added to App 1 acceptance criteria. | Adding a tenth package or folding the `WritingSystem` protocol into `IWCore` is an architecture decision with CI implications (the non-Latin unit test). | ARCH, close in Phase 0. Recommendation: `WritingSystem` protocol in `IWCore`, English implementation in `IWContent`'s base pack, no tenth package until App 3 Phase A. |
-| I | Kids app and `IWFeatures` | 04's dependency diagram has the InkwellKids target consuming `IWFeatures` and `IWDesignSystem`; Kids 03 decided tokens only and its own kid feature code. | The diagram is a design statement, not a typo; 04 should be amended by its owner. | ARCH, close in App 1 Phase 0 (so the package graph is right from day one). Recommendation: Kids 03 is right; amend 04's diagram. |
-| J | Letter draw duration | 01 and master: 1.2 s ceremony, tap to skip, scaled by preset (1200/700/400 ms). 07 and 09: M01 Letter Draw is 600 ms, with 09 as the governing catalog. | A 2x difference in the single most important animation; it is a taste decision JOBS and DESIGN must make on a device, not in a register. | DESIGN with JOBS, close at the W4 direction demo. Recommendation: build both; 09's catalog is updated to whatever wins, and the preset scaling from master 6.8 applies either way. |
-| K | Share card content | Master idea 3: spoiler-free card with no words (10/5/0 glyph grid). 03 Phase 2 and 08 Section 3.6: an image of the final ledger with names. | Trademark exposure in shared cards (master R4) versus the "show your friends what you wrote" loop are different product goals. | DESIGN with DATA and JOBS, close in Phase 2. Recommendation: ledger with names and words by default (it is the party's record), with a one-tap spoiler-free variant for public posting. |
-| L | Dictionary size budget | 02: ARCH 12 MB total versus DATA 18 MB. 04: 6 MB base pack in bundle plus up to 12 MB optional downloaded on demand. Master: under 6 MB. 1.0 has no download path. | Depends on whether Movies and Cities ship in the bundle in 1.0, which is also cut-list item 6. | DATA with ARCH, close at the dictionary freeze (W14). Recommendation: 6 MB base plus Movies and Cities in the bundle if they fit under 12 MB total; otherwise cut-list item 6 applies. |
-| M | Bot tiers and personalities | 02: three data-driven tiers (Casual, Clever, Ruthless), plus a Kids "Buddy" row. Master idea 19 (in the v1.0 list): three named bots with ink portraits. Kids 02: four named characters (Pip, Wren, Rook, The Librarian). | Named adult bots are a design and copy commitment on top of the engine; the engine design is unaffected. | GAME with DESIGN, close in Phase 3. Recommendation: tiers stay data; names and portraits for App 1 are a Phase 3 nice-to-have that falls to 1.1 if Phase 3 is tight. |
+These thirteen were first left OPEN because each changes a gate, a budget or a scope line rather than a sentence. The team resolved them on 2026-10-04 in a single reconciliation pass. Each entry gives the short debate, the DECISION, its confidence, and the files edited; the owning document carries a matching "DECISION (reconciled 2026-10-04)" line at the relevant spot, and the resolved decisions are also entered in Section 3 (marked "reconciled 2.2").
+
+#### A. Cold launch budget
+
+Five numbers on three devices: 01 said 1.5 s on iPhone 12 and 1.0 s on current devices; 03 said p90 1.5 s on the SE 2nd gen; 04 and 05 said 800 ms p90 (target 500) on iPhone 11 or SE 3rd gen; 09 said 400 ms on iPhone 12.
+
+> **[QA]** One number, one device, one nightly test. I will take 05's 800 ms p90 on the SE 3rd gen as the gate because it is already in my MetricKit table, and 03's 1.5 s on the SE 2nd gen as the floor we never cross.
+
+> **[IOS]** 400 ms on an iPhone 12 was my aspiration for the Lobby with the shader off the launch path. It is not a gate I can promise with the dictionary prewarm in the same window. Retire it; keep 500 ms as the target column.
+
+> **[JOBS]** Fine, as long as "interactive" means the card is tappable, not that pixels appeared. If the first tap does nothing, the number lied.
+
+**DECISION:** cold launch to an interactive Lobby is 800 ms p90 (target 500 ms) on the iPhone SE 3rd gen as the release gate and the Phase 1 exit criterion, with 1.5 s p90 as the never-exceed floor on the iPhone SE 2nd gen; both measured nightly. The 400 ms, 1.0 s and iPhone 12 figures are retired. Owning document: 05 Section 4. **Confidence: Firm.** Files edited: app1-inkwell/01, 03, 04, 05, 08, 09; app2-inkwell-kids/03.
+
+#### B. Theme effort versus schedule
+
+07 priced Paper & Ink at 3.5 to 4.5 EW, Swiss Editorial at 2 to 2.5 EW and Night Lounge at 4 to 5 EW beyond the skeleton; 03 budgeted the Pro theme at 0.5 EW inside an 8 EW Phase 4; master idea 17 assumed one week per theme.
+
+> **[DESIGN]** My figures include design and asset production, not only engineering, which is half the gap. The other half is real: Night Lounge at full scope is glow, materials and a shader, and that is not 0.5 EW of anything.
+
+> **[ARCH]** Then split the theme in two. Tokens, a display face, static glow and the S3 sound pack is about 1.25 EW of engineering on the skeleton; the shader and animated materials are the expensive half, and they can wait.
+
+> **[JOBS]** I said I would cut Night Lounge to 1.1 before I cut a frame of the reveal, and I still would. But a Pro screen that sells plumbing is a bad Pro screen, so the reduced theme ships if W14 says there is room, and cut-list item 3 is the honest fallback. This one is the founder's money; it goes on the F6 line.
+
+**DECISION:** Paper & Ink and Swiss Editorial ship in 1.0 at full scope. Night Lounge ships in 1.0 at reduced scope (tokens, display face, static glow, S3 sound; no CRT shader, no animated materials, no ambient drift) inside a 2 EW Phase 4 theme budget (Swiss 0.75, Night Lounge 1.25), funded from the Phase 5 and 6 buffer. If the W14 capacity review cannot fund it, cut-list item 3 moves Night Lounge to 1.1 as the first Pro content drop. 07's effort figures are design plus engineering; 03's are engineering only. Owning document: 03 Section 8. **Confidence: Needs founder sign-off (F6).** Files edited: app1-inkwell/03, 07, 09; master.
+
+#### C. Beta program length versus the 24-week calendar
+
+05's four-stage beta (3 + 3 + 4 + 1 weeks, up to 2,000 testers) is eleven weeks; 03 fits two external betas into Phase 5's four weeks with 200 to 500 testers; the master reference said 50 to 200 weekly.
+
+> **[QA]** Two external betas two weeks apart is my floor and 03 already honors it. I wrote the eleven-week plan as what I would do with time I do not have.
+
+> **[ARCH]** Internal alpha has run since the first playable, so the launch build is on team phones for about twenty weeks. The external window being four weeks is survivable; the crash numbers come from the second beta's seven days.
+
+> **[JOBS]** The 2,000-tester open beta is what happens if we move the date, not the baseline. Keep it in the table as the extended stage so nobody has to invent it under pressure.
+
+**DECISION:** the committed program is 03's: Beta 1 (W19 to W20, closed, about 150 people in family and friend groups), Beta 2 (W21 to W22, public TestFlight link, 200 to 500 testers), release candidate week at W23. 05's "Kitchen table" and "Living room" cohorts are folded into Beta 1; its open beta survives only as the extended stage that runs if the date moves under the cut list. Owning document: 05 Section 5. **Confidence: Firm.** Files edited: app1-inkwell/03, 05; master.
+
+#### D. Performance floor device
+
+03 named the iPhone SE 2nd gen (A13) on iOS 17 as the floor and put it in the lab; 04 and 05 used iPhone 11 or SE 3rd gen (A15) as the baseline, with SE 3 in Tier A.
+
+> **[IOS]** Two devices, two jobs. The SE 2 is the oldest A13 class that runs iOS 17 and it keeps us honest about launch time. The SE 3 is where "no dropped frames" is measured, because that is the oldest phone a Pro buyer is likely to hold.
+
+> **[QA]** Agreed, and the SE 2 joins Tier B explicitly so the matrix says what the lab buys. Hero animations are gated on Tier A; floor budgets on the SE 2.
+
+**DECISION:** the iPhone SE 2nd gen is the launch-time performance floor and stays in the device lab (Tier B); the iPhone SE 3rd gen is the Tier A "flawless" device on which the release-gate numbers and zero dropped frames in hero animations are measured. Owning document: 05 Section 3. **Confidence: Firm.** Files edited: app1-inkwell/03, 04, 05.
+
+#### E. Nearby host loss behavior
+
+02 and 03: pause 30 s, then "continue as pass-and-play" with the ledger intact. 04 Section 8: host migration to the lowest `PeerID` after 5 s with a log rebroadcast.
+
+> **[ARCH]** Migration is the better protocol and I designed it. It is also two more message types, a membership agreement step and a test matrix I do not want in front of the W6 spike.
+
+> **[GAME]** Pause then fall back is the rule the table understands: the phone that is still here keeps the game. Nobody loses a point, which is the promise we made in 02.
+
+> **[IOS]** Ship the fallback. If beta shows hosts dropping every other game, migration is the first 1.1 case I write.
+
+**DECISION:** 1.0 ships 02's pause-then-fallback (30 s "Waiting for host", then pass-and-play with the ledger intact); host migration is designed in 04 but not built, and is the 1.1 improvement if beta shows frequent host drops. Owning document: 02 Section 4.3. **Confidence: Firm.** Files edited: app1-inkwell/02, 03 (1.1 list), 04; master (R7).
+
+#### F. Timer behavior when the app is backgrounded
+
+02 Section 12: the timer keeps running (anti-peeking) with a "left the table" mark; 02 edge case 13 and 04 Section 4.1: pause on interruption default on for pass-and-play and solo; 08: solo pauses, pass-and-play OPEN.
+
+> **[GAME]** The right answer differs by mode and by cause. Solo pauses because there is nobody to cheat. In pass-and-play a phone call is not peeking, so it pauses; switching to a dictionary app is peeking, so the clock runs and the mark shows. Nearby and async never pause, other people are waiting.
+
+> **[ARCH]** That is a per-mode `pausePolicy` in `IWRules` with three values, and the house rule toggles one of them. Cleaner than the boolean I wrote.
+
+> **[IOS]** iOS tells me the difference: a call or Siri is an audio-session interruption and a scene-phase change together; an app switch is the scene phase alone. Implementable without heuristics.
+
+**DECISION:** solo pauses and resumes with a 3-2-1 count; pass-and-play pauses on system interruptions (calls, Siri, alerts) and keeps running on a voluntary app switch with the "left the table" mark; nearby and async never pause and auto-submit at the deadline. The "Pause on interruption" house rule covers interruptions only. Owning document: 02 Section 12. **Confidence: Firm.** Files edited: app1-inkwell/02, 04, 08.
+
+#### G. Family-safe profile: reject or suppress profanity
+
+01 (DATA): profanity excluded from the valid list, the app will not validate it. 02 edge case 34: scored like any other word, never suggested or shown in share images. Master 5.3: the blocklist never applies to private in-game entries.
+
+> **[DATA]** Both statements are mine and the spec is the better one. A dictionary that says "ass" is not an animal is lying, and players know it. Family-safe is about what the app shows and promotes: hints, corrections, bot words, share cards.
+
+> **[JOBS]** I expected to disagree and I do not. The app never says the word; the table can. Mask it in anything that leaves the phone unless the adult toggle is on.
+
+> **[KIDS]** For the record, this is the adult app's stance. Inkwell Kids uses allow-lists and a boring flat response, and nothing here changes that.
+
+**DECISION:** the family-safe profile governs what the app shows and promotes, not what a private table may write: a profane word typed at the table is validated and scored like any other word; it never appears in suggestions, hints, "did you mean" corrections, bot answers, leaderboards or share images, and it is masked in anything shared unless the adult explicit toggle is on. Owning document: 02 edge case 34. **Confidence: Firm.** Files edited: app1-inkwell/01, 02; master (5.3).
+
+#### H. Localization package
+
+App 3 and the master reference depended on a Localization package that 04's nine-package list does not include.
+
+> **[ARCH]** A tenth package for one protocol and an English alphabet is a package for the sake of a diagram. `WritingSystem` goes in `IWCore`, the English implementation ships in `IWContent`'s base pack, and the non-Latin unit test runs in the Linux lane with the engine tests.
+
+> **[DATA]** Agreed as long as the pack format is unit-keyed from day one, which 04 Section 6 already requires. App 3's seven constraints stay App 1 acceptance criteria.
+
+**DECISION:** no Localization package in 1.0; the `WritingSystem` protocol lives in `IWCore`, its English implementation in `IWContent`'s base pack, the non-Latin CI test in the `IWCore` lane; a separate `IWLocalization` package is reconsidered at App 3 Phase A. Owning document: 04 Section 2. **Confidence: Firm.** Files edited: app1-inkwell/04; app3-multilingual; master (5.1, idea 24, R15).
+
+#### I. Kids app and `IWFeatures`
+
+04's dependency diagram had the InkwellKids target consuming `IWFeatures` and `IWDesignSystem`; Kids 03 decided tokens only and its own kid feature code.
+
+> **[ARCH]** Kids 03 is right and my diagram was a shortcut. The Kids target links the pure packages and `IWPersistence` directly, takes primitive tokens from `IWDesignSystem`, and never links `IWMultiplayer` or `IWAnalytics`.
+
+> **[KIDS]** Which is also the compliance story: the Kids binary cannot contain code that talks to the network if it never links the packages that do.
+
+**DECISION:** 04's diagram amended; InkwellKids depends on `IWCore`, `IWRules`, `IWContent`, `IWPersistence` and primitive tokens from `IWDesignSystem` only; feature code lives in the Kids packages per Kids 03 Section 2. Owning document: 04 Section 2. **Confidence: Firm.** Files edited: app1-inkwell/04; master (5.1 diagram).
+
+#### J. Letter draw duration
+
+01 and the master reference: a 1.2 s ceremony scaled by preset (1200/700/400 ms). 07, 08 and 09: M01 at 600 ms, with 09 as the governing catalog.
+
+> **[DESIGN]** They are two different animations. The ink wheel is a ceremony you want once; the stroke-by-stroke write is the thing you see three hundred times. 01 already said "skippable after the first time", which is the answer hiding in the brief.
+
+> **[JOBS]** First draw on the device gets the wheel. Every draw after that is the 600 ms write. If a repeat player ever waits for the letter, we got it wrong.
+
+> **[GAME]** Blitz drops to 400 ms, and the preset scaling otherwise collapses, because 600 ms is already short enough for Relaxed through Quick.
+
+> **[IOS]** Both are live glyphs under one `PhaseAnimator`, so the once-per-device flag is a single `UserDefaults` key and nothing else changes. We still confirm it on a phone at W4.
+
+**DECISION:** the first letter draw on a device is the full 1.2 s ink-wheel ceremony, remembered per device; every later draw is 09's M01 at 600 ms (Relaxed, Standard, Quick) and 400 ms for Blitz; always tap-to-skip, always a live glyph, 120 ms cross-fade under Reduce Motion. 09 is the governing catalog. Owning document: 09 Section 4. **Confidence: Provisional (confirmed on a device at the W4 demo).** Files edited: app1-inkwell/01, 09; master (2.4 table, 6.3, 6.8).
+
+#### K. Share card content
+
+Master idea 3: a spoiler-free card with no words. 03 Phase 2 and 08 Section 3.6: an image of the final ledger with names.
+
+> **[DESIGN]** The ledger is the party's record; it is what people hold up the phone to show. The glyph grid is for strangers. One card, two renderings, one toggle on the share sheet.
+
+> **[DATA]** My trademark worry in R4 was about our copy, not the players'. Words a player typed are their content; the family-safe mask still applies; the spoiler-free variant is the one we offer for public posting.
+
+> **[JOBS]** Default to the ledger. Nobody shares a grid of glyphs with the people who were at the table.
+
+**DECISION:** the default share image is the final ledger with names and words in the active theme; a one-tap spoiler-free variant (letter, category icons, 10/5/0 glyph grid, no words) exists for public posting; family-safe masking applies to both. Owning document: 08 Section 3.6. **Confidence: Firm.** Files edited: app1-inkwell/03, 08; master (idea 3, R4).
+
+#### L. Dictionary size budget
+
+02: ARCH 12 MB versus DATA 18 MB. 04: 6 MB base pack plus up to 12 MB downloaded on demand. Master: under 6 MB. 1.0 has no download path.
+
+> **[DATA]** The 18 MB was Movies and Cities at full length. Compressed as DAWGs with front coding they are closer to 4 MB together, which is why I can live with a 12 MB ceiling.
+
+> **[ARCH]** Then the rule is simple: 6 MB base pack, 12 MB hard ceiling for everything in the 1.0 bundle, CI fails over either. Movies and Cities ship in the bundle if they fit under the ceiling; if not, cut-list item 6 already exists. Downloads are a 1.x path once the CDN exists.
+
+**DECISION:** 6 MB base pack in the bundle; Movies and Cities in the bundle if the whole bundle stays under a 12 MB compressed hard ceiling, otherwise cut-list item 6 applies; the 18 MB figure is retired; no download path in 1.0. Measured at the W14 freeze. Owning document: 04 Section 6.4. **Confidence: Provisional (measured at the W14 dictionary freeze).** Files edited: app1-inkwell/02, 03, 04; master (5.3).
+
+#### M. Bot tiers and personalities
+
+02: three data-driven tiers (Casual, Clever, Ruthless) plus a Kids "Buddy" row. Master idea 19 in the v1.0 list: three named bots with ink portraits. Kids 02: four named characters.
+
+> **[GAME]** I still believe a table needs faces. I also cannot find the week in the plan, and a bot called Ruthless that answers "Fox" on purpose already has a personality.
+
+> **[DESIGN]** Three portraits and three names is copy, illustration and a no-eyes rule to honor. It is a 1.1 case I would enjoy writing, not a Phase 3 afterthought.
+
+> **[JOBS]** 1.1. The engine does not care and neither does the first-run player.
+
+**DECISION:** 1.0 ships the three data-driven tiers under their tier names with the concession line; named bots with ink portraits (master idea 19) move to the 1.1 candidate list and need a one-page case and a demo. Kids 02's named characters are unaffected. Owning document: 02 Section 11.4. **Confidence: Firm.** Files edited: app1-inkwell/02, 03 (1.1 list); master (idea 19, 7.1 DECISION).
 
 ---
 
@@ -90,14 +226,14 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | P7 | Monetization: free download plus one-time Inkwell Pro non-consumable via StoreKit 2. Free tier complete for solo and pass-and-play with classic rules, default theme, unlimited rounds. Pro unlocks nearby, online async, house rules, category packs, Night Lounge theme, stats. Host-pays for multi-phone sessions. No ads, no subscription, no consumables, ever. Themes are inside Pro for v1; a la carte theme packs are a later option. | app1-inkwell/01 §11; app1-inkwell/07 §9; master §4.4 (reconciled) | Founder |
 | P8 | Recommended price frame: Pro at $6.99 US with a $4.99 introductory price for four weeks, Family Sharing on. | app1-inkwell/01 §10 | Founder |
 | P9 | The "Ink" soft currency is rejected for both apps. | master §7 idea 18; app2-inkwell-kids/02 §10 | Firm |
-| P10 | Family-safe dictionary profile is the default in App 1; explicit content is an adult opt-in, device-level. | app1-inkwell/01 §12; app1-inkwell/02 §8 | Firm (what it means for validity is OPEN G) |
+| P10 | Family-safe dictionary profile is the default in App 1; explicit content is an adult opt-in, device-level. | app1-inkwell/01 §12; app1-inkwell/02 §8 | Firm (validity policy is G24) |
 | P11 | Second-round rate is the headline health metric for launch; under 70 percent stops feature work. | app1-inkwell/01 §7 | Firm |
 | P12 | Success targets: D1 40 percent, D7 20 percent, D30 10 percent, crash-free 99.8 percent, rating 4.7 or higher, Pro conversion 4 percent of D7 users. | app1-inkwell/01 §7 | Provisional |
 | P13 | Online async is in the Phase 5 plan behind Pro, Word Chain async first, NPAT async second; real-time online is out of v1 and demoted to a flag-gated skunkworks experiment; async is the pre-approved first cut if Phase 5 slips. | app1-inkwell/03 §19.1; app1-inkwell/04 §7.1; master §4.1 (reconciled) | Founder |
 | P14 | iPad: v1 ships a "runs well on iPad" layout; a bespoke iPad design is a Phase 7 pass. | app1-inkwell/01 §6; app1-inkwell/05 §3 (narrowed) | Firm |
 | P15 | Android is not on the 12-month roadmap; the three portable assets (engine spec plus fixtures, content packs, tokens) are maintained as if it were. | app1-inkwell/06 §8 | Firm |
 | P16 | Build natively from day one; keep the engine portable through schema, replay fixtures and a conformance runner, not a second language; web prototyping is allowed for rules experiments only and nothing from it is "ported". | app1-inkwell/06 §5 | Firm |
-| P17 | v1.0 ships master ideas 1 (ink-wheel draw), 3 (result cards), 17 (themes inside Pro), 19 (bot personalities, see OPEN M), 21 (pens-down hand-off), 22 (dispute screen), 24 (no A to Z in code). v1.1 takes 2, 4, 5, 7, 8, 10. v1.2 takes 13, 15 (link sharing only), 16. Parallel passes: 6, 11, 14. Skunkworks: 9, 12, 23, the tactile tile. Killed: the marketplace and the currency. | master §7.1 | Provisional |
+| P17 | v1.0 ships master ideas 1 (ink-wheel draw), 3 (result cards), 17 (themes inside Pro), 21 (pens-down hand-off), 22 (dispute screen), 24 (no A to Z in code). v1.1 takes 2, 4, 5, 7, 8, 10 and 19 (bot personalities, moved per 2.2 M). v1.2 takes 13, 15 (link sharing only), 16. Parallel passes: 6, 11, 14. Skunkworks: 9, 12, 23, the tactile tile. Killed: the marketplace and the currency. | master §7.1 (amended) | Provisional |
 | P18 | App 3 is design-for-now, build-later; its seven App 1 constraints (no hardcoded A to Z, grapheme iteration, normalize before compare, leading/trailing layout, locale-aware hero glyph, category identifiers, unit-keyed dictionary format) are App 1 acceptance criteria. | app3-multilingual §7 | Firm |
 
 ### 3.2 Game rules
@@ -119,11 +255,15 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | G13 | Autocorrect, predictive text and paste are disabled in timed rounds; timing uses a monotonic clock; answers are sealed by hash commitment in nearby play. | app1-inkwell/02 §12; app1-inkwell/08 §5.4 (reconciled) | Firm |
 | G14 | The scoring reveal is the protected "juice" moment and is never cut; it runs category by category, player by player, duplicates after each category, totals last, tap anywhere to skip, 6 s cap at four players, 8 s at eight. | app1-inkwell/02 §13, §17; app1-inkwell/08 §7 | Firm |
 | G15 | The first round is the tutorial: one-line card descriptions, faint placeholders, one-time inline captions, a "How to play" sheet under 120 words per game; no carousel. | app1-inkwell/02 §14; app1-inkwell/08 §2 | Firm |
-| G16 | Host-authoritative event ordering plus commit-reveal for answers in every networked mode; no CRDTs because every mode has a single orderer. | app1-inkwell/04 §8, §9 | Firm (host-loss behavior is OPEN E) |
+| G16 | Host-authoritative event ordering plus commit-reveal for answers in every networked mode; no CRDTs because every mode has a single orderer. | app1-inkwell/04 §8, §9 | Firm (host-loss behavior is G22) |
 | G17 | Stop-rule grace defaults to 5 s (0, 5, 10 s options); stop requires every field non-empty. | app1-inkwell/02 §2.2, §8; app1-inkwell/04 §8 and app1-inkwell/08 §4.2 (reconciled) | Firm |
 | G18 | Word Chain in the UX plan: vertical list with a lifted hero-letter strip; ribbon rendering only for Swiss Editorial with a VoiceOver list alternative; spiral is skunkworks. | app1-inkwell/08 §6 | Firm |
 | G19 | NPAT answer entry: Layout 3 (hybrid expanding stack) default; Layout 2 (paged) at AX3 and above and as a setting; no live dictionary validation; a quiet letter-mismatch helper is allowed; no swipe-to-dismiss; explicit Quit with confirmation. | app1-inkwell/08 §5 | Firm (helper in v1 is OPEN) |
 | G20 | One joke in the app: the bot's concession line. | app1-inkwell/08 §10 | Firm |
+| G21 | Bots in 1.0 are the three data-driven tiers under their tier names (Casual, Clever, Ruthless); named bots with ink portraits are a 1.1 candidate needing a one-page case and a demo (reconciled 2.2 M). | app1-inkwell/02 §11.4; master §7 idea 19; app1-inkwell/03 §11 | Firm |
+| G22 | Nearby host loss: 30 s "Waiting for host" pause, then "continue as pass-and-play" with the ledger intact; host migration is designed in 04 but is a 1.1 improvement only if beta shows frequent host drops (reconciled 2.2 E). | app1-inkwell/02 §4.3; app1-inkwell/04 §8, ADR-010 | Firm |
+| G23 | Backgrounding per mode: solo pauses and resumes with a 3-2-1 count; pass-and-play pauses on system interruptions only and keeps running on a voluntary app switch with the "left the table" mark; nearby and async never pause and auto-submit at the deadline; `pausePolicy` in `IWRules` (reconciled 2.2 F). | app1-inkwell/02 §12, §15; app1-inkwell/04 §4.1; app1-inkwell/08 §11 | Firm |
+| G24 | Family-safe profile governs what the app shows and promotes: a profane word typed at a private table is scored like any other word, never suggested, hinted, corrected to, used by bots, shown on leaderboards or in share images, and is masked in anything shared unless the adult explicit toggle is on (reconciled 2.2 G). | app1-inkwell/02 §15 edge case 34; app1-inkwell/01 §3; master §5.3 | Firm |
 
 ### 3.3 Platform and architecture
 
@@ -131,7 +271,7 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 |---|---|---|---|
 | A1 | Native SwiftUI, iOS 17.0 minimum for 1.0, Swift 6 strict concurrency, Xcode 16+, Swift Packages; the current shipping iOS is the primary design and test target; re-evaluate the minimum at 1.1 with App Store Connect data. Shared packages keep an iOS 17 deployment target for App 2. | app1-inkwell/03 §19.2; app1-inkwell/04 ADR-001; app1-inkwell/06 §6, §10; master §5.6 (all reconciled) | Founder |
 | A2 | P1 (pure deterministic engine) governs; conflicts between principles resolve in favor of P1, then P2 (offline-first, account-free local play). | app1-inkwell/04 §1 | Firm |
-| A3 | Nine packages: `IWCore`, `IWRules`, `IWContent`, `IWDesignSystem`, `IWPersistence`, `IWMultiplayer`, `IWAnalytics`, `IWFeatureFlags`, `IWFeatures`; the first three are platform-pure and built on Linux in CI. Other documents' GameEngine, Dictionary, Networking map onto these. | app1-inkwell/04 §2, ADR-005; app1-inkwell/03 §4 (reconciled) | Firm (Localization is OPEN H) |
+| A3 | Nine packages: `IWCore`, `IWRules`, `IWContent`, `IWDesignSystem`, `IWPersistence`, `IWMultiplayer`, `IWAnalytics`, `IWFeatureFlags`, `IWFeatures`; the first three are platform-pure and built on Linux in CI. Other documents' GameEngine, Dictionary, Networking map onto these. | app1-inkwell/04 §2, ADR-005; app1-inkwell/03 §4 (reconciled) | Firm (no Localization package, see A22) |
 | A4 | Reducer `(State, Event) -> (State, [Effect])` with an event-sourced, hash-chained match log as the source of truth; derived state is a cache with snapshots every 25 events; undo is an event. | app1-inkwell/04 §3, ADR-002 | Firm |
 | A5 | Engine time is monotonic ticks; `ContinuousClock` behind a protocol; `timerExpired` carries the deadline tick; no `Timer`. | app1-inkwell/04 §4, ADR-003 | Firm |
 | A6 | Persistence: GRDB.swift over SQLite behind a `MatchStore` protocol, WAL mode, explicit SQL migrations, schema v1 as specified; SwiftData is a parallel pass for the iCloud era; no iCloud sync in v1. | app1-inkwell/04 §5.3, ADR-004; master §5.5, §5.8 (reconciled) | Firm |
@@ -142,7 +282,7 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | A11 | Single `NavigationStack`, rounds as full-screen covers, no `TabView` in v1; protocol DI via `Environment`; previews mandatory per component state. | app1-inkwell/04 §10, ADR-016 | Firm |
 | A12 | Design tokens are generated from `tokens.json`; a lint rule forbids literal colors and durations in feature code. | app1-inkwell/04 §10.4, ADR-015; app1-inkwell/07 §10 | Firm |
 | A13 | Swift 6 strict concurrency everywhere; two actors (`MatchSession`, `Dictionary`); `@preconcurrency` exceptions documented in ADR-009. | app1-inkwell/04 §11 | Firm |
-| A14 | Performance budgets as in 04 §12 and 05 §4 are CI gates, verified weekly on devices. | app1-inkwell/04 §12; app1-inkwell/05 §4 | Provisional (cold launch number is OPEN A) |
+| A14 | Performance budgets as in 04 §12 and 05 §4 are CI gates, verified weekly on devices. | app1-inkwell/04 §12; app1-inkwell/05 §4 | Firm (cold launch number is Q19) |
 | A15 | Dual-definition motion tokens (full and reduced) and model-owned accessibility descriptions; accessibility audits are release gates. | app1-inkwell/04 §13 | Firm |
 | A16 | No third-party analytics SDK in v1; first-party local counters only; privacy label target "Data Not Collected"; a compile-time `KidsMode` removes `IWAnalytics`'s network sink. | app1-inkwell/04 §14, ADR-012; app1-inkwell/05 §7 | Firm |
 | A17 | Feature flags: local typed flags with a debug menu for v1; signed remote JSON post-launch; a flag never alters a saved match's rules. | app1-inkwell/04 §15, ADR-013 | Firm |
@@ -150,6 +290,9 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | A19 | Build pipeline: Xcode Cloud for app builds and TestFlight; GitHub Actions Linux runners for the pure packages; Fastlane for screenshots and metadata only. | app1-inkwell/04 §18, ADR-014 | Firm |
 | A20 | Approved platform parallel passes: Rive letter-reveal (3 days), web rules sandbox (2 days, GAME only); Kotlin conformance stub deferred to post-launch; Flutter and React Native passes not approved. | app1-inkwell/06 §7, §10 | Firm |
 | A21 | Zero servers in 1.0; infrastructure cost target $0 per month beyond the developer program fee. | app1-inkwell/03 §1; app1-inkwell/04 §7 | Firm |
+| A22 | No Localization package in 1.0: the `WritingSystem` protocol lives in `IWCore`, its English implementation in `IWContent`'s base pack, the non-Latin unit CI test in the `IWCore` Linux lane; a separate `IWLocalization` package is reconsidered at App 3 Phase A (reconciled 2.2 H). | app1-inkwell/04 §2, ADR-005; app3-multilingual §3; master §5.1 | Firm |
+| A23 | The InkwellKids target links `IWCore`, `IWRules`, `IWContent` and `IWPersistence` directly, takes primitive tokens only from `IWDesignSystem`, never links `IWFeatures`, `IWMultiplayer` or `IWAnalytics`; 04's diagram amended (reconciled 2.2 I). | app1-inkwell/04 §2; app2-inkwell-kids/03 §2 | Firm |
+| A24 | Dictionary size: 6 MB base pack in the bundle; Movies and Cities in the bundle only if everything bundled stays under a 12 MB compressed hard ceiling, otherwise cut-list item 6; the 18 MB figure is retired; no download path in 1.0 (reconciled 2.2 L). | app1-inkwell/04 §6.4; app1-inkwell/02 §9.2, §17; app1-inkwell/03 §7; master §5.3 | Provisional (measured at the W14 freeze) |
 
 ### 3.4 Design and motion
 
@@ -166,12 +309,14 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | D9 | SwiftUI-first animation stack (core, PhaseAnimator, KeyframeAnimator); SpriteKit overlay for particles; SwiftUI Shader for ink bleed, grain and ambient drift with static fallbacks; Lottie only for small illustrative loops; Rive is skunkworks; at most one third-party animation runtime in the shipping binary, possibly none; the bake-off decides M01 and shader fallbacks. | app1-inkwell/09 §5; master §6.3 (reconciled) | Provisional |
 | D10 | Springs for interactive and layout motion; authored curves only for the letter-draw path trim and the reveal cadence. | app1-inkwell/09 §10 | Firm |
 | D11 | The animation catalog is capped at 32 entries for v1; a new entry requires retiring one. | app1-inkwell/09 §10 | Firm |
-| D12 | Letter draw duration scales with the timer preset and is always tap-to-skip, always a live glyph, with a 120 ms cross-fade under Reduce Motion. The absolute duration is OPEN J. | master §6.8; app1-inkwell/09 §4 | Provisional |
+| D12 | Letter draw: the first draw on a device is the full 1.2 s ink-wheel ceremony, remembered per device; every later draw is M01 at 600 ms (Relaxed, Standard, Quick) and 400 ms for Blitz; always tap-to-skip, always a live glyph, 120 ms cross-fade under Reduce Motion; 09 is the governing catalog (reconciled 2.2 J). | app1-inkwell/09 §4; master §6.8; app1-inkwell/01 §5 | Provisional (confirmed on a device at the W4 demo) |
 | D13 | Sound: S1 Foley is the default pack, S2 Tonal ships with Swiss and as the fallback, S3 Electric ships with Night Lounge in Pro; sound packs are theme bundle contents, not separate purchases; no sound on launch, ever; no music during a round. | app1-inkwell/09 §6 | Firm |
 | D14 | Haptics: system patterns via `sensoryFeedback` where they fit, Core Haptics AHAP files for the eight roles with a pattern identity; AHAP files live in the theme bundle keyed by role; intensity setting Off, Light, Standard; no haptic without a visual. | app1-inkwell/09 §7; app1-inkwell/08 §8 | Firm |
 | D15 | Prototyping: Figma for tokens and screens, Principle or Origami for timing studies, Xcode Previews for the truth; hidden developer menu with 10x slow motion and a Reduce Motion override in internal builds. | app1-inkwell/09 §9 | Firm |
 | D16 | Timer VoiceOver announcements at 30, 20, 10, 5 to 1 and "Time's up"; one-field-at-a-time is automatic at AX3 and above and a setting otherwise. | app1-inkwell/08 §9 | Firm |
 | D17 | Copy voice: a sharp, warm friend; short sentences; no "Oops", no emoji, at most one exclamation mark in celebrations; the 30 reference strings in 08 §10 are the style guide. | app1-inkwell/08 §10 | Firm |
+| D18 | Theme scope for 1.0: Paper & Ink and Swiss Editorial at full scope; Night Lounge at reduced scope (tokens, display face, static glow, S3 sound; no CRT shader, no animated materials, no ambient drift) inside a 2 EW Phase 4 theme budget; if the W14 capacity review cannot fund it, cut-list item 3 moves Night Lounge to 1.1 as the first Pro content drop. 07's effort figures are design plus engineering; 03's are engineering only (reconciled 2.2 B). | app1-inkwell/03 §8, §18; app1-inkwell/07 §6, §9; master §7 idea 17 | Founder (F6) |
+| D19 | Share image: the final ledger with names and words in the active theme by default; a one-tap spoiler-free variant (letter, category icons, 10/5/0 glyph grid, no words) for public posting; family-safe masking on both (reconciled 2.2 K). | app1-inkwell/08 §3.6; app1-inkwell/03 §6; master §7 idea 3, R4 | Firm |
 
 ### 3.5 Quality and release
 
@@ -184,9 +329,9 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | Q5 | Never cut: scoring reveal, letter draw ceremony, pass-and-play, challenge flow, Reduce Motion alternatives, VoiceOver support, family-safe default, first-60-seconds spec, two betas. | app1-inkwell/03 §18 | Firm |
 | Q6 | Dictionary v1 freezes at W14; later fixes ride point releases except offensive-content fixes, which ship immediately. | app1-inkwell/03 §7, §20 | Firm |
 | Q7 | Test pyramid: Swift Testing for new tests, XCUITest for twelve critical flows, pointfreeco snapshot tests for the design system, property tests at 1,000 iterations per PR and 50,000 nightly, replay fixtures from every bug, accessibility audits automated per PR and manual per release candidate. Coverage gate 90 percent on the pure packages, target 95 percent. | app1-inkwell/05 §2; app1-inkwell/03 §16 (reconciled) | Firm |
-| Q8 | Device matrix Tiers A, B, C with iPad in Tier C plus one physical iPad smoke pass per release candidate; the oldest supported iOS point release is tested on a physical device per release candidate. | app1-inkwell/05 §3 (narrowed) | Firm (floor device is OPEN D) |
+| Q8 | Device matrix Tiers A, B, C with iPad in Tier C plus one physical iPad smoke pass per release candidate; the oldest supported iOS point release is tested on a physical device per release candidate. | app1-inkwell/05 §3 (narrowed) | Firm (floor device is Q20) |
 | Q9 | Crash-free sessions at or above 99.8 percent in external beta for seven days is the gate; 99.9 percent is the production target at 30 days; hang rate under 0.1 percent; zero lost matches across 100 force-quits. | app1-inkwell/05 §4 | Firm |
-| Q10 | Two external TestFlight betas inside Phase 5 as the committed minimum, recruited through the five personas and family groups; Sentry in TestFlight builds only; beta consent note tells parents children may be present and never asks for a child's name. | app1-inkwell/03 §9; app1-inkwell/05 §5 | Provisional (program length is OPEN C) |
+| Q10 | Two external TestFlight betas inside Phase 5 as the committed minimum, recruited through the five personas and family groups; Sentry in TestFlight builds only; beta consent note tells parents children may be present and never asks for a child's name. | app1-inkwell/03 §9; app1-inkwell/05 §5 | Firm (program shape is Q21) |
 | Q11 | App Store Review checklist executed with evidence per submission, mapped to guideline sections; the live guidelines are re-read before each submission; review notes include a demo video, a sandbox Pro account and the challenge-vote explanation. | app1-inkwell/05 §6; app1-inkwell/03 §17 | Firm |
 | Q12 | Privacy label "Data Not Collected" at launch; `ITSAppUsesNonExemptEncryption = NO`; any SDK that would change the label needs an ADR. | app1-inkwell/05 §7, §8 | Firm |
 | Q13 | Age rating: answer the questionnaire conservatively and accept the computed result (likely 9+ or 13+ for peer-visible typed words). | app1-inkwell/05 §9 | Firm |
@@ -195,6 +340,9 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | Q16 | The 48-item "perfect app" bar is adopted; six items (Reduce Motion alternatives, zero accessibility audit failures, VoiceOver full match, purchase and restore in production, privacy label matches behavior, 99.8 percent crash-free in beta) are non-waivable. | app1-inkwell/05 §17 | Firm |
 | Q17 | Rating prompt, if shown, only after a completed multi-round session with a positive signal, never during a round or on first launch, at most once per version. | app1-inkwell/03 §9; app1-inkwell/05 §16 | Provisional (whether to show it at all is OPEN) |
 | Q18 | App 2 Phase 0 starts at W25 on the shared packages, after App 1 ships. | app1-inkwell/03 §11; app2-inkwell-kids/03 §7 | Firm |
+| Q19 | Cold launch to interactive Lobby: 800 ms p90 (target 500 ms) on iPhone SE 3rd gen as the release gate and Phase 1 exit criterion; 1.5 s p90 never-exceed on iPhone SE 2nd gen; measured nightly; the 400 ms, 1.0 s and iPhone 12 figures are retired (reconciled 2.2 A). | app1-inkwell/05 §4; app1-inkwell/01 §5, §7; app1-inkwell/03 §5, §20; app1-inkwell/04 §12; app1-inkwell/09 §10; app2-inkwell-kids/03 §6 | Firm |
+| Q20 | iPhone SE 2nd gen (A13, iOS 17) is the performance floor and stays in the lab (Tier B); iPhone SE 3rd gen (A15) is the Tier A "flawless" device where release-gate numbers and zero dropped frames in hero animations are measured (reconciled 2.2 D). | app1-inkwell/05 §3; app1-inkwell/03 §4, §19.2; app1-inkwell/04 §12 | Firm |
+| Q21 | Beta program: Beta 1 (W19 to W20, closed, about 150 people in family and friend groups), Beta 2 (W21 to W22, public TestFlight link, 200 to 500 testers), release candidate week at W23; internal alpha continuous from the first playable; the 2,000-tester open beta runs only if the date moves under the cut list (reconciled 2.2 C). | app1-inkwell/05 §5; app1-inkwell/03 §9; master §5.7 | Firm |
 
 ### 3.6 Kids edition
 
@@ -246,7 +394,7 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | # | Decision | Source | Confidence |
 |---|---|---|---|
 | M1 | App 3 is design-for-now, build-later; no engineering committed; it most likely ships as language packs inside App 1 (option B), with a separate app (A) decided after App 1 reaches 1.2 and a Kids bilingual mode (C) surviving as a feature once a pack exists. | app3-multilingual §5, §7 | Firm |
-| M2 | "Letter" generalizes to a `Unit` supplied by a language pack through a `WritingSystem` protocol (draw pool, first unit, last unit, normalization, collation, layout direction); the engine never inspects a unit beyond equality. | app3-multilingual §3 | Firm (package home is OPEN H) |
+| M2 | "Letter" generalizes to a `Unit` supplied by a language pack through a `WritingSystem` protocol (draw pool, first unit, last unit, normalization, collation, layout direction); the engine never inspects a unit beyond equality. | app3-multilingual §3 | Firm (protocol lives in `IWCore`, see A22) |
 | M3 | Prioritized language list: Spanish, German, French, Hindi, Japanese, Portuguese (Brazil), Korean, Arabic, Chinese (research only). | app3-multilingual §4 | Provisional |
 | M4 | Phased story: Research (2 EW plus consultants), Spanish pilot (5 to 6 EW), Scale (17 to 20 EW over releases); each pack gets native-speaker QA. | app3-multilingual §6 | Provisional |
 
@@ -272,8 +420,8 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | O10 | Whether App 1 gets a non-marketed "Family" preset (looser timers, simpler categories). | app2-inkwell-kids/01 §2, §8 | JOBS with KIDS | Phase 3 |
 | O11 | Pre-order versus scheduled release for 1.0. | app1-inkwell/03 §20 | JOBS | Phase 5 (W20) |
 | O12 | Whether the ratings prompt is shown at all in 1.0. | app1-inkwell/05 §19 | JOBS with QA | Phase 5 |
-| O13 | Share card content: full ledger with names versus spoiler-free glyph grid (editor OPEN K). | master §7 idea 3; app1-inkwell/08 §3.6 | DESIGN with DATA | Phase 2 |
-| O14 | Named bot personalities for App 1 in 1.0 or 1.1 (editor OPEN M). | master §7 idea 19; app1-inkwell/02 §11.4 | GAME with DESIGN | Phase 3 |
+| O13 | Closed (2.2 K, D19): ledger with names and words by default, spoiler-free variant one tap away. | master §7 idea 3; app1-inkwell/08 §3.6 | DESIGN with DATA | Closed |
+| O14 | Closed (2.2 M, G21): named bots move to 1.1. | master §7 idea 19; app1-inkwell/02 §11.4 | GAME with DESIGN | Closed |
 
 ### 4.2 Game rules
 
@@ -283,12 +431,12 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | O16 | Designated-judge mode in App 1 v1 (classroom persona) or only in App 2. | app1-inkwell/02 §16, §17 | GAME with JOBS | Phase 3 (demo first) |
 | O17 | Whether the "Stop!" rule is on by default for Blitz presets. | app1-inkwell/02 §17 | GAME | Phase 3 |
 | O18 | Stop-rule grace in pass-and-play: per remaining player or immediate end. | app1-inkwell/08 §12 | GAME | Phase 2 |
-| O19 | Backgrounding during a round: pause or forfeit, by mode (editor OPEN F). | app1-inkwell/08 §12; app1-inkwell/02 §12, §15; app1-inkwell/04 §4.1 | GAME | Phase 1 |
+| O19 | Closed (2.2 F, G23): per-mode pause policy; no forfeit. | app1-inkwell/08 §12; app1-inkwell/02 §12, §15; app1-inkwell/04 §4.1 | GAME | Closed |
 | O20 | A 2-second grace window for late submissions in nearby play to absorb drift. | app1-inkwell/04 §4, §22 | GAME with ARCH | Phase 5 (beta data) |
-| O21 | Nearby host-loss behavior: pause-then-pass-and-play versus host migration (editor OPEN E). | app1-inkwell/02 §4.3; app1-inkwell/04 §8 | ARCH with GAME | Phase 1 (W6 spike) |
-| O22 | Family-safe profile: reject profanity for scoring or only suppress it from suggestions and shares (editor OPEN G). | app1-inkwell/01 §3; app1-inkwell/02 §15; master §5.3 | DATA with GAME, JOBS | Phase 1 |
+| O21 | Closed (2.2 E, G22): pause-then-pass-and-play in 1.0; host migration is a 1.1 candidate. | app1-inkwell/02 §4.3; app1-inkwell/04 §8 | ARCH with GAME | Closed |
+| O22 | Closed (2.2 G, G24): score it, never promote it, mask it in anything shared. | app1-inkwell/01 §3; app1-inkwell/02 §15; master §5.3 | DATA with GAME, JOBS | Closed |
 | O23 | Live letter-mismatch helper: ship in v1 or hold for a usability test. | app1-inkwell/08 §12 | DESIGN with GAME | Phase 2 |
-| O24 | Final on-device dictionary size budget (12 versus 18 MB; bundle-only in 1.0) (editor OPEN L). | app1-inkwell/02 §17; app1-inkwell/04 §6.4 | DATA with ARCH | Phase 3 (W14 freeze) |
+| O24 | Closed (2.2 L, A24): 6 MB base, 12 MB bundle ceiling; the only remaining question is whether Movies and Cities fit, measured at the W14 freeze (cut-list item 6 otherwise). | app1-inkwell/02 §17; app1-inkwell/04 §6.4 | DATA with ARCH | Closed (measure at W14) |
 | O25 | Whether accepted async disputes feed the shared curation queue or only the local house dictionary. | master §3.6, §9.2 | DATA | Post-launch |
 
 ### 4.3 Platform and architecture
@@ -304,9 +452,9 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 | O32 | iCloud sync of match history in 1.x and which persistence path. | app1-inkwell/04 §5.3, §22; master §5.8, §9.2 | ARCH | Post-launch |
 | O33 | Sentry in production after the 30-day review. | app1-inkwell/04 §16, §22; app1-inkwell/05 §19 | QA with ARCH | Post-launch (30 days) |
 | O34 | `IWFeatures` as one package with many products or many packages. | app1-inkwell/04 §2 | ARCH | Phase 1 |
-| O35 | Where the `WritingSystem` protocol and Localization live: inside `IWCore`/`IWContent` or a tenth package (editor OPEN H). | app3-multilingual §3; master §5.1 | ARCH | Phase 0 |
-| O36 | Amend 04's dependency diagram so InkwellKids does not consume `IWFeatures` (editor OPEN I). | app1-inkwell/04 §2; app2-inkwell-kids/03 §2 | ARCH | Phase 0 |
-| O37 | Cold launch budget and baseline device: one number, one device (editor OPEN A, D). | app1-inkwell/01, 03, 04, 05, 09 | QA with IOS | Phase 0 |
+| O35 | Closed (2.2 H, A22): `WritingSystem` in `IWCore`, no tenth package in 1.0. | app3-multilingual §3; master §5.1 | ARCH | Closed |
+| O36 | Closed (2.2 I, A23): 04's diagram amended. | app1-inkwell/04 §2; app2-inkwell-kids/03 §2 | ARCH | Closed |
+| O37 | Closed (2.2 A and D, Q19 and Q20): 800 ms p90 on the SE 3rd gen as the gate, 1.5 s on the SE 2nd gen as the floor. | app1-inkwell/01, 03, 04, 05, 09 | QA with IOS | Closed |
 | O38 | Rive adoption after the parallel pass; M01 implementation (SwiftUI trim versus Rive). | app1-inkwell/06 §10; app1-inkwell/09 §10 | DESIGN with IOS | Phase 2 (W8 bake-off) |
 | O39 | iOS 18 zoom transition (M31) dual path or iOS 17 fallback only. | app1-inkwell/09 §10 | IOS | Phase 2 |
 
@@ -314,21 +462,21 @@ Confidence: **Firm**, **Provisional**, **Founder** (needs founder sign-off). "So
 
 | # | Open question | Source | Owner | Close by |
 |---|---|---|---|---|
-| O40 | Night Lounge CRT scanline shader in v1 or later (GPU budget and photosensitivity review). | app1-inkwell/07 §9, §16; app1-inkwell/09 §10 | IOS with DESIGN | Phase 3 |
+| O40 | Closed by D18: the CRT scanline shader is not in 1.0 (reduced-scope Night Lounge); revisit for 1.1 with a GPU budget and a photosensitivity review. | app1-inkwell/07 §9, §16; app1-inkwell/09 §10 | IOS with DESIGN | Closed (1.1 review) |
 | O41 | Final licensed display face for Night Lounge versus the OFL fallback. | app1-inkwell/07 §16 | DESIGN | Phase 1 |
 | O42 | Whether custom theme sounds ship with the theme or are a separate Pro feature (reconciled default: with the theme, per 09 §6). | app1-inkwell/07 §16; app1-inkwell/09 §6 | GAME with DESIGN | Phase 2 |
 | O43 | Paper grain: shader versus static tile, pending battery numbers. | app1-inkwell/07 §16; app1-inkwell/09 §10 | IOS | Phase 2 (bake-off step 3) |
 | O44 | Timer tick haptic default on or off (TestFlight survey). | app1-inkwell/09 §10 | GAME with QA | Phase 5 |
-| O45 | Letter draw duration: 600 ms (09) versus 1.2 s scaled (01, master) (editor OPEN J). | app1-inkwell/09 §4; master §6.8 | DESIGN with JOBS | Phase 1 (W4 demo) |
+| O45 | Closed (2.2 J, D12): 1.2 s ceremony once per device, then 600 ms (400 ms Blitz); confirmed on a device at W4. | app1-inkwell/09 §4; master §6.8 | DESIGN with JOBS | Closed (confirm at W4) |
 | O46 | Whether the letter is announced to VoiceOver immediately or at the end of the draw for parity. | master §6.8, §9.2 | DESIGN with IOS | Phase 2 |
 | O47 | Share image letter style: handwriting face for all themes or the theme's own letter. | app1-inkwell/08 §12 | DESIGN | Phase 2 |
-| O48 | Theme scope versus schedule: Night Lounge in 1.0 at reduced scope or 1.1 (editor OPEN B). | app1-inkwell/03 §8; app1-inkwell/07 §8 | JOBS with DESIGN, ARCH | Phase 0 |
+| O48 | Closed (2.2 B, D18): Night Lounge at reduced scope in 1.0 within a 2 EW budget, or 1.1 via cut-list item 3; founder sign-off on F6. | app1-inkwell/03 §8; app1-inkwell/07 §9 | JOBS with DESIGN, ARCH | Closed (F6) |
 
 ### 4.5 Quality and release
 
 | # | Open question | Source | Owner | Close by |
 |---|---|---|---|---|
-| O49 | Beta program length versus the 24-week calendar (editor OPEN C). | app1-inkwell/03 §9; app1-inkwell/05 §5 | QA with ARCH, JOBS | Phase 2 (W10) |
+| O49 | Closed (2.2 C, Q21): two external betas inside Phase 5 plus the RC week; the open beta runs only if the date moves. | app1-inkwell/03 §9; app1-inkwell/05 §5 | QA with ARCH, JOBS | Closed |
 | O50 | Final app name and keyword set after legal check. | app1-inkwell/05 §19; app1-inkwell/01 §8 | JOBS | Phase 0 (reserve), Phase 3 (final by W14) |
 | O51 | Whether the age rating questionnaire computes 9+ or 13+ for peer-visible typed words; accept the result. | app1-inkwell/05 §19 | QA | Phase 5 |
 | O52 | iPad large-canvas pass-and-play layout (Phase 7 bespoke pass). | app1-inkwell/05 §3; app1-inkwell/01 §6 | DESIGN | Phase 7 |
@@ -376,7 +524,7 @@ These are the calls only the founder can make. Each carries the team's one-line 
 | F3 | Pro price point and introductory pricing | $6.99 with a $4.99 launch price for four weeks; confirm after Phase 5 TestFlight feedback. |
 | F4 | iOS minimum | iOS 17.0 for 1.0; re-evaluate at 1.1 with real usage data; never adopt an API because it is new. |
 | F5 | Default visual direction | Paper & Ink as the identity, confirmed on a device at the W4 demo against Night Lounge; Swiss Editorial free, Night Lounge in Pro, Playful Pop parked, Quiet Minimal as the skeleton. |
-| F6 | Theme scope for 1.0 versus the schedule | Paper & Ink and Swiss Editorial in 1.0; Night Lounge either reduced to tokens and sound (no shader, no animated glass) or moved to 1.1 as the first Pro content drop. The 44 EW plan cannot absorb 07's full theme estimates. |
+| F6 | Theme scope for 1.0 versus the schedule | Paper & Ink and Swiss Editorial in 1.0; Night Lounge in 1.0 at reduced scope (tokens, display face, static glow, sound; no shader, no animated materials) inside a 2 EW Phase 4 theme budget taken from the Phase 5 and 6 buffer, which makes cut-list item 1 likely; if W14 shows no room, cut-list item 3 moves it to 1.1 as the first Pro content drop. The 44 EW plan cannot absorb 07's full theme estimates. Team decision recorded in Section 2.2 B and D18; needs the founder's yes. |
 | F7 | Online multiplayer in v1 at all | Yes to async over Game Center in Phase 5 behind Pro, Word Chain first; it is pre-approved as the first cut if Phase 5 slips. No real-time online in v1 under any circumstances. |
 | F8 | Nearby multiplayer in v1 | Yes in Phase 4 behind Pro, contingent on the W5 to W6 spike; accept a four-device cap rather than slip. |
 | F9 | Kids app name | Inkling if the trademark search is clean, with "Kids" in the subtitle; otherwise Inkwell Kids. Never "Jr.". |
@@ -387,6 +535,8 @@ These are the calls only the founder can make. Each carries the team's one-line 
 ---
 
 ## 6. Closing team round-table
+
+*Editor's note: the round-table was recorded before the Section 2.2 reconciliation pass. The fights named below (theme scope, cold-launch numbers, beta length, the letter draw, profanity, named bots) are now closed in Section 2.2; the voices stand as written because they explain why each decision landed where it did.*
 
 > **[JOBS]** Seventeen documents and about a hundred decisions, and the product still fits in one sentence: two paper games, zero friction, scoring that is a show. I am proud of that. I am also on record disagreeing with two of my own colleagues. I think DESIGN's three-theme plan is one theme too many for a 44-engineer-week schedule with no slack, and I will cut Night Lounge to 1.1 before I cut a frame of the reveal. And I still think the ratings prompt should not exist in 1.0; QA will win that argument with data and I will lose it gracefully, but not before launch.
 
