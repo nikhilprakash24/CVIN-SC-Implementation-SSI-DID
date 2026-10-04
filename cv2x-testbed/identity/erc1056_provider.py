@@ -818,7 +818,10 @@ class ERC1056Provider(IdentityProvider):
             if found_key is not None:
                 return found_key, found_valid_to, hops
 
-            # DIDRevoked carries no previousChange, so the chain ends there.
+            # Every event, DIDRevoked included (since the D21 fix), carries
+            # previousChange; the chain ends only at genesis (0) or on a
+            # malformed pointer. An old-ABI DIDRevoked (no previousChange)
+            # still terminates the walk here rather than looping.
             if previous_change is None or previous_change >= block:
                 break
             block = previous_change

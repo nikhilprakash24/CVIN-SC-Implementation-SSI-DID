@@ -94,6 +94,23 @@ contract CVINCombinedIdentity {
         uint256 previousChange
     );
 
+    /**
+     * @dev ERC-1056-style change marker for the ERC-735 side. addClaim and
+     *      removeClaim advance `changed[identity]`, so without an event that
+     *      carries `previousChange` the did:ethr pointer walk
+     *      (changed -> previousChange -> ... -> 0) was cut at every claim
+     *      operation (defect D22). Emitted alongside ClaimAdded / ClaimRemoved
+     *      with previousChange = the `changed` value before this operation;
+     *      `removed` distinguishes the two.
+     */
+    event DIDClaimChanged(
+        address indexed identity,
+        bytes32 claimId,
+        uint256 topic,
+        bool removed,
+        uint256 previousChange
+    );
+
     // ERC-735-style
     event ClaimAdded(
         bytes32 indexed claimId,
@@ -245,6 +262,7 @@ contract CVINCombinedIdentity {
         });
 
         emit ClaimAdded(claimId, identity, topic, scheme, issuer, signature, data, uri);
+        emit DIDClaimChanged(identity, claimId, topic, false, changed[identity]);
         changed[identity] = block.number;
     }
 
@@ -269,6 +287,7 @@ contract CVINCombinedIdentity {
 
         delete _claims[identity][claimId];
         emit ClaimRemoved(claimId, identity, claim.topic, claim.issuer);
+        emit DIDClaimChanged(identity, claimId, claim.topic, true, changed[identity]);
         changed[identity] = block.number;
     }
 

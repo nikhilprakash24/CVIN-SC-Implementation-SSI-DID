@@ -453,7 +453,13 @@ contract MOBIVIDRegistry is ERC1056Registry {
     /**
      * @dev Get DID string for vehicle
      * @param vehicleIdentity Vehicle address
-     * @return DID string in format: did:ethr:0x{chainId}:{address}
+     * @return DID string in format: did:ethr:0x{chainId hex}:0x{40 lowercase hex}
+     *
+     * The chain id is the minimal (unpadded) lowercase hex of block.chainid
+     * with a 0x prefix, as the did:ethr method specification writes it;
+     * the address is the 0x-prefixed, zero-padded 40-hex-char form. Earlier
+     * revisions omitted the 0x on the address (defect D10), which made the
+     * string a non-conformant did:ethr identifier.
      *
      * Note: This is a view helper. In practice, DID resolution
      * happens off-chain by parsing events.
@@ -463,13 +469,10 @@ contract MOBIVIDRegistry is ERC1056Registry {
         view
         returns (string memory)
     {
-        // Format: did:ethr:0x{chainId}:{address}
-        // Chain ID is retrieved from block.chainid
-        // In production, implement proper DID string formatting
         return string(abi.encodePacked(
             "did:ethr:0x",
             _toHexString(block.chainid),
-            ":",
+            ":0x",
             _toHexString(uint256(uint160(vehicleIdentity)), 20)
         ));
     }

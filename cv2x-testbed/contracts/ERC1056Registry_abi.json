@@ -112,6 +112,12 @@
         "internalType": "uint256",
         "name": "revokedAt",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "previousChange",
+        "type": "uint256"
       }
     ],
     "name": "DIDRevoked",

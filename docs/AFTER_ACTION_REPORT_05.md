@@ -36,10 +36,13 @@ register, update the defect log, close.
 - 2026-10-04 — report opened; state check and the D11 code read requested.
 - **F1 (D11) done**: `verify_message` now binds verification to the key registered for the vehicle (record lookup by `vehicle_did`; embedded key must match; unknown/revoked rejected; on-chain `isRevoked` when attached). Six chain-free regression tests (the provider's constructor probes the chain, so the test initialises the base class directly); Python side **87 passed**. Finding while reading the code: the vehicle key is generated *after* the birth transaction and never anchored on-chain — recorded as **D11b**, to land after the D21 registry changes. Confirmed the SUMO harness verifies through the VC layer, so the V2V results never ran on the defective path.
 - F2–F4, F6 (ERC-1056 family, MOBI) and F5 (token VINs) delegated as two groups with disjoint files; running.
+- **F2, F3, F4, F6 done** (ERC-1056 family and MOBI): `ERC1056Registry` emits `previousChange` on `DIDRevoked`, rejects a second revocation and gates every mutator on `notRevoked` (D21); `CVINCombinedIdentity` emits `DIDClaimChanged(…, previousChange)` on claim ops (D22); `CVINVehicleDIDRegistry` uses a 100-year attribute validity instead of `type(uint256).max` — the birth record is reachable at 83,290 gas (D18); `MOBIVIDRegistry.getVehicleDID` emits `0x` (D10). 18 regression tests; MOBI copies byte-identical; provider ABI/bytecode regenerated. Gas moved: revokeIdentity +547, changeOwner +2,213 (the `revoked` SLOAD), addClaim +2,328 — recorded for the benchmark re-execution. Not fixed (D16): the inherited `changeOwner` bypasses MOBI's ownership history — needs odometer/authority inputs, left for the author. Eight demos that asserted the old behaviour now fail and will be updated after the token group lands.
 
 ## 3. Decisions
 - **D-E** — contract fixes are allowed to move gas; the results of record are regenerated
   and the register says which rows changed and why, rather than freezing numbers that
   no longer describe the code.
+
+- **D-F** — revocation is terminal: every mutator, including `revokeDelegate`/`revokeAttribute`, reverts for a revoked identity (the agent offered a looser variant; rejected — clean-up after revocation would re-open the change list a resolver relies on).
 
 ## 4. Closing — *(written last)*
