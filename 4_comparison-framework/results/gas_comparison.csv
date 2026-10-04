@@ -1,13 +1,13 @@
 standard,Deploy registry gasUsed,Deploy registry rel. cost (x cheapest),Create identity gasUsed,Create identity rel. cost (x cheapest),Update key/attribute gasUsed,Update key/attribute rel. cost (x cheapest),Update via 4337 EntryPoint gasUsed,Update via 4337 EntryPoint rel. cost (x cheapest),Add delegate/claim gasUsed,Add delegate/claim rel. cost (x cheapest),Revoke gasUsed,Revoke rel. cost (x cheapest),Transfer ownership gasUsed,Transfer ownership rel. cost (x cheapest)
 ERC-1056,958726,2.10,52594,1.01,35494,1.01,—,—,54831,1.55,35046,1.38,51754,1.82
 ERC-721,2721476,5.96,542378,10.39,119737,3.41,—,—,48302,1.37,27677,1.09,174670,6.15
-ERC-725,—,—,519384,9.95,137096,3.91,—,—,119996,3.40,43388,1.71,28390,1.00
-ERC-725xy,—,—,1680816,32.20,49937,1.42,—,—,—,—,—,—,28834,1.02
-ERC-735,—,—,1466088,28.09,77691,2.21,—,—,292708,8.30,72142,2.84,28724,1.01
+ERC-725,—,—,519384,9.95,137096,3.90,—,—,119996,3.40,43388,1.71,28390,1.00
+ERC-725xy,—,—,1680816,32.19,49937,1.42,—,—,—,—,—,—,28834,1.02
+ERC-735,—,—,1535776,29.41,77713,2.21,—,—,292730,8.30,72195,2.84,28746,1.01
 ERC-1155,2304865,5.05,103913,1.99,49130,1.40,—,—,57147,1.62,30625,1.20,83947,2.96
 ERC-4337,456294,1.00,759088,14.54,49343,1.41,96173,1.00,47557,1.35,25429,1.00,28539,1.01
-LSP8,1592737,3.49,149430,2.86,55051,1.57,—,—,—,—,41838,1.65,80576,2.84
-MOBI-VID-V2,4025159,8.82,299143,5.73,306941,8.75,—,—,35277,1.00,75052,2.95,200023,7.05
-CVIN-Combined,1421834,3.12,52192,1.00,35092,1.00,—,—,292366,8.29,73795,2.90,51747,1.82
+LSP8,1614592,3.54,149615,2.87,55114,1.57,—,—,—,—,42141,1.66,80600,2.84
+MOBI-VID-V2,4025159,8.82,299143,5.73,306941,8.74,—,—,35277,1.00,75052,2.95,200023,7.05
+CVIN-Combined,1490166,3.27,52216,1.00,35116,1.00,—,—,287570,8.15,69721,2.74,51747,1.82
 
-Conditions,"solc 0.8.24 (optimizer on, 200 runs, viaIR)",OpenZeppelin 5.0.2,network hardhat-local,measured 2026-10-03T23:01:41.438Z
+Conditions,"solc 0.8.24 (optimizer on, 200 runs, viaIR)",OpenZeppelin 5.0.2,network hardhat-local,measured 2026-10-04T05:26:18.368Z

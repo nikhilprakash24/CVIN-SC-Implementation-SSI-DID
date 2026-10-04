@@ -212,6 +212,36 @@ describe("CVINVehicleLSP8 (LSP8 Identifiable Digital Asset, representative)", fu
             expect(await lsp8.exists(TOKEN_ID)).to.be.false;
         });
 
+        // K-8 (REVIEW_02): tokenId = keccak256(VIN), so a re-mint of the same VIN
+        // reuses the tokenId. revokeVehicle used to leave _tokenIdData in place, so
+        // the new token read the old token's inspection / registration data.
+        it("K-8: re-minting a revoked VIN does not return the old token's data", async function () {
+            const INSPECTION = await lsp8.DATA_KEY_INSPECTION();
+            const REGISTRATION = await lsp8.DATA_KEY_REGISTRATION();
+            const VIN_KEY = await lsp8.DATA_KEY_VIN();
+            const oldInspection = ethers.toUtf8Bytes("inspection:PASS:2026-01-01");
+            await lsp8.connect(authority).setDataForTokenId(TOKEN_ID, INSPECTION, oldInspection);
+            await lsp8.connect(authority).setDataBatchForTokenIds([TOKEN_ID], [REGISTRATION], [ethers.toUtf8Bytes("reg:ON-1234")]);
+
+            await lsp8.connect(authority).revokeVehicle(TOKEN_ID, "0x");
+            // A burned token exposes no data either.
+            expect(await lsp8.getDataForTokenId(TOKEN_ID, INSPECTION)).to.equal("0x");
+
+            await lsp8.connect(authority).mintVehicle(buyer.address, TEST_VIN);
+            expect(await lsp8.tokenOwnerOf(TOKEN_ID)).to.equal(buyer.address);
+            expect(await lsp8.getDataForTokenId(TOKEN_ID, INSPECTION)).to.equal("0x");
+            expect(await lsp8.getDataForTokenId(TOKEN_ID, REGISTRATION)).to.equal("0x");
+            const batch = await lsp8.getDataBatchForTokenIds([TOKEN_ID, TOKEN_ID], [INSPECTION, VIN_KEY]);
+            expect(batch[0]).to.equal("0x");
+            // The fresh mint re-writes its own VIN key.
+            expect(ethers.toUtf8String(batch[1])).to.equal(TEST_VIN);
+
+            // New data written to the re-minted token is readable as usual.
+            const newInspection = ethers.toUtf8Bytes("inspection:PASS:2027-01-01");
+            await lsp8.connect(authority).setDataForTokenId(TOKEN_ID, INSPECTION, newInspection);
+            expect(await lsp8.getDataForTokenId(TOKEN_ID, INSPECTION)).to.equal(ethers.hexlify(newInspection));
+        });
+
         it("rejects revocation from a caller that is neither authority nor token owner", async function () {
             await expect(
                 lsp8.connect(attacker).revokeVehicle(TOKEN_ID, "0x")

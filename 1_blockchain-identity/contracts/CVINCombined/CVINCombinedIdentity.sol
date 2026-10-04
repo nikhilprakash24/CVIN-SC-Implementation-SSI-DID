@@ -42,7 +42,9 @@ pragma solidity ^0.8.24;
  *      signed content from then on. Keying on the digest rather than the
  *      signature bytes also rejects a malleated (high-s) copy of the old
  *      signature. The issuer re-issues by signing new data. An OWNER removal
- *      is not a revocation and records nothing. There is still no nonce or
+ *      is not a revocation and records nothing; the issuer can still revoke
+ *      the content afterwards with revokeClaimContent, which does not need
+ *      the claim to be anchored (Pass 2). There is still no nonce or
  *      expiry in the signed payload, so an older, never-revoked claim for the
  *      same (issuer, topic) can be re-anchored after the issuer replaced it.
  */
@@ -64,7 +66,11 @@ contract CVINCombinedIdentity {
     /// @dev delegates[identity][delegateType][delegate] = validity expiry timestamp.
     mapping(address => mapping(bytes32 => mapping(address => uint256))) public delegates;
 
-    /// @dev Block number of the identity's last change (event-log linked list).
+    /// @dev Block number of the identity's last DID event (DIDOwnerChanged,
+    ///      DIDDelegateChanged, DIDAttributeChanged): the head of the ERC-1056
+    ///      changed -> previousChange event-log linked list. Claim add/remove
+    ///      does not touch it (REVIEW_02 K-6), so a resolver walking the chain
+    ///      never lands on a block that holds only a claim event.
     mapping(address => uint256) public changed;
 
     // ============ ERC-735-style claim state ============
@@ -86,8 +92,8 @@ contract CVINCombinedIdentity {
 
     /// @notice Issuer-revoked claim content (REVIEW_02 K-2).
     /// @dev key = keccak256(abi.encodePacked(issuer, keccak256(abi.encodePacked(address(this), identity, topic, data)))),
-    ///      i.e. the issuer and the raw digest it signed. Set only by an
-    ///      issuer removal. No extra event or view, to keep the deployment
+    ///      i.e. the issuer and the raw digest it signed. Set by an issuer
+    ///      removal or by revokeClaimContent. No extra event or view, to keep the deployment
     ///      cost of the fix small; verifiers query this getter.
     mapping(bytes32 => bool) public revokedClaims;
 
@@ -266,7 +272,9 @@ contract CVINCombinedIdentity {
         });
 
         emit ClaimAdded(claimId, identity, topic, scheme, issuer, signature, data, uri);
-        changed[identity] = block.number;
+        // changed[] is deliberately NOT advanced (REVIEW_02 K-6): it is the
+        // ERC-1056 DID-event chain head, and ClaimAdded carries no
+        // previousChange. Claim history is indexed by its own events.
     }
 
     /// @notice Remove a claim (identity owner or the claim's issuer).
@@ -280,18 +288,6 @@ contract CVINCombinedIdentity {
             "CVINCombined: unauthorized"
         );
 
-        // Remove from topic index (swap-and-pop).
-        bytes32[] storage ids = _claimIdsByTopic[identity][claim.topic];
-        for (uint256 i = 0; i < ids.length; i++) {
-            if (ids[i] == claimId) {
-                ids[i] = ids[ids.length - 1];
-                ids.pop();
-                break;
-            }
-        }
-
-        delete _claims[identity][claimId];
-
         if (msg.sender == claim.issuer) {
             revokedClaims[
                 keccak256(
@@ -303,8 +299,45 @@ contract CVINCombinedIdentity {
             ] = true;
         }
 
-        emit ClaimRemoved(claimId, identity, claim.topic, claim.issuer);
-        changed[identity] = block.number;
+        _deleteClaim(identity, claimId, claim.topic, claim.issuer);
+    }
+
+    /**
+     * @notice Issuer-side revocation of signed claim CONTENT about `identity`,
+     *         whether or not it is currently anchored (REVIEW_02 K-2, Pass 2).
+     * @dev removeClaim needs the claim to exist, so an owner could pre-empt a
+     *      revocation by removing the claim first (the issuer's removeClaim
+     *      then reverts) and re-anchor the old signature later. This records
+     *      keccak256(msg.sender, digest) unconditionally; it can only ever
+     *      block claims signed by the caller itself, so it needs no access
+     *      control. If the caller's claim for `topic` is anchored with exactly
+     *      this data it is removed too; other (re-issued) data is left alone.
+     */
+    function revokeClaimContent(address identity, uint256 topic, bytes calldata data) external {
+        revokedClaims[keccak256(abi.encodePacked(msg.sender, _claimDigest(identity, topic, data)))] = true;
+
+        bytes32 claimId = keccak256(abi.encodePacked(msg.sender, topic));
+        Claim storage claim = _claims[identity][claimId];
+        if (claim.issuer != address(0) && keccak256(claim.data) == keccak256(data)) {
+            _deleteClaim(identity, claimId, topic, msg.sender);
+        }
+    }
+
+    /// @dev Unindex (swap-and-pop), delete and emit ClaimRemoved. changed[]
+    ///      is not advanced (K-6), see addClaim.
+    function _deleteClaim(address identity, bytes32 claimId, uint256 topic, address issuer) private {
+        bytes32[] storage ids = _claimIdsByTopic[identity][topic];
+        for (uint256 i = 0; i < ids.length; i++) {
+            if (ids[i] == claimId) {
+                ids[i] = ids[ids.length - 1];
+                ids.pop();
+                break;
+            }
+        }
+
+        delete _claims[identity][claimId];
+
+        emit ClaimRemoved(claimId, identity, topic, issuer);
     }
 
     /// @notice O(1) claim lookup for on-chain verifiers.

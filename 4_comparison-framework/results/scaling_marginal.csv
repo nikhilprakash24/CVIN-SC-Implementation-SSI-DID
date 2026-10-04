@@ -1,10 +1,10 @@
 # Experiment A: marginal-cost stationarity (gasUsed of K sequential same-type appends)
 standard,append_op,first_op_gas,op50_gas,delta_gas,slope_gas_per_op,r2,constant_O1
 ERC-1056,setAttribute,52594,35494,-17100,-40.235,0.0588,yes
-ERC-735,addClaim,292804,275729,-17075,-40.316,0.0591,yes
+ERC-735,addClaim,292826,275751,-17075,-40.316,0.0591,yes
 ERC-1155,issueCredential,57147,40047,-17100,-40.235,0.0588,yes
-CVIN-Combined,addClaim,309538,275376,-34162,-80.478,0.0589,yes
+CVIN-Combined,addClaim,287642,270580,-17062,-40.243,0.059,yes
 MOBI-VID-V2,recordLifecycleEvent,306941,255641,-51300,-120.706,0.0588,yes
 
-# Conditions,K=50 appends/standard on a fresh chain,"solc 0.8.24 (optimizer 200, viaIR)",OZ 5.0.2,chainId 31337,measured 2026-10-03
+# Conditions,K=50 appends/standard on a fresh chain,"solc 0.8.24 (optimizer 200, viaIR)",OZ 5.0.2,chainId 31337,measured 2026-10-04
 # Legend,"gasUsed = exact receipt.gasUsed; slope/R^2 are exact least-squares fits vs op index. O(1)=yes means marginal append cost does not grow with history (a negative slope is a one-off cold-slot first write, amortized thereafter)."
