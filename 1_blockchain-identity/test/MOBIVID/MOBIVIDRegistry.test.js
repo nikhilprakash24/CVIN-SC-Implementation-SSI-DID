@@ -498,7 +498,8 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       const garbage = ethers.toUtf8Bytes("0xsignature-placeholder");
       await expect(
         registry.connect(dmv).attestEvent(eventId, vehicle.address, garbage)
-      ).to.be.reverted;
+      ).to.be.revertedWithCustomError(registry, "ECDSAInvalidSignatureLength")
+        .withArgs(garbage.length); // REVIEW_02 Q-14: assert the ECDSA length check, not any revert
 
       // (3) A well-formed signature by the WRONG key (a role-holder forging
       //     another party's attestation) reverts.
