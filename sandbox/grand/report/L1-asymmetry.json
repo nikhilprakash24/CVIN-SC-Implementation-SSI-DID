@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T05:40:36.116Z",
+  "generatedAt": "2026-10-04T06:27:10.546Z",
   "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
   "options": [
     "cvin-combined",
@@ -431,7 +431,7 @@
       "outcome": "ok",
       "gasUsed": "331461",
       "reason": null,
-      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x914281… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:VINCVINCOMBINED00)"
+      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0xF4EEc5… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:VINCVINCOMBINED00)"
     },
     {
       "option": "erc-1056-uport",
@@ -511,7 +511,7 @@
       "outcome": "ok",
       "gasUsed": "287041",
       "reason": null,
-      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x7fca83e59827ed6ffa16c0ded3d5ba645ac7e013902…)"
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x305d3a63a15babf96b4d235d9129c0794672ea2f8bf…)"
     },
     {
       "option": "cvin-combined",
@@ -751,7 +751,7 @@
       "outcome": "ok",
       "gasUsed": "76352",
       "reason": null,
-      "note": "execute(CALL, CVINExecuteTarget, 0, setValue(435795)) — real call, msg.sender==identity: true; target deploy=133519 not counted; op 'changeOwner' mapped to this demo; owner-gated by msg.sender, signature ignored; resolved as did:erc725:0x7a69:0x40a42Baf86Fc821f972Ad2aC878729063CeEF403"
+      "note": "execute(CALL, CVINExecuteTarget, 0, setValue(225287)) — real call, msg.sender==identity: true; target deploy=133519 not counted; op 'changeOwner' mapped to this demo; owner-gated by msg.sender, signature ignored; resolved as did:erc725:0x7a69:0x40a42Baf86Fc821f972Ad2aC878729063CeEF403"
     },
     {
       "option": "erc-735",

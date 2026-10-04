@@ -19,7 +19,7 @@ M = measured in the comparison or an experiment · I = implemented but not used 
 | Off-chain creation (identity exists before any transaction) | I | I | I | I | — | — | — | — | — | — | — | — | — |
 | Message signing / verification (off-chain hot path) | — | M | — | — | I | — | — | — | — | — | — | — | I |
 
-Options: 13 · families: 14 · cells: 182 · empty: 0 · unreviewed: 173/182
+Options: 13 · families: 14 · cells: 182 · empty: 0 · unreviewed: 172/182
 
 Per option — M / I / — counts:
 

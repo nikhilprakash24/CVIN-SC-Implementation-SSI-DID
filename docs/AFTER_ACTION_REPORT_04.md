@@ -64,6 +64,76 @@ the two parallel streams that are now one trunk. The notebook index remains requ
 - **Implementation step S3 done**: nine mechanism files parameterised over all eleven adapters, 99 records (72 ok / 27 N/A / 0 fail), exact gas per cell, N/A reasons recorded, and **seven disagreements** between what the tests observed and what the generated manifests declared (ERC-725's proxy deployment is an explicit creation; `removeKey`/`setData`-clear/`removeClaim` are sub-identity revocations the manifests marked not-applicable; both ERC-1056 variants hold claims off-chain; ERC-725's `approve` is a stub) — the input for the manifest review that gates S7. Acceptance here: 99 passing alone, **319 passing** for the whole tree. Two fixes on the way: the directory invocation does not work with Hardhat (files, not directories — README corrected); `js-yaml` was only a transitive dependency and is now declared. S9: the contract workflow's `npx hardhat test` now collects L1 with L2, and the python-layers job covers L3 and L4, so every layer runs in CI.
 - **Manifest review (gate for S7)**: the seven L1 disagreements were resolved as *generator rules* (`REVIEW` in `make_manifests.py`, each with the observed evidence) rather than hand edits, and the generator now preserves any family a human marks `reviewed: true` across regenerations (the S1 follow-up). Regenerated: 182 cells, 0 empty, 9 reviewed by rule; L1 re-run **99 passing, 88/88 agreements, 0 disagreements**. The remaining 173 auto stances agree with the tests and stay `reviewed: false` for the author's pass.
 - **Implementation step S7 done** (two groups): **92 demo scripts, 1,625 steps**, every public function of every contract exercised (coverage computed from the ABIs, not hand-written), one JSON step per call with exact gas and an on/off-chain flag, a README per option with the family→demo→functions table and the asymmetry notes. All 92 run green here. The demos did the sandbox's real job: they surfaced **twenty further potential defects** (D7–D26 in `docs/DEFECT_LOG.md`), including an unreachable birth record (`setVehicleAttributes` overflow), two ways the `did:ethr` linked list is severed (revocation and claim ops), a MOBI verifier trusting the key inside the message, a non-conformant `did:ethr` string, VIN case-sensitivity minting duplicate identities, and ERC-725's `execute` being a stub (the manifest reason is corrected). High-severity items block the chapter claims they touch until fixed or narrowed (log §C).
+- **Implementation step S8 done**: `sandbox/grand/run.py all` orchestrates smoke → L1 → whole Hardhat tree → Python layers → all 92 demos and assembles `report/GRAND_REPORT.md` (plus `demos.{json,md}`); first full run **ALL OK**. Stage table:
+  | smoke | ✓ | {} | 3.1 |
+  | L1 | ✓ | {'passing': 99, 'failing': 0} | 4.1 |
+  | L1+L2 | ✓ | {'passing': 319, 'failing': 0} | 9.9 |
+  | L3+L4 | ✓ | {'passed': 81} | 6.8 |
+  | demos | ✓ | {'demos': 92, 'steps': 1625, 'flagged': 87, 'failures': []} |  |
+  | create | ✓ 0 | ✓ 77792 | ✓ 54639 | ✓ 103881 | ✓ 759088 | ✓ 542474 | ✓ 519384 | ✓ 1730753 | ✓ 1371394 | ✓ 149430 | ✓ 276671 |
+  | controller-change | ✓ 68813 | ✓ 68842 | ✓ 51669 | ✓ 83704 | ✓ 28527 | ✓ 179562 | ✓ 28378 | ✓ 28822 | ✓ 28690 | ✓ 80576 | ✓ 35456 |
+  | key-or-delegate | ✓ 72262 | ✓ 72219 | ✓ 35044 | — | ✓ 47569 | — | ✓ 137096 | — | — | — | ✓ 35265 |
+  | attribute | ✓ 51576 | ✓ 52016 | ✓ 37180 | ✓ 94150 | ✓ 94471 | ✓ 120137 | — | ✓ 95166 | — | ✓ 100282 | ✓ 37463 |
+  | claim | ✓ 331461 | — | — | ✓ 57115 | — | — | — | — | ✓ 314543 | ✓ 148815 | ✓ 287041 |
+  | revoke | ✓ 71322 | ✓ 32868 | ✓ 74823 | ✓ 37417 | — | ✓ 27677 | ✓ 41399 | ✓ 33870 | ✓ 69438 | ✓ 41838 | ✓ 74836 |
+  | transfer | — | — | — | ✓ 83704 | ✓ 28527 | ✓ 179562 | — | — | — | ✓ 80576 | ✓ 179826 |
+  | signed-op | — | ✓ 96053 | — | — | ✓ 69405 | — | ✓ 28358 | ✓ 76352 | — | — | — |
+  | resolve | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 |
+  | cvin-combined | attributes | ✓ | 13 | 1,849,305 | 1 | 1.9 |
+  | cvin-combined | authorisation-roles | ✓ | 13 | 2,057,147 | 2 | 1.7 |
+  | cvin-combined | claims | ✓ | 29 | 2,656,771 | 1 | 2.6 |
+  | cvin-combined | controller | ✓ | 14 | 1,816,329 | 0 | 1.9 |
+  | cvin-combined | did-resolution | ✓ | 12 | 2,091,042 | 0 | 2.4 |
+  | cvin-combined | keys-delegates | ✓ | 13 | 1,583,972 | 1 | 1.9 |
+  | cvin-combined | lifecycle-history | ✓ | 13 | 1,824,439 | 1 | 2.5 |
+  | cvin-combined | offchain-creation | ✓ | 11 | 1,646,287 | 0 | 1.9 |
+  | cvin-combined | revocation | ✓ | 15 | 2,256,201 | 0 | 2.4 |
+  | cvin-combined | vin-linkage | ✓ | 10 | 1,972,932 | 0 | 1.8 |
+  | erc-1056-uport | attributes | ✓ | 28 | 3,110,117 | 2 | 2.5 |
+  | erc-1056-uport | authorisation-roles | ✓ | 13 | 2,825,536 | 1 | 1.9 |
+  | erc-1056-uport | controller | ✓ | 30 | 3,182,650 | 1 | 2.3 |
+  | erc-1056-uport | creation | ✓ | 15 | 2,881,476 | 0 | 1.8 |
+  | erc-1056-uport | did-resolution | ✓ | 14 | 2,893,347 | 0 | 2.3 |
+  | erc-1056-uport | keys-delegates | ✓ | 22 | 3,141,268 | 0 | 2.0 |
+  | erc-1056-uport | lifecycle-history | ✓ | 13 | 2,978,277 | 0 | 2.0 |
+  | erc-1056-uport | offchain-creation | ✓ | 13 | 2,858,695 | 0 | 2.4 |
+  | erc-1056-uport | revocation | ✓ | 21 | 3,379,633 | 2 | 2.0 |
+  | erc-1056-uport | signed-execution | ✓ | 13 | 1,253,949 | 0 | 2.3 |
+  | erc-1056-uport | vin-linkage | ✓ | 15 | 2,863,870 | 2 | 1.8 |
+  | erc-1056-vehicle | attributes | ✓ | 10 | 972,579 | 1 | 2.2 |
+  | erc-1056-vehicle | claims | ✓ | 10 | 756,396 | 0 | 2.0 |
+  | erc-1056-vehicle | controller | ✓ | 13 | 837,610 | 1 | 2.3 |
+  | erc-1056-vehicle | creation | ✓ | 13 | 975,070 | 1 | 1.9 |
+  | erc-1056-vehicle | did-resolution | ✓ | 11 | 828,404 | 0 | 2.4 |
+  | erc-1056-vehicle | keys-delegates | ✓ | 11 | 896,831 | 1 | 1.6 |
+  | erc-1056-vehicle | lifecycle-history | ✓ | 13 | 954,226 | 1 | 2.3 |
+  | erc-1056-vehicle | offchain-messaging | ✓ | 10 | 831,219 | 1 | 1.8 |
+  | erc-1056-vehicle | revocation | ✓ | 22 | 1,058,251 | 2 | 2.4 |
+  | erc-1155 | attributes | ✓ | 13 | 213,637 | 2 | 1.7 |
+  | erc-1155 | authorisation-roles | ✓ | 19 | 551,229 | 1 | 2.4 |
+  | erc-1155 | claims | ✓ | 24 | 537,693 | 3 | 2.3 |
+  | erc-1155 | controller | ✓ | 27 | 607,297 | 3 | 2.1 |
+  | erc-1155 | creation | ✓ | 18 | 311,487 | 1 | 1.9 |
+  | erc-1155 | lifecycle-history | ✓ | 14 | 470,610 | 0 | 2.3 |
+  | erc-1155 | revocation | ✓ | 16 | 340,694 | 3 | 2.0 |
+  | erc-1155 | token-economics | ✓ | 13 | 117,357 | 2 | 2.3 |
+  | erc-1155 | vin-linkage | ✓ | 11 | 224,993 | 1 | 1.8 |
+  | erc-4337 | attributes | ✓ | 15 | 302,272 | 0 | 2.4 |
+  | erc-4337 | controller | ✓ | 21 | 257,650 | 0 | 2.0 |
+  | erc-4337 | creation | ✓ | 14 | 21,062 | 0 | 2.4 |
+  | erc-4337 | keys-delegates | ✓ | 19 | 205,742 | 1 | 1.8 |
+  | erc-4337 | lifecycle-history | ✓ | 15 | 295,592 | 0 | 2.3 |
+  | erc-4337 | signed-execution | ✓ | 25 | 258,512 | 0 | 2.0 |
+  | erc-721 | attributes | ✓ | 24 | 451,954 | 0 | 2.4 |
+  | erc-721 | authorisation-roles | ✓ | 22 | 856,635 | 2 | 1.9 |
+  | erc-721 | controller | ✓ | 37 | 1,103,280 | 0 | 2.5 |
+  | erc-721 | creation | ✓ | 38 | 1,278,637 | 0 | 1.8 |
+  | erc-721 | did-resolution | ✓ | 8 | 0 | 0 | 2.6 |
+  | erc-721 | lifecycle-history | ✓ | 18 | 568,094 | 0 | 1.8 |
+  | erc-721 | revocation | ✓ | 16 | 338,694 | 2 | 2.5 |
+  | erc-721 | token-economics | ✓ | 43 | 1,005,301 | 1 | 2.0 |
+  | erc-721 | vin-linkage | ✓ | 13 | 1,000,824 | 2 | 2.5 |
+  The grand sandbox of the original 2025 sandbox guide — one base to build and test anything — now exists as a single command over the canonical code, with every layer and every feature demo reporting into one document.
 
 - **D-B** keep both ERC-1056 variants as named sub-options (default). **D-C** archive the research copies (default). **D-D** asymmetry discussion as a chapter-6 section (default). All reversible on the author's word.
 
