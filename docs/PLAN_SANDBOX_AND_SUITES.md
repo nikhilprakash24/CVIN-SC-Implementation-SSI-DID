@@ -68,7 +68,7 @@ capabilities()                 -> manifest subset           # what the adapter c
 | S6 ✅ 2026-10-04 | **L4 suite.** Turn the 12 use cases into pytest cases (each use case = one test with its own fixture chain); add a V2V harness smoke test (`--simulate`, 10 vehicles, 2 s) and reproducibility tests for the three experiments (`--render-only` + schema checks) | `pytest sandbox/suites/L4-exemplar-interactions` green in < 3 min |
 | S7 | **Demos.** Per option, one script per capability family exercising every relevant feature the manifest marks "implemented" — including the ones the comparison never uses (royalties, toll, guardian recovery, batch credentials, LSP data keys, execute(), signed ops) — printing gas and the on/off-chain stance | every "implemented" manifest entry has a demo that runs |
 | S8 | **Grand runner.** `run.py` orchestrates deploy → L1–L4 → demos → report for one or all options; the report is the asymmetry chapter's data | `python3 sandbox/grand/run.py all` completes and writes `report/` |
-| S9 | **CI.** One job per layer; L4 nightly; the matrix generator and the grand report as artifacts | four green jobs |
+| S9 ◐ 2026-10-04 (Python job green on GitHub; L1 job pending S3) | **CI.** One job per layer; L4 nightly; the matrix generator and the grand report as artifacts | four green jobs |
 | S10 | **Thesis.** Chapter 6 (or a new chapter 5 section) "Feature asymmetry: the union versus the intersection" written from `grand/report` | section drafted with the table and the on/off-chain discussion |
 
 Order: S0 → S1 → S2 → S3 (the first visible result: the cross-option L1 table) → S4/S5
