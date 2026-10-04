@@ -98,44 +98,61 @@
       80
     ],
     "per_interval_ms": [
-      0.63747,
-      1.2713,
-      2.5387,
-      5.07024,
-      10.36288
+      0.81694,
+      1.60899,
+      3.18674,
+      6.39915,
+      13.13381
     ],
     "per_interval_p95_ms": [
-      0.8901,
-      1.43764,
-      2.79931,
-      5.3745,
-      12.3349
+      0.94944,
+      1.9403,
+      4.0802,
+      8.88746,
+      17.63213
     ],
     "per_interval_mean_ms": [
-      0.66455,
-      1.28983,
-      2.59034,
-      5.14193,
-      10.86366
+      0.82792,
+      1.65786,
+      3.35325,
+      6.69336,
+      13.67747
     ],
     "per_message_median_ms": [
-      0.12377,
-      0.121838,
-      0.12138,
-      0.120988,
-      0.131095
+      0.156475,
+      0.153963,
+      0.152493,
+      0.153463,
+      0.155267
     ],
     "budget_ms": 100.0,
     "saturation_P": null,
-    "extrapolated_saturation_P": 771.8,
+    "extrapolated_saturation_P": 609.2,
     "fit": {
-      "slope_ms_per_neighbor": 0.129628,
-      "intercept_ms": -0.042349,
-      "r2": 0.9999
+      "slope_ms_per_neighbor": 0.164265,
+      "intercept_ms": -0.063088,
+      "r2": 0.9998
     },
     "intervals_per_point": 300,
     "warmup_per_point": 50,
-    "saturation_note": "per-interval verification stays within the 100 ms budget across the whole tested range (P<=80); saturation is beyond the tested range, extrapolated P*~=772 neighbors",
+    "saturation_note": "per-interval verification stays within the 100 ms budget across the whole tested range (P<=80); saturation is beyond the tested range, extrapolated P*~=609 neighbors",
+    "environment": {
+      "date_utc": "2026-10-04T09:23:35+00:00",
+      "commit": "fd25d0529c6e652833ed491f9b2584edc5f56509",
+      "tree_clean": true,
+      "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+      "logical_cpus": 4,
+      "platform": "Linux-6.18.44-fc-v64-x86_64-with-glibc2.39",
+      "python": "3.11.15",
+      "libraries": {
+        "coincurve": "21.0.0",
+        "eth-account": "0.14.0",
+        "eth-keys": "0.8.0",
+        "cryptography": "49.0.0",
+        "numpy": "2.4.6",
+        "web3": "8.0.0"
+      }
+    },
     "method": "Reuses SSIIdentityLayer from sumo_identity_integration.py (real secp256k1 EIP-191 sign at sender, signature recovery + cached-peer address comparison at receiver = warm V2V verify path). One receiver verifies P pre-cached neighbors per 100 ms interval; P neighbors are signed fresh each interval OUTSIDE the timed region, and only the receiver's P verifications are timed (time.perf_counter). Reported per_interval_ms is the MEDIAN over the timed intervals. P* is the smallest P whose median exceeds 100 ms; if none within P<=80 it is extrapolated from a least-squares linear fit.",
     "honesty": "Crypto verification LOAD ONLY (RESEARCH_AUDIT \u00a74.4). Excludes radio propagation, MAC-layer contention, channel loss and queueing; BSMs are delivered in-process. This is a CPU-time saturation bound, not end-to-end V2V latency. Warm path (cached peers) only \u2014 first-contact VC verification is amortised and not included per interval."
   },
