@@ -31,10 +31,10 @@ Three design rules follow from the audit (F1–F10):
 | `erc725` | ERC-725 CVIN_DID_ERC725 (proxy/key-manager) | **one contract per identity** | storage (key map + key array) | ✅ | `adapters/erc725.adapter.js` |
 | `erc735` | ERC-735 CVINVehicleClaimHolder (owner plays the ERC-734 MANAGEMENT key) | **one contract per identity**; claims = issuer-signed, owner-anchored | storage (claim struct incl. signature + data, topic index) | ✅ | `adapters/erc735.adapter.js` |
 | `erc1155` | ERC-1155 CVINVehicleCredential1155 | the **vehicle address** is the identity; balances = credentials (soulbound) | storage (balances, VIN maps) | ✅ | `adapters/erc1155.adapter.js` |
-| `erc725xy` | ERC-725 X/Y (LSP0-style generic data store) | contract per identity | storage (ERC725Y key/value) | ⏳ | |
-| `lsp8` | LUKSO LSP8 identifiable digital asset | token per identity, universal receiver | storage | ⏳ | |
-| `erc4337` | ERC-4337 smart account (EntryPoint + UserOperation) | account per identity | storage + bundler indirection | ⏳ | |
-| `cvin` | CVIN-Combined hybrid (ERC-1056 anchor + off-chain VC + ERC-1155 status) | address DID + status tokens | event log + minimal storage | ⏳ | |
+| `erc725xy` | ERC-725 X+Y smart account `CVINVehicleERC725XY` (generic executor + key/value store, single owner) | **contract per identity** | storage (ERC-725Y key/value) | ✅ | `adapters/erc725xy.adapter.js` |
+| `lsp8` | LSP8 representative `CVINVehicleLSP8` (single issuing authority; operators and LSP1 hooks omitted) | shared collection; bytes32 token = keccak(VIN) | storage (per-token key/value, generation-versioned) | ✅ | `adapters/lsp8.adapter.js` |
+| `erc4337` | `CVINMinimalEntryPoint` + `CVINVehicleAccount` (research harness: no bundler/paymaster/deposits) | **account per identity**; owner key rotates, address stable | storage + EntryPoint indirection (U5) | ✅ | `adapters/erc4337.adapter.js` |
+| `cvin` | CVIN-Combined `CVINCombinedIdentity` (thesis hybrid: ERC-1056 events + on-chain ERC-735 claims for the safety-critical subset) | address is the DID (shared contract) | event log + claim storage | ✅ | `adapters/cvin.adapter.js` |
 | `pki` | **Baseline A:** IEEE 1609.2-style PKI (CA + enrollment/pseudonym certs + CRL) — `cv2x-testbed/identity/standard/pki_identity.py` | certificate | off-chain | ✅ (Python) | Python harness (§9) |
 | `central` | **Baseline B:** centralised vehicle registry (database) — `cv2x-testbed/identity/centralized_vehicle_registry.py` | row | off-chain | ✅ (Python) | Python harness (§9) |
 
@@ -115,6 +115,26 @@ Credentials are W3C VCs issued **off-chain** by `2_w3c-ssi-layer/verifiable-cred
 | batch | none (sequential) | none exposed (`mintBatch` exists in ERC-1155 but the contract has no batch registration) — sequential |
 
 Lifecycle events whose primitive a substrate lacks (2, 11, 12 for both) are recorded as `n/a` and excluded from that substrate's lifetime total, which then says "excl. k n/a".
+
+### 2.2b Realisations on the last four substrates (2026-10-04)
+
+| Op | ERC-725xy (`erc725xy`) | LSP8 (`lsp8`) | ERC-4337 (`erc4337`) | CVIN-Combined (`cvin`) |
+|---|---|---|---|---|
+| C1 | deploy account(owner) + `setData(VIN)` (2 tx) | `mintVehicle` by the authority (token = keccak(VIN)) | deploy account(entryPoint, owner) + `setAttribute(VIN)` (2 tx) | manufacturer-signed **VIN attestation claim** (topic 1) anchored by the owner (1 tx; the address is already an identity) |
+| C2 | deploy + `setDataBatch` of the 8 VID-I keys (2 tx) | C1 + `setDataBatchForTokenIds` (7 keys, 1 tx) | deploy + 8 × `setAttribute` (9 tx; no batch) | C1 + manufacturer claim (topic 2) with the ABI-encoded VID-I fields (2 tx) |
+| R1 | `owner()` | `tokenOwnerOf` (0x0 if burned) | `owner()` | `identityOwner` |
+| R2 | n/a | `exists(keccak(vin))` → tokenId | n/a | n/a (VIN is claim data) |
+| R3 | `owner` + `getDataBatch` (2 RPC) | `exists` + `getDataBatchForTokenIds` + `tokenOwnerOf` | `owner`, `guardian`, `getAttribute` × keys | `changed`-chain walk (DID events; claims do not advance it) + one `ClaimAdded` and one `ClaimRemoved` log query; validity judged against the **latest block timestamp** |
+| R4 / U2 / D1 | n/a (single owner; no LSP6 key manager) | n/a (operators not implemented) | **guardian** = single recovery slot: `setGuardian(key)` / `setGuardian(0)` / `guardian()==key` — a recovery key that can install a new owner, not a signing delegate (documented stretch); rotation = one `setGuardian` | `addDelegate` / `revokeDelegate` / `validDelegate` (ERC-1056 semantics) |
+| U1 / U4 | `transferOwnership` | token owner `transfer(from,to,id,force=true,"")` | `transferOwnership` | `changeOwner` |
+| U3 / D2 | `setData(key, value)` / `setData(key, 0x)` | authority `setDataForTokenId` / clear | `setAttribute` / `setAttribute(key, 0x)` | event attribute / `revokeAttribute` (validTo = 0) |
+| U5 | n/a | n/a | **headline path**: owner signs a `PackedUserOperation` (EIP-191 over `userOpHash`) with `callData = execute(self, 0, setAttribute(..))`; relayer calls `EntryPoint.handleOp` | n/a |
+| D3 | `renounceOwnership` | authority `revokeVehicle` (burn, data generation bumped) | `transferOwnership(0xdEaD)` (no primitive) | permanent `did/deactivated` attribute (no primitive) |
+| V1 | issuer's own account `setData(issuerKey)` | n/a (single authority) | issuer's own account `setAttribute(issuerKey)` | issuer `addDelegate` on its own identity |
+| V3 / V5 / V6 | issuer account `setData(credHash, "active")` / `setData(credHash, 0x)` / `getData` | authority `setDataForTokenId(token, credHash, "active")` / clear / read | issuer account `setAttribute(credHash, ..)` / clear / `getAttribute` | issuer-signed claim (topic = uint(credHash), **raw-digest** signature) anchored by the owner / issuer `removeClaim` (sticky) / `hasValidClaim` (O(1)) |
+| batch | `setDataBatch` (data), none for creation | `setDataBatchForTokenIds` (data), none for mint | none | none |
+
+For `erc725xy`, `erc4337` (and `erc725` before them) the issuer's credential status lives in the issuer's own per-identity contract, deployed once as a shared cost (`prepareIssuer` deploys one per fresh issuer, unmeasured).
 
 ### 2.3 "Beyond CRUD" — per-operation dimensions recorded for every op
 
@@ -345,7 +365,7 @@ results/metrics/latest -> <run-id>   (symlink; the only run chapters may cite)
 - [x] Scenarios: crud, lifecycle, scale, batch, throughput, resolve
 - [x] First trunk-traceable run committed under `results/metrics/latest`
 - [x] Adapters: ERC-735, ERC-1155 (contracts from the review-02 trunk; conformance green; §2.2a)
-- [ ] Adapters: ERC-725xy, LSP8, ERC-4337, CVIN-Combined (each: adapter → conformance → run)
+- [x] Adapters: ERC-725xy, LSP8, ERC-4337, CVIN-Combined (§2.2b) — all nine standards (ten columns with the ERC-1056 wrapper variant) now run the same catalogue
 - [ ] Python: `benchmark_pki_vs_erc1056.py` (closes F2)
 - [ ] Rubric scored for all substrates with evidence cells
 - [ ] External W3C DID test-suite run (closes F5)

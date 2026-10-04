@@ -13,11 +13,12 @@ describe("Benchmark adapter conformance", function () {
   /** Does the resolved document carry attribute (name, value)? Substrate-specific encoding. */
   function hasAttribute(id, doc, name, value) {
     switch (id) {
-      case "erc1056": case "erc1056w": return doc.attributes[keccak256(toUtf8Bytes(name))] === hexlify(toUtf8Bytes(value));
+      case "erc1056": case "erc1056w": case "cvin": return doc.attributes[keccak256(toUtf8Bytes(name))] === hexlify(toUtf8Bytes(value));
       case "erc721": return doc.serviceRecords.includes(value);
       case "erc725": return doc.keys.some((k) => k.key === keccak256(toUtf8Bytes(`attr:${name}:${value}`)));
       case "erc735": return doc.claims.some((c) => c.topic === BigInt(keccak256(toUtf8Bytes(name))).toString() && c.data === hexlify(toUtf8Bytes(value)));
       case "erc1155": return doc.credentials.MAINTENANCE_BADGE > 0; // payload not storable: presence of the badge
+      case "erc725xy": case "lsp8": case "erc4337": return doc.data[keccak256(toUtf8Bytes(name))] === hexlify(toUtf8Bytes(value));
       default: throw new Error(`no attribute probe for ${id}`);
     }
   }
@@ -52,7 +53,7 @@ describe("Benchmark adapter conformance", function () {
         if (!adapter.supports("R2_resolve_by_vin")) return this.skip();
         const v = await adapter.resolveByVin(dataset[1].vin);
         // Q-13: equality with the identity that was created for this VIN, not just non-zero.
-        const expected = id === "erc1056" || id === "erc1056w" || id === "erc1155" ? actors.vehicleOwner.address : id === "erc721" ? h.tokenId : undefined;
+        const expected = id === "erc1056" || id === "erc1056w" || id === "erc1155" ? actors.vehicleOwner.address : id === "erc721" || id === "lsp8" ? h.tokenId : undefined;
         expect(expected !== undefined, `no R2 expectation for ${id}`).to.equal(true);
         expect(v).to.equal(expected);
       });
@@ -136,14 +137,14 @@ describe("Benchmark adapter conformance", function () {
       it("D3 deactivate: identity reads as deactivated", async function () {
         await wait(await adapter.deactivate(h));
         // Q-13: post-state per substrate's deactivation semantics.
-        if (id === "erc1056" || id === "erc1056w") {
+        if (id === "erc1056" || id === "erc1056w" || id === "cvin") {
           const doc = await adapter.resolveDocument(h);
           expect(doc.attributes[keccak256(toUtf8Bytes(PAYLOADS.deactivatedName))]).to.equal(hexlify(toUtf8Bytes("true")));
         } else if (id === "erc721") {
           expect((await adapter.resolveDocument(h)).attributes.active).to.equal(false);
-        } else if (id === "erc725" || id === "erc1155") {
+        } else if (id === "erc725" || id === "erc1155" || id === "erc725xy" || id === "lsp8") {
           expect(await adapter.resolveOwner(h)).to.equal(ZeroAddress);
-        } else if (id === "erc735") {
+        } else if (id === "erc735" || id === "erc4337") {
           expect(await adapter.resolveOwner(h)).to.equal("0x000000000000000000000000000000000000dEaD");
         } else {
           throw new Error(`no D3 post-state check for ${id}`);
