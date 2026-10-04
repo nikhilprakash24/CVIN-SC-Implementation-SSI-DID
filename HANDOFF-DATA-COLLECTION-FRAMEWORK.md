@@ -71,7 +71,7 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 | Transactions | 26 | 17 | 26 |
 | Zero→nonzero SSTOREs (writes, not net state) | **8** | 92 | 83 |
 | Log bytes | 6,464 | 4,288 | 3,072 |
-| Shared deployment (once) | 2,673,900 | 2,721,476 | 519,384 (+519,384 **per identity**) |
+| Shared deployment (once) | 2,709,021 | 2,721,476 | 519,384 (+519,384 **per identity**) |
 
 ### 3.3 L3 scale, L5 throughput, L6 read path
 
@@ -84,7 +84,7 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 
 | Hyp. | Verdict on current data | Action for the thesis text |
 |---|---|---|
-| H1 "≥ 10× cheaper for create/update" | **Refuted as stated.** Lifetime 2.6× / 3.0×; C1 5.2× / 8.5×; U3 3.4×; ERC-1056 is *not* the minimum on U1/U4/D3 (ERC-725) or U2/D1 (ERC-721). | Restate H1 as "cheapest substrate on lifetime cost and on every CREATE/anchor op, with the lowest persistent state (7 vs 79–91 slots)"; drop the 10× figure or attribute it to the per-op pair where it holds (none here — check after `erc1056w` variant, §5.1). |
+| H1 "≥ 10× cheaper for create/update" | **Refuted as stated.** Lifetime 2.6× / 3.0×; C1 5.2× / 8.5×; U3 3.4×; ERC-1056 is *not* the minimum on U1/U4/D3 (ERC-725) or U2/D1 (ERC-721). | Restate H1 as "cheapest substrate on lifetime cost and on every CREATE/anchor op, with the fewest zero→nonzero storage writes (8 vs 83–92)"; drop the 10× figure or attribute it to the per-op pair where it holds (none here — check after `erc1056w` variant, §5.1). |
 | H1' flat in N | Supported. | keep |
 | H3 real-time | Read-side evidence now exists: on-chain resolution of an ERC-1056 identity with history costs ≈65–71 ms *in-process* — it will not fit 100 ms over a real RPC. Supports the second half of H3 (must pre-resolve). | cite `scale.md` h-axis and `resolve.md` |
 | H4 event-log cheapest for VID-II events | Supported on 12/17 events. The exceptions are the k1 add and the rotation (ERC-721), the two ownership transfers (ERC-725) and the deactivation (ERC-725). | keep, with exceptions listed |

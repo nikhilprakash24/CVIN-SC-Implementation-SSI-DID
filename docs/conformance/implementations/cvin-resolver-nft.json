@@ -25,7 +25,7 @@
       "output": {
         "didResolutionMetadata": {
           "contentType": "application/did+ld+json",
-          "retrieved": "2026-09-24T23:32:46.716399+00:00",
+          "retrieved": "2026-10-04T05:23:42.193982+00:00",
           "error": null,
           "errorMessage": null
         },
@@ -40,7 +40,7 @@
               "id": "did:nft:0x1:0xabc:123#owner",
               "type": "EcdsaSecp256k1VerificationKey2019",
               "controller": "did:nft:0x1:0xabc:123",
-              "blockchainAccountId": "eip155:0x1:0xabc"
+              "blockchainAccountId": "eip155:1:0xabc"
             }
           ],
           "authentication": [
@@ -55,7 +55,7 @@
           ]
         },
         "didDocumentMetadata": {
-          "created": "2026-09-24T23:32:46.716390+00:00",
+          "created": "2026-10-04T05:23:42.193962+00:00",
           "updated": null,
           "deactivated": false,
           "versionId": null,
@@ -77,13 +77,13 @@
       "output": {
         "didResolutionMetadata": {
           "contentType": "application/did+ld+json",
-          "retrieved": "2026-09-24T23:32:46.716399+00:00",
+          "retrieved": "2026-10-04T05:23:42.193982+00:00",
           "error": null,
           "errorMessage": null
         },
-        "didDocumentStream": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:nft:0x1:0xabc:123\", \"verificationMethod\": [{\"id\": \"did:nft:0x1:0xabc:123#owner\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:nft:0x1:0xabc:123\", \"blockchainAccountId\": \"eip155:0x1:0xabc\"}], \"authentication\": [\"did:nft:0x1:0xabc:123#owner\"], \"service\": [{\"id\": \"did:nft:0x1:0xabc:123#nft-metadata\", \"type\": \"NFTMetadata\", \"serviceEndpoint\": \"https://api.opensea.io/api/v1/asset/0xabc/123\"}]}",
+        "didDocumentStream": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:nft:0x1:0xabc:123\", \"verificationMethod\": [{\"id\": \"did:nft:0x1:0xabc:123#owner\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:nft:0x1:0xabc:123\", \"blockchainAccountId\": \"eip155:1:0xabc\"}], \"authentication\": [\"did:nft:0x1:0xabc:123#owner\"], \"service\": [{\"id\": \"did:nft:0x1:0xabc:123#nft-metadata\", \"type\": \"NFTMetadata\", \"serviceEndpoint\": \"https://api.opensea.io/api/v1/asset/0xabc/123\"}]}",
         "didDocumentMetadata": {
-          "created": "2026-09-24T23:32:46.716390+00:00",
+          "created": "2026-10-04T05:23:42.193962+00:00",
           "updated": null,
           "deactivated": false,
           "versionId": null,
@@ -104,7 +104,7 @@
         "didResolutionMetadata": {
           "contentType": "application/did+ld+json",
           "retrieved": null,
-          "error": "internalError",
+          "error": "invalidDid",
           "errorMessage": "Invalid did:nft format: did:nft:0x1:0xabc"
         },
         "didDocument": null,
