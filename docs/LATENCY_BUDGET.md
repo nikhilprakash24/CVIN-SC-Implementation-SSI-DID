@@ -83,6 +83,14 @@ state every *k* messages rather than every message has
 which crosses P*(0.5) = 100 at *k* ≈ 25 (one refresh per 2.5 s at 10 Hz).
 This is the design point to evaluate under SUMO.
 
+> **Measured 2026-10-04 (register #32, `cv2x-testbed/results/freshness_k.*`).** The sweep over
+> k ∈ {1, 5, 25, ∞} fits t_eff = 0.428 ms + 10.52 ms / k within ±7 %. The refresh in this provider is
+> a full resolution (4 RPCs, 10.5 ms), not the single 2.5 ms round trip assumed above. So
+> P*(0.5) = 100 is reached at **k ≈ 146** (≈95 with a one-call refresh), and the "k ≈ 25" above is
+> superseded. The security cost is measured too: a revocation takes effect after at most k − 1
+> further messages from that sender (0 / 4 / 24 for k = 1 / 5 / 25), so at 10 Hz and k = 146 a
+> revoked key is honoured for up to ≈14.5 s.
+
 ## 5. Caveats
 
 - All ERC-1056 latencies are from a local Hardhat node (≈2.5 ms per round

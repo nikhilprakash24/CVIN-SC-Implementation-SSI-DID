@@ -28,3 +28,17 @@ it.
 
 Add entries above this line as decisions are made. Do not edit past entries;
 append a correction entry instead.
+
+> **SC-13 — closed 2026-10-04 (stream F-D).** The lifecycle-parity comparison against
+> `centralized_vehicle_registry.py` was run as pre-registered (M4, PLAN_MOBI_SUMO §A.2): birth,
+> lifecycle event, ownership transfer, history query, n = 50, single full run. Results:
+> `cv2x-testbed/results/lifecycle_parity.*`; register row #33.
+>
+> **Verdicts as measured:**
+> - the centralized registry is ≥10× faster for all three writes (PASS);
+> - "equal for history queries once cached" FAILS on the pre-fixed [0.5, 2] band. The cached MOBI
+>   history is faster than the centralized query, and the gap is a serialisation artefact.
+>
+> **Chapter 5 should report both verdicts** (pending the author's chapter pass), stating that the centralized baseline is in-process, so the
+> write ratios are upper bounds on its advantage, and giving the post-hoc re-statement of the history
+> claim, labelled as post hoc.
