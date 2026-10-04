@@ -1,0 +1,5 @@
+k,refresh_mode,n,median_ms,p95_ms,mean_ms,min_ms,max_ms,stdev_ms,refreshes_in_window,full_resolutions_in_window,probe_only_refreshes_in_window,cached_in_window,refresh_median_ms,cached_median_ms,refresh_rpc_median,cached_rpc_max,rpc_calls_mean,analytic_this_run_ms,analytic_latency_budget_ms,P*(0.5)_measured_mean,P*(0.5)_measured_median,P*(0.5)_analytic_this_run,P*(0.5)_analytic_latency_budget,staleness_max_accepted_after_revocation,staleness_bound_k_minus_1,staleness_within_bound
+1,full,250,10.7993,14.8940,11.4023,8.6228,28.1520,2.4460,250,250,0,0,10.7993,,4.0000,,4.0000,10.7993,2.9000,4,4,4,17,0,0,True
+5,full,250,0.5369,11.7022,2.7047,0.4587,18.4739,4.3921,50,50,0,200,10.6361,0.5183,4.0000,0,0.8000,2.5723,0.9000,18,93,19,55,4,4,True
+25,full,250,0.5090,0.9442,0.9854,0.4489,12.7403,2.2445,10,10,0,240,12.1919,0.5073,4.0000,0,0.1600,0.9269,0.5000,50,98,53,100,24,24,True
+inf,full,250,0.5156,0.9784,0.6181,0.4548,2.9023,0.2398,0,0,0,250,,0.5156,,0,0.0000,0.5156,0.4000,80,96,96,125,50,,unbounded
