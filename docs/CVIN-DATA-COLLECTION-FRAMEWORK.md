@@ -25,7 +25,8 @@ Three design rules follow from the audit (F1–F10):
 
 | ID | Substrate | Identity model | State model | On trunk? | Adapter |
 |---|---|---|---|---|---|
-| `erc1056` | ERC-1056 EthereumDIDRegistry + CVINVehicleDIDRegistry | address *is* the DID; single shared registry | **event log** (owner + delegate maps are the only storage) | ✅ | `adapters/erc1056.adapter.js` |
+| `erc1056` | ERC-1056 EthereumDIDRegistry + CVINVehicleDIDRegistry, **pure did:ethr mode** (controller calls the registry directly) | address *is* the DID; single shared registry | **event log** (owner + delegate maps are the only storage) | ✅ | `adapters/erc1056.adapter.js` |
+| `erc1056w` | same contracts, **wrapper-controlled mode** (controller hands ERC-1056 control to the wrapper at creation; all mutations via the wrapper, which tracks the vehicle owner) | as above | event log | ✅ | `adapters/erc1056w.adapter.js` |
 | `erc721` | ERC-721 CVINVehicleNFT | token *is* the identity; one contract, many tokens | rich storage (metadata struct, transfer history array, service-record array) | ✅ | `adapters/erc721.adapter.js` |
 | `erc725` | ERC-725 CVIN_DID_ERC725 (proxy/key-manager) | **one contract per identity** | storage (key map + key array) | ✅ | `adapters/erc725.adapter.js` |
 | `erc735` | ERC-735 claim holder (on top of ERC-725) | contract per identity | storage (claim map by topic) | ⏳ | `adapters/erc735.adapter.js` |
@@ -65,7 +66,7 @@ Operations are named at the SSI-semantic level and grouped by CRUD class. Every 
 | Op ID | Class | Semantic | Core? | ERC-1056 realisation | ERC-721 realisation | ERC-725 realisation |
 |---|---|---|---|---|---|---|
 | `C1_create_identity` | CREATE | Bring a new vehicle identity into existence, bound to a VIN | core | `createVehicleDID` (wrapper: VIN↔address mapping; DID itself is implicit) | `mintVehicle` (mint + metadata struct + history entry) | `new CVIN_DID_ERC725()` **contract deployment** + `addKey(vinHash)` |
-| `C2_create_with_attributes` | CREATE | Create + publish the MOBI VID-I birth-certificate attribute set (VIN, make, model, year, colour, engine, mfg date, autonomy) | core | `C1` + 8 × `setAttribute` by the controller (pure did:ethr mode, 9 tx). *Wrapper-controlled mode* (`changeOwner(did, wrapper)` + `setVehicleAttributes`, 3 tx, loses meta-tx) is a planned variant adapter `erc1056w` | `mintVehicle` already stores the struct (same tx) | `C1` + 7 × `addKey` |
+| `C2_create_with_attributes` | CREATE | Create + publish the MOBI VID-I birth-certificate attribute set (VIN, make, model, year, colour, engine, mfg date, autonomy) | core | pure: `C1` + 8 × `setAttribute` by the controller (9 tx). wrapper (`erc1056w`): `createVehicleDID` + `changeOwner(did, wrapper)` + `setVehicleAttributes` (3 tx; loses meta-tx) | `mintVehicle` already stores the struct (same tx) | `C1` + 7 × `addKey` |
 | `R1_resolve_owner` | READ | Who controls this identity? | core | `identityOwner(did)` (1 SLOAD) | `ownerOf(tokenId)` | `owner()` |
 | `R2_resolve_by_vin` | READ | VIN → identity | core | `getDIDFromVIN` | `getTokenIdFromVIN` | off-chain index (n/a on-chain) — *cond.* |
 | `R3_resolve_document` | READ | Build the full W3C DID Document | core | event-log walk: `changed[did]` → `eth_getLogs` per `previousChange` link | view calls: `ownerOf`, `vehicleMetadata`, `tokenURI`, `getTransferHistory` | `getKeys` + `getKey` × k |
@@ -317,7 +318,7 @@ results/metrics/latest -> <run-id>   (symlink; the only run chapters may cite)
 - [x] Methodology fixed (this document)
 - [x] `MEASUREMENT_CONDITIONS.md`
 - [x] Harness: collector, stats, exporters, dataset, adapter interface
-- [x] Adapters: ERC-1056, ERC-721, ERC-725 (+ conformance test)
+- [x] Adapters: ERC-1056 (pure), ERC-1056 (wrapper), ERC-721, ERC-725 (+ conformance test)
 - [x] Scenarios: crud, lifecycle, scale, batch, throughput, resolve
 - [x] First trunk-traceable run committed under `results/metrics/latest`
 - [ ] Adapters: ERC-735, ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined (each: contract → adapter → conformance → run)

@@ -13,7 +13,7 @@ describe("Benchmark adapter conformance", function () {
   /** Does the resolved document carry attribute (name, value)? Substrate-specific encoding. */
   function hasAttribute(id, doc, name, value) {
     switch (id) {
-      case "erc1056": return doc.attributes[keccak256(toUtf8Bytes(name))] === hexlify(toUtf8Bytes(value));
+      case "erc1056": case "erc1056w": return doc.attributes[keccak256(toUtf8Bytes(name))] === hexlify(toUtf8Bytes(value));
       case "erc721": return doc.serviceRecords.includes(value);
       case "erc725": return doc.keys.some((k) => k.key === keccak256(toUtf8Bytes(`attr:${name}:${value}`)));
       default: throw new Error(`no attribute probe for ${id}`);
@@ -38,7 +38,8 @@ describe("Benchmark adapter conformance", function () {
       });
 
       it("C1/C2 create identity", async function () {
-        const r1 = await wait(await adapter.createIdentity(dataset[0], actors.vehicleOwner));
+        // distinct wallet: in ERC-1056 one address is one DID (wrapper mode hands it over at C1)
+        const r1 = await wait(await adapter.createIdentity(dataset[0], actors.extras[2]));
         expect(r1.txs.length).to.be.greaterThan(0);
         const r2 = await wait(await adapter.createIdentityWithAttributes(dataset[1], actors.vehicleOwner));
         h = r2.result;
@@ -49,7 +50,7 @@ describe("Benchmark adapter conformance", function () {
         if (!adapter.supports("R2_resolve_by_vin")) return this.skip();
         const v = await adapter.resolveByVin(dataset[1].vin);
         // Q-13: equality with the identity that was created for this VIN, not just non-zero.
-        const expected = id === "erc1056" ? actors.vehicleOwner.address : id === "erc721" ? h.tokenId : undefined;
+        const expected = id === "erc1056" || id === "erc1056w" ? actors.vehicleOwner.address : id === "erc721" ? h.tokenId : undefined;
         expect(expected !== undefined, `no R2 expectation for ${id}`).to.equal(true);
         expect(v).to.equal(expected);
       });
@@ -131,7 +132,7 @@ describe("Benchmark adapter conformance", function () {
       it("D3 deactivate: identity reads as deactivated", async function () {
         await wait(await adapter.deactivate(h));
         // Q-13: post-state per substrate's deactivation semantics.
-        if (id === "erc1056") {
+        if (id === "erc1056" || id === "erc1056w") {
           const doc = await adapter.resolveDocument(h);
           expect(doc.attributes[keccak256(toUtf8Bytes(PAYLOADS.deactivatedName))]).to.equal(hexlify(toUtf8Bytes("true")));
         } else if (id === "erc721") {

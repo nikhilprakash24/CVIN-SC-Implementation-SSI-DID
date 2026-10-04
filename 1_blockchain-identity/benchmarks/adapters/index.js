@@ -1,5 +1,6 @@
 "use strict";
 const { ERC1056Adapter } = require("./erc1056.adapter");
+const { ERC1056WrapperAdapter } = require("./erc1056w.adapter");
 const { ERC721Adapter } = require("./erc721.adapter");
 const { ERC725Adapter } = require("./erc725.adapter");
 
@@ -7,6 +8,7 @@ const { ERC725Adapter } = require("./erc725.adapter");
 // trunk are listed so tables print an explicit "not implemented" cell (audit F1).
 const ALL_SUBSTRATES = [
   { id: "erc1056", label: "ERC-1056" },
+  { id: "erc1056w", label: "ERC-1056 (wrapper)" },
   { id: "erc721", label: "ERC-721" },
   { id: "erc725", label: "ERC-725" },
   { id: "erc735", label: "ERC-735" },
@@ -17,6 +19,6 @@ const ALL_SUBSTRATES = [
   { id: "cvin", label: "CVIN-Combined" },
 ];
 
-const ADAPTERS = { erc1056: ERC1056Adapter, erc721: ERC721Adapter, erc725: ERC725Adapter };
+const ADAPTERS = { erc1056: ERC1056Adapter, erc1056w: ERC1056WrapperAdapter, erc721: ERC721Adapter, erc725: ERC725Adapter };
 
 module.exports = { ADAPTERS, ALL_SUBSTRATES };
