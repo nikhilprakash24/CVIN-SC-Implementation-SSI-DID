@@ -286,6 +286,7 @@ async function scaleERC735(signers) {
       [identityAddress, TOPIC, data]
     );
     const signature = await issuer.signMessage(ethers.getBytes(messageHash));
+    await (await holder.authorizeIssuer(issuer.address, TOPIC)).wait(); // D25a setup, not measured
     gas.push(
       await gasOf(holder.addClaim(TOPIC, ECDSA_SCHEME, issuer.address, signature, data, uri))
     );

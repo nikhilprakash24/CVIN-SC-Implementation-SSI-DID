@@ -130,7 +130,9 @@ class Erc735Adapter {
     const E = this.ethers;
     const c = await this._contract(id);
     const t = Number(topic);
-    const bytes = this._bytes(data);
+    // D25b: a topic-1 (VIN attestation) claim's data must end with the holder's VIN bytes.
+    let bytes = this._bytes(data);
+    if (t === 1) bytes = E.concat([bytes, E.toUtf8Bytes(await c.vin())]);
     const digest = this._claimDigest(id, t, bytes);
     let sig = signature;
     let issuer = opts.issuer;
@@ -144,7 +146,13 @@ class Erc735Adapter {
       if (!issuer) issuer = E.verifyMessage(E.getBytes(digest), sig);
       how = `issuer=${issuer.slice(0, 8)}… (caller-supplied signature)`;
     }
-    const receipt = await (await c.connect(await this._ownerSigner(c)).addClaim(t, ECDSA_SCHEME, issuer, sig, bytes, opts.uri || '')).wait();
+    // D25a: third-party issuers must be authorised per topic by the owner (self-issued claims need no entry).
+    const ownerSigner = await this._ownerSigner(c);
+    if (issuer.toLowerCase() !== ownerSigner.address.toLowerCase() && !(await c.isAuthorizedIssuer(issuer, t))) {
+      await (await c.connect(ownerSigner).authorizeIssuer(issuer, t)).wait(); // setup, not counted in gasUsed
+      how += ' +authorizeIssuer';
+    }
+    const receipt = await (await c.connect(ownerSigner).addClaim(t, ECDSA_SCHEME, issuer, sig, bytes, opts.uri || '')).wait();
     const claimId = this._claimId(issuer, t);
     const k = String(id).toLowerCase();
     if (!this._claims.has(k)) this._claims.set(k, []);

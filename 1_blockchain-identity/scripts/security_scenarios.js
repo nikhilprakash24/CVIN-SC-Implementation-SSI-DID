@@ -353,6 +353,7 @@ async function scenarioERC735(signers) {
   const TOPIC = 1; // VIN_ATTESTATION
   const SCHEME = 1; // ECDSA
   const data = ethers.toUtf8Bytes(`VIN:${VIN}`);
+  await (await holder.authorizeIssuer(issuer.address, TOPIC)).wait(); // D25a: legitimate issuer authorised (setup)
 
   // EIP-191 signature of keccak256(address(this), topic, data) by the issuer
   async function signClaim(signer) {

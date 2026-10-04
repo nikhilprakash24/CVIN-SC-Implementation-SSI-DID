@@ -439,6 +439,8 @@ describe("Security / ERC-735 (CVINVehicleClaimHolder)", function () {
     const F = await ethers.getContractFactory("CVINVehicleClaimHolder", owner);
     holder = await F.deploy(VIN);
     await holder.waitForDeployment();
+    // D25a: the legitimate issuer must be authorised for the topic (fixture, not an attack step)
+    await (await holder.connect(owner).authorizeIssuer(issuer.address, TOPIC)).wait();
   });
 
   it("unauthorizedIssuance: N/A (self-sovereign per-vehicle deployment)", function () {

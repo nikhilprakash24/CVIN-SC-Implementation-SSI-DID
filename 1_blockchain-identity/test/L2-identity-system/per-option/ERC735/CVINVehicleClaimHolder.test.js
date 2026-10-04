@@ -40,6 +40,13 @@ describe("CVINVehicleClaimHolder (ERC-735)", function () {
         const ClaimHolder = await ethers.getContractFactory("CVINVehicleClaimHolder");
         claimHolder = await ClaimHolder.connect(owner).deploy(TEST_VIN);
         await claimHolder.waitForDeployment();
+
+        // D25a fixture: since the issuer registry, addClaim requires the issuer to be
+        // authorized for the topic (self-issued claims excepted). Accredit the three
+        // issuers this suite uses for the topics they issue on.
+        await claimHolder.connect(owner).authorizeIssuer(manufacturer.address, VIN_ATTESTATION);
+        await claimHolder.connect(owner).authorizeIssuer(inspector.address, INSPECTION);
+        await claimHolder.connect(owner).authorizeIssuer(insurer.address, INSURANCE);
     });
 
     describe("Deployment / identity creation", function () {

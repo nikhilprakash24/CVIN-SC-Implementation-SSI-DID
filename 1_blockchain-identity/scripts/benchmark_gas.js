@@ -445,6 +445,10 @@ async function benchmarkERC735(signers) {
 
   const identityAddress = await holder.getAddress();
 
+  // D25a setup (not measured): authorise the issuers the benchmark uses.
+  await (await holder.authorizeIssuer(manufacturer.address, VIN_ATTESTATION)).wait();
+  await (await holder.authorizeIssuer(inspector.address, INSPECTION)).wait();
+
   // addDelegateOrClaim: first addClaim (issuer-signed VIN attestation, ClaimAdded).
   const dataV1 = ethers.toUtf8Bytes(`VIN:${VIN}`);
   const sigV1 = await signClaim(manufacturer, identityAddress, VIN_ATTESTATION, dataV1);

@@ -108,6 +108,19 @@ interface IERC735 {
  *   keccak256(abi.encodePacked(identityAddress, topic, data)) with the standard
  *   "\x19Ethereum Signed Message:\n32" prefix. Contract-account issuers
  *   (ERC-1271) are therefore not supported.
+ * - Issuer registry (docs/DEFECT_LOG.md D25a): the draft trusts any signer. Here
+ *   the owner maintains an (issuer, topic) whitelist — authorizeIssuer /
+ *   revokeIssuer / isAuthorizedIssuer — and addClaim requires the claim's issuer
+ *   to be authorized for the claim's topic. The single exception is a
+ *   SELF-ISSUED claim (issuer == owner): the ERC-735 draft lets an identity
+ *   issue claims about itself, and the owner plays the identity's key here, so
+ *   such a claim needs no registry entry (a verifier sees issuer == owner and
+ *   reads it as self-asserted). Authorizations belong to the vehicle, not the
+ *   owner: they survive transferOwnership (the new owner may revoke them).
+ *   Revoking an issuer is forward-looking: claims it already issued stay until
+ *   removeClaim.
+ * - VIN binding (D25b): a VIN_ATTESTATION (topic 1) claim must attest THIS
+ *   holder's VIN — see _encodesHolderVin for the exact encoding rule.
  */
 contract CVINVehicleClaimHolder is IERC735 {
     // ============ Vehicle claim topics ============
@@ -145,9 +158,14 @@ contract CVINVehicleClaimHolder is IERC735 {
     /// @dev topic => list of claimIds
     mapping(uint256 => bytes32[]) private claimIdsByTopic;
 
+    /// @dev Issuer registry (D25a): issuer => topic => authorized to issue on that topic
+    mapping(address => mapping(uint256 => bool)) private authorizedIssuers;
+
     // ============ Events (identity lifecycle, beyond ERC-735) ============
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     event VehicleIdentityCreated(bytes32 indexed vinHash, string vin, address indexed owner);
+    event IssuerAuthorized(address indexed issuer, uint256 indexed topic);
+    event IssuerRevoked(address indexed issuer, uint256 indexed topic);
 
     // ============ Modifiers ============
     modifier onlyOwner() {
@@ -169,8 +187,15 @@ contract CVINVehicleClaimHolder is IERC735 {
 
     /**
      * @notice Add (or update) a claim about this vehicle identity.
-     * @dev Only the identity owner may anchor claims. The issuer's ECDSA
-     *      signature over (identityAddress, topic, data) is verified on-chain.
+     * @dev Only the identity owner may anchor claims. Checks, in order:
+     *      1. issuer != 0 and scheme == ECDSA_SCHEME;
+     *      2. the issuer's EIP-191 ECDSA signature over
+     *         keccak256(abi.encodePacked(address(this), topic, data)) recovers to
+     *         `issuer` (see _recoverSigner for the scheme note) — who signed;
+     *      3. that signer is authorized for `topic` (isAuthorizedIssuer), or the
+     *         claim is self-issued (issuer == owner) — D25a — may they sign;
+     *      4. for topic VIN_ATTESTATION, `data` encodes this holder's VIN
+     *         (_encodesHolderVin) — D25b — is it about this vehicle.
      *      Re-adding a claim with the same (issuer, topic) updates it and
      *      emits ClaimChanged instead of ClaimAdded.
      */
@@ -191,6 +216,13 @@ contract CVINVehicleClaimHolder is IERC735 {
             ) == issuer,
             "ERC735: invalid issuer signature"
         );
+        require(
+            issuer == owner || authorizedIssuers[issuer][topic],
+            "ERC735: issuer not authorized for topic"
+        );
+        if (topic == VIN_ATTESTATION) {
+            require(_encodesHolderVin(data), "ERC735: VIN attestation does not match holder VIN");
+        }
 
         bytes32 claimId = keccak256(abi.encodePacked(issuer, topic));
         bool exists = claims[claimId].issuer != address(0);
@@ -295,6 +327,39 @@ contract CVINVehicleClaimHolder is IERC735 {
         return claims[keccak256(abi.encodePacked(issuer, topic))].issuer != address(0);
     }
 
+    // ============ Issuer registry (D25a) ============
+
+    /**
+     * @notice Authorize `issuer` to issue claims on `topic` for this vehicle.
+     * @dev Owner-managed: the holder decides which authorities it recognises
+     *      (an OEM for MANUFACTURER_CERT, a test centre for INSPECTION, ...).
+     *      Reverts if already authorized so that every IssuerAuthorized event
+     *      marks a real state change.
+     */
+    function authorizeIssuer(address issuer, uint256 topic) external onlyOwner {
+        require(issuer != address(0), "ERC735: issuer is zero address");
+        require(!authorizedIssuers[issuer][topic], "ERC735: issuer already authorized");
+        authorizedIssuers[issuer][topic] = true;
+        emit IssuerAuthorized(issuer, topic);
+    }
+
+    /**
+     * @notice Withdraw `issuer`'s right to issue claims on `topic`.
+     * @dev Forward-looking: claims already anchored by `issuer` remain until
+     *      removeClaim (the issuer keeps its issuer-side removal right).
+     */
+    function revokeIssuer(address issuer, uint256 topic) external onlyOwner {
+        require(authorizedIssuers[issuer][topic], "ERC735: issuer not authorized");
+        authorizedIssuers[issuer][topic] = false;
+        emit IssuerRevoked(issuer, topic);
+    }
+
+    /// @notice Whether `issuer` is currently authorized to issue claims on `topic`.
+    ///         The self-issuance exemption (issuer == owner) is NOT reflected here.
+    function isAuthorizedIssuer(address issuer, uint256 topic) external view returns (bool) {
+        return authorizedIssuers[issuer][topic];
+    }
+
     // ============ Ownership (MANAGEMENT-key role) ============
 
     /**
@@ -307,8 +372,48 @@ contract CVINVehicleClaimHolder is IERC735 {
         emit OwnershipTransferred(previousOwner, newOwner);
     }
 
+    // ============ Internal: VIN binding (D25b) ============
+
+    /**
+     * @dev Encoding rule for a VIN_ATTESTATION (topic 1) payload: the LAST
+     *      bytes(vin).length bytes of `data` must equal bytes(vin), i.e.
+     *      keccak256(data[data.length - |vin| :]) == vinHash. The attested VIN
+     *      is therefore the trailing field of the payload, optionally preceded
+     *      by an application prefix ("VIN:" / "vin:" as the L2 test and the gas
+     *      benchmark use), and a bare `bytes(vin)` payload (as the demos use)
+     *      satisfies it too. A payload naming any other VIN, a truncated VIN,
+     *      or a VIN followed by further bytes is rejected. Structured payloads
+     *      (JSON, ABI) are NOT accepted on topic 1 — they belong on the other
+     *      topics, where no binding is imposed.
+     */
+    function _encodesHolderVin(bytes calldata data) internal view returns (bool) {
+        bytes memory v = bytes(vin);
+        uint256 n = v.length;
+        if (data.length < n) {
+            return false;
+        }
+        // keccak256(v) == vinHash by construction (constructor); hashing the
+        // 17-byte memory copy is cheaper than a second cold SLOAD of vinHash.
+        return keccak256(data[data.length - n:]) == keccak256(v);
+    }
+
     // ============ Internal: ECDSA recovery ============
 
+    /**
+     * @dev SIGNATURE SCHEME (docs/DEFECT_LOG.md D25c). This contract verifies
+     *      an EIP-191 "personal_sign" signature: the issuer signs
+     *      keccak256(abi.encodePacked(address(this), topic, data)) and the
+     *      contract re-applies the "\x19Ethereum Signed Message:\n32" prefix
+     *      before ecrecover (ethers: signer.signMessage(getBytes(digest))). A
+     *      RAW secp256k1 signature over the unprefixed digest is rejected here.
+     *      CVINCombinedIdentity._recoverRawDigest does the OPPOSITE — it
+     *      ecrecovers the raw digest keccak256(abi.encodePacked(registry,
+     *      identity, topic, data)) and rejects an EIP-191 signature — so an
+     *      issuer signature is not portable between the two claim contracts.
+     *      Unifying the scheme is a design decision left to the author
+     *      (recommendation in AFTER_ACTION_REPORT_05 §1 F7: EIP-191, matching
+     *      the VC layer and the ERC-4337 account); this fix does not change it.
+     */
     function _recoverSigner(bytes32 messageHash, bytes memory signature)
         internal
         pure
