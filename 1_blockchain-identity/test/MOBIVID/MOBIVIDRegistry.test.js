@@ -280,6 +280,26 @@ describe("MOBI VID Registry V1 (birth certificates)", function () {
     });
   });
 
+  // K-15 (REVIEW_02): getVehicleDID left out the "0x" before the address
+  // (did:ethr:0x7a69:7099…), which did:ethr and did_resolver.py reject.
+  describe("K-15: getVehicleDID emits a well-formed did:ethr", function () {
+    it("returns did:ethr:0x<chainId hex>:0x<40 lowercase hex address>", async function () {
+      const { registry, vehicle } = await loadFixture(deployV1Fixture);
+      const { chainId } = await ethers.provider.getNetwork();
+      expect(chainId).to.equal(31337n);
+      const did = await registry.getVehicleDID(vehicle.address);
+      expect(did).to.equal(`did:ethr:0x7a69:${vehicle.address.toLowerCase()}`);
+      expect(did).to.match(/^did:ethr:0x[0-9a-f]+:0x[0-9a-f]{40}$/);
+      expect(did.length).to.equal("did:ethr:0x7a69:".length + 42);
+    });
+
+    it("zero-pads addresses with leading zero nibbles to 40 hex digits", async function () {
+      const { registry } = await loadFixture(deployV1Fixture);
+      const addr = "0x000000000000000000000000000000000000beef";
+      expect(await registry.getVehicleDID(addr)).to.equal(`did:ethr:0x7a69:${addr}`);
+    });
+  });
+
   // K-4 (REVIEW_02): registerVehicleBirth overwrote owners[] with no check, so
   // an authorised manufacturer could take over any existing did:ethr or
   // re-birth a revoked one.
@@ -425,6 +445,87 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
           outsider.address, EventType.MAINTENANCE, 100, DATA_HASH, CRED_HASH, "BC-CAN"
         )
       ).to.be.revertedWith("Vehicle not registered");
+    });
+  });
+
+  // K-15 (REVIEW_02): OWNER is a global role; before the fix any OWNER-role
+  // address could file owner-reportable events against any vehicle.
+  describe("K-15: OWNER-role events are limited to the vehicle's current owner", function () {
+    const OWNER_TYPES = [
+      ["MAINTENANCE", EventType.MAINTENANCE], ["ACCIDENT", EventType.ACCIDENT],
+      ["MODIFICATION", EventType.MODIFICATION], ["THEFT_REPORT", EventType.THEFT_REPORT],
+      ["INSURANCE_CLAIM", EventType.INSURANCE_CLAIM],
+    ];
+    const NOT_OWNER = "OWNER role: not the current owner of this vehicle";
+
+    // Vehicle A (fixture vehicle) is owned by firstOwner; vehicle B by ownerB.
+    async function twoVehiclesFixture() {
+      const f = await deployV2Fixture();
+      const signers = await ethers.getSigners();
+      const ownerB = signers[9], vehicleB = signers[10], buyer = signers[11];
+      await f.registry.connect(f.manufacturer).registerVehicleBirth(
+        vehicleB.address, ethers.keccak256(ethers.toUtf8Bytes("VIN-B:salt")),
+        "encrypted:VIN-B", BIRTH_CERT_HASH, ownerB.address, BIRTH_ATTRS
+      );
+      await f.registry.authorizeIssuer(f.firstOwner.address, IssuerRole.OWNER);
+      await f.registry.authorizeIssuer(ownerB.address, IssuerRole.OWNER);
+      await f.registry.authorizeIssuer(buyer.address, IssuerRole.OWNER);
+      return { ...f, ownerB, vehicleB, buyer };
+    }
+
+    function file(registry, signer, vehicle, type) {
+      return registry.connect(signer).recordLifecycleEvent(
+        vehicle, type, 12000, DATA_HASH, CRED_HASH, "BC-CAN");
+    }
+
+    it("the owner of vehicle A cannot file a THEFT_REPORT on vehicle B", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      await expect(file(f.registry, f.firstOwner, f.vehicleB.address, EventType.THEFT_REPORT))
+        .to.be.revertedWith(NOT_OWNER);
+      expect(await f.registry.vehicleEventCount(f.vehicleB.address)).to.equal(0n);
+    });
+
+    it("rejects every OWNER-gated event type on a vehicle the caller does not own", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      for (const [, type] of OWNER_TYPES) {
+        await expect(file(f.registry, f.firstOwner, f.vehicleB.address, type))
+          .to.be.revertedWith(NOT_OWNER);
+      }
+    });
+
+    it("the owner of vehicle A can file every OWNER-gated event type on A", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      for (const [, type] of OWNER_TYPES) {
+        const receipt = await (await file(f.registry, f.firstOwner, f.vehicle.address, type)).wait();
+        const evt = await f.registry.getFunction("getEvent")(f.vehicle.address, extractEventId(f.registry, receipt));
+        expect(evt.issuer).to.equal(f.firstOwner.address);
+        expect(evt.verified).to.equal(false);
+      }
+      expect(await f.registry.getEventTypeCount(f.vehicle.address, EventType.THEFT_REPORT)).to.equal(1n);
+    });
+
+    it("after a transfer the previous owner cannot file, the new owner can", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      await f.registry.connect(f.firstOwner).transferVehicleOwnership(
+        f.vehicle.address, f.buyer.address, 15000, "BC-ICBC");
+      await expect(file(f.registry, f.firstOwner, f.vehicle.address, EventType.THEFT_REPORT))
+        .to.be.revertedWith(NOT_OWNER);
+      await expect(file(f.registry, f.buyer, f.vehicle.address, EventType.THEFT_REPORT))
+        .to.emit(f.registry, "LifecycleEventRecorded");
+    });
+
+    it("the role matrix still applies first (OWNER cannot file RECALL even on its own vehicle)", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      await expect(file(f.registry, f.firstOwner, f.vehicle.address, EventType.RECALL))
+        .to.be.revertedWith("Not authorized to issue this event type");
+    });
+
+    it("organisational roles keep registry-wide scope (police and service centre on any vehicle)", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      await expect(file(f.registry, f.police, f.vehicleB.address, EventType.THEFT_REPORT))
+        .to.emit(f.registry, "LifecycleEventRecorded");
+      await expect(file(f.registry, f.serviceCenter, f.vehicleB.address, EventType.MAINTENANCE))
+        .to.emit(f.registry, "LifecycleEventRecorded");
     });
   });
 

@@ -13,7 +13,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-04T05:27:33.382Z",
+    "date": "2026-10-04T22:12:48.074Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [
@@ -605,14 +605,14 @@
     "MOBI-VID-V2": {
       "deployRegistry": {
         "n": 30,
-        "median": 4025159.0,
-        "min": 4025159,
-        "max": 4025159,
+        "median": 4058713.0,
+        "min": 4058713,
+        "max": 4058713,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          4025159,
-          4025159
+          4058713,
+          4058713
         ]
       },
       "createIdentity": {
@@ -629,14 +629,14 @@
       },
       "updateAttribute": {
         "n": 30,
-        "median": 306941.0,
-        "min": 306941,
-        "max": 306941,
+        "median": 307166.0,
+        "min": 307166,
+        "max": 307166,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          306941,
-          306941
+          307166,
+          307166
         ]
       },
       "addDelegateOrClaim": {

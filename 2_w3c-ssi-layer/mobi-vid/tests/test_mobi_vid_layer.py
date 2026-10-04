@@ -206,6 +206,26 @@ class TestBirthCertificate:
         record = registry.get_vehicle_birth(vehicle.address)
         assert credential_content_hash(vc) == record["birthCertHash"]
 
+    def test_onchain_vehicle_did_resolves_and_matches_python_did(
+            self, registry, vehicle, birth):
+        # Review-02 K-15: getVehicleDID omitted the "0x" before the address,
+        # so the repo's own resolver rejected the on-chain DID (invalidDid)
+        # and it differed from the DID the Python layer puts in the VCs.
+        sys.path.insert(0, str(REPO_ROOT / "2_w3c-ssi-layer" / "did-resolution"))
+        from did_resolver import DIDResolver
+
+        onchain = registry.contract.functions.getVehicleDID(
+            vehicle.address).call()
+        assert onchain == (f"did:ethr:{hex(registry.chain_id())}:"
+                           f"{vehicle.address.lower()}")
+        result = DIDResolver().resolve(onchain)
+        assert result.didResolutionMetadata.error is None, \
+            result.didResolutionMetadata.errorMessage
+        assert result.didDocument is not None
+        assert result.didDocument.id == onchain
+        # Same DID as the VC subject, up to EIP-55 address case.
+        assert onchain.lower() == registry.vehicle_did(vehicle.address).lower()
+
     def test_salted_vin_hash_lookup(self, registry, vehicle, birth):
         recomputed = salted_vin_hash(VIN, birth["vinSalt"])
         assert recomputed == birth["vinHash"]
