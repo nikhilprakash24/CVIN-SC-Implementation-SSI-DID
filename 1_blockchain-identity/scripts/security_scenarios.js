@@ -32,6 +32,7 @@
 const fs = require("fs");
 const path = require("path");
 const { ethers } = require("hardhat");
+const { revertDataOf } = require("../test/security/attackHarness");
 
 const VIN = "1HGBH41JXMN109186"; // 17-char ISO-3779 VIN used across scenarios
 
@@ -43,13 +44,22 @@ function cell(outcome, mechanism, evidence, method = "executed") {
   return { outcome, mechanism, evidence, method };
 }
 
-/** Run a tx promise expecting it to revert; capture whether it did + reason. */
+/**
+ * Run a tx promise expecting it to revert; capture whether it did + reason.
+ * Only an EVM revert (an error carrying ABI revert data) counts as "reverted".
+ * Any other error (TypeError, ethers ABI/argument error, provider failure)
+ * means the attack never ran, so it is re-thrown instead of being recorded as
+ * a defense (REVIEW_02 Q-8; shares revertDataOf with the test harness).
+ */
 async function expectRevert(txPromise) {
   try {
     const tx = await txPromise;
     await tx.wait();
     return { reverted: false, reason: null };
   } catch (err) {
+    if (revertDataOf(err) === null) {
+      throw new Error(`attack FAILED-TO-RUN (not a revert): ${err && err.message}`);
+    }
     const reason =
       err.reason ||
       err.shortMessage ||

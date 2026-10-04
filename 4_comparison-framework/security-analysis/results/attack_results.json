@@ -6,6 +6,7 @@
       "attack": "Self-sovereign: every address is its own did:ethr (implicit, zero-cost creation) — there is no gated issuance step to bypass. The equivalent protection (an attacker cannot publish onto a DID it does not control) is exercised by unauthorizedAttributeWrite.",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     },
     "unauthorizedAttributeWrite": {
@@ -13,7 +14,8 @@
       "threat": "Tampering (unauthorized state write)",
       "attack": "attacker calls setAttribute(victim, ...) to publish/rotate a key on a DID it does not own",
       "defense": "onlyOwner(identity, msg.sender): actor must equal identityOwner(identity)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'DIDRegistry: unauthorized'",
+      "revertReason": "Error(\"DIDRegistry: unauthorized\")",
+      "expectedRevert": "Error(\"DIDRegistry: unauthorized\")",
       "control": "PASS"
     },
     "unauthorizedDelegateOrClaim": {
@@ -21,7 +23,8 @@
       "threat": "Spoofing / Elevation (forged delegate or claim)",
       "attack": "attacker calls addDelegate(victim, ...) installing itself as a signing delegate (ERC-1056 has no on-chain claim model)",
       "defense": "onlyOwner(identity, msg.sender)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'DIDRegistry: unauthorized'",
+      "revertReason": "Error(\"DIDRegistry: unauthorized\")",
+      "expectedRevert": "Error(\"DIDRegistry: unauthorized\")",
       "control": "PASS"
     },
     "unauthorizedRevocation": {
@@ -29,7 +32,8 @@
       "threat": "Denial of Service (unauthorized revocation)",
       "attack": "attacker calls revokeAttribute(victim, ...) to disable a victim's published key",
       "defense": "onlyOwner(identity, msg.sender)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'DIDRegistry: unauthorized'",
+      "revertReason": "Error(\"DIDRegistry: unauthorized\")",
+      "expectedRevert": "Error(\"DIDRegistry: unauthorized\")",
       "control": "PASS"
     },
     "identityHijack": {
@@ -37,7 +41,8 @@
       "threat": "Elevation of Privilege (identity/ownership takeover)",
       "attack": "attacker calls changeOwner(victim, attacker) to seize control of the DID",
       "defense": "onlyOwner(identity, msg.sender)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'DIDRegistry: unauthorized'",
+      "revertReason": "Error(\"DIDRegistry: unauthorized\")",
+      "expectedRevert": "Error(\"DIDRegistry: unauthorized\")",
       "control": "PASS"
     },
     "signatureReplay": {
@@ -45,7 +50,8 @@
       "threat": "Replay (reuse of a consumed signed operation)",
       "attack": "replay a previously mined setAttributeSigned (identical v,r,s) to re-apply a signed key update",
       "defense": "per-identity nonce folded into the signed hash; recovered signer != owner after nonce bump",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'DIDRegistry: invalid signature'",
+      "revertReason": "Error(\"DIDRegistry: invalid signature\")",
+      "expectedRevert": "Error(\"DIDRegistry: invalid signature\")",
       "control": "PASS"
     }
   },
@@ -55,7 +61,8 @@
       "threat": "Spoofing (forged identity issuance)",
       "attack": "attacker (no MANUFACTURER_ROLE) calls mintVehicle to fabricate a vehicle identity",
       "defense": "AccessControl onlyRole(MANUFACTURER_ROLE)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0xeefb95e842a3287179d933b4460be539a1d5af11aa8b325bb45c5c8dc92de4ed\")'",
+      "revertReason": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0xeefb95e842a3287179d933b4460be539a1d5af11aa8b325bb45c5c8dc92de4ed)",
+      "expectedRevert": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0xeefb95e842a3287179d933b4460be539a1d5af11aa8b325bb45c5c8dc92de4ed)",
       "control": "PASS"
     },
     "unauthorizedAttributeWrite": {
@@ -63,7 +70,8 @@
       "threat": "Tampering (unauthorized state write)",
       "attack": "attacker (no SERVICE_CENTER_ROLE) appends a forged service record (closest attribute analogue in ERC-721)",
       "defense": "AccessControl onlyRole(SERVICE_CENTER_ROLE)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0xe00629f427c6136ae9b856b472ff74184d9d0bee21b9336d8fbb33b66079065a\")'",
+      "revertReason": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0xe00629f427c6136ae9b856b472ff74184d9d0bee21b9336d8fbb33b66079065a)",
+      "expectedRevert": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0xe00629f427c6136ae9b856b472ff74184d9d0bee21b9336d8fbb33b66079065a)",
       "control": "PASS"
     },
     "unauthorizedDelegateOrClaim": {
@@ -71,7 +79,8 @@
       "threat": "Spoofing / Elevation (forged delegate or claim)",
       "attack": "attacker calls approve(attacker, tokenId) to delegate transfer rights over a victim's vehicle (approve = ERC-721's only delegation primitive; no claim model)",
       "defense": "ERC721: _msgSender() must be owner or operator (ERC721InvalidApprover)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'ERC721InvalidApprover(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\")'",
+      "revertReason": "ERC721InvalidApprover(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)",
+      "expectedRevert": "ERC721InvalidApprover(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)",
       "control": "PASS"
     },
     "unauthorizedRevocation": {
@@ -79,7 +88,8 @@
       "threat": "Denial of Service (unauthorized revocation)",
       "attack": "attacker (no DEFAULT_ADMIN_ROLE) calls deactivateVehicle to disable a victim's identity",
       "defense": "AccessControl onlyRole(DEFAULT_ADMIN_ROLE)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0x0000000000000000000000000000000000000000000000000000000000000000\")'",
+      "revertReason": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x0000000000000000000000000000000000000000000000000000000000000000)",
+      "expectedRevert": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x0000000000000000000000000000000000000000000000000000000000000000)",
       "control": "PASS"
     },
     "identityHijack": {
@@ -87,7 +97,8 @@
       "threat": "Elevation of Privilege (identity/ownership takeover)",
       "attack": "attacker calls transferFrom(victim, attacker, tokenId) to steal the vehicle NFT",
       "defense": "ERC721: caller must be owner or approved (ERC721InsufficientApproval)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'ERC721InsufficientApproval(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", 1)'",
+      "revertReason": "ERC721InsufficientApproval(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 1)",
+      "expectedRevert": "ERC721InsufficientApproval(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 1)",
       "control": "PASS"
     },
     "signatureReplay": {
@@ -96,6 +107,7 @@
       "attack": "This ERC-721 implementation exposes no signed/relayed (meta-transaction) operation, so there is no consumed signature to replay.",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     }
   },
@@ -106,6 +118,7 @@
       "attack": "Each identity is its own contract deployed permissionlessly by its controller; there is no shared gated issuer to bypass. Protection of an existing identity is exercised by the write/hijack scenarios.",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     },
     "unauthorizedAttributeWrite": {
@@ -113,7 +126,8 @@
       "threat": "Tampering (unauthorized state write)",
       "attack": "attacker calls addKey to inject a management key into a victim's identity contract",
       "defense": "require(msg.sender == _owner, \"Only owner can add keys\")",
-      "revertReason": "Transaction reverted and Hardhat couldn't infer the reason.",
+      "revertReason": "Error(\"Only owner can add keys\")",
+      "expectedRevert": "Error(\"Only owner can add keys\")",
       "control": "PASS"
     },
     "unauthorizedDelegateOrClaim": {
@@ -121,7 +135,8 @@
       "threat": "Spoofing / Elevation (forged delegate or claim)",
       "attack": "attacker calls addKey(purpose=3 CLAIM) to authorize itself as a claim signer",
       "defense": "require(msg.sender == _owner, \"Only owner can add keys\")",
-      "revertReason": "Transaction reverted and Hardhat couldn't infer the reason.",
+      "revertReason": "Error(\"Only owner can add keys\")",
+      "expectedRevert": "Error(\"Only owner can add keys\")",
       "control": "PASS"
     },
     "unauthorizedRevocation": {
@@ -129,7 +144,8 @@
       "threat": "Denial of Service (unauthorized revocation)",
       "attack": "attacker calls removeKey to strip a key from a victim's identity",
       "defense": "require(msg.sender == _owner, \"Only owner can remove keys\")",
-      "revertReason": "Transaction reverted and Hardhat couldn't infer the reason.",
+      "revertReason": "Error(\"Only owner can remove keys\")",
+      "expectedRevert": "Error(\"Only owner can remove keys\")",
       "control": "PASS"
     },
     "identityHijack": {
@@ -137,7 +153,8 @@
       "threat": "Elevation of Privilege (identity/ownership takeover)",
       "attack": "attacker calls transferOwnership(attacker) to seize the identity contract",
       "defense": "require(msg.sender == _owner, \"Only owner can transfer ownership\")",
-      "revertReason": "Transaction reverted and Hardhat couldn't infer the reason.",
+      "revertReason": "Error(\"Only owner can transfer ownership\")",
+      "expectedRevert": "Error(\"Only owner can transfer ownership\")",
       "control": "PASS"
     },
     "signatureReplay": {
@@ -146,6 +163,7 @@
       "attack": "This basic ERC-725 key manager has no signed/relayed operation (execute() is direct-owner-gated), so there is no consumed signature to replay.",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     }
   },
@@ -156,6 +174,7 @@
       "attack": "Each vehicle identity is its own claim-holder contract deployed permissionlessly by its owner; there is no shared gated issuer to bypass.",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     },
     "unauthorizedAttributeWrite": {
@@ -163,7 +182,8 @@
       "threat": "Tampering (unauthorized state write)",
       "attack": "attacker (non-owner) calls addClaim to write/overwrite a claim on the identity (closest attribute analogue)",
       "defense": "onlyOwner modifier (owner plays the ERC-734 MANAGEMENT-key role)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'ERC735: caller is not the owner'",
+      "revertReason": "Error(\"ERC735: caller is not the owner\")",
+      "expectedRevert": "Error(\"ERC735: caller is not the owner\")",
       "control": "PASS"
     },
     "unauthorizedDelegateOrClaim": {
@@ -171,7 +191,8 @@
       "threat": "Spoofing / Elevation (forged delegate or claim)",
       "attack": "anchor a claim naming a trusted issuer but signed by the attacker's key (issuer-signature forgery)",
       "defense": "on-chain ecrecover of EIP-191(identity,topic,data) must equal the named issuer",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'ERC735: invalid issuer signature'",
+      "revertReason": "Error(\"ERC735: invalid issuer signature\")",
+      "expectedRevert": "Error(\"ERC735: invalid issuer signature\")",
       "control": "PASS"
     },
     "unauthorizedRevocation": {
@@ -179,7 +200,8 @@
       "threat": "Denial of Service (unauthorized revocation)",
       "attack": "a party that is neither owner nor issuer calls removeClaim to strip a valid attestation",
       "defense": "require(msg.sender == owner || msg.sender == claim.issuer)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'ERC735: caller is not owner nor issuer'",
+      "revertReason": "Error(\"ERC735: caller is not owner nor issuer\")",
+      "expectedRevert": "Error(\"ERC735: caller is not owner nor issuer\")",
       "control": "PASS"
     },
     "identityHijack": {
@@ -187,7 +209,8 @@
       "threat": "Elevation of Privilege (identity/ownership takeover)",
       "attack": "attacker calls transferOwnership(attacker) to seize the vehicle identity",
       "defense": "onlyOwner modifier",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'ERC735: caller is not the owner'",
+      "revertReason": "Error(\"ERC735: caller is not the owner\")",
+      "expectedRevert": "Error(\"ERC735: caller is not the owner\")",
       "control": "PASS"
     },
     "signatureReplay": {
@@ -195,7 +218,8 @@
       "threat": "Replay (reuse of a consumed signed operation)",
       "attack": "replay vehicle A's issuer-signed attestation onto attacker-controlled vehicle B",
       "defense": "signed digest binds address(this) (the holder contract), so ecrecover on B != issuer",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'ERC735: invalid issuer signature'",
+      "revertReason": "Error(\"ERC735: invalid issuer signature\")",
+      "expectedRevert": "Error(\"ERC735: invalid issuer signature\")",
       "control": "PASS"
     }
   },
@@ -205,7 +229,8 @@
       "threat": "Spoofing (forged identity issuance)",
       "attack": "attacker (no ISSUER_ROLE) calls registerVehicle to mint a BIRTH_CERT identity",
       "defense": "AccessControl onlyRole(ISSUER_ROLE)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122\")'",
+      "revertReason": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)",
+      "expectedRevert": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)",
       "control": "PASS"
     },
     "unauthorizedAttributeWrite": {
@@ -213,7 +238,8 @@
       "threat": "Tampering (unauthorized state write)",
       "attack": "attacker (no ISSUER_ROLE) rewrites a credential-type metadata URI (closest attribute analogue)",
       "defense": "AccessControl onlyRole(ISSUER_ROLE)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122\")'",
+      "revertReason": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)",
+      "expectedRevert": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)",
       "control": "PASS"
     },
     "unauthorizedDelegateOrClaim": {
@@ -221,7 +247,8 @@
       "threat": "Spoofing / Elevation (forged delegate or claim)",
       "attack": "attacker (no ISSUER_ROLE) mints an INSPECTION_CERT credential to a vehicle (credential = claim analogue)",
       "defense": "AccessControl onlyRole(ISSUER_ROLE)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122\")'",
+      "revertReason": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)",
+      "expectedRevert": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)",
       "control": "PASS"
     },
     "unauthorizedRevocation": {
@@ -229,15 +256,17 @@
       "threat": "Denial of Service (unauthorized revocation)",
       "attack": "attacker (no ISSUER_ROLE) burns a vehicle's BIRTH_CERT to deregister its identity",
       "defense": "AccessControl onlyRole(ISSUER_ROLE)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'AccessControlUnauthorizedAccount(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122\")'",
+      "revertReason": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)",
+      "expectedRevert": "AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)",
       "control": "PASS"
     },
     "identityHijack": {
       "outcome": "DEFENDED",
       "threat": "Elevation of Privilege (identity/ownership takeover)",
       "attack": "attacker calls safeTransferFrom to pull a victim's soulbound BIRTH_CERT identity token",
-      "defense": "ERC1155 approval check + soulbound _update guard (holder transfers require ISSUER_ROLE)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'ERC1155MissingApprovalForAll(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0x70997970C51812dc3A010C7d01b50e0d17dc79C8\")'",
+      "defense": "ERC1155 operator-approval check (ERC1155MissingApprovalForAll). The soulbound _update guard (holder transfers require ISSUER_ROLE) is not what stops this attack: the approval check reverts first",
+      "revertReason": "ERC1155MissingApprovalForAll(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x70997970C51812dc3A010C7d01b50e0d17dc79C8)",
+      "expectedRevert": "ERC1155MissingApprovalForAll(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x70997970C51812dc3A010C7d01b50e0d17dc79C8)",
       "control": "PASS"
     },
     "signatureReplay": {
@@ -246,6 +275,7 @@
       "attack": "Credential issuance/revocation is direct role-gated calls with no signed/relayed operation, so there is no consumed signature to replay.",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     }
   },
@@ -256,6 +286,7 @@
       "attack": "The account (identity) is deployed permissionlessly; the identifier is the account address. There is no shared gated issuer to bypass.",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     },
     "unauthorizedAttributeWrite": {
@@ -263,7 +294,8 @@
       "threat": "Tampering (unauthorized state write)",
       "attack": "attacker calls setAttribute directly on the vehicle account",
       "defense": "onlyOwnerOrEntryPoint modifier (msg.sender must be owner, entryPoint, or self)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'CVINVehicleAccount: not owner or entryPoint'",
+      "revertReason": "Error(\"CVINVehicleAccount: not owner or entryPoint\")",
+      "expectedRevert": "Error(\"CVINVehicleAccount: not owner or entryPoint\")",
       "control": "PASS"
     },
     "unauthorizedDelegateOrClaim": {
@@ -271,7 +303,8 @@
       "threat": "Spoofing / Elevation (forged delegate or claim)",
       "attack": "attacker calls setGuardian(attacker) to install itself as the recovery delegate (guardian = recovery-delegate analogue; no on-chain claim model)",
       "defense": "onlyOwnerOrEntryPoint modifier",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'CVINVehicleAccount: not owner or entryPoint'",
+      "revertReason": "Error(\"CVINVehicleAccount: not owner or entryPoint\")",
+      "expectedRevert": "Error(\"CVINVehicleAccount: not owner or entryPoint\")",
       "control": "PASS"
     },
     "unauthorizedRevocation": {
@@ -279,23 +312,26 @@
       "threat": "Denial of Service (unauthorized revocation)",
       "attack": "attacker calls setGuardian(0) to strip the account's recovery delegate (delegate-revocation analogue; ERC-4337 has no identity-level revocation)",
       "defense": "onlyOwnerOrEntryPoint modifier",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'CVINVehicleAccount: not owner or entryPoint'",
+      "revertReason": "Error(\"CVINVehicleAccount: not owner or entryPoint\")",
+      "expectedRevert": "Error(\"CVINVehicleAccount: not owner or entryPoint\")",
       "control": "PASS"
     },
     "identityHijack": {
       "outcome": "DEFENDED",
       "threat": "Elevation of Privilege (identity/ownership takeover)",
-      "attack": "attacker calls transferOwnership(attacker) to rotate the signing key; also attempts recoverOwner(attacker) as a non-guardian",
+      "attack": "attacker calls transferOwnership(attacker) to rotate the signing key; also attempts recoverOwner(attacker) as a non-guardian while a guardian is set",
       "defense": "transferOwnership gated by onlyOwnerOrEntryPoint; recoverOwner gated by require(msg.sender == guardian)",
-      "revertReason": "transferOwnership: VM Exception while processing transaction: reverted with reason string 'CVINVehicleAccount: not owner or entryPoint'; recoverOwner(non-guardian): VM Exception while processing transaction: reverted with reason string 'CVINVehicleAccount: not guardian'",
-      "control": "PASS"
+      "revertReason": "transferOwnership: Error(\"CVINVehicleAccount: not owner or entryPoint\"); recoverOwner(non-guardian): Error(\"CVINVehicleAccount: not guardian\")",
+      "expectedRevert": "transferOwnership: Error(\"CVINVehicleAccount: not owner or entryPoint\"); recoverOwner(non-guardian): Error(\"CVINVehicleAccount: not guardian\")",
+      "control": "transferOwnership(owner): PASS; recoverOwner(guardian): PASS"
     },
     "signatureReplay": {
       "outcome": "DEFENDED",
       "threat": "Replay (reuse of a consumed signed operation)",
       "attack": "replay a previously mined PackedUserOperation (same nonce and signature) through handleOp",
       "defense": "EntryPoint per-sender sequential nonce: require(userOp.nonce == nonces[sender])",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'CVINEntryPoint: invalid nonce'",
+      "revertReason": "Error(\"CVINEntryPoint: invalid nonce\")",
+      "expectedRevert": "Error(\"CVINEntryPoint: invalid nonce\")",
       "control": "PASS"
     }
   },
@@ -305,7 +341,8 @@
       "threat": "Spoofing (forged identity issuance)",
       "attack": "attacker (not the contract owner / issuing authority) calls mintVehicle",
       "defense": "onlyOwner modifier (\"caller is not the contract owner\")",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'LSP8: caller is not the contract owner'",
+      "revertReason": "Error(\"LSP8: caller is not the contract owner\")",
+      "expectedRevert": "Error(\"LSP8: caller is not the contract owner\")",
       "control": "PASS"
     },
     "unauthorizedAttributeWrite": {
@@ -313,7 +350,8 @@
       "threat": "Tampering (unauthorized state write)",
       "attack": "attacker calls setDataForTokenId to forge per-token vehicle metadata (e.g. inspection status)",
       "defense": "onlyOwner modifier (only the issuing authority writes token data)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'LSP8: caller is not the contract owner'",
+      "revertReason": "Error(\"LSP8: caller is not the contract owner\")",
+      "expectedRevert": "Error(\"LSP8: caller is not the contract owner\")",
       "control": "PASS"
     },
     "unauthorizedDelegateOrClaim": {
@@ -322,6 +360,7 @@
       "attack": "This representative LSP8 implementation omits operator authorization and has no native claim model, so there is no delegate/claim primitive to abuse (attestations live in owner-gated per-token data keys, covered by unauthorizedAttributeWrite).",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     },
     "unauthorizedRevocation": {
@@ -329,7 +368,8 @@
       "threat": "Denial of Service (unauthorized revocation)",
       "attack": "attacker calls revokeVehicle to burn a victim's identity token",
       "defense": "require(msg.sender == owner || msg.sender == tokenOwner)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'LSP8: caller is not authority nor token owner'",
+      "revertReason": "Error(\"LSP8: caller is not authority nor token owner\")",
+      "expectedRevert": "Error(\"LSP8: caller is not authority nor token owner\")",
       "control": "PASS"
     },
     "identityHijack": {
@@ -337,7 +377,8 @@
       "threat": "Elevation of Privilege (identity/ownership takeover)",
       "attack": "attacker calls transfer(from=victim, to=attacker, tokenId) to steal the vehicle token (operators not implemented)",
       "defense": "require(msg.sender == tokenOwner) (\"caller is not the token owner\")",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'LSP8: caller is not the token owner'",
+      "revertReason": "Error(\"LSP8: caller is not the token owner\")",
+      "expectedRevert": "Error(\"LSP8: caller is not the token owner\")",
       "control": "PASS"
     },
     "signatureReplay": {
@@ -346,6 +387,7 @@
       "attack": "This LSP8 implementation has no signed/relayed operation, so there is no consumed signature to replay.",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     }
   },
@@ -355,7 +397,8 @@
       "threat": "Spoofing (forged identity issuance)",
       "attack": "attacker (not an authorized manufacturer) calls registerVehicleBirth to forge a birth certificate",
       "defense": "onlyAuthorizedManufacturer modifier",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'Only authorized manufacturers can register vehicles'",
+      "revertReason": "Error(\"Only authorized manufacturers can register vehicles\")",
+      "expectedRevert": "Error(\"Only authorized manufacturers can register vehicles\")",
       "control": "PASS"
     },
     "unauthorizedAttributeWrite": {
@@ -363,7 +406,8 @@
       "threat": "Tampering (unauthorized state write)",
       "attack": "attacker (unauthorized issuer) records a fabricated MAINTENANCE lifecycle event (closest attribute analogue)",
       "defense": "onlyAuthorizedIssuer(eventType): role must be whitelisted for that event type",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'Not authorized to issue this event type'",
+      "revertReason": "Error(\"Not authorized to issue this event type\")",
+      "expectedRevert": "Error(\"Not authorized to issue this event type\")",
       "control": "PASS"
     },
     "unauthorizedDelegateOrClaim": {
@@ -371,7 +415,8 @@
       "threat": "Spoofing / Elevation (forged delegate or claim)",
       "attack": "attacker (unauthorized) calls attestEvent to co-sign a lifecycle event (multi-party attestation = claim analogue)",
       "defense": "require(authorizedIssuers[msg.sender] != NONE)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'Not authorized to attest'",
+      "revertReason": "Error(\"Not authorized to attest\")",
+      "expectedRevert": "Error(\"Not authorized to attest\")",
       "control": "PASS"
     },
     "unauthorizedRevocation": {
@@ -379,7 +424,8 @@
       "threat": "Denial of Service (unauthorized revocation)",
       "attack": "attacker calls revokeIdentity(vehicle) to decommission a victim's DID",
       "defense": "inherited onlyOwner(identity, msg.sender) (only the current identity owner)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'Only owner can perform this action'",
+      "revertReason": "Error(\"Only owner can perform this action\")",
+      "expectedRevert": "Error(\"Only owner can perform this action\")",
       "control": "PASS"
     },
     "identityHijack": {
@@ -387,7 +433,8 @@
       "threat": "Elevation of Privilege (identity/ownership takeover)",
       "attack": "attacker calls transferVehicleOwnership to seize a victim vehicle's identity",
       "defense": "inherited onlyOwner(identity, msg.sender)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'Only owner can perform this action'",
+      "revertReason": "Error(\"Only owner can perform this action\")",
+      "expectedRevert": "Error(\"Only owner can perform this action\")",
       "control": "PASS"
     },
     "signatureReplay": {
@@ -396,6 +443,7 @@
       "attack": "This MOBI VID V2 build exposes only direct-call operations (no ERC-1056 *Signed meta-transactions are wired through), so there is no consumed signature to replay. attestEvent stores a signature blob but never re-executes it on-chain.",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     }
   },
@@ -406,6 +454,7 @@
       "attack": "ERC-1056 side: every address is an implicit self-owned identity; there is no gated issuance step to bypass.",
       "defense": null,
       "revertReason": null,
+      "expectedRevert": null,
       "control": null
     },
     "unauthorizedAttributeWrite": {
@@ -413,7 +462,8 @@
       "threat": "Tampering (unauthorized state write)",
       "attack": "attacker calls setAttribute(victim, ...) on a DID it does not own",
       "defense": "onlyIdentityOwner(identity) modifier",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'CVINCombined: unauthorized'",
+      "revertReason": "Error(\"CVINCombined: unauthorized\")",
+      "expectedRevert": "Error(\"CVINCombined: unauthorized\")",
       "control": "PASS"
     },
     "unauthorizedDelegateOrClaim": {
@@ -421,7 +471,8 @@
       "threat": "Spoofing / Elevation (forged delegate or claim)",
       "attack": "anchor a safety-critical claim naming a trusted issuer but signed by the attacker's key (issuer-signature forgery)",
       "defense": "on-chain ecrecover of raw digest keccak256(registry,identity,topic,data) must equal the named issuer",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'CVINCombined: invalid claim signature'",
+      "revertReason": "Error(\"CVINCombined: invalid claim signature\")",
+      "expectedRevert": "Error(\"CVINCombined: invalid claim signature\")",
       "control": "PASS"
     },
     "unauthorizedRevocation": {
@@ -429,7 +480,8 @@
       "threat": "Denial of Service (unauthorized revocation)",
       "attack": "a party that is neither identity owner nor claim issuer calls removeClaim to strip a safety-critical attestation",
       "defense": "require(msg.sender == identityOwner(identity) || msg.sender == claim.issuer)",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'CVINCombined: unauthorized'",
+      "revertReason": "Error(\"CVINCombined: unauthorized\")",
+      "expectedRevert": "Error(\"CVINCombined: unauthorized\")",
       "control": "PASS"
     },
     "identityHijack": {
@@ -437,7 +489,8 @@
       "threat": "Elevation of Privilege (identity/ownership takeover)",
       "attack": "attacker calls changeOwner(victim, attacker) to seize the identity",
       "defense": "onlyIdentityOwner(identity) modifier",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'CVINCombined: unauthorized'",
+      "revertReason": "Error(\"CVINCombined: unauthorized\")",
+      "expectedRevert": "Error(\"CVINCombined: unauthorized\")",
       "control": "PASS"
     },
     "signatureReplay": {
@@ -445,7 +498,8 @@
       "threat": "Replay (reuse of a consumed signed operation)",
       "attack": "replay the victim's issuer-signed claim onto the attacker's own identity to inherit a credential",
       "defense": "signed digest binds both registry address and the subject identity; ecrecover on a different identity != issuer",
-      "revertReason": "VM Exception while processing transaction: reverted with reason string 'CVINCombined: invalid claim signature'",
+      "revertReason": "Error(\"CVINCombined: invalid claim signature\")",
+      "expectedRevert": "Error(\"CVINCombined: invalid claim signature\")",
       "control": "PASS"
     }
   },
@@ -481,6 +535,8 @@
     "outcomes": [
       "DEFENDED",
       "VULNERABLE",
+      "UNEXPECTED-REVERT",
+      "FAILED-TO-RUN",
       "N/A"
     ],
     "contracts": {
@@ -494,7 +550,7 @@
       "MOBI-VID-V2": "contracts/MOBI/MOBIVIDRegistryV2.sol:MOBIVIDRegistryV2",
       "CVIN-Combined": "contracts/CVINCombined/CVINCombinedIdentity.sol:CVINCombinedIdentity"
     },
-    "notes": "Each cell is the REAL observed outcome of executing a concrete attack transaction on a fresh Hardhat network: DEFENDED = the malicious tx reverted; VULNERABLE = it was mined; N/A = the attack does not apply to the standard's identity model. Most cells also carry a differential 'control' (the same operation by the authorized party) that must PASS, proving the revert is due to access control / signature verification, not an unrelated failure. Attacks parallel the gas benchmark's lifecycle operation set (create/update/delegate-or-claim/revoke/transfer) plus a cross-cutting signatureReplay attack.",
+    "notes": "Each cell is the REAL observed outcome of executing a concrete attack transaction on a fresh Hardhat network: DEFENDED = the malicious tx reverted with the expected revert reason / custom error of the named defense (expectedRevert; revertReason is decoded from the raw revert data); UNEXPECTED-REVERT = it reverted for another reason; FAILED-TO-RUN = the attack threw a non-revert error (TypeError, ABI error) and never executed; VULNERABLE = it was mined; N/A = the attack does not apply to the standard's identity model. Most cells also carry a differential 'control' (the same operation by the authorized party) that must PASS, proving the revert is due to access control / signature verification, not an unrelated failure. Attacks parallel the gas benchmark's lifecycle operation set (create/update/delegate-or-claim/revoke/transfer) plus a cross-cutting signatureReplay attack.",
     "attacks": [
       "unauthorizedIssuance",
       "unauthorizedAttributeWrite",
