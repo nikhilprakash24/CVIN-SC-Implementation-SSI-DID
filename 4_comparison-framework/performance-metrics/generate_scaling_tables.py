@@ -354,6 +354,27 @@ def write_richness_csv(rich, sd, out_path):
     print(f"Wrote {out_path}")
 
 
+# Pre-declared confirmation block for Experiment C (review 02 follow-up F-A,
+# declared in f1c2399 before it ran): five fresh repeats, order judged by the
+# driver's own scaling_verdict() on the median of the repeat medians. When it
+# exists it decides the stated order; a single run's order is reported beside it.
+CONFIRMATION_C = RESULTS_DIR / "scaling_verify_repeats" / "C_confirmation_R6-R10_summary.json"
+
+
+def _richness_order_sentence(sc):
+    single = sc["order"]
+    if CONFIRMATION_C.exists():
+        conf = json.loads(CONFIRMATION_C.read_text())["credential_richness"]["scaling"]["order"]
+        if conf.split(" ")[0] != single.split(" ")[0]:
+            return (f"Verification is {tex_escape(conf)} in $N$ by the pre-declared "
+                    "five-repeat confirmation block (\\texttt{scaling\\_verify\\_repeats/}); "
+                    f"this table's single run alone reads {tex_escape(single.split(' ')[0])}, "
+                    "a run-to-run artefact at $N\\ge16$.")
+        return (f"Verification is {tex_escape(conf)} in $N$ (this run and the "
+                "pre-declared five-repeat confirmation block agree).")
+    return f"Verification is {tex_escape(single)} in $N$."
+
+
 def write_richness_tex(rich, sd, out_path):
     sc = rich["scaling"]
     target = rich["sig_check_target_ms"]
@@ -364,7 +385,7 @@ def write_richness_tex(rich, sd, out_path):
         "salted claim digests. Each cell is the median over "
         f"{rich['runs_per_point']} warm runs (p95 in parentheses), real "
         "secp256k1 EIP-191 recovery, single host (repeatability framing, thesis "
-        f"\\S5.4). Verification is {tex_escape(sc['order'])} in $N$ and remains "
+        f"\\S5.4). {_richness_order_sentence(sc)} It remains "
         f"far below the {target:.0f}\\,ms signature-check target across the "
         "whole range."
     )

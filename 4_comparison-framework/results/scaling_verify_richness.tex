@@ -2,7 +2,7 @@
 % Requires \usepackage{booktabs}.
 \begin{table}[htbp]
   \centering
-  \caption{Experiment C: real W3C Verifiable Credential verification latency vs credential richness. Left: full verification of a credential carrying $N$ claims. Right: selective disclosure of $k$ of $N=16$ salted claim digests. Each cell is the median over 300 warm runs (p95 in parentheses), real secp256k1 EIP-191 recovery, single host (repeatability framing, thesis \S5.4). Verification is O(N) — linear marginal growth in $N$ and remains far below the 10\,ms signature-check target across the whole range.}
+  \caption{Experiment C: real W3C Verifiable Credential verification latency vs credential richness. Left: full verification of a credential carrying $N$ claims. Right: selective disclosure of $k$ of $N=16$ salted claim digests. Each cell is the median over 300 warm runs (p95 in parentheses), real secp256k1 EIP-191 recovery, single host (repeatability framing, thesis \S5.4). Verification is O(1) — effectively constant (ECDSA recovery dominates) in $N$ by the pre-declared five-repeat confirmation block (\texttt{scaling\_verify\_repeats/}); this table's single run alone reads O(N), a run-to-run artefact at $N\ge16$. It remains far below the 10\,ms signature-check target across the whole range.}
   \label{tab:scaling-verify-richness}
   \footnotesize
   \begin{tabular}{rr@{\hskip 2em}rr}
