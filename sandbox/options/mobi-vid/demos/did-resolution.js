@@ -25,8 +25,8 @@ d.run(async () => {
 
   const chainId = (await ethers.provider.getNetwork()).chainId;
   const didOnChain = await d.view('get-vehicle-did', 'MOBIVIDRegistryV2.getVehicleDID', reg.getVehicleDID(id),
-    'POTENTIAL DEFECT: returns did:ethr:0x<chainId hex>:<40 hex chars> WITHOUT the 0x prefix on the address (_toHexString(value,20) adds none), which is not a conformant did:ethr identifier; the adapter\'s resolve() copies it verbatim',
-    (v) => assert.equal(v, `did:ethr:0x${chainId.toString(16)}:${id.toLowerCase().slice(2)}`));
+    'FIXED (D10): returns did:ethr:0x<chainId hex>:0x<40 lowercase hex> — the 0x prefix on the address is now present, so the string is a conformant did:ethr identifier (formerly _toHexString(value,20) added none); the adapter\'s resolve() copies it verbatim',
+    (v) => { assert.match(v, /^did:ethr:0x[0-9a-f]+:0x[0-9a-f]{40}$/); assert.equal(v, `did:ethr:0x${chainId.toString(16)}:${id.toLowerCase()}`); });
   await d.view('get-vehicle-did-any-address', 'MOBIVIDRegistryV2.getVehicleDID', reg.getVehicleDID(delegate.address), 'OBSERVATION: any address resolves to a DID string, registered or not (ERC-1056 semantics: every address is an identity)', (v) => assert.ok(v.startsWith('did:ethr:')));
   await d.view('identity-owner', 'MOBIVIDRegistryV2.identityOwner', reg.identityOwner(id), 'controller', (v) => assert.equal(v, vehicleOwner.address));
   await d.view('get-identity-info', 'MOBIVIDRegistryV2.getIdentityInfo', reg.getIdentityInfo(id), 'MEASURED (resolve): (owner, lastChangedBlock, isRevoked, revokedTimestamp)', (v) => { assert.equal(v.owner, vehicleOwner.address); assert.ok(v.lastChangedBlock > 0n); assert.equal(v.isRevoked, false); });

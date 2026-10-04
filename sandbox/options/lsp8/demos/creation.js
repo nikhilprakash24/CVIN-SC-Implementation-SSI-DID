@@ -26,11 +26,11 @@ d.run(async () => {
   await d.view('symbol', 'CVINVehicleLSP8.symbol', c.symbol(), 'collection symbol', (v) => assert.equal(v, 'CVIN-LSP8'));
   await d.view('owner', 'CVINVehicleLSP8.owner', c.owner(), 'issuing authority', (v) => assert.equal(v, authority.address));
   await d.view('total-supply-0', 'CVINVehicleLSP8.totalSupply', c.totalSupply(), 'no identities yet', (v) => assert.equal(v, 0n));
-  const tokenId = await d.view('token-id-for-vin', 'CVINVehicleLSP8.tokenIdForVIN', c.tokenIdForVIN(VINS.bmw), 'pure: tokenId = keccak256(bytes(VIN)) — the identifier is known before the mint (LSP8_TOKENID_FORMAT hash)', (v) => assert.equal(v, ethers.keccak256(ethers.toUtf8Bytes(VINS.bmw))));
+  const tokenId = await d.view('token-id-for-vin', 'CVINVehicleLSP8.tokenIdForVIN', c.tokenIdForVIN(VINS.bmw), 'pure: tokenId = keccak256(bytes(normalised VIN)) — the identifier is known before the mint (LSP8_TOKENID_FORMAT hash); since D13 the VIN is upper-cased and ISO 3779-checked first', (v) => assert.equal(v, ethers.keccak256(ethers.toUtf8Bytes(VINS.bmw))));
   await d.view('exists-before', 'CVINVehicleLSP8.exists', c.exists(tokenId), 'not yet', (v) => assert.equal(v, false));
   await d.reverts('mint-unauthorised', 'CVINVehicleLSP8.mintVehicle', () => c.connect(stranger).mintVehicle(stranger.address, VINS.bmw), 'caller is not the contract owner', 'single authority mints (not self-sovereign)');
   await d.reverts('mint-zero', 'CVINVehicleLSP8.mintVehicle', () => c.connect(authority).mintVehicle(ethers.ZeroAddress, VINS.bmw), 'mint to zero address', 'guard');
-  await d.reverts('mint-empty-vin', 'CVINVehicleLSP8.mintVehicle', () => c.connect(authority).mintVehicle(vehicleOwner.address, ''), 'empty VIN', 'only emptiness is checked, not the 17-char ISO length');
+  await d.reverts('mint-empty-vin', 'CVINVehicleLSP8.mintVehicle', () => c.connect(authority).mintVehicle(vehicleOwner.address, ''), 'empty VIN', 'the emptiness guard fires first; the ISO 3779 shape check (17 chars, no I/O/Q, upper-cased) follows it since the D13 fix');
 
   const r = await d.tx('mint-vehicle', 'CVINVehicleLSP8.mintVehicle', c.connect(authority).mintVehicle(vehicleOwner.address, VINS.bmw),
     'MEASURED (createIdentity): mints tokenId=keccak(VIN) to the owner and stores the VIN under DATA_KEY_VIN');
@@ -47,8 +47,9 @@ d.run(async () => {
   await d.reverts('mint-duplicate', 'CVINVehicleLSP8.mintVehicle', () => c.connect(authority).mintVehicle(fleet.address, VINS.bmw), 'tokenId already minted', 'VIN uniqueness == tokenId uniqueness (same hash)');
   await d.tx('mint-fleet-1', 'CVINVehicleLSP8.mintVehicle', c.connect(authority).mintVehicle(fleet.address, VINS.ford), 'fleet vehicle 1');
   await d.tx('mint-fleet-2', 'CVINVehicleLSP8.mintVehicle', c.connect(authority).mintVehicle(fleet.address, VINS.tesla), 'fleet vehicle 2');
-  await d.tx('mint-short-vin', 'CVINVehicleLSP8.mintVehicle', c.connect(authority).mintVehicle(fleet.address, 'SHORT'), 'OBSERVATION: a 5-character "VIN" is accepted (no ISO 3779 validation)');
-  await d.view('fleet-token-ids', 'CVINVehicleLSP8.tokenIdsOf', c.tokenIdsOf(fleet.address), 'three ids for the fleet', (v) => assert.equal(v.length, 3));
-  await d.view('total-supply-4', 'CVINVehicleLSP8.totalSupply', c.totalSupply(), 'four identities', (v) => assert.equal(v, 4n));
+  await d.reverts('mint-short-vin', 'CVINVehicleLSP8.mintVehicle', () => c.connect(authority).mintVehicle(fleet.address, 'SHORT'), 'invalid VIN length', 'FIXED (D13): a 5-character "VIN" is rejected — ISO 3779 length is enforced (formerly accepted as a fourth identity)');
+  await d.reverts('mint-invalid-char', 'CVINVehicleLSP8.mintVehicle', () => c.connect(authority).mintVehicle(fleet.address, 'KMHD84LF1HU12345Q'), 'invalid VIN character', 'FIXED (D13): the letters I, O and Q are rejected (check digit intentionally not enforced)');
+  await d.view('fleet-token-ids', 'CVINVehicleLSP8.tokenIdsOf', c.tokenIdsOf(fleet.address), 'two ids for the fleet (the malformed mints were rejected)', (v) => assert.equal(v.length, 2));
+  await d.view('total-supply-3', 'CVINVehicleLSP8.totalSupply', c.totalSupply(), 'three identities', (v) => assert.equal(v, 3n));
   await d.reverts('token-owner-of-missing', 'CVINVehicleLSP8.tokenOwnerOf', () => c.tokenOwnerOf(ethers.id('nope')), 'tokenId does not exist', 'checked getter');
 });

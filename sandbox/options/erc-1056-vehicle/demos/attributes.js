@@ -1,7 +1,7 @@
 'use strict';
 /**
  * erc-1056-vehicle / attributes — event-only setAttribute / revokeAttribute (validTo = now on
- * revocation), gated by the revoked flag.
+ * revocation), both gated by the revoked flag (revocation is terminal since the D21 fix).
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-1056-vehicle/demos/attributes.js
  */
 const hre = global.hre || require('hardhat'); // injected by `npx hardhat run`
@@ -55,7 +55,8 @@ async function main() {
   assert(rev.args.validTo === BigInt(blk.timestamp), 'validTo == now');
   await tx('revokeIdentity', 'ERC1056Registry.revokeIdentity', registry.connect(vehicleOwner).revokeIdentity(id), 'decommission the vehicle');
   await reverts('setAttribute-after-revoke', 'ERC1056Registry.setAttribute', registry.connect(vehicleOwner).setAttribute(id, SVC, url, 60), 'Identity is revoked', 'the revoked flag gates new attributes (the chain enforces decommissioning for writes)');
-  await tx('revokeAttribute-after-revoke', 'ERC1056Registry.revokeAttribute', registry.connect(vehicleOwner).revokeAttribute(id, h('did/vehicle/vin'), b(VIN)), 'OBSERVATION: revocations of attributes remain possible after identity revocation (clean-up allowed)');
+  await reverts('revokeAttribute-after-revoke', 'ERC1056Registry.revokeAttribute', registry.connect(vehicleOwner).revokeAttribute(id, h('did/vehicle/vin'), b(VIN)), 'Identity is revoked',
+    'FIXED (D21, decision D-F): revocation is terminal — attribute revocation is blocked too (formerly clean-up stayed possible after identity revocation); a resolver treats every attribute of a revoked identity as void via isRevoked');
 }
 
 main().then(() => {

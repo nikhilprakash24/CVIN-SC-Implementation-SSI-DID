@@ -53,5 +53,5 @@ d.run(async () => {
   await d.view('last-changed', 'MOBIVIDRegistryV2.lastChanged', reg.lastChanged(vehicle), 'same value via the view', (v) => assert.equal(v, BigInt(r2.blockNumber + 1)));
   await d.tx('revoke-identity', 'MOBIVIDRegistryV2.revokeIdentity', reg.connect(owner).revokeIdentity(vehicle), 'decommission');
   await d.reverts('set-after-revoke', 'MOBIVIDRegistryV2.setAttribute', () => reg.connect(owner).setAttribute(vehicle, name('x'), '0x01', YEAR), 'Identity is revoked', 'no new attributes on a revoked identity');
-  await d.tx('revoke-after-revoke', 'MOBIVIDRegistryV2.revokeAttribute', reg.connect(owner).revokeAttribute(vehicle, name('did/svc/telematics'), ethers.toUtf8Bytes('https://telematics.example/v/2')), 'attribute revocation still allowed (cleanup)');
+  await d.reverts('revoke-after-revoke', 'MOBIVIDRegistryV2.revokeAttribute', () => reg.connect(owner).revokeAttribute(vehicle, name('did/svc/telematics'), ethers.toUtf8Bytes('https://telematics.example/v/2')), 'Identity is revoked', 'FIXED (D21, decision D-F): revocation is terminal — attribute clean-up is blocked as well (formerly allowed); a resolver voids all attributes of a revoked identity via isRevoked');
 });

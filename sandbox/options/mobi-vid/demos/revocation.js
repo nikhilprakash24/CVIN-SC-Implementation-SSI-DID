@@ -3,8 +3,9 @@
  * MOBI VID — family "Revocation / status" (manifest: measured-in-comparison via revokeIdentity /
  * isRevoked / revoked). Four revocation levels: identity (revokeIdentity: permanent flag +
  * revokedAt + DIDRevoked), delegate and attribute (event-only validTo=now), issuer and
- * manufacturer authorisations. Shows which operations the revoked flag actually blocks, which
- * it does not, and that the VID II DECOMMISSION event is NOT a revocation.
+ * manufacturer authorisations. Shows that the revoked flag blocks every mutator (terminal since
+ * the D21 fix: changeOwner, clean-up revocations and a second revokeIdentity revert, revokedAt is
+ * frozen), and that the VID II DECOMMISSION event is NOT a revocation.
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/mobi-vid/demos/revocation.js
  */
 const { ethers } = global; // injected by `hardhat run` (the demos live outside the Hardhat project)
@@ -40,14 +41,13 @@ d.run(async () => {
   await d.reverts('blocked-record-event', 'MOBIVIDRegistryV2.recordLifecycleEvent', () => reg.connect(dmv).recordLifecycleEvent(vehicle, 9, 1, ethers.id('x'), ethers.id('y'), 'DE'), 'Vehicle identity is revoked', 'blocked');
   await d.reverts('blocked-transfer', 'MOBIVIDRegistryV2.transferVehicleOwnership', () => reg.connect(owner).transferVehicleOwnership(vehicle, buyer.address, 1, 'X'), 'Vehicle identity is revoked', 'blocked');
   await d.reverts('blocked-register-vehicle', 'MOBIVIDRegistryV2.registerVehicle', () => reg.connect(stranger).registerVehicle(vehicle, '0x01'), 'Identity already revoked', 'blocked');
-  await d.tx('not-blocked-change-owner', 'MOBIVIDRegistryV2.changeOwner', reg.connect(owner).changeOwner(vehicle, buyer.address), 'OBSERVATION: not blocked — ERC-1056 changeOwner ignores the revoked flag');
-  await d.tx('not-blocked-revoke-delegate', 'MOBIVIDRegistryV2.revokeDelegate', reg.connect(buyer).revokeDelegate(vehicle, SIG_AUTH, stranger.address), 'fine-grained revocation still works (cleanup)');
-  await d.tx('not-blocked-revoke-attribute', 'MOBIVIDRegistryV2.revokeAttribute', reg.connect(buyer).revokeAttribute(vehicle, ethers.encodeBytes32String('x'), '0x01'), 'fine-grained revocation still works (cleanup)');
-  const r2 = await d.tx('revoke-twice', 'MOBIVIDRegistryV2.revokeIdentity', reg.connect(buyer).revokeIdentity(vehicle), 'OBSERVATION: a second revokeIdentity is accepted and OVERWRITES revokedAt (the "permanent" timestamp can be moved forward by the new owner)');
-  const ts2 = BigInt((await ethers.provider.getBlock(r2.blockNumber)).timestamp);
-  assert.ok(ts2 > ts1);
-  await d.view('revoked-at-moved', 'MOBIVIDRegistryV2.revokedAt', reg.revokedAt(vehicle), 'revokedAt now later than the first revocation', (v) => assert.equal(v, ts2));
-  d.offchain('no-unrevoke', 'MOBIVIDRegistryV2', 'there is no un-revoke: the flag is one-way (unlike ERC-1155 deregistration which can be re-registered)');
+  await d.reverts('blocked-change-owner', 'MOBIVIDRegistryV2.changeOwner', () => reg.connect(owner).changeOwner(vehicle, buyer.address), 'Identity is revoked', 'FIXED (D21): the inherited ERC-1056 changeOwner is gated by the revoked flag (formerly a decommissioned identity could still change hands)');
+  await d.reverts('blocked-revoke-delegate', 'MOBIVIDRegistryV2.revokeDelegate', () => reg.connect(owner).revokeDelegate(vehicle, SIG_AUTH, stranger.address), 'Identity is revoked', 'FIXED (D21, decision D-F): revocation is terminal — even delegate clean-up reverts (formerly allowed)');
+  await d.reverts('blocked-revoke-attribute', 'MOBIVIDRegistryV2.revokeAttribute', () => reg.connect(owner).revokeAttribute(vehicle, ethers.encodeBytes32String('x'), '0x01'), 'Identity is revoked', 'FIXED (D21, decision D-F): attribute clean-up reverts too; isRevoked voids everything at once');
+  await d.reverts('revoke-twice', 'MOBIVIDRegistryV2.revokeIdentity', () => reg.connect(owner).revokeIdentity(vehicle), 'Identity already revoked', 'FIXED (D21): a second revokeIdentity reverts (formerly it was accepted and OVERWROTE revokedAt, so the "permanent" timestamp could be moved forward)');
+  await d.view('revoked-at-frozen', 'MOBIVIDRegistryV2.revokedAt', reg.revokedAt(vehicle), 'revokedAt is still the first (and only) revocation time', (v) => assert.equal(v, ts1));
+  await d.view('owner-frozen', 'MOBIVIDRegistryV2.identityOwner', reg.identityOwner(vehicle), 'the last owner before decommissioning is frozen on-chain', (v) => assert.equal(v, owner.address));
+  d.offchain('no-unrevoke', 'MOBIVIDRegistryV2', 'there is no un-revoke: the flag is one-way and terminal (unlike ERC-1155 deregistration which can be re-registered)');
 
   const r3 = await d.tx('revoke-issuer', 'MOBIVIDRegistryV2.revokeIssuerAuthorization', reg.connect(authority).revokeIssuerAuthorization(dmv.address), 'issuer-level revocation -> IssuerAuthorizationRevoked');
   assert.equal(eventArgs(reg, r3, 'IssuerAuthorizationRevoked').issuer, dmv.address);

@@ -3,6 +3,8 @@
  * erc-1056-vehicle / revocation — the one ERC-1056 variant WITH identity-level revocation:
  * revokeIdentity / isRevoked / revoked / revokedAt / DIDRevoked, what it gates afterwards, plus
  * attribute/delegate revocation and the off-chain status checks of the provider.
+ * Since the D21 fix (2026-10-04) revocation is terminal: every mutator (changeOwner included) and a
+ * second revokeIdentity revert, revokedAt is frozen, and DIDRevoked carries previousChange.
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-1056-vehicle/demos/revocation.js
  */
 const hre = global.hre || require('hardhat'); // injected by `npx hardhat run`
@@ -51,11 +53,13 @@ async function main() {
   // identity-level revocation
   assert((await view('isRevoked-before', 'ERC1056Registry.isRevoked', registry.isRevoked(id), (v) => `isRevoked == ${v}`)) === false, 'not revoked');
   await reverts('revokeIdentity-by-stranger', 'ERC1056Registry.revokeIdentity', registry.connect(stranger).revokeIdentity(id), 'Only owner can perform this action', 'only the controller decommissions');
+  const changedBefore = await registry.changed(id);
   const rr = await tx('revokeIdentity', 'ERC1056Registry.revokeIdentity', registry.connect(vehicleOwner).revokeIdentity(id),
-    'MEASURED (#21/#29 revoke): 2 SSTOREs (revoked flag + revokedAt) + DIDRevoked + changed pointer; the identity-level kill switch the uPort registry lacks');
+    'MEASURED (#21/#29 revoke): 2 SSTOREs (revoked flag + revokedAt) + DIDRevoked(identity, revokedAt, previousChange) + changed pointer; the identity-level kill switch the uPort registry lacks');
   const ev = eventsOf(rr, registry, 'DIDRevoked');
   const blk = await ethers.provider.getBlock(rr.blockNumber);
   assert(ev.length === 1 && ev[0].args.revokedAt === BigInt(blk.timestamp), 'DIDRevoked');
+  assert(ev[0].args.previousChange === changedBefore, 'DIDRevoked.previousChange links to the previous change (FIXED D21)');
   assert((await view('isRevoked-after', 'ERC1056Registry.isRevoked', registry.isRevoked(id), (v) => `isRevoked == ${v}: MEASURED (#21/#29 status check) — an O(1) on-chain read any contract or RSU can make`)) === true, 'revoked');
   assert((await view('revoked-mapping', 'ERC1056Registry.revoked', registry.revoked(id), (v) => `revoked[id] == ${v} (public mapping behind isRevoked)`)) === true, 'mapping');
   assert((await view('revokedAt', 'ERC1056Registry.revokedAt', registry.revokedAt(id), (v) => `revokedAt == ${v} (block timestamp of decommissioning)`)) === BigInt(blk.timestamp), 'revokedAt');
@@ -67,13 +71,14 @@ async function main() {
   await reverts('setAttribute-after-revoke', 'ERC1056Registry.setAttribute', registry.connect(vehicleOwner).setAttribute(id, SVC, url, 60), 'Identity is revoked', 'new attributes blocked');
   await reverts('updateVehicleKey-after-revoke', 'ERC1056Registry.updateVehicleKey', registry.connect(vehicleOwner).updateVehicleKey(id, pk), 'Identity is revoked', 'key rotation blocked');
   await reverts('registerVehicle-after-revoke', 'ERC1056Registry.registerVehicle', registry.connect(vehicleOwner).registerVehicle(id, pk), 'Identity already revoked', 'resurrection blocked: revocation is permanent');
-  await tx('changeOwner-after-revoke', 'ERC1056Registry.changeOwner', registry.connect(vehicleOwner).changeOwner(id, newOwner.address),
-    'OBSERVATION: changeOwner is NOT gated by the revoked flag — a decommissioned identity can still be transferred (and the new owner can revoke it again)');
-  const r2 = await tx('revokeIdentity-again', 'ERC1056Registry.revokeIdentity', registry.connect(newOwner).revokeIdentity(id),
-    'OBSERVATION: revokeIdentity is not idempotent-guarded: a second call succeeds and OVERWRITES revokedAt with a later timestamp (audit trail of the original decommissioning time survives only in the first DIDRevoked event)');
-  const ra2 = await registry.revokedAt(id);
-  assert(ra2 > BigInt(blk.timestamp), 'revokedAt overwritten');
-  void r2;
+  await reverts('changeOwner-after-revoke', 'ERC1056Registry.changeOwner', registry.connect(vehicleOwner).changeOwner(id, newOwner.address), 'Identity is revoked',
+    'FIXED (D21): changeOwner is now gated by the revoked flag — a decommissioned identity cannot change hands (formerly it could, and the new owner could revoke it again)');
+  await reverts('revokeIdentity-again', 'ERC1056Registry.revokeIdentity', registry.connect(vehicleOwner).revokeIdentity(id), 'Identity already revoked',
+    'FIXED (D21): revokeIdentity is single-shot — a second call reverts instead of overwriting revokedAt (formerly it succeeded and moved the timestamp)');
+  await reverts('revokeAttribute-after-revoke', 'ERC1056Registry.revokeAttribute', registry.connect(vehicleOwner).revokeAttribute(id, SVC, url), 'Identity is revoked',
+    'FIXED (D21): revocation is terminal — even attribute/delegate clean-up reverts; the last state before DIDRevoked is frozen');
+  assert((await view('revokedAt-frozen', 'ERC1056Registry.revokedAt', registry.revokedAt(id), (v) => `revokedAt == ${v}: unchanged by the rejected second revocation (FIXED D21: the original decommissioning time is the only one)`)) === BigInt(blk.timestamp), 'revokedAt frozen');
+  assert((await registry.identityOwner(id)) === vehicleOwner.address, 'owner frozen');
 
   // off-chain status checks of the provider
   out('offchain-check_revocation_status', `offchain:${PROVIDER}#check_revocation_status`, false, 0, 'check_revocation_status(vehicle_id) (line 649): looks the vehicle up in the provider store and calls isRevoked(address) — the one on-chain read in the V2X hot path');

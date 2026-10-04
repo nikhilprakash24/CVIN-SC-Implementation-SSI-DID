@@ -58,5 +58,5 @@ d.run(async () => {
   await d.tx('revoke-identity', 'MOBIVIDRegistryV2.revokeIdentity', reg.connect(owner).revokeIdentity(vehicle), 'decommission');
   await d.reverts('add-delegate-after-revoke', 'MOBIVIDRegistryV2.addDelegate', () => reg.connect(owner).addDelegate(vehicle, SIG_AUTH, backupKey.address, YEAR), 'Identity is revoked', 'no new keys for a revoked identity');
   await d.reverts('update-key-after-revoke', 'MOBIVIDRegistryV2.updateVehicleKey', () => reg.connect(owner).updateVehicleKey(vehicle, newPub), 'Identity is revoked', 'no key rotation for a revoked identity');
-  await d.tx('revoke-delegate-after-revoke', 'MOBIVIDRegistryV2.revokeDelegate', reg.connect(owner).revokeDelegate(vehicle, SIG_AUTH, telematicsKey.address), 'revocations stay possible after decommissioning (sensible: cleanup)');
+  await d.reverts('revoke-delegate-after-revoke', 'MOBIVIDRegistryV2.revokeDelegate', () => reg.connect(owner).revokeDelegate(vehicle, SIG_AUTH, telematicsKey.address), 'Identity is revoked', 'FIXED (D21, decision D-F): revocation is terminal — delegate clean-up is blocked after decommissioning (formerly allowed); the verifier\'s replay must consult isRevoked, which voids every delegate at once');
 });

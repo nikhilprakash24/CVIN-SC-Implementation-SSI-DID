@@ -52,5 +52,6 @@ d.run(async () => {
   await d.reverts('get-history-unregistered', 'MOBIVIDRegistryV2.getOwnershipHistory', () => reg.getOwnershipHistory(stranger.address), 'Vehicle not registered', 'checked getter (the count getter is unchecked and returns 0)');
   await d.tx('revoke-identity', 'MOBIVIDRegistryV2.revokeIdentity', reg.connect(buyer).revokeIdentity(vehicle), 'owner decommissions the identity');
   await d.reverts('transfer-after-revoke', 'MOBIVIDRegistryV2.transferVehicleOwnership', () => reg.connect(buyer).transferVehicleOwnership(vehicle, buyer2.address, 1, 'X'), 'Vehicle identity is revoked', 'VID II transfer blocked');
-  await d.tx('change-owner-after-revoke', 'MOBIVIDRegistryV2.changeOwner', reg.connect(buyer).changeOwner(vehicle, buyer2.address), 'OBSERVATION: the inherited changeOwner has NO revoked check — a decommissioned identity can still change hands at the ERC-1056 level');
+  await d.reverts('change-owner-after-revoke', 'MOBIVIDRegistryV2.changeOwner', () => reg.connect(buyer).changeOwner(vehicle, buyer2.address), 'Identity is revoked', 'FIXED (D21): the inherited changeOwner now checks the revoked flag — a decommissioned identity cannot change hands at the ERC-1056 level either (formerly it could)');
+  await d.view('owner-frozen-after-revoke', 'MOBIVIDRegistryV2.identityOwner', reg.identityOwner(vehicle), 'the owner at decommissioning time is frozen', (v) => assert.equal(v, buyer.address));
 });

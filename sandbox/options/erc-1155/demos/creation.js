@@ -3,7 +3,8 @@
  * ERC-1155 — family "Identity creation (explicit)" (manifest: measured-in-comparison via
  * registerVehicle). Identity = the address that holds one soulbound BIRTH_CERT (token id 1).
  * Exercises registerVehicle, the credential-type constants, isRegistered, the two VIN indexes
- * written at registration, ERC-165 introspection and every creation guard.
+ * written at registration, ERC-165 introspection and every creation guard (including the D13
+ * ISO 3779 normalisation: 17 chars, no I/O/Q, upper-cased before hashing).
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-1155/demos/creation.js
  */
 const { ethers } = global; // injected by `hardhat run` (the demos live outside the Hardhat project)
@@ -40,10 +41,12 @@ d.run(async () => {
 
   await d.reverts('register-twice', 'CVINVehicleCredential1155.registerVehicle', () => c.connect(issuer).registerVehicle(vehicleA.address, VINS.honda), 'vehicle already registered', 'one BIRTH_CERT per address');
   await d.reverts('register-duplicate-vin', 'CVINVehicleCredential1155.registerVehicle', () => c.connect(issuer).registerVehicle(vehicleB.address, VINS.bmw), 'VIN already registered', 'VIN uniqueness via the hash index');
-  await d.reverts('register-empty-vin', 'CVINVehicleCredential1155.registerVehicle', () => c.connect(issuer).registerVehicle(vehicleB.address, ''), 'empty VIN', 'only emptiness is checked: NOT the 17-char length (unlike CVINVehicleNFT)');
-  await d.tx('register-short-vin', 'CVINVehicleCredential1155.registerVehicle', c.connect(issuer).registerVehicle(vehicleB.address, 'SHORT'), 'OBSERVATION: a 5-character "VIN" is accepted — no ISO 3779 validation on this option');
+  await d.reverts('register-empty-vin', 'CVINVehicleCredential1155.registerVehicle', () => c.connect(issuer).registerVehicle(vehicleB.address, ''), 'empty VIN', 'the emptiness guard fires first; the ISO 3779 shape check (17 chars, no I/O/Q, upper-cased) follows it since the D13 fix');
+  await d.reverts('register-short-vin', 'CVINVehicleCredential1155.registerVehicle', () => c.connect(issuer).registerVehicle(vehicleB.address, 'SHORT'), 'invalid VIN length', 'FIXED (D13): a 5-character "VIN" is rejected — ISO 3779 length is enforced on this option too (formerly accepted)');
+  await d.reverts('register-invalid-char', 'CVINVehicleCredential1155.registerVehicle', () => c.connect(issuer).registerVehicle(vehicleB.address, 'WBA3A5C55CF25678O'), 'invalid VIN character', 'FIXED (D13): the letters I, O and Q are rejected (check digit intentionally not enforced)');
+  await d.reverts('register-lowercase-twin', 'CVINVehicleCredential1155.registerVehicle', () => c.connect(issuer).registerVehicle(vehicleB.address, VINS.bmw.toLowerCase()), 'VIN already registered', 'FIXED (D13): the VIN is upper-cased before hashing, so the lower-cased twin collides with the registered VIN');
   await d.reverts('register-zero-address', 'CVINVehicleCredential1155.registerVehicle', () => c.connect(issuer).registerVehicle(ethers.ZeroAddress, VINS.honda), 'vehicle is zero address', 'zero-address guard');
   await d.reverts('register-unauthorised', 'CVINVehicleCredential1155.registerVehicle', () => c.connect(stranger).registerVehicle(stranger.address, VINS.honda), 'AccessControlUnauthorizedAccount', 'only ISSUER_ROLE creates identities (not self-sovereign)');
   await d.tx('register-second', 'CVINVehicleCredential1155.registerVehicle', c.connect(issuer).registerVehicle(stranger.address, VINS.honda), 'a second real vehicle');
-  await d.view('balance-of-batch', 'CVINVehicleCredential1155.balanceOfBatch', c.balanceOfBatch([vehicleA.address, vehicleB.address, stranger.address], [1, 1, 1]), 'ERC-1155 batch read: three identities exist', (v) => assert.deepEqual([...v], [1n, 1n, 1n]));
+  await d.view('balance-of-batch', 'CVINVehicleCredential1155.balanceOfBatch', c.balanceOfBatch([vehicleA.address, vehicleB.address, stranger.address], [1, 1, 1]), 'ERC-1155 batch read: two identities exist (vehicleB holds none — every one of its malformed registrations was rejected)', (v) => assert.deepEqual([...v], [1n, 0n, 1n]));
 });

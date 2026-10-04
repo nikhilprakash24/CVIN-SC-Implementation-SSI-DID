@@ -1,8 +1,9 @@
 'use strict';
 /**
  * erc-1056-vehicle / lifecycle-history — changed / lastChanged and the previousChange linked
- * list; DIDRevoked carries no previousChange, so revocation CUTS the list and a resolver must
- * fall back to a range scan. nonce is declared but never consumed.
+ * list, walked through a revocation: since the D21 fix DIDRevoked carries previousChange like the
+ * three ERC-1056 events, so the walk reaches genesis with no gap (formerly the list was CUT at the
+ * revoke block and a resolver had to fall back to a range scan). nonce is declared but never consumed.
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-1056-vehicle/demos/lifecycle-history.js
  */
 const hre = global.hre || require('hardhat'); // injected by `npx hardhat run`
@@ -37,9 +38,9 @@ async function walk(registry, id) {
       registry.queryFilter(registry.filters.DIDRevoked(id), n, n),
     ]);
     let prev = block;
-    for (const ev of [...o, ...d, ...a]) { events.push(ev.fragment.name + '@' + n); if (ev.args.previousChange < prev) prev = ev.args.previousChange; }
-    for (const ev of r) events.push(ev.fragment.name + '@' + n);
-    if (prev === block) { cut = r.length > 0; break; }
+    // all four event kinds carry previousChange (DIDRevoked since the D21 fix), so one rule covers them
+    for (const ev of [...o, ...d, ...a, ...r]) { events.push(ev.fragment.name + '@' + n); if (ev.args.previousChange < prev) prev = ev.args.previousChange; }
+    if (prev === block) { cut = true; break; } // a block on the list whose events point nowhere earlier: the list is severed
     block = prev;
   }
   return { head, events, cut, stoppedAt: block };
@@ -63,19 +64,22 @@ async function main() {
   out('walk-before-revoke', 'ERC1056Registry.changed', true, 0, `linked-list walk: ${w1.events.join(', ')} -> stopped at ${w1.stoppedAt} (complete, ${w1.events.length} events, blocks ${[r1, r2, r3, r4].map((r) => r.blockNumber).join('/')})`);
   assert(w1.events.length === 4 && w1.stoppedAt === 0n && !w1.cut, 'complete chain');
 
-  const r5 = await tx('op5-revokeIdentity', 'ERC1056Registry.revokeIdentity', registry.connect(newOwner).revokeIdentity(id), 'history entry 5: DIDRevoked(identity, revokedAt) — NOTE: this event has no previousChange field');
+  const r5 = await tx('op5-revokeIdentity', 'ERC1056Registry.revokeIdentity', registry.connect(newOwner).revokeIdentity(id), 'history entry 5: DIDRevoked(identity, revokedAt, previousChange) — the previousChange field was added by the D21 fix');
   assert((await registry.changed(id)) === BigInt(r5.blockNumber), 'changed moved to revoke block');
+  const rev = (await registry.queryFilter(registry.filters.DIDRevoked(id), r5.blockNumber, r5.blockNumber))[0];
+  assert(rev.args.previousChange === BigInt(r4.blockNumber), 'DIDRevoked.previousChange == block of op4');
   const w2 = await walk(registry, id);
-  out('walk-after-revoke-CUT', 'ERC1056Registry.changed', true, 0, `walk from the new head: ${w2.events.join(', ')} -> cut=${w2.cut}: POTENTIAL DEFECT — changed now points at a block whose only event (DIDRevoked) carries no previousChange, so the did:ethr linked list is severed and the ${w1.events.length} earlier events are unreachable by pointer-walking; a resolver must fall back to a full range scan (the S2 adapter does exactly that)`);
-  assert(w2.cut === true && w2.events.length === 1, 'chain cut');
+  out('walk-after-revoke', 'ERC1056Registry.changed', true, 0, `walk from the new head: ${w2.events.join(', ')} -> stopped at ${w2.stoppedAt}, cut=${w2.cut}: FIXED (D21) — DIDRevoked.previousChange == ${rev.args.previousChange} (block of op4), so the did:ethr linked list continues through the revocation and all ${w2.events.length} events are reachable by pointer-walking from changed(); formerly DIDRevoked carried no previousChange and the walk found only the revoke block (the S2 adapter had to range-scan)`);
+  assert(!w2.cut && w2.stoppedAt === 0n && w2.events.length === 5 && w2.events[0] === 'DIDRevoked@' + r5.blockNumber, 'walk reaches genesis through the revocation');
   const scan = await registry.queryFilter(registry.filters.DIDAttributeChanged(id), 0, 'latest');
-  out('fallback-range-scan', 'ERC1056Registry.changed', true, 0, `fallback scan of DIDAttributeChanged(id) over the whole chain finds ${scan.length} events — O(chain) instead of O(#changes)`);
+  out('range-scan-cross-check', 'ERC1056Registry.changed', true, 0, `a full range scan of DIDAttributeChanged(id) finds ${scan.length} event(s), the same as the pointer walk — the O(chain) fallback is no longer needed for correctness`);
+  assert(scan.length === w2.events.filter((e) => e.startsWith('DIDAttributeChanged')).length, 'scan agrees with walk');
   const Adapter = require('../adapter');
   const ad = new Adapter({ ethers, signers: { deployer, vehicleOwner, newOwner, delegate } });
   await ad.attach(await registry.getAddress());
   const doc = (await ad.resolve(id)).value;
-  out('adapter-resolve-after-cut', 'adapter.resolve', true, 0, `adapter.resolve (with its DIDRevoked fallback) still reconstructs events=${doc.meta.events}, revoked=${doc.status.revoked}, controller=${doc.controller.slice(0, 10)}…`);
-  assert(doc.meta.events === 5 && doc.status.revoked === true, 'adapter fallback works');
+  out('adapter-resolve-after-revoke', 'adapter.resolve', true, 0, `adapter.resolve reconstructs events=${doc.meta.events}, revoked=${doc.status.revoked}, controller=${doc.controller.slice(0, 10)}… (its pre-fix DIDRevoked fallback is now redundant but harmless)`);
+  assert(doc.meta.events === 5 && doc.status.revoked === true, 'adapter resolves the full history');
 }
 
 main().then(() => {
