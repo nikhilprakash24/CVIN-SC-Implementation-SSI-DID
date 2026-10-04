@@ -49,6 +49,7 @@ async function main() {
     assert((await c.getClaimIdsByTopic(t)).length === 0, `${n} empty`);
   }
   out('no-claims-at-birth', `${CONTRACT}.getClaimIdsByTopic`, true, 0, 'all four vehicle topics are empty at creation: the identity asserts a VIN but holds no attestation of it yet (the VIN_ATTESTATION claim comes from a manufacturer, see vin-linkage)');
+  assert((await view('no-issuers-at-birth', `${CONTRACT}.isAuthorizedIssuer`, c.isAuthorizedIssuer(deployer.address, 1), (v) => `isAuthorizedIssuer(deployer, VIN_ATTESTATION) == ${v}: the D25a issuer registry is empty at creation — the owner must authorizeIssuer(issuer, topic) before any third-party claim can be anchored (self-issued claims excepted)`)) === false, 'empty registry');
   const code = await ethers.provider.getCode(id);
   out('bytecode-size', `${CONTRACT}.constructor`, true, 0, `runtime bytecode ${(code.length - 2) / 2} bytes per vehicle; the VIN string costs 1 extra slot (<=31 bytes)`);
   const Adapter = require('../adapter');

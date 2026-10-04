@@ -34,6 +34,7 @@ async function main() {
   const sign = (signer, topic, data) => signer.signMessage(ethers.getBytes(ethers.solidityPackedKeccak256(['address', 'uint256', 'bytes'], [id, topic, data])));
   const cid = ethers.solidityPackedKeccak256(['address', 'uint256'], [inspector.address, 3]);
 
+  await tx('h0-authorizeIssuer', `${CONTRACT}.authorizeIssuer`, c.connect(vehicleOwner).authorizeIssuer(inspector.address, 3), 'D25: issuers must be authorised per topic — history entry 0b: IssuerAuthorized(inspector, INSPECTION)');
   const d1 = b('APK:2024-03-01:PASS:odo=120000');
   const r1 = await tx('h1-addClaim', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(3, 1, inspector.address, await sign(inspector, 3, d1), d1, ''), 'first anchoring');
   assert(eventsOf(r1, c, 'ClaimRequested').length === 1 && eventsOf(r1, c, 'ClaimAdded').length === 1, 'requested+added');
@@ -44,7 +45,7 @@ async function main() {
   out('ClaimChanged-decoded', `${CONTRACT}.addClaim`, true, 0, `ClaimChanged(claimId, topic=${chg[0].args.topic}, issuer, data="${utf8(chg[0].args.data)}"): the PREVIOUS value is not in the event — a verifier reconstructs the history by ordering ClaimAdded/ClaimChanged logs`);
   const r3 = await tx('h3-transferOwnership', `${CONTRACT}.transferOwnership`, c.connect(vehicleOwner).transferOwnership(newOwner.address), 'sale');
   const d3 = b('APK:2026-03-02:FAIL:brakes');
-  const r4 = await tx('h4-addClaim-update-by-buyer', `${CONTRACT}.addClaim`, c.connect(newOwner).addClaim(3, 1, inspector.address, await sign(inspector, 3, d3), d3, ''), 'the new owner anchors the next (failed) inspection — the holder changed, the issuer did not');
+  const r4 = await tx('h4-addClaim-update-by-buyer', `${CONTRACT}.addClaim`, c.connect(newOwner).addClaim(3, 1, inspector.address, await sign(inspector, 3, d3), d3, ''), 'the new owner anchors the next (failed) inspection — the holder changed, the issuer did not, and its D25a authorisation survived the sale (no re-authorizeIssuer needed)');
   const r5 = await tx('h5-removeClaim', `${CONTRACT}.removeClaim`, c.connect(inspector).removeClaim(cid), 'issuer withdraws; ClaimRemoved carries the FULL last claim (signature, data, uri) so the log alone proves what was revoked');
   const rem = eventsOf(r5, c, 'ClaimRemoved')[0];
   assert(utf8(rem.args.data) === utf8(d3) && rem.args.signature.length === 132, 'full claim in ClaimRemoved');
@@ -54,9 +55,10 @@ async function main() {
   const removed = await c.queryFilter(c.filters.ClaimRemoved(), 0, 'latest');
   const requested = await c.queryFilter(c.filters.ClaimRequested(), 0, 'latest');
   const owners = await c.queryFilter(c.filters.OwnershipTransferred(), 0, 'latest');
+  const authorised = await c.queryFilter(c.filters.IssuerAuthorized(), 0, 'latest');
   const timeline = [...added, ...changed, ...removed].sort((x, y) => x.blockNumber - y.blockNumber).map((e) => `${e.fragment.name}@${e.blockNumber}:${utf8(e.args.data)}`);
-  out('timeline-from-logs', `${CONTRACT}.getClaimIdsByTopic`, true, 0, `log scan: ClaimRequested=${requested.length} ClaimAdded=${added.length} ClaimChanged=${changed.length} ClaimRemoved=${removed.length} OwnershipTransferred=${owners.length}; inspection timeline: ${timeline.join(' -> ')}`);
-  assert(added.length === 1 && changed.length === 2 && removed.length === 1 && owners.length === 2, 'counts');
+  out('timeline-from-logs', `${CONTRACT}.getClaimIdsByTopic`, true, 0, `log scan: IssuerAuthorized=${authorised.length} ClaimRequested=${requested.length} ClaimAdded=${added.length} ClaimChanged=${changed.length} ClaimRemoved=${removed.length} OwnershipTransferred=${owners.length}; inspection timeline: ${timeline.join(' -> ')} (D25a adds IssuerAuthorized/IssuerRevoked as trust-policy history: who the holder recognised, and when)`);
+  assert(added.length === 1 && changed.length === 2 && removed.length === 1 && owners.length === 2 && authorised.length === 1, 'counts');
   assert([r1, r2, r3, r4, r5].every((r) => r.status === 1), 'all ok');
   assert((await view('current-state', `${CONTRACT}.getClaimIdsByTopic`, c.getClaimIdsByTopic(3), (v) => `getClaimIdsByTopic(INSPECTION) -> ${v.length} now: current state forgets the 3 inspections; only the log remembers (no changed pointer, no linked list: O(chain) scan per contract address)`)).length === 0, 'empty now');
   out('history-not-measured', `${CONTRACT}.getClaim`, true, 0, 'the comparison measures addClaim/removeClaim gas and never the history read; ClaimChanged is listed in the manifest as the only lifecycle marker');

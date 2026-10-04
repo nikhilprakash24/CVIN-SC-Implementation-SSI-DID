@@ -1,7 +1,9 @@
 'use strict';
 /**
  * erc-735 / revocation — sub-identity only: removeClaim by the owner (holder-side) or by the
- * issuer (issuer-side); no identity-level revocation and no claim expiry.
+ * issuer (issuer-side), plus (D25a) revokeIssuer, which withdraws an issuer's right to issue
+ * going forward without touching its existing claims; no identity-level revocation and no
+ * claim expiry.
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-735/demos/revocation.js
  */
 const hre = global.hre || require('hardhat'); // injected by `npx hardhat run`
@@ -41,6 +43,7 @@ async function main() {
   // three inspections by three issuers on the same topic, to exercise index compaction
   const issuers = [inspector, insurer, manufacturer];
   for (const [i, s] of issuers.entries()) {
+    await tx(`authorizeIssuer-${i}`, `${CONTRACT}.authorizeIssuer`, c.connect(vehicleOwner).authorizeIssuer(s.address, 3), `D25: issuers must be authorised per topic — issuer #${i} ${short(s.address)} admitted for INSPECTION`);
     const d = b(`APK:${2024 + i}:PASS`);
     await tx(`addClaim-INSPECTION-${i}`, `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(3, 1, s.address, await sign(s, 3, d), d, ''), `inspection claim #${i} by ${short(s.address)}`);
   }
@@ -59,6 +62,13 @@ async function main() {
   await tx('removeClaim-issuer-side', `${CONTRACT}.removeClaim`, c.connect(insurer).removeClaim(claimId(insurer.address, 3)), 'issuer-side revocation: the issuer withdraws without the holder\'s cooperation (the CRL analogue, pushed on-chain)');
   await reverts('stranger-cannot-remove', `${CONTRACT}.removeClaim`, c.connect(stranger).removeClaim(claimId(manufacturer.address, 3)), 'caller is not owner nor issuer', 'access');
   assert((await c.getClaimIdsByTopic(3)).length === 1, '1 left');
+
+  // issuer-level revocation (D25a): forward-looking, distinct from claim removal
+  await tx('revokeIssuer-manufacturer', `${CONTRACT}.revokeIssuer`, c.connect(vehicleOwner).revokeIssuer(manufacturer.address, 3), 'D25a: the holder withdraws issuer #2\'s right to issue INSPECTION claims (IssuerRevoked)');
+  assert((await view('isAuthorizedIssuer-after-revoke', `${CONTRACT}.isAuthorizedIssuer`, c.isAuthorizedIssuer(manufacturer.address, 3), (v) => `isAuthorizedIssuer(issuer #2, INSPECTION) == ${v}`)) === false, 'revoked');
+  assert((await view('claim-survives-revokeIssuer', `${CONTRACT}.claimExists`, c.claimExists(manufacturer.address, 3), (v) => `claimExists(issuer #2, INSPECTION) == ${v}: revokeIssuer is FORWARD-LOOKING — the claim it already issued stays live until removeClaim; revoking an issuer is not revoking its claims`)) === true, 'claim stays');
+  const dLate = b('APK:2027:PASS');
+  await reverts('addClaim-after-revokeIssuer', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(3, 1, manufacturer.address, await sign(manufacturer, 3, dLate), dLate, ''), 'issuer not authorized for topic', 'a later claim (or in-place update) by the revoked issuer is rejected despite a valid signature');
   out('no-expiry', `${CONTRACT}.getClaim`, true, 0, 'claims have NO validity window: an inspection from 2024 stays "valid" on-chain until someone removes it — currency must be judged from the data payload off-chain (contrast ERC-1056 validTo)');
   assert(typeof c.isRevoked === 'undefined', 'no identity revocation');
   out('no-identity-revocation', `${CONTRACT}.owner`, true, 0, 'no identity-level revocation and no renounce: a stolen/scrapped vehicle keeps a live claim holder; the best available signal is "all claims removed" (compare ERC1056Registry.revokeIdentity)');
@@ -69,7 +79,7 @@ async function main() {
   assert(na.notApplicable === true, 'bare id N/A');
   out('adapter-revoke-bare', 'adapter.revoke', true, 0, `adapter.revoke(id) -> NotApplicable: ${na.reason}`);
   const rv = await ad.revoke({ id, issuer: manufacturer.address, topic: 3 });
-  out('adapter-revoke-claim', `${CONTRACT}.removeClaim`, true, rv.gasUsed, `adapter.revoke({ id, issuer, topic }) -> ${rv.note}`);
+  out('adapter-revoke-claim', `${CONTRACT}.removeClaim`, true, rv.gasUsed, `adapter.revoke({ id, issuer, topic }) -> ${rv.note} (the revoked issuer's surviving claim is removed by the owner — the two revocation levels compose)`);
   assert((await c.getClaimIdsByTopic(3)).length === 0, 'all removed');
 }
 

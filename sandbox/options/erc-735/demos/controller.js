@@ -38,6 +38,7 @@ async function main() {
   const data = ethers.toUtf8Bytes(VIN);
   const digest = ethers.solidityPackedKeccak256(['address', 'uint256', 'bytes'], [id, 2, data]);
   const sig = await manufacturer.signMessage(ethers.getBytes(digest));
+  await tx('authorizeIssuer-manufacturer', `${CONTRACT}.authorizeIssuer`, c.connect(vehicleOwner).authorizeIssuer(manufacturer.address, 2), 'D25: issuers must be authorised per topic — the first owner admits the OEM for MANUFACTURER_CERT');
   await tx('addClaim-manufacturer', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(2, 1, manufacturer.address, sig, data, 'ipfs://cert'), 'a claim anchored by the first owner (to show it survives the sale)');
   const claimId = ethers.solidityPackedKeccak256(['address', 'uint256'], [manufacturer.address, 2]);
 
@@ -49,9 +50,12 @@ async function main() {
   assert(eventsOf(r, c, 'OwnershipTransferred')[0].args.newOwner === newOwner.address, 'event');
   assert((await view('owner-after', `${CONTRACT}.owner`, c.owner(), (v) => `owner == ${short(v)}`)) === newOwner.address, 'rotated');
   assert((await view('claims-survive', `${CONTRACT}.claimExists`, c.claimExists(manufacturer.address, 2), (v) => `claimExists(manufacturer, MANUFACTURER_CERT) == ${v}: claims belong to the identity, not to the owner`)) === true, 'claim survives');
+  assert((await view('issuer-authorisation-survives', `${CONTRACT}.isAuthorizedIssuer`, c.isAuthorizedIssuer(manufacturer.address, 2), (v) => `isAuthorizedIssuer(manufacturer, MANUFACTURER_CERT) == ${v}: D25a authorisations belong to the VEHICLE too — they survive the sale; the buyer may revokeIssuer`)) === true, 'auth survives');
+  await reverts('old-owner-cannot-revoke-issuer', `${CONTRACT}.revokeIssuer`, c.connect(vehicleOwner).revokeIssuer(manufacturer.address, 2), 'caller is not the owner', 'the registry is MANAGEMENT-key state: the seller can no longer admit or revoke issuers');
   await reverts('old-owner-locked-out', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(2, 1, manufacturer.address, sig, data, ''), 'caller is not the owner', 'previous owner cannot anchor claims any more');
   await reverts('old-owner-cannot-remove', `${CONTRACT}.removeClaim`, c.connect(vehicleOwner).removeClaim(claimId), 'caller is not owner nor issuer', '… nor remove them (only owner or issuer)');
   await tx('new-owner-removes', `${CONTRACT}.removeClaim`, c.connect(newOwner).removeClaim(claimId), 'the buyer may drop the seller-era claim');
+  await tx('new-owner-revokes-issuer', `${CONTRACT}.revokeIssuer`, c.connect(newOwner).revokeIssuer(manufacturer.address, 2), '… and withdraw the seller-era issuer authorisation (IssuerRevoked)');
   assert(typeof c.renounceOwnership === 'undefined', 'no renounce');
   out('no-renounce', `${CONTRACT}.owner`, true, 0, 'no renounceOwnership and no zero transfer: unlike ERC-725/725xy this identity cannot be frozen; decommissioning is not expressible (revocation family: claims only)');
 }

@@ -2,8 +2,10 @@
 /**
  * erc-735 / claims — on-chain claims with on-chain signature verification: the four vehicle
  * topics, ECDSA scheme, EIP-191 signing over keccak256(identity, topic, data), ClaimRequested +
- * ClaimAdded / ClaimChanged / ClaimRemoved, getClaim / getClaimIdsByTopic / claimExists, and the
- * validation negatives (wrong signer, raw-digest signature, high-s, scheme, zero issuer, access).
+ * ClaimAdded / ClaimChanged / ClaimRemoved, getClaim / getClaimIdsByTopic / claimExists, the
+ * per-topic issuer registry that addClaim enforces since D25a (authorizeIssuer first; self-issued
+ * claims exempt), and the validation negatives (wrong signer, unauthorised issuer, raw-digest
+ * signature — D25c, documented not changed —, high-s, scheme, zero issuer, access).
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-735/demos/claims.js
  */
 const hre = global.hre || require('hardhat'); // injected by `npx hardhat run`
@@ -48,12 +50,20 @@ async function main() {
   assert((await view('ECDSA_SCHEME', `${CONTRACT}.ECDSA_SCHEME`, c.ECDSA_SCHEME(), (v) => `ECDSA_SCHEME == ${v}: the only accepted scheme (contract-account / ERC-1271 issuers unsupported)`)) === 1n, 'scheme');
   out('signing-scheme', 'offchain:issuer-signing', false, 0, 'issuer signs keccak256(abi.encodePacked(identity, topic, data)) WITH the EIP-191 "\\x19Ethereum Signed Message:\\n32" prefix (personal_sign-compatible: any wallet can issue); the chain prefixes again and ecrecovers');
 
-  // manufacturer birth certificate
+  // issuer registry (D25a): the owner admits each authority for the topic it may attest
   const mData = b(JSON.stringify({ vin: VIN, make: 'Honda', model: 'Accord', year: 2003, plant: 'Marysville' }));
   const mSig = await sign(manufacturer, T.MANUFACTURER_CERT, mData);
-  await reverts('addClaim-by-non-owner', `${CONTRACT}.addClaim`, c.connect(manufacturer).addClaim(T.MANUFACTURER_CERT, 1, manufacturer.address, mSig, mData, ''), 'caller is not the owner', 'even the ISSUER cannot push a claim: the holder (owner) anchors it — self-sovereign consent');
+  await reverts('addClaim-unauthorised-issuer', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.MANUFACTURER_CERT, 1, manufacturer.address, mSig, mData, ''), 'issuer not authorized for topic', 'FIXED (D25a): a validly signed claim from an issuer the owner has not admitted for this topic is rejected — formerly any key could sign a MANUFACTURER_CERT');
+  for (const [who, name, topic, tname] of [[manufacturer, 'manufacturer', T.MANUFACTURER_CERT, 'MANUFACTURER_CERT'], [inspector, 'inspector', T.INSPECTION, 'INSPECTION'], [insurer, 'insurer', T.INSURANCE, 'INSURANCE'], [manufacturer, 'manufacturer', T.VIN_ATTESTATION, 'VIN_ATTESTATION']]) {
+    await tx(`authorizeIssuer-${name}-${tname}`, `${CONTRACT}.authorizeIssuer`, c.connect(vehicleOwner).authorizeIssuer(who.address, topic), `D25: issuers must be authorised per topic — owner admits ${name} for ${tname} (IssuerAuthorized)`);
+  }
+  const inspectorOnInsurance = await c.isAuthorizedIssuer(inspector.address, T.INSURANCE);
+  assert((await view('isAuthorizedIssuer', `${CONTRACT}.isAuthorizedIssuer`, c.isAuthorizedIssuer(inspector.address, T.INSPECTION), (v) => `isAuthorizedIssuer(inspector, INSPECTION) == ${v}; (inspector, INSURANCE) == ${inspectorOnInsurance}: the whitelist is (issuer, topic)-scoped`)) === true && inspectorOnInsurance === false, 'registry');
+
+  // manufacturer birth certificate
+  await reverts('addClaim-by-non-owner', `${CONTRACT}.addClaim`, c.connect(manufacturer).addClaim(T.MANUFACTURER_CERT, 1, manufacturer.address, mSig, mData, ''), 'caller is not the owner', 'even the (authorised) ISSUER cannot push a claim: the holder (owner) anchors it — self-sovereign consent');
   const r1 = await tx('addClaim-MANUFACTURER_CERT', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.MANUFACTURER_CERT, 1, manufacturer.address, mSig, mData, 'ipfs://QmBirthCert'),
-    `MEASURED (benchmark addDelegateOrClaim; L1 claim 314,543): ecrecover at add time + full claim stored (${mData.length / 2 - 1} bytes data + 65-byte sig + uri)`);
+    `MEASURED (benchmark addDelegateOrClaim; L1 claim 314,543, pre-D25): ecrecover at add time + registry SLOAD (D25a) + full claim stored (${mData.length / 2 - 1} bytes data + 65-byte sig + uri)`);
   assert(eventsOf(r1, c, 'ClaimRequested').length === 1 && eventsOf(r1, c, 'ClaimAdded').length === 1, 'ClaimRequested + ClaimAdded');
   out('events-first-add', `${CONTRACT}.addClaim`, true, 0, 'first add emits ClaimRequested(uint256(claimId), …) AND ClaimAdded: the draft\'s async request/approve flow is collapsed into one synchronous call (event-shape compatibility only)');
   const mId = claimId(manufacturer.address, T.MANUFACTURER_CERT);
@@ -82,7 +92,8 @@ async function main() {
   await reverts('tampered-data', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.VIN_ATTESTATION, 1, manufacturer.address, await sign(manufacturer, T.VIN_ATTESTATION, b(VIN)), b('1HGCM82633A004353'), ''), 'invalid issuer signature', 'data altered after signing');
   const rawWallet = ethers.Wallet.createRandom();
   const rawSig = ethers.Signature.from(rawWallet.signingKey.sign(digest(T.VIN_ATTESTATION, b(VIN)))).serialized;
-  await reverts('raw-digest-signature', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.VIN_ATTESTATION, 1, rawWallet.address, rawSig, b(VIN), ''), 'invalid issuer signature', 'a RAW secp256k1 signature over the digest (no EIP-191 prefix, the CVIN-Combined convention) is rejected here — the two claim contracts use incompatible signing conventions');
+  await reverts('raw-digest-signature', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.VIN_ATTESTATION, 1, rawWallet.address, rawSig, b(VIN), ''), 'invalid issuer signature', 'a RAW secp256k1 signature over the digest (no EIP-191 prefix, the CVIN-Combined convention) is rejected here — D25c: documented in _recoverSigner, NOT changed by the D25 fix');
+  out('signature-scheme-D25c', 'offchain:issuer-signing', false, 0, 'D25c (recorded, not fixed): this contract ecrecovers the EIP-191-prefixed digest and rejects a raw one; CVINCombinedIdentity._recoverRawDigest does the opposite, so one issuer signature is not portable between the two claim contracts. Unifying the scheme (AFTER_ACTION_REPORT_05 §1 F7 recommends EIP-191, matching the VC layer and the ERC-4337 account) is a design decision left to the author');
   const good = ethers.Signature.from(await sign(manufacturer, T.VIN_ATTESTATION, b(VIN)));
   // ethers refuses to construct a non-canonical signature, so assemble the complementary (r, N-s, v') bytes by hand
   const highS = ethers.concat([good.r, ethers.toBeHex(SECP256K1_N - BigInt(good.s), 32), new Uint8Array([good.v === 27 ? 28 : 27])]);
@@ -90,7 +101,14 @@ async function main() {
   await reverts('short-signature', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.VIN_ATTESTATION, 1, manufacturer.address, '0x1234', b(VIN), ''), 'invalid signature length', '65 bytes required');
   await reverts('unsupported-scheme', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.VIN_ATTESTATION, 2, manufacturer.address, good.serialized, b(VIN), ''), 'unsupported signature scheme', 'scheme must be 1 (ECDSA)');
   await reverts('zero-issuer', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.VIN_ATTESTATION, 1, ethers.ZeroAddress, good.serialized, b(VIN), ''), 'issuer is zero address', 'guard');
-  await tx('addClaim-VIN_ATTESTATION', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.VIN_ATTESTATION, 1, manufacturer.address, good.serialized, b(VIN), ''), 'the valid VIN attestation finally anchored');
+  await tx('addClaim-VIN_ATTESTATION', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.VIN_ATTESTATION, 1, manufacturer.address, good.serialized, b(VIN), ''), 'the valid VIN attestation finally anchored (authorised issuer, payload ends in this holder\'s VIN — D25b, see vin-linkage)');
+
+  // self-issued claim: exempt from the registry
+  const selfData = b('OWNER-NOTE:garage-kept');
+  await tx('addClaim-self-issued', `${CONTRACT}.addClaim`, c.connect(vehicleOwner).addClaim(T.INSURANCE, 1, vehicleOwner.address, await sign(vehicleOwner, T.INSURANCE, selfData), selfData, ''),
+    'D25a exemption: issuer == owner needs no registry entry (the ERC-735 draft lets an identity issue claims about itself); a verifier reads issuer == owner as self-asserted');
+  assert((await c.isAuthorizedIssuer(vehicleOwner.address, T.INSURANCE)) === false, 'owner not whitelisted');
+  await tx('removeClaim-self-issued', `${CONTRACT}.removeClaim`, c.connect(vehicleOwner).removeClaim(claimId(vehicleOwner.address, T.INSURANCE)), 'and withdraws it again');
 
   // removal
   await reverts('removeClaim-by-stranger', `${CONTRACT}.removeClaim`, c.connect(stranger).removeClaim(claimId(insurer.address, T.INSURANCE)), 'caller is not owner nor issuer', 'access');
@@ -99,7 +117,7 @@ async function main() {
   assert(eventsOf(r3, c, 'ClaimRemoved').length === 1, 'ClaimRemoved');
   await tx('removeClaim-by-issuer', `${CONTRACT}.removeClaim`, c.connect(inspector).removeClaim(claimId(inspector.address, T.INSPECTION)), 'issuer-side revocation: the inspection authority withdraws its own attestation without the owner');
   assert((await view('claimExists-after', `${CONTRACT}.claimExists`, c.claimExists(inspector.address, T.INSPECTION), (v) => `claimExists(inspector, INSPECTION) == ${v}`)) === false, 'removed');
-  out('automation-note', `${CONTRACT}.getClaim`, true, 0, 'automation: the chain verifies issuer signatures at anchoring time, so later verifiers trust getClaim without crypto; what it cannot check: that the issuer is a legitimate authority (no issuer registry) or that the claim is still current (no expiry field) — those stay off-chain');
+  out('automation-note', `${CONTRACT}.getClaim`, true, 0, 'automation: the chain verifies issuer signatures at anchoring time AND (D25a) that the issuer is on the holder\'s per-topic registry — or is the owner itself —, so later verifiers trust getClaim without crypto and without re-checking the issuer against a whitelist; what it still cannot check: that a registered issuer is a genuinely accredited authority (the owner decides whom to admit — there is no global/OEM-level registry) or that the claim is still current (no expiry field) — those stay off-chain');
   const Adapter = require('../adapter');
   const ad = new Adapter({ ethers, signers: { deployer, vehicleOwner, newOwner, delegate } });
   await ad.attach(id);
