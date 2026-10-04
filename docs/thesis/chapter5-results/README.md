@@ -1,6 +1,6 @@
 # Chapter 5 — Results (Working Draft)
 
-> **Re-execution note (2026-09-24).** After the analysis lineage was merged onto the trunk, the nine-standard gas benchmark was re-executed under the trunk's compiler settings (solc 0.8.24, optimizer 200 + viaIR, **evm cancun**, OpenZeppelin 5.0.2). Every cell moved down by 1–2.8% relative to the July 2026 run (largest: deployments; creates 1.2–2.3%) and every cross-standard ratio is unchanged to two decimals. The results of record are now `4_comparison-framework/results/gas_benchmark.json` (2026-09-24); tables in this chapter that quote July values are to be regenerated from it before submission. Register: `docs/MEASUREMENT_CONDITIONS.md` #25.
+> **Regeneration note (2026-10-04).** Every table and quoted gas figure in this chapter was regenerated from the results of record re-executed on the trunk after the defect-fix passes of 2026-10-04 (`docs/AFTER_ACTION_REPORT_05.md`, `_06.md`): `4_comparison-framework/results/gas_benchmark.json`, `mobi_vid_backends.json`, `scaling_marginal.json`, `scaling_lifetime.json` (condition M1: solc 0.8.24, optimizer 200 + viaIR, **evm cancun**, OpenZeppelin 5.0.2). The cells moved by the fixes, with their causes, are listed in `gas_moved_by_defect_fixes_2026-10-04.json` and `…_pass06.json`; the cross-standard ratios and every ranking are unchanged. Register: `docs/MEASUREMENT_CONDITIONS.md` #25, #26, #31, #32.
 
 **Status**: draft assembled from measured artifacts only. Every number in
 this chapter is traceable to a committed data file or a reproducible
@@ -70,21 +70,21 @@ Exact `receipt.gasUsed` per standard for an identical operation set. "—"
 
 | Standard | Create identity | Update attr. | Add claim/deleg. | Revoke | Transfer |
 |---|--:|--:|--:|--:|--:|
-| CVIN-Combined | **52,178** | 35,078 | 289,923 | 73,727 | 51,734 |
-| ERC-1056 | 52,612 | 35,512 | 54,853 | 35,065 | 51,764 |
-| ERC-1155 | 103,905 | 49,156 | 57,126 | 30,641 | 83,641 |
-| LSP8 | 149,352 | 55,065 | — | 41,877 | 80,526 |
-| MOBI-VID-V2 | 298,923 | 306,923 | 35,286 | 74,844 | 200,018 |
-| ERC-725 | 528,647 | 137,107 | 120,007 | 43,410 | 28,397 |
-| ERC-721 | 542,429 | 119,753 | 48,306 | 27,685 | 174,707 |
-| ERC-4337 | 768,204 | 49,366 | 47,560 | 25,432 | 28,561 |
-| ERC-735 | 1,404,108 | 75,151 | 290,249 | 72,100 | 28,704 |
-| ERC-725xy | 1,704,992 | 49,950 | — | — | 28,839 |
+| CVIN-Combined | **52,170** | 35,070 | 292,214 | 75,580 | 51,725 |
+| ERC-1056 | 52,594 | 35,494 | 54,831 | 35,046 | 51,754 |
+| ERC-1155 | 107,729 | 51,199 | 80,131 | 33,049 | 86,298 |
+| LSP8 | 152,453 | 55,070 | — | 41,812 | 80,544 |
+| MOBI-VID-V2 | 298,941 | 306,985 | 35,321 | 75,382 | 200,089 |
+| ERC-725 | 519,384 | 137,096 | 119,996 | 43,388 | 28,390 |
+| ERC-721 | 545,101 | 119,737 | 48,302 | 27,677 | 174,670 |
+| ERC-4337 | 759,088 | 49,343 | 47,557 | 25,429 | 28,539 |
+| ERC-735 | 1,598,928 | 80,788 | 295,805 | 72,064 | 28,768 |
+| ERC-725xy | 1,680,816 | 49,937 | — | — | 28,834 |
 
 **Findings (RQ1):**
 
-1. **Identity-creation cost spans ~33×** across the nine standards, from
-   52,178 gas (CVIN-Combined) to 1,704,992 gas (ERC-725xy). The minimal
+1. **Identity-creation cost spans ~32×** across the nine standards, from
+   52,170 gas (CVIN-Combined) to 1,680,816 gas (ERC-725xy). The minimal
    event-log designs (ERC-1056, CVIN-Combined) are the cheapest; the
    full smart-account designs (ERC-725xy's X+Y account, ERC-4337) and the
    claim-holder (ERC-735) are the most expensive — ERC-725xy is the
@@ -92,20 +92,20 @@ Exact `receipt.gasUsed` per standard for an identical operation set. "—"
    data-store contract.
 
 2. **ERC-1056 vs. NFT/proxy designs**: creating an identity costs
-   ~10.3× more on ERC-721 (542,429) and ERC-725 (528,647) than on
-   ERC-1056 (52,612). This **quantitatively confirms hypothesis H1**
+   ~10.4× more on ERC-721 (545,101) and ERC-725 (519,384) than on
+   ERC-1056 (52,594). This **quantitatively confirms hypothesis H1**
    (minimal-state standards ≥10× cheaper for identity creation).
 
 3. **The 4337 account-abstraction tax is isolated and measured**: the
-   same `setAttribute` costs 49,366 gas called directly and 96,228 gas
-   routed through the minimal EntryPoint — a **46,862-gas indirection
+   same `setAttribute` costs 49,343 gas called directly and 96,173 gas
+   routed through the minimal EntryPoint — a **46,830-gas indirection
    overhead per operation** (bundler/paymaster overhead excluded, noted
    as a simplification). ERC-4337 also has the second-highest identity
-   creation cost (768,204).
+   creation cost (759,088).
 
 4. **On-chain claims are expensive everywhere**: standards that store
-   verifiable claims on-chain (ERC-735 addClaim 290,249; CVIN-Combined
-   addClaim 289,923) pay ~5–8× the cost of an event-based attribute
+   verifiable claims on-chain (ERC-735 addClaim 295,805; CVIN-Combined
+   addClaim 292,214) pay ~5–8× the cost of an event-based attribute
    write, reflecting SSTORE-heavy claim structs with issuer signatures.
 
 ---
@@ -118,11 +118,11 @@ The thesis's hybrid design (ERC-1056-style event identity + ERC-735-style
 on-chain claims) was hypothesized (H5) to occupy a favourable point on the
 cost/capability frontier. The data supports this:
 
-- **Identity operations at ERC-1056 cost**: create 52,178 (vs 52,612),
-  update 35,078 (vs 35,512), transfer 51,734 (vs 51,764) — statistically
+- **Identity operations at ERC-1056 cost**: create 52,170 (vs 52,594),
+  update 35,070 (vs 35,494), transfer 51,725 (vs 51,754) — statistically
   indistinguishable from the cheapest standard.
 - **Plus O(1) verifiable on-chain claims** when the safety-critical
-  subset needs them (addClaim 289,923), a capability ERC-1056 lacks
+  subset needs them (addClaim 292,214), a capability ERC-1056 lacks
   entirely.
 
 In other words, the hybrid pays the cheap price for the common path
@@ -157,11 +157,11 @@ realization):
 
 | Backend | Birth (VID I) | Lifecycle (VID II) | Third-party attest. | Fidelity |
 |---|--:|--:|--:|:--:|
-| ERC-1056 | 51,962 | **34,946** | 61,545 † | 3/5 |
-| ERC-735 | 290,165 | 290,200 | 290,212 | 5/5 |
-| ERC-1155 | 103,905 | 57,126 | 57,126 † | 3/5 |
-| CVIN-Combined | **51,728** | **34,652** | 334,883 | **5/5** |
-| MOBI-VID-V2 | 298,923 | 306,980 | 192,718 | 5/5 |
+| ERC-1056 | 51,944 | **34,928** | 61,501 † | 3/5 |
+| ERC-735 | 292,689 | 292,724 | 292,736 | 5/5 |
+| ERC-1155 | 107,729 | 80,131 | 63,031 † | 3/5 |
+| CVIN-Combined | **51,720** | **34,644** | 337,134 | **5/5** |
+| MOBI-VID-V2 | 298,941 | 306,985 | 192,749 | 5/5 |
 
 **Fidelity matrix** — native support for each of the five MOBI VID concepts
 (✓ native, ✗ not native / off-chain only):
@@ -179,7 +179,7 @@ The `†` cells are recorded honestly rather than faked: ERC-1056's
 the identity owner** (a meta-tx/relayer pattern), so it cannot express an
 *independent* second party — genuine ERC-1056 third-party attestations are
 off-chain W3C VCs (the on-chain footprint is the owner authorizing an
-attester via `addDelegate`, 54,865 gas). ERC-1155 has no attest-to-an-event
+attester via `addDelegate`, 54,831 gas). ERC-1155 has no attest-to-an-event
 primitive at all; the figure shown is a *second* authorized issuer minting a
 corroborating credential — a parallel issuance with no signature and no
 linkage to a specific prior event.
@@ -197,9 +197,9 @@ linkage to a specific prior event.
 
 2. **Event-log standards are cheapest for the common path.** The two
    event-log backends own the cheapest birth
-   and lifecycle writes (CVIN-Combined 51,728 / 34,652; ERC-1056 51,962 /
-   34,946) — roughly **6–9× cheaper** than the purpose-built MOBI-VID-V2
-   registry (298,923 / 306,980), which pays for dedicated on-chain structs
+   and lifecycle writes (CVIN-Combined 51,720 / 34,644; ERC-1056 51,944 /
+   34,928) — roughly **6–9× cheaper** than the purpose-built MOBI-VID-V2
+   registry (298,941 / 306,985), which pays for dedicated on-chain structs
    (typed events, odometer, jurisdiction, verified flag, VIN-hash index).
 
 3. **Claim-based standards are the faithful way to get attestation.** Only
@@ -207,9 +207,9 @@ linkage to a specific prior event.
    CVIN-Combined) or a purpose-built attestation (MOBI-VID-V2) reach 5/5;
    they are exactly the backends that natively support both multi-party
    attestation and verifiable on-chain claims. A subtlety the raw score
-   hides: the **purpose-built `attestEvent` (192,718) is actually the
+   hides: the **purpose-built `attestEvent` (192,749) is actually the
    cheapest native attestation**, undercutting the generic claim structs of
-   ERC-735 (290,212) and CVIN-Combined (334,883) because it stores a compact
+   ERC-735 (292,736) and CVIN-Combined (337,134) because it stores a compact
    attestation record (signature + role + timestamp) rather than a full
    claim struct with topic/scheme/data/URI strings.
 
@@ -218,7 +218,7 @@ linkage to a specific prior event.
    cost of any 5/5 backend** — its three canonical operations sum to 421,263
    gas versus 798,621 (MOBI-VID-V2) and 870,577 (ERC-735). It pays the
    cheap event-log price for the common path (birth/lifecycle at ERC-1056
-   cost) and only pays the claim price (334,883) when a verifiable on-chain
+   cost) and only pays the claim price (337,134) when a verifiable on-chain
    attestation is actually required. No backend offers both higher fidelity
    and lower gas, so it is Pareto-optimal.
 
@@ -311,13 +311,13 @@ runs — caught with zero false negatives and zero false positives across
 
 **Provenance**: `python3 cv2x-testbed/scripts/w3c_compliance_checker.py`
 (executable checks against the canonical VC layer and DID resolver;
-exit 0 at the ≥90% gate).
+exit 0 at the ≥90% gate; results of record `4_comparison-framework/results/w3c_compliance.json`, re-executed 2026-10-04; register #4). The external W3C DID test suite (335/336, also on a registry-minted `did:ethr`) is reported in `docs/conformance/W3C_DID_TEST_SUITE.md`.
 
 | Dimension | Score | Basis |
 |---|--:|---|
-| DID Core v1.0 | 93.3% | 13/15 executed checks |
+| DID Core v1.0 | 96.7% | 14/15 executed checks |
 | VC Data Model v2.0 | 93.1% | 27/29 executed checks |
-| **Aggregate (executable)** | **93.2%** | 40 PASS + 2 PARTIAL / 44 |
+| **Aggregate (executable)** | **94.3%** | 41 PASS + 1 PARTIAL + 2 FAIL / 44 (PASS + ½·PARTIAL) |
 | SSI principles | qualitative | 10 items, excluded from score |
 
 The two failing checks are **documented, deliberate deviations**, counted
@@ -327,8 +327,8 @@ as failures rather than hidden:
 2. The cryptosuite (`eip191-secp256k1-recovery-2024`) is thesis-defined
    (Ethereum-native, offline-verifiable), not a W3C-registered suite.
 
-**Finding (RQ3 / H2):** the ≥90% compliance target is met (93.2%
-measured, not asserted), demonstrating that blockchain-rooted identities
+**Finding (RQ3 / H2):** the ≥90% compliance target is met (94.3%
+measured, not asserted; 93.2% at the merge, before the 2026-10-03 resolver fixes), demonstrating that blockchain-rooted identities
 can be lifted to W3C DID/VC conformance through a resolution/issuance
 layer, with the residual gap being canonicalization/cryptosuite
 registration rather than any structural incompatibility — consistent
@@ -407,7 +407,7 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
    eventId, EIP-191, OZ ECDSA low-s) and reverts on mismatch. A
    before/after test (`test/MOBIVID/MOBIVIDRegistry.test.js`) confirms a
    valid attestation succeeds while forged, wrong-key, and replayed
-   signatures revert. Cost: attestEvent rose from **121,110 → 192,718
+   signatures revert. Cost: attestEvent rose from **121,110 → 192,749
    gas** (the added `ecrecover` + storing a real 65-byte signature) — the
    security/performance trade-off made concrete. This flipped the MOBI
    `Replay` cell from ◐ to ✓ in the matrix above.
@@ -418,8 +418,8 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
 
 | Hypothesis | Verdict | Key evidence |
 |---|---|---|
-| **H1** — minimal-state ≥10× cheaper for identity creation | **Supported** | ERC-1056 52,612 vs ERC-721 542,429 (10.3×); §5.2 |
-| **H2** — ≥90% W3C compliance achievable via a translation layer | **Supported** | 93.2% measured, deviations are canonicalization/suite only; §5.5 |
+| **H1** — minimal-state ≥10× cheaper for identity creation | **Supported** | ERC-1056 52,594 vs ERC-721 545,101 (10.4×); §5.2 |
+| **H2** — ≥90% W3C compliance achievable via a translation layer | **Supported** | 94.3% measured (93.2% at the merge; resolver fixes 2026-10-03), deviations are canonicalization/suite only; §5.5 |
 | **H3** — off-chain credential verification is not the V2V bottleneck | **Supported** (verification-step scope) | SSI warm 0.165 ms (95% CI [0.162,0.168], N=30), cold 0.400 ms — both ≤ the 10 ms auth budget; end-to-end network terms excluded (§5.4, §5.8) |
 | **H4** — MOBI VID realizable across backends | **Supported** (fidelity gradient) | 5-backend native sweep: birth + lifecycle native on all 5; multi-party attestation native on 3/5 (ERC-735, CVIN-Combined, MOBI-VID-V2 = 5/5), partial on ERC-1056/ERC-1155 (3/5); §5.3.1 |
 | **H5** — hybrid on the cost/capability frontier | **Supported** (creation *and* lifetime) | CVIN-Combined = ERC-1056 identity cost + on-chain claims (§5.3); §5.9 sharpens it — the hybrid slides linearly along the cost/verifiability axis (claim fraction *f*), tunable per-event over a vehicle lifetime |
@@ -474,17 +474,18 @@ Fifty sequential append operations were performed on a fresh deployment of each
 standard. **Every standard is O(1): steady-state marginal cost is exactly constant
 from the second operation onward.** The only index-dependence is a one-time
 cold-storage penalty on the first write — precisely **17,100 gas per counter/length
-storage slot touched** (the EVM cold-vs-warm SSTORE differential): ×1 for ERC-1056,
-ERC-735, ERC-1155; ×2 for CVIN-Combined (claim array + change pointer); ×3 for
-MOBI-VID-V2 (event array + two counters). After that first write, each is flat.
+storage slot touched** (the EVM cold-vs-warm SSTORE differential): ×1 for ERC-1056
+and ERC-735; ×2 for ERC-1155 (balance slot + the per-vehicle held-type bitmap the D8
+fix added) and CVIN-Combined (claim array + change pointer); ×3 for MOBI-VID-V2
+(event array + two counters). After that first write, each is flat.
 
 | Standard | Append | Steady-state marginal | Verdict |
 |---|--:|--:|:--:|
-| ERC-1056 | `setAttribute` | 35,512 | O(1) |
-| ERC-1155 | `issueCredential` | 40,026 | O(1) |
-| ERC-735 | `addClaim` | 273,233 | O(1) |
-| CVIN-Combined | `addClaim` | 272,933 | O(1) |
-| MOBI-VID-V2 | `recordLifecycleEvent` | 255,680 | O(1) |
+| ERC-1056 | `setAttribute` | 35,494 | O(1) |
+| ERC-1155 | `issueCredential` | 42,816 | O(1) |
+| ERC-735 | `addClaim` | 278,826 | O(1) |
+| CVIN-Combined | `addClaim` | 275,224 | O(1) |
+| MOBI-VID-V2 | `recordLifecycleEvent` | 255,685 | O(1) |
 
 This is a **null result, and an important one**: the a-priori concern that
 claim-storing or event-storing substrates would degrade to O(n) as a vehicle's history
@@ -503,14 +504,14 @@ work, not fiat.**
 
 | Rank | Standard | Lifetime gas | ±50%-frequency band |
 |---|---|--:|---|
-| 1 | ERC-1056 | 1,450,824 | 0.75–2.15 M |
-| 2 | ERC-1155 | 1,755,738 | 0.93–2.58 M |
-| 3 | CVIN-Combined | 9,759,510 | 4.91–14.6 M |
-| 4 | MOBI-VID-V2 | 9,847,777 | 5.07–14.6 M |
-| 5 | ERC-735 | 11,052,885 | 6.23–15.9 M |
+| 1 | ERC-1056 | 1,450,146 | 0.75–2.15 M |
+| 2 | ERC-1155 | 1,865,183 | 0.99–2.74 M |
+| 3 | CVIN-Combined | 9,839,660 | 4.95–14.73 M |
+| 4 | MOBI-VID-V2 | 9,848,183 | 5.07–14.62 M |
+| 5 | ERC-735 | 11,443,652 | 6.52–16.37 M |
 
 **The ranking reverses §5.2.** CVIN-Combined, the *cheapest* substrate to *create* an
-identity (52,178 gas), is only third over a *lifetime* — because storing every
+identity (52,170 gas), is only third over a *lifetime* — because storing every
 lifecycle event as an on-chain claim costs ~273k each, versus ~35k for an event-log
 write. The event-only substrates (ERC-1056, ERC-1155) are ~6–7× cheaper over a
 lifetime. **The "best" standard therefore depends on whether the workload is
@@ -525,11 +526,11 @@ subset that needs on-chain verifiability. Its true lifetime cost is therefore a
 function of the claim fraction *f* — the share of lifecycle events requiring verifiable
 on-chain claims:
 
-> Lifetime(CVIN-Combined, *f*) ≈ 52,178 (birth) + 3 × 51,734 (transfers)
-> + 35 × [(1−*f*)·35,000 (event write) + *f*·272,933 (claim)]
+> Lifetime(CVIN-Combined, *f*) ≈ 52,170 (birth) + 3 × 51,725 (transfers)
+> + 35 × [(1−*f*)·35,000 (event write) + *f*·275,224 (claim)]
 
 At *f* = 0 this is ≈ **1.43 M** (indistinguishable from ERC-1056, the lifetime winner);
-at *f* = 1 it is the ≈ **9.76 M** worst case tabulated above. **The hybrid slides
+at *f* = 1 it is the ≈ **9.84 M** worst case tabulated above. **The hybrid slides
 linearly along the entire cost/verifiability trade-off within a single substrate** —
 which is precisely its contribution: not "cheapest always," but the ability to buy
 on-chain verifiability incrementally, only where the application demands it, across the
@@ -540,12 +541,12 @@ the hybrid defers it to per-event. This is the lifecycle-scale statement of H5.
 "Pareto-optimal" loosely; the committed data lets us make the exact claim. Define the
 objective space (create-identity gas ↓, MOBI VID fidelity ↑; §5.3.1). A point *x*
 dominates *y* iff gas(*x*) ≤ gas(*y*) and fidelity(*x*) ≥ fidelity(*y*) with at least
-one strict. At creation, CVIN-Combined = (52,178 gas, 5/5) is **non-dominated**: it is
-the unique point attaining full fidelity at near-minimal cost — ERC-1056 (52,612, 3/5)
-is neither cheaper *and* higher-fidelity, and every other 5/5 substrate (ERC-735 1.40 M,
-MOBI-VID-V2 298,923) is strictly dominated *by* it. At lifetime scope, among all
-full-fidelity substrates CVIN-Combined at *f*=1 (9.76 M) is the cheapest — it dominates
-ERC-735 (11.05 M) and MOBI-VID-V2 (9.85 M); it is incomparable to ERC-1056 (1.45 M, but
+one strict. At creation, CVIN-Combined = (52,170 gas, 5/5) is **non-dominated**: it is
+the unique point attaining full fidelity at near-minimal cost — ERC-1056 (52,594, 3/5)
+is neither cheaper *and* higher-fidelity, and every other 5/5 substrate (ERC-735 1.60 M,
+MOBI-VID-V2 298,941) is strictly dominated *by* it. At lifetime scope, among all
+full-fidelity substrates CVIN-Combined at *f*=1 (9.84 M) is the cheapest — it dominates
+ERC-735 (11.44 M) and MOBI-VID-V2 (9.85 M); it is incomparable to ERC-1056 (1.45 M, but
 only 3/5). As *f* varies in [0,1], CVIN-Combined **traces the efficient frontier itself**
 between the cheap-lower-fidelity corner and the full-fidelity corner. So the rigorous H5
 statement is not "cheapest" but: **CVIN-Combined is Pareto-non-dominated on the

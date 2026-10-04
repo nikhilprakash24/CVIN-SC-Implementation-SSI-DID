@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-07-23T22:51:29.630267",
+  "timestamp": "2026-10-04T22:26:35.259213",
   "methodology": "All non-qualitative checks execute the DID resolver and VC stack and record observed outcomes. SSI principles are qualitative and excluded from the score.",
   "summary": {
     "executed_checks": 44,
-    "pass": 40,
+    "pass": 41,
     "fail": 2,
-    "partial": 2,
+    "partial": 1,
     "qualitative": 10,
-    "score": 93.18181818181817
+    "score": 94.31818181818183
   },
   "checks": [
     {
@@ -22,21 +22,21 @@
       "section": "3.1",
       "requirement": "Malformed DID (no 'did:' scheme) MUST produce a resolution error, not a document",
       "status": "PASS",
-      "notes": "'not-a-did' rejected with error='internalError', didDocument=null"
+      "notes": "'not-a-did' rejected with error='invalidDid', didDocument=null"
     },
     {
       "spec": "DID Core v1.0",
       "section": "7.1.2",
       "requirement": "Unsupported DID method MUST yield a resolution error ('methodNotSupported')",
-      "status": "PARTIAL",
-      "notes": "error surfaced (resolution safely refused) but code is 'internalError' instead of 'methodNotSupported'"
+      "status": "PASS",
+      "notes": "error='methodNotSupported' as specified"
     },
     {
       "spec": "DID Core v1.0",
       "section": "3.1",
       "requirement": "Method-specific identifier violating the method's ABNF (did:nft w/o tokenId) MUST error",
       "status": "PASS",
-      "notes": "did:nft without tokenId rejected with error='internalError'"
+      "notes": "did:nft without tokenId rejected with error='invalidDid'"
     },
     {
       "spec": "DID Core v1.0",
@@ -127,7 +127,7 @@
       "section": "Identifiers",
       "requirement": "Credential 'id', when present, MUST be a URL/URI",
       "status": "PASS",
-      "notes": "credential id is a URI: urn:uuid:c172c541-41ac-48ce-85dc-700f42f7fc80"
+      "notes": "credential id is a URI: urn:uuid:256b4987-22d6-4d4c-87f3-d1b5e0eecd06"
     },
     {
       "spec": "VC Data Model v2.0",
@@ -141,7 +141,7 @@
       "section": "Issuer",
       "requirement": "'issuer' MUST be present and be a URI (DID) identifying the issuer",
       "status": "PASS",
-      "notes": "issuer = did:ethr:0x1:0x6F9e4A189f83e614BFD94a213FF56DC5a679B6ff"
+      "notes": "issuer = did:ethr:0x1:0x07A1450d6CBf4644B00F7CE645Ec47771FaC30FC"
     },
     {
       "spec": "VC Data Model v2.0",
@@ -155,7 +155,7 @@
       "section": "Validity Period",
       "requirement": "'validFrom'/'validUntil' MUST be valid XML-Schema dateTime values (v2 renames issuanceDate)",
       "status": "PASS",
-      "notes": "validFrom=2026-07-23T22:51:29Z, validUntil=2027-07-23T22:51:29Z, both XML-Schema dateTime"
+      "notes": "validFrom=2026-10-04T22:26:35Z, validUntil=2027-10-04T22:26:35Z, both XML-Schema dateTime"
     },
     {
       "spec": "VC Data Model v2.0",
@@ -183,14 +183,14 @@
       "section": "Securing Mechanisms",
       "requirement": "Proof MUST be cryptographically bound to the issuer's key (recoverable signature)",
       "status": "PASS",
-      "notes": "secp256k1 recovery yields the issuer address 0x6F9e4A189f83e614BFD94a213FF56DC5a679B6ff (offline, no chain round-trip)"
+      "notes": "secp256k1 recovery yields the issuer address 0x07A1450d6CBf4644B00F7CE645Ec47771FaC30FC (offline, no chain round-trip)"
     },
     {
       "spec": "VC Data Model v2.0",
       "section": "Verification",
       "requirement": "A well-formed, freshly issued credential MUST verify end-to-end",
       "status": "PASS",
-      "notes": "verify_credential => valid, sub-checks ['disclosure', 'revocation', 'schema', 'signature', 'structure', 'temporal'] all true (0.35 ms)"
+      "notes": "verify_credential => valid, sub-checks ['disclosure', 'revocation', 'schema', 'signature', 'structure', 'temporal'] all true (0.32 ms)"
     },
     {
       "spec": "VC Data Model v2.0",

@@ -161,34 +161,34 @@
   },
   "ERC-1155": {
     "deployRegistry": {
-      "gasUsed": 2380231,
+      "gasUsed": 2871435,
       "txCount": 1,
       "notes": "Single shared multi-token credential contract; deployer receives DEFAULT_ADMIN_ROLE and ISSUER_ROLE in constructor."
     },
     "createIdentity": {
-      "gasUsed": 107238,
+      "gasUsed": 107729,
       "txCount": 1,
       "notes": "registerVehicle (issuer-only): mints one soulbound BIRTH_CERT token, binds VIN string + vinHash mappings to the vehicle address."
     },
     "updateAttribute": {
-      "gasUsed": 49130,
+      "gasUsed": 51199,
       "txCount": 1,
       "notes": "No key/attribute model in ERC-1155. Measured closest analogue: setTokenURI per-credential-type metadata URI override (issuer-only)."
     },
     "addDelegateOrClaim": {
-      "gasUsed": 57137,
+      "gasUsed": 80131,
       "txCount": 1,
       "notes": "issueCredential (issuer-only): mints an INSPECTION_CERT credential token to a registered vehicle (claim analogue; delegates are not part of ERC-1155)."
     },
     "revoke": {
-      "gasUsed": 30647,
+      "gasUsed": 33049,
       "txCount": 1,
       "notes": "revokeCredential (issuer-only burn) of the inspection credential. Burning the BIRTH_CERT would deregister the whole identity."
     },
     "transferOwnership": {
-      "gasUsed": 83748,
+      "gasUsed": 86298,
       "txCount": 1,
-      "notes": "issuerTransferCredential of the BIRTH_CERT: re-binds VIN + registration mappings to the new vehicle address. Credentials are soulbound - holder-initiated transfers revert by design."
+      "notes": "issuerTransferCredential of the BIRTH_CERT on a vehicle holding nothing else: re-binds VIN + registration mappings to the new vehicle address. Credentials are soulbound - the standard transfer entry points revert for everyone (D7 fix); an identity that still holds credentials moves atomically through issuerTransferIdentity (not benchmarked: its cost grows with the number of held types)."
     }
   },
   "ERC-4337": {
@@ -262,7 +262,7 @@
   },
   "MOBI-VID-V2": {
     "deployRegistry": {
-      "gasUsed": 3966355,
+      "gasUsed": 4169921,
       "txCount": 1,
       "notes": "Single shared registry (V2 = ERC-1056 base + MOBI VID I birth certificates + VID II lifecycle events); deployer becomes registry authority + authorized manufacturer."
     },
@@ -272,17 +272,17 @@
       "notes": "registerVehicleBirth (MOBI VID I birth certificate): VIN hash + encrypted VIN + cert hash + first owner. birthAttributes left empty to avoid known V1 validity-overflow bug."
     },
     "updateAttribute": {
-      "gasUsed": 306941,
+      "gasUsed": 306985,
       "txCount": 1,
       "notes": "recordLifecycleEvent (MOBI VID II, MAINTENANCE): stores full event struct + VC hash + counters on-chain. Issuer authorization excluded as setup."
     },
     "addDelegateOrClaim": {
-      "gasUsed": 35277,
+      "gasUsed": 35321,
       "txCount": 1,
-      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 192683 gas."
+      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 192749 gas."
     },
     "transferOwnership": {
-      "gasUsed": 200023,
+      "gasUsed": 200089,
       "txCount": 1,
       "notes": "transferVehicleOwnership: appends odometer-stamped ownership record + ERC-1056 changeOwner. Called by current owner."
     },
@@ -334,7 +334,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-04T09:36:50.433Z",
+    "date": "2026-10-04T22:20:14.461Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [

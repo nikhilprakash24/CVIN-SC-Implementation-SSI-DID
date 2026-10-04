@@ -1,19 +1,19 @@
 # L1 identity mechanisms — cross-option asymmetry (from tests)
 
-Generated 2026-10-04T09:47:25.003Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
+Generated 2026-10-04T22:27:26.307Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
 
 ✓ gas = the adapter ran the mechanism (exact gasUsed of the measured transaction; 0 = no transaction, e.g. implicit creation or a view) · — = NotApplicable (reason below) · ✗ = adapter error or failed assertion · · = not run
 
 | Mechanism | cvin-combined | erc-1056-uport | erc-1056-vehicle | erc-1155 | erc-4337 | erc-721 | erc-725 | erc-725xy | erc-735 | lsp8 | mobi-vid |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| create | ✓ 0 | ✓ 77814 | ✓ 54655 | ✓ 107238 | ✓ 759088 | ✓ 545197 | ✓ 519384 | ✓ 1730753 | ✓ 1598928 | ✓ 152453 | ✓ 276671 |
-| controller-change | ✓ 68813 | ✓ 68842 | ✓ 53882 | ✓ 83748 | ✓ 28527 | ✓ 179562 | ✓ 28378 | ✓ 28822 | ✓ 28756 | ✓ 80544 | ✓ 37669 |
-| key-or-delegate | ✓ 72262 | ✓ 72219 | ✓ 35044 | — | ✓ 47569 | — | ✓ 137096 | — | — | — | ✓ 35265 |
-| attribute | ✓ 51576 | ✓ 52016 | ✓ 37180 | ✓ 94150 | ✓ 94471 | ✓ 120137 | — | ✓ 95166 | — | ✓ 100283 | ✓ 37463 |
-| claim | ✓ 333789 | — | — | ✓ 57137 | — | — | — | — | ✓ 320397 | ✓ 148816 | ✓ 287041 |
-| revoke | ✓ 73215 | ✓ 32868 | ✓ 75370 | ✓ 37435 | — | ✓ 27677 | ✓ 41399 | ✓ 33870 | ✓ 78012 | ✓ 41812 | ✓ 75382 |
-| transfer | — | — | — | ✓ 83748 | ✓ 28527 | ✓ 179562 | — | — | — | ✓ 80544 | ✓ 180039 |
-| signed-op | — | ✓ 96053 | — | — | ✓ 69405 | — | ✓ 28358 | ✓ 76352 | — | — | — |
+| create | ✓ 0 | ✓ 77814 | ✓ 54655 | ✓ 107729 | ✓ 759088 | ✓ 545197 | ✓ 519384 | ✓ 1730753 | ✓ 1598928 | ✓ 152453 | ✓ 276671 |
+| controller-change | ✓ 68813 | ✓ 68842 | ✓ 53882 | ✓ 89793 | ✓ 28527 | ✓ 179562 | ✓ 28378 | ✓ 28822 | ✓ 28756 | ✓ 80544 | ✓ 37735 |
+| key-or-delegate | ✓ 72262 | ✓ 72219 | ✓ 35044 | — | ✓ 47569 | — | ✓ 137096 | — | — | — | ✓ 35309 |
+| attribute | ✓ 51576 | ✓ 52016 | ✓ 37180 | ✓ 96478 | ✓ 94471 | ✓ 120137 | — | ✓ 95166 | — | ✓ 100283 | ✓ 37485 |
+| claim | ✓ 333803 | — | — | ✓ 80131 | — | — | — | — | ✓ 320397 | ✓ 148816 | ✓ 287085 |
+| revoke | ✓ 73215 | ✓ 32868 | ✓ 75370 | ✓ 72614 | — | ✓ 27677 | ✓ 41399 | ✓ 33870 | ✓ 78012 | ✓ 41812 | ✓ 75382 |
+| transfer | — | — | — | ✓ 89793 | ✓ 28527 | ✓ 179562 | — | — | — | ✓ 80544 | ✓ 180105 |
+| signed-op | — | ✓ 96065 | — | — | ✓ 69393 | — | ✓ 28358 | ✓ 76352 | — | — | — |
 | resolve | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 |
 
 Per mechanism: create ok 11 / na 0 / fail 0 · controller-change ok 11 / na 0 / fail 0 · key-or-delegate ok 6 / na 5 / fail 0 · attribute ok 9 / na 2 / fail 0 · claim ok 5 / na 6 / fail 0 · revoke ok 10 / na 1 / fail 0 · transfer ok 5 / na 6 / fail 0 · signed-op ok 4 / na 7 / fail 0 · resolve ok 11 / na 0 / fail 0

@@ -72,7 +72,7 @@ standards, from 52,178 gas (CVIN-Combined) to 1,704,992 gas (ERC-725xy).
 Minimal event-log designs are cheapest and full smart-account / on-chain-claim
 designs are most expensive; concretely, **ERC-1056 (52,612) is ~10× cheaper**
 than the NFT/proxy designs ERC-721 (542,429) and ERC-725 (528,647), and the
-ERC-4337 EntryPoint indirection adds a measured 46,862 gas per operation. Gas
+ERC-4337 EntryPoint indirection adds a measured 46,830 gas per operation. Gas
 is deterministic (byte-identical across N=30), so the ranking is exact, not a
 sampling artifact (§5.2).
 
@@ -138,7 +138,7 @@ backends. H4 is therefore supported *with a fidelity gradient*, not as a flat
   one identical testbed rather than compared on paper.
 - **Exact, deterministic performance data** (gas across all nine standards,
   N=30, byte-identical, σ=0), quantifying a ~33× cost spread and the ~10×
-  minimal-vs-NFT gap, plus an isolated 46,862-gas ERC-4337 indirection tax.
+  minimal-vs-NFT gap, plus an isolated 46,830-gas ERC-4337 indirection tax.
 - **A W3C-compliant SSI layer for blockchain vehicle identity** achieving 93.2%
   executable, CI-gated compliance (DID Core + VC Data Model) with a full
   offline VC pipeline and four-method DID resolver.

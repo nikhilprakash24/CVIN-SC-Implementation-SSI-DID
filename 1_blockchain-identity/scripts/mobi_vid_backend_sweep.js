@@ -201,6 +201,12 @@ async function sweepERC735(signers) {
   const inspector = new ethers.Wallet(INSPECTOR_KEY);
   const insurer = new ethers.Wallet(SECOND_ISSUER_KEY);
 
+  // Since the D25 fix (2026-10-04) addClaim accepts only issuers the holder's owner has
+  // authorised for the topic (the owner itself is exempt). Authorisation is setup, not counted.
+  for (const [w, topic] of [[manufacturer, MANUFACTURER_CERT], [inspector, INSPECTION], [insurer, INSURANCE]]) {
+    await (await holder.authorizeIssuer(w.address, topic)).wait();
+  }
+
   // 1. Birth attestation (VID I) -> manufacturer birth-certificate claim.
   const birthData = ethers.toUtf8Bytes(`birth:${VIN}`);
   const birthSig = await signClaim(manufacturer, MANUFACTURER_CERT, birthData);

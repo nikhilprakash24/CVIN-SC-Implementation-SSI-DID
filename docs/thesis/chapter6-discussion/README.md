@@ -81,7 +81,7 @@ The security analysis also produced a *method* finding worth carrying into the
 discussion: the `attestEvent` signature-verification gap that the threat-matrix
 lens surfaced and the thesis then fixed (attestations now `ecrecover` against a
 domain-separated digest; forged and replayed signatures revert; §5.6). The cost
-of the fix — attestEvent rising from 121,110 to 192,718 gas — is the
+of the fix — attestEvent rising from 121,110 to 192,718 gas (192,749 on the 2026-10-04 re-execution) — is the
 security/performance trade-off made concrete *within a single operation*: the
 extra ~72k gas buys on-chain signature verification that the original code
 omitted. That a source-reading lens caught what a passing revert-suite could

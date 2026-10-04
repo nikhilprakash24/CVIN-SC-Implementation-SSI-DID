@@ -95,3 +95,17 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | 92 demos + 8 READMEs under `sandbox/options/` (`5778651`, `eed6bfc`) | steps that asserted the defective behaviour now assert the fix; READMEs split fixed from still-open | the demos are the chapter's evidence of the surface |
 | `docs/DEFECT_LOG.md` §B statuses, new §C (open items with the decision each needs) | the log reflects the fix pass | the chapter cites the log |
 | `sandbox/grand/report/*` (regenerated) | the grand run on the fixed trunk | the chapter's data |
+
+## Pass 7 — The remaining high-severity defects and the conformance follow-up (2026-10-04)
+
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_06.md` | Report 06: plan G1–G5, per-step log, decisions D-G/D-H/D-I, closing | opened before the first change, closed after the grand run |
+| `CVINVehicleCredential1155.sol` (`d941ad5`) + `soulboundRebinding.regression.test.js` (13 tests) | D7/D8: standard transfer entry points closed; held-type bitmap (`credentialTypesOf`, types ≤ 255); `issuerTransferIdentity` atomic re-binding (`IdentityRebound`); no orphaned credentials; `URI` event | the last open **H** item on a token option |
+| `CVIN_NFT_DID_ERC721.sol` (`d941ad5`) + `payTollAfterRenounce.regression.test.js` | D9: no toll to `address(0)` | one-line veracity fix |
+| `MOBIVIDRegistry.sol` (both copies, `d941ad5`) + `anchorVehicleKey.regression.test.js` (4) ; `cv2x-testbed/identity/mobi_vid_provider.py` + `test_mobi_provider_onchain_key.py` (7) | D11b: `anchorVehicleKey` (manufacturer once at birth, owner thereafter); provider anchors at registration and verifies from the chain when it has no local record; artifact ABI loaded (inline ABI lacked `isRevoked`) | completes the MOBI V2V security claim |
+| `sandbox/options/{erc-1155,erc-721,mobi-vid}` demos + READMEs (`7404e94`, `d941ad5`), `adapter.js` (ERC-1155), manifests, `docs/FEATURE_ASYMMETRY_MATRIX.md` | every new function exercised; adapters use the whole-identity path | 100 % surface coverage kept |
+| `4_comparison-framework/results/` — `gas_benchmark.json`, `gas_comparison.{csv,tex}`, `gas_moved_by_defect_fixes_2026-10-04_pass06.json`, `mobi_vid_backends.{json,csv,tex}`, `scaling_marginal.*`, `scaling_lifetime.*`, `w3c_compliance.json`; `scripts/mobi_vid_backend_sweep.js` (fixed) | results of record re-executed on the final contracts; the sweep ran on the trunk for the first time | decision D-E |
+| `docs/thesis/chapter5-results/README.md` (regenerated tables + prose), README.md, thesis README, chapters 6–7 (cells) | no document quotes a pre-fix number | register discipline |
+| `docs/conformance/` — `generate_implementations.py --ethr-did`, `implementations-registry-did/`, `reports/registry-did-2026-10-04/`, write-up §8 | external DID suite on a registry-minted `did:ethr`: 335/336 | D10 follow-up |
+| `docs/MEASUREMENT_CONDITIONS.md` #26 → V, #30 note, #32; `docs/DEFECT_LOG.md` (D7/D8/D9/D11b fixed, D27 added, §C refreshed) | the register and the log reflect the pass | — |

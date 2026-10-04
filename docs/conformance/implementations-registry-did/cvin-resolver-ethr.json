@@ -1,0 +1,110 @@
+{
+  "implementation": "CVIN did_resolver.py (ERC-1056)",
+  "implementer": "CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)",
+  "didMethod": "did:ethr",
+  "expectedOutcomes": {
+    "defaultOutcome": [
+      0,
+      1
+    ],
+    "invalidDidErrorOutcome": [
+      2
+    ],
+    "notFoundErrorOutcome": [],
+    "representationNotSupportedErrorOutcome": [],
+    "methodNotSupportedErrorOutcome": [
+      3
+    ],
+    "deactivatedOutcome": []
+  },
+  "executions": [
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "retrieved": "2026-10-04T22:22:09Z"
+        },
+        "didDocument": {
+          "@context": [
+            "https://www.w3.org/ns/did/v1",
+            "https://w3id.org/security/suites/secp256k1-2019/v1"
+          ],
+          "id": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375",
+          "controller": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375",
+          "verificationMethod": [
+            {
+              "id": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller",
+              "type": "EcdsaSecp256k1VerificationKey2019",
+              "controller": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375",
+              "blockchainAccountId": "eip155:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375"
+            }
+          ],
+          "authentication": [
+            "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller"
+          ],
+          "assertionMethod": [
+            "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller"
+          ]
+        },
+        "didDocumentMetadata": {
+          "created": "2026-10-04T22:22:09Z",
+          "versionId": "1"
+        }
+      }
+    },
+    {
+      "function": "resolveRepresentation",
+      "input": {
+        "did": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375",
+        "resolutionOptions": {
+          "accept": "application/did+ld+json"
+        }
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "contentType": "application/did+ld+json",
+          "retrieved": "2026-10-04T22:22:09Z"
+        },
+        "didDocumentStream": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375\", \"controller\": \"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375\", \"verificationMethod\": [{\"id\": \"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375\", \"blockchainAccountId\": \"eip155:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375\"}], \"authentication\": [\"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller\"], \"assertionMethod\": [\"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller\"]}",
+        "didDocumentMetadata": {
+          "created": "2026-10-04T22:22:09Z",
+          "versionId": "1"
+        }
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:ethr_0x1234",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "error": "invalidDid",
+          "errorMessage": "Invalid DID format: did:ethr_0x1234"
+        },
+        "didDocument": null,
+        "didDocumentMetadata": {}
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:web:example.com",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "error": "methodNotSupported",
+          "errorMessage": "DID method 'web' is not supported"
+        },
+        "didDocument": null,
+        "didDocumentMetadata": {}
+      }
+    }
+  ]
+}

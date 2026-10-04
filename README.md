@@ -128,7 +128,7 @@ All numbers below are measured from the repository. Gas is **Hardhat-local**, so
 |---|---:|
 | CVIN-Combined | 52,170 |
 | ERC-1056 | 52,594 |
-| ERC-1155 | 107,238 |
+| ERC-1155 | 107,729 |
 | LSP8 | 152,453 |
 | MOBI-VID-V2 | 298,941 |
 | ERC-725 | 519,384 |
@@ -137,8 +137,8 @@ All numbers below are measured from the repository. Gas is **Hardhat-local**, so
 | ERC-735 | 1,598,928 |
 | ERC-725xy | 1,680,816 |
 
-*Condition M1: solc 0.8.24, optimizer 200 + viaIR, evm `cancun`, OpenZeppelin 5.0.2, Hardhat local; re-executed 2026-10-04 after the defect fixes (`4_comparison-framework/results/gas_benchmark.json`; cells moved by the fixes are listed in `gas_moved_by_defect_fixes_2026-10-04.json`). See `docs/MEASUREMENT_CONDITIONS.md` #25, #31.*
-**Key finding:** ~33× spread across standards; ERC-1056 is ~10× cheaper than ERC-721/ERC-725 under this table's operation definitions (bare `createIdentity` vs VIN-bound `mintVehicle`), ≈7× when the VIN is bound on both sides (**H1 supported**; definitions and the reconciliation with the bare-mint figure of 102,804 are in `docs/MEASUREMENT_CONDITIONS.md` #6/#25). The ERC-4337 EntryPoint indirection adds +46,862 gas/op. MOBI VID V2 is measured alongside as an application profile, not as one of the 9 base standards.
+*Condition M1: solc 0.8.24, optimizer 200 + viaIR, evm `cancun`, OpenZeppelin 5.0.2, Hardhat local; re-executed 2026-10-04 after the defect fixes (`4_comparison-framework/results/gas_benchmark.json`; cells moved by the fixes are listed in `gas_moved_by_defect_fixes_2026-10-04.json` and `…_pass06.json`). See `docs/MEASUREMENT_CONDITIONS.md` #25, #31, #32.*
+**Key finding:** ~33× spread across standards; ERC-1056 is ~10× cheaper than ERC-721/ERC-725 under this table's operation definitions (bare `createIdentity` vs VIN-bound `mintVehicle`), ≈7× when the VIN is bound on both sides (**H1 supported**; definitions and the reconciliation with the bare-mint figure of 102,804 are in `docs/MEASUREMENT_CONDITIONS.md` #6/#25). The ERC-4337 EntryPoint indirection adds +46,830 gas/op. MOBI VID V2 is measured alongside as an application profile, not as one of the 9 base standards.
 
 ### V2V latency (RQ4 / H3) — N=30 seeded runs, median [95% CI], ms
 

@@ -237,7 +237,7 @@
       "threat": "Elevation of Privilege (identity/ownership takeover)",
       "attack": "attacker calls safeTransferFrom to pull a victim's soulbound BIRTH_CERT identity token",
       "defense": "ERC1155 approval check + soulbound _update guard (holder transfers require ISSUER_ROLE)",
-      "revertReason": "VM Exception while processing transaction: reverted with custom error 'ERC1155MissingApprovalForAll(\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\", \"0x70997970C51812dc3A010C7d01b50e0d17dc79C8\")'",
+      "revertReason": "VM Exception while processing transaction: reverted with reason string 'CVIN1155: credentials are soulbound (issuer-mediated transfer only)'",
       "control": "PASS"
     },
     "signatureReplay": {

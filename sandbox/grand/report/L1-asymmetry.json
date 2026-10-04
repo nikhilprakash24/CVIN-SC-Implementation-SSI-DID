@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T09:47:25.003Z",
+  "generatedAt": "2026-10-04T22:27:26.307Z",
   "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
   "options": [
     "cvin-combined",
@@ -101,7 +101,7 @@
       "option": "erc-1155",
       "mechanism": "create",
       "outcome": "ok",
-      "gasUsed": "107238",
+      "gasUsed": "107729",
       "reason": null,
       "note": "id = keccak256(vin) (vinHashToVehicle index); identity address = holder of BIRTH_CERT; explicit; resolved as did:cvin:erc1155:31337:0x5FC8d32690cc91D4c39d9d3abcBD16989F875707:0x26ceb620a5fe84826ecf11ac8ac7f9cd8ea0d0884b2b517c28c9a4ff1483d2e9"
     },
@@ -189,9 +189,9 @@
       "option": "erc-1155",
       "mechanism": "controller-change",
       "outcome": "ok",
-      "gasUsed": "83748",
+      "gasUsed": "89793",
       "reason": null,
-      "note": "changeController: issuer-mediated BIRTH_CERT re-binding 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 -> 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC (soulbound; holder cannot self-transfer); new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+      "note": "changeController: issuer-mediated whole-identity re-binding 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 -> 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC (BIRTH_CERT + 0 credential type(s); soulbound, holder cannot self-transfer); new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
     {
       "option": "erc-4337",
@@ -245,7 +245,7 @@
       "option": "mobi-vid",
       "mechanism": "controller-change",
       "outcome": "ok",
-      "gasUsed": "37669",
+      "gasUsed": "37735",
       "reason": null,
       "note": "ERC-1056 changeOwner (controller only; no ownership-history record); new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
@@ -333,7 +333,7 @@
       "option": "mobi-vid",
       "mechanism": "key-or-delegate",
       "outcome": "ok",
-      "gasUsed": "35265",
+      "gasUsed": "35309",
       "reason": null,
       "note": "ERC-1056 addDelegate (event-only); key address (0x90F79bf6EB2c4f870365E785982E1f101E93b906)"
     },
@@ -365,7 +365,7 @@
       "option": "erc-1155",
       "mechanism": "attribute",
       "outcome": "ok",
-      "gasUsed": "94150",
+      "gasUsed": "96478",
       "reason": null,
       "note": "setTokenURI(BIRTH_CERT): collection-wide credential-type URI, not per-identity; key \"did/svc/telematics\" not representable; attribute value (https://l1.example.invalid/erc-1155/telematics)"
     },
@@ -421,7 +421,7 @@
       "option": "mobi-vid",
       "mechanism": "attribute",
       "outcome": "ok",
-      "gasUsed": "37463",
+      "gasUsed": "37485",
       "reason": null,
       "note": "ERC-1056 setAttribute (event-only, 1-year validity); attribute value (https://l1.example.invalid/mobi-vid/telematics)"
     },
@@ -429,9 +429,9 @@
       "option": "cvin-combined",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "333789",
+      "gasUsed": "333803",
       "reason": null,
-      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x5A5D3B… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
+      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x1541d9… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
     },
     {
       "option": "erc-1056-uport",
@@ -453,7 +453,7 @@
       "option": "erc-1155",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "57137",
+      "gasUsed": "80131",
       "reason": null,
       "note": "issueCredential(type=3 INSPECTION_CERT); data/signature have no on-chain representation; document changed after addClaim (claim stored as hash/balance only)"
     },
@@ -509,9 +509,9 @@
       "option": "mobi-vid",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "287041",
+      "gasUsed": "287085",
       "reason": null,
-      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x1614403cc3007fb09b08f5def695f8ab0c313faaa1c…)"
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x9a4f87db4d748dd69552c5803d8d638553aa5386a3f…)"
     },
     {
       "option": "cvin-combined",
@@ -541,9 +541,9 @@
       "option": "erc-1155",
       "mechanism": "revoke",
       "outcome": "ok",
-      "gasUsed": "37435",
+      "gasUsed": "72614",
       "reason": null,
-      "note": "revokeCredential(BIRTH_CERT) burn = identity deregistered (VIN mappings deleted); prep: addClaim; marker \"deactivated\":true"
+      "note": "revokeCredential(BIRTH_CERT) burn = identity deregistered (VIN mappings deleted); 1 other credential type(s) revoked first (D8 invariant); prep: addClaim; marker \"deactivated\":true"
     },
     {
       "option": "erc-4337",
@@ -629,9 +629,9 @@
       "option": "erc-1155",
       "mechanism": "transfer",
       "outcome": "ok",
-      "gasUsed": "83748",
+      "gasUsed": "89793",
       "reason": null,
-      "note": "transfer: issuer-mediated BIRTH_CERT re-binding 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 -> 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC (soulbound; holder cannot self-transfer); recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+      "note": "transfer: issuer-mediated whole-identity re-binding 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 -> 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC (BIRTH_CERT + 0 credential type(s); soulbound, holder cannot self-transfer); recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
     {
       "option": "erc-4337",
@@ -685,7 +685,7 @@
       "option": "mobi-vid",
       "mechanism": "transfer",
       "outcome": "ok",
-      "gasUsed": "180039",
+      "gasUsed": "180105",
       "reason": null,
       "note": "transferVehicleOwnership: odometer-stamped OwnershipTransfer record + ERC-1056 changeOwner; recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
@@ -701,7 +701,7 @@
       "option": "erc-1056-uport",
       "mechanism": "signed-op",
       "outcome": "ok",
-      "gasUsed": "96053",
+      "gasUsed": "96065",
       "reason": null,
       "note": "changeOwnerSigned relayed by 0xf39Fd6… (adapter-signed raw digest; nonce 0 -> newOwner 0x709979…); resolved as did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
     },
@@ -725,9 +725,9 @@
       "option": "erc-4337",
       "mechanism": "signed-op",
       "outcome": "ok",
-      "gasUsed": "69405",
+      "gasUsed": "69393",
       "reason": null,
-      "note": "handleOp -> validateUserOp(ecrecover) -> transferOwnership(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC); bundler=deployer; resolved as did:pkh:eip155:31337:0xFD6F7A6a5c21A3f503EBaE7a473639974379c351"
+      "note": "handleOp -> validateUserOp(ecrecover) -> transferOwnership(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC); bundler=deployer; resolved as did:pkh:eip155:31337:0xa6e99A4ED7498b3cdDCBB61a6A607a4925Faa1B7"
     },
     {
       "option": "erc-721",
@@ -751,7 +751,7 @@
       "outcome": "ok",
       "gasUsed": "76352",
       "reason": null,
-      "note": "execute(CALL, CVINExecuteTarget, 0, setValue(238508)) — real call, msg.sender==identity: true; target deploy=133519 not counted; op 'changeOwner' mapped to this demo; owner-gated by msg.sender, signature ignored; resolved as did:erc725:0x7a69:0x40a42Baf86Fc821f972Ad2aC878729063CeEF403"
+      "note": "execute(CALL, CVINExecuteTarget, 0, setValue(837729)) — real call, msg.sender==identity: true; target deploy=133519 not counted; op 'changeOwner' mapped to this demo; owner-gated by msg.sender, signature ignored; resolved as did:erc725:0x7a69:0x96F3Ce39Ad2BfDCf92C0F6E2C2CAbF83874660Fc"
     },
     {
       "option": "erc-735",
@@ -807,7 +807,7 @@
       "outcome": "ok",
       "gasUsed": "0",
       "reason": null,
-      "note": "registered=true vehicle=0x709979… vin=CVNERC11550000000 credentials=[BIRTH_CERT]; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:cvin:erc1155:31337:0x8bCe54ff8aB45CB075b044AE117b8fD91F9351aB:0x26ceb620a5fe84826ecf11ac8ac7f9cd8ea0d0884b2b517c28c9a4ff1483d2e9; verificationMethods=1"
+      "note": "registered=true vehicle=0x709979… vin=CVNERC11550000000 credentials=[BIRTH_CERT]; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:cvin:erc1155:31337:0x74Cf9087AD26D541930BaC724B7ab21bA8F00a27:0x26ceb620a5fe84826ecf11ac8ac7f9cd8ea0d0884b2b517c28c9a4ff1483d2e9; verificationMethods=1"
     },
     {
       "option": "erc-4337",
@@ -815,7 +815,7 @@
       "outcome": "ok",
       "gasUsed": "0",
       "reason": null,
-      "note": "owner=0x709979… guardian=none attrs=0 userOpNonce=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:pkh:eip155:31337:0xaca81583840B1bf2dDF6CDe824ada250C1936B4D; verificationMethods=1"
+      "note": "owner=0x709979… guardian=none attrs=0 userOpNonce=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:pkh:eip155:31337:0x70bDA08DBe07363968e9EE53d899dFE48560605B; verificationMethods=1"
     },
     {
       "option": "erc-721",
@@ -823,7 +823,7 @@
       "outcome": "ok",
       "gasUsed": "0",
       "reason": null,
-      "note": "owner=0x709979… vin=CVNERC72100000000 active=true records=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:nft:erc721:0x70bda08dbe07363968e9ee53d899dfe48560605b:1; verificationMethods=1"
+      "note": "owner=0x709979… vin=CVNERC72100000000 active=true records=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:nft:erc721:0x26b862f640357268bd2d9e95bc81553a2aa81d7e:1; verificationMethods=1"
     },
     {
       "option": "erc-725",
@@ -839,7 +839,7 @@
       "outcome": "ok",
       "gasUsed": "0",
       "reason": null,
-      "note": "owner=0x709979… vin=CVNERC725XY000000 attrs=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:erc725:0x7a69:0x5D42EBdBBa61412295D7b0302d6F50aC449Ddb4F; verificationMethods=1"
+      "note": "owner=0x709979… vin=CVNERC725XY000000 attrs=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:erc725:0x7a69:0xddE78e6202518FF4936b5302cC2891ec180E8bFf; verificationMethods=1"
     },
     {
       "option": "erc-735",
@@ -855,7 +855,7 @@
       "outcome": "ok",
       "gasUsed": "0",
       "reason": null,
-      "note": "exists=true owner=0x709979… vin=CVNLSP80000000000 dataKeys=1; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:cvin:lsp8:31337:0xddE78e6202518FF4936b5302cC2891ec180E8bFf:0xa4792d3a110a3dffa33ddb030d13fb2e0341f93889736563aafd7aea48f9ef02; verificationMethods=1"
+      "note": "exists=true owner=0x709979… vin=CVNLSP80000000000 dataKeys=1; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:cvin:lsp8:31337:0xB06c856C8eaBd1d8321b687E188204C1018BC4E5:0xa4792d3a110a3dffa33ddb030d13fb2e0341f93889736563aafd7aea48f9ef02; verificationMethods=1"
     },
     {
       "option": "mobi-vid",
