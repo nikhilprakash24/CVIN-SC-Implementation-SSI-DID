@@ -563,6 +563,7 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
     for k in ('date_utc', 'git_commit', 'git_dirty', 'python_version', 'node_version', 'hardhat_version',
               'ethers_version', 'web3_version', 'solc_version', 'cryptography_version', 'chain_id',
               'block_gas_limit', 'automine', 'contract_address', 'contract_deploy_gas',
+              'registry_artifact', 'registry_bytecode_sha256', 'registry_compiler',
               'cpu_model', 'cpu_count', 'os'):
         L.append(f"| {k} | {env.get(k)} |")
     L.append("")
@@ -732,6 +733,12 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
              "(bounded replay cache). This adds the same small amount of work to every backend's `sign_message` "
              "and `verify_message`; the ERC-1056 freshness check runs before any RPC. The wire format is "
              "unchanged (same `timestamp` field and length).")
+    if env.get('registry_artifact') and not str(env.get('registry_artifact')).startswith('artifacts/'):
+        L.append("   **Deployed bytecode:** the tracked `cv2x-testbed/artifacts/` ERC1056Registry artifact predates "
+                 "the K-3 contract fix (review 02, Q-9), so this run deployed a fresh compile of the current "
+                 "`contracts/ERC1056Registry.sol` with the testbed's compiler settings (see `registry_artifact`, "
+                 "`registry_bytecode_sha256` and `registry_compiler` in the environment table). Gas differs from "
+                 "runs that deployed the tracked artifact.")
     L.append("6. **Single machine, single process, no concurrency.** Throughput under load, RPC contention "
              "and multi-vehicle broadcast scenarios are out of scope here.")
     L.append("7. **The ERC-1056 column is the cv2x `ERC1056Registry`, not `EthereumDIDRegistry` (review 02, K-5).** "
@@ -747,10 +754,39 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
         f.write("\n".join(L))
 
 
-def deploy_registry(rpc_url: str):
+TRACKED_REGISTRY_ARTIFACT = os.path.join(ROOT, 'artifacts', 'contracts', 'ERC1056Registry.sol',
+                                         'ERC1056Registry.json')
+
+
+def registry_artifact_info(path: str) -> Dict[str, Any]:
+    """Provenance of the deployed bytecode: path, sha256, compiler settings (from build-info)."""
+    import hashlib
+    with open(path) as f:
+        art = json.load(f)
+    info: Dict[str, Any] = {
+        'registry_artifact': os.path.relpath(path, ROOT) if path.startswith(ROOT) else path,
+        'registry_bytecode_sha256': hashlib.sha256(art['bytecode'].encode()).hexdigest(),
+        'registry_compiler': None,
+    }
+    dbg = os.path.join(os.path.dirname(path), 'ERC1056Registry.dbg.json')
+    try:
+        with open(dbg) as f:
+            build_info = os.path.normpath(os.path.join(os.path.dirname(dbg), json.load(f)['buildInfo']))
+        with open(build_info) as f:
+            bi = json.load(f)
+        st = bi['input']['settings']
+        info['registry_compiler'] = (f"solc {bi.get('solcLongVersion')}, optimizer "
+                                     f"{st.get('optimizer')}, evmVersion {st.get('evmVersion')}, "
+                                     f"viaIR {bool(st.get('viaIR'))}")
+    except Exception:
+        pass
+    return info
+
+
+def deploy_registry(rpc_url: str, artifact_path: Optional[str] = None):
     """Deploy ERC1056Registry from the compiled artifact; return (address, receipt gasUsed)."""
     from identity.erc1056_provider import ERC1056Provider
-    with open(os.path.join(ROOT, 'artifacts', 'contracts', 'ERC1056Registry.sol', 'ERC1056Registry.json')) as f:
+    with open(artifact_path or TRACKED_REGISTRY_ARTIFACT) as f:
         art = json.load(f)
     p = ERC1056Provider(rpc_url)
     w3 = p.w3
@@ -780,6 +816,10 @@ def main():
     ap.add_argument('--deploy', action='store_true',
                     help='deploy a fresh ERC1056Registry from artifacts/ and record its receipt gasUsed '
                          '(instead of reading deployments/localhost.json)')
+    ap.add_argument('--registry-artifact', default=os.environ.get('CV2X_REGISTRY_ARTIFACT'),
+                    help='with --deploy: Hardhat artifact JSON of ERC1056Registry to deploy (default: the '
+                         'tracked artifacts/contracts/ERC1056Registry.sol/ERC1056Registry.json; env '
+                         'CV2X_REGISTRY_ARTIFACT). Its path, bytecode sha256 and compiler settings are recorded.')
     ap.add_argument('--no-chain', action='store_true', help='skip the ERC-1056 backend')
     ap.add_argument('--out-dir', default=os.path.join(ROOT, 'results'))
     ap.add_argument('--render-only', action='store_true',
@@ -813,8 +853,11 @@ def main():
             from identity.erc1056_provider import ERC1056Provider
             address = args.contract_address
             deploy_gas = None
+            artifact_info = {'registry_artifact': None, 'registry_bytecode_sha256': None,
+                             'registry_compiler': None}
             if args.deploy:
-                address, deploy_gas = deploy_registry(args.rpc_url)
+                address, deploy_gas = deploy_registry(args.rpc_url, args.registry_artifact)
+                artifact_info = registry_artifact_info(args.registry_artifact or TRACKED_REGISTRY_ARTIFACT)
                 print(f"Deployed ERC1056Registry at {address} (gasUsed {deploy_gas})")
             elif address is None:
                 with open(os.path.join(ROOT, 'deployments', 'localhost.json')) as f:
@@ -836,6 +879,7 @@ def main():
                 'contract_address': address,
                 'contract_deploy_gas': deploy_gas,
                 'client_version': w3.client_version if hasattr(w3, 'client_version') else None,
+                **artifact_info,
             }
             backends.append(Backend('erc1056_did', erc, True, RPCCounter(w3)))
         except Exception as e:  # never fabricate: record precisely why the chain backend is absent
