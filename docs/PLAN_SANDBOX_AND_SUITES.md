@@ -27,7 +27,7 @@ sandbox/
       README.md                  # the option's asymmetry notes (on/off-chain, crypto, automation)
     erc-721/ erc-725/ erc-725xy/ erc-735/ erc-1155/ erc-4337/ lsp8/ cvin-combined/ mobi-vid/
     baseline-pki/ baseline-centralized/
-  suites/
+  suites/ -> ../1_blockchain-identity/test  (symlink: Hardhat test files must resolve chai/hardhat from inside the project)
     L1-identity-mechanisms/      # uniform cross-option suite driven by the adapters
     L2-identity-system/          # registries, roles, lookups, history, signed ops, entry points
     L3-ssi/                      # DID resolution, VC, MOBI-as-VC, conformance hooks
@@ -63,7 +63,7 @@ capabilities()                 -> manifest subset           # what the adapter c
 | S1 ✅ 2026-10-04 | **Manifests.** Write the 13 `manifest.yaml` (the two ERC-1056 variants from S0, eight other on-chain options, MOBI VID, 2 baselines) from the generated matrix §3 lists plus the providers; three stances per capability family with a one-line reason | `grand/run.py matrix` renders the union table with no empty cells |
 | S2 | **Adapters (JS).** `adapter.js` per on-chain option implementing the interface over the G2 contracts; `NotApplicable` where the manifest says so | a smoke script creates/changes/resolves one identity per option |
 | S3 | **L1 suite.** One mocha file per L1 mechanism, parameterised over all adapters; asserts behaviour where supported, records N/A otherwise; emits `report/L1-asymmetry.json` | runs green across 10 options; the N/A table matches the manifests |
-| S4 | **L2 suite.** Re-home the existing registry/role/entry-point/security tests under `suites/L2-identity-system/` via mocha config (no rewrites); add a uniform signed-operation test across the options that declare it | 219 Hardhat tests still pass from the new layout; signed-op coverage table emitted |
+| S4 ◐ 2026-10-04 (re-home done; signed-op table pending) | **L2 suite.** Re-home the existing registry/role/entry-point/security tests under `suites/L2-identity-system/` via mocha config (no rewrites); add a uniform signed-operation test across the options that declare it | 219 Hardhat tests still pass from the new layout; signed-op coverage table emitted |
 | S5 | **L3 suite.** Re-home the 60 pytest; add the external DID test-suite run as a pytest that reads `docs/conformance/reports/` and asserts no regression below 335/336; make the internal checker a pytest asserting ≥ 94.3 | `pytest sandbox/suites/L3-ssi` green; conformance regression caught |
 | S6 | **L4 suite.** Turn the 12 use cases into pytest cases (each use case = one test with its own fixture chain); add a V2V harness smoke test (`--simulate`, 10 vehicles, 2 s) and reproducibility tests for the three experiments (`--render-only` + schema checks) | `pytest sandbox/suites/L4-exemplar-interactions` green in < 3 min |
 | S7 | **Demos.** Per option, one script per capability family exercising every relevant feature the manifest marks "implemented" — including the ones the comparison never uses (royalties, toll, guardian recovery, batch credentials, LSP data keys, execute(), signed ops) — printing gas and the on/off-chain stance | every "implemented" manifest entry has a demo that runs |
