@@ -121,6 +121,52 @@ def test_revoked_identity_rejected(provider, vid):
     assert provider.verify_message(signed)[0] is False
 
 
+def test_revoked_flag_rejects_even_when_a_key_resolves(provider, vid):
+    """
+    Exercises the `is_revoked` check itself (Pass 2 re-review, M3).
+
+    In the test above `DIDRevoked` (no previousChange) cuts the event chain,
+    so no key resolves and verify fails whether or not the revoked flag is
+    checked. Here a key rotation and the revocation are mined in the SAME
+    block: `changed` points at that block, its DIDAttributeChanged event
+    carries previousChange, so the new key DOES resolve, and only the
+    registry's revoked flag (from getIdentityInfo) can reject the message.
+    """
+    from cryptography.hazmat.primitives.asymmetric import ec
+
+    w3 = provider.w3
+    acct = provider.vehicle_account(vid)
+    identity = Web3.to_checksum_address(provider.vehicles[vid]['address'])
+    new_key = ec.generate_private_key(ec.SECP256K1())
+    new_pub = new_key.public_key().public_bytes(
+        serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
+    nonce = w3.eth.get_transaction_count(acct.address)
+    base = {'from': acct.address, 'gas': 200000, 'gasPrice': w3.eth.gas_price}
+    txs = [
+        provider.contract.functions.updateVehicleKey(identity, new_pub).build_transaction(
+            dict(base, nonce=nonce)),
+        provider.contract.functions.revokeIdentity(identity).build_transaction(
+            dict(base, nonce=nonce + 1)),
+    ]
+    w3.provider.make_request('evm_setAutomine', [False])
+    try:
+        hashes = [w3.eth.send_raw_transaction(provider._raw_tx(acct.sign_transaction(t)))
+                  for t in txs]
+        w3.provider.make_request('evm_mine', [])
+    finally:
+        w3.provider.make_request('evm_setAutomine', [True])
+    receipts = [w3.eth.wait_for_transaction_receipt(h) for h in hashes]
+    assert [r.status for r in receipts] == [1, 1]
+    assert receipts[0].blockNumber == receipts[1].blockNumber
+
+    provider.vehicles[vid]['private_key'] = new_key
+    provider.vehicles[vid]['public_key'] = new_key.public_key()
+    data, _ = provider.resolve_identity(vid)
+    assert data['public_key'] == new_pub.hex(), "precondition: a key must still resolve"
+    assert data['is_revoked'] is True
+    assert provider.verify_message(provider.sign_message(vid, make_bsm(17)))[0] is False
+
+
 def test_verify_uses_no_isRevoked_call(provider, vid):
     """T-5: one eth_call (getIdentityInfo) + one eth_getLogs (+ web3's eth_chainId)."""
     rc = RPCCounter(provider.w3)
