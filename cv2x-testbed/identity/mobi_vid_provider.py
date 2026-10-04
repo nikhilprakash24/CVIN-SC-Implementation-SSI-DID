@@ -545,9 +545,31 @@ class MOBIVIDProvider(IdentityProvider):
             # Extract components
             message = signed_message['message']
             signature_hex = signed_message['signature']
-            public_key_hex = signed_message['public_key']
 
-            # Reconstruct public key
+            # Defect D11 (docs/DEFECT_LOG.md, fixed 2026-10-04): the verifier used to
+            # reconstruct the key from the message itself, so an impostor signing with
+            # its own key under a vehicle's DID passed. The authoritative key is the one
+            # bound to the vehicle at registration; a key carried in the message is
+            # accepted only if it equals the registered one. Unknown or revoked vehicles
+            # are rejected. On-chain anchoring of the key (D11b) is the follow-up.
+            vehicle_did = signed_message.get('vehicle_did')
+            if not vehicle_did:
+                raise ValueError("signed message carries no vehicle_did")
+            vehicle_identity = self._vehicle_id_to_identity(vehicle_did)
+            record = self.vehicles.get(vehicle_identity)
+            if not record or not record.get('public_key'):
+                raise ValueError(f"no registered key for {vehicle_did}")
+            if record.get('revoked'):
+                raise ValueError(f"vehicle {vehicle_did} is revoked")
+            if self.contract is not None:
+                if self.contract.functions.isRevoked(vehicle_identity).call():
+                    raise ValueError(f"vehicle {vehicle_did} is revoked on-chain")
+            public_key_hex = record['public_key']
+            embedded = signed_message.get('public_key')
+            if embedded is not None and embedded.lower() != public_key_hex.lower():
+                raise ValueError("embedded public key does not match the registered key")
+
+            # Reconstruct the registered public key
             public_key_bytes = bytes.fromhex(public_key_hex)
             public_key = ec.EllipticCurvePublicKey.from_encoded_point(
                 ec.SECP256K1(),
