@@ -348,13 +348,22 @@ class W3CComplianceChecker:
                         "'serviceEndpoint'", check_services)
 
         def check_resolution_metadata():
+            # DID Core 7.1.2: contentType MUST NOT be present for resolve()
+            # and is REQUIRED for a successful resolveRepresentation()
+            # (stream G-R, R2; this check used to expect it on resolve()).
             for name, res in results.items():
                 meta = res.didResolutionMetadata
-                assert meta.contentType == "application/did+ld+json", \
-                    f"{name}: contentType={meta.contentType}"
+                assert "contentType" not in res.to_dict()["didResolutionMetadata"], \
+                    f"{name}: resolve() carries contentType={meta.contentType}"
                 assert meta.retrieved, f"{name}: no 'retrieved' timestamp"
                 datetime.fromisoformat(meta.retrieved)  # must parse
-            return "contentType + parseable 'retrieved' timestamp on all resolutions"
+                rep = resolver.resolve_representation(dids[name])
+                ct = rep.didResolutionMetadata.contentType
+                assert ct == "application/did+ld+json", \
+                    f"{name}: resolveRepresentation() contentType={ct}"
+                assert json.loads(rep.didDocumentStream)["id"] == dids[name]
+            return ("contentType on resolveRepresentation() only, matching "
+                    "the stream; parseable 'retrieved' on all resolutions")
         self._run_check(spec, "7.1.2",
                         "Resolution MUST return DID resolution metadata "
                         "(contentType, retrieved)", check_resolution_metadata)
