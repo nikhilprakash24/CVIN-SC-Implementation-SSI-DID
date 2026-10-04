@@ -118,6 +118,45 @@ function buildAnalysis(runDir) {
     `- Baseline ${colLabels[BASELINE]} lifetime ${lifeIdx[BASELINE].lifetimeGas.toLocaleString("en-US")} gas; cheapest-to-dearest lifetime order: ${adapters.slice().sort((x, y) => lifeIdx[x].lifetimeGas - lifeIdx[y].lifetimeGas).map((a) => `${colLabels[a]} (${ratio(lifeIdx[a].lifetimeGas, lifeIdx[BASELINE].lifetimeGas)}×)`).join(" < ")}`,
     "", "Criterion 'O(1) on-chain credential check' is a design property (a contract can verify a credential with one view call), not a measurement; it is the axis on which the CVIN-Combined hybrid and the storage-based substrates beat the event-log substrates. It is assigned per adapter in `analysis/analysis.js` and must be stated with the table.", "");
 
+  // ---- 5. W3C DID Method Rubric — measured inputs (docs/DID_METHOD_RUBRIC.md §1a) -------
+  const eventLog = { erc1056: true, erc1056w: true, cvin: true };
+  const txc = (a, op) => { const r = crudIdx.get(`${a}|${op}`); return r && r.supported !== false ? r.txCount : null; };
+  const fmtGas = (a, op) => { const g = gas(a, op); return g == null ? "n/a" : `${g.toLocaleString("en-US")}${txc(a, op) > 1 ? ` (${txc(a, op)} tx)` : ""}`; };
+  const rubricRows = ["R_3_2_5", "R_3_2_7", "R_3_2_7b", "R_3_2_8a", "R_3_2_8b", "R_3_2_8c", "R_3_3_2a", "R_3_3_2b", "R_3_4_1", "R_3_4_7", "R_3_4_8", "R_3_7_2"];
+  const rubricLabels = {
+    R_3_2_5: "3.2.5 Offline creation (identity exists before any tx?)",
+    R_3_2_7: "3.2.7 ▲ Creation cost: C1 bind VIN (gas)",
+    R_3_2_7b: "3.2.7 ▲ Creation incl. VID-I attributes: C2 (gas)",
+    R_3_2_8a: "3.2.8 ▲ Update cost: U3 attribute (gas)",
+    R_3_2_8b: "3.2.8 ▲ Controller rotation: U1 (gas)",
+    R_3_2_8c: "3.2.8 ▲ Deletion: D3 deactivate (gas)",
+    R_3_3_2a: `3.3.2 ▲ Limited-resource resolution: R3 RPC calls at h=${maxH}`,
+    R_3_3_2b: "3.3.2 ▲ Resolution median ms after lifecycle",
+    R_3_4_1: "3.4.1 Auditability: linked event chain vs state snapshot",
+    R_3_4_7: "3.4.7 Verification relationships: delegate keys",
+    R_3_4_8: "3.4.8 Relayed / signed operations (meta-tx)",
+    R_3_7_2: "3.7.2 ▲ Incentive for many DIDs: lifetime gas × baseline",
+  };
+  const spec5 = { title: "A5 — W3C DID Method Rubric: measured inputs per criterion (▲ = quantitative cell fed by this run)", rowLabel: "Rubric criterion", rowKeys: rubricRows, rowLabels: rubricLabels, colKeys: adapters, colLabels,
+    cellFn: (r, a) => {
+      switch (r) {
+        case "R_3_2_5": return eventLog[a] ? "yes (implicit identity; C1 only binds the VIN)" : "no (mint / deploy / register tx)";
+        case "R_3_2_7": return fmtGas(a, "C1_create_identity");
+        case "R_3_2_7b": return fmtGas(a, "C2_create_with_attributes");
+        case "R_3_2_8a": return fmtGas(a, "U3_set_attribute");
+        case "R_3_2_8b": return fmtGas(a, "U1_rotate_controller");
+        case "R_3_2_8c": return fmtGas(a, "D3_deactivate_identity");
+        case "R_3_3_2a": return h50.get(`${a}|${maxH}`)?.readRpcCalls ?? null;
+        case "R_3_3_2b": return resIdx.get(`${a}|R3_resolve_document`)?.latency?.median ?? null;
+        case "R_3_4_1": return eventLog[a] ? "full linked history (previousChange chain)" : (a === "erc735" || a === "erc721") ? "events + current state (no chain pointer)" : "current state (events unlinked)";
+        case "R_3_4_7": return supported(a, "U2_add_delegate") ? (a === "erc4337" ? "recovery guardian only" : a === "erc721" ? "approval (no expiry)" : "delegates with TTL") : "none";
+        case "R_3_4_8": return supported(a, "U5_meta_tx") ? "yes" : "no";
+        case "R_3_7_2": { const l = lifeIdx[a]; return l ? `${ratio(l.lifetimeGas, lifeIdx[BASELINE].lifetimeGas)}${l.skippedEvents && l.skippedEvents.length ? "†" : ""}` : null; }
+        default: return null;
+      }
+    } };
+  out.push(emit(runDir, "analysis_rubric_inputs", spec5, footer));
+
   const json = { runId: meta.runId, baseline: BASELINE, criteria: crit.map(({ id, label, lower }) => ({ id, label, lower })), values: vals, dominatedBy: dom, frontier };
   fs.writeFileSync(path.join(runDir, "analysis.json"), JSON.stringify(json, null, 2));
   writeText(path.join(runDir, "ANALYSIS.md"), out.join("\n"));
