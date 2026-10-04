@@ -1,0 +1,1117 @@
+{
+  "generatedAt": "2026-10-04T05:39:46.515Z",
+  "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
+  "options": [
+    "cvin-combined",
+    "erc-1056-uport",
+    "erc-1056-vehicle",
+    "erc-1155",
+    "erc-4337",
+    "erc-721",
+    "erc-725",
+    "erc-725xy",
+    "erc-735",
+    "lsp8",
+    "mobi-vid"
+  ],
+  "mechanisms": [
+    "create",
+    "controller-change",
+    "key-or-delegate",
+    "attribute",
+    "claim",
+    "revoke",
+    "transfer",
+    "signed-op",
+    "resolve"
+  ],
+  "counts": {
+    "create": {
+      "ok": 11,
+      "na": 0,
+      "fail": 0
+    },
+    "controller-change": {
+      "ok": 11,
+      "na": 0,
+      "fail": 0
+    },
+    "key-or-delegate": {
+      "ok": 6,
+      "na": 5,
+      "fail": 0
+    },
+    "attribute": {
+      "ok": 9,
+      "na": 2,
+      "fail": 0
+    },
+    "claim": {
+      "ok": 5,
+      "na": 6,
+      "fail": 0
+    },
+    "revoke": {
+      "ok": 10,
+      "na": 1,
+      "fail": 0
+    },
+    "transfer": {
+      "ok": 5,
+      "na": 6,
+      "fail": 0
+    },
+    "signed-op": {
+      "ok": 4,
+      "na": 7,
+      "fail": 0
+    },
+    "resolve": {
+      "ok": 11,
+      "na": 0,
+      "fail": 0
+    }
+  },
+  "records": [
+    {
+      "option": "cvin-combined",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "identity is the address (identityOwner defaults to self); vin=VINCVINCOMBINED00 not anchored (use addClaim topic 1 or setAttribute); implicit; resolved as did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "77792",
+      "reason": null,
+      "note": "createVehicleDID vin=VINERC1056UPORT00; implicit 0-gas path also available; explicit; resolved as did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "54639",
+      "reason": null,
+      "note": "registerVehicle sent by the vehicle account (1-year did/pub/secp256k1/veriKey/base64); vin=VINERC1056VEHICLE not anchored (VIN linkage N/A); explicit; resolved as did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "option": "erc-1155",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "103881",
+      "reason": null,
+      "note": "id = keccak256(vin) (vinHashToVehicle index); identity address = holder of BIRTH_CERT; explicit; resolved as did:cvin:erc1155:31337:0x5FC8d32690cc91D4c39d9d3abcBD16989F875707:0x50e275b67e6193482933858c57233054708d41d29edc5d00aa075047990d5daf"
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "759088",
+      "reason": null,
+      "note": "direct deployment (no factory/initCode -> not counterfactual here); VIN VINERC43370000000 not bound on-chain; explicit; resolved as did:pkh:eip155:31337:0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "542474",
+      "reason": null,
+      "note": "explicit; resolved as did:nft:erc721:0x8a791620dd6260079bf849dc5567adc3f2fdc318:1"
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "519384",
+      "reason": null,
+      "note": "proxy deployment is the creation cost (owner = deployer of the proxy); vin=VINERC72500000000 not stored (no data store); explicit; resolved as did:erc725:0x7a69:0x71C95911E9a5D330f4D621842EC243EE1343292e"
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "1730753",
+      "reason": null,
+      "note": "deploy=1680816 (account deployment is the creation cost; owner=0x709979…) +setData(VIN_KEY)=49937; explicit; resolved as did:erc725:0x7a69:0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0"
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "1371394",
+      "reason": null,
+      "note": "claim-holder deployment is the creation cost (vin=VINERC73500000000 stored in constructor); explicit; resolved as did:erc735:0x7a69:0x712516e61C8B383dF4A63CFe83d7701Bce54B03e"
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "149430",
+      "reason": null,
+      "note": "tokenId = keccak256(vin); VIN stored under DATA_KEY_VIN; explicit; resolved as did:cvin:lsp8:31337:0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82:0xb799cd20cd59cc386fbbeeea0ff9200a876468aa2067067957bc9c0121640706"
+    },
+    {
+      "option": "mobi-vid",
+      "mechanism": "create",
+      "outcome": "ok",
+      "gasUsed": "276671",
+      "reason": null,
+      "note": "registerVehicleBirth (VID I); identity address derived from VIN; birthAttributes empty; explicit; resolved as did:ethr:0x7a69:f83c8695695fdc369bdace5d13ad556f7129b7bb"
+    },
+    {
+      "option": "cvin-combined",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "68813",
+      "reason": null,
+      "note": "changeOwner; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "68842",
+      "reason": null,
+      "note": "changeOwner; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "51669",
+      "reason": null,
+      "note": "changeOwner; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-1155",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "83704",
+      "reason": null,
+      "note": "changeController: issuer-mediated BIRTH_CERT re-binding 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 -> 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC (soulbound; holder cannot self-transfer); new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "28527",
+      "reason": null,
+      "note": "signing-key rotation; account address unchanged; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "179562",
+      "reason": null,
+      "note": "ownership IS control for an NFT (== transfer); new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "28378",
+      "reason": null,
+      "note": "transferOwnership; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "28822",
+      "reason": null,
+      "note": "transferOwnership (controlling-key rotation; account address unchanged); new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "28690",
+      "reason": null,
+      "note": "transferOwnership; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "80576",
+      "reason": null,
+      "note": "changeController: ownership IS control (LSP8 5-arg transfer, force=true); new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "mobi-vid",
+      "mechanism": "controller-change",
+      "outcome": "ok",
+      "gasUsed": "35456",
+      "reason": null,
+      "note": "ERC-1056 changeOwner (controller only; no ownership-history record); new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "cvin-combined",
+      "mechanism": "key-or-delegate",
+      "outcome": "ok",
+      "gasUsed": "72262",
+      "reason": null,
+      "note": "addDelegate(veriKey, 3600s); key address (0x90F79bf6EB2c4f870365E785982E1f101E93b906)"
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "key-or-delegate",
+      "outcome": "ok",
+      "gasUsed": "72219",
+      "reason": null,
+      "note": "addDelegate(veriKey, 3600s); key address (0x90F79bf6EB2c4f870365E785982E1f101E93b906)"
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "key-or-delegate",
+      "outcome": "ok",
+      "gasUsed": "35044",
+      "reason": null,
+      "note": "addDelegate(veriKey, 3600s) event-only; key address (0x90F79bf6EB2c4f870365E785982E1f101E93b906)"
+    },
+    {
+      "option": "erc-1155",
+      "mechanism": "key-or-delegate",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no key/delegate model on ERC-1155: setApprovalForAll() is an operator approval for token moves, not a verification key (manifest: Key / delegate management not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "key-or-delegate",
+      "outcome": "ok",
+      "gasUsed": "47569",
+      "reason": null,
+      "note": "setGuardian: recovery delegate (can recoverOwner); purpose/validity not representable; key address (0x90F79bf6EB2c4f870365E785982E1f101E93b906)"
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "key-or-delegate",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no key/delegate model on ERC-721: approve()/setApprovalForAll() delegate transfer rights only, not a verification key (manifest: Key / delegate management not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "key-or-delegate",
+      "outcome": "ok",
+      "gasUsed": "137096",
+      "reason": null,
+      "note": "addKey(purpose=2 ACTION, type=1 ECDSA); no expiry — validitySeconds=3600 ignored; ERC-734 key id keccak(abi.encode(address)) (0x697e28ac033ac5f9533d4005e2390c13c007f056636…)"
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "key-or-delegate",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "ERC-725 X/Y has a single owner and no key/delegate model; OPERATION_DELEGATECALL is an executor opcode, not identity delegation",
+      "note": null
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "key-or-delegate",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no key/delegate model in ERC-735 (keys are deferred to ERC-734; a single owner plays the MANAGEMENT key)",
+      "note": null
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "key-or-delegate",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no key/delegate model: operator authorization (authorizeOperator/revokeOperator) is not implemented in this representative LSP8, and operators would delegate token moves, not verification keys (manifest: Key / delegate management not-applicable)",
+      "note": null
+    },
+    {
+      "option": "mobi-vid",
+      "mechanism": "key-or-delegate",
+      "outcome": "ok",
+      "gasUsed": "35265",
+      "reason": null,
+      "note": "ERC-1056 addDelegate (event-only); key address (0x90F79bf6EB2c4f870365E785982E1f101E93b906)"
+    },
+    {
+      "option": "cvin-combined",
+      "mechanism": "attribute",
+      "outcome": "ok",
+      "gasUsed": "51576",
+      "reason": null,
+      "note": "setAttribute (event-only); attribute value (https://l1.example.invalid/cvin-combined/tele…)"
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "attribute",
+      "outcome": "ok",
+      "gasUsed": "52016",
+      "reason": null,
+      "note": "setAttribute (event-only); attribute value (https://l1.example.invalid/erc-1056-uport/tel…)"
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "attribute",
+      "outcome": "ok",
+      "gasUsed": "37180",
+      "reason": null,
+      "note": "setAttribute (event-only); attribute value (https://l1.example.invalid/erc-1056-vehicle/t…)"
+    },
+    {
+      "option": "erc-1155",
+      "mechanism": "attribute",
+      "outcome": "ok",
+      "gasUsed": "94150",
+      "reason": null,
+      "note": "setTokenURI(BIRTH_CERT): collection-wide credential-type URI, not per-identity; key \"did/svc/telematics\" not representable; attribute value (https://l1.example.invalid/erc-1155/telematics)"
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "attribute",
+      "outcome": "ok",
+      "gasUsed": "94471",
+      "reason": null,
+      "note": "direct owner call (not via EntryPoint); attribute value (68747470733a2f2f6c312e6578616d706c652e696e766…)"
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "attribute",
+      "outcome": "ok",
+      "gasUsed": "120137",
+      "reason": null,
+      "note": "addServiceRecord (append-only list, no keyed overwrite); attribute value (https://l1.example.invalid/erc-721/telematics)"
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "attribute",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no attribute/data store in the ERC-725 basic proxy (ERC-725Y setData is the erc-725xy option)",
+      "note": null
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "attribute",
+      "outcome": "ok",
+      "gasUsed": "95166",
+      "reason": null,
+      "note": "setData (ERC-725Y store, DataChanged); attribute value (https://l1.example.invalid/erc-725xy/telematics)"
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "attribute",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no attribute store in ERC-735; the closest analogue is a claim (addClaim)",
+      "note": null
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "attribute",
+      "outcome": "ok",
+      "gasUsed": "100282",
+      "reason": null,
+      "note": "setDataForTokenId by the issuing authority (token owner cannot write); attribute value (68747470733a2f2f6c312e6578616d706c652e696e766…)"
+    },
+    {
+      "option": "mobi-vid",
+      "mechanism": "attribute",
+      "outcome": "ok",
+      "gasUsed": "37463",
+      "reason": null,
+      "note": "ERC-1056 setAttribute (event-only, 1-year validity); attribute value (https://l1.example.invalid/mobi-vid/telematics)"
+    },
+    {
+      "option": "cvin-combined",
+      "mechanism": "claim",
+      "outcome": "ok",
+      "gasUsed": "331487",
+      "reason": null,
+      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x143657… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:VINCVINCOMBINED00)"
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "claim",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "ERC-1056 stores no claims on-chain; the Claims family is only the SVC_CREDENTIAL_SERVICE endpoint attribute (use setAttribute); credentials live off-chain",
+      "note": null
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "claim",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no on-chain claim function; credentials are off-chain W3C VCs handled by erc1056_provider.py (update/get/revoke_credential)",
+      "note": null
+    },
+    {
+      "option": "erc-1155",
+      "mechanism": "claim",
+      "outcome": "ok",
+      "gasUsed": "57115",
+      "reason": null,
+      "note": "issueCredential(type=3 INSPECTION_CERT); data/signature have no on-chain representation; document changed after addClaim (claim stored as hash/balance only)"
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "claim",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no on-chain claim/credential model in ERC-4337: the account validates UserOperations and stores attributes, it does not hold claims (manifest: Claims / credentials not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "claim",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no claim/credential model on ERC-721: inspector/service-center roles write unsigned records, there is no signed claim (manifest: Claims / credentials not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "claim",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no claim storage; claims live in the companion ERC-735 claim holder (erc-735 option)",
+      "note": null
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "claim",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no claim model in ERC-725 X/Y; claims live in the ERC-735 claim holder",
+      "note": null
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "claim",
+      "outcome": "ok",
+      "gasUsed": "314543",
+      "reason": null,
+      "note": "addClaim topic=1 VIN_ATTESTATION issuer=0xf39Fd6… (adapter-signed, EIP-191); claim data (L1-claim:erc-735:VINERC73500000000)"
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "claim",
+      "outcome": "ok",
+      "gasUsed": "148815",
+      "reason": null,
+      "note": "attestation stored as a per-token data key (no native claim model; signature stored, not verified); claim data (4c312d636c61696d3a6c7370383a56494e4c535038303…)"
+    },
+    {
+      "option": "mobi-vid",
+      "mechanism": "claim",
+      "outcome": "ok",
+      "gasUsed": "287041",
+      "reason": null,
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x7f4ba6ec54fac7025feb06672ae0395e22c32b7d0e9…)"
+    },
+    {
+      "option": "cvin-combined",
+      "mechanism": "revoke",
+      "outcome": "ok",
+      "gasUsed": "71322",
+      "reason": null,
+      "note": "removeClaim (storage refund applies); prep: addClaim; document differs from pre-revoke document"
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "revoke",
+      "outcome": "ok",
+      "gasUsed": "32868",
+      "reason": null,
+      "note": "revokeDelegate; prep: addKeyOrDelegate; document differs from pre-revoke document"
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "revoke",
+      "outcome": "ok",
+      "gasUsed": "74823",
+      "reason": null,
+      "note": "revokeIdentity (identity-level, permanent); prep: addKeyOrDelegate; marker \"revoked\":true"
+    },
+    {
+      "option": "erc-1155",
+      "mechanism": "revoke",
+      "outcome": "ok",
+      "gasUsed": "37417",
+      "reason": null,
+      "note": "revokeCredential(BIRTH_CERT) burn = identity deregistered (VIN mappings deleted); prep: addClaim; marker \"deactivated\":true"
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "revoke",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no identity-level revocation in ERC-4337: the account contract persists; only the recovery guardian can be cleared via setGuardian(0) (manifest: Revocation / status not-applicable)",
+      "note": "prep: addKeyOrDelegate; sub-identity revoke(addKeyOrDelegate handle) ok gas=25429 setGuardian(0): guardian (recovery delegate) revoked"
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "revoke",
+      "outcome": "ok",
+      "gasUsed": "27677",
+      "reason": null,
+      "note": "deactivateVehicle: active=false, token not burned; prep: setAttribute; marker \"active\":false"
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "revoke",
+      "outcome": "ok",
+      "gasUsed": "41399",
+      "reason": null,
+      "note": "removeKey (key revoked; array compacted); prep: addKeyOrDelegate; document differs from pre-revoke document"
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "revoke",
+      "outcome": "ok",
+      "gasUsed": "33870",
+      "reason": null,
+      "note": "setData(did/svc/telematics, 0x) — non-standard attribute clear, not an identity revocation; prep: setAttribute; document differs from pre-revoke document"
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "revoke",
+      "outcome": "ok",
+      "gasUsed": "69438",
+      "reason": null,
+      "note": "removeClaim (claim deleted; topic index compacted); prep: addClaim; document differs from pre-revoke document"
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "revoke",
+      "outcome": "ok",
+      "gasUsed": "41838",
+      "reason": null,
+      "note": "revokeVehicle: token burned (Transfer to 0 + VehicleRevoked); data keys not cleared; prep: addClaim; marker \"revoked\":true"
+    },
+    {
+      "option": "mobi-vid",
+      "mechanism": "revoke",
+      "outcome": "ok",
+      "gasUsed": "74836",
+      "reason": null,
+      "note": "revokeIdentity: permanent DID revocation (DIDRevoked); prep: addClaim; marker \"revoked\":true"
+    },
+    {
+      "option": "cvin-combined",
+      "mechanism": "transfer",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no token in the hybrid; control moves with changeOwner (changeController)",
+      "note": null
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "transfer",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "ERC-1056 has no token to transfer; the DID is the address and control moves with changeOwner (changeController)",
+      "note": null
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "transfer",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "ERC-1056 has no token to transfer; control moves with changeOwner (changeController)",
+      "note": null
+    },
+    {
+      "option": "erc-1155",
+      "mechanism": "transfer",
+      "outcome": "ok",
+      "gasUsed": "83704",
+      "reason": null,
+      "note": "transfer: issuer-mediated BIRTH_CERT re-binding 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 -> 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC (soulbound; holder cannot self-transfer); recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "transfer",
+      "outcome": "ok",
+      "gasUsed": "28527",
+      "reason": null,
+      "note": "account is not a token: transfer == transferOwnership (key rotation); recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "transfer",
+      "outcome": "ok",
+      "gasUsed": "179562",
+      "reason": null,
+      "note": "recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "transfer",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "identity is a contract account, not a token; ownership moves with transferOwnership (changeController); approve() is an unimplemented stub",
+      "note": null
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "transfer",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "identity is a contract account, not a token; ownership moves with transferOwnership (changeController)",
+      "note": null
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "transfer",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "identity is a contract, not a token; ownership moves with transferOwnership (changeController)",
+      "note": null
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "transfer",
+      "outcome": "ok",
+      "gasUsed": "80576",
+      "reason": null,
+      "note": "transfer: ownership IS control (LSP8 5-arg transfer, force=true); recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "mobi-vid",
+      "mechanism": "transfer",
+      "outcome": "ok",
+      "gasUsed": "179826",
+      "reason": null,
+      "note": "transferVehicleOwnership: odometer-stamped OwnershipTransfer record + ERC-1056 changeOwner; recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+    },
+    {
+      "option": "cvin-combined",
+      "mechanism": "signed-op",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no *Signed meta-transaction entry points in CVINCombinedIdentity; issuer signatures are verified in addClaim (authorisation of a claim, not delegated execution)",
+      "note": null
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "signed-op",
+      "outcome": "ok",
+      "gasUsed": "96053",
+      "reason": null,
+      "note": "changeOwnerSigned relayed by 0xf39Fd6… (adapter-signed raw digest; nonce 0 -> newOwner 0x709979…); resolved as did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "signed-op",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "ERC1056Registry declares a nonce mapping but exposes no *Signed meta-transaction entry point (no changeOwnerSigned / addDelegateSigned / setAttributeSigned)",
+      "note": null
+    },
+    {
+      "option": "erc-1155",
+      "mechanism": "signed-op",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no off-chain-authorised execution on ERC-1155: no permit, meta-transaction or signed entry point (manifest: Delegated / signed execution not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "signed-op",
+      "outcome": "ok",
+      "gasUsed": "69405",
+      "reason": null,
+      "note": "handleOp -> validateUserOp(ecrecover) -> transferOwnership(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC); bundler=deployer; resolved as did:pkh:eip155:31337:0xFD6F7A6a5c21A3f503EBaE7a473639974379c351"
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "signed-op",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no off-chain-authorised execution on ERC-721: no permit, meta-transaction or signed entry point (manifest: Delegated / signed execution not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "signed-op",
+      "outcome": "ok",
+      "gasUsed": "28358",
+      "reason": null,
+      "note": "execute(CALL, self, 0, transferOwnership(0x709979…)); owner-gated by msg.sender, signature ignored; basic variant only emits Executed (no call performed); resolved as did:erc725:0x7a69:0x87F850cbC2cFfac086F20d0d7307E12d06fA2127"
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "signed-op",
+      "outcome": "ok",
+      "gasUsed": "76352",
+      "reason": null,
+      "note": "execute(CALL, CVINExecuteTarget, 0, setValue(381329)) — real call, msg.sender==identity: true; target deploy=133519 not counted; op 'changeOwner' mapped to this demo; owner-gated by msg.sender, signature ignored; resolved as did:erc725:0x7a69:0x40a42Baf86Fc821f972Ad2aC878729063CeEF403"
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "signed-op",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no meta-transaction or execute surface in ERC-735; all mutations are owner msg.sender-gated",
+      "note": null
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "signed-op",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no off-chain-authorised execution on LSP8: no permit, meta-transaction or signed entry point (manifest: Delegated / signed execution not-applicable)",
+      "note": null
+    },
+    {
+      "option": "mobi-vid",
+      "mechanism": "signed-op",
+      "outcome": "na",
+      "gasUsed": null,
+      "reason": "no signed (meta-transaction) execution: the ERC1056Registry base declares nonce but implements no changeOwnerSigned/addDelegateSigned/setAttributeSigned; attestEvent verifies an EIP-191 signature but is a role-gated direct call by the attester (manifest lists this family as implemented via `nonce` only)",
+      "note": null
+    },
+    {
+      "option": "cvin-combined",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "controller=0x709979… delegates=0 services=0 claims=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8; verificationMethods=1"
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "controller=0x709979… delegates=0 services=0 vin=VINERC1056UPORT00; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8; verificationMethods=1"
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "controller=0x709979… revoked=false delegates=0 services=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8; verificationMethods=2"
+    },
+    {
+      "option": "erc-1155",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "registered=true vehicle=0x709979… vin=VINERC11550000000 credentials=[BIRTH_CERT]; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:cvin:erc1155:31337:0x8bCe54ff8aB45CB075b044AE117b8fD91F9351aB:0x50e275b67e6193482933858c57233054708d41d29edc5d00aa075047990d5daf; verificationMethods=1"
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "owner=0x709979… guardian=none attrs=0 userOpNonce=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:pkh:eip155:31337:0xaca81583840B1bf2dDF6CDe824ada250C1936B4D; verificationMethods=1"
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "owner=0x709979… vin=VINERC72100000000 active=true records=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:nft:erc721:0x70bda08dbe07363968e9ee53d899dfe48560605b:1; verificationMethods=1"
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "owner=0x709979… keys=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:erc725:0x7a69:0x20F43316cf784C821a65aE874c8060f30c30c7C4; verificationMethods=1"
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "owner=0x709979… vin=VINERC725XY000000 attrs=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:erc725:0x7a69:0x5D42EBdBBa61412295D7b0302d6F50aC449Ddb4F; verificationMethods=1"
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "owner=0x709979… vin=VINERC73500000000 claims=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:erc735:0x7a69:0xa115891Cae16388b84cb7a521A2032f6b354FE25; verificationMethods=1"
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "exists=true owner=0x709979… vin=VINLSP80000000000 dataKeys=1; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:cvin:lsp8:31337:0xddE78e6202518FF4936b5302cC2891ec180E8bFf:0xb799cd20cd59cc386fbbeeea0ff9200a876468aa2067067957bc9c0121640706; verificationMethods=1"
+    },
+    {
+      "option": "mobi-vid",
+      "mechanism": "resolve",
+      "outcome": "ok",
+      "gasUsed": "0",
+      "reason": null,
+      "note": "owner=0x709979… registered=true revoked=false delegates=0 attrs=0 events=0 transfers=0; owner address (0x70997970C51812dc3A010C7d01b50e0d17dc79C8); id=did:ethr:0x7a69:f83c8695695fdc369bdace5d13ad556f7129b7bb; verificationMethods=1"
+    }
+  ],
+  "naReasons": [
+    {
+      "option": "erc-1155",
+      "mechanism": "key-or-delegate",
+      "reason": "no key/delegate model on ERC-1155: setApprovalForAll() is an operator approval for token moves, not a verification key (manifest: Key / delegate management not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "key-or-delegate",
+      "reason": "no key/delegate model on ERC-721: approve()/setApprovalForAll() delegate transfer rights only, not a verification key (manifest: Key / delegate management not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "key-or-delegate",
+      "reason": "ERC-725 X/Y has a single owner and no key/delegate model; OPERATION_DELEGATECALL is an executor opcode, not identity delegation",
+      "note": null
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "key-or-delegate",
+      "reason": "no key/delegate model in ERC-735 (keys are deferred to ERC-734; a single owner plays the MANAGEMENT key)",
+      "note": null
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "key-or-delegate",
+      "reason": "no key/delegate model: operator authorization (authorizeOperator/revokeOperator) is not implemented in this representative LSP8, and operators would delegate token moves, not verification keys (manifest: Key / delegate management not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "attribute",
+      "reason": "no attribute/data store in the ERC-725 basic proxy (ERC-725Y setData is the erc-725xy option)",
+      "note": null
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "attribute",
+      "reason": "no attribute store in ERC-735; the closest analogue is a claim (addClaim)",
+      "note": null
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "claim",
+      "reason": "ERC-1056 stores no claims on-chain; the Claims family is only the SVC_CREDENTIAL_SERVICE endpoint attribute (use setAttribute); credentials live off-chain",
+      "note": null
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "claim",
+      "reason": "no on-chain claim function; credentials are off-chain W3C VCs handled by erc1056_provider.py (update/get/revoke_credential)",
+      "note": null
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "claim",
+      "reason": "no on-chain claim/credential model in ERC-4337: the account validates UserOperations and stores attributes, it does not hold claims (manifest: Claims / credentials not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "claim",
+      "reason": "no claim/credential model on ERC-721: inspector/service-center roles write unsigned records, there is no signed claim (manifest: Claims / credentials not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "claim",
+      "reason": "no claim storage; claims live in the companion ERC-735 claim holder (erc-735 option)",
+      "note": null
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "claim",
+      "reason": "no claim model in ERC-725 X/Y; claims live in the ERC-735 claim holder",
+      "note": null
+    },
+    {
+      "option": "erc-4337",
+      "mechanism": "revoke",
+      "reason": "no identity-level revocation in ERC-4337: the account contract persists; only the recovery guardian can be cleared via setGuardian(0) (manifest: Revocation / status not-applicable)",
+      "note": "prep: addKeyOrDelegate; sub-identity revoke(addKeyOrDelegate handle) ok gas=25429 setGuardian(0): guardian (recovery delegate) revoked"
+    },
+    {
+      "option": "cvin-combined",
+      "mechanism": "transfer",
+      "reason": "no token in the hybrid; control moves with changeOwner (changeController)",
+      "note": null
+    },
+    {
+      "option": "erc-1056-uport",
+      "mechanism": "transfer",
+      "reason": "ERC-1056 has no token to transfer; the DID is the address and control moves with changeOwner (changeController)",
+      "note": null
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "transfer",
+      "reason": "ERC-1056 has no token to transfer; control moves with changeOwner (changeController)",
+      "note": null
+    },
+    {
+      "option": "erc-725",
+      "mechanism": "transfer",
+      "reason": "identity is a contract account, not a token; ownership moves with transferOwnership (changeController); approve() is an unimplemented stub",
+      "note": null
+    },
+    {
+      "option": "erc-725xy",
+      "mechanism": "transfer",
+      "reason": "identity is a contract account, not a token; ownership moves with transferOwnership (changeController)",
+      "note": null
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "transfer",
+      "reason": "identity is a contract, not a token; ownership moves with transferOwnership (changeController)",
+      "note": null
+    },
+    {
+      "option": "cvin-combined",
+      "mechanism": "signed-op",
+      "reason": "no *Signed meta-transaction entry points in CVINCombinedIdentity; issuer signatures are verified in addClaim (authorisation of a claim, not delegated execution)",
+      "note": null
+    },
+    {
+      "option": "erc-1056-vehicle",
+      "mechanism": "signed-op",
+      "reason": "ERC1056Registry declares a nonce mapping but exposes no *Signed meta-transaction entry point (no changeOwnerSigned / addDelegateSigned / setAttributeSigned)",
+      "note": null
+    },
+    {
+      "option": "erc-1155",
+      "mechanism": "signed-op",
+      "reason": "no off-chain-authorised execution on ERC-1155: no permit, meta-transaction or signed entry point (manifest: Delegated / signed execution not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-721",
+      "mechanism": "signed-op",
+      "reason": "no off-chain-authorised execution on ERC-721: no permit, meta-transaction or signed entry point (manifest: Delegated / signed execution not-applicable)",
+      "note": null
+    },
+    {
+      "option": "erc-735",
+      "mechanism": "signed-op",
+      "reason": "no meta-transaction or execute surface in ERC-735; all mutations are owner msg.sender-gated",
+      "note": null
+    },
+    {
+      "option": "lsp8",
+      "mechanism": "signed-op",
+      "reason": "no off-chain-authorised execution on LSP8: no permit, meta-transaction or signed entry point (manifest: Delegated / signed execution not-applicable)",
+      "note": null
+    },
+    {
+      "option": "mobi-vid",
+      "mechanism": "signed-op",
+      "reason": "no signed (meta-transaction) execution: the ERC1056Registry base declares nonce but implements no changeOwnerSigned/addDelegateSigned/setAttributeSigned; attestEvent verifies an EIP-191 signature but is a role-gated direct call by the attester (manifest lists this family as implemented via `nonce` only)",
+      "note": null
+    }
+  ],
+  "failures": [],
+  "manifestComparison": {
+    "families": {
+      "create": [
+        "Identity creation (explicit)",
+        "Off-chain creation (identity exists before any transaction)"
+      ],
+      "controller-change": [
+        "Ownership / controller change"
+      ],
+      "key-or-delegate": [
+        "Key / delegate management"
+      ],
+      "attribute": [
+        "Attributes / data store"
+      ],
+      "claim": [
+        "Claims / credentials"
+      ],
+      "revoke": [
+        "Revocation / status"
+      ],
+      "transfer": [
+        "Token economics (approvals, royalties, payments)",
+        "Ownership / controller change"
+      ],
+      "signed-op": [
+        "Delegated / signed (off-chain-authorised) execution"
+      ]
+    },
+    "agreements": 81,
+    "total": 88,
+    "disagreements": [
+      {
+        "option": "erc-725",
+        "mechanism": "create",
+        "agree": false,
+        "manifest": "\"Identity creation (explicit)\" not-applicable, \"Off-chain creation (identity exists before any transaction)\" not-applicable",
+        "observed": "ok (gas 519384; proxy deployment is the creation cost (owner = deployer of the proxy); vin=VINERC72500000000 not stored (no data store); explicit; resolved as did:erc725:0x7a69:0x71C95911E9a5D330f4D621842EC243EE1343292e)"
+      },
+      {
+        "option": "erc-1056-uport",
+        "mechanism": "claim",
+        "agree": false,
+        "manifest": "\"Claims / credentials\" implemented",
+        "observed": "n/a (ERC-1056 stores no claims on-chain; the Claims family is only the SVC_CREDENTIAL_SERVICE endpoint attribute (use setAttribute); credentials live off-chain)"
+      },
+      {
+        "option": "erc-1056-vehicle",
+        "mechanism": "claim",
+        "agree": false,
+        "manifest": "\"Claims / credentials\" implemented",
+        "observed": "n/a (no on-chain claim function; credentials are off-chain W3C VCs handled by erc1056_provider.py (update/get/revoke_credential))"
+      },
+      {
+        "option": "erc-725",
+        "mechanism": "revoke",
+        "agree": false,
+        "manifest": "\"Revocation / status\" not-applicable",
+        "observed": "ok (gas 41399; removeKey (key revoked; array compacted); prep: addKeyOrDelegate; document differs from pre-revoke document)"
+      },
+      {
+        "option": "erc-725xy",
+        "mechanism": "revoke",
+        "agree": false,
+        "manifest": "\"Revocation / status\" not-applicable",
+        "observed": "ok (gas 33870; setData(did/svc/telematics, 0x) — non-standard attribute clear, not an identity revocation; prep: setAttribute; document differs from pre-revoke document)"
+      },
+      {
+        "option": "erc-735",
+        "mechanism": "revoke",
+        "agree": false,
+        "manifest": "\"Revocation / status\" not-applicable",
+        "observed": "ok (gas 69438; removeClaim (claim deleted; topic index compacted); prep: addClaim; document differs from pre-revoke document)"
+      },
+      {
+        "option": "erc-725",
+        "mechanism": "transfer",
+        "agree": false,
+        "manifest": "\"Token economics (approvals, royalties, payments)\" implemented, \"Ownership / controller change\" implemented",
+        "observed": "n/a (identity is a contract account, not a token; ownership moves with transferOwnership (changeController); approve() is an unimplemented stub)"
+      }
+    ]
+  }
+}
