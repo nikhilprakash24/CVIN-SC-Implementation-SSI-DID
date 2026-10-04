@@ -119,7 +119,7 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 
 Reading: the wrapper indirection costs ~9–10k gas per mutation (external call + `vehicleOwnerOf` gate) and pays back only where it collapses transactions (C2: −132k). Lifetime improves 2.4%, so the best-case ERC-1056 ratios are 2.6× / 3.1× — H1's verdict (§3.4) does not change. The cheaper resolution in wrapper mode is a side-effect of the fidelity gap in §3.5.1 (ownership transfers leave no registry event), not an efficiency gain. Conformance: `npm run test:conformance` 39 passing / 5 pending; full suite 302 passing / 6 pending.
 
-### 3.7 All nine standards (added 2026-10-04; ten columns — run of record stamped on harness tree `65057d71aec4837914fe11f325b7c089beabba45`, see `MEASUREMENT_CONDITIONS.md` §5.F; register rows #34–#35)
+### 3.7 All nine standards (added 2026-10-04; ten columns — run of record identified by the `meta.measured` code hashes in `results/metrics/latest/meta.json`, see `MEASUREMENT_CONDITIONS.md` §5.F; register rows #34–#35)
 
 The six columns below that existed before are byte-identical to run `bca0899`. Realisations for the new substrates: framework §2.2a (ERC-735, ERC-1155) and §2.2b (ERC-725xy, LSP8, ERC-4337, CVIN-Combined). `n/a` = no primitive on that substrate (a result, not a gap in the harness).
 

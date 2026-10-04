@@ -15,7 +15,7 @@ function load(runDir, name) {
 }
 
 function footerFor(meta) {
-  return `Run ${meta.runId} · commit ${meta.commitShort}${meta.dirty ? " (dirty)" : ""} · solc ${meta.solc} target ${meta.evmVersion} runs=${meta.optimizerRuns} viaIR=${meta.viaIR} · Hardhat in-process automine${meta.network && meta.network.hardfork ? ", executes " + meta.network.hardfork : ""} · N=${meta.conditions.repetitions}`;
+  return `Run ${meta.runId} · commit ${meta.commitShort}${(meta.dirtyMeasured ?? meta.dirty) ? " (dirty)" : ""} · solc ${meta.solc} target ${meta.evmVersion} runs=${meta.optimizerRuns} viaIR=${meta.viaIR} · Hardhat in-process automine${meta.network && meta.network.hardfork ? ", executes " + meta.network.hardfork : ""} · N=${meta.conditions.repetitions}`;
 }
 
 function cellFactory(rows, adaptersRun, pick) {

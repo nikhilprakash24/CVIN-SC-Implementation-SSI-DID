@@ -60,11 +60,17 @@ async function main() {
   const latestBlock = await hre.ethers.provider.getBlock("latest");
   const meta = {
     runId, commit: git("rev-parse HEAD"), commitShort: sha, branch: git("rev-parse --abbrev-ref HEAD"),
-    // Tree hashes survive a rebase that touches nothing under 1_blockchain-identity:
-    // a run is reproducible from any commit whose harnessTree equals this value.
-    harnessTree: git("rev-parse HEAD:1_blockchain-identity"),
-    contractsTree: git("rev-parse HEAD:1_blockchain-identity/contracts"),
+    // Identity of the MEASURED code, independent of the commit hash (which a rebase
+    // rewrites) and of results/ (which every promotion changes): a run is reproducible
+    // from any commit whose four `measured` hashes equal these (conditions §5.F).
+    measured: {
+      benchmarksTree: git("rev-parse HEAD:1_blockchain-identity/benchmarks"),
+      contractsTree: git("rev-parse HEAD:1_blockchain-identity/contracts"),
+      hardhatConfigBlob: git("rev-parse HEAD:1_blockchain-identity/hardhat.config.js"),
+      lockfileBlob: git("rev-parse HEAD:1_blockchain-identity/package-lock.json"),
+    },
     dirty: (git("status --porcelain") || "").length > 0,
+    dirtyMeasured: (git("status --porcelain -- 1_blockchain-identity/benchmarks 1_blockchain-identity/contracts 1_blockchain-identity/hardhat.config.js 1_blockchain-identity/package-lock.json") || "").length > 0,
     date: new Date().toISOString(),
     node: process.version, hardhat: require("hardhat/package.json").version, ethers: hre.ethers.version,
     solc: solc.version, evmVersion: solc.settings.evmVersion || "default", optimizerRuns: solc.settings.optimizer.runs, viaIR: !!solc.settings.viaIR,
