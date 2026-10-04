@@ -29,6 +29,7 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
 
+from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
 from identity.base import (
     IdentityProvider,
     IdentityType,
@@ -91,6 +92,10 @@ class ERC1056Provider(IdentityProvider):
 
         if contract_address:
             self._load_contract(contract_address)
+
+        # Freshness window + replay cache for verify_message (review 02, T-9).
+        # On by default; the same FreshnessPolicy as the PKI providers.
+        self.freshness = FreshnessPolicy()
 
         # Local storage (for performance)
         self.vehicles = {}  # vehicle_id -> vehicle data
@@ -393,7 +398,11 @@ class ERC1056Provider(IdentityProvider):
         return credential
 
     def sign_message(self, vehicle_id: str, message: Dict) -> Dict:
-        """Sign message with vehicle's private key"""
+        """Sign message with vehicle's private key.
+
+        The signature covers the message AND its generation time
+        (`freshness.signed_bytes`, review 02 T-9).
+        """
         start_time = time.time()
 
         if vehicle_id not in self.vehicles:
@@ -401,8 +410,9 @@ class ERC1056Provider(IdentityProvider):
 
         vehicle = self.vehicles[vehicle_id]
 
-        # Serialize message
-        message_bytes = json.dumps(message, sort_keys=True).encode()
+        # Serialize message + generation time
+        timestamp = generation_timestamp()
+        message_bytes = signed_bytes(message, timestamp)
 
         # Sign with private key
         signature = vehicle['private_key'].sign(
@@ -415,7 +425,7 @@ class ERC1056Provider(IdentityProvider):
             'message': message,
             'signature': signature.hex(),
             'did': vehicle['did'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': timestamp,
             'identity_type': 'erc1056_did'
         }
 
@@ -427,7 +437,30 @@ class ERC1056Provider(IdentityProvider):
         return signed_message
 
     def verify_message(self, signed_message: Dict) -> Tuple[bool, IdentityMetrics]:
-        """Verify signed message"""
+        """
+        Verify a signed message from `signed_message['did']`.
+
+        Steps: freshness of the signed generation time and the replay cache
+        (`self.freshness`, review 02 T-9; checked before any RPC), resolution
+        of the sender's key from the registry, the registry's revoked flag,
+        then the secp256k1 signature over message + generation time.
+
+        WHAT "ERC-1056 VERIFY" MEANS HERE (review 02, T-10; not implemented,
+        documented):
+          * Only the custom `did/pub/secp256k1/veriKey/base64` attribute is
+            accepted as a signing key (the newest still-valid one, see
+            `_resolve_key_from_events`). The identity OWNER's own key
+            (ERC-1056 `identityOwner`, i.e. an ecrecover of the owner address)
+            and `sigAuth` / `veriKey` DELEGATES (`DIDDelegateChanged`) are NOT
+            accepted. A message signed by a valid owner or delegate is
+            rejected, so the check fails closed, but it is narrower than the
+            ERC-1056 / did:ethr notion of "owner or valid delegate".
+          * Resolution uses the registry's LATEST state at verification time,
+            not the state at the message's generation time. A key rotated or
+            revoked after signing invalidates an older genuine message; a key
+            added after signing would be used for it. With the 1 s freshness
+            window this gap is at most the window plus block time.
+        """
         start_time = time.time()
         metrics = IdentityMetrics()
 
@@ -444,6 +477,13 @@ class ERC1056Provider(IdentityProvider):
                 return False, metrics
 
             vehicle_address = parts[3]
+
+            # Freshness window + replay cache (T-9), before any RPC
+            timestamp = signed_message.get('timestamp')
+            message_bytes = signed_bytes(message, timestamp)
+            if self.freshness.check(timestamp, did, message_bytes) is not None:
+                metrics.verification_time_ms = (time.time() - start_time) * 1000
+                return False, metrics
 
             # Resolve DID (get public key from blockchain)
             resolution_start = time.time()
@@ -471,13 +511,13 @@ class ERC1056Provider(IdentityProvider):
                 public_key_bytes
             )
 
-            # Verify signature
-            message_bytes = json.dumps(message, sort_keys=True).encode()
+            # Verify signature (covers the generation time)
             public_key.verify(
                 signature,
                 message_bytes,
                 ec.ECDSA(hashes.SHA256())
             )
+            self.freshness.accept(did, message_bytes, timestamp)
 
             # Success
             elapsed = (time.time() - start_time) * 1000

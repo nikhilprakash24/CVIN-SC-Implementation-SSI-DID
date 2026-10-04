@@ -59,10 +59,30 @@ sys.path.insert(0, ROOT)
 
 from identity.standard.pki_identity import VehiclePKIIdentity, VehiclePKI_CA  # noqa: E402
 from identity.centralized_provider import CentralizedIdentityProvider  # noqa: E402
+from identity.freshness import FreshnessPolicy  # noqa: E402
 
 PSEUDONYM_POOL = 20          # pseudonym certificates issued at PKI registration (provider default)
 FUND_WEI = 10 ** 18          # 1 ETH per vehicle account (local chain provisioning, untimed)
 VEHICLE_METADATA = {"make": "Testbed", "model": "BSM-Vehicle"}
+
+# Freshness / replay protection (review 02, T-9), configured EXPLICITLY and
+# IDENTICALLY for every backend: the providers' secure default (1.0 s past,
+# 0.1 s future, bounded replay cache on). Each verify therefore parses the
+# signed generation time, compares it with the clock, hashes the signed bytes
+# and looks them up in / inserts them into the replay cache, on both sides.
+BENCHMARK_FRESHNESS = FreshnessPolicy().describe()
+
+
+def configure_freshness(provider) -> None:
+    """Install a fresh BENCHMARK_FRESHNESS policy on the backend's verifier."""
+    policy = FreshnessPolicy(
+        max_age_s=BENCHMARK_FRESHNESS['max_age_s'],
+        max_future_s=BENCHMARK_FRESHNESS['max_future_s'],
+        replay_cache=BENCHMARK_FRESHNESS['replay_cache'],
+        replay_cache_size=BENCHMARK_FRESHNESS['replay_cache_size'],
+        enabled=BENCHMARK_FRESHNESS['enabled'])
+    target = provider.peer if isinstance(provider, StandardPKIAdapter) else provider
+    target.freshness = policy
 
 
 # --------------------------------------------------------------------------
@@ -400,10 +420,19 @@ def run_backend(backend: Backend, n: int, warmup: int, run_tag: str) -> Dict[str
     prov.revoke_credential(v_rev, "sanity")
     tampered = dict(prov.sign_message(v_sign, make_bsm(8)))
     tampered['message'] = dict(tampered['message'], speed=99.9)
+    genuine = prov.sign_message(v_sign, make_bsm(9))
+    genuine_ok = bool(prov.verify_message(genuine)[0]) is True
+    # T-9: the same packet again (replay), and the packet with its timestamp
+    # rewritten (the timestamp is inside the signature).
+    replay_rejected = bool(prov.verify_message(json.loads(json.dumps(genuine)))[0]) is False
+    altered = dict(prov.sign_message(v_sign, make_bsm(10)))
+    altered['timestamp'] = datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
     sanity = {
         'verify_after_revocation_is_false': bool(prov.verify_message(signed_before)[0]) is False,
         'verify_tampered_message_is_false': bool(prov.verify_message(tampered)[0]) is False,
-        'verify_genuine_message_is_true': bool(prov.verify_message(prov.sign_message(v_sign, make_bsm(9)))[0]) is True,
+        'verify_genuine_message_is_true': genuine_ok,
+        'verify_replayed_message_is_false': replay_rejected,
+        'verify_altered_timestamp_is_false': bool(prov.verify_message(altered)[0]) is False,
     }
     print(f"  sanity: {sanity}")
     return {'operations': results, 'sanity': sanity}
@@ -580,12 +609,22 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
         L.append("")
 
     L.append("## Sanity checks (untimed, must all be True)\n")
-    L.append("| Backend | verify after revocation is False | tampered message rejected | genuine message accepted |")
-    L.append("|---|:---:|:---:|:---:|")
+    L.append("| Backend | verify after revocation is False | tampered message rejected | genuine message accepted | "
+             "replayed message rejected | altered timestamp rejected |")
+    L.append("|---|:---:|:---:|:---:|:---:|:---:|")
     for b, s in sanity.items():
         L.append(f"| {b} | {s['verify_after_revocation_is_false']} | {s['verify_tampered_message_is_false']} | "
-                 f"{s['verify_genuine_message_is_true']} |")
+                 f"{s['verify_genuine_message_is_true']} | {s.get('verify_replayed_message_is_false', '-')} | "
+                 f"{s.get('verify_altered_timestamp_is_false', '-')} |")
     L.append("")
+    fr = env.get('freshness')
+    if fr:
+        L.append("**Freshness / replay protection (review 02, T-9), configured explicitly and identically for every "
+                 f"backend:** enabled={fr['enabled']}, window {fr['max_age_s']} s past / {fr['max_future_s']} s "
+                 f"future, replay cache {'on' if fr['replay_cache'] else 'off'} "
+                 f"(bound {fr['replay_cache_size']} entries). The generation time is inside the signed bytes. "
+                 "Every `verify_message` above includes the check (parse the signed timestamp, compare with the "
+                 "clock, SHA-256 of the signed bytes, cache lookup and insert); `sign_message` includes stamping it.\n")
 
     L.append("## What each operation actually does per backend\n")
     L.append("| Operation | pki_standard / pki_centralized (X.509, ECDSA P-256) | erc1056_did (ERC1056Registry, ECDSA secp256k1) |")
@@ -596,6 +635,7 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
              "vehicle sends `updateVehicleKey(addr, newPubkey)` (1 tx; emits DIDAttributeChanged) |")
     L.append("| sign_message | ECDSA-SHA256 over canonical JSON with current pseudonym key; message carries the PEM certificate | "
              "ECDSA-SHA256 over canonical JSON with the vehicle key; message carries only the `did:ethr` string |")
+    L.append("| (both, since T-9) | the signed bytes are `{message, timestamp}` (generation time inside the signature) | same |")
     L.append("| verify_message | parse PEM cert; verify the CA's ECDSA P-256 signature on the certificate and the issuer name "
              "against the trusted CA certificate; validity window; CRL set lookup; ECDSA verify of the message (2 ECDSA "
              "verifies, no network) | "
@@ -687,6 +727,11 @@ def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]],
              "ERC-1056 `verify_message` is removed (the revoked flag comes from `getIdentityInfo`); (T-6) RPC "
              "counts are snapshotted before the untimed post-check, so `revoke_credential` no longer includes the "
              "check's `isRevoked` call.")
+    L.append("   **Review 02 Pass 2 (T-9):** every provider now signs the message *and* its generation time and "
+             "`verify_message` rejects packets outside the freshness window and packets already accepted "
+             "(bounded replay cache). This adds the same small amount of work to every backend's `sign_message` "
+             "and `verify_message`; the ERC-1056 freshness check runs before any RPC. The wire format is "
+             "unchanged (same `timestamp` field and length).")
     L.append("6. **Single machine, single process, no concurrency.** Throughput under load, RPC contention "
              "and multi-vehicle broadcast scenarios are out of scope here.")
     L.append("7. **The ERC-1056 column is the cv2x `ERC1056Registry`, not `EthereumDIDRegistry` (review 02, K-5).** "
@@ -797,7 +842,11 @@ def main():
             skipped['erc1056_did'] = f'not run: {type(e).__name__}: {e}'
             print(f"WARNING: ERC-1056 backend not run: {e}")
 
+    for b in backends:
+        configure_freshness(b.provider)
+
     env = environment(chain_info, args.n, args.warmup)
+    env['freshness'] = dict(BENCHMARK_FRESHNESS)
     print("Environment:", json.dumps(env, indent=2))
 
     run_tag = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')

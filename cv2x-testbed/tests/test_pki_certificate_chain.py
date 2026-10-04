@@ -18,6 +18,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.x509.oid import NameOID
 
 from identity.centralized_provider import CentralizedIdentityProvider
+from identity.freshness import generation_timestamp, signed_bytes
 from identity.standard.pki_identity import VehiclePKI_CA, VehiclePKIIdentity
 from experiment_pki_vs_erc1056 import StandardPKIAdapter, make_bsm
 
@@ -37,10 +38,13 @@ def _cert(subject_cn, issuer_name, subject_key, signing_key, not_before=None, no
 
 
 def _package(cert, key, msg=HARD_BRAKE):
-    sig = key.sign(json.dumps(msg, sort_keys=True).encode(), ec.ECDSA(hashes.SHA256()))
+    # Signs message + generation time, as the providers do since T-9, so these
+    # packages fail on the certificate check alone (see the positive controls).
+    ts = generation_timestamp()
+    sig = key.sign(signed_bytes(msg, ts), ec.ECDSA(hashes.SHA256()))
     return {'message': msg, 'signature': sig.hex(),
             'certificate': cert.public_bytes(serialization.Encoding.PEM).decode(),
-            'timestamp': datetime.utcnow().isoformat()}
+            'timestamp': ts}
 
 
 def forge_self_signed(issuer_name, msg=HARD_BRAKE):
@@ -66,6 +70,15 @@ def standard():
 def test_standard_accepts_legitimate_message(standard):
     ca, sender, verifier = standard
     assert verifier.verify_message(sender.sign_message(make_bsm(1)), ca.get_crl())[0] is True
+
+
+def test_standard_accepts_package_helper_with_ca_signed_cert(standard):
+    """Positive control for _package: a CA-signed cert passes, so the forged
+    cases below fail on the certificate, not on the package format."""
+    ca, _, verifier = standard
+    k = ec.generate_private_key(ec.SECP256R1())
+    cert = _cert("Pseudonym-ok", ca.ca_certificate.subject, k, ca.ca_private_key)
+    assert verifier.verify_message(_package(cert, k), ca.get_crl())[0] is True
 
 
 def test_standard_rejects_forged_cert_copying_ca_subject(standard):
@@ -156,6 +169,12 @@ def test_centralized_rejects_cert_from_other_ca_with_same_name(central):
     rogue = CentralizedIdentityProvider("CVIN-Central-CA")
     rogue.register_vehicle("R")
     assert central.verify_message(rogue.sign_message("R", make_bsm(2)))[0] is False
+
+
+def test_centralized_accepts_package_helper_with_ca_signed_cert(central):
+    k = ec.generate_private_key(ec.SECP256R1())
+    cert = _cert("Pseudonym-ok", central.ca_certificate.subject, k, central.ca_private_key)
+    assert central.verify_message(_package(cert, k))[0] is True
 
 
 def test_centralized_rejects_expired_ca_signed_cert(central):
