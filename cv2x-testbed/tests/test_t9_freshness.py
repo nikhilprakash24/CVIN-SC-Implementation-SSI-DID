@@ -398,3 +398,44 @@ def test_erc1056_stale_rejected_before_any_rpc(erc, monkeypatch):
         p.w3.provider.make_request = rc._orig
         if hasattr(p.w3.provider, '_request_func_cache'):
             p.w3.provider._request_func_cache = (None, None)
+
+
+# ------------------------------------------- Pass 3: DID re-encoding replay
+
+def _reencode(did, *, lower=False, chain=None):
+    _, _, c, addr = did.split(':')
+    return f"did:ethr:{chain if chain is not None else c}:{addr.lower() if lower else addr}"
+
+
+def test_erc1056_replay_with_lowercased_did_rejected(erc):
+    """The DID is outside the signed bytes; a re-spelled DID must not evade the cache."""
+    p, vid = erc
+    signed = p.sign_message(vid, make_bsm(5))
+    assert p.verify_message(signed)[0] is True
+    replay = dict(signed, did=_reencode(signed['did'], lower=True))
+    assert replay['did'] != signed['did']
+    assert p.verify_message(replay)[0] is False
+
+
+def test_erc1056_replay_with_padded_chain_segment_rejected(erc):
+    p, vid = erc
+    signed = p.sign_message(vid, make_bsm(6))
+    assert p.verify_message(signed)[0] is True
+    chain = int(signed['did'].split(':')[2], 16)
+    replay = dict(signed, did=_reencode(signed['did'], chain=f"0x{chain:08x}"))
+    assert p.verify_message(replay)[0] is False
+
+
+def test_erc1056_did_on_another_chain_rejected(erc):
+    """A DID naming another chain must not verify against this chain's registry."""
+    p, vid = erc
+    signed = p.sign_message(vid, make_bsm(7))
+    other = dict(signed, did=_reencode(signed['did'], chain='0x1'))
+    assert p.verify_message(other)[0] is False
+    assert p.verify_message(signed)[0] is True
+
+
+@pytest.mark.parametrize('bad', [float('nan'), float('inf'), float('-inf')])
+def test_non_finite_timestamp_rejected(bad):
+    policy = FreshnessPolicy()
+    assert policy.check(bad, "signer", b"payload") is not None

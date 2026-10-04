@@ -96,6 +96,10 @@ class ERC1056Provider(IdentityProvider):
         # Freshness window + replay cache for verify_message (review 02, T-9).
         # On by default; the same FreshnessPolicy as the PKI providers.
         self.freshness = FreshnessPolicy()
+        # Chain this provider's registry lives on; verify_message binds DIDs to
+        # it (review 02 Pass 3: an unbound chain segment let a re-encoded DID
+        # miss the replay cache). Cached so verification adds no RPC.
+        self._chain_id = self.w3.eth.chain_id
 
         # Local storage (for performance)
         self.vehicles = {}  # vehicle_id -> vehicle data
@@ -115,6 +119,13 @@ class ERC1056Provider(IdentityProvider):
         self.metrics.pseudonymity_support = False  # Can be added with multiple DIDs
         self.metrics.single_point_of_failure = False  # Decentralized
         self.metrics.availability_percentage = 99.0  # Blockchain uptime
+
+    def _local_chain_id(self) -> int:
+        """Chain id of the connected node, cached (set in __init__)."""
+        cid = getattr(self, '_chain_id', None)
+        if cid is None:
+            cid = self._chain_id = self.w3.eth.chain_id
+        return cid
 
     def _load_contract(self, address: str):
         """Load contract ABI and create contract instance"""
@@ -476,12 +487,24 @@ class ERC1056Provider(IdentityProvider):
             if len(parts) != 4 or parts[0] != 'did' or parts[1] != 'ethr':
                 return False, metrics
 
-            vehicle_address = parts[3]
+            # Bind the DID to this registry's chain and canonicalise it. The DID
+            # is not inside the signed bytes, so the replay cache must be keyed on
+            # what the DID resolves to, not on its spelling: otherwise a captured
+            # packet replayed with a lower-cased address or another chain segment
+            # resolves to the same key but misses the cache (review 02 Pass 3).
+            try:
+                did_chain = int(parts[2], 16)
+                vehicle_address = Web3.to_checksum_address(parts[3])
+            except ValueError:
+                return False, metrics
+            if did_chain != self._local_chain_id():
+                return False, metrics
+            signer_key = f"did:ethr:0x{did_chain:x}:{vehicle_address}"
 
             # Freshness window + replay cache (T-9), before any RPC
             timestamp = signed_message.get('timestamp')
             message_bytes = signed_bytes(message, timestamp)
-            if self.freshness.check(timestamp, did, message_bytes) is not None:
+            if self.freshness.check(timestamp, signer_key, message_bytes) is not None:
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
@@ -517,7 +540,7 @@ class ERC1056Provider(IdentityProvider):
                 message_bytes,
                 ec.ECDSA(hashes.SHA256())
             )
-            self.freshness.accept(did, message_bytes, timestamp)
+            self.freshness.accept(signer_key, message_bytes, timestamp)
 
             # Success
             elapsed = (time.time() - start_time) * 1000

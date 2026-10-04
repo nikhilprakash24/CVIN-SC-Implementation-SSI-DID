@@ -54,6 +54,7 @@ import hashlib
 import json
 import time
 from collections import OrderedDict
+import math
 from datetime import datetime, timezone
 from typing import Callable, Optional, Tuple
 
@@ -82,7 +83,12 @@ def parse_timestamp(ts) -> float:
     if isinstance(ts, bool):
         raise ValueError("timestamp must be a string or a number")
     if isinstance(ts, (int, float)):
-        return float(ts)
+        value = float(ts)
+        # NaN/inf compare False against both window bounds, so they would pass
+        # the freshness check and never expire from the replay cache.
+        if not math.isfinite(value):
+            raise ValueError("timestamp must be finite")
+        return value
     if not isinstance(ts, str):
         raise ValueError("timestamp must be a string or a number")
     dt = datetime.fromisoformat(ts)
