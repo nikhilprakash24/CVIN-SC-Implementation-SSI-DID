@@ -61,7 +61,8 @@ class ERC1056Provider(IdentityProvider):
         self,
         web3_provider_url: str = "http://127.0.0.1:8545",
         contract_address: Optional[str] = None,
-        private_key: Optional[str] = None
+        private_key: Optional[str] = None,
+        refresh_every: Optional[int] = 1
     ):
         super().__init__(IdentityType.ERC1056_DID)
 
@@ -101,6 +102,11 @@ class ERC1056Provider(IdentityProvider):
         # miss the replay cache). Cached so verification adds no RPC.
         self._chain_id = self.w3.eth.chain_id
 
+        # Freshness-k verifier cache (review §5.1, LATENCY_BUDGET.md §4).
+        # See set_refresh_every(). k = 1 (the default) is the uncached
+        # behaviour measured in claim #21: every verify reads the chain.
+        self.set_refresh_every(refresh_every)
+
         # Local storage (for performance)
         self.vehicles = {}  # vehicle_id -> vehicle data
         self.did_cache = {}  # DID -> resolved document (TTL cache)
@@ -119,6 +125,58 @@ class ERC1056Provider(IdentityProvider):
         self.metrics.pseudonymity_support = False  # Can be added with multiple DIDs
         self.metrics.single_point_of_failure = False  # Decentralized
         self.metrics.availability_percentage = 99.0  # Blockchain uptime
+
+    # ------------------------------------------------------------------
+    # Freshness-k: refresh the sender's key/revocation state every k messages
+    # ------------------------------------------------------------------
+
+    def set_refresh_every(self, k: Optional[int]) -> None:
+        """
+        Set how often `verify_message` re-reads a sender's key and revocation
+        state from the registry, counted in messages PER SENDER (the
+        canonical DID):
+
+          k = 1     every message resolves from the chain (no cache; the
+                    behaviour of claim #21 and the default);
+          k > 1     message 1 of a sender resolves and caches the state,
+                    messages 2..k use the cache, message k+1 resolves again;
+          k = None  resolve once per sender, never refresh (k = infinity).
+
+        Every message counts toward k once it has passed the T-9 freshness /
+        replay check (which runs first and is identical for every k),
+        whether or not its signature then verifies.
+
+        SECURITY TRADE-OFF (staleness bound): with k > 1 a revocation or key
+        rotation on chain is seen only at the sender's next refresh, so up to
+        k - 1 messages from that sender may still verify after the
+        revocation is mined (unbounded for k = None). With k = 1 none do.
+        Changing k clears the cache.
+        """
+        if k is not None:
+            k = int(k)
+            if k < 1:
+                raise ValueError("refresh_every must be >= 1 or None (infinity)")
+        self.refresh_every = k
+        self._sender_state = {}   # canonical DID -> [identity_data, uses]
+        self.chain_refreshes = 0  # resolutions issued by verify_message
+        self.cache_hits = 0       # verifies served from the cache
+
+    def _sender_identity(self, signer_key: str, vehicle_address: str, metrics):
+        """Key/revocation state of a sender for verify_message, per refresh_every."""
+        k = self.refresh_every
+        if k != 1:
+            entry = self._sender_state.get(signer_key)
+            if entry is not None and (k is None or entry[1] < k):
+                entry[1] += 1
+                self.cache_hits += 1
+                metrics.resolution_time_ms = 0.0
+                return entry[0]
+        identity_data, resolution_time = self.resolve_identity_from_address(vehicle_address)
+        metrics.resolution_time_ms = resolution_time
+        self.chain_refreshes += 1
+        if k != 1 and identity_data:
+            self._sender_state[signer_key] = [identity_data, 1]
+        return identity_data
 
     def _local_chain_id(self) -> int:
         """Chain id of the connected node, cached (set in __init__)."""
@@ -466,6 +524,10 @@ class ERC1056Provider(IdentityProvider):
             accepted. A message signed by a valid owner or delegate is
             rejected, so the check fails closed, but it is narrower than the
             ERC-1056 / did:ethr notion of "owner or valid delegate".
+          * With `refresh_every` = k > 1 (freshness-k, see
+            set_refresh_every) the state is the one read at the sender's
+            last refresh, up to k - 1 messages old: a revocation is seen up
+            to k - 1 messages late. k = 1 (default) reads it every message.
           * Resolution uses the registry's LATEST state at verification time,
             not the state at the message's generation time. A key rotated or
             revoked after signing invalidates an older genuine message; a key
@@ -508,10 +570,9 @@ class ERC1056Provider(IdentityProvider):
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
-            # Resolve DID (get public key from blockchain)
-            resolution_start = time.time()
-            identity_data, resolution_time = self.resolve_identity_from_address(vehicle_address)
-            metrics.resolution_time_ms = resolution_time
+            # Resolve DID (get public key from blockchain); with
+            # refresh_every > 1 only every k-th message per sender does
+            identity_data = self._sender_identity(signer_key, vehicle_address, metrics)
 
             if not identity_data:
                 return False, metrics
@@ -528,11 +589,15 @@ class ERC1056Provider(IdentityProvider):
             if not identity_data.get('public_key'):
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
-            public_key_bytes = bytes.fromhex(identity_data['public_key'])
-            public_key = ec.EllipticCurvePublicKey.from_encoded_point(
-                ec.SECP256K1(),
-                public_key_bytes
-            )
+            public_key = identity_data.get('_public_key_obj')
+            if public_key is None:
+                public_key_bytes = bytes.fromhex(identity_data['public_key'])
+                public_key = ec.EllipticCurvePublicKey.from_encoded_point(
+                    ec.SECP256K1(),
+                    public_key_bytes
+                )
+                if self.refresh_every != 1:
+                    identity_data['_public_key_obj'] = public_key   # cached with the state
 
             # Verify signature (covers the generation time)
             public_key.verify(
