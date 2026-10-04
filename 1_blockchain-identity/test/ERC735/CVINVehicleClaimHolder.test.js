@@ -288,7 +288,53 @@ describe("CVINVehicleClaimHolder (ERC-735)", function () {
             ).to.emit(claimHolder, "ClaimAdded");
         });
 
-        it("K-2: owner self-removal is not a revocation - owner may re-anchor the same claim", async function () {
+        // Pass 2 re-review: removeClaim needs the claim to be anchored, so the
+        // owner could pre-empt revocation by removing the claim first (issuer's
+        // removeClaim then reverted "claim does not exist") and re-add it later.
+        it("K-2 bypass: owner pre-removes, issuer revokeClaimContent, owner re-add reverts", async function () {
+            await claimHolder.connect(owner).removeClaim(claimId);
+            await expect(claimHolder.connect(insurer).removeClaim(claimId))
+                .to.be.revertedWith("ERC735: claim does not exist");
+            await claimHolder.connect(insurer).revokeClaimContent(INSURANCE, data);
+            expect(await claimHolder.revokedClaims(await revocationKey())).to.be.true;
+            await expect(
+                claimHolder
+                    .connect(owner)
+                    .addClaim(INSURANCE, ECDSA_SCHEME, insurer.address, signature, data, "ipfs://policy")
+            ).to.be.revertedWith("ERC735: claim revoked by issuer");
+            expect(await claimHolder.claimExists(insurer.address, INSURANCE)).to.be.false;
+        });
+
+        it("K-2: revokeClaimContent on an anchored claim records the revocation and removes it", async function () {
+            await expect(claimHolder.connect(insurer).revokeClaimContent(INSURANCE, data))
+                .to.emit(claimHolder, "ClaimRemoved")
+                .withArgs(claimId, INSURANCE, ECDSA_SCHEME, insurer.address, signature, data, "ipfs://policy");
+            expect(await claimHolder.claimExists(insurer.address, INSURANCE)).to.be.false;
+            expect(await claimHolder.getClaimIdsByTopic(INSURANCE)).to.have.lengthOf(0);
+            expect(await claimHolder.revokedClaims(await revocationKey())).to.be.true;
+        });
+
+        it("K-2: revokeClaimContent only binds the caller's own signatures and leaves re-issued data anchored", async function () {
+            // A third party "revoking" the content records a key under ITS
+            // address, which never matches the insurer-signed claim.
+            await claimHolder.connect(attacker).revokeClaimContent(INSURANCE, data);
+            expect(await claimHolder.claimExists(insurer.address, INSURANCE)).to.be.true;
+            expect(await claimHolder.revokedClaims(await revocationKey())).to.be.false;
+            // The issuer re-issues new data, then revokes the OLD content: the
+            // anchored (new) claim stays, the old content can no longer be re-anchored.
+            const identityAddress = await claimHolder.getAddress();
+            const newData = ethers.toUtf8Bytes("policy:XYZ-124");
+            const newSig = await signClaim(insurer, identityAddress, INSURANCE, newData);
+            await claimHolder.connect(owner).addClaim(INSURANCE, ECDSA_SCHEME, insurer.address, newSig, newData, "ipfs://p2");
+            await claimHolder.connect(insurer).revokeClaimContent(INSURANCE, data);
+            const anchored = await claimHolder.getClaim(claimId);
+            expect(anchored.data).to.equal(ethers.hexlify(newData));
+            await expect(
+                claimHolder.connect(owner).addClaim(INSURANCE, ECDSA_SCHEME, insurer.address, signature, data, "ipfs://policy")
+            ).to.be.revertedWith("ERC735: claim revoked by issuer");
+        });
+
+        it("K-2: owner self-removal is not a revocation - owner may re-anchor the same claim (issuer has not revoked)", async function () {
             await claimHolder.connect(owner).removeClaim(claimId);
             expect(await claimHolder.revokedClaims(await revocationKey())).to.be.false;
             await expect(
