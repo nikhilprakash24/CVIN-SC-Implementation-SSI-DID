@@ -1,4 +1,4 @@
-Metric,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
-tx / s (queue + mine),163.181,175.85,191.697,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-tx / s (mine only),954.688,1149.778,2225.584,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-gas / s,5280982,22100260,23002620,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Metric,erc1056,erc1056w,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
+tx / s (queue + mine),147.894,159.051,125.136,183.755,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+tx / s (mine only),1652.076,1198.597,344.748,2394.572,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+gas / s,4786272,6682651,15833689,22049416,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.

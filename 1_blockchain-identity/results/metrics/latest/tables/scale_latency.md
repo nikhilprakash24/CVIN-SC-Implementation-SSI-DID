@@ -1,12 +1,12 @@
 ### L3 — Read latency vs N and h: median / p95 ms (in-process, 2 warm-up + 10 samples)
 
-| Axis | op | ERC-1056 | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| N=0|R3_resolve_document | 8.472 / 9.09 | 3.925 / 5.396 | 6.82 / 7.608 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=100|R3_resolve_document | 8.068 / 9.171 | 3.792 / 4.967 | 8.555 / 15.267 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| N=1000|R3_resolve_document | 9.012 / 11.771 | 4.093 / 5.565 | 8.852 / 10.747 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=1|R3_resolve_document | 8.782 / 11.576 | 4.166 / 4.854 | 8.783 / 10.321 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=10|R3_resolve_document | 19.718 / 25.248 | 7.769 / 13.863 | 15.719 / 18.496 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| h=50|R3_resolve_document | 68.016 / 78.582 | 29.333 / 121.629 | 52.072 / 67.677 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| Axis | op | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| N=0|R3_resolve_document | 7.488 / 8.037 | 5.72 / 7.991 | 4.576 / 5.453 | 7.473 / 8.289 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| N=100|R3_resolve_document | 7.296 / 8.922 | 4.927 / 5.717 | 3.683 / 7.628 | 6.32 / 7.894 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| N=1000|R3_resolve_document | 7.429 / 7.76 | 4.988 / 9.199 | 4.679 / 7.591 | 7.667 / 8.5 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| h=1|R3_resolve_document | 11.591 / 16.477 | 5.724 / 6.272 | 4.092 / 5.608 | 7.641 / 8.672 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| h=10|R3_resolve_document | 22.432 / 26.479 | 12.532 / 14.205 | 6.076 / 7.321 | 12.075 / 15.867 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| h=50|R3_resolve_document | 74.889 / 87.744 | 39.394 / 55.041 | 16.225 / 24.504 | 43.686 / 54.095 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 
-_Run 2026-10-03T23-23-59Z_59405ff · commit 59405ff · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-04T05-31-55Z_3ea92f7 · commit 3ea92f7 (dirty) · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_

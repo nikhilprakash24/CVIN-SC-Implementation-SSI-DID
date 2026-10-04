@@ -12,7 +12,7 @@
         "logBytes": 2272,
         "sstoreCount": 10,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 64.468155
+        "latencyMs": 101.861754
       },
       {
         "eventNo": 2,
@@ -24,7 +24,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 7.060922
+        "latencyMs": 7.387304
       },
       {
         "eventNo": 3,
@@ -36,7 +36,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 7.613016
+        "latencyMs": 7.385851
       },
       {
         "eventNo": 4,
@@ -48,7 +48,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 7.869082
+        "latencyMs": 7.175029
       },
       {
         "eventNo": 5,
@@ -60,7 +60,7 @@
         "logBytes": 288,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 8.513677
+        "latencyMs": 8.29175
       },
       {
         "eventNo": 6,
@@ -72,7 +72,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 8.149932
+        "latencyMs": 7.539755
       },
       {
         "eventNo": 7,
@@ -84,7 +84,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 7.793389
+        "latencyMs": 7.871246
       },
       {
         "eventNo": 8,
@@ -96,7 +96,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 7.93877
+        "latencyMs": 7.421067
       },
       {
         "eventNo": 9,
@@ -108,7 +108,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 7.357107
+        "latencyMs": 7.02719
       },
       {
         "eventNo": 10,
@@ -120,7 +120,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 8.162983
+        "latencyMs": 7.376414
       },
       {
         "eventNo": 11,
@@ -132,7 +132,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 6.947097
+        "latencyMs": 6.517935
       },
       {
         "eventNo": 12,
@@ -144,7 +144,7 @@
         "logBytes": 384,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 13.899999
+        "latencyMs": 13.752427
       },
       {
         "eventNo": 13,
@@ -156,7 +156,7 @@
         "logBytes": 128,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 6.851464
+        "latencyMs": 6.326167
       },
       {
         "eventNo": 14,
@@ -168,7 +168,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 8.542472
+        "latencyMs": 7.916767
       },
       {
         "eventNo": 15,
@@ -180,7 +180,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 7.369675
+        "latencyMs": 7.264736
       },
       {
         "eventNo": 16,
@@ -192,7 +192,7 @@
         "logBytes": 128,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 6.33169
+        "latencyMs": 6.50131
       },
       {
         "eventNo": 17,
@@ -204,7 +204,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 6.367378
+        "latencyMs": 7.036838
       }
     ],
     "lifetimeGas": 1050787,
@@ -220,6 +220,226 @@
     }
   },
   {
+    "adapter": "erc1056w",
+    "events": [
+      {
+        "eventNo": 1,
+        "event": "VID-I birth certificate",
+        "op": "C2_create_with_attributes",
+        "actor": "manufacturer",
+        "gasUsed": 234551,
+        "txCount": 3,
+        "logBytes": 2400,
+        "sstoreCount": 12,
+        "zeroToNonzeroSstores": 4,
+        "latencyMs": 86.428847
+      },
+      {
+        "eventNo": 2,
+        "event": "Issuer key anchor",
+        "op": "V1_issuer_key_anchor",
+        "actor": "issuer",
+        "gasUsed": 72243,
+        "txCount": 1,
+        "logBytes": 192,
+        "sstoreCount": 2,
+        "zeroToNonzeroSstores": 2,
+        "latencyMs": 12.808205
+      },
+      {
+        "eventNo": 3,
+        "event": "Registration credential anchored",
+        "op": "V3_anchor_status",
+        "actor": "issuer",
+        "gasUsed": 33918,
+        "txCount": 1,
+        "logBytes": 256,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 11.606875
+      },
+      {
+        "eventNo": 4,
+        "event": "Insurance credential anchored",
+        "op": "V3_anchor_status",
+        "actor": "issuer",
+        "gasUsed": 33918,
+        "txCount": 1,
+        "logBytes": 256,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 7.969924
+      },
+      {
+        "eventNo": 5,
+        "event": "Service endpoint published",
+        "op": "U3_set_attribute",
+        "actor": "owner",
+        "gasUsed": 44665,
+        "txCount": 1,
+        "logBytes": 288,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 31.28523
+      },
+      {
+        "eventNo": 6,
+        "event": "Service record 1",
+        "op": "U3_set_attribute",
+        "actor": "serviceCenter",
+        "gasUsed": 45269,
+        "txCount": 1,
+        "logBytes": 320,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 9.080254
+      },
+      {
+        "eventNo": 7,
+        "event": "Service record 2",
+        "op": "U3_set_attribute",
+        "actor": "serviceCenter",
+        "gasUsed": 45269,
+        "txCount": 1,
+        "logBytes": 320,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 9.901109
+      },
+      {
+        "eventNo": 8,
+        "event": "Service record 3",
+        "op": "U3_set_attribute",
+        "actor": "serviceCenter",
+        "gasUsed": 45269,
+        "txCount": 1,
+        "logBytes": 320,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 20.671689
+      },
+      {
+        "eventNo": 9,
+        "event": "Service record 4",
+        "op": "U3_set_attribute",
+        "actor": "serviceCenter",
+        "gasUsed": 45269,
+        "txCount": 1,
+        "logBytes": 320,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 12.105627
+      },
+      {
+        "eventNo": 10,
+        "event": "Service record 5",
+        "op": "U3_set_attribute",
+        "actor": "serviceCenter",
+        "gasUsed": 45269,
+        "txCount": 1,
+        "logBytes": 320,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 19.424403
+      },
+      {
+        "eventNo": 11,
+        "event": "Delegate key added (k1)",
+        "op": "U2_add_delegate",
+        "actor": "owner",
+        "gasUsed": 64708,
+        "txCount": 1,
+        "logBytes": 192,
+        "sstoreCount": 2,
+        "zeroToNonzeroSstores": 1,
+        "latencyMs": 9.12214
+      },
+      {
+        "eventNo": 12,
+        "event": "Key rotation (k1 to k2)",
+        "op": "rotate_delegate (U2+D1)",
+        "actor": "owner",
+        "gasUsed": 106584,
+        "txCount": 2,
+        "logBytes": 384,
+        "sstoreCount": 4,
+        "zeroToNonzeroSstores": 1,
+        "latencyMs": 18.239594
+      },
+      {
+        "eventNo": 13,
+        "event": "Ownership transfer (resale)",
+        "op": "U4_transfer_vehicle",
+        "actor": "owner→newOwner",
+        "gasUsed": 57176,
+        "txCount": 1,
+        "logBytes": 128,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 1,
+        "latencyMs": 8.792528
+      },
+      {
+        "eventNo": 14,
+        "event": "Re-registration credential",
+        "op": "V3_anchor_status",
+        "actor": "issuer",
+        "gasUsed": 33918,
+        "txCount": 1,
+        "logBytes": 256,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 7.75083
+      },
+      {
+        "eventNo": 15,
+        "event": "Credential revocation (old insurance)",
+        "op": "V5_revoke_credential",
+        "actor": "issuer",
+        "gasUsed": 33470,
+        "txCount": 1,
+        "logBytes": 256,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 7.841036
+      },
+      {
+        "eventNo": 16,
+        "event": "Second ownership transfer",
+        "op": "U4_transfer_vehicle",
+        "actor": "newOwner→thirdOwner",
+        "gasUsed": 40084,
+        "txCount": 1,
+        "logBytes": 128,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 6.639719
+      },
+      {
+        "eventNo": 17,
+        "event": "End-of-life deactivation",
+        "op": "D3_deactivate_identity",
+        "actor": "admin/owner",
+        "gasUsed": 43801,
+        "txCount": 1,
+        "logBytes": 256,
+        "sstoreCount": 1,
+        "zeroToNonzeroSstores": 0,
+        "latencyMs": 9.292247
+      }
+    ],
+    "lifetimeGas": 1025381,
+    "lifetimeTxCount": 20,
+    "lifetimeLogBytes": 6592,
+    "lifetimeZeroToNonzeroSstores": 9,
+    "sharedDeployGas": 2709021,
+    "perIdentityDeployGas": 0,
+    "apportioned": {
+      "1": 3734402,
+      "1000": 1028090,
+      "1000000": 1025384
+    }
+  },
+  {
     "adapter": "erc721",
     "events": [
       {
@@ -232,7 +452,7 @@
         "logBytes": 416,
         "sstoreCount": 27,
         "zeroToNonzeroSstores": 23,
-        "latencyMs": 12.198433
+        "latencyMs": 13.593311
       },
       {
         "eventNo": 2,
@@ -244,7 +464,7 @@
         "logBytes": 416,
         "sstoreCount": 24,
         "zeroToNonzeroSstores": 16,
-        "latencyMs": 12.36478
+        "latencyMs": 13.308463
       },
       {
         "eventNo": 3,
@@ -256,7 +476,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 5,
-        "latencyMs": 7.808255
+        "latencyMs": 8.065424
       },
       {
         "eventNo": 4,
@@ -268,7 +488,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 8.182171
+        "latencyMs": 8.393832
       },
       {
         "eventNo": 5,
@@ -280,7 +500,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 9.355612
+        "latencyMs": 7.357475
       },
       {
         "eventNo": 6,
@@ -292,7 +512,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.994864
+        "latencyMs": 6.910697
       },
       {
         "eventNo": 7,
@@ -304,7 +524,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 8.058964
+        "latencyMs": 7.570717
       },
       {
         "eventNo": 8,
@@ -316,7 +536,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 8.21388
+        "latencyMs": 7.673698
       },
       {
         "eventNo": 9,
@@ -328,7 +548,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.74709
+        "latencyMs": 8.212789
       },
       {
         "eventNo": 10,
@@ -340,7 +560,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 8.557604
+        "latencyMs": 11.380149
       },
       {
         "eventNo": 11,
@@ -352,7 +572,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 6.798251
+        "latencyMs": 10.276583
       },
       {
         "eventNo": 12,
@@ -364,7 +584,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 6.754243
+        "latencyMs": 7.402612
       },
       {
         "eventNo": 13,
@@ -376,7 +596,7 @@
         "logBytes": 288,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 6,
-        "latencyMs": 9.070653
+        "latencyMs": 9.155037
       },
       {
         "eventNo": 14,
@@ -388,7 +608,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.771401
+        "latencyMs": 7.448996
       },
       {
         "eventNo": 15,
@@ -400,7 +620,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.646708
+        "latencyMs": 7.207714
       },
       {
         "eventNo": 16,
@@ -412,7 +632,7 @@
         "logBytes": 288,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 6,
-        "latencyMs": 9.27292
+        "latencyMs": 9.362925
       },
       {
         "eventNo": 17,
@@ -424,7 +644,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 6.939776
+        "latencyMs": 10.195932
       }
     ],
     "lifetimeGas": 2701239,
@@ -452,7 +672,7 @@
         "logBytes": 1120,
         "sstoreCount": 41,
         "zeroToNonzeroSstores": 34,
-        "latencyMs": 76.605301
+        "latencyMs": 65.788734
       },
       {
         "eventNo": 2,
@@ -464,7 +684,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 5,
-        "latencyMs": 6.970082
+        "latencyMs": 7.340343
       },
       {
         "eventNo": 3,
@@ -476,7 +696,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.257445
+        "latencyMs": 7.04525
       },
       {
         "eventNo": 4,
@@ -488,7 +708,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 6.880566
+        "latencyMs": 7.218313
       },
       {
         "eventNo": 5,
@@ -500,7 +720,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.1694
+        "latencyMs": 7.260799
       },
       {
         "eventNo": 6,
@@ -512,7 +732,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.2588
+        "latencyMs": 7.090674
       },
       {
         "eventNo": 7,
@@ -524,7 +744,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.888953
+        "latencyMs": 7.791426
       },
       {
         "eventNo": 8,
@@ -536,7 +756,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 6.866977
+        "latencyMs": 7.018146
       },
       {
         "eventNo": 9,
@@ -548,7 +768,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.143861
+        "latencyMs": 7.179804
       },
       {
         "eventNo": 10,
@@ -560,7 +780,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.729723
+        "latencyMs": 6.719223
       },
       {
         "eventNo": 11,
@@ -572,7 +792,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.268513
+        "latencyMs": 6.674463
       },
       {
         "eventNo": 12,
@@ -584,7 +804,7 @@
         "logBytes": 192,
         "sstoreCount": 11,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 17.391491
+        "latencyMs": 17.413772
       },
       {
         "eventNo": 13,
@@ -596,7 +816,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 6.539074
+        "latencyMs": 6.098973
       },
       {
         "eventNo": 14,
@@ -608,7 +828,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 7.470313
+        "latencyMs": 6.814591
       },
       {
         "eventNo": 15,
@@ -620,7 +840,7 @@
         "logBytes": 64,
         "sstoreCount": 6,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 8.79792
+        "latencyMs": 7.511697
       },
       {
         "eventNo": 16,
@@ -632,7 +852,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 6.634647
+        "latencyMs": 6.382705
       },
       {
         "eventNo": 17,
@@ -644,7 +864,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 8.082043
+        "latencyMs": 5.947902
       }
     ],
     "lifetimeGas": 3155103,

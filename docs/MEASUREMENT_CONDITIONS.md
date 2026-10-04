@@ -195,3 +195,21 @@ not have, so the two latency columns are **not** directly comparable and must be
 | Nine-standard "52,178 → 1,704,992", "+46,862 gas/op" | register #25 (old), README, CAPABILITIES | **S**: July pre-cancun values; now 52,192 → 1,680,816 and +46,830 |
 | W3C checker 93.2 % | register #4 (old), README, CI comment | **S**: 94.3 % after review-02 S-10 (one check: unknown method → `methodNotSupported`) |
 | verify 0.276/0.372 PKI vs 11.163/13.524 ERC-1056; #22 revoke 75,044, deploy 878,509 (2026-10-03, `2032c77`) | register #21/#22 (Pass 1) | **S**, review 02 Pass 2: the registry bytecode was a stale tracked artifact predating K-3 (R2-H2), and T-9 changes the signed bytes and adds a freshness check to every verify. Now rows #21/#22 (`1d0e3a2`) |
+
+### 5.E Toolchain pinning (M1-H), observed 2026-10-04
+
+Gas is EVM-defined, but the node that executes it is not version-free. A harness run on
+commit `3ea92f7` with an **unpinned** `npm install` (Hardhat 2.29.1, Node 22.22.2) moved two
+cells against the run of record `59405ff` (Hardhat 2.28.6): ERC-721 `U1_rotate_controller`
+179,470 → 179,482 (+12) and `U4_transfer_vehicle` 182,374 → 182,399 (+25); every other cell,
+including all lifecycle events, was identical. Re-running the same commit after `npm ci`
+(lockfile toolchain) reproduced the run of record byte-for-byte in all shared columns
+(run `2026-10-04T05-31-55Z_3ea92f7`, now `results/metrics/latest`). Rules:
+
+- M1-H runs are valid only from `npm ci`; `meta.json` records `hardhat` and `node`, and a
+  chapter may cite a run only if those match the lockfile.
+- A toolchain change is a conditions change: re-run and re-promote `latest`; do not mix
+  cells from runs with different `meta.hardhat`.
+- The two moved cells are the ERC-721 ops whose cost already shows a within-run cold/warm
+  receiver spread (§5.D row for `59405ff`, H-3); the cause of the +12/+25 under 2.29.1 was
+  not investigated further because the pinned toolchain removes it.

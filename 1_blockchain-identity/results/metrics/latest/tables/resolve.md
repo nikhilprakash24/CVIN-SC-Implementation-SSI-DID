@@ -1,10 +1,10 @@
 ### L6 — Verifier read path after lifecycle: RPC calls / bytes / median ms / p95 ms
 
-| Operation | ERC-1056 | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| R3_resolve_document | 22 / 16936 / 14.169 / 18.659 | 7 / 5724 / 6.332 / 9.081 | 17 / 4100 / 12.655 / 15.231 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R1_resolve_owner | 1 / 68 / 0.795 / 1.318 | 1 / 68 / 0.775 / 0.903 | 1 / 68 / 0.622 / 0.886 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| R4_verify_delegate | 1 / 68 / 0.891 / 1.183 | 2 / 136 / 1.093 / 1.567 | 1 / 196 / 0.776 / 1.099 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
-| V6_status_check | 1 / 3395 / 1.409 / 2.031 | 1 / 3268 / 2.783 / 3.046 | 1 / 196 / 0.665 / 0.866 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| R3_resolve_document | 22 / 16936 / 14.863 / 16.243 | 14 / 16328 / 10.937 / 16.314 | 7 / 5724 / 6.201 / 8.454 | 17 / 4100 / 12.314 / 17.162 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R1_resolve_owner | 1 / 68 / 0.696 / 0.996 | 1 / 68 / 0.762 / 0.991 | 1 / 68 / 0.642 / 0.829 | 1 / 68 / 0.807 / 2.246 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| R4_verify_delegate | 1 / 68 / 0.83 / 1.013 | 1 / 68 / 1.038 / 1.45 | 2 / 136 / 1.195 / 1.859 | 1 / 196 / 0.807 / 1.701 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
+| V6_status_check | 1 / 3395 / 1.308 / 2.108 | 1 / 3395 / 1.56 / 2.131 | 1 / 3268 / 2.68 / 3.272 | 1 / 196 / 0.762 / 1.26 | not impl. | not impl. | not impl. | not impl. | not impl. | not impl. |
 
-_Run 2026-10-03T23-23-59Z_59405ff · commit 59405ff · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-04T05-31-55Z_3ea92f7 · commit 3ea92f7 (dirty) · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_

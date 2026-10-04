@@ -1,7 +1,7 @@
 # HANDBACK — Data-Collection & Comparative-Analysis Framework ("CRUD and Beyond")
 
 **Author:** Nikhil Prakash (MASc, UBC ECE) — nikhil.prakash1995@gmail.com
-**Date:** 2026-09-30 · **Branch:** `claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt` (rebased on `084edfd`, the merged trunk)
+**Date:** 2026-10-04 (wrapper-mode addendum; body from 2026-09-30/10-03) · **Branch:** `claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt` (rebased on `084edfd`, the merged trunk)
 **Replaces:** the v1 handoff of 2026-09-24 (which quoted un-sourced "~45–50K gas" figures; see `docs/MEASUREMENT_CONDITIONS.md` §D)
 **Read next, in order:** `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md` → `docs/MEASUREMENT_CONDITIONS.md` → `1_blockchain-identity/results/metrics/latest/REPORT.md` → `docs/AUDIT_01_ORIGINAL_GOALS.md`
 
@@ -9,7 +9,7 @@
 
 ## 0. One-paragraph state
 
-The research objective is to show, through a fixed research process, that ERC-1056 is the right SSI substrate for CAVs. This session delivered the process: a written methodology (operation catalogue, scenarios, statistics, falsifiers, threats to validity), a measurement harness that runs the **same 18-operation catalogue on every substrate** through a per-standard adapter, and the **first trunk-traceable run** (`results/metrics/latest`, commit-stamped) for the three substrates that exist on the trunk — ERC-1056, ERC-721, ERC-725. The remaining six substrates plug in by writing one adapter each; the protocol does not change. The numbers already say something the thesis must take on board: ERC-1056 is the cheapest substrate on lifetime cost by **2.6× (vs ERC-721) and 3.0× (vs ERC-725)** (review-02 corrected run; first reported as 2.7×), not the ≥10× H1 currently asserts, and its event-log read path is the **most expensive to resolve** (linear in history). Both are defensible thesis results; the hypothesis text needs to follow the data, not the other way round.
+The research objective is to show, through a fixed research process, that ERC-1056 is the right SSI substrate for CAVs. This session delivered the process: a written methodology (operation catalogue, scenarios, statistics, falsifiers, threats to validity), a measurement harness that runs the **same 18-operation catalogue on every substrate** through a per-standard adapter, and the **first trunk-traceable run** (`results/metrics/latest`, commit-stamped) for the three substrates that exist on the trunk — ERC-1056, ERC-721, ERC-725. The remaining six substrates plug in by writing one adapter each; the protocol does not change. The numbers already say something the thesis must take on board: ERC-1056 is the cheapest substrate on lifetime cost by **2.6× (vs ERC-721) and 3.0× (vs ERC-725)** (review-02 corrected run; first reported as 2.7×; **2.6× / 3.1× in its best, wrapper-controlled mode — §3.6**), not the ≥10× H1 currently asserts, and its event-log read path is the **most expensive to resolve** (linear in history). Both are defensible thesis results; the hypothesis text needs to follow the data, not the other way round.
 
 ---
 
@@ -41,7 +41,7 @@ npm run metrics:quick
 
 Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit give byte-identical gas tables. This has been true only since review 02 (H-1, H-3): before it, random wallets and a shared issuer moved some cells between runs. Latencies are in-process client + EVM and reproduce in distribution only.
 
-## 3. Headline results (run `2026-10-03T23-23-59Z_59405ff`, clean tree; full tables in `results/metrics/latest/`)
+## 3. Headline results (run of record now `2026-10-04T05-31-55Z_3ea92f7`, clean tree, locked toolchain; its ERC-1056 / ERC-721 / ERC-725 columns are byte-identical to `59405ff` quoted below, and it adds the ERC-1056 wrapper column of §3.6; full tables in `results/metrics/latest/`)
 
 > **Corrected in review 02** (`docs/REVIEW_02_CODEBASE.md` H-1–H-8, `docs/review02/PASS1_H.md`). The previous run `3b786c2` and the figures this section printed for it are superseded (`MEASUREMENT_CONDITIONS.md` §5.D).
 
@@ -84,7 +84,7 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 
 | Hyp. | Verdict on current data | Action for the thesis text |
 |---|---|---|
-| H1 "≥ 10× cheaper for create/update" | **Refuted as stated.** Lifetime 2.6× / 3.0×; C1 5.2× / 8.5×; U3 3.4×; ERC-1056 is *not* the minimum on U1/U4/D3 (ERC-725) or U2/D1 (ERC-721). | Restate H1 as "cheapest substrate on lifetime cost and on every CREATE/anchor op, with the fewest zero→nonzero storage writes (8 vs 83–92)"; drop the 10× figure or attribute it to the per-op pair where it holds (none here — check after `erc1056w` variant, §5.1). |
+| H1 "≥ 10× cheaper for create/update" | **Refuted as stated.** Lifetime 2.6× / 3.0×; C1 5.2× / 8.5×; U3 3.4×; ERC-1056 is *not* the minimum on U1/U4/D3 (ERC-725) or U2/D1 (ERC-721). | Restate H1 as "cheapest substrate on lifetime cost and on every CREATE/anchor op, with the fewest zero→nonzero storage writes (8 vs 83–92)"; drop the 10× figure — it holds for no op pair even in wrapper mode (§3.6: lifetime 2.6× / 3.1×, C2 2.4× / 6.4×). |
 | H1' flat in N | Supported. | keep |
 | H3 real-time | Read-side evidence now exists: on-chain resolution of an ERC-1056 identity with history costs ≈65–71 ms *in-process* — it will not fit 100 ms over a real RPC. Supports the second half of H3 (must pre-resolve). | cite `scale.md` h-axis and `resolve.md` |
 | H4 event-log cheapest for VID-II events | Supported on 12/17 events. The exceptions are the k1 add and the rotation (ERC-721), the two ownership transfers (ERC-725) and the deactivation (ERC-725). | keep, with exceptions listed |
@@ -92,10 +92,32 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 
 ### 3.5 Artefacts to be aware of (not bugs, but must be stated)
 
-1. **ERC-1056 C2 runs in pure did:ethr mode** (owner sends 8 `setAttribute` txs). The CVIN wrapper's single-tx `setVehicleAttributes` requires the wrapper to hold ERC-1056 control (`changeOwner(did, wrapper)`), which disables meta-tx. A second adapter `erc1056w` for that mode is the fastest way to a more favourable C2 (expected ≈ 3 tx / ~200k). Both are honest realisations; report both.
+1. **ERC-1056 is measured in two modes.** `erc1056` is pure did:ethr (owner sends 8 `setAttribute` txs for C2); `erc1056w` is the CVIN wrapper-controlled mode (`changeOwner(did, wrapper)` once, then `setVehicleAttributes` in one tx). Both are honest realisations and both are reported (§3.6). Wrapper mode loses meta-tx (U5) and attribute revocation (D2), and its ownership transfers are **invisible to a plain did:ethr resolver** — `transferVehicleOwnership` changes only the wrapper's `vehicleOwners` mapping, so no `DIDOwnerChanged` is emitted and the registry still names the wrapper as controller. Record as a fidelity gap under T2.
 2. **ERC-1056 V6 status check** in `crud` scans `eth_getLogs` from block 0 (852 B since review 02 gave each iteration a fresh issuer; it was 92 KB when the issuer's history accumulated across iterations). That is the naive realisation; a Status List 2021 bitstring (one attribute) is the intended one and should be implemented in the CVIN-Combined adapter.
 3. **Within-run execution-gas spreads (identical between runs):** ERC-721 U1 (154,730 vs 157,530, cold vs warm receiver balance slot) and ERC-721 C1 (iteration 0 is the contract's first mint, −2,800). The reported value is the mode; the REPORT lists every cell with more than one execution value.
 4. Latencies are **in-process** Hardhat; they measure client + EVM only. Never compare them with the Python HTTP-RPC numbers without saying so.
+5. **Toolchain must be the lockfile's.** A run with Hardhat 2.29.1 (unpinned `npm install`) moved two cells by +12 / +25 gas (ERC-721 U1, U4) against the run of record; `npm ci` (Hardhat 2.28.6) reproduced every shared cell byte-for-byte. Always `npm ci`; `meta.json` records the versions.
+
+### 3.6 ERC-1056 wrapper-controlled mode (`erc1056w`, added 2026-10-04, run `3ea92f7`)
+
+| Op | pure `erc1056` | wrapper `erc1056w` | vs ERC-721 / ERC-725 (wrapper) |
+|---|---:|---:|---|
+| C1 create identity | **76,808** (1 tx) | 145,662 (2 tx: register + hand-over) | 2.7× / 4.5× |
+| C2 create + VID-I attributes | 366,978 (9 tx) | **234,587** (3 tx) | 2.4× / 6.4× |
+| U1 / U4 rotate / transfer | 51,754 | 57,188 | 3.1× / 0.5× (ERC-725 cheaper) |
+| U2 add delegate | 55,143 | 64,720 | 0.7× (ERC-721 cheaper) / 1.9× |
+| U3 set attribute | **35,024** | 44,677 | 2.7× / 2.7× |
+| U5 meta-tx | 62,646 | n/a | — |
+| D1 revoke delegate | 32,868 | 41,888 | 0.6× / 1.4× |
+| D2 revoke attribute | 34,576 | n/a (no entry point) | — |
+| D3 deactivate | 34,230 | 43,809 | 0.6× / 0.5× |
+| V1 / V3 / V5 | 55,143 / 33,918 / 33,470 | same (issuer uses the registry directly) | |
+| **Lifetime (17 events)** | 1,050,787 (26 tx) | **1,025,381** (20 tx) | **2.63× / 3.08×** |
+| Zero→nonzero SSTOREs | 8 | 9 | vs 92 / 83 |
+| R3 resolve after lifecycle | 22 RPC / 13.5 ms | 14 RPC / 10.9 ms | vs 7 / 6.5 ms, 17 / 12.1 ms |
+| R3 at history h = 50 | 112 RPC / 75 ms | 55 RPC / 39 ms | vs 7 / 16 ms, 61 / 44 ms |
+
+Reading: the wrapper indirection costs ~9–10k gas per mutation (external call + `vehicleOwnerOf` gate) and pays back only where it collapses transactions (C2: −132k). Lifetime improves 2.4%, so the best-case ERC-1056 ratios are 2.6× / 3.1× — H1's verdict (§3.4) does not change. The cheaper resolution in wrapper mode is a side-effect of the fidelity gap in §3.5.1 (ownership transfers leave no registry event), not an efficiency gain. Conformance: `npm run test:conformance` 39 passing / 5 pending; full suite 285 passing / 6 pending.
 
 ---
 
@@ -116,7 +138,7 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 
 ## 5. Next steps, in priority order
 
-1. **`erc1056w` adapter** (wrapper-controlled mode; ~1 h). Gives the thesis the honest best case for ERC-1056 C2 and the wrapper's `transferVehicleOwnership` path.
+1. ~~`erc1056w` adapter~~ — **done** (`3ea92f7`, §3.6). Follow-up decision: should the wrapper emit (or forward) `DIDOwnerChanged` on ownership transfer so did:ethr resolvers see the vehicle owner? Either implement, or document the gap in the T2 compliance discussion.
 2. **PKI-vs-ERC-1056 script** (`cv2x-testbed/scripts/benchmark_pki_vs_erc1056.py`, closes F2; ~3 h). Map `C2→register_vehicle, V2→sign, V4→verify, V5→revoke, V6→check_revocation, R3→resolve`; N = 30; one CSV; label the HTTP-RPC condition.
 3. **ERC-735 adapter + contract** (claims on top of the ERC-725 identity; next in the roadmap). Then ERC-1155 (first substrate with a *native batch* primitive — the `batch` scenario will finally have a `native` row), ERC-725xy, LSP8, ERC-4337, CVIN-Combined (ERC-1056 anchor + Status List + ERC-1155 credential tokens).
 4. **Rewrite H1** in `README.md` / `docs/RESEARCH_THRUSTS_REPORT.md` / `docs/thesis/README.md` per §3.4 so one hypothesis structure appears everywhere (audit F6).
@@ -136,3 +158,4 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 - Rebased the v1 handoff commit onto the trunk that had moved (`084edfd`: build fixed to solc 0.8.24, tests 47/47, audit + project summary).
 - Wrote methodology and conditions documents; built harness; three adapters passed conformance; smoke runs surfaced and fixed: `setVehicleAttributes` unreachable in direct mode (→ pure did:ethr C2), one-address-one-DID iteration collision (→ fresh funded owner per identity), Hardhat automine nonce rejection (→ queue-then-mine throughput), ethers `estimateGas` dominating the queue phase (→ fixed fee overrides), RPC counting through `provider.send`, dataset off-by-one at N = 1 000, varying string lengths (→ fixed-width payloads).
 - Full run committed as `results/metrics/latest`; pushed.
+- 2026-10-04: added `erc1056w` on top of the review-02 harness; its conformance run exposed the one-address-one-DID collision in the test's C1/C2 (fixed: C1 uses its own wallet) and that "expire now" cannot stand in for attribute revocation (D2 declared n/a). Re-ran all six scenarios for four substrates; found and documented the toolchain-pinning effect (§3.5.5); `results/metrics/latest` is run `3ea92f7`.

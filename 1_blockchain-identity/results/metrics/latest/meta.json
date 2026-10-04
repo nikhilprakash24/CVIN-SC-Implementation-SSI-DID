@@ -1,11 +1,11 @@
 {
-  "runId": "2026-10-03T23-23-59Z_59405ff",
-  "commit": "59405ff78e07b394c8aaac8417a15d471472634f",
-  "commitShort": "59405ff",
-  "branch": "HEAD",
-  "dirty": false,
-  "date": "2026-10-03T23:24:00.413Z",
-  "node": "v22.22.0",
+  "runId": "2026-10-04T05-31-55Z_3ea92f7",
+  "commit": "3ea92f7c4e4e1fd9bb5c4df7fc5fa5f86a6a4295",
+  "commitShort": "3ea92f7",
+  "branch": "claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt",
+  "dirty": true,
+  "date": "2026-10-04T05:31:56.783Z",
+  "node": "v22.22.2",
   "hardhat": "2.28.6",
   "ethers": "6.17.0",
   "solc": "0.8.24",
@@ -60,6 +60,7 @@
   ],
   "adapters": [
     "erc1056",
+    "erc1056w",
     "erc721",
     "erc725"
   ],
@@ -69,11 +70,11 @@
     "ethUSD": 3000
   },
   "scenarioSeconds": {
-    "crud": 86.809,
-    "lifecycle": 1.324,
-    "scale": 66.557,
-    "batch": 8.848,
-    "throughput": 11.81,
-    "resolve": 2.968
+    "crud": 112.554,
+    "lifecycle": 2.049,
+    "scale": 95.039,
+    "batch": 12.029,
+    "throughput": 17.782,
+    "resolve": 4.01
   }
 }

@@ -1,14 +1,14 @@
-Operation,erc1056,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
-C1_create_identity,516,420,2226,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-C2_create_with_attributes,2244,612,2926,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U1_rotate_controller,68,100,36,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U2_add_delegate,132,68,100,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U3_set_attribute,228,164,100,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U4_transfer_vehicle,68,100,36,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-U5_meta_tx,324,n/a,n/a,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-D1_revoke_delegate,100,68,36,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-D2_revoke_attribute,196,n/a,36,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-D3_deactivate_identity,196,36,4,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-V1_issuer_key_anchor,132,452,100,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-V3_anchor_status,196,196,100,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
-V5_revoke_credential,164,196,36,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+Operation,erc1056,erc1056w,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
+C1_create_identity,516,584,420,2226,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+C2_create_with_attributes,2244,1164,612,2926,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U1_rotate_controller,68,68,100,36,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U2_add_delegate,132,132,68,100,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U3_set_attribute,228,228,164,100,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U4_transfer_vehicle,68,68,100,36,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+U5_meta_tx,324,n/a,n/a,n/a,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+D1_revoke_delegate,100,100,68,36,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+D2_revoke_attribute,196,n/a,n/a,36,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+D3_deactivate_identity,196,196,36,4,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+V1_issuer_key_anchor,132,132,452,100,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+V3_anchor_status,196,196,196,100,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
+V5_revoke_credential,164,164,196,36,not impl.,not impl.,not impl.,not impl.,not impl.,not impl.
