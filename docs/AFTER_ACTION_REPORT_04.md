@@ -137,6 +137,34 @@ the two parallel streams that are now one trunk. The notebook index remains requ
 
 - **D-B** keep both ERC-1056 variants as named sub-options (default). **D-C** archive the research copies (default). **D-D** asymmetry discussion as a chapter-6 section (default). All reversible on the author's word.
 
+## 3b. Closing of the implementation stretch (2026-10-04)
+
+All ten plan steps executed in one day, each gated, committed and green on CI:
+S0 fork named + CI identity checks · S1 thirteen manifests + union · S2 eleven adapters ·
+S3 L1 suite (99 tests, N/A recorded) · S4 tests layered in place (219 held) ·
+S5 Python layers (conformance regression, checker as a test) · S6 use cases + V2V smoke
+as tests (81 Python tests) · S7 92 demos, 1,625 steps, 100 % surface coverage ·
+S8 grand runner, first full run ALL OK · S9 every layer in CI · S10 draft section.
+
+Totals on the trunk now: **319 Hardhat + 81 Python = 400 automated tests**; 92 feature
+demos; three generated asymmetry reports; a defect log of 26 items (6 fixed, 20 open,
+6 of them high). The sandbox did what the design step promised: it made the asymmetry
+computable and it found what no earlier test reached.
+
+Gates that fired and were honoured: S4 first attempt (tests outside the project cannot
+resolve chai — reverted, redone in place with a symlinked view); S5 twice (pytest
+collected the whole repository — fixed with explicit paths); the S3 directory
+invocation (Hardhat takes files); the S6/S7 js-yaml transitive dependency.
+
+What the author decides next (unchanged plus two new):
+1. The three plan §3 decisions were taken at their defaults — confirm or reverse.
+2. **Which high-severity defects to fix before chapter text cites the paths they
+   touch** (D10, D11, D13, D18, D21, D22, D25 — `docs/DEFECT_LOG.md` §C).
+3. The manifest review pass (173 cells still `reviewed: false`, all agreeing with the
+   tests).
+4. SUMO go-ahead, tags push, Sepolia secrets, notebook index, Chapter 2 citations —
+   as before.
+
 ## 4. Closing of the design step
 
 **Done.** The four documents the author asked for, in the order asked: the clean review,

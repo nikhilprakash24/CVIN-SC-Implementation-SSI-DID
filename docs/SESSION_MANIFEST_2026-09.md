@@ -66,3 +66,17 @@ discovered one commit at a time. Ordered by the pass that produced them.
   generated outputs, ignored.
 - The two `.dbg.json` build-path changes under `cv2x-testbed/artifacts/` — noise.
 - Local tags `v0.7.0`, `v0.8.0` — present, cannot be pushed from the session.
+
+## Pass 5 — Grand sandbox, per-option sandboxes, layered suites (2026-10-03/04)
+
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_04.md` | Report 04: brief, design step, every implementation step with its gate | step-by-step execution on request |
+| `docs/REVIEW_02_STATE_AND_PARALLEL_WORK.md`, `docs/PLAN_SANDBOX_AND_SUITES.md`, `docs/META_COMMENTARY_2026-10.md` | the clean review, the clean plan, the thinking-out-loud | requested in that order |
+| `docs/FEATURE_ASYMMETRY_MATRIX.md` + `4_comparison-framework/feature-matrix/make_feature_matrix.py` | the on-chain surface of every option from the compiled ABIs; CI fails if stale | ground the asymmetry in code |
+| `sandbox/` (grand runner, options/<slug>/{manifest.yaml, adapter.js, demos/, README.md}, lib/, py-suites/, suites→test symlink) | the grand sandbox and the per-option sandboxes | B1–B3 of the brief |
+| `1_blockchain-identity/test/{L1-identity-mechanisms,L2-identity-system}` | the layered Hardhat suites (99 + 220) | the four-layer test structure |
+| `sandbox/grand/report/{asymmetry,L1-asymmetry,demos,GRAND_REPORT}.md` | generated: declared union, observed mechanisms, exercised surface, the whole run | the chapter's data |
+| `docs/DEFECT_LOG.md` | 26 latent defects with severity, status, treatment | what the sandbox found |
+| `docs/thesis/chapter6-discussion/section-feature-asymmetry.md` | draft section: union vs intersection, three axes, asymmetry budget | S10 |
+| Contract fix `CVINVehicleCredential1155` self-transfer guard + regression test; `_research-copies/` archive; CI identity/freshness checks; `js-yaml` dev dependency | hygiene the steps required | — |

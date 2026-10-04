@@ -69,7 +69,7 @@ capabilities()                 -> manifest subset           # what the adapter c
 | S7 ✅ 2026-10-04 | **Demos.** Per option, one script per capability family exercising every relevant feature the manifest marks "implemented" — including the ones the comparison never uses (royalties, toll, guardian recovery, batch credentials, LSP data keys, execute(), signed ops) — printing gas and the on/off-chain stance | every "implemented" manifest entry has a demo that runs |
 | S8 ✅ 2026-10-04 | **Grand runner.** `run.py` orchestrates deploy → L1–L4 → demos → report for one or all options; the report is the asymmetry chapter's data | `python3 sandbox/grand/run.py all` completes and writes `report/` |
 | S9 ✅ 2026-10-04 (contract job collects L1+L2; python-layers job covers L3+L4; nightly benchmark separate) | **CI.** One job per layer; L4 nightly; the matrix generator and the grand report as artifacts | four green jobs |
-| S10 | **Thesis.** Chapter 6 (or a new chapter 5 section) "Feature asymmetry: the union versus the intersection" written from `grand/report` | section drafted with the table and the on/off-chain discussion |
+| S10 ◐ 2026-10-04 (draft section written; chapter placement is decision 3) | **Thesis.** Chapter 6 (or a new chapter 5 section) "Feature asymmetry: the union versus the intersection" written from `grand/report` | section drafted with the table and the on/off-chain discussion |
 
 Order: S0 → S1 → S2 → S3 (the first visible result: the cross-option L1 table) → S4/S5
 (re-homing, low risk) → S6 (closes the L4 gap) → S7 → S8 → S9 → S10.
