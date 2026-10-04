@@ -30,3 +30,4 @@ cv2x-testbed/cache/
 
 # Claude Code agent worktrees (local only)
 .claude/worktrees/
+1_blockchain-identity/results/metrics-rpc/runs/
