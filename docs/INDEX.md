@@ -32,6 +32,8 @@ provenance and must not be cited in chapters.
 | What can each identity option actually do, from code? | `docs/FEATURE_ASYMMETRY_MATRIX.md` | generated from the compiled ABIs by `4_comparison-framework/feature-matrix/make_feature_matrix.py`; interpretation in Review 02 §4 |
 | What is the state of all the work as one picture (three contract generations, the ERC-1056 fork, coverage by layer)? | `docs/REVIEW_02_STATE_AND_PARALLEL_WORK.md` | the clean review of 2026-10-03 |
 | How do the grand sandbox, per-option sandboxes and the L1–L4 suites get built? | `docs/PLAN_SANDBOX_AND_SUITES.md` | steps S0–S10 with acceptance checks |
+| What is the relation between this branch and the parallel review-2 trunk (`clone-cvin-id-scs`, now the default branch), and what did each do? | `docs/REVIEW_03_PARALLEL_LINEAGES.md` | the clean review of the two lineages (agreements, same quantities measured twice, 21 contradictions); appendices `docs/reconciliation/RECON_{DOCS,CODE,TSR}.md` |
+| How are the two lineages merged, and which decisions does that need? | `docs/PLAN_MERGE_LINEAGES.md` | decisions M-A…M-L with defaults; steps S0–S10 with gates; what is re-executed |
 | Thinking out loud, October 2026 | `docs/META_COMMENTARY_2026-10.md` | the asymmetry as the thesis; brainstorm; what to do first |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
