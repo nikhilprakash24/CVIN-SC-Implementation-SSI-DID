@@ -125,6 +125,34 @@ unrelated planning project (`npat-planning/`, "Inkwell"); a fourth (`testing-sui
     `latency` row list); adapter smoke 11/11; checker on the merged resolver **94.3 %** (floor
     stays 94.0, M-L).
 
+- **Merge commit `bd90004` pushed** (S0–S4 in one commit). CI: six of eight jobs green; two red
+  for reasons found and fixed in the next commits: the feature-matrix freshness gate (matrix
+  regenerated after the commit → `19aed0a`), and the testbed artifact-freshness gate — CI
+  compiles the testbed with the **root** `node_modules` (OpenZeppelin 5.0.2) while the local
+  testbed install carries OpenZeppelin 5.4.0, so `MOBIVIDRegistryV2`'s bytecode differed;
+  regenerated the CI way (`80e8f03`). All seven jobs green on `80e8f03`, including the
+  review-2 metrics-harness job against our contracts (their adapters updated in the merge).
+- **S5 part 1** (`19aed0a`): scaling A/B, MOBI backend sweep and the security scenarios
+  re-executed on the merged contracts — lifetime ranking unchanged (CVIN-Combined 9,831,477
+  still below MOBI-VID-V2 9,856,260), fidelity scores unchanged, **43/43 defended, 11 n/a**
+  under the strict harness.
+- **S7** (`d517c56`, delegated, accepted): external W3C DID suite on the merged resolver —
+  **335/336** on the fixtures and **335/336** on a registry-minted DID
+  (`did:ethr:0x7a69:0xf51acf23…`), control 347/347; `blockchainAccountId` now decimal
+  (**D27 closed** by review-2 S-10); the merged generator gained `--ethr-did`; write-up §12.
+- **Metrics harness** (`npm run metrics`, 14 min here): ran to completion on the merged
+  contracts, but its `meta.json` records `dirty: true` (the manifests and results were
+  uncommitted when it started). Under the review-2 lineage's own rule (§5.E/§5.F: a run of record
+  comes from a clean tree) the run is **discarded** and re-run on the clean tree at the end of
+  the pass. Recorded here so the 14 minutes are not mistaken for a result.
+- **Text pass, part 1**: `DEFECT_LOG.md` — D27 fixed (S-10), D12 second half fixed (K-8), D16
+  rest fixed (K-3/K-15), D22 revised (M-A), §C refreshed, new §E cross-reference between the
+  K/T/S series and the D series; chapter 5 regenerated from the merged results (four tables by
+  script, prose numbers, **ERC-735 is now the heaviest create at 1,757,881 — spread 33.7×** —
+  and the V2V/density passages brought to the review-2 re-runs 0.153 ms / 0.164 ms per
+  neighbour / P* ≈ 609 / 150 = 5 × 30); README and thesis README cells; register merge notes
+  on #4, #24, #25, #26, #28.
+
 ## 3. Decisions
 - **R-A** — the merge is executed on this branch by merging the parallel trunk in, not the other
   way round: the session's push scope is this branch only, and the merged history is identical

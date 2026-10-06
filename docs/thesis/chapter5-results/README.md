@@ -1,6 +1,6 @@
 # Chapter 5 — Results (Working Draft)
 
-> **Regeneration note (2026-10-04).** Every table and quoted gas figure in this chapter was regenerated from the results of record re-executed on the trunk after the defect-fix passes of 2026-10-04 (`docs/AFTER_ACTION_REPORT_05.md`, `_06.md`): `4_comparison-framework/results/gas_benchmark.json`, `mobi_vid_backends.json`, `scaling_marginal.json`, `scaling_lifetime.json` (condition M1: solc 0.8.24, optimizer 200 + viaIR, **evm cancun**, OpenZeppelin 5.0.2). The cells moved by the fixes, with their causes, are listed in `gas_moved_by_defect_fixes_2026-10-04.json` and `…_pass06.json`; the cross-standard ratios and every ranking are unchanged. Register: `docs/MEASUREMENT_CONDITIONS.md` #25, #26, #31, #32.
+> **Regeneration note (2026-10-04, refreshed 2026-10-06 after the merge of the two lineages — `docs/PLAN_MERGE_LINEAGES.md`; the V2V and density figures come from the review-2 lineage's re-runs, register #26/#27).** Every table and quoted gas figure in this chapter was regenerated from the results of record re-executed on the trunk after the defect-fix passes of 2026-10-04 (`docs/AFTER_ACTION_REPORT_05.md`, `_06.md`): `4_comparison-framework/results/gas_benchmark.json`, `mobi_vid_backends.json`, `scaling_marginal.json`, `scaling_lifetime.json` (condition M1: solc 0.8.24, optimizer 200 + viaIR, **evm cancun**, OpenZeppelin 5.0.2). The cells moved by the fixes, with their causes, are listed in `gas_moved_by_defect_fixes_2026-10-04.json` and `…_pass06.json`; the cross-standard ratios and every ranking are unchanged. Register: `docs/MEASUREMENT_CONDITIONS.md` #25, #26, #31, #32.
 
 **Status**: draft assembled from measured artifacts only. Every number in
 this chapter is traceable to a committed data file or a reproducible
@@ -70,26 +70,29 @@ Exact `receipt.gasUsed` per standard for an identical operation set. "—"
 
 | Standard | Create identity | Update attr. | Add claim/deleg. | Revoke | Transfer |
 |---|--:|--:|--:|--:|--:|
-| CVIN-Combined | **52,170** | 35,070 | 292,214 | 75,580 | 51,725 |
+| CVIN-Combined | **52,216** | 35,116 | 291,977 | 73,248 | 51,747 |
 | ERC-1056 | 52,594 | 35,494 | 54,831 | 35,046 | 51,754 |
 | ERC-1155 | 107,729 | 51,199 | 80,131 | 33,049 | 86,298 |
-| LSP8 | 152,453 | 55,070 | — | 41,812 | 80,544 |
-| MOBI-VID-V2 | 298,941 | 306,985 | 35,321 | 75,382 | 200,089 |
+| LSP8 | 152,644 | 55,133 | — | 42,116 | 80,568 |
+| MOBI-VID-V2 | 299,143 | 307,210 | 35,321 | 75,382 | 200,089 |
 | ERC-725 | 519,384 | 137,096 | 119,996 | 43,388 | 28,390 |
 | ERC-721 | 545,101 | 119,737 | 48,302 | 27,677 | 174,670 |
 | ERC-4337 | 759,088 | 49,343 | 47,557 | 25,429 | 28,539 |
-| ERC-735 | 1,598,928 | 80,788 | 295,805 | 72,064 | 28,768 |
 | ERC-725xy | 1,680,816 | 49,937 | — | — | 28,834 |
+| ERC-735 | 1,757,881 | 83,341 | 298,358 | 72,195 | 28,812 |
 
 **Findings (RQ1):**
 
-1. **Identity-creation cost spans ~32×** across the nine standards, from
-   52,170 gas (CVIN-Combined) to 1,680,816 gas (ERC-725xy). The minimal
+1. **Identity-creation cost spans ~34×** across the nine standards, from
+   52,216 gas (CVIN-Combined) to 1,757,881 gas (ERC-735). The minimal
    event-log designs (ERC-1056, CVIN-Combined) are the cheapest; the
-   full smart-account designs (ERC-725xy's X+Y account, ERC-4337) and the
-   claim-holder (ERC-735) are the most expensive — ERC-725xy is the
-   heaviest because each identity deploys a complete generic-executor +
-   data-store contract.
+   claim-holder (ERC-735) and the full smart-account designs (ERC-725xy's
+   X+Y account, ERC-4337) are the most expensive. ERC-735 became the
+   heaviest after the 2026-10 fixes: each identity deploys a per-vehicle
+   claim-holder contract that now also carries an issuer registry (D25a),
+   VIN binding of attestations (D25b) and sticky issuer revocation (K-2) —
+   veracity has a deployment price; ERC-725xy (1,680,816) deploys a complete
+   generic-executor + data-store contract per identity.
 
 2. **ERC-1056 vs. NFT/proxy designs**: creating an identity costs
    ~10.4× more on ERC-721 (545,101) and ERC-725 (519,384) than on
@@ -104,8 +107,8 @@ Exact `receipt.gasUsed` per standard for an identical operation set. "—"
    creation cost (759,088).
 
 4. **On-chain claims are expensive everywhere**: standards that store
-   verifiable claims on-chain (ERC-735 addClaim 295,805; CVIN-Combined
-   addClaim 292,214) pay ~5–8× the cost of an event-based attribute
+   verifiable claims on-chain (ERC-735 addClaim 298,358; CVIN-Combined
+   addClaim 291,977) pay ~5–8× the cost of an event-based attribute
    write, reflecting SSTORE-heavy claim structs with issuer signatures.
 
 ---
@@ -118,11 +121,11 @@ The thesis's hybrid design (ERC-1056-style event identity + ERC-735-style
 on-chain claims) was hypothesized (H5) to occupy a favourable point on the
 cost/capability frontier. The data supports this:
 
-- **Identity operations at ERC-1056 cost**: create 52,170 (vs 52,594),
-  update 35,070 (vs 35,494), transfer 51,725 (vs 51,754) — statistically
+- **Identity operations at ERC-1056 cost**: create 52,216 (vs 52,594),
+  update 35,116 (vs 35,494), transfer 51,747 (vs 51,754) — statistically
   indistinguishable from the cheapest standard.
 - **Plus O(1) verifiable on-chain claims** when the safety-critical
-  subset needs them (addClaim 292,214), a capability ERC-1056 lacks
+  subset needs them (addClaim 291,977), a capability ERC-1056 lacks
   entirely.
 
 In other words, the hybrid pays the cheap price for the common path
@@ -158,10 +161,10 @@ realization):
 | Backend | Birth (VID I) | Lifecycle (VID II) | Third-party attest. | Fidelity |
 |---|--:|--:|--:|:--:|
 | ERC-1056 | 51,944 | **34,928** | 61,501 † | 3/5 |
-| ERC-735 | 292,689 | 292,724 | 292,736 | 5/5 |
+| ERC-735 | 295,242 | 295,277 | 295,289 | 5/5 |
 | ERC-1155 | 107,729 | 80,131 | 63,031 † | 3/5 |
-| CVIN-Combined | **51,720** | **34,644** | 337,134 | **5/5** |
-| MOBI-VID-V2 | 298,941 | 306,985 | 192,749 | 5/5 |
+| CVIN-Combined | **51,766** | **34,690** | 336,896 | **5/5** |
+| MOBI-VID-V2 | 299,143 | 307,210 | 192,749 | 5/5 |
 
 **Fidelity matrix** — native support for each of the five MOBI VID concepts
 (✓ native, ✗ not native / off-chain only):
@@ -197,9 +200,9 @@ linkage to a specific prior event.
 
 2. **Event-log standards are cheapest for the common path.** The two
    event-log backends own the cheapest birth
-   and lifecycle writes (CVIN-Combined 51,720 / 34,644; ERC-1056 51,944 /
+   and lifecycle writes (CVIN-Combined 51,766 / 34,690; ERC-1056 51,944 /
    34,928) — roughly **6–9× cheaper** than the purpose-built MOBI-VID-V2
-   registry (298,941 / 306,985), which pays for dedicated on-chain structs
+   registry (299,143 / 307,210), which pays for dedicated on-chain structs
    (typed events, odometer, jurisdiction, verified flag, VIN-hash index).
 
 3. **Claim-based standards are the faithful way to get attestation.** Only
@@ -209,7 +212,7 @@ linkage to a specific prior event.
    attestation and verifiable on-chain claims. A subtlety the raw score
    hides: the **purpose-built `attestEvent` (192,749) is actually the
    cheapest native attestation**, undercutting the generic claim structs of
-   ERC-735 (292,736) and CVIN-Combined (337,134) because it stores a compact
+   ERC-735 (295,289) and CVIN-Combined (336,896) because it stores a compact
    attestation record (signature + role + timestamp) rather than a full
    claim struct with topic/scheme/data/URI strings.
 
@@ -218,7 +221,7 @@ linkage to a specific prior event.
    cost of any 5/5 backend** — its three canonical operations sum to 421,263
    gas versus 798,621 (MOBI-VID-V2) and 870,577 (ERC-735). It pays the
    cheap event-log price for the common path (birth/lifecycle at ERC-1056
-   cost) and only pays the claim price (337,134) when a verifiable on-chain
+   cost) and only pays the claim price (336,896) when a verifiable on-chain
    attestation is actually required. No backend offers both higher fidelity
    and lower gas, so it is Pareto-optimal.
 
@@ -258,26 +261,30 @@ signature check against cached peer):
 
 | Path | Sign | Cold verify | Warm verify |
 |---|--:|--:|--:|
-| SSI (blockchain credential) | 0.241 [0.238, 0.243] | 0.400 [0.392, 0.405] | **0.165 [0.162, 0.168]** |
-| PKI (IEEE 1609.2 baseline) | 0.083 [0.082, 0.085] | 0.450 [0.447, 0.459] | 0.102 [0.101, 0.104] |
+| SSI (blockchain credential) | 0.224 [0.221, 0.227] | 0.399 [0.381, 0.411] | **0.153 [0.151, 0.154]** |
+| PKI (IEEE 1609.2 baseline) | 0.078 [0.075, 0.078] | 0.220 [0.218, 0.223] | 0.094 [0.093, 0.095] |
 
 Aggregate throughput/integrity over the 30 runs (50 vehicles, 10 Hz):
 
 | Metric | Value |
 |---|--:|
 | Messages verified | 1,650,318 |
-| Verification failures | 90 |
+| Verification failures | 150 |
 
-The 90 failures are **exactly the injected attacks** — 3 per run
-(tampered SSI BSM, uncredentialed SSI sender, tampered PKI BSM) × 30
-runs — caught with zero false negatives and zero false positives across
-1.65 M verifications.
+The 150 failures are **exactly the injected attacks** — 5 per run
+(tampered PKI BSM, tampered SSI BSM, stale PKI BSM and stale SSI BSM — the
+T-9 freshness probes — and an uncredentialed SSI sender) × 30 runs — caught
+with zero false negatives and zero false positives across 1.65 M
+verifications (register #27, re-executed 2026-10-04 on the review-2 tree;
+the July values 0.165 / 0.400 / 90 are superseded, the fall being
+environmental — host and `cryptography` 41 → 49 — with a measured code
+effect of +2.4 % warm / +9 % cold on the same host).
 
 **Findings (RQ4 / H3):**
 
 1. **Credential verification is not the V2V latency bottleneck.** SSI warm
-   verification is 0.165 ms (95% CI [0.162, 0.168], n=30) and the cold
-   full-credential path is 0.400 ms — both far below the 10 ms
+   verification is 0.153 ms (95% CI [0.151, 0.154], n=30) and the cold
+   full-credential path is 0.399 ms — both far below the 10 ms
    signature-check budget conventionally allocated to V2V message
    authentication (cold clears it by 25×). *Scope, stated precisely:* this
    is the **cryptographic verification** term only, not end-to-end message
@@ -293,7 +300,7 @@ runs — caught with zero false negatives and zero false positives across
    below is statistically resolved, not measurement noise.
 
 2. **SSI costs ~1.6× PKI per warm message but both are immaterial** at
-   the safety timescale (0.165 ms vs 0.102 ms). The blockchain-rooted
+   the safety timescale (0.153 ms vs 0.094 ms). The blockchain-rooted
    identity does not introduce a latency barrier to V2V safety
    messaging; the cost of blockchain identity is at issuance/registration
    (RQ1 gas), not at verification time.
@@ -420,14 +427,15 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
 |---|---|---|
 | **H1** — minimal-state ≥10× cheaper for identity creation | **Supported** | ERC-1056 52,594 vs ERC-721 545,101 (10.4×); §5.2 |
 | **H2** — ≥90% W3C compliance achievable via a translation layer | **Supported** | 94.3% measured (93.2% at the merge; resolver fixes 2026-10-03), deviations are canonicalization/suite only; §5.5 |
-| **H3** — off-chain credential verification is not the V2V bottleneck | **Supported** (verification-step scope) | SSI warm 0.165 ms (95% CI [0.162,0.168], N=30), cold 0.400 ms — both ≤ the 10 ms auth budget; end-to-end network terms excluded (§5.4, §5.8) |
+| **H3** — off-chain credential verification is not the V2V bottleneck | **Supported** (verification-step scope) | SSI warm 0.153 ms (95% CI [0.151,0.154], N=30), cold 0.399 ms — both ≤ the 10 ms auth budget; end-to-end network terms excluded (§5.4, §5.8) |
 | **H4** — MOBI VID realizable across backends | **Supported** (fidelity gradient) | 5-backend native sweep: birth + lifecycle native on all 5; multi-party attestation native on 3/5 (ERC-735, CVIN-Combined, MOBI-VID-V2 = 5/5), partial on ERC-1056/ERC-1155 (3/5); §5.3.1 |
 | **H5** — hybrid on the cost/capability frontier | **Supported** (creation *and* lifetime) | CVIN-Combined = ERC-1056 identity cost + on-chain claims (§5.3); §5.9 sharpens it — the hybrid slides linearly along the cost/verifiability axis (claim fraction *f*), tunable per-event over a vehicle lifetime |
 
 **Scaling addendum (§5.9, RQ-S1–3):** no standard degrades with history (all O(1));
 lifetime cost *reverses* the creation ranking (ERC-1056 cheapest over 15 years,
 CVIN-Combined tunable via *f*); verification is O(1) in credential richness and linear
-in traffic density with a saturation point (P\* ≈ 772 neighbours) far beyond any
+in traffic density with an extrapolated saturation point (P\* ≈ 609 neighbours,
+586–627; a linear extrapolation beyond the tested range) far beyond any
 realistic V2V regime.
 
 ---
@@ -483,9 +491,9 @@ fix added) and CVIN-Combined (claim array + change pointer); ×3 for MOBI-VID-V2
 |---|--:|--:|:--:|
 | ERC-1056 | `setAttribute` | 35,494 | O(1) |
 | ERC-1155 | `issueCredential` | 42,816 | O(1) |
-| ERC-735 | `addClaim` | 278,826 | O(1) |
-| CVIN-Combined | `addClaim` | 275,224 | O(1) |
-| MOBI-VID-V2 | `recordLifecycleEvent` | 255,685 | O(1) |
+| ERC-735 | `addClaim` | 281,379 | O(1) |
+| CVIN-Combined | `addClaim` | 274,987 | O(1) |
+| MOBI-VID-V2 | `recordLifecycleEvent` | 255,910 | O(1) |
 
 This is a **null result, and an important one**: the a-priori concern that
 claim-storing or event-storing substrates would degrade to O(n) as a vehicle's history
@@ -506,12 +514,12 @@ work, not fiat.**
 |---|---|--:|---|
 | 1 | ERC-1056 | 1,450,146 | 0.75–2.15 M |
 | 2 | ERC-1155 | 1,865,183 | 0.99–2.74 M |
-| 3 | CVIN-Combined | 9,839,660 | 4.95–14.73 M |
-| 4 | MOBI-VID-V2 | 9,848,183 | 5.07–14.62 M |
-| 5 | ERC-735 | 11,443,652 | 6.52–16.37 M |
+| 3 | CVIN-Combined | 9,831,477 | 4.94–14.72 M |
+| 4 | MOBI-VID-V2 | 9,856,260 | 5.08–14.63 M |
+| 5 | ERC-735 | 11,692,092 | 6.72–16.66 M |
 
 **The ranking reverses §5.2.** CVIN-Combined, the *cheapest* substrate to *create* an
-identity (52,170 gas), is only third over a *lifetime* — because storing every
+identity (52,216 gas), is only third over a *lifetime* — because storing every
 lifecycle event as an on-chain claim costs ~273k each, versus ~35k for an event-log
 write. The event-only substrates (ERC-1056, ERC-1155) are ~6–7× cheaper over a
 lifetime. **The "best" standard therefore depends on whether the workload is
@@ -526,8 +534,8 @@ subset that needs on-chain verifiability. Its true lifetime cost is therefore a
 function of the claim fraction *f* — the share of lifecycle events requiring verifiable
 on-chain claims:
 
-> Lifetime(CVIN-Combined, *f*) ≈ 52,170 (birth) + 3 × 51,725 (transfers)
-> + 35 × [(1−*f*)·35,000 (event write) + *f*·275,224 (claim)]
+> Lifetime(CVIN-Combined, *f*) ≈ 52,216 (birth) + 3 × 51,747 (transfers)
+> + 35 × [(1−*f*)·35,000 (event write) + *f*·274,987 (claim)]
 
 At *f* = 0 this is ≈ **1.43 M** (indistinguishable from ERC-1056, the lifetime winner);
 at *f* = 1 it is the ≈ **9.84 M** worst case tabulated above. **The hybrid slides
@@ -541,10 +549,10 @@ the hybrid defers it to per-event. This is the lifecycle-scale statement of H5.
 "Pareto-optimal" loosely; the committed data lets us make the exact claim. Define the
 objective space (create-identity gas ↓, MOBI VID fidelity ↑; §5.3.1). A point *x*
 dominates *y* iff gas(*x*) ≤ gas(*y*) and fidelity(*x*) ≥ fidelity(*y*) with at least
-one strict. At creation, CVIN-Combined = (52,170 gas, 5/5) is **non-dominated**: it is
+one strict. At creation, CVIN-Combined = (52,216 gas, 5/5) is **non-dominated**: it is
 the unique point attaining full fidelity at near-minimal cost — ERC-1056 (52,594, 3/5)
 is neither cheaper *and* higher-fidelity, and every other 5/5 substrate (ERC-735 1.60 M,
-MOBI-VID-V2 298,941) is strictly dominated *by* it. At lifetime scope, among all
+MOBI-VID-V2 299,143) is strictly dominated *by* it. At lifetime scope, among all
 full-fidelity substrates CVIN-Combined at *f*=1 (9.84 M) is the cheapest — it dominates
 ERC-735 (11.44 M) and MOBI-VID-V2 (9.85 M); it is incomparable to ERC-1056 (1.45 M, but
 only 3/5). As *f* varies in [0,1], CVIN-Combined **traces the efficient frontier itself**
@@ -558,16 +566,17 @@ trade-off reported separately, per `docs/THREAT_MODEL.md` goals G5–G8.)
 ### 5.9.3 Verification scales benignly (RQ-S3)
 
 - **Vs credential richness (Exp C):** verification is **O(1) in claim count** — median
-  holds ≈ 0.16 ms from 1 to 32 claims (fitted slope 0.0003 ms/claim), p95 ≈ 0.21 ms,
-  staying ≫ 60× under the 10 ms signature-check target across the range. Selective
-  disclosure is mildly **O(k)** in the number of disclosed claims (each adds one salted
-  SHA-256 recompute atop the constant ECDSA recovery), rising only 0.175 → 0.222 ms as
-  *k* goes 1 → 16.
+  ≈ 0.17–0.20 ms from 1 to 32 claims (relative slope 0.0038 per claim, spread 1.14 over the
+  pre-declared 5-repeat confirmation), p95 ≤ 0.54 ms, staying ≫ 18× under the 10 ms
+  signature-check target across the range. Selective disclosure is mildly **O(k)** in the
+  number of disclosed claims (each adds one salted SHA-256 recompute atop the constant
+  ECDSA recovery), rising only 0.196 → 0.259 ms (0.004 ms/claim) as *k* goes 1 → 16
+  (register #26, Exp. C/D re-executed 2026-10-04).
 - **Vs traffic density (Exp D) — the saturation point:** per-vehicle per-interval
-  verification time is **linear at 0.130 ms/neighbour (R² = 0.9999)**. At 80 neighbours
-  it consumes 10.4% of the 100 ms V2V interval; it never saturates within the tested
-  range, and linear extrapolation places the **saturation point at P\* ≈ 772
-  neighbours** — an order of magnitude beyond any realistic V2V neighbourhood (dense
+  verification time is **linear at 0.164 ms/neighbour (R² = 0.9998; repeats
+  0.159–0.171)**. At 80 neighbours it consumes 13 % of the 100 ms V2V interval; it never
+  saturates within the tested range, and linear extrapolation places the **saturation
+  point at P\* ≈ 609 neighbours (586–627)** — an extrapolation, stated as such — an order of magnitude beyond any realistic V2V neighbourhood (dense
   intersections are ≤ ~100). The engineering conclusion: **cryptographic verification
   is decisively not the V2V bottleneck, even at extreme density.** (Crypto load only;
   excludes radio/MAC — §5.8; extrapolation assumes the linearity that independent

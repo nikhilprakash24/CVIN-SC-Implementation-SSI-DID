@@ -148,7 +148,7 @@ All numbers below are measured from the repository; each has a row in `docs/MEAS
 | SSI, cold (full VC verify) | 0.399 [0.381, 0.411] |
 | PKI baseline, warm | 0.094 [0.093, 0.095] |
 
-1.65M verifications; 90 failures = exactly the 3 injected attacks × 30 runs. **H3 supported** — roughly a 600× margin to the 100 ms V2V budget. *Caveat: excludes radio/MAC/network-stack latency; mobility is simulated (no SUMO binary required).*
+1.65M verifications; 150 failures = exactly the 5 injected attacks × 30 runs. **H3 supported** — roughly a 600× margin to the 100 ms V2V budget. *Caveat: excludes radio/MAC/network-stack latency; mobility is simulated (no SUMO binary required).*
 
 ### Security (RQ2 / H5) — two complementary lenses
 

@@ -43,7 +43,7 @@ citation set). Chapters 3–7 are grounded in the measured artifacts.
 ### Implementation Contributions
 1. **9 Blockchain Identity Standards + MOBI VID profile** - all implemented, tested (217 Hardhat tests), and gas-benchmarked on-chain
 2. **W3C Compliant System** - 94.3% (after the 2026-10-03 resolver fixes; 93.2% at the merge) measured compliance (executable checker, CI-gated ≥90%)
-3. **Real-time V2V Integration** - blockchain identity verified in the V2V message path with real cryptography (SSI warm verify 0.165 ms)
+3. **Real-time V2V Integration** - blockchain identity verified in the V2V message path with real cryptography (SSI warm verify 0.153 ms)
 4. **MOBI VID** - VID I birth certificate + VID II (11 lifecycle event types), on-chain `attestEvent` signature verification, AES-256-GCM VIN encryption
 
 ### Experimental Results (Chapter 5 — measured; see `chapter5-results/`)
@@ -72,7 +72,7 @@ citation set). Chapters 3–7 are grounded in the measured artifacts.
 ### RQ4: Real-Time Feasibility
 **Question**: Are blockchain identities viable for real-time safety-critical V2V?
 
-**Answer (measured, H3 supported)**: Yes for the cryptographic path. SSI warm verify is 0.165 ms [0.162, 0.168] (N=30) against the ~100 ms V2V budget (~600× margin); cold full-credential verify 0.400 ms. Caveat: excludes radio/MAC/network-stack latency; mobility is simulated.
+**Answer (measured, H3 supported)**: Yes for the cryptographic path. SSI warm verify is 0.153 ms [0.151, 0.154] (N=30, re-executed 2026-10-04, register #27) against the ~100 ms V2V budget (~650× margin); cold full-credential verify 0.399 ms. Caveat: excludes radio/MAC/network-stack latency; mobility is simulated.
 
 ## Writing Guidelines
 
