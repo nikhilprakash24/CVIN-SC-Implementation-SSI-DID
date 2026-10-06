@@ -31,6 +31,7 @@ provenance and must not be cited in chapters.
 | How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-10-04.md` | the single file to read first when picking the work up (supersedes `HANDBACK_2026-09-30.md`) |
 | How is a substrate measured operation by operation (CRUD and beyond), and what did it show? | `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md` (method: 18-op catalogue, scenarios, falsifiers) + `HANDOFF-DATA-COLLECTION-FRAMEWORK.md` (results and hypothesis verdicts) | harness in `1_blockchain-identity/benchmarks/`; numbers via register #29–#31 only |
 | What did the code-level review find, and what was fixed? | `docs/REVIEW_02_CODEBASE.md` (findings K/H/S/T/Q), `docs/PLAN_REVIEW_02.md`, `docs/review02/PASS*_*.md` (per-stream changes), `docs/AFTER_ACTION_REPORT_03.md` | review 2, 2026-10-03; complements `AUDIT_01` (claims) and `RESEARCH_AUDIT` (validity) |
+| How are the tests and results organised as one suite (subject × identity function × property × evidence), and what is the plan to get there? | `docs/planning/TESTING_SUITE_RESULTS_PLAN.md` (TSR Plan v1.0) + `docs/planning/TESTING_SUITE_SECOND_PASS_SHEET.md` (author's second pass) | as-found survey in `docs/planning/testing_suite/INVENTORY_AS_FOUND_2026-10-04.md`; `docs/testing/` is created by the plan's Phase 1 |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 
