@@ -39,6 +39,7 @@ provenance and must not be cited in chapters.
 | What did the code-level review find, and what was fixed? | `docs/REVIEW_02_CODEBASE.md` (findings K/H/S/T/Q), `docs/PLAN_REVIEW_02.md`, `docs/review02/PASS*_*.md` (per-stream changes), `docs/review02/AAR_REVIEW2_03.md` | review 2, 2026-10-03; complements `AUDIT_01` (claims) and `RESEARCH_AUDIT` (validity) |
 | How are the tests and results organised as one suite (subject × identity function × property × evidence), and what is the plan to get there? | `docs/planning/TESTING_SUITE_RESULTS_PLAN.md` (TSR Plan v1.0) + `docs/planning/TESTING_SUITE_SECOND_PASS_SHEET.md` (author's second pass) | as-found survey in `docs/planning/testing_suite/INVENTORY_AS_FOUND_2026-10-04.md`; `docs/testing/` is created by the plan's Phase 1 |
 | What does the TSR plan map onto in the sandbox already built here, and what is adopted from it? | `docs/reconciliation/RECON_TSR.md` (40-row mapping, 13 naming conflicts, what to adopt) | reconciliation of 2026-10-06; the merge plan's step S10 |
+| Where is any test, and how do the TSR plan and the grand sandbox fit together? | `docs/testing/README.md` | the entry point for the organised suite after the merge: three clicks to any test, the TSR→sandbox mapping, what the plan still asks for |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 
