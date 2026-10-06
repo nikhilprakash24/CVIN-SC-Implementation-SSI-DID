@@ -85,7 +85,7 @@ does not make them.
 1. `docs/HANDOFF_2026-10-03_REVIEW2.md` (this file)
 2. `docs/REVIEW_02_CODEBASE.md`
 3. `docs/PLAN_REVIEW_02.md`
-4. `docs/AFTER_ACTION_REPORT_03.md` (opened at Phase 1, closed at Phase 6)
+4. `docs/review02/AAR_REVIEW2_03.md` (opened at Phase 1, closed at Phase 6)
 5. `docs/HANDBACK_2026-10-03.md`
 
 ## 7. Resume from this save point

@@ -1,7 +1,7 @@
 # Follow-up stream G-M: MOBI quick fixes (K-15)
 
 **Date:** 2026-10-04 · **Author:** Nikhil Prakash
-**Input:** `docs/AFTER_ACTION_REPORT_05.md` (stream G-M); `docs/MOBI_VID_CHECKLIST.md` VID-R1, UC2-BR2,
+**Input:** `docs/review02/AAR_REVIEW2_05.md` (stream G-M); `docs/MOBI_VID_CHECKLIST.md` VID-R1, UC2-BR2,
 §5.2 and §6; `docs/REVIEW_02_CODEBASE.md` K-15; `docs/review02/PASS1_K.md` and `PASS2_K.md` (how gas
 results and testbed artifacts are regenerated).
 **Base:** `f73e81e`. Local commits, not pushed. The shared docs (register, README, handoffs, index,

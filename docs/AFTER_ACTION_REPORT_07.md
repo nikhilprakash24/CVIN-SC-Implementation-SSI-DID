@@ -153,6 +153,15 @@ unrelated planning project (`npat-planning/`, "Inkwell"); a fourth (`testing-sui
   neighbour / P* ≈ 609 / 150 = 5 × 30); README and thesis README cells; register merge notes
   on #4, #24, #25, #26, #28.
 
+- **S10 (part 1)** (`2c03a3d`, `0444ae8`): the TSR plan commit merged (one index conflict);
+  `SCOPE_CHANGES.md` gains SC-14a (SC-14's rationale corrected: MOBI VID I v2.0 is public in
+  full) and SC-15…SC-20 from the review-2 checklist's proposals (P-7 folded into SC-14a);
+  `docs/testing/README.md` written as the entry point: three clicks to any test, the TSR →
+  sandbox mapping with the resolution of each naming conflict, and what the plan still asks
+  for (TC tags, generated registers, stamping, charters, statistics — the next pass). The
+  renamed review-2 reports carry a header note and the review-2 documents' references point
+  at the new paths.
+
 ## 3. Decisions
 - **R-A** — the merge is executed on this branch by merging the parallel trunk in, not the other
   way round: the session's push scope is this branch only, and the merged history is identical

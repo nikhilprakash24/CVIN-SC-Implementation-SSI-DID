@@ -1,3 +1,4 @@
+<!-- Renamed at the merge of 2026-10-06 from docs/AFTER_ACTION_REPORT_05.md (review-2 lineage); the sandbox lineage's report with that number keeps the original path. See docs/PLAN_MERGE_LINEAGES.md M-I. -->
 # After-Action Report 05 — Next-session list after the follow-up (2026-10-04)
 
 **Opened:** before the pass ran. **Status:** CLOSED 2026-10-04; results are in `docs/HANDBACK_2026-10-04.md` §4.

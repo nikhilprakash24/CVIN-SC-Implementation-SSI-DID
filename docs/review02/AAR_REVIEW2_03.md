@@ -1,3 +1,4 @@
+<!-- Renamed at the merge of 2026-10-06 from docs/AFTER_ACTION_REPORT_03.md (review-2 lineage); the sandbox lineage's report with that number keeps the original path. See docs/PLAN_MERGE_LINEAGES.md M-I. -->
 # After-Action Report 03 — Review 2 (2026-10-03)
 
 **Opened:** at Phase 1, before the review ran. **Status:** CLOSED 2026-10-04 (handback `docs/HANDBACK_2026-10-04.md`).

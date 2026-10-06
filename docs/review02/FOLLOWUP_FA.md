@@ -1,6 +1,6 @@
 # Follow-up F-A: re-running register rows #26 (Exp. C/D) and #27
 
-**Stream:** F-A of `docs/AFTER_ACTION_REPORT_04.md` (input: `docs/HANDBACK_2026-10-04.md` §4,
+**Stream:** F-A of `docs/review02/AAR_REVIEW2_04.md` (input: `docs/HANDBACK_2026-10-04.md` §4,
 "Next session" item 1).
 **Date:** 2026-10-04. **Base:** `d2e6a58`.
 **Scope:** register #27 (V2V latency, N=30 seeded runs) and #26 Exp. C/D (verify latency vs claim

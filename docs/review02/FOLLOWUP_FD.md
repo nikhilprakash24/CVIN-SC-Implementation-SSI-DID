@@ -1,7 +1,7 @@
 # Follow-up stream F-D: freshness-k sweep and M4 lifecycle parity
 
 **Date:** 2026-10-04 · **Author:** Nikhil Prakash
-**Input:** `docs/AFTER_ACTION_REPORT_04.md` (stream F-D); `docs/REVIEW_CV2X_TESTBED_LINEAGE.md` §5.1 and
+**Input:** `docs/review02/AAR_REVIEW2_04.md` (stream F-D); `docs/REVIEW_CV2X_TESTBED_LINEAGE.md` §5.1 and
 §3.3; `docs/LATENCY_BUDGET.md` §4; `docs/PLAN_MOBI_SUMO.md` M4 and its pre-registration (§A.2);
 `docs/MEASUREMENT_CONDITIONS.md` §1 and rows #21–#23; `docs/review02/PASS2_T.md`.
 **Base:** `d2e6a58`. Local commits, not pushed. The shared docs (register, README, handoffs, index,
