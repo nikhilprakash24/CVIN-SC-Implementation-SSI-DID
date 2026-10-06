@@ -1,0 +1,178 @@
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+(node:7615) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS suites/did-production/did-production.spec.js
+  suites/did-production
+    IMPLEMENTATION ::did:example::Example DID Method (DID v1.0)::DID Working Group::
+      6.1 Production
+        did:example:123
+          application/did+json
+            ✓ 6.1 Production and Consumption - A conforming producer MUST take a DID document data model and a representation-specific entries map as input into the production process. The conforming producer MAY accept additional options as input into the production process. (2 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST serialize all entries in the DID document data model, and the representation-specific entries map, that do not have explicit processing rules for the representation being produced using only the representation's data type processing rules and return the serialization after the production process completes. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST return the Media Type string associated with the representation after the production process completes. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST NOT produce non-conforming DIDs or DID documents. (1 ms)
+          application/did+ld+json
+            ✓ 6.1 Production and Consumption - A conforming producer MUST take a DID document data model and a representation-specific entries map as input into the production process. The conforming producer MAY accept additional options as input into the production process. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST serialize all entries in the DID document data model, and the representation-specific entries map, that do not have explicit processing rules for the representation being produced using only the representation's data type processing rules and return the serialization after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST return the Media Type string associated with the representation after the production process completes. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST NOT produce non-conforming DIDs or DID documents.
+      6.2.1 JSON Production
+        did:example:123
+          ✓ 6.2.1 JSON Production - All entries of a DID document MUST be included in the root JSON Object.
+          ✓ 6.2.1 JSON Production - When serializing a DID document, a conforming producer MUST specify a media type of application/did+json to downstream applications such as described in § 7.1.2 DID Resolution Metadata.
+          6.2.1 JSON Production - The DID document, DID document data structures, and representation-specific entries map MUST be serialized to the JSON representation according to the following production rules:
+            PARAMETER value=did:example:123
+              ✓ 6.2.1 JSON Production - string: A JSON String. (1 ms)
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=[object Object],[object Object]
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table.
+            PARAMETER value=[object Object]
+              ✓ 6.2.1 JSON Production - map: A JSON Object, where each entry is serialized as a member of the JSON Object with the entry key as a JSON String member name and the entry value according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - map: A JSON Object, where each entry is serialized as a member of the JSON Object with the entry key as a JSON String member name and the entry value according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - map: A JSON Object, where each entry is serialized as a member of the JSON Object with the entry key as a JSON String member name and the entry value according to its type, as defined in this table. (1 ms)
+              ✓ 6.2.1 JSON Production - map: A JSON Object, where each entry is serialized as a member of the JSON Object with the entry key as a JSON String member name and the entry value according to its type, as defined in this table.
+            PARAMETER value=did:example:123#key-0
+              ✓ 6.2.1 JSON Production - string: A JSON String. (1 ms)
+            PARAMETER value=JsonWebKey2020
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+              ✓ 6.2.1 JSON Production - string: A JSON String. (4 ms)
+            PARAMETER value=OKP
+              ✓ 6.2.1 JSON Production - string: A JSON String. (1 ms)
+              ✓ 6.2.1 JSON Production - string: A JSON String. (1 ms)
+            PARAMETER value=Ed25519
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=VDXDwuGKVq91zxU6q7__jLDUq8_C5cuxECgd-1feFTE
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=did:example:123#key-1
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=X25519
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=3kY9jl1by7pLzgJktUH-e9H6fihdVUb00-sTzkfmIl8
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=#key-0
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - string: A JSON String. (1 ms)
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table. (1 ms)
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table. (1 ms)
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=#key-1
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table. (8 ms)
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=2020-09-26T20:14:02Z
+              ✓ 6.2.1 JSON Production - datetime: A JSON String serialized as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. (1 ms)
+            PARAMETER value=1.2
+              ✓ 6.2.1 JSON Production - double: A JSON Number with a decimal and fractional component.
+            PARAMETER value=5
+              ✓ 6.2.1 JSON Production - integer: A JSON Number without a decimal or fractional component.
+            PARAMETER value=true
+              ✓ 6.2.1 JSON Production - boolean: A JSON Boolean. (1 ms)
+            PARAMETER value=null
+              ✓ 6.2.1 JSON Production - null: A JSON null literal.
+      6.3.1 JSON-LD Production
+        did:example:123
+          ✓ 6.3.1 JSON-LD Production - The DID document and any DID document data structures expressed by the data model MUST be serialized to the JSON-LD representation according to the JSON representation production rules as defined in § 6.2 JSON. (1 ms)
+          ✓ 6.3.1 JSON-LD Production - In addition to using the JSON  representation production rules, JSON-LD production MUST include the representation-specific @context entry.
+          ✓ 6.3.1 JSON-LD Production - The serialized value of @context MUST be the JSON String https://www.w3.org/ns/did/v1 (DID v1.0) or https://www.w3.org/ns/did/v1.1 (DID v1.1), or a JSON Array where the first item is the JSON String https://www.w3.org/ns/did/v1 or https://www.w3.org/ns/did/v1.1, and the subsequent items are serialized according to the JSON representation production rules. (1 ms)
+          ✓ 6.3.1 JSON-LD Production - When serializing a JSON-LD representation of a DID document, a conforming producer MUST specify a media type of application/did+ld+json to downstream applications such as described in § 7.1.2 DID Resolution Metadata.
+    IMPLEMENTATION ::did:example::Example DID Method (DID v1.1)::DID Working Group::
+      6.1 Production
+        did:example:123
+          application/did+json
+            ✓ 6.1 Production and Consumption - A conforming producer MUST take a DID document data model and a representation-specific entries map as input into the production process. The conforming producer MAY accept additional options as input into the production process.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST serialize all entries in the DID document data model, and the representation-specific entries map, that do not have explicit processing rules for the representation being produced using only the representation's data type processing rules and return the serialization after the production process completes. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST return the Media Type string associated with the representation after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST NOT produce non-conforming DIDs or DID documents.
+          application/did+ld+json
+            ✓ 6.1 Production and Consumption - A conforming producer MUST take a DID document data model and a representation-specific entries map as input into the production process. The conforming producer MAY accept additional options as input into the production process.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST serialize all entries in the DID document data model, and the representation-specific entries map, that do not have explicit processing rules for the representation being produced using only the representation's data type processing rules and return the serialization after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST return the Media Type string associated with the representation after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST NOT produce non-conforming DIDs or DID documents.
+      6.2.1 JSON Production
+        did:example:123
+          ✓ 6.2.1 JSON Production - All entries of a DID document MUST be included in the root JSON Object.
+          ✓ 6.2.1 JSON Production - When serializing a DID document, a conforming producer MUST specify a media type of application/did+json to downstream applications such as described in § 7.1.2 DID Resolution Metadata.
+          6.2.1 JSON Production - The DID document, DID document data structures, and representation-specific entries map MUST be serialized to the JSON representation according to the following production rules:
+            PARAMETER value=did:example:123
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+              ✓ 6.2.1 JSON Production - string: A JSON String. (4 ms)
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=[object Object],[object Object]
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table. (1 ms)
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table.
+            PARAMETER value=[object Object]
+              ✓ 6.2.1 JSON Production - map: A JSON Object, where each entry is serialized as a member of the JSON Object with the entry key as a JSON String member name and the entry value according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - map: A JSON Object, where each entry is serialized as a member of the JSON Object with the entry key as a JSON String member name and the entry value according to its type, as defined in this table. (1 ms)
+              ✓ 6.2.1 JSON Production - map: A JSON Object, where each entry is serialized as a member of the JSON Object with the entry key as a JSON String member name and the entry value according to its type, as defined in this table. (1 ms)
+              ✓ 6.2.1 JSON Production - map: A JSON Object, where each entry is serialized as a member of the JSON Object with the entry key as a JSON String member name and the entry value according to its type, as defined in this table. (1 ms)
+            PARAMETER value=did:example:123#key-0
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=JsonWebKey2020
+              ✓ 6.2.1 JSON Production - string: A JSON String. (1 ms)
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=OKP
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=Ed25519
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=VDXDwuGKVq91zxU6q7__jLDUq8_C5cuxECgd-1feFTE
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=did:example:123#key-1
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=X25519
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=3kY9jl1by7pLzgJktUH-e9H6fihdVUb00-sTzkfmIl8
+              ✓ 6.2.1 JSON Production - string: A JSON String. (1 ms)
+            PARAMETER value=#key-0
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table. (1 ms)
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table. (1 ms)
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=#key-1
+              ✓ 6.2.1 JSON Production - list: A JSON Array, where each element of the list is serialized, in order, as a value of the array according to its type, as defined in this table. (1 ms)
+              ✓ 6.2.1 JSON Production - set: A JSON Array, where each element of the set is added, in order, as a value of the array according to its type, as defined in this table.
+              ✓ 6.2.1 JSON Production - string: A JSON String.
+            PARAMETER value=2020-09-26T20:14:02Z
+              ✓ 6.2.1 JSON Production - datetime: A JSON String serialized as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+            PARAMETER value=1.2
+              ✓ 6.2.1 JSON Production - double: A JSON Number with a decimal and fractional component. (1 ms)
+            PARAMETER value=5
+              ✓ 6.2.1 JSON Production - integer: A JSON Number without a decimal or fractional component.
+            PARAMETER value=true
+              ✓ 6.2.1 JSON Production - boolean: A JSON Boolean.
+            PARAMETER value=null
+              ✓ 6.2.1 JSON Production - null: A JSON null literal.
+      6.3.1 JSON-LD Production
+        did:example:123
+          ✓ 6.3.1 JSON-LD Production - The DID document and any DID document data structures expressed by the data model MUST be serialized to the JSON-LD representation according to the JSON representation production rules as defined in § 6.2 JSON.
+          ✓ 6.3.1 JSON-LD Production - In addition to using the JSON  representation production rules, JSON-LD production MUST include the representation-specific @context entry.
+          ✓ 6.3.1 JSON-LD Production - The serialized value of @context MUST be the JSON String https://www.w3.org/ns/did/v1 (DID v1.0) or https://www.w3.org/ns/did/v1.1 (DID v1.1), or a JSON Array where the first item is the JSON String https://www.w3.org/ns/did/v1 or https://www.w3.org/ns/did/v1.1, and the subsequent items are serialized according to the JSON representation production rules.
+          ✓ 6.3.1 JSON-LD Production - When serializing a JSON-LD representation of a DID document, a conforming producer MUST specify a media type of application/did+ld+json to downstream applications such as described in § 7.1.2 DID Resolution Metadata.
+
+Test Suites: 1 passed, 1 total
+Tests:       106 passed, 106 total
+Snapshots:   0 total
+Time:        1.148 s
+Ran all test suites matching /suites\/did-production/i.
+Test results written to: report/tmp/control-cli-did-production.json

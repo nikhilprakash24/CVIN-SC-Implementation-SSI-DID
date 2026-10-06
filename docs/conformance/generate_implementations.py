@@ -44,9 +44,19 @@ No `didParameters` (the resolver does not parse DID URL query parameters), no
 (there is no dereference function) are registered.
 
 Usage:
-    python3 docs/conformance/generate_implementations.py <output-dir>
+    python3 docs/conformance/generate_implementations.py [<output-dir>] [--ethr-did <did>]
+
+By default the did:ethr entry uses the static fixture
+did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678. `--ethr-did` (or the
+environment variable CVIN_ETHR_DID) replaces that identifier in the did:ethr
+method file and in its resolver executions, e.g. with a DID minted by
+MOBIVIDRegistry.getVehicleDID() on a Hardhat chain
+(did:ethr:0x7a69:0x<40 hex>). The error-case inputs and the did:mobi / did:nft
+entries are not affected. Without the flag the output is unchanged. (Ported
+from the sandbox lineage's generator at the 2026-10-06 merge, S7.)
 """
 
+import argparse
 import json
 import os
 import sys
@@ -176,8 +186,30 @@ def resolver_file(method, did, result, rep, resolver):
     }
 
 
-def main():
-    out_dir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "implementations")
+ETHR_DID_ENV = "CVIN_ETHR_DID"
+
+
+def parse_args(argv):
+    parser = argparse.ArgumentParser(
+        description="Generate W3C DID Test Suite implementation files from did_resolver.py")
+    parser.add_argument("output_dir", nargs="?", default=os.path.join(HERE, "implementations"))
+    parser.add_argument(
+        "--ethr-did", default=os.environ.get(ETHR_DID_ENV) or None, metavar="DID",
+        help="did:ethr identifier to register instead of the static fixture "
+             f"(default: {METHODS['ethr']['did']}; env {ETHR_DID_ENV})")
+    args = parser.parse_args(argv)
+    if args.ethr_did is not None and not args.ethr_did.startswith("did:ethr:"):
+        parser.error(f"--ethr-did must be a did:ethr identifier, got {args.ethr_did!r}")
+    return args
+
+
+def main(argv=None):
+    args = parse_args(sys.argv[1:] if argv is None else argv)
+    out_dir = args.output_dir
+    if args.ethr_did:
+        # Only the identifier changes; the error cases and the other methods
+        # are the same as in the default run.
+        METHODS["ethr"]["did"] = args.ethr_did
     os.makedirs(out_dir, exist_ok=True)
     resolver = DIDResolver()
     written = []

@@ -21,37 +21,37 @@
     {
       "function": "resolve",
       "input": {
-        "did": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375",
+        "did": "did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189",
         "resolutionOptions": {}
       },
       "output": {
         "didResolutionMetadata": {
-          "retrieved": "2026-10-04T22:22:09Z"
+          "retrieved": "2026-10-06T04:27:34Z"
         },
         "didDocument": {
           "@context": [
             "https://www.w3.org/ns/did/v1",
             "https://w3id.org/security/suites/secp256k1-2019/v1"
           ],
-          "id": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375",
-          "controller": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375",
+          "id": "did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189",
+          "controller": "did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189",
           "verificationMethod": [
             {
-              "id": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller",
+              "id": "did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189#controller",
               "type": "EcdsaSecp256k1VerificationKey2019",
-              "controller": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375",
-              "blockchainAccountId": "eip155:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375"
+              "controller": "did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189",
+              "blockchainAccountId": "eip155:31337:0xf51acf236d982b1355c70c0ebd66563fc1674189"
             }
           ],
           "authentication": [
-            "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller"
+            "did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189#controller"
           ],
           "assertionMethod": [
-            "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller"
+            "did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189#controller"
           ]
         },
         "didDocumentMetadata": {
-          "created": "2026-10-04T22:22:09Z",
+          "created": "2026-10-06T04:27:34Z",
           "versionId": "1"
         }
       }
@@ -59,7 +59,7 @@
     {
       "function": "resolveRepresentation",
       "input": {
-        "did": "did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375",
+        "did": "did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189",
         "resolutionOptions": {
           "accept": "application/did+ld+json"
         }
@@ -67,11 +67,11 @@
       "output": {
         "didResolutionMetadata": {
           "contentType": "application/did+ld+json",
-          "retrieved": "2026-10-04T22:22:09Z"
+          "retrieved": "2026-10-06T04:27:34Z"
         },
-        "didDocumentStream": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375\", \"controller\": \"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375\", \"verificationMethod\": [{\"id\": \"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375\", \"blockchainAccountId\": \"eip155:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375\"}], \"authentication\": [\"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller\"], \"assertionMethod\": [\"did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375#controller\"]}",
+        "didDocumentStream": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189\", \"controller\": \"did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189\", \"verificationMethod\": [{\"id\": \"did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189#controller\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189\", \"blockchainAccountId\": \"eip155:31337:0xf51acf236d982b1355c70c0ebd66563fc1674189\"}], \"authentication\": [\"did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189#controller\"], \"assertionMethod\": [\"did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189#controller\"]}",
         "didDocumentMetadata": {
-          "created": "2026-10-04T22:22:09Z",
+          "created": "2026-10-06T04:27:34Z",
           "versionId": "1"
         }
       }
@@ -99,6 +99,7 @@
       },
       "output": {
         "didResolutionMetadata": {
+          "retrieved": "2026-10-06T04:27:34Z",
           "error": "methodNotSupported",
           "errorMessage": "DID method 'web' is not supported"
         },

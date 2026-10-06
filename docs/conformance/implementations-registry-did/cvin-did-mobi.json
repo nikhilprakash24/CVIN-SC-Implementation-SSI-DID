@@ -51,11 +51,11 @@
       },
       "representation": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:mobi:5YJ3E1EA0PF123456\", \"verificationMethod\": [{\"id\": \"did:mobi:5YJ3E1EA0PF123456#manufacturer-key\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:mobi:5YJ3E1EA0PF123456\", \"publicKeyHex\": \"0x...\"}], \"authentication\": [\"did:mobi:5YJ3E1EA0PF123456#manufacturer-key\"], \"service\": [{\"id\": \"did:mobi:5YJ3E1EA0PF123456#birth-certificate\", \"type\": \"MobiVidBirthCertificate\", \"serviceEndpoint\": \"ipfs://Qm...\"}, {\"id\": \"did:mobi:5YJ3E1EA0PF123456#lifecycle-events\", \"type\": \"MobiVidLifecycleEvents\", \"serviceEndpoint\": \"https://mobi-vid-registry.example.com/events\"}], \"alsoKnownAs\": [\"vin:5YJ3E1EA0PF123456\"]}",
       "didDocumentMetadata": {
-        "created": "2026-10-04T22:22:09Z"
+        "created": "2026-10-06T04:27:34Z"
       },
       "didResolutionMetadata": {
         "contentType": "application/did+ld+json",
-        "retrieved": "2026-10-04T22:22:09Z"
+        "retrieved": "2026-10-06T04:27:34Z"
       }
     }
   }
