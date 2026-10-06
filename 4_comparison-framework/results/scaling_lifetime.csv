@@ -2,9 +2,9 @@
 rank,standard,append_op,birth_x1_gas,appends_x35_gas,transfers_x3_gas,lifetime_total_gas,band_minus50pct_gas,band_plus50pct_gas
 1,ERC-1056,setAttribute,52594,1242290,155262,1450146,751370,2148922
 2,ERC-1155,issueCredential,107729,1498560,258894,1865183,986456,2743910
-3,CVIN-Combined,addClaim,52170,9632315,155175,9839660,4945915,14733405
-4,MOBI-VID-V2,recordLifecycleEvent,298941,8948975,600267,9848183,5073562,14622804
-5,ERC-735,addClaim,1598928,9758420,86304,11443652,6521290,16366014
+3,CVIN-Combined,addClaim,52216,9624020,155241,9831477,4941847,14721108
+4,MOBI-VID-V2,recordLifecycleEvent,299143,8956850,600267,9856260,5077702,14634819
+5,ERC-735,addClaim,1757881,9847775,86436,11692092,6724987,16659198
 
 # Profile (assumed),birth=1,maintenance=30,inspection=4,recall=1,transfer=3,total_events=39
 # Model,"MODEL over an ASSUMED profile. Lifetime = birth(createIdentity) + 35 x steady-state append marginal (Exp A) + 3 x transferOwnership. Band = +/-50% recurring event frequency (birth fixed). Gas is relative on-chain work, not fiat."

@@ -2,7 +2,7 @@
 % Requires \usepackage{booktabs}.
 \begin{table}[htbp]
   \centering
-  \caption{Experiment A --- marginal-cost stationarity. On a fresh deployment of each standard, $K=50$ sequential same-type append-to-history operations were executed with a fixed-size payload and a fixed actor; \texttt{gasUsed} was recorded for every operation index. Columns give the first-operation gas, the $50$\textsuperscript{th}-operation gas, their difference $\Delta$, the exact least-squares slope (gas per operation) and $R^2$ of \texttt{gasUsed} versus index, and whether the marginal cost is constant ($O(1)$). A slightly negative slope is a one-off cold-storage first write (each counter/length slot pays $\approx$\,$17{,}100$ gas once, then is warm) and is amortized away --- cost does not grow with history. Local Hardhat network (chain id 31337), Solidity 0.8.24 (optimizer, 200 runs, via-IR), OpenZeppelin 5.0.2, 2026-10-04.}
+  \caption{Experiment A --- marginal-cost stationarity. On a fresh deployment of each standard, $K=50$ sequential same-type append-to-history operations were executed with a fixed-size payload and a fixed actor; \texttt{gasUsed} was recorded for every operation index. Columns give the first-operation gas, the $50$\textsuperscript{th}-operation gas, their difference $\Delta$, the exact least-squares slope (gas per operation) and $R^2$ of \texttt{gasUsed} versus index, and whether the marginal cost is constant ($O(1)$). A slightly negative slope is a one-off cold-storage first write (each counter/length slot pays $\approx$\,$17{,}100$ gas once, then is warm) and is amortized away --- cost does not grow with history. Local Hardhat network (chain id 31337), Solidity 0.8.24 (optimizer, 200 runs, via-IR), OpenZeppelin 5.0.2, 2026-10-06.}
   \label{tab:scaling-marginal}
   \footnotesize
   \setlength{\tabcolsep}{5pt}
@@ -12,10 +12,10 @@
     Standard & Append op & First-op & $50$th-op & $\Delta$ & Slope (gas/op) & $R^2$ & $O(1)$? \\
     \midrule
     ERC-1056 & \texttt{setAttribute} & 52,594 & 35,494 & -17,100 & -40.24 & 0.0588 & yes \\
-    ERC-735 & \texttt{addClaim} & 295,901 & 278,826 & -17,075 & -40.32 & 0.0591 & yes \\
+    ERC-735 & \texttt{addClaim} & 298,454 & 281,379 & -17,075 & -40.32 & 0.0591 & yes \\
     ERC-1155 & \texttt{issueCredential} & 80,131 & 42,816 & -37,315 & -87.80 & 0.0588 & yes \\
-    CVIN-Combined & \texttt{addClaim} & 309,386 & 275,224 & -34,162 & -80.48 & 0.0589 & yes \\
-    MOBI-VID-V2 & \texttt{recordLifecycleEvent} & 306,985 & 255,685 & -51,300 & -120.71 & 0.0588 & yes \\
+    CVIN-Combined & \texttt{addClaim} & 292,049 & 274,987 & -17,062 & -40.24 & 0.0590 & yes \\
+    MOBI-VID-V2 & \texttt{recordLifecycleEvent} & 307,210 & 255,910 & -51,300 & -120.71 & 0.0588 & yes \\
     \bottomrule
   \end{tabular}}
 \end{table}

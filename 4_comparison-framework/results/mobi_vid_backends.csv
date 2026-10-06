@@ -1,9 +1,9 @@
 backend,Birth attestation (VID I) gasUsed,Birth attestation (VID I) native,Lifecycle event (VID II) gasUsed,Lifecycle event (VID II) native,Third-party attestation gasUsed,Third-party attestation native,fidelity (/5),birthAnchoring,lifecycleEvents,multiPartyAttestation,verifiableClaims,revocation
 ERC-1056,51944,yes,34928,yes,61501,no,3/5,yes,yes,no,no,yes
-ERC-735,292689,yes,292724,yes,292736,yes,5/5,yes,yes,yes,yes,yes
+ERC-735,295242,yes,295277,yes,295289,yes,5/5,yes,yes,yes,yes,yes
 ERC-1155,107729,yes,80131,yes,63031,no,3/5,yes,yes,no,no,yes
-CVIN-Combined,51720,yes,34644,yes,337134,yes,5/5,yes,yes,yes,yes,yes
-MOBI-VID-V2,298941,yes,306985,yes,192749,yes,5/5,yes,yes,yes,yes,yes
+CVIN-Combined,51766,yes,34690,yes,336896,yes,5/5,yes,yes,yes,yes,yes
+MOBI-VID-V2,299143,yes,307210,yes,192749,yes,5/5,yes,yes,yes,yes,yes
 
 Legend,gasUsed = exact receipt.gasUsed of one native-mapped tx; 'native=no' cells are the closest honest approximation (concept not natively supported by the backend).
-Conditions,"solc 0.8.24 (optimizer 200, viaIR)",OpenZeppelin 5.0.2,network hardhat-local chainId 31337,measured 2026-10-04T22:23:25.375Z
+Conditions,"solc 0.8.24 (optimizer 200, viaIR)",OpenZeppelin 5.0.2,network hardhat-local chainId 31337,measured 2026-10-06T04:25:51.180Z

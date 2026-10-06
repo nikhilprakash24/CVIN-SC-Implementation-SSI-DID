@@ -65,7 +65,9 @@ families:
   - getClaimIdsByTopic
   - isAuthorizedIssuer
   - removeClaim
+  - revokeClaimContent
   - revokeIssuer
+  - revokedClaims
   measured:
   - addClaim
   - removeClaim
@@ -75,7 +77,9 @@ families:
   stance: implemented
   functions:
   - IssuerRevoked
+  - revokeClaimContent
   - revokeIssuer
+  - revokedClaims
   measured: []
   reason: 'sub-identity revocation only: removeClaim revokes a claim; no identity-level revocation — reviewed from
     L1 observation'
@@ -138,6 +142,6 @@ families:
   reason: no function or method in this family on this option — auto; review whether the standard defines it
   reviewed: false
 surface:
-  functions: 17
+  functions: 19
   events: 8
   provider_methods: 0

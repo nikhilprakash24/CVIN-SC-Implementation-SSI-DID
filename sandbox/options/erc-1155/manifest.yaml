@@ -17,8 +17,10 @@ benchmark_ops:
     vehicle (claim analogue; delegates are not part of ERC-1155).'
   revoke: revokeCredential (issuer-only burn) of the inspection credential. Burning the BIRTH_CERT would deregister
     the whole identity.
-  transferOwnership: 'issuerTransferCredential of the BIRTH_CERT: re-binds VIN + registration mappings to the new
-    vehicle address. Credentials are soulbound - holder-initiated transfers revert by design.'
+  transferOwnership: 'issuerTransferCredential of the BIRTH_CERT on a vehicle holding nothing else: re-binds VIN
+    + registration mappings to the new vehicle address. Credentials are soulbound - the standard transfer entry
+    points revert for everyone (D7 fix); an identity that still holds credentials moves atomically through issuerTransferIdentity
+    (not benchmarked: its cost grows with the number of held types).'
 families:
 - name: Identity creation (explicit)
   stance: measured-in-comparison
@@ -72,6 +74,7 @@ families:
   - revokeCredential
   measured:
   - issueCredential
+  - issuerTransferIdentity
   - revokeCredential
   reason: measured via benchmark_gas.js
   reviewed: false
@@ -100,7 +103,7 @@ families:
   reason: present in the option's surface but not used by the comparison — asymmetry to discuss
   reviewed: false
 - name: Authorisation / roles
-  stance: implemented
+  stance: measured-in-comparison
   functions:
   - DEFAULT_ADMIN_ROLE
   - ISSUER_ROLE
@@ -114,8 +117,9 @@ families:
   - issuerTransferIdentity
   - renounceRole
   - revokeRole
-  measured: []
-  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  measured:
+  - issuerTransferIdentity
+  reason: measured via benchmark_gas.js
   reviewed: false
 - name: Token economics (approvals, royalties, payments)
   stance: implemented

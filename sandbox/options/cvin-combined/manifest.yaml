@@ -14,7 +14,7 @@ benchmark_ops:
   updateAttribute: setAttribute rotating the published key (ERC-1056 side, event-only storage).
   addDelegateOrClaim: 'addClaim (ERC-735 side): verifies the issuer''s raw-digest ECDSA signature via ecrecover
     and stores the full claim on-chain (O(1) verification thereafter). Event-only ERC-1056 addDelegate measured
-    separately: 55162 gas.'
+    separately: 55184 gas.'
   revoke: 'removeClaim (ERC-735 side): deletes the stored claim + topic index (storage refund applies). Event-only
     revokeAttribute/revokeDelegate (ERC-1056 side) also supported at ~ERC-1056 cost.'
   transferOwnership: 'changeOwner (ERC-1056 side): rotates the controlling key of the DID (identifier stable).'
@@ -70,6 +70,8 @@ families:
   - getClaimIdsByTopic
   - hasValidClaim
   - removeClaim
+  - revokeClaimContent
+  - revokedClaims
   measured:
   - addClaim
   - removeClaim
@@ -79,7 +81,9 @@ families:
   stance: measured-in-comparison
   functions:
   - revokeAttribute
+  - revokeClaimContent
   - revokeDelegate
+  - revokedClaims
   measured:
   - revokeDelegate
   reason: measured via benchmark_gas.js
@@ -145,6 +149,6 @@ families:
   reason: no function or method in this family on this option — auto; review whether the standard defines it
   reviewed: false
 surface:
-  functions: 18
+  functions: 20
   events: 6
   provider_methods: 0

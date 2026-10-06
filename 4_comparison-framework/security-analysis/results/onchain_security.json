@@ -5,7 +5,7 @@
     "ozVersion": "5.0.2",
     "network": "hardhat-local",
     "chainId": 31337,
-    "date": "2026-10-04T09:16:40.839Z",
+    "date": "2026-10-06T04:26:37.368Z",
     "categories": [
       "impersonation",
       "replay",
@@ -184,7 +184,7 @@
       },
       "identity_theft": {
         "outcome": "DEFENDED",
-        "mechanism": "soulbound: _update blocks transfers between non-zero addresses unless msg.sender holds ISSUER_ROLE",
+        "mechanism": "soulbound: the standard safeTransferFrom / safeBatchTransferFrom entry points revert for everyone (D7 fix); only the issuer re-binding paths move credentials",
         "evidence": "holder safeTransferFrom of BIRTH_CERT reverted: \"VM Exception while processing transaction: reverted with reason string 'CVIN1155: credentials are soulbound (issuer-mediated transfer only)'\". A stolen vehicle key cannot move the identity token; only an issuer can re-bind it.",
         "method": "executed"
       },
@@ -196,8 +196,8 @@
       },
       "recovery": {
         "outcome": "PARTIAL",
-        "mechanism": "issuer-mediated recovery: ISSUER_ROLE can issuerTransferCredential the BIRTH_CERT to a new vehicle address (re-binds VIN)",
-        "evidence": "issuer re-bound identity to 0x90F79bf6EB2c4f870365E785982E1f101E93b906; balanceOf(new, BIRTH_CERT)=1. Recovery depends on a trusted issuer, not the key holder.",
+        "mechanism": "issuer-mediated recovery: ISSUER_ROLE can issuerTransferIdentity the BIRTH_CERT and every held credential to a new vehicle address (re-binds VIN)",
+        "evidence": "issuer re-bound identity to 0x90F79bf6EB2c4f870365E785982E1f101E93b906; balanceOf(new, BIRTH_CERT)=1, INSPECTION=1. Recovery depends on a trusted issuer, not the key holder.",
         "method": "executed"
       },
       "privacy": {
@@ -317,7 +317,7 @@
       "privacy": {
         "outcome": "DEFENDED",
         "mechanism": "VIN stored ONLY as bytes32 vinHash + off-chain-encrypted `encryptedVIN`; VehicleBirthRegistered event emits the hash, not the VIN; DID is did:ethr:<chainId>:<address>",
-        "evidence": "vehicleBirths.vinHash = 0x4033859e568c05f5545f080dd3e2646cc5056351fc2fe2dccdd0bad65ddb203d (hash); encryptedVIN = \"encrypted:AES256:VINCIPHERTEXT==\" (ciphertext, not the VIN); getVehicleDID() = \"did:ethr:0x7a69:15d34aaf54267db7d7c367839aaf71a00a2c6a65\" (no VIN in the DID). Only family that avoids plaintext VIN on-chain.",
+        "evidence": "vehicleBirths.vinHash = 0x4033859e568c05f5545f080dd3e2646cc5056351fc2fe2dccdd0bad65ddb203d (hash); encryptedVIN = \"encrypted:AES256:VINCIPHERTEXT==\" (ciphertext, not the VIN); getVehicleDID() = \"did:ethr:0x7a69:0x15d34aaf54267db7d7c367839aaf71a00a2c6a65\" (no VIN in the DID). Only family that avoids plaintext VIN on-chain.",
         "method": "executed"
       }
     },

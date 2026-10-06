@@ -31,19 +31,19 @@
     },
     "ERC-735": {
       "birthAttestation": {
-        "gasUsed": 292689,
+        "gasUsed": 295242,
         "nativeSupport": true,
         "approximate": false,
         "note": "addClaim(MANUFACTURER_CERT): a birth certificate is a first-class ERC-735 claim carrying the manufacturer's issuer signature, ecrecover-verified on-chain and stored O(1)-readable. High-fidelity native mapping."
       },
       "lifecycleEvent": {
-        "gasUsed": 292724,
+        "gasUsed": 295277,
         "nativeSupport": true,
         "approximate": false,
         "note": "addClaim(INSPECTION): a lifecycle event modelled as an issuer-signed claim. Native, but claims are keyed by (issuer, topic) — re-issuing the same topic/issuer UPDATES in place rather than appending, so a rich multi-event history needs distinct topics/issuers (unlike MOBI VID II's per-event structs)."
       },
       "thirdPartyAttestation": {
-        "gasUsed": 292736,
+        "gasUsed": 295289,
         "nativeSupport": true,
         "approximate": false,
         "note": "addClaim by a SECOND, independent issuer (insurer != manufacturer): the claim carries the third party's ECDSA signature over (identity, topic, data), ecrecover-verified on-chain before storage. This IS native multi-party attestation — the core ERC-735 capability."
@@ -89,19 +89,19 @@
     },
     "CVIN-Combined": {
       "birthAttestation": {
-        "gasUsed": 51720,
+        "gasUsed": 51766,
         "nativeSupport": true,
         "approximate": false,
         "note": "setAttribute anchors (vinHash || birthCertHash) as an ERC-1056-style event (cheap common path). Native anchoring via the hybrid's event-log side."
       },
       "lifecycleEvent": {
-        "gasUsed": 34644,
+        "gasUsed": 34690,
         "nativeSupport": true,
         "approximate": false,
         "note": "Lifecycle events appended via the ERC-1056-style event log (cheap). Structured event semantics (odometer/role) remain off-chain, unlike MOBI VID II."
       },
       "thirdPartyAttestation": {
-        "gasUsed": 337134,
+        "gasUsed": 336896,
         "nativeSupport": true,
         "approximate": false,
         "note": "addClaim (hybrid's ERC-735 side): a second issuer's ECDSA signature over (registry, identity, topic, data) is ecrecover-verified on-chain and the claim is stored for O(1) verification. Native multi-party attestation — paid only when a safety-critical on-chain claim is actually needed."
@@ -118,13 +118,13 @@
     },
     "MOBI-VID-V2": {
       "birthAttestation": {
-        "gasUsed": 298941,
+        "gasUsed": 299143,
         "nativeSupport": true,
         "approximate": false,
         "note": "registerVehicleBirth (MOBI VID I): purpose-built birth certificate — salted VIN hash + encrypted VIN + cert hash + first owner + manufacturer, in a dedicated on-chain struct with VIN-hash lookup index. Highest-fidelity native mapping (the reference)."
       },
       "lifecycleEvent": {
-        "gasUsed": 306985,
+        "gasUsed": 307210,
         "nativeSupport": true,
         "approximate": false,
         "note": "recordLifecycleEvent (MOBI VID II, MAINTENANCE): dedicated event struct with eventType, issuer, timestamp, odometer, dataHash, W3C-VC hash, verified flag, jurisdiction, block number + per-type counters. Highest-fidelity native mapping (11 event types, issuer-role gating)."
@@ -157,7 +157,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-04T22:23:25.375Z",
+    "date": "2026-10-06T04:25:51.180Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [

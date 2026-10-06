@@ -16,7 +16,7 @@ benchmark_ops:
   updateAttribute: 'recordLifecycleEvent (MOBI VID II, MAINTENANCE): stores full event struct + VC hash + counters
     on-chain. Issuer authorization excluded as setup.'
   addDelegateOrClaim: 'Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim
-    analogue, 65-byte signature stored) measured separately: 192683 gas.'
+    analogue, 65-byte signature stored) measured separately: 192749 gas.'
   transferOwnership: 'transferVehicleOwnership: appends odometer-stamped ownership record + ERC-1056 changeOwner.
     Called by current owner.'
   revoke: 'revokeIdentity (inherited ERC-1056 extension): permanently flags the vehicle DID as revoked (decommissioning).'

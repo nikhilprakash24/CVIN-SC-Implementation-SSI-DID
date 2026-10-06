@@ -5,7 +5,7 @@
     "disclaimer": "This is a MODEL over an ASSUMED event profile, not a measurement. Totals integrate measured per-op gas (Experiment A steady-state append marginals + gas_benchmark.json birth/transfer costs) across the canonical profile. Gas is relative on-chain work, not fiat (RESEARCH_AUDIT.md §4.1). The profile is an assumption; the +/-50% band varies recurring event frequency.",
     "solcVersion": "0.8.24",
     "ozVersion": "5.0.2",
-    "date": "2026-10-04T22:20:58.308Z",
+    "date": "2026-10-06T04:25:47.947Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "profile": {
@@ -38,15 +38,15 @@
     },
     {
       "name": "CVIN-Combined",
-      "total": 9839660
+      "total": 9831477
     },
     {
       "name": "MOBI-VID-V2",
-      "total": 9848183
+      "total": 9856260
     },
     {
       "name": "ERC-735",
-      "total": 11443652
+      "total": 11692092
     }
   ],
   "standards": {
@@ -91,8 +91,8 @@
       "decomposition": {
         "birth": {
           "count": 1,
-          "unitGas": 1598928,
-          "subtotalGas": 1598928,
+          "unitGas": 1757881,
+          "subtotalGas": 1757881,
           "source": "gas_benchmark.createIdentity"
         },
         "appends": {
@@ -102,24 +102,24 @@
             "recall"
           ],
           "count": 35,
-          "unitGas": 278812,
-          "subtotalGas": 9758420,
+          "unitGas": 281365,
+          "subtotalGas": 9847775,
           "source": "Experiment A steady-state marginal of addClaim (mean of ops 2..50)"
         },
         "transfers": {
           "count": 3,
-          "unitGas": 28768,
-          "subtotalGas": 86304,
+          "unitGas": 28812,
+          "subtotalGas": 86436,
           "source": "gas_benchmark.transferOwnership"
         }
       },
       "distinguishesEventClasses": "partial: birth (createIdentity) and transfer (ownership op) are distinct on-chain ops; maintenance/inspection/recall collapse to the generic append op (the standard does not type them on-chain)",
-      "totalLifetimeGas": 11443652,
+      "totalLifetimeGas": 11692092,
       "sensitivityBand": {
         "note": "+/-50% event frequency on the recurring (append + transfer) load; birth fixed at 1.",
-        "low": 6521290,
-        "base": 11443652,
-        "high": 16366014
+        "low": 6724987,
+        "base": 11692092,
+        "high": 16659198
       }
     },
     "ERC-1155": {
@@ -163,8 +163,8 @@
       "decomposition": {
         "birth": {
           "count": 1,
-          "unitGas": 52170,
-          "subtotalGas": 52170,
+          "unitGas": 52216,
+          "subtotalGas": 52216,
           "source": "gas_benchmark.createIdentity"
         },
         "appends": {
@@ -174,24 +174,24 @@
             "recall"
           ],
           "count": 35,
-          "unitGas": 275209,
-          "subtotalGas": 9632315,
+          "unitGas": 274972,
+          "subtotalGas": 9624020,
           "source": "Experiment A steady-state marginal of addClaim (mean of ops 2..50)"
         },
         "transfers": {
           "count": 3,
-          "unitGas": 51725,
-          "subtotalGas": 155175,
+          "unitGas": 51747,
+          "subtotalGas": 155241,
           "source": "gas_benchmark.transferOwnership"
         }
       },
       "distinguishesEventClasses": "partial: birth (createIdentity) and transfer (ownership op) are distinct on-chain ops; maintenance/inspection/recall collapse to the generic append op (the standard does not type them on-chain)",
-      "totalLifetimeGas": 9839660,
+      "totalLifetimeGas": 9831477,
       "sensitivityBand": {
         "note": "+/-50% event frequency on the recurring (append + transfer) load; birth fixed at 1.",
-        "low": 4945915,
-        "base": 9839660,
-        "high": 14733405
+        "low": 4941847,
+        "base": 9831477,
+        "high": 14721108
       }
     },
     "MOBI-VID-V2": {
@@ -199,8 +199,8 @@
       "decomposition": {
         "birth": {
           "count": 1,
-          "unitGas": 298941,
-          "subtotalGas": 298941,
+          "unitGas": 299143,
+          "subtotalGas": 299143,
           "source": "gas_benchmark.createIdentity"
         },
         "appends": {
@@ -210,8 +210,8 @@
             "recall"
           ],
           "count": 35,
-          "unitGas": 255685,
-          "subtotalGas": 8948975,
+          "unitGas": 255910,
+          "subtotalGas": 8956850,
           "source": "Experiment A steady-state marginal of recordLifecycleEvent (mean of ops 2..50)"
         },
         "transfers": {
@@ -222,12 +222,12 @@
         }
       },
       "distinguishesEventClasses": "yes: birth (registerVehicleBirth), lifecycle events (recordLifecycleEvent, class-independent cost), transfer (transferVehicleOwnership)",
-      "totalLifetimeGas": 9848183,
+      "totalLifetimeGas": 9856260,
       "sensitivityBand": {
         "note": "+/-50% event frequency on the recurring (append + transfer) load; birth fixed at 1.",
-        "low": 5073562,
-        "base": 9848183,
-        "high": 14622804
+        "low": 5077702,
+        "base": 9856260,
+        "high": 14634819
       }
     }
   }

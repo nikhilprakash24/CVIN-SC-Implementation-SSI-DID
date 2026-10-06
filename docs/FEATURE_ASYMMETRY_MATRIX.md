@@ -7,19 +7,19 @@
 | Option | Contract | Functions | Writes | Reads | Events |
 |---|---|---:|---:|---:|---:|
 | ERC-1056 | `EthereumDIDRegistry` | 16 | 10 | 6 | 3 |
-| ERC-1056 | `CVINVehicleDIDRegistry` | 33 | 8 | 25 | 3 |
+| ERC-1056 | `CVINVehicleDIDRegistry` | 34 | 8 | 26 | 3 |
 | ERC-721 | `CVINVehicleNFT` | 45 | 14 | 31 | 12 |
 | ERC-721 | `CVIN_NFT_DID_ERC721` | 21 | 10 | 11 | 8 |
 | ERC-721 | `CVIN_NFT_DID_ERC721_Monolithic` | 18 | 8 | 10 | 4 |
 | ERC-725 | `CVIN_SCBasedAccOrID_DID_ERC725Basic` | 9 | 6 | 3 | 4 |
 | ERC-725xy | `CVINVehicleERC725XY` | 21 | 7 | 14 | 4 |
 | ERC-725xy | `CVINExecuteTarget` | 4 | 1 | 3 | 1 |
-| ERC-735 | `CVINVehicleClaimHolder` | 17 | 5 | 12 | 8 |
+| ERC-735 | `CVINVehicleClaimHolder` | 19 | 6 | 13 | 8 |
 | ERC-1155 | `CVINVehicleCredential1155` | 34 | 10 | 24 | 12 |
 | ERC-4337 | `CVINVehicleAccount` | 10 | 6 | 4 | 6 |
 | ERC-4337 | `CVINMinimalEntryPoint` | 3 | 1 | 2 | 1 |
 | LSP8 | `CVINVehicleLSP8` | 21 | 6 | 15 | 6 |
-| CVIN-Combined | `CVINCombinedIdentity` | 18 | 7 | 11 | 6 |
+| CVIN-Combined | `CVINCombinedIdentity` | 20 | 8 | 12 | 6 |
 | MOBI-VID (I+II) | `ERC1056Registry` | 17 | 8 | 9 | 4 |
 | MOBI-VID (I+II) | `MOBIVIDRegistry` | 38 | 14 | 24 | 9 |
 | MOBI-VID (I+II) | `MOBIVIDRegistryV2` | 57 | 18 | 39 | 13 |
@@ -31,9 +31,9 @@
 | Identity creation (explicit) | **2** | **3** | — | **4** | **1** | **4** | **1** | **2** | — | **5** |
 | Ownership / controller change | **12** | **10** | **4** | **4** | **3** | **2** | **5** | **4** | **3** | **9** |
 | Key / delegate management | **12** | — | **4** | — | — | — | **5** | — | **5** | **3** |
-| Attributes / data store | **8** | **11** | — | **8** | — | **4** | **4** | **4** | **3** | **5** |
-| Claims / credentials | **1** | — | — | — | **16** | **12** | — | **1** | **11** | **11** |
-| Revocation / status | **5** | **3** | — | — | **2** | **4** | — | **2** | **2** | **11** |
+| Attributes / data store | **9** | **11** | — | **8** | — | **4** | **4** | **4** | **3** | **5** |
+| Claims / credentials | **1** | — | — | — | **18** | **12** | — | **1** | **13** | **11** |
+| Revocation / status | **5** | **3** | — | — | **4** | **4** | — | **2** | **4** | **11** |
 | Delegated / signed (off-chain-authorised) execution | **5** | — | **2** | **3** | — | — | **6** | — | — | — |
 | Lifecycle events / history | **4** | **9** | — | **1** | **1** | **1** | **2** | **2** | **5** | **25** |
 | Authorisation / roles | **3** | **15** | — | — | **6** | **12** | — | — | **1** | **14** |
@@ -62,7 +62,7 @@ Heuristics (name regex, case-insensitive) — auditable:
 - **Identity creation (explicit):** `VehicleDIDCreated`, `createVehicleDID`
 - **Ownership / controller change:** `DIDOwnerChanged`, `VehicleOwnershipTransferred`, `changeOwner`, `changeOwnerSigned`, `getVehicleOwner`, `identityOwner`, `owner`, `owners`, `transferVehicleOwnership`, `updateOwnershipMapping`, `vehicleOwnerOf`, `vehicleOwners`
 - **Key / delegate management:** `DELEGATE_SIGAUTH`, `DELEGATE_VERIKEY`, `DIDDelegateChanged`, `addDelegate`, `addDelegateSigned`, `addVerificationDelegate`, `delegates`, `isValidDelegate`, `revokeDelegate`, `revokeDelegateSigned`, `revokeVerificationDelegate`, `validDelegate`
-- **Attributes / data store:** `DIDAttributeChanged`, `DID_MANUFACTURING_DATE`, `PERMANENT_ATTRIBUTE_VALIDITY`, `revokeAttribute`, `revokeAttributeSigned`, `setAttribute`, `setAttributeSigned`, `setVehicleAttributes`
+- **Attributes / data store:** `DIDAttributeChanged`, `DID_MANUFACTURING_DATE`, `PERMANENT_ATTRIBUTE_VALIDITY`, `VEHICLE_ATTRIBUTE_VALIDITY`, `revokeAttribute`, `revokeAttributeSigned`, `setAttribute`, `setAttributeSigned`, `setVehicleAttributes`
 - **Claims / credentials:** `SVC_CREDENTIAL_SERVICE`
 - **Revocation / status:** `revokeAttribute`, `revokeAttributeSigned`, `revokeDelegate`, `revokeDelegateSigned`, `revokeVerificationDelegate`
 - **Delegated / signed (off-chain-authorised) execution:** `addDelegateSigned`, `changeOwnerSigned`, `revokeAttributeSigned`, `revokeDelegateSigned`, `setAttributeSigned`
@@ -103,8 +103,8 @@ Heuristics (name regex, case-insensitive) — auditable:
 ### ERC-735
 - **Identity creation (explicit):** `VehicleIdentityCreated`
 - **Ownership / controller change:** `OwnershipTransferred`, `owner`, `transferOwnership`
-- **Claims / credentials:** `ClaimAdded`, `ClaimChanged`, `ClaimRemoved`, `ClaimRequested`, `INSPECTION`, `IssuerAuthorized`, `IssuerRevoked`, `VIN_ATTESTATION`, `addClaim`, `authorizeIssuer`, `claimExists`, `getClaim`, `getClaimIdsByTopic`, `isAuthorizedIssuer`, `removeClaim`, `revokeIssuer`
-- **Revocation / status:** `IssuerRevoked`, `revokeIssuer`
+- **Claims / credentials:** `ClaimAdded`, `ClaimChanged`, `ClaimRemoved`, `ClaimRequested`, `INSPECTION`, `IssuerAuthorized`, `IssuerRevoked`, `VIN_ATTESTATION`, `addClaim`, `authorizeIssuer`, `claimExists`, `getClaim`, `getClaimIdsByTopic`, `isAuthorizedIssuer`, `removeClaim`, `revokeClaimContent`, `revokeIssuer`, `revokedClaims`
+- **Revocation / status:** `IssuerRevoked`, `revokeClaimContent`, `revokeIssuer`, `revokedClaims`
 - **Lifecycle events / history:** `ClaimChanged`
 - **Authorisation / roles:** `IssuerAuthorized`, `IssuerRevoked`, `MANUFACTURER_CERT`, `authorizeIssuer`, `isAuthorizedIssuer`, `revokeIssuer`
 - **VIN linkage:** `VIN_ATTESTATION`, `vin`, `vinHash`
@@ -146,8 +146,8 @@ Heuristics (name regex, case-insensitive) — auditable:
 - **Ownership / controller change:** `DIDOwnerChanged`, `changeOwner`, `identityOwner`
 - **Key / delegate management:** `DIDDelegateChanged`, `addDelegate`, `delegates`, `revokeDelegate`, `validDelegate`
 - **Attributes / data store:** `DIDAttributeChanged`, `revokeAttribute`, `setAttribute`
-- **Claims / credentials:** `CLAIM_TOPIC_INSPECTION`, `CLAIM_TOPIC_MANUFACTURER`, `CLAIM_TOPIC_VIN`, `ClaimAdded`, `ClaimRemoved`, `DIDClaimChanged`, `addClaim`, `getClaim`, `getClaimIdsByTopic`, `hasValidClaim`, `removeClaim`
-- **Revocation / status:** `revokeAttribute`, `revokeDelegate`
+- **Claims / credentials:** `CLAIM_TOPIC_INSPECTION`, `CLAIM_TOPIC_MANUFACTURER`, `CLAIM_TOPIC_VIN`, `ClaimAdded`, `ClaimRemoved`, `DIDClaimChanged`, `addClaim`, `getClaim`, `getClaimIdsByTopic`, `hasValidClaim`, `removeClaim`, `revokeClaimContent`, `revokedClaims`
+- **Revocation / status:** `revokeAttribute`, `revokeClaimContent`, `revokeDelegate`, `revokedClaims`
 - **Lifecycle events / history:** `DIDAttributeChanged`, `DIDClaimChanged`, `DIDDelegateChanged`, `DIDOwnerChanged`, `changed`
 - **Authorisation / roles:** `CLAIM_TOPIC_MANUFACTURER`
 - **VIN linkage:** `CLAIM_TOPIC_VIN`

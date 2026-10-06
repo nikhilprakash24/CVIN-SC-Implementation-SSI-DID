@@ -2,7 +2,7 @@
 % Requires \usepackage{booktabs}.
 \begin{table}[htbp]
   \centering
-  \caption{Experiment B --- lifetime cost \textbf{model} (an assumption, not a measurement). Total on-chain gas to carry one vehicle identity through the canonical 15-year profile (1 birth, 30 maintenance, 4 inspections, 1 recall, 3 transfers $= 39$ events), decomposed by event class. Birth uses each standard's identity-creation cost and transfers its ownership-transfer cost (\texttt{gas\_benchmark.json}); the recurring maintenance/inspection/recall events use the Experiment~A steady-state append marginal. Rows are ranked by total (cheapest first). The last two columns give the $\pm 50\%$ event-frequency sensitivity band (birth fixed). Gas is relative on-chain work, not fiat. Solidity 0.8.24 (optimizer, 200 runs, via-IR), OpenZeppelin 5.0.2, chain id 31337, 2026-10-04.}
+  \caption{Experiment B --- lifetime cost \textbf{model} (an assumption, not a measurement). Total on-chain gas to carry one vehicle identity through the canonical 15-year profile (1 birth, 30 maintenance, 4 inspections, 1 recall, 3 transfers $= 39$ events), decomposed by event class. Birth uses each standard's identity-creation cost and transfers its ownership-transfer cost (\texttt{gas\_benchmark.json}); the recurring maintenance/inspection/recall events use the Experiment~A steady-state append marginal. Rows are ranked by total (cheapest first). The last two columns give the $\pm 50\%$ event-frequency sensitivity band (birth fixed). Gas is relative on-chain work, not fiat. Solidity 0.8.24 (optimizer, 200 runs, via-IR), OpenZeppelin 5.0.2, chain id 31337, 2026-10-06.}
   \label{tab:scaling-lifetime}
   \footnotesize
   \setlength{\tabcolsep}{5pt}
@@ -13,9 +13,9 @@
     \midrule
     1 & ERC-1056 & 52,594 & 1,242,290 & 155,262 & \textbf{1,450,146} & 751,370 & 2,148,922 \\
     2 & ERC-1155 & 107,729 & 1,498,560 & 258,894 & \textbf{1,865,183} & 986,456 & 2,743,910 \\
-    3 & CVIN-Combined & 52,170 & 9,632,315 & 155,175 & \textbf{9,839,660} & 4,945,915 & 14,733,405 \\
-    4 & MOBI-VID-V2 & 298,941 & 8,948,975 & 600,267 & \textbf{9,848,183} & 5,073,562 & 14,622,804 \\
-    5 & ERC-735 & 1,598,928 & 9,758,420 & 86,304 & \textbf{11,443,652} & 6,521,290 & 16,366,014 \\
+    3 & CVIN-Combined & 52,216 & 9,624,020 & 155,241 & \textbf{9,831,477} & 4,941,847 & 14,721,108 \\
+    4 & MOBI-VID-V2 & 299,143 & 8,956,850 & 600,267 & \textbf{9,856,260} & 5,077,702 & 14,634,819 \\
+    5 & ERC-735 & 1,757,881 & 9,847,775 & 86,436 & \textbf{11,692,092} & 6,724,987 & 16,659,198 \\
     \bottomrule
   \end{tabular}}
 \end{table}
