@@ -5,7 +5,7 @@
 [![UBC](https://img.shields.io/badge/Institution-UBC-blue.svg)](https://www.ubc.ca/)
 [![Thesis](https://img.shields.io/badge/Type-MASc%20Thesis-green.svg)](https://www.ubc.ca/)
 
-> **Status:** v0.8.0 ("Rigor & Ground-Truth Hardening"), working toward 0.9.0. ~295 automated tests green (217 Hardhat + 28 W3C VC + 32 MOBI VID + 6 VIN-cipher + 12/12 lifecycle use cases). **W3C compliance 93.2%** (executable checker, CI-gated at ≥90%). All implementation phases built and tested; remaining work is public-testnet (Sepolia) validation, optional real-SUMO, and thesis writing.
+> **Status:** v0.8.0 ("Rigor & Ground-Truth Hardening"), working toward 0.9.0. **739 automated tests green** (369 Hardhat incl. 43 strictly-asserted attack scenarios and nine-adapter harness conformance + 358 Python across the VC layer, DID resolver, MOBI VID and the cv2x testbed + 12/12 lifecycle use cases), all run in CI with no skips. **W3C compliance 94.3%** (executable checker, internal and self-scored; CI floor 93.0%). Review 02 (2026-10-03/04, `docs/REVIEW_02_CODEBASE.md`) fixed all 3 Critical and 15 of 16 High findings (including three found by its own re-reviews) (the remaining one, restating H1, is the author's decision); numbers below follow its re-runs. All implementation phases built and tested; remaining work is public-testnet (Sepolia) validation, optional real-SUMO, and thesis writing.
 
 ---
 
@@ -32,9 +32,9 @@
 
 ### Hypotheses
 
-- **H1** — Minimal identity standards (e.g. ERC-1056) are substantially cheaper to create than heavyweight account standards. **SUPPORTED** — the ratio depends on the operation definition: ~10× against ERC-721/725 when ERC-1056 creation is the bare `createIdentity` (52,594 gas, evm cancun) and ERC-721 creation is VIN-bound `mintVehicle` (545,101); **≈7×** when both sides bind the VIN (`createVehicleDID` 78,068). See `docs/MEASUREMENT_CONDITIONS.md` #6/#25.
-- **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (94.3% measured; external W3C DID test suite 335/336).**
-- **H3** — Off-chain credential verification meets the real-time V2V latency budget (100 ms). **SUPPORTED (0.165 ms warm).**
+- **H1** — Minimal identity standards (e.g. ERC-1056) are substantially cheaper to create than heavyweight account standards. **SUPPORTED** — the ratio depends on the operation definition: ~10× against ERC-721/725 when ERC-1056 creation is the bare `createIdentity` (52,594 gas, evm cancun) and ERC-721 creation is VIN-bound `mintVehicle` (542,378); **≈7×** when both sides bind the VIN (`createVehicleDID` 78,068). See `docs/MEASUREMENT_CONDITIONS.md` #6/#25. **Over a full MOBI VID lifecycle** (metrics harness, register #30) ERC-1056 is cheapest by **2.6× (ERC-721) and 3.0× (ERC-725)**, not 10×; restating H1 accordingly is pending the author's framing decision.
+- **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (94.3% measured, internal checker; external W3C DID test suite 335/336, register #24).**
+- **H3** — Off-chain credential verification meets the real-time V2V latency budget (100 ms). **SUPPORTED (0.153 ms warm, cached/off-chain verify; register #27. Uncached ERC-1056 verify is 9.7 ms; see the freshness-k frontier, #32).**
 - **H4** — MOBI VID generalizes across identity backends. **SUPPORTED** (5-backend realization sweep; birth + lifecycle native on all, multi-party attestation native on claim-capable backends — a documented fidelity gradient).
 - **H5** — A hybrid design can sit on the security/performance frontier. **SUPPORTED (CVIN-Combined).**
 
@@ -50,7 +50,7 @@ CVIN-SC-Implementation-SSI-DID/
 ├── 1_blockchain-identity/              # Hardhat project — 9 standards + MOBI VID
 │   ├── contracts/                      # CVINCombined, ERC1056, ERC1155, ERC4337,
 │   │                                   #   ERC721, ERC725, ERC725xy, ERC735, LSP8, MOBI
-│   ├── test/                           # 217 contract tests (per-standard + security/)
+│   ├── test/                           # 369 contract tests (per-standard + security/ + harness conformance)
 │   ├── scripts/                        # benchmark_gas.js, validate_sepolia.js, deploy, security
 │   └── SEPOLIA_VALIDATION.md           # public-testnet validation harness (not yet run)
 │
@@ -90,7 +90,7 @@ CVIN-SC-Implementation-SSI-DID/
 All 9 standards implemented as Hardhat contracts and benchmarked on-chain (hardhat-local).
 
 - ✅ Smart contracts for all 9 standards + MOBI VID
-- ✅ 217-test Hardhat suite (per-standard + `test/security/`)
+- ✅ 369-test Hardhat suite (per-standard + `test/security/` + harness conformance)
 - ✅ Gas benchmark (`scripts/benchmark_gas.js`), N=30 deterministic runs
 - ✅ Sepolia validation harness authored (`scripts/validate_sepolia.js`) — run pending
 
@@ -98,7 +98,7 @@ All 9 standards implemented as Hardhat contracts and benchmarked on-chain (hardh
 - ✅ W3C DID resolver — 4 methods (`did:ethr`, `did:nft`, `did:key`, `did:mobi`)
 - ✅ Verifiable Credentials — issuer, holder wallet, verifier (6-stage offline pipeline), 10 automotive schemas, selective disclosure (SD-JWT-style salted digests), revocation registry, EIP-191 secp256k1 Data Integrity proofs (28 tests)
 - ✅ MOBI VID I (birth certificate: W3C VC + on-chain content-hash anchoring) and VID II (11 lifecycle event types with on-chain `attestEvent` ecrecover verification and AES-256-GCM VIN encryption) — 32 tests
-- ✅ Compliance checker (executable) — **93.2% measured**, CI-gated ≥90%
+- ✅ Compliance checker (executable) — **94.3% measured**, CI floor 93.0%
 
 ### Phase 3 — CV2X Testbed Integration (✅ Complete)
 - ✅ 12 end-to-end lifecycle use cases with REAL cryptographic verification (forged/replayed credentials fail; pass/fail is computed, not hardcoded) — 12/12
@@ -120,21 +120,21 @@ All 9 standards implemented as Hardhat contracts and benchmarked on-chain (hardh
 
 ## 📊 Key Results (Measured)
 
-All numbers below are measured from the repository. Gas is **Hardhat-local**, solc 0.8.24, OpenZeppelin 5.0.2 — deterministic and verified byte-identical across N=30 runs (CI width 0).
+All numbers below are measured from the repository; each has a row in `docs/MEASUREMENT_CONDITIONS.md` (all re-executed on the merged trunk 2026-10-03/04). Gas is **Hardhat-local**, solc 0.8.24, OpenZeppelin 5.0.2 — deterministic and verified byte-identical across N=30 runs (CI width 0).
 
 ### Gas — create identity (RQ1 / H1)
 
 | Standard | Create-identity gas |
 |---|---:|
-| CVIN-Combined | 52,170 |
+| CVIN-Combined | 52,216 |
 | ERC-1056 | 52,594 |
 | ERC-1155 | 107,729 |
-| LSP8 | 152,453 |
-| MOBI-VID-V2 | 298,941 |
+| LSP8 | 152,644 |
+| MOBI-VID-V2 | 299,143 |
 | ERC-725 | 519,384 |
 | ERC-721 | 545,101 |
 | ERC-4337 | 759,088 |
-| ERC-735 | 1,598,928 |
+| ERC-735 | 1,757,881 |
 | ERC-725xy | 1,680,816 |
 
 *Condition M1: solc 0.8.24, optimizer 200 + viaIR, evm `cancun`, OpenZeppelin 5.0.2, Hardhat local; re-executed 2026-10-04 after the defect fixes (`4_comparison-framework/results/gas_benchmark.json`; cells moved by the fixes are listed in `gas_moved_by_defect_fixes_2026-10-04.json` and `…_pass06.json`). See `docs/MEASUREMENT_CONDITIONS.md` #25, #31, #32.*
@@ -144,9 +144,9 @@ All numbers below are measured from the repository. Gas is **Hardhat-local**, so
 
 | Path | Median latency (ms) |
 |---|---|
-| SSI (blockchain credential), warm verify | **0.165** [0.162, 0.168] |
-| SSI, cold (full VC verify) | 0.400 [0.392, 0.405] |
-| PKI baseline, warm | 0.102 [0.101, 0.104] |
+| SSI (blockchain credential), warm verify | **0.153** [0.151, 0.154] |
+| SSI, cold (full VC verify) | 0.399 [0.381, 0.411] |
+| PKI baseline, warm | 0.094 [0.093, 0.095] |
 
 1.65M verifications; 90 failures = exactly the 3 injected attacks × 30 runs. **H3 supported** — roughly a 600× margin to the 100 ms V2V budget. *Caveat: excludes radio/MAC/network-stack latency; mobility is simulated (no SUMO binary required).*
 
@@ -159,7 +159,7 @@ Findings: no standard dominates (a security/performance frontier — **H5**); on
 
 ### W3C compliance (RQ3 / H2)
 
-**93.2% measured** across 44 executed checks, with 2 documented deviations (canonical JSON vs URDNA2015; a thesis-defined cryptosuite). **H2 supported.**
+**94.3% measured** across 44 executed checks (41 PASS, 1 PARTIAL, 2 FAIL), with 2 documented deviations (canonical JSON vs URDNA2015; a thesis-defined cryptosuite). **H2 supported.**
 
 ### Hypotheses status
 
@@ -167,7 +167,7 @@ Findings: no standard dominates (a security/performance frontier — **H5**); on
 |---|---|
 | H1 — minimal standards substantially cheaper to create (~10× bare, ≈7× VIN-bound) | ✅ Supported |
 | H2 — ≥90% W3C compliance | ✅ Supported (94.3% internal; 335/336 external DID suite) |
-| H3 — off-chain verify meets V2V budget | ✅ Supported (0.165 ms warm) |
+| H3 — off-chain verify meets V2V budget | ✅ Supported (0.153 ms warm, cached; uncached on-chain verify needs freshness-k caching, #32) |
 | H4 — MOBI VID across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
 | H5 — hybrid on the frontier | ✅ Supported (CVIN-Combined) |
 
@@ -190,7 +190,7 @@ ERC-1056, ERC-721, ERC-725, **ERC-725xy** (full ERC-725X+Y account; added in v0.
 - Python packages: `web3`, `eth-account`, `cryptography`, `pytest`, `coincurve`
 - SUMO binary is **not** required — the V2V study runs in `--simulate` mode (real SUMO is optional/future)
 
-### Smart-contract tests (217 passing)
+### Smart-contract tests (369 passing)
 
 ```bash
 cd 1_blockchain-identity
@@ -214,7 +214,7 @@ cd 2_w3c-ssi-layer/mobi-vid && python3 -m pytest tests/
 # 12 end-to-end lifecycle use cases (12/12)
 python3 cv2x-testbed/scripts/test_use_cases.py
 
-# Executable W3C compliance checker (reports 93.2%)
+# Executable W3C compliance checker (reports 94.3%)
 python3 cv2x-testbed/scripts/w3c_compliance_checker.py
 ```
 

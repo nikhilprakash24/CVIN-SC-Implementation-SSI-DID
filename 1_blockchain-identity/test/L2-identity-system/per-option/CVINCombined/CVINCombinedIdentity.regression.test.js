@@ -94,8 +94,9 @@ describe("CVINCombinedIdentity — D22 regression (claim ops stay on the previou
     await expect(tx).to.emit(registry, "DIDClaimChanged").withArgs(id, claimId, TOPIC_MANUFACTURER, false, previousChange);
     await expect(tx).to.emit(registry, "ClaimAdded");
     const receipt = await (await tx).wait();
-    expect(await registry.changed(id)).to.equal(BigInt(receipt.blockNumber));
-    console.log("       Gas addClaim (with DIDClaimChanged):", receipt.gasUsed.toString());
+    // merge decision M-A (2026-10-06): claim ops no longer advance changed[] (review-2 K-6); the event keeps the history indexable
+    expect(await registry.changed(id)).to.equal(previousChange);
+    console.log("       Gas addClaim (with DIDClaimChanged, changed[] untouched):", receipt.gasUsed.toString());
   });
 
   it("removeClaim emits DIDClaimChanged(..., removed=true, previousChange) next to ClaimRemoved", async function () {
@@ -106,45 +107,44 @@ describe("CVINCombinedIdentity — D22 regression (claim ops stay on the previou
     await expect(tx).to.emit(registry, "DIDClaimChanged").withArgs(id, claimId, TOPIC_MANUFACTURER, true, previousChange);
     await expect(tx).to.emit(registry, "ClaimRemoved");
     const receipt = await (await tx).wait();
-    expect(await registry.changed(id)).to.equal(BigInt(receipt.blockNumber));
-    console.log("       Gas removeClaim (with DIDClaimChanged):", receipt.gasUsed.toString());
+    expect(await registry.changed(id)).to.equal(previousChange); // M-A / K-6
+    console.log("       Gas removeClaim (with DIDClaimChanged, changed[] untouched):", receipt.gasUsed.toString());
   });
 
-  it("a walk from changed() after addClaim + removeClaim + setAttribute reaches genesis without gaps", async function () {
+  it("a walk from changed() after addClaim + removeClaim + setAttribute reaches genesis without gaps and never visits a claim block (K-6 / M-A)", async function () {
     const { registry, id, r1, r2, r3, r4 } = await loadFixture(historyFixture);
     const w = await walk(registry, id);
     expect(w.stoppedAt).to.equal(0n, "walk must terminate at genesis, not at a cut");
     expect(w.gaps).to.equal(0, "every previousChange must point at a block in which the identity emitted an event");
-    expect(w.visited).to.deep.equal([r4.blockNumber, r3.blockNumber, r2.blockNumber, r1.blockNumber]);
-    expect(w.names).to.deep.equal([
-      `DIDAttributeChanged@${r4.blockNumber}`,
-      `DIDClaimChanged@${r3.blockNumber}`,
-      `DIDClaimChanged@${r2.blockNumber}`,
-      `DIDAttributeChanged@${r1.blockNumber}`,
-    ]);
-    // the attribute written after the claim ops links back to the removeClaim block
+    // merge decision M-A (2026-10-06): claim ops do not advance changed[] (review-2 K-6), so the DID-event
+    // chain skips the two claim blocks entirely; the claim history is reached through DIDClaimChanged's own filter
+    expect(w.visited).to.deep.equal([r4.blockNumber, r1.blockNumber]);
+    expect(w.names).to.deep.equal([`DIDAttributeChanged@${r4.blockNumber}`, `DIDAttributeChanged@${r1.blockNumber}`]);
     const last = await registry.queryFilter(registry.filters.DIDAttributeChanged(id), r4.blockNumber, r4.blockNumber);
-    expect(last[0].args.previousChange).to.equal(BigInt(r3.blockNumber));
+    expect(last[0].args.previousChange).to.equal(BigInt(r1.blockNumber));
+    const claims = await registry.queryFilter(registry.filters.DIDClaimChanged(id), r2.blockNumber, r3.blockNumber);
+    expect(claims.map((e) => e.args.removed)).to.deep.equal([false, true]);
   });
 
-  it("a walk restricted to the three classic ERC-1056 events is still cut at the claim block (documents why the resolver must know DIDClaimChanged)", async function () {
-    const { registry, id, r3, r4 } = await loadFixture(historyFixture);
+  it("a walk over the three classic ERC-1056 events is NOT cut by claim operations (K-6 / M-A): the attribute after the claims links to the attribute before them", async function () {
+    const { registry, id, r1, r3, r4 } = await loadFixture(historyFixture);
     let block = await registry.changed(id);
     const n = Number(block);
     expect(n).to.equal(r4.blockNumber);
     const a = await registry.queryFilter(registry.filters.DIDAttributeChanged(id), n, n);
-    block = a[0].args.previousChange; // -> removeClaim block
+    block = a[0].args.previousChange; // -> the attribute before the claim ops, not the removeClaim block
     const m = Number(block);
-    expect(m).to.equal(r3.blockNumber);
-    const classic = (
+    expect(m).to.equal(r1.blockNumber);
+    // the claim block carries no classic event and is not on the chain; its DIDClaimChanged is found by its own filter
+    const classicAtClaim = (
       await Promise.all([
-        registry.queryFilter(registry.filters.DIDOwnerChanged(id), m, m),
-        registry.queryFilter(registry.filters.DIDDelegateChanged(id), m, m),
-        registry.queryFilter(registry.filters.DIDAttributeChanged(id), m, m),
+        registry.queryFilter(registry.filters.DIDOwnerChanged(id), r3.blockNumber, r3.blockNumber),
+        registry.queryFilter(registry.filters.DIDDelegateChanged(id), r3.blockNumber, r3.blockNumber),
+        registry.queryFilter(registry.filters.DIDAttributeChanged(id), r3.blockNumber, r3.blockNumber),
       ])
     ).flat();
-    expect(classic).to.have.lengthOf(0);
-    const claim = await registry.queryFilter(registry.filters.DIDClaimChanged(id), m, m);
+    expect(classicAtClaim).to.have.lengthOf(0);
+    const claim = await registry.queryFilter(registry.filters.DIDClaimChanged(id), r3.blockNumber, r3.blockNumber);
     expect(claim).to.have.lengthOf(1);
     expect(claim[0].args.removed).to.be.true;
   });

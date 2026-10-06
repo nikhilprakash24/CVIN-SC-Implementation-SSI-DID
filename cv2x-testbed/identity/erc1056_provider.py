@@ -15,10 +15,11 @@ import os
 import time
 import json
 import hashlib
-from typing import Dict, Tuple, Optional, Union
+from typing import Dict, Tuple, Optional
 from datetime import datetime, timedelta
 from eth_account import Account
 from web3 import Web3
+from eth_abi import decode as _abi_decode
 
 try:  # web3 >= 7 renamed the PoA middleware
     from web3.middleware import ExtraDataToPOAMiddleware as _poa_middleware
@@ -29,12 +30,24 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
 
+from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
 from identity.base import (
     IdentityProvider,
     IdentityType,
     IdentityMetrics,
     VehicleCredential
 )
+
+_ABI_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                         'contracts', 'ERC1056Registry_abi.json')
+
+# Maximum assumed difference between this host's clock and the chain's block
+# timestamps. Attribute validity (`validTo`) is chain time; when a validTo lies
+# within this window of the wall clock, the chain's latest block timestamp is
+# fetched (one extra RPC) to decide. A local Hardhat node with automine runs a
+# few seconds ahead of the wall clock, so a revocation (validTo = block.timestamp)
+# can look "still valid" by the wall clock alone.
+CLOCK_SKEW_S = 900
 
 
 class ERC1056Provider(IdentityProvider):
@@ -50,27 +63,10 @@ class ERC1056Provider(IdentityProvider):
         web3_provider_url: str = "http://127.0.0.1:8545",
         contract_address: Optional[str] = None,
         private_key: Optional[str] = None,
-        freshness_k: Union[int, str, float, None] = None,
+        refresh_every: Optional[int] = 1,
+        refresh_mode: str = 'full'
     ):
-        """
-        freshness_k controls the verifier-side cache used by verify_message():
-
-          None (default)  no cache: every verification resolves the key and the
-                          revocation flag from the registry (current behaviour,
-                          getIdentityInfo + event walk + isRevoked per message).
-          k >= 1          the resolved key / revocation state of each sender is
-                          cached after its first resolution; the chain is
-                          consulted again only on every k-th message from that
-                          sender, with ONE JSON-RPC round trip (eth_call of
-                          changed(identity)); a full re-resolution happens only
-                          if that block number differs from the cached one.
-                          k=1 consults the chain on every message.
-          0 or 'inf'      never refresh after the first resolution.
-        """
         super().__init__(IdentityType.ERC1056_DID)
-        self.freshness_k = self._parse_freshness(freshness_k)
-        # sender address (lowercase) -> cached verification state, see _cached_identity()
-        self._verifier_cache: Dict[str, Dict] = {}
 
         # Connect to blockchain
         self.w3 = Web3(Web3.HTTPProvider(web3_provider_url))
@@ -100,6 +96,22 @@ class ERC1056Provider(IdentityProvider):
         if contract_address:
             self._load_contract(contract_address)
 
+        # Freshness window + replay cache for verify_message (review 02, T-9).
+        # On by default; the same FreshnessPolicy as the PKI providers.
+        self.freshness = FreshnessPolicy()
+        # Chain this provider's registry lives on; verify_message binds DIDs to
+        # it (review 02 Pass 3: an unbound chain segment let a re-encoded DID
+        # miss the replay cache). Cached so verification adds no RPC.
+        self._chain_id = self.w3.eth.chain_id
+
+        # Freshness-k verifier cache (review §5.1, LATENCY_BUDGET.md §4).
+        # See set_refresh_every(). k = 1 (the default) is the uncached
+        # behaviour measured in claim #21: every verify reads the chain.
+        # refresh_mode 'full' (default, the #32 code path) re-resolves at every
+        # refresh; 'probe' issues one getIdentityInfo eth_call and re-resolves
+        # only when the identity's state moved (see set_refresh_every).
+        self.set_refresh_every(refresh_every, refresh_mode)
+
         # Local storage (for performance)
         self.vehicles = {}  # vehicle_id -> vehicle data
         self.did_cache = {}  # DID -> resolved document (TTL cache)
@@ -119,20 +131,161 @@ class ERC1056Provider(IdentityProvider):
         self.metrics.single_point_of_failure = False  # Decentralized
         self.metrics.availability_percentage = 99.0  # Blockchain uptime
 
+    # ------------------------------------------------------------------
+    # Freshness-k: refresh the sender's key/revocation state every k messages
+    # ------------------------------------------------------------------
+
+    REFRESH_MODES = ('full', 'probe')
+
+    def set_refresh_every(self, k: Optional[int], mode: Optional[str] = None) -> None:
+        """
+        Set how often `verify_message` re-reads a sender's key and revocation
+        state from the registry, counted in messages PER SENDER (the
+        canonical DID):
+
+          k = 1     every message resolves from the chain (no cache; the
+                    behaviour of claim #21 and the default);
+          k > 1     message 1 of a sender resolves and caches the state,
+                    messages 2..k use the cache, message k+1 resolves again;
+          k = None  resolve once per sender, never refresh (k = infinity).
+
+        `mode` selects what a refresh does (None keeps the current mode;
+        the constructor default is 'full'):
+
+          'full'   a full resolution: getIdentityInfo + the eth_getLogs walk
+                   (the #32 code path, unchanged);
+          'probe'  ONE eth_call of getIdentityInfo (owner, changed block,
+                   revoked flag, revokedAt) on raw calldata. If owner, the
+                   `changed` block and the revoked flag equal the cached ones,
+                   the cached state is kept (and its counter restarts);
+                   otherwise a full resolution runs, reusing the probe's
+                   getIdentityInfo result. Every registry write to an identity
+                   (owner/delegate/attribute change, updateVehicleKey,
+                   revokeIdentity) bumps `changed`, so the probe sees each of
+                   them. A cached key whose validTo lies within CLOCK_SKEW_S of
+                   the wall clock is never kept on a probe (time-based expiry
+                   does not move `changed`): a full resolution runs instead.
+                   With k = 1 in this mode the state is cached but probed on
+                   every message.
+
+        Every message counts toward k once it has passed the T-9 freshness /
+        replay check (which runs first and is identical for every k and
+        mode), whether or not its signature then verifies.
+
+        SECURITY TRADE-OFF (staleness bound): with k > 1 a revocation or key
+        rotation on chain is seen only at the sender's next refresh, so up to
+        k - 1 messages from that sender may still verify after the
+        revocation is mined (unbounded for k = None). With k = 1 none do.
+        The bound is the same in both modes. Changing k or mode clears the
+        cache.
+        """
+        if k is not None:
+            k = int(k)
+            if k < 1:
+                raise ValueError("refresh_every must be >= 1 or None (infinity)")
+        if mode is None:
+            mode = getattr(self, 'refresh_mode', 'full')
+        if mode not in self.REFRESH_MODES:
+            raise ValueError(f"refresh_mode must be one of {self.REFRESH_MODES}")
+        self.refresh_every = k
+        self.refresh_mode = mode
+        self._sender_state = {}   # canonical DID -> [identity_data, uses]
+        self.chain_refreshes = 0  # refreshes issued by verify_message (full or probe)
+        self.chain_probes = 0     # probe mode: refreshes answered by the probe alone
+        self.full_resolutions = 0  # full resolutions issued by verify_message
+        self.cache_hits = 0       # verifies served from the cache
+
+    def _caching(self) -> bool:
+        """True when verify_message keeps per-sender state (k > 1, or probe mode)."""
+        return self.refresh_every != 1 or self.refresh_mode == 'probe'
+
+    def _sender_identity(self, signer_key: str, vehicle_address: str, metrics):
+        """Key/revocation state of a sender for verify_message, per refresh_every."""
+        k = self.refresh_every
+        entry = self._sender_state.get(signer_key) if self._caching() else None
+        if entry is not None and k != 1 and (k is None or entry[1] < k):
+            entry[1] += 1
+            self.cache_hits += 1
+            metrics.resolution_time_ms = 0.0
+            return entry[0]
+        start = time.time()
+        self.chain_refreshes += 1
+        info = None
+        if self.refresh_mode == 'probe' and entry is not None:
+            info = self._probe_identity_info(vehicle_address)
+            cached = entry[0]
+            if info is not None and self._probe_unchanged(cached, info):
+                entry[1] = 1
+                self.chain_probes += 1
+                metrics.resolution_time_ms = (time.time() - start) * 1000
+                return cached
+        if info is None:
+            identity_data, resolution_time = self.resolve_identity_from_address(vehicle_address)
+            metrics.resolution_time_ms = resolution_time   # as in #32
+        else:
+            identity_data, _ = self.resolve_identity_from_address(vehicle_address, identity_info=info)
+            metrics.resolution_time_ms = (time.time() - start) * 1000   # probe + resolution
+        self.full_resolutions += 1
+        if self._caching() and identity_data:
+            self._sender_state[signer_key] = [identity_data, 1]
+        else:
+            self._sender_state.pop(signer_key, None)
+        return identity_data
+
+    @staticmethod
+    def _probe_unchanged(cached: Dict, info: Tuple) -> bool:
+        """The probe's getIdentityInfo equals the cached state and the cached key is not near expiry."""
+        owner, last_changed, is_revoked, _revoked_at = info
+        if (int(last_changed) != int(cached.get('last_changed', -1))
+                or bool(is_revoked) != bool(cached.get('is_revoked'))
+                or str(owner).lower() != str(cached.get('owner', '')).lower()):
+            return False
+        valid_to = cached.get('public_key_valid_to')
+        if valid_to is not None and int(valid_to) <= int(time.time()) + CLOCK_SKEW_S:
+            return False   # time-based expiry does not move `changed`: re-resolve
+        return True
+
+    def _probe_identity_info(self, address: str):
+        """
+        One eth_call of getIdentityInfo(address) on pre-encoded calldata, sent
+        as a single JSON-RPC request (no eth_chainId from web3's contract
+        wrapper / middleware): returns
+        (owner, changed, revoked, revokedAt), or None on error.
+        """
+        try:
+            checksum = Web3.to_checksum_address(address)
+            fn = self.contract.functions.getIdentityInfo(checksum)
+            data = fn._encode_transaction_data()
+            # Straight to the HTTP provider: web3's middleware would add two
+            # eth_chainId requests around an eth_call.
+            resp = self.w3.provider.make_request(
+                'eth_call', [{'to': self.contract.address, 'data': data}, 'latest'])
+            if 'error' in resp:
+                raise RuntimeError(resp['error'])
+            raw = Web3.to_bytes(hexstr=resp['result'])
+            owner, changed, revoked, revoked_at = _abi_decode(
+                ['address', 'uint256', 'bool', 'uint256'], bytes(raw))
+            return Web3.to_checksum_address(owner), int(changed), bool(revoked), int(revoked_at)
+        except Exception as e:
+            print(f"Probe error: {e}")
+            return None
+
+    def _local_chain_id(self) -> int:
+        """Chain id of the connected node, cached (set in __init__)."""
+        cid = getattr(self, '_chain_id', None)
+        if cid is None:
+            cid = self._chain_id = self.w3.eth.chain_id
+        return cid
+
     def _load_contract(self, address: str):
         """Load contract ABI and create contract instance"""
-        # Load ABI from compiled contract (cwd-relative, then relative to this package)
-        abi = None
-        for candidate in ('contracts/ERC1056Registry_abi.json',
-                          os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
-                                       'contracts', 'ERC1056Registry_abi.json')):
-            try:
-                with open(candidate, 'r') as f:
-                    abi = json.load(f)
-                break
-            except FileNotFoundError:
-                continue
-        if abi is None:
+        # Load ABI from compiled contract
+        # Resolved relative to this module, not the CWD (review 02, T-12): the
+        # inline fallback ABI has no events, so key resolution needs this file.
+        try:
+            with open(_ABI_PATH, 'r') as f:
+                abi = json.load(f)
+        except FileNotFoundError:
             # Inline ABI for bootstrapping
             abi = self._get_inline_abi()
 
@@ -157,13 +310,6 @@ class ERC1056Provider(IdentityProvider):
                 "name": "revokeIdentity",
                 "outputs": [],
                 "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [{"internalType": "address", "name": "", "type": "address"}],
-                "name": "changed",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
                 "type": "function"
             },
             {
@@ -214,12 +360,22 @@ class ERC1056Provider(IdentityProvider):
     @staticmethod
     def vehicle_account(vehicle_id: str):
         """
-        Deterministic Ethereum account for a vehicle (the DID subject / controller).
+        TEST-ONLY deterministic Ethereum account for a vehicle (the DID subject /
+        controller).
+
+        INSECURE BY CONSTRUCTION (review 02, T-11): the controller private key is
+        sha256(vehicle_id). Anyone who knows (or guesses) a vehicle id can derive
+        that vehicle's controller key and rotate or revoke its identity. This
+        exists only so the local-testbed experiments can re-derive the account
+        without key storage; a real deployment must generate the controller key
+        with a CSPRNG and keep it in the vehicle's secure element / HSM.
 
         ERC1056Registry guards registerVehicle/updateVehicleKey/revokeIdentity with
         onlyOwner(identity, msg.sender); identityOwner() defaults to the identity
         itself, so these transactions must be signed by this account.
         """
+        # !!! TEST-ONLY KEY DERIVATION — DO NOT USE OUTSIDE THE LOCAL TESTBED !!!
+        # !!! controller key = sha256(vehicle_id): publicly derivable (T-11).  !!!
         return Account.from_key(hashlib.sha256(vehicle_id.encode()).digest())
 
     def _send_tx(self, contract_fn, sender, gas: int):
@@ -403,7 +559,11 @@ class ERC1056Provider(IdentityProvider):
         return credential
 
     def sign_message(self, vehicle_id: str, message: Dict) -> Dict:
-        """Sign message with vehicle's private key"""
+        """Sign message with vehicle's private key.
+
+        The signature covers the message AND its generation time
+        (`freshness.signed_bytes`, review 02 T-9).
+        """
         start_time = time.time()
 
         if vehicle_id not in self.vehicles:
@@ -411,8 +571,9 @@ class ERC1056Provider(IdentityProvider):
 
         vehicle = self.vehicles[vehicle_id]
 
-        # Serialize message
-        message_bytes = json.dumps(message, sort_keys=True).encode()
+        # Serialize message + generation time
+        timestamp = generation_timestamp()
+        message_bytes = signed_bytes(message, timestamp)
 
         # Sign with private key
         signature = vehicle['private_key'].sign(
@@ -425,7 +586,7 @@ class ERC1056Provider(IdentityProvider):
             'message': message,
             'signature': signature.hex(),
             'did': vehicle['did'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': timestamp,
             'identity_type': 'erc1056_did'
         }
 
@@ -437,7 +598,34 @@ class ERC1056Provider(IdentityProvider):
         return signed_message
 
     def verify_message(self, signed_message: Dict) -> Tuple[bool, IdentityMetrics]:
-        """Verify signed message"""
+        """
+        Verify a signed message from `signed_message['did']`.
+
+        Steps: freshness of the signed generation time and the replay cache
+        (`self.freshness`, review 02 T-9; checked before any RPC), resolution
+        of the sender's key from the registry, the registry's revoked flag,
+        then the secp256k1 signature over message + generation time.
+
+        WHAT "ERC-1056 VERIFY" MEANS HERE (review 02, T-10; not implemented,
+        documented):
+          * Only the custom `did/pub/secp256k1/veriKey/base64` attribute is
+            accepted as a signing key (the newest still-valid one, see
+            `_resolve_key_from_events`). The identity OWNER's own key
+            (ERC-1056 `identityOwner`, i.e. an ecrecover of the owner address)
+            and `sigAuth` / `veriKey` DELEGATES (`DIDDelegateChanged`) are NOT
+            accepted. A message signed by a valid owner or delegate is
+            rejected, so the check fails closed, but it is narrower than the
+            ERC-1056 / did:ethr notion of "owner or valid delegate".
+          * With `refresh_every` = k > 1 (freshness-k, see
+            set_refresh_every) the state is the one read at the sender's
+            last refresh, up to k - 1 messages old: a revocation is seen up
+            to k - 1 messages late. k = 1 (default) reads it every message.
+          * Resolution uses the registry's LATEST state at verification time,
+            not the state at the message's generation time. A key rotated or
+            revoked after signing invalidates an older genuine message; a key
+            added after signing would be used for it. With the 1 s freshness
+            window this gap is at most the window plus block time.
+        """
         start_time = time.time()
         metrics = IdentityMetrics()
 
@@ -453,52 +641,63 @@ class ERC1056Provider(IdentityProvider):
             if len(parts) != 4 or parts[0] != 'did' or parts[1] != 'ethr':
                 return False, metrics
 
-            vehicle_address = parts[3]
+            # Bind the DID to this registry's chain and canonicalise it. The DID
+            # is not inside the signed bytes, so the replay cache must be keyed on
+            # what the DID resolves to, not on its spelling: otherwise a captured
+            # packet replayed with a lower-cased address or another chain segment
+            # resolves to the same key but misses the cache (review 02 Pass 3).
+            try:
+                did_chain = int(parts[2], 16)
+                vehicle_address = Web3.to_checksum_address(parts[3])
+            except ValueError:
+                return False, metrics
+            if did_chain != self._local_chain_id():
+                return False, metrics
+            signer_key = f"did:ethr:0x{did_chain:x}:{vehicle_address}"
 
-            if self.freshness_k is not None:
-                # Cached verifier (freshness parameter k, see __init__).
-                entry, chain_ms = self._cached_identity(vehicle_address)
-                metrics.resolution_time_ms = chain_ms
-                if entry is None or entry['public_key_obj'] is None:
-                    metrics.verification_time_ms = (time.time() - start_time) * 1000
-                    return False, metrics
-                if entry['is_revoked']:
-                    metrics.verification_time_ms = (time.time() - start_time) * 1000
-                    return False, metrics
-                public_key = entry['public_key_obj']
-            else:
-                # Uncached verifier (default): read the registry on every message.
-                # Resolve DID (get public key from blockchain)
-                resolution_start = time.time()
-                identity_data, resolution_time = self.resolve_identity_from_address(vehicle_address)
-                metrics.resolution_time_ms = resolution_time
+            # Freshness window + replay cache (T-9), before any RPC
+            timestamp = signed_message.get('timestamp')
+            message_bytes = signed_bytes(message, timestamp)
+            if self.freshness.check(timestamp, signer_key, message_bytes) is not None:
+                metrics.verification_time_ms = (time.time() - start_time) * 1000
+                return False, metrics
 
-                if not identity_data:
-                    return False, metrics
+            # Resolve DID (get public key from blockchain); with
+            # refresh_every > 1 only every k-th message per sender does
+            identity_data = self._sender_identity(signer_key, vehicle_address, metrics)
 
-                # Check revocation
-                is_revoked, check_time = self.check_revocation_status_by_address(vehicle_address)
-                if is_revoked:
-                    metrics.verification_time_ms = (time.time() - start_time) * 1000
-                    return False, metrics
+            if not identity_data:
+                return False, metrics
 
-                # Get public key (resolved from DIDAttributeChanged events)
-                if not identity_data.get('public_key'):
-                    metrics.verification_time_ms = (time.time() - start_time) * 1000
-                    return False, metrics
+            # Check revocation. getIdentityInfo (the eth_call inside the
+            # resolution above) already returned the registry's revoked flag,
+            # read together with the `changed` pointer the key was resolved
+            # from; a second isRevoked eth_call is redundant (review 02, T-5).
+            if identity_data.get('is_revoked', True):
+                metrics.verification_time_ms = (time.time() - start_time) * 1000
+                return False, metrics
+
+            # Get public key (resolved from DIDAttributeChanged events)
+            if not identity_data.get('public_key'):
+                metrics.verification_time_ms = (time.time() - start_time) * 1000
+                return False, metrics
+            public_key = identity_data.get('_public_key_obj')
+            if public_key is None:
                 public_key_bytes = bytes.fromhex(identity_data['public_key'])
                 public_key = ec.EllipticCurvePublicKey.from_encoded_point(
                     ec.SECP256K1(),
                     public_key_bytes
                 )
+                if self._caching():
+                    identity_data['_public_key_obj'] = public_key   # cached with the state
 
-            # Verify signature
-            message_bytes = json.dumps(message, sort_keys=True).encode()
+            # Verify signature (covers the generation time)
             public_key.verify(
                 signature,
                 message_bytes,
                 ec.ECDSA(hashes.SHA256())
             )
+            self.freshness.accept(signer_key, message_bytes, timestamp)
 
             # Success
             elapsed = (time.time() - start_time) * 1000
@@ -514,106 +713,6 @@ class ERC1056Provider(IdentityProvider):
             print(f"Verification error: {e}")
             metrics.verification_time_ms = (time.time() - start_time) * 1000
             return False, metrics
-
-    # ------------------------------------------------------------------
-    # Verifier-side cache with freshness parameter k
-    # ------------------------------------------------------------------
-
-    @staticmethod
-    def _parse_freshness(value) -> Optional[int]:
-        """None -> off; 0/'inf'/float('inf') -> never refresh (0); int >= 1 -> k."""
-        if value is None:
-            return None
-        if isinstance(value, str):
-            if value.strip().lower() in ('inf', 'infinity', 'never'):
-                return 0
-            value = int(value)
-        if isinstance(value, float):
-            if value == float('inf'):
-                return 0
-            value = int(value)
-        if not isinstance(value, int) or value < 0:
-            raise ValueError(f"freshness_k must be None, an int >= 0 or 'inf' (got {value!r})")
-        return value
-
-    def _changed_block(self, checksum_address: str) -> int:
-        """
-        ERC-1056 freshness check: changed(identity), the block of the last
-        registry change for this identity (key rotation AND revocation both
-        update it in ERC1056Registry). Issued as a single raw eth_call so the
-        refresh is exactly one JSON-RPC round trip (web3's contract wrapper
-        adds two eth_chainId requests around every call).
-        """
-        data = self.contract.encode_abi('changed', args=[checksum_address])
-        resp = self.w3.provider.make_request('eth_call', [{'to': self.contract.address, 'data': data}, 'latest'])
-        if 'result' not in resp:
-            raise RuntimeError(f"eth_call changed() failed: {resp.get('error')}")
-        return int(resp['result'], 16)
-
-    def _resolve_for_cache(self, address: str) -> Optional[Dict]:
-        """Full resolution (getIdentityInfo + event walk) -> cache entry, or None."""
-        identity_data, _ = self.resolve_identity_from_address(address)
-        if not identity_data:
-            return None
-        key_obj = None
-        if identity_data.get('public_key'):
-            key_obj = ec.EllipticCurvePublicKey.from_encoded_point(
-                ec.SECP256K1(), bytes.fromhex(identity_data['public_key']))
-        return {
-            'last_changed': int(identity_data['last_changed']),
-            'is_revoked': bool(identity_data['is_revoked']),
-            'public_key': identity_data['public_key'],
-            'public_key_obj': key_obj,
-            'public_key_valid_to': identity_data.get('public_key_valid_to'),
-        }
-
-    def _cached_identity(self, address: str) -> Tuple[Optional[Dict], float]:
-        """
-        Return (cache entry, chain_read_ms) for `address`, consulting the chain
-        on the first message from the sender and then on every k-th message
-        (k = self.freshness_k; 0 = never). chain_read_ms is 0.0 when the entry
-        was served from the cache without any RPC.
-        """
-        key = address.lower()
-        entry = self._verifier_cache.get(key)
-        t0 = time.time()
-
-        if entry is None:
-            entry = self._resolve_for_cache(address)
-            if entry is None:
-                return None, (time.time() - t0) * 1000
-            entry.update({'since_refresh': 0, 'refreshes': 0, 'resolutions': 1, 'messages': 1})
-            self._verifier_cache[key] = entry
-            return entry, (time.time() - t0) * 1000
-
-        entry['messages'] += 1
-        entry['since_refresh'] += 1
-        valid_to = entry.get('public_key_valid_to')
-        expired = valid_to is not None and valid_to <= int(time.time())
-        due = self.freshness_k > 0 and entry['since_refresh'] >= self.freshness_k
-        if not (due or expired):
-            return entry, 0.0
-
-        # Freshness refresh: one round trip; full re-resolution only on change.
-        entry['since_refresh'] = 0
-        entry['refreshes'] += 1
-        changed = self._changed_block(Web3.to_checksum_address(address))
-        if changed != entry['last_changed'] or expired:
-            fresh = self._resolve_for_cache(address)
-            entry['resolutions'] += 1
-            if fresh is None:
-                self._verifier_cache.pop(key, None)
-                return None, (time.time() - t0) * 1000
-            entry.update(fresh)
-        return entry, (time.time() - t0) * 1000
-
-    def verifier_cache_stats(self) -> Dict[str, Dict[str, int]]:
-        """Per-sender counters of the freshness cache (messages, refreshes, resolutions)."""
-        return {addr: {k: e[k] for k in ('messages', 'since_refresh', 'refreshes', 'resolutions', 'last_changed')}
-                for addr, e in self._verifier_cache.items()}
-
-    def clear_verifier_cache(self):
-        self._verifier_cache.clear()
 
     def revoke_credential(self, vehicle_id: str, reason: str = "") -> bool:
         """Revoke vehicle identity on blockchain"""
@@ -735,21 +834,27 @@ class ERC1056Provider(IdentityProvider):
         vehicle_address = self.vehicles[vehicle_id]['address']
         return self.resolve_identity_from_address(vehicle_address)
 
-    def resolve_identity_from_address(self, address: str) -> Tuple[Optional[Dict], float]:
-        """Resolve identity from Ethereum address"""
+    def resolve_identity_from_address(self, address: str,
+                                      identity_info: Optional[Tuple] = None) -> Tuple[Optional[Dict], float]:
+        """Resolve identity from Ethereum address.
+
+        `identity_info` (owner, changed, revoked, revokedAt) is a
+        getIdentityInfo result already read for this address (the probe-mode
+        refresh passes it); when None it is read here (1 eth_call).
+        """
         start_time = time.time()
 
         try:
             checksum = Web3.to_checksum_address(address)
 
             # 1 eth_call: registry state for this identity
-            owner, last_changed, is_revoked, revoked_at = self.contract.functions.getIdentityInfo(
-                checksum
-            ).call()
+            if identity_info is None:
+                identity_info = self.contract.functions.getIdentityInfo(checksum).call()
+            owner, last_changed, is_revoked, revoked_at = identity_info
 
-            # ERC-1056 resolution: walk the `previousChange` linked list of
-            # blocks (1 eth_getLogs per hop) until the current verification key
-            # attribute is found. Same algorithm as ethr-did-resolver.
+            # ERC-1056 resolution: collect the identity's events along the
+            # `previousChange` linked list (1 eth_getLogs per hop), then replay
+            # them forward (T-2). See _resolve_key_from_events.
             public_key_hex, valid_to, hops = self._resolve_key_from_events(checksum, last_changed)
 
             identity_data = {
@@ -771,11 +876,28 @@ class ERC1056Provider(IdentityProvider):
             return None, (time.time() - start_time) * 1000
 
     def _resolve_key_from_events(self, checksum_address: str, last_changed: int,
-                                 max_hops: int = 64):
+                                 max_hops: int = 256):
         """
-        Follow the ERC-1056 change chain backwards from block `last_changed`
-        and return (public_key_hex, valid_to, hops) for the newest still-valid
-        key attribute, or (None, None, hops) if none exists.
+        ERC-1056 key resolution by forward replay (review 02, T-2).
+
+        1. Collect: follow the `previousChange` chain backwards from block
+           `last_changed` (1 eth_getLogs per hop, as ethr-did-resolver does)
+           and keep every event for this identity.
+        2. Replay: sort the events by (blockNumber, logIndex) and apply them
+           oldest-first. For DIDAttributeChanged the attribute is the pair
+           (name, value); the newest event for a pair wins, and if its
+           `validTo` is not in the future (a `revokeAttribute` sets
+           validTo = block.timestamp) the pair is removed.
+        3. Select: among the surviving `veriKey` attributes, return the most
+           recently set one.
+
+        The previous implementation walked backwards and returned the first
+        still-valid key it met, so a revocation event (validTo <= now) was
+        skipped and the older "set" event for the same key was returned: a
+        key revoked by its owner kept verifying messages.
+
+        Returns (public_key_hex, valid_to, hops), or (None, None, hops) when no
+        valid key exists.
         """
         identity_topic = '0x' + checksum_address[2:].lower().rjust(64, '0')
         events = {
@@ -784,8 +906,9 @@ class ERC1056Provider(IdentityProvider):
             self.contract.events.DIDAttributeChanged().topic: self.contract.events.DIDAttributeChanged(),
             self.contract.events.DIDRevoked().topic: self.contract.events.DIDRevoked(),
         }
-        now = int(time.time())
 
+        # 1. collect
+        collected = []
         block = int(last_changed)
         hops = 0
         while block > 0 and hops < max_hops:
@@ -796,37 +919,69 @@ class ERC1056Provider(IdentityProvider):
                 'toBlock': block,
                 'topics': [None, identity_topic],
             })
-
             previous_change = None
-            found_key = None
-            found_valid_to = None
             for raw in logs:
                 event = events.get(Web3.to_hex(raw['topics'][0]))
                 if event is None:
                     continue
                 args = event.process_log(raw)['args']
+                collected.append((int(raw['blockNumber']), int(raw['logIndex']),
+                                  event.event_name, args))
                 if 'previousChange' in args:
                     prev = int(args['previousChange'])
-                    previous_change = prev if previous_change is None else min(previous_change, prev)
-                if (event.event_name == 'DIDAttributeChanged'
-                        and bytes(args['name']) == self.KEY_ATTRIBUTE_NAME
-                        and int(args['validTo']) > now):
-                    # later logs in the same block supersede earlier ones
-                    found_key = bytes(args['value']).hex()
-                    found_valid_to = int(args['validTo'])
-
-            if found_key is not None:
-                return found_key, found_valid_to, hops
-
-            # Every event, DIDRevoked included (since the D21 fix), carries
-            # previousChange; the chain ends only at genesis (0) or on a
-            # malformed pointer. An old-ABI DIDRevoked (no previousChange)
-            # still terminates the walk here rather than looping.
-            if previous_change is None or previous_change >= block:
+                    if prev < block:
+                        previous_change = prev if previous_change is None else min(previous_change, prev)
+            # DIDRevoked carries no previousChange, so the chain ends there
+            # (cv2x ERC1056Registry, review 02 K-5).
+            if previous_change is None:
                 break
             block = previous_change
 
-        return None, None, hops
+        # 2. replay oldest-first; newest event per (name, value) wins
+        collected.sort(key=lambda e: (e[0], e[1]))
+        attributes = {}   # (name, value) -> (validTo, (block, logIndex))
+        for block_number, log_index, event_name, args in collected:
+            if event_name != 'DIDAttributeChanged':
+                continue
+            pair = (bytes(args['name']), bytes(args['value']))
+            attributes[pair] = (int(args['validTo']), (block_number, log_index))
+
+        # 3. keep the still-valid pairs; pick the most recently set veriKey
+        clock = _ValidityClock(self.w3)
+        best = None
+        for (name, value), (valid_to, order) in attributes.items():
+            if name != self.KEY_ATTRIBUTE_NAME:
+                continue
+            if not clock.is_valid(valid_to):
+                continue   # expired or revoked
+            if best is None or order > best[2]:
+                best = (value.hex(), valid_to, order)
+
+        if best is None:
+            return None, None, hops
+        return best[0], best[1], hops
+
+
+class _ValidityClock:
+    """
+    Decides `validTo > now` in chain time. Uses the wall clock when validTo is
+    more than CLOCK_SKEW_S away from it (no RPC), otherwise fetches the latest
+    block timestamp once (1 eth_getBlockByNumber) and compares against it.
+    """
+
+    def __init__(self, w3):
+        self.w3 = w3
+        self.wall = int(time.time())
+        self.chain_now = None
+
+    def is_valid(self, valid_to: int) -> bool:
+        if valid_to > self.wall + CLOCK_SKEW_S:
+            return True
+        if valid_to <= self.wall - CLOCK_SKEW_S:
+            return False
+        if self.chain_now is None:
+            self.chain_now = max(self.wall, int(self.w3.eth.get_block('latest')['timestamp']))
+        return valid_to > self.chain_now
 
 
 if __name__ == "__main__":

@@ -1,18 +1,18 @@
 # L1 identity mechanisms — cross-option asymmetry (from tests)
 
-Generated 2026-10-04T22:27:26.307Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
+Generated 2026-10-06T04:22:47.261Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
 
 ✓ gas = the adapter ran the mechanism (exact gasUsed of the measured transaction; 0 = no transaction, e.g. implicit creation or a view) · — = NotApplicable (reason below) · ✗ = adapter error or failed assertion · · = not run
 
 | Mechanism | cvin-combined | erc-1056-uport | erc-1056-vehicle | erc-1155 | erc-4337 | erc-721 | erc-725 | erc-725xy | erc-735 | lsp8 | mobi-vid |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| create | ✓ 0 | ✓ 77814 | ✓ 54655 | ✓ 107729 | ✓ 759088 | ✓ 545197 | ✓ 519384 | ✓ 1730753 | ✓ 1598928 | ✓ 152453 | ✓ 276671 |
-| controller-change | ✓ 68813 | ✓ 68842 | ✓ 53882 | ✓ 89793 | ✓ 28527 | ✓ 179562 | ✓ 28378 | ✓ 28822 | ✓ 28756 | ✓ 80544 | ✓ 37735 |
-| key-or-delegate | ✓ 72262 | ✓ 72219 | ✓ 35044 | — | ✓ 47569 | — | ✓ 137096 | — | — | — | ✓ 35309 |
-| attribute | ✓ 51576 | ✓ 52016 | ✓ 37180 | ✓ 96478 | ✓ 94471 | ✓ 120137 | — | ✓ 95166 | — | ✓ 100283 | ✓ 37485 |
-| claim | ✓ 333803 | — | — | ✓ 80131 | — | — | — | — | ✓ 320397 | ✓ 148816 | ✓ 287085 |
-| revoke | ✓ 73215 | ✓ 32868 | ✓ 75370 | ✓ 72614 | — | ✓ 27677 | ✓ 41399 | ✓ 33870 | ✓ 78012 | ✓ 41812 | ✓ 75382 |
-| transfer | — | — | — | ✓ 89793 | ✓ 28527 | ✓ 179562 | — | — | — | ✓ 80544 | ✓ 180105 |
+| create | ✓ 0 | ✓ 77836 | ✓ 54655 | ✓ 107729 | ✓ 759088 | ✓ 545197 | ✓ 519384 | ✓ 1730753 | ✓ 1757881 | ✓ 152644 | ✓ 276873 |
+| controller-change | ✓ 68835 | ✓ 68842 | ✓ 53882 | ✓ 89793 | ✓ 28527 | ✓ 179562 | ✓ 28378 | ✓ 28822 | ✓ 28800 | ✓ 80568 | ✓ 180105 |
+| key-or-delegate | ✓ 72284 | ✓ 72219 | ✓ 35044 | — | ✓ 47569 | — | ✓ 137096 | — | — | — | ✓ 35309 |
+| attribute | ✓ 51622 | ✓ 52016 | ✓ 37180 | ✓ 96478 | ✓ 94471 | ✓ 120137 | — | ✓ 95166 | — | ✓ 100346 | ✓ 37485 |
+| claim | ✓ 316451 | — | — | ✓ 80131 | — | — | — | — | ✓ 322950 | ✓ 148879 | ✓ 287310 |
+| revoke | ✓ 70873 | ✓ 32868 | ✓ 75370 | ✓ 72614 | — | ✓ 27677 | ✓ 41399 | ✓ 33870 | ✓ 78143 | ✓ 42116 | ✓ 75382 |
+| transfer | — | — | — | ✓ 89793 | ✓ 28527 | ✓ 179562 | — | — | — | ✓ 80568 | ✓ 180105 |
 | signed-op | — | ✓ 96065 | — | — | ✓ 69393 | — | ✓ 28358 | ✓ 76352 | — | — | — |
 | resolve | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 |
 

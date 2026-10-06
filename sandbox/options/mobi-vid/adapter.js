@@ -20,7 +20,8 @@
  *                                          birthCertHash, firstOwner=owner, birthAttributes="0x")   [authorised manufacturer]
  *                                                          MOBI VID I birth certificate; birthAttributes left empty to
  *                                                          mirror the benchmark's measured op (V1 overflow bug now fixed).
- *   changeController  changeOwner(identity, newController) [current ERC-1056 owner]  pure controller change
+ *   changeController  transferVehicleOwnership(identity, newController, 0, "SANDBOX") [owner]  (K-3, merged 2026-10-06:
+ *                                                          the public changeOwner reverts for born vehicles)
  *                                                          (DIDOwnerChanged only; no ownership-history record).
  *   addKeyOrDelegate  addDelegate(identity, bytes32(purpose), key, validitySeconds)   [owner]  inherited ERC-1056
  *                                                          (event-only). Returns keyId = "<id>:<purposeBytes32>:<key>".
@@ -145,8 +146,11 @@ class MobiVidAdapter {
   }
 
   async changeController(id, newController) {
-    const receipt = await (await (await this._asOwner(id)).changeOwner(id, newController)).wait();
-    return { ok: true, receipt, gasUsed: receipt.gasUsed, note: 'ERC-1056 changeOwner (controller only; no ownership-history record)' };
+    // Review-2 K-3 (merged 2026-10-06): the public ERC-1056 changeOwner is closed for born
+    // vehicles ("MOBIVID: use transferVehicleOwnership"), so a controller change on this option
+    // IS an ownership transfer with its odometer-stamped history record.
+    const receipt = await (await (await this._asOwner(id)).transferVehicleOwnership(id, newController, 0n, 'SANDBOX')).wait();
+    return { ok: true, receipt, gasUsed: receipt.gasUsed, note: 'transferVehicleOwnership (K-3: changeOwner reverts for born vehicles); appends an OwnershipTransfer record + ERC-1056 DIDOwnerChanged' };
   }
 
   async addKeyOrDelegate(id, key, purpose, validitySeconds) {

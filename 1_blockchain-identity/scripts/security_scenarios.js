@@ -32,6 +32,7 @@
 const fs = require("fs");
 const path = require("path");
 const { ethers } = require("hardhat");
+const { revertDataOf } = require("../test/L2-identity-system/security/attackHarness");
 
 const VIN = "1HGBH41JXMN109186"; // 17-char ISO-3779 VIN used across scenarios
 
@@ -43,13 +44,22 @@ function cell(outcome, mechanism, evidence, method = "executed") {
   return { outcome, mechanism, evidence, method };
 }
 
-/** Run a tx promise expecting it to revert; capture whether it did + reason. */
+/**
+ * Run a tx promise expecting it to revert; capture whether it did + reason.
+ * Only an EVM revert (an error carrying ABI revert data) counts as "reverted".
+ * Any other error (TypeError, ethers ABI/argument error, provider failure)
+ * means the attack never ran, so it is re-thrown instead of being recorded as
+ * a defense (REVIEW_02 Q-8; shares revertDataOf with the test harness).
+ */
 async function expectRevert(txPromise) {
   try {
     const tx = await txPromise;
     await tx.wait();
     return { reverted: false, reason: null };
   } catch (err) {
+    if (revertDataOf(err) === null) {
+      throw new Error(`attack FAILED-TO-RUN (not a revert): ${err && err.message}`);
+    }
     const reason =
       err.reason ||
       err.shortMessage ||
@@ -318,7 +328,7 @@ async function scenarioERC725(signers) {
   }
   out.sybil = cell(
     "PARTIAL",
-    "permissionless per-identity contract deployment; the only Sybil barrier is deployment gas (~529k each)",
+    "permissionless per-identity contract deployment; the only Sybil barrier is deployment gas (exact createIdentity gas: matrix cost_proxy_gas)",
     `attacker deployed ${deployed}/3 independent identity contracts with no authorisation. Cost-gated only, not issuer-gated.`
   );
 
@@ -413,7 +423,7 @@ async function scenarioERC735(signers) {
   }
   out.sybil = cell(
     "PARTIAL",
-    "permissionless per-identity contract deployment; Sybil barrier is deployment gas only (~1.40M each — the most expensive to spam)",
+    "permissionless per-identity contract deployment; Sybil barrier is deployment gas only (the most expensive to spam; exact createIdentity gas: matrix cost_proxy_gas)",
     `attacker deployed ${deployed}/3 claim-holder identities unchallenged. Cost-gated only; claims themselves still need a trusted issuer signature.`
   );
 
@@ -585,7 +595,7 @@ async function scenarioERC4337(signers) {
     `transferOwnership (key rotation) ok=${rot.ok}; account address (identity) unchanged. A stolen owner key can rotate itself out, but guardian recovery (below) can restore control.`
   );
 
-  // sybil: permissionless account deployment (~768k gas each).
+  // sybil: permissionless account deployment (gas: matrix cost_proxy_gas).
   const AcctA = await ethers.getContractFactory("CVINVehicleAccount", attacker);
   let deployed = 0;
   for (let i = 0; i < 3; i++) {
@@ -595,7 +605,7 @@ async function scenarioERC4337(signers) {
   }
   out.sybil = cell(
     "PARTIAL",
-    "permissionless smart-account deployment; Sybil barrier is deployment gas only (~768k each)",
+    "permissionless smart-account deployment; Sybil barrier is deployment gas only (exact createIdentity gas: matrix cost_proxy_gas)",
     `attacker deployed ${deployed}/3 accounts unchallenged. Cost-gated only, not issuer-gated.`
   );
 
@@ -768,7 +778,7 @@ async function scenarioMOBI(signers) {
   );
   out.sybil = cell(
     syb.reverted ? "DEFENDED" : "VULNERABLE",
-    "identity creation gated by onlyAuthorizedManufacturer AND VIN-hash uniqueness; highest per-identity cost (~299k gas)",
+    "identity creation gated by onlyAuthorizedManufacturer AND VIN-hash uniqueness (exact createIdentity gas: matrix cost_proxy_gas)",
     `attacker registerVehicleBirth reverted: "${syb.reason}". Strongest Sybil resistance: manufacturer authorisation + unique-VIN enforcement.`
   );
 

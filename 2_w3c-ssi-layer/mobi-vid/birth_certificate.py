@@ -47,7 +47,7 @@ import json
 import secrets
 import sys
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Iterable, Optional
 
 from eth_account.signers.local import LocalAccount
 from web3 import Web3
@@ -61,7 +61,9 @@ _VC_LAYER = Path(__file__).resolve().parent.parent / "verifiable-credentials"
 if str(_VC_LAYER) not in sys.path:
     sys.path.insert(0, str(_VC_LAYER))
 
-from vc_issuer import CredentialIssuer, canonicalize  # noqa: E402
+from vc_issuer import (  # noqa: E402
+    CredentialIssuer, RevocationRegistry, canonicalize,
+)
 from vc_verifier import CredentialVerifier, TrustedIssuerRegistry  # noqa: E402
 from vc_schemas import is_valid_vin  # noqa: E402
 
@@ -199,6 +201,21 @@ class BirthCertificateIssuer:
     def manufacturer_did(self) -> str:
         return self.credential_issuer.issuer_did
 
+    @property
+    def status_registry(self) -> RevocationRegistry:
+        """
+        The revocation registry named in this manufacturer's birth
+        certificates' ``credentialStatus`` (bound to the manufacturer DID).
+        Verifiers must be given it (review 02, S-2: a declared status that
+        cannot be checked now fails verification).
+        """
+        return self.credential_issuer.revocation_registry
+
+    def revoke_birth_certificate(self, credential_id: str,
+                                 reason: str = "unspecified") -> None:
+        """Revoke a birth certificate VC (off-chain status registry)."""
+        self.credential_issuer.revoke_credential(credential_id, reason)
+
     # ------------------------------------------------------------------
 
     def issue_birth_certificate(self,
@@ -227,7 +244,7 @@ class BirthCertificateIssuer:
                 ERC-1056 DIDAttributeChanged (exercises the fixed V1 path).
 
         Returns dict with: verifiableCredential, vinSalt, vinHash, vinSecret,
-        vehicleDid, txReceipt, gasUsed, contentHash.
+        vehicleDid, txReceipt, gasUsed, contentHash, statusRegistry.
         """
         if not is_valid_vin(vin):
             raise ValueError(f"invalid ISO 3779 VIN: {vin!r}")
@@ -289,6 +306,8 @@ class BirthCertificateIssuer:
             "contentHash": content_hash,
             "txReceipt": receipt,
             "gasUsed": receipt["gasUsed"],
+            # registry to hand to verifiers (credentialStatus is checked)
+            "statusRegistry": self.status_registry,
         }
 
 
@@ -302,16 +321,28 @@ class BirthCertificateVerifier:
 
       * cryptographic: the VC verifies through the canonical
         CredentialVerifier pipeline (structure, schema, temporal,
-        signature recovery against the manufacturer's did:ethr address);
+        revocation status, signature recovery against the manufacturer's
+        did:ethr address);
       * anchoring: keccak256 of the presented VC matches the
         `birthCertHash` stored on-chain for the vehicle, and the presented
         (vin, salt) pair recomputes the on-chain `vinHash`.
     """
 
     def __init__(self, registry: MOBIVIDRegistryClient,
-                 trusted_issuers: Optional[TrustedIssuerRegistry] = None):
+                 trusted_issuers: Optional[TrustedIssuerRegistry] = None,
+                 status_registries: Optional[
+                     Iterable[RevocationRegistry]] = None):
+        """
+        Args:
+            status_registries: the manufacturers' revocation registries
+                (``BirthCertificateIssuer.status_registry``). A birth
+                certificate whose ``credentialStatus`` names a registry not
+                given here is INVALID (fail closed, review 02 S-2).
+        """
         self.registry = registry
-        self.verifier = CredentialVerifier(trusted_issuers=trusted_issuers)
+        self.verifier = CredentialVerifier(
+            revocation_registry=list(status_registries or []),
+            trusted_issuers=trusted_issuers)
 
     def verify(self, vc: Dict[str, Any], vehicle_identity: str,
                vin: Optional[str] = None,
@@ -386,7 +417,8 @@ if __name__ == "__main__":
     print(f"Vehicle DID: {result['vehicleDid']}")
     print(f"Gas used:    {result['gasUsed']}")
 
-    verifier = BirthCertificateVerifier(registry)
+    verifier = BirthCertificateVerifier(
+        registry, status_registries=[issuer.status_registry])
     report = verifier.verify(result["verifiableCredential"], vehicle.address,
                              vin="5YJ3E1EA0PF123456",
                              vin_salt=result["vinSalt"])

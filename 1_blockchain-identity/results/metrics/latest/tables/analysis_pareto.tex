@@ -1,0 +1,21 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+Criterion & ERC-1056 & ERC-1056 (wrapper) & ERC-721 & ERC-725 & ERC-735 & ERC-1155 & ERC-725xy & LSP8 & ERC-4337 & CVIN-Combined \\
+\midrule
+Lifetime gas ↓ & 1,050,787 & 1,025,381 & 2,701,239 & 3,155,103 & 5,369,010 & 1,150,981 & 2,956,507 & 1,505,258 & 2,221,290 & 2,533,978 \\
+Zero→nonzero SSTOREs ↓ & 8 & 9 & 92 & 83 & 145 & 18 & 38 & 42 & 37 & 81 \\
+R3 RPC calls at h=50 ↓ & 112 & 55 & 7 & 61 & 3 & 3 & 2 & 3 & 61 & 107 \\
+R3 median ms after lifecycle ↓ & 20.31 & 12.23 & 7.00 & 15.32 & 7.62 & 2.63 & 4.25 & 3.89 & 8.33 & 12.80 \\
+Core ops supported ↑ & 17 & 16 & 16 & 16 & 12 & 14 & 13 & 13 & 16 & 16 \\
+O(1) on-chain credential check (view) ↑ & no & no & yes & yes & yes & yes & yes & yes & yes & yes \\
+**Dominated by** (cost axes: lifetime, SSTOREs) & — & — & ERC-1056, ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337, CVIN-Combined & ERC-1056, ERC-1056 (wrapper), ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined & ERC-1056, ERC-1056 (wrapper), ERC-721, ERC-725, ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined & ERC-1056, ERC-1056 (wrapper) & ERC-1056, ERC-1056 (wrapper), ERC-1155, ERC-4337 & ERC-1056, ERC-1056 (wrapper), ERC-1155 & ERC-1056, ERC-1056 (wrapper), ERC-1155 & ERC-1056, ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337 \\
+**Dominated by** (cost + read path) & — & — & ERC-1155, LSP8 & ERC-1056 (wrapper), ERC-1155, ERC-725xy, LSP8, ERC-4337 & ERC-1155, ERC-725xy, LSP8 & — & — & ERC-1155 & ERC-1155 & ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337 \\
+**Dominated by** (all six criteria) & — & — & — & ERC-4337 & ERC-1155, ERC-725xy, LSP8 & — & — & ERC-1155 & — & ERC-4337 \\
+\bottomrule
+\end{tabular}
+\caption{A3 — H5 dominance analysis: a substrate is dominated if another is at least as good on every listed criterion and better on one. '—' = on the Pareto frontier for that criterion set Run 2026-10-04T09-50-29Z\_0eef6af · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056}
+\label{tab:analysis_pareto}
+\end{table}

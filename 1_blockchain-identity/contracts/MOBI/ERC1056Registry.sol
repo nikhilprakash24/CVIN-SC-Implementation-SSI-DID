@@ -104,7 +104,8 @@ contract ERC1056Registry {
     }
 
     /**
-     * @dev Transfer ownership of an identity
+     * @dev Transfer ownership of an identity. A revoked identity is frozen
+     *      (REVIEW_02 K-3: it used to be re-assignable after revocation).
      */
     function changeOwner(
         address identity,
@@ -116,7 +117,9 @@ contract ERC1056Registry {
         changed[identity] = block.number;
     }
 
-    function changeOwner(address identity, address newOwner) public {
+    /// @dev virtual so a registry that keeps its own ownership record (e.g.
+    ///      MOBIVIDRegistry.ownershipHistory) can stop this path bypassing it.
+    function changeOwner(address identity, address newOwner) public virtual {
         changeOwner(identity, msg.sender, newOwner);
     }
 
@@ -159,7 +162,7 @@ contract ERC1056Registry {
     }
 
     /**
-     * @dev Revoke a delegate
+     * @dev Revoke a delegate (rejected on a revoked identity, K-3)
      */
     function revokeDelegate(
         address identity,
@@ -225,7 +228,7 @@ contract ERC1056Registry {
     }
 
     /**
-     * @dev Revoke an attribute
+     * @dev Revoke an attribute (rejected on a revoked identity, K-3)
      */
     function revokeAttribute(
         address identity,

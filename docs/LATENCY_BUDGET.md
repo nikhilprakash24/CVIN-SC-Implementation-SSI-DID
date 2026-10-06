@@ -95,6 +95,19 @@ finite k. The design point to evaluate under SUMO is therefore k ≈ 25–100
 (revocation latency 2.5–10 s at 10 Hz) — a quantitative trade-off the thesis can
 state exactly.
 
+> **Measured 2026-10-04 (register #32, `cv2x-testbed/results/freshness_k.*`).** The sweep over
+> k ∈ {1, 5, 25, ∞} fits t_eff = 0.428 ms + 10.52 ms / k within ±7 %. The refresh in this provider is
+> a full resolution (4 RPCs, 10.5 ms), not the single 2.5 ms round trip assumed above. So
+> P*(0.5) = 100 is reached at **k ≈ 146** (≈95 with a one-call refresh), and the "k ≈ 25" above is
+> superseded. The security cost is measured too: a revocation takes effect after at most k − 1
+> further messages from that sender (0 / 4 / 24 for k = 1 / 5 / 25), so at 10 Hz and k = 146 a
+> revoked key is honoured for up to ≈14.5 s.
+>
+> **Update (register #37).** A one-call probe refresh cuts t_chain to ≈2.8 ms while keeping the k − 1
+> staleness bound. But on a second host, with t_local ≈ 0.5 ms, **no k reaches P*(0.5) = 100 in either
+> mode** (k = ∞ gives ≈80). The knee is therefore host-dependent and must always be quoted with its
+> t_local.
+
 ## 5. Caveats
 
 - All ERC-1056 latencies are from a local Hardhat node (≈2.5 ms per round
@@ -108,9 +121,11 @@ state exactly.
   P* by the core count for the off-chain rows but not for the RPC-bound
   rows (which serialize on the node).
 - The bundle lineage reported an off-chain warm verify of 0.165 ms
-  (N=30) and a saturation of ≈772 neighbours at 0.130 ms/neighbour; those
-  figures are consistent in shape with the rows above but are **B** (not
-  re-executed on this trunk).
+  (N=30) and a saturation of ≈772 neighbours at 0.130 ms/neighbour. Both were
+  **re-executed on this trunk 2026-10-04**: warm verify **0.153 ms [0.151, 0.154]**
+  (register #27), and **0.164 ms/neighbour, P* ≈ 609** (register #26; an
+  extrapolation beyond the tested P ≤ 80). The change from the bundle values is
+  environmental (same-host A/B), not code.
 
 ## 6. Sources
 

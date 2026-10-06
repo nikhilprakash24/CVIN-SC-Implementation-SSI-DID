@@ -64,8 +64,18 @@ contract CVINVehicleLSP8 {
 
     uint256 private _existingTokens;
 
-    /// @dev tokenId => token owner
-    mapping(bytes32 => address) private _tokenOwners;
+    /// @dev Token owner plus the token's data generation, packed in one slot.
+    ///      generation is bumped on every revoke (REVIEW_02 K-8): tokenId =
+    ///      keccak256(VIN) is reused when a VIN is re-minted, and the data store
+    ///      is keyed by generation, so a re-mint starts with an empty store
+    ///      instead of inheriting the burned token's inspection data.
+    struct TokenRecord {
+        address owner;
+        uint96 generation;
+    }
+
+    /// @dev tokenId => (token owner, data generation)
+    mapping(bytes32 => TokenRecord) private _tokens;
 
     /// @dev owner => list of owned tokenIds
     mapping(address => bytes32[]) private _ownedTokens;
@@ -73,8 +83,9 @@ contract CVINVehicleLSP8 {
     /// @dev tokenId => index in _ownedTokens[owner]
     mapping(bytes32 => uint256) private _ownedTokensIndex;
 
-    /// @dev LSP8-style per-token key-value store: tokenId => dataKey => value
-    mapping(bytes32 => mapping(bytes32 => bytes)) private _tokenIdData;
+    /// @dev LSP8-style per-token key-value store:
+    ///      tokenId => generation => dataKey => value (generation: see TokenRecord)
+    mapping(bytes32 => mapping(uint96 => mapping(bytes32 => bytes))) private _tokenIdData;
 
     // ============ Events ============
 
@@ -130,7 +141,7 @@ contract CVINVehicleLSP8 {
     }
 
     function tokenOwnerOf(bytes32 tokenId) public view returns (address) {
-        address tokenOwner = _tokenOwners[tokenId];
+        address tokenOwner = _tokens[tokenId].owner;
         require(tokenOwner != address(0), "LSP8: tokenId does not exist");
         return tokenOwner;
     }
@@ -147,7 +158,7 @@ contract CVINVehicleLSP8 {
     }
 
     function exists(bytes32 tokenId) public view returns (bool) {
-        return _tokenOwners[tokenId] != address(0);
+        return _tokens[tokenId].owner != address(0);
     }
 
     // ============ Identity creation (mint) ============
@@ -168,12 +179,13 @@ contract CVINVehicleLSP8 {
         // "1hgbh41jxmn109186" and "1HGBH41JXMN109186" derive the same tokenId.
         string memory normalizedVIN = _normalizeVIN(vin);
         tokenId = keccak256(bytes(normalizedVIN));
-        require(_tokenOwners[tokenId] == address(0), "LSP8: tokenId already minted");
+        TokenRecord storage record = _tokens[tokenId];
+        require(record.owner == address(0), "LSP8: tokenId already minted");
 
         _addTokenTo(vehicleOwner, tokenId);
         _existingTokens += 1;
 
-        _tokenIdData[tokenId][DATA_KEY_VIN] = bytes(normalizedVIN);
+        _tokenIdData[tokenId][record.generation][DATA_KEY_VIN] = bytes(normalizedVIN);
         emit TokenIdDataChanged(tokenId, DATA_KEY_VIN, bytes(normalizedVIN));
         emit DataChanged(DATA_KEY_VIN, bytes(normalizedVIN));
 
@@ -256,8 +268,10 @@ contract CVINVehicleLSP8 {
     /**
      * @notice Revoke (burn) a vehicle identity token. Callable by the issuing
      *         authority (contract owner) or the current token owner.
-     *         The token's data store entries remain readable off-chain via
-     *         past events but are not cleared on-chain (gas-representative).
+     *         The token's data store is retired by bumping its generation
+     *         (REVIEW_02 K-8): getDataForTokenId returns empty for the burned
+     *         token and for any later re-mint of the same VIN. The old values
+     *         stay in storage (unreachable) and in past events.
      */
     function revokeVehicle(bytes32 tokenId, bytes calldata data) external {
         address tokenOwner = tokenOwnerOf(tokenId);
@@ -267,6 +281,7 @@ contract CVINVehicleLSP8 {
         );
 
         _removeTokenFrom(tokenOwner, tokenId);
+        _tokens[tokenId].generation += 1;
         _existingTokens -= 1;
 
         emit Transfer(msg.sender, tokenOwner, address(0), tokenId, true, data);
@@ -284,8 +299,9 @@ contract CVINVehicleLSP8 {
         bytes32 dataKey,
         bytes calldata dataValue
     ) external onlyOwner {
-        require(exists(tokenId), "LSP8: tokenId does not exist");
-        _tokenIdData[tokenId][dataKey] = dataValue;
+        TokenRecord storage record = _tokens[tokenId];
+        require(record.owner != address(0), "LSP8: tokenId does not exist");
+        _tokenIdData[tokenId][record.generation][dataKey] = dataValue;
         emit TokenIdDataChanged(tokenId, dataKey, dataValue);
         emit DataChanged(dataKey, dataValue);
     }
@@ -295,7 +311,7 @@ contract CVINVehicleLSP8 {
         view
         returns (bytes memory)
     {
-        return _tokenIdData[tokenId][dataKey];
+        return _tokenIdData[tokenId][_tokens[tokenId].generation][dataKey];
     }
 
     /// @notice Batch variant (LSP8 signature)
@@ -309,8 +325,9 @@ contract CVINVehicleLSP8 {
             "LSP8: array length mismatch"
         );
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            require(exists(tokenIds[i]), "LSP8: tokenId does not exist");
-            _tokenIdData[tokenIds[i]][dataKeys[i]] = dataValues[i];
+            TokenRecord storage record = _tokens[tokenIds[i]];
+            require(record.owner != address(0), "LSP8: tokenId does not exist");
+            _tokenIdData[tokenIds[i]][record.generation][dataKeys[i]] = dataValues[i];
             emit TokenIdDataChanged(tokenIds[i], dataKeys[i], dataValues[i]);
             emit DataChanged(dataKeys[i], dataValues[i]);
         }
@@ -324,7 +341,7 @@ contract CVINVehicleLSP8 {
         require(tokenIds.length == dataKeys.length, "LSP8: array length mismatch");
         dataValues = new bytes[](tokenIds.length);
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            dataValues[i] = _tokenIdData[tokenIds[i]][dataKeys[i]];
+            dataValues[i] = _tokenIdData[tokenIds[i]][_tokens[tokenIds[i]].generation][dataKeys[i]];
         }
     }
 
@@ -340,7 +357,7 @@ contract CVINVehicleLSP8 {
     // ============ Internal enumeration helpers ============
 
     function _addTokenTo(address to, bytes32 tokenId) private {
-        _tokenOwners[tokenId] = to;
+        _tokens[tokenId].owner = to;
         _ownedTokensIndex[tokenId] = _ownedTokens[to].length;
         _ownedTokens[to].push(tokenId);
     }
@@ -357,6 +374,6 @@ contract CVINVehicleLSP8 {
         }
         tokens.pop();
         delete _ownedTokensIndex[tokenId];
-        delete _tokenOwners[tokenId];
+        _tokens[tokenId].owner = address(0);
     }
 }

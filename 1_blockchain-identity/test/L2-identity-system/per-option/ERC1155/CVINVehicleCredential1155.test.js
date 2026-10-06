@@ -232,6 +232,24 @@ describe("CVINVehicleCredential1155 (ERC-1155 multi-token credentials)", functio
             expect(await credential.hasCredential(vehicle.address, REGISTRATION)).to.be.false;
         });
 
+        // K-13 (REVIEW_02): moving a BIRTH_CERT onto a holder that already has
+        // one overwrote vehicleVIN[to] and orphaned that vehicle's VIN.
+        it("K-13: rejects moving a BIRTH_CERT to an address that already holds one", async function () {
+            const OTHER_VIN = "2HGBH41JXMN109187";
+            await credential.connect(issuer).registerVehicle(newVehicleAddress.address, OTHER_VIN);
+
+            await expect(
+                credential
+                    .connect(issuer)
+                    .issuerTransferCredential(vehicle.address, newVehicleAddress.address, BIRTH_CERT)
+            ).to.be.revertedWith("CVIN1155: recipient already registered");
+
+            expect(await credential.vehicleVIN(newVehicleAddress.address)).to.equal(OTHER_VIN);
+            expect(await credential.vehicleVIN(vehicle.address)).to.equal(TEST_VIN);
+            expect(await credential.vinHashToVehicle(ethers.keccak256(ethers.toUtf8Bytes(OTHER_VIN))))
+                .to.equal(newVehicleAddress.address);
+        });
+
         it("rejects issuerTransferCredential from a non-issuer", async function () {
             await expect(
                 credential

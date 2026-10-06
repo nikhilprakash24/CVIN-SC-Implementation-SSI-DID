@@ -58,6 +58,33 @@ should say so in chapter 3.
 | 3.7.1 Per-DID visibility | all state public; VIN only as hash (MOBI VID) | token metadata public | account state public | SC-02 observability section |
 | 3.7.2 Incentives for multicontext DIDs | cheap (implicit) → many DIDs per vehicle is free until first write | expensive (mint per identity) | expensive (deploy per identity) | ▲ creation cost |
 
+## 1a. All nine standards (2026-10-04): measured inputs and the qualitative cells for the six added substrates
+
+The quantitative cells (▲) for **all ten columns** are now generated from the harness run of
+record by `npm run metrics:analyze` → `1_blockchain-identity/results/metrics/latest/tables/analysis_rubric_inputs.{md,csv,tex}`
+(run `2026-10-04T09-50-29Z_0eef6af`; register #34–#36). That table supersedes the three-column
+numbers quoted in §1 (which came from the test suite and the cv2x registry, register #1/#3/#22, and
+are **not** the harness's operation definitions — see `MEASUREMENT_CONDITIONS.md` §5.D). The
+qualitative method-level cells for the substrates not in §1:
+
+| Criterion | ERC-735 (claim holder) | ERC-1155 (credential tokens) | ERC-725xy (X+Y account) | LSP8 (identifiable asset) | ERC-4337 (smart account) | CVIN-Combined (hybrid) |
+|---|---|---|---|---|---|---|
+| 3.2.1 Permissioned operation | open: anyone deploys their own holder; owner anchors, issuer revokes | **permissioned**: ISSUER_ROLE registers, issues, re-binds, burns; holders cannot transfer (soulbound) | open: anyone deploys an account | **permissioned**: a single contract owner mints, writes data and revokes | open: anyone deploys an account behind the EntryPoint | open: any address is an identity; claims gated to the identity owner and the issuer |
+| 3.2.2 Interoperability | ERC-735 is an unfinalised draft; project-specific `did:erc735` | ERC-1155 wallets/indexers read balances; no DID method; project-specific `did:erc1155` | ERC-725 v2 / LSP0 ecosystem (resolvers for LSP0 Universal Profiles); project-specific here | LUKSO LSP8 tooling (representative implementation omits LSP1 hooks and operators) | ERC-4337 bundlers/wallets (harness EntryPoint is minimal, not canonical v0.7) | ERC-1056 half is `did:ethr`-compatible; claim half project-specific |
+| 3.2.3 Scope of usage | attestation-centric identity | credential-holding identity | general smart account | asset-bound identity (collection-scoped) | general smart account with recovery | general identity + safety-critical attestations |
+| 3.2.5 Offline creation | no (deploy) | no (issuer registers) | no (deploy) | no (authority mints) | no (deploy; counterfactual initCode omitted) | **yes** (implicit; C1 binds the VIN by claim) |
+| 3.3.3 Limited-resource registration | contract deployment by the owner | none for the vehicle (issuer pays) | contract deployment | none for the vehicle (authority pays) | contract deployment (or sponsored via EntryPoint/initCode, not measured) | funded EOA (owner anchors the VIN claim) |
+| 3.4.7 Verification relationships | owner only (ERC-734 keys absent) | vehicle address only | owner only (no LSP6 key manager) | token owner only (operators absent) | owner + **recovery guardian** (can install a new owner) | owner + delegates with TTL (`veriKey`, `sigAuth`) |
+| 3.4.8 Authentication model | key-based; issuer signatures (EIP-191) verified on-chain at add time | role-based issuance; holder is the address | key-based (owner); executor for on-chain action | ownership-based; authority-written data | key-based; UserOperation signature validated by the account (EIP-191 over userOpHash) | key/delegate-based; raw-digest issuer signatures verified at add time |
+| 3.6.7 Provenance | per-identity contract address (VIN in constructor) | registry address + vehicle address | account address | collection address + keccak(VIN) token id | account address + EntryPoint address | registry address + identity address + chain id in the claim digest |
+| 3.7.1 Per-DID visibility | all claims public incl. signatures and data | balances public (credential types visible; one type per credential hash) | key/value store public | per-token data public | attributes public | events + claims public |
+| 3.7.2 Incentive for multicontext DIDs | expensive (1.54 M deploy per identity) | cheap-ish (104 k register, but issuer-gated) | expensive (1.73 M per identity) | moderate (133 k mint, authority-gated) | expensive (0.81 M per identity) | cheap (267 k VIN claim; identity itself free) |
+
+Where the rubric asks for a method *rule* (3.2.1, 3.3.3) the answer for ERC-1155 and LSP8 is
+"permissioned", which is a different trust model from the open substrates and must be weighed
+against their cost advantage in chapter 6: their cheap reads and writes are bought with a single
+writing authority.
+
 ## 2. Ledger-level envelope (answered once)
 
 To be written once for the deployment target (Ethereum L1 vs an L2), citing

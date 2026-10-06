@@ -83,6 +83,50 @@ def percentile_linear(sorted_vals, p):
     return sorted_vals[lo_i] * (1.0 - frac) + sorted_vals[hi_i] * frac
 
 
+def environment_header():
+    """Environment header required for latency figures
+    (docs/MEASUREMENT_CONDITIONS.md §1): CPU, Python, libraries, date, commit."""
+    import datetime as _dt
+    import importlib.metadata as _md
+    import os as _os
+    import platform as _pf
+    import subprocess as _sp
+    cpu = _pf.processor() or "n/a"
+    try:
+        with open("/proc/cpuinfo") as fh:
+            for line in fh:
+                if line.startswith("model name"):
+                    cpu = line.split(":", 1)[1].strip()
+                    break
+    except OSError:
+        pass
+    here = Path(__file__).resolve().parent
+
+    def _vcs(*a):
+        try:
+            return _sp.run(["git", *a], cwd=here, capture_output=True,
+                           text=True, check=True).stdout.strip()
+        except Exception:  # noqa: BLE001
+            return None
+    libs = {}
+    for p in ("coincurve", "eth-account", "eth-keys", "cryptography", "numpy", "web3"):
+        try:
+            libs[p] = _md.version(p)
+        except Exception:  # noqa: BLE001
+            libs[p] = None
+    status = _vcs("status", "--porcelain")
+    return {
+        "date_utc": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
+        "commit": _vcs("rev-parse", "HEAD"),
+        "tree_clean": (status == "") if status is not None else None,
+        "cpu": cpu,
+        "logical_cpus": _os.cpu_count(),
+        "platform": _pf.platform(),
+        "python": _pf.python_version(),
+        "libraries": libs,
+    }
+
+
 def main():
     ap = argparse.ArgumentParser(description="Multi-run V2V latency statistics driver")
     ap.add_argument("--runs", type=int, default=30, help="number of runs (seeds 1..runs)")
@@ -106,6 +150,7 @@ def main():
     completed_seeds = []
     failed_runs = []
 
+    env = environment_header()  # captured before the runs write any file
     wall0 = time.time()
     for seed in seeds:
         cmd = [args.python, str(SCRIPT), "--simulate",
@@ -186,6 +231,7 @@ def main():
         "vehicles_per_run": args.vehicles,
         "per_population": per_population,
         "totals": totals,
+        "environment": env,
         "method": (
             "Each run is an independent subprocess of sumo_identity_integration.py "
             "--simulate (real ECDSA P-256 for PKI, real W3C VC + secp256k1 EIP-191 "
@@ -206,9 +252,10 @@ def main():
             "Single host, single process per run, no CPU pinning: absolute latencies "
             "are hardware-dependent (this machine) and reflect a warm, uncontended "
             "core; runs were executed serially to avoid inter-run CPU contention.",
-            "verification_failures are exclusively the 3 injected attacks per run "
-            "(tampered PKI BSM, tampered SSI BSM, uncredentialed SSI sender); the "
-            "benign BSM flow produces zero failures.",
+            "verification_failures are exclusively the 5 injected attacks per run "
+            "(tampered PKI BSM, tampered SSI BSM, stale PKI BSM, stale SSI BSM "
+            "[T-9 freshness window], uncredentialed SSI sender); the benign BSM "
+            "flow produces zero failures.",
             "p95 here is the 95th percentile OF the per-run medians (across-run tail "
             "of the typical latency), not a pooled per-message p95.",
         ],

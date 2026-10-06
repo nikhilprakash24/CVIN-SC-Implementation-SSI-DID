@@ -5,7 +5,7 @@
     "ozVersion": "5.0.2",
     "network": "hardhat-local",
     "chainId": 31337,
-    "date": "2026-07-19T21:09:18.398Z",
+    "date": "2026-10-04T09:16:40.839Z",
     "categories": [
       "impersonation",
       "replay",
@@ -114,7 +114,7 @@
       },
       "sybil": {
         "outcome": "PARTIAL",
-        "mechanism": "permissionless per-identity contract deployment; the only Sybil barrier is deployment gas (~529k each)",
+        "mechanism": "permissionless per-identity contract deployment; the only Sybil barrier is deployment gas (exact createIdentity gas: matrix cost_proxy_gas)",
         "evidence": "attacker deployed 3/3 independent identity contracts with no authorisation. Cost-gated only, not issuer-gated.",
         "method": "executed"
       },
@@ -152,7 +152,7 @@
       },
       "sybil": {
         "outcome": "PARTIAL",
-        "mechanism": "permissionless per-identity contract deployment; Sybil barrier is deployment gas only (~1.40M each — the most expensive to spam)",
+        "mechanism": "permissionless per-identity contract deployment; Sybil barrier is deployment gas only (the most expensive to spam; exact createIdentity gas: matrix cost_proxy_gas)",
         "evidence": "attacker deployed 3/3 claim-holder identities unchallenged. Cost-gated only; claims themselves still need a trusted issuer signature.",
         "method": "executed"
       },
@@ -228,7 +228,7 @@
       },
       "sybil": {
         "outcome": "PARTIAL",
-        "mechanism": "permissionless smart-account deployment; Sybil barrier is deployment gas only (~768k each)",
+        "mechanism": "permissionless smart-account deployment; Sybil barrier is deployment gas only (exact createIdentity gas: matrix cost_proxy_gas)",
         "evidence": "attacker deployed 3/3 accounts unchallenged. Cost-gated only, not issuer-gated.",
         "method": "executed"
       },
@@ -304,7 +304,7 @@
       },
       "sybil": {
         "outcome": "DEFENDED",
-        "mechanism": "identity creation gated by onlyAuthorizedManufacturer AND VIN-hash uniqueness; highest per-identity cost (~299k gas)",
+        "mechanism": "identity creation gated by onlyAuthorizedManufacturer AND VIN-hash uniqueness (exact createIdentity gas: matrix cost_proxy_gas)",
         "evidence": "attacker registerVehicleBirth reverted: \"VM Exception while processing transaction: reverted with reason string 'Only authorized manufacturers can register vehicles'\". Strongest Sybil resistance: manufacturer authorisation + unique-VIN enforcement.",
         "method": "executed"
       },

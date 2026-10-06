@@ -58,7 +58,7 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
         GOVERNMENT_DMV,    // Can issue registrations, inspections
         POLICE,            // Can issue theft reports, accidents
         INSPECTION_STATION,// Can issue safety/emissions tests
-        OWNER              // Can report events (unverified)
+        OWNER              // Can report events (unverified) on a vehicle it currently owns
     }
 
     // ============ STRUCTS ============
@@ -205,7 +205,9 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Check if address is authorized to issue event type
+     * @dev Check if address is authorized to issue event type.
+     * Role check only: recordLifecycleEvent also requires an OWNER-role
+     * issuer to be the vehicle's current owner (K-15).
      * @param issuer Address to check
      * @param eventType Type of event
      * @return True if authorized
@@ -250,6 +252,20 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
         returns (bytes32 eventId)
     {
         require(!revoked[vehicleIdentity], "Vehicle identity is revoked");
+
+        // Review-02 K-15: OWNER is a global role, so on its own it let any
+        // OWNER-role address file MAINTENANCE, ACCIDENT, MODIFICATION,
+        // THEFT_REPORT or INSURANCE_CLAIM events against any vehicle. An
+        // OWNER-role issuer must also be the vehicle's current ERC-1056
+        // owner, so a previous owner loses the right on transfer. The
+        // organisational roles (service centre, police, insurer, DMV, ...)
+        // keep their registry-wide scope by design.
+        if (authorizedIssuers[msg.sender] == IssuerRole.OWNER) {
+            require(
+                identityOwner(vehicleIdentity) == msg.sender,
+                "OWNER role: not the current owner of this vehicle"
+            );
+        }
 
         // Generate unique event ID
         eventId = keccak256(abi.encodePacked(

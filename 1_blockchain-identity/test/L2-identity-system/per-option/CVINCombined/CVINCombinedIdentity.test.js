@@ -364,6 +364,177 @@ describe("CVINCombinedIdentity (ERC-1056 + ERC-735 hybrid)", function () {
                 registry.connect(attacker).removeClaim(identity.address, claimId)
             ).to.be.revertedWith("CVINCombined: unauthorized");
         });
+
+        // K-2 (REVIEW_02): issuer revocation must stick.
+        describe("K-2 issuer revocation", function () {
+            let issuerSigner, signature, claimId;
+
+            beforeEach(async function () {
+                issuerSigner = issuerWallet.connect(ethers.provider);
+                await (await deployer.sendTransaction({ to: issuerSigner.address, value: ethers.parseEther("1") })).wait();
+                signature = await signClaim(identity.address, CLAIM_TOPIC_VIN, vinData);
+                claimId = claimIdFor(issuerWallet.address, CLAIM_TOPIC_VIN);
+                await registry
+                    .connect(identity)
+                    .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri);
+            });
+
+            it("owner cannot re-add a claim the issuer revoked, using the old signature", async function () {
+                await registry.connect(issuerSigner).removeClaim(identity.address, claimId);
+
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri)
+                ).to.be.revertedWith("CVINCombined: claim revoked by issuer");
+                expect(await registry.hasValidClaim(identity.address, CLAIM_TOPIC_VIN, issuerWallet.address)).to.be.false;
+            });
+
+            it("issuer removal records the revoked content in revokedClaims", async function () {
+                const keyFor = async (data) => ethers.solidityPackedKeccak256(
+                    ["address", "bytes32"],
+                    [issuerWallet.address, ethers.solidityPackedKeccak256(
+                        ["address", "address", "uint256", "bytes"],
+                        [await registry.getAddress(), identity.address, CLAIM_TOPIC_VIN, data])]
+                );
+                expect(await registry.revokedClaims(await keyFor(vinData))).to.be.false;
+                await expect(registry.connect(issuerSigner).removeClaim(identity.address, claimId))
+                    .to.emit(registry, "ClaimRemoved");
+                expect(await registry.revokedClaims(await keyFor(vinData))).to.be.true;
+                expect(await registry.revokedClaims(await keyFor("0x00"))).to.be.false;
+            });
+
+            it("a malleated (high-s) copy of the revoked signature is also rejected", async function () {
+                await registry.connect(issuerSigner).removeClaim(identity.address, claimId);
+                const sig = ethers.Signature.from(signature);
+                const n = BigInt("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141");
+                const highS = ethers.toBeHex(n - BigInt(sig.s), 32);
+                const flippedV = sig.v === 27 ? 28 : 27;
+                const malleated = ethers.concat([sig.r, highS, ethers.toBeHex(flippedV, 1)]);
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, malleated, vinData, claimUri)
+                ).to.be.revertedWith("CVINCombined: claim revoked by issuer");
+            });
+
+            it("issuer can re-issue the topic with new signed data after revoking", async function () {
+                await registry.connect(issuerSigner).removeClaim(identity.address, claimId);
+                const newData = ethers.toUtf8Bytes("1HGCM82633A004353");
+                const newSig = await signClaim(identity.address, CLAIM_TOPIC_VIN, newData);
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, newSig, newData, claimUri)
+                ).to.emit(registry, "ClaimAdded");
+            });
+
+            // Pass 2 re-review: the owner could pre-empt revocation by removing
+            // the claim first (issuer removeClaim then reverts "claim not found").
+            it("K-2 bypass: owner pre-removes, issuer revokeClaimContent, owner re-add reverts", async function () {
+                await registry.connect(identity).removeClaim(identity.address, claimId);
+                await expect(registry.connect(issuerSigner).removeClaim(identity.address, claimId))
+                    .to.be.revertedWith("CVINCombined: claim not found");
+                await registry.connect(issuerSigner).revokeClaimContent(identity.address, CLAIM_TOPIC_VIN, vinData);
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri)
+                ).to.be.revertedWith("CVINCombined: claim revoked by issuer");
+                expect(await registry.hasValidClaim(identity.address, CLAIM_TOPIC_VIN, issuerWallet.address)).to.be.false;
+            });
+
+            it("revokeClaimContent on an anchored claim records the revocation and removes it", async function () {
+                await expect(registry.connect(issuerSigner).revokeClaimContent(identity.address, CLAIM_TOPIC_VIN, vinData))
+                    .to.emit(registry, "ClaimRemoved")
+                    .withArgs(claimId, identity.address, CLAIM_TOPIC_VIN, issuerWallet.address);
+                expect(await registry.hasValidClaim(identity.address, CLAIM_TOPIC_VIN, issuerWallet.address)).to.be.false;
+                expect(await registry.getClaimIdsByTopic(identity.address, CLAIM_TOPIC_VIN)).to.have.lengthOf(0);
+            });
+
+            it("revokeClaimContent by a third party cannot touch another issuer's claim", async function () {
+                await registry.connect(attacker).revokeClaimContent(identity.address, CLAIM_TOPIC_VIN, vinData);
+                expect(await registry.hasValidClaim(identity.address, CLAIM_TOPIC_VIN, issuerWallet.address)).to.be.true;
+                await registry.connect(identity).removeClaim(identity.address, claimId);
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri)
+                ).to.emit(registry, "ClaimAdded");
+            });
+
+            it("revokeClaimContent of old content leaves a re-issued (different data) claim anchored", async function () {
+                const newData = ethers.toUtf8Bytes("1HGCM82633A004353");
+                const newSig = await signClaim(identity.address, CLAIM_TOPIC_VIN, newData);
+                await registry
+                    .connect(identity)
+                    .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, newSig, newData, claimUri);
+                await registry.connect(issuerSigner).revokeClaimContent(identity.address, CLAIM_TOPIC_VIN, vinData);
+                const anchored = await registry.getClaim(identity.address, claimId);
+                expect(anchored.data).to.equal(ethers.hexlify(newData));
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri)
+                ).to.be.revertedWith("CVINCombined: claim revoked by issuer");
+            });
+
+            it("owner self-removal is not a revocation; the owner may re-anchor the claim (issuer has not revoked)", async function () {
+                await registry.connect(identity).removeClaim(identity.address, claimId);
+                await expect(
+                    registry
+                        .connect(identity)
+                        .addClaim(identity.address, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, signature, vinData, claimUri)
+                ).to.emit(registry, "ClaimAdded");
+            });
+        });
+
+        // K-6 (REVIEW_02): claim add/remove used to set changed[identity] without
+        // emitting a DID event carrying previousChange, so a resolver walking
+        // changed -> previousChange landed on a block with no DID event and lost
+        // all earlier history. Claims now leave changed[] alone.
+        it("K-6: claim add/remove does not break the changed -> previousChange chain", async function () {
+            const identityAddress = identity.address;
+            const DID_EVENTS = ["DIDOwnerChanged", "DIDDelegateChanged", "DIDAttributeChanged"];
+            const didTopics = DID_EVENTS.map((n) => registry.interface.getEvent(n).topicHash);
+            const identityTopic = ethers.zeroPadValue(identityAddress, 32);
+
+            const didBlocks = [];
+            const record = async (txPromise) => (await (await txPromise).wait()).blockNumber;
+
+            didBlocks.push(await record(registry.connect(identity).setAttribute(identityAddress, ATTR_NAME, "0x01", 86400)));
+            didBlocks.push(await record(registry.connect(identity).addDelegate(identityAddress, DELEGATE_TYPE_VERIKEY, delegate.address, 86400)));
+            const sig = await signClaim(identityAddress, CLAIM_TOPIC_VIN, vinData);
+            await record(registry.connect(identity).addClaim(identityAddress, CLAIM_TOPIC_VIN, SCHEME_ECDSA, issuerWallet.address, sig, vinData, ""));
+            didBlocks.push(await record(registry.connect(identity).setAttribute(identityAddress, ATTR_NAME, "0x02", 86400)));
+            await record(registry.connect(identity).removeClaim(identityAddress, claimIdFor(issuerWallet.address, CLAIM_TOPIC_VIN)));
+
+            // The pointer names the latest DID event, not a claim block.
+            expect(await registry.changed(identityAddress)).to.equal(didBlocks[didBlocks.length - 1]);
+
+            // ERC-1056 resolver walk: logs at block b filtered on the identity topic,
+            // then follow previousChange until 0.
+            const visited = [];
+            let block = Number(await registry.changed(identityAddress));
+            while (block !== 0) {
+                const logs = await ethers.provider.getLogs({
+                    address: await registry.getAddress(),
+                    fromBlock: block,
+                    toBlock: block,
+                    topics: [didTopics, identityTopic],
+                });
+                expect(logs.length, `no DID event at block ${block}`).to.be.gt(0);
+                visited.push(block);
+                const parsed = registry.interface.parseLog(logs[0]);
+                block = Number(parsed.args.previousChange);
+            }
+            expect(visited.reverse()).to.deep.equal(didBlocks);
+        });
+
+        // K-11 (REVIEW_02): an empty slot must not read as a valid claim.
+        it("K-11: hasValidClaim is false for an empty slot (issuer = 0, topic = 0)", async function () {
+            expect(await registry.hasValidClaim(identity.address, 0, ethers.ZeroAddress)).to.be.false;
+        });
     });
 
     describe("Gas Costs (hybrid benchmark)", function () {

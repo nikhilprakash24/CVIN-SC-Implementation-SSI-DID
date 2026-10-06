@@ -1,0 +1,255 @@
+{
+  "runId": "2026-10-04T09-50-29Z_0eef6af",
+  "baseline": "erc1056",
+  "criteria": [
+    {
+      "id": "lifetime",
+      "label": "Lifetime gas",
+      "lower": true
+    },
+    {
+      "id": "z2nz",
+      "label": "Zero→nonzero SSTOREs",
+      "lower": true
+    },
+    {
+      "id": "r3rpc",
+      "label": "R3 RPC calls at h=50",
+      "lower": true
+    },
+    {
+      "id": "r3ms",
+      "label": "R3 median ms after lifecycle",
+      "lower": true
+    },
+    {
+      "id": "caps",
+      "label": "Core ops supported",
+      "lower": false
+    },
+    {
+      "id": "onchainVerify",
+      "label": "O(1) on-chain credential check (view)",
+      "lower": false
+    }
+  ],
+  "values": {
+    "erc1056": {
+      "lifetime": 1050787,
+      "z2nz": 8,
+      "r3rpc": 112,
+      "r3ms": 20.306,
+      "caps": 17,
+      "onchainVerify": 0
+    },
+    "erc1056w": {
+      "lifetime": 1025381,
+      "z2nz": 9,
+      "r3rpc": 55,
+      "r3ms": 12.23,
+      "caps": 16,
+      "onchainVerify": 0
+    },
+    "erc721": {
+      "lifetime": 2701239,
+      "z2nz": 92,
+      "r3rpc": 7,
+      "r3ms": 6.996,
+      "caps": 16,
+      "onchainVerify": 1
+    },
+    "erc725": {
+      "lifetime": 3155103,
+      "z2nz": 83,
+      "r3rpc": 61,
+      "r3ms": 15.317,
+      "caps": 16,
+      "onchainVerify": 1
+    },
+    "erc735": {
+      "lifetime": 5369010,
+      "z2nz": 145,
+      "r3rpc": 3,
+      "r3ms": 7.619,
+      "caps": 12,
+      "onchainVerify": 1
+    },
+    "erc1155": {
+      "lifetime": 1150981,
+      "z2nz": 18,
+      "r3rpc": 3,
+      "r3ms": 2.625,
+      "caps": 14,
+      "onchainVerify": 1
+    },
+    "erc725xy": {
+      "lifetime": 2956507,
+      "z2nz": 38,
+      "r3rpc": 2,
+      "r3ms": 4.246,
+      "caps": 13,
+      "onchainVerify": 1
+    },
+    "lsp8": {
+      "lifetime": 1505258,
+      "z2nz": 42,
+      "r3rpc": 3,
+      "r3ms": 3.886,
+      "caps": 13,
+      "onchainVerify": 1
+    },
+    "erc4337": {
+      "lifetime": 2221290,
+      "z2nz": 37,
+      "r3rpc": 61,
+      "r3ms": 8.329,
+      "caps": 16,
+      "onchainVerify": 1
+    },
+    "cvin": {
+      "lifetime": 2533978,
+      "z2nz": 81,
+      "r3rpc": 107,
+      "r3ms": 12.796,
+      "caps": 16,
+      "onchainVerify": 1
+    }
+  },
+  "dominatedBy": {
+    "cost": {
+      "erc1056": [],
+      "erc1056w": [],
+      "erc721": [
+        "erc1056",
+        "erc1056w",
+        "erc1155",
+        "lsp8",
+        "erc4337",
+        "cvin"
+      ],
+      "erc725": [
+        "erc1056",
+        "erc1056w",
+        "erc1155",
+        "erc725xy",
+        "lsp8",
+        "erc4337",
+        "cvin"
+      ],
+      "erc735": [
+        "erc1056",
+        "erc1056w",
+        "erc721",
+        "erc725",
+        "erc1155",
+        "erc725xy",
+        "lsp8",
+        "erc4337",
+        "cvin"
+      ],
+      "erc1155": [
+        "erc1056",
+        "erc1056w"
+      ],
+      "erc725xy": [
+        "erc1056",
+        "erc1056w",
+        "erc1155",
+        "erc4337"
+      ],
+      "lsp8": [
+        "erc1056",
+        "erc1056w",
+        "erc1155"
+      ],
+      "erc4337": [
+        "erc1056",
+        "erc1056w",
+        "erc1155"
+      ],
+      "cvin": [
+        "erc1056",
+        "erc1056w",
+        "erc1155",
+        "lsp8",
+        "erc4337"
+      ]
+    },
+    "costRead": {
+      "erc1056": [],
+      "erc1056w": [],
+      "erc721": [
+        "erc1155",
+        "lsp8"
+      ],
+      "erc725": [
+        "erc1056w",
+        "erc1155",
+        "erc725xy",
+        "lsp8",
+        "erc4337"
+      ],
+      "erc735": [
+        "erc1155",
+        "erc725xy",
+        "lsp8"
+      ],
+      "erc1155": [],
+      "erc725xy": [],
+      "lsp8": [
+        "erc1155"
+      ],
+      "erc4337": [
+        "erc1155"
+      ],
+      "cvin": [
+        "erc1056w",
+        "erc1155",
+        "lsp8",
+        "erc4337"
+      ]
+    },
+    "all": {
+      "erc1056": [],
+      "erc1056w": [],
+      "erc721": [],
+      "erc725": [
+        "erc4337"
+      ],
+      "erc735": [
+        "erc1155",
+        "erc725xy",
+        "lsp8"
+      ],
+      "erc1155": [],
+      "erc725xy": [],
+      "lsp8": [
+        "erc1155"
+      ],
+      "erc4337": [],
+      "cvin": [
+        "erc4337"
+      ]
+    }
+  },
+  "frontier": {
+    "cost": [
+      "erc1056",
+      "erc1056w"
+    ],
+    "costRead": [
+      "erc1056",
+      "erc1056w",
+      "erc1155",
+      "erc725xy"
+    ],
+    "all": [
+      "erc1056",
+      "erc1056w",
+      "erc721",
+      "erc1155",
+      "erc725xy",
+      "erc4337"
+    ]
+  }
+}

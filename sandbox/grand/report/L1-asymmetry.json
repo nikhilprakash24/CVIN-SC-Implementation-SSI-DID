@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T22:27:26.307Z",
+  "generatedAt": "2026-10-06T04:22:47.261Z",
   "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
   "options": [
     "cvin-combined",
@@ -85,7 +85,7 @@
       "option": "erc-1056-uport",
       "mechanism": "create",
       "outcome": "ok",
-      "gasUsed": "77814",
+      "gasUsed": "77836",
       "reason": null,
       "note": "createVehicleDID vin=CVNERC1056UPORT00; implicit 0-gas path also available; explicit; resolved as did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
     },
@@ -141,7 +141,7 @@
       "option": "erc-735",
       "mechanism": "create",
       "outcome": "ok",
-      "gasUsed": "1598928",
+      "gasUsed": "1757881",
       "reason": null,
       "note": "claim-holder deployment is the creation cost (vin=CVNERC73500000000 stored in constructor); explicit; resolved as did:erc735:0x7a69:0x712516e61C8B383dF4A63CFe83d7701Bce54B03e"
     },
@@ -149,7 +149,7 @@
       "option": "lsp8",
       "mechanism": "create",
       "outcome": "ok",
-      "gasUsed": "152453",
+      "gasUsed": "152644",
       "reason": null,
       "note": "tokenId = keccak256(vin); VIN stored under DATA_KEY_VIN; explicit; resolved as did:cvin:lsp8:31337:0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82:0xa4792d3a110a3dffa33ddb030d13fb2e0341f93889736563aafd7aea48f9ef02"
     },
@@ -157,7 +157,7 @@
       "option": "mobi-vid",
       "mechanism": "create",
       "outcome": "ok",
-      "gasUsed": "276671",
+      "gasUsed": "276873",
       "reason": null,
       "note": "registerVehicleBirth (VID I); identity address derived from VIN; birthAttributes empty; explicit; resolved as did:ethr:0x7a69:0x25c6b4a345466f8ffcac093a977d437e2f0d4a1d"
     },
@@ -165,7 +165,7 @@
       "option": "cvin-combined",
       "mechanism": "controller-change",
       "outcome": "ok",
-      "gasUsed": "68813",
+      "gasUsed": "68835",
       "reason": null,
       "note": "changeOwner; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
@@ -229,7 +229,7 @@
       "option": "erc-735",
       "mechanism": "controller-change",
       "outcome": "ok",
-      "gasUsed": "28756",
+      "gasUsed": "28800",
       "reason": null,
       "note": "transferOwnership; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
@@ -237,7 +237,7 @@
       "option": "lsp8",
       "mechanism": "controller-change",
       "outcome": "ok",
-      "gasUsed": "80544",
+      "gasUsed": "80568",
       "reason": null,
       "note": "changeController: ownership IS control (LSP8 5-arg transfer, force=true); new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
@@ -245,15 +245,15 @@
       "option": "mobi-vid",
       "mechanism": "controller-change",
       "outcome": "ok",
-      "gasUsed": "37735",
+      "gasUsed": "180105",
       "reason": null,
-      "note": "ERC-1056 changeOwner (controller only; no ownership-history record); new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
+      "note": "transferVehicleOwnership (K-3: changeOwner reverts for born vehicles); appends an OwnershipTransfer record + ERC-1056 DIDOwnerChanged; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
     {
       "option": "cvin-combined",
       "mechanism": "key-or-delegate",
       "outcome": "ok",
-      "gasUsed": "72262",
+      "gasUsed": "72284",
       "reason": null,
       "note": "addDelegate(veriKey, 3600s); key address (0x90F79bf6EB2c4f870365E785982E1f101E93b906)"
     },
@@ -341,7 +341,7 @@
       "option": "cvin-combined",
       "mechanism": "attribute",
       "outcome": "ok",
-      "gasUsed": "51576",
+      "gasUsed": "51622",
       "reason": null,
       "note": "setAttribute (event-only); attribute value (https://l1.example.invalid/cvin-combined/tele…)"
     },
@@ -413,7 +413,7 @@
       "option": "lsp8",
       "mechanism": "attribute",
       "outcome": "ok",
-      "gasUsed": "100283",
+      "gasUsed": "100346",
       "reason": null,
       "note": "setDataForTokenId by the issuing authority (token owner cannot write); attribute value (68747470733a2f2f6c312e6578616d706c652e696e766…)"
     },
@@ -429,9 +429,9 @@
       "option": "cvin-combined",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "333803",
+      "gasUsed": "316451",
       "reason": null,
-      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x1541d9… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
+      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x8D6E90… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
     },
     {
       "option": "erc-1056-uport",
@@ -493,7 +493,7 @@
       "option": "erc-735",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "320397",
+      "gasUsed": "322950",
       "reason": null,
       "note": "addClaim topic=1 VIN_ATTESTATION issuer=0xf39Fd6… (adapter-signed, EIP-191) +authorizeIssuer; claim data (L1-claim:erc-735:CVNERC73500000000)"
     },
@@ -501,7 +501,7 @@
       "option": "lsp8",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "148816",
+      "gasUsed": "148879",
       "reason": null,
       "note": "attestation stored as a per-token data key (no native claim model; signature stored, not verified); claim data (4c312d636c61696d3a6c7370383a43564e4c535038303…)"
     },
@@ -509,15 +509,15 @@
       "option": "mobi-vid",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "287085",
+      "gasUsed": "287310",
       "reason": null,
-      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x9a4f87db4d748dd69552c5803d8d638553aa5386a3f…)"
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0xa2d3f9bddbdaecb640d1051d6efe7063fef63f318b3…)"
     },
     {
       "option": "cvin-combined",
       "mechanism": "revoke",
       "outcome": "ok",
-      "gasUsed": "73215",
+      "gasUsed": "70873",
       "reason": null,
       "note": "removeClaim (storage refund applies); prep: addClaim; document differs from pre-revoke document"
     },
@@ -581,7 +581,7 @@
       "option": "erc-735",
       "mechanism": "revoke",
       "outcome": "ok",
-      "gasUsed": "78012",
+      "gasUsed": "78143",
       "reason": null,
       "note": "removeClaim (claim deleted; topic index compacted); prep: addClaim; document differs from pre-revoke document"
     },
@@ -589,7 +589,7 @@
       "option": "lsp8",
       "mechanism": "revoke",
       "outcome": "ok",
-      "gasUsed": "41812",
+      "gasUsed": "42116",
       "reason": null,
       "note": "revokeVehicle: token burned (Transfer to 0 + VehicleRevoked); data keys not cleared; prep: addClaim; marker \"revoked\":true"
     },
@@ -677,7 +677,7 @@
       "option": "lsp8",
       "mechanism": "transfer",
       "outcome": "ok",
-      "gasUsed": "80544",
+      "gasUsed": "80568",
       "reason": null,
       "note": "transfer: ownership IS control (LSP8 5-arg transfer, force=true); recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
@@ -751,7 +751,7 @@
       "outcome": "ok",
       "gasUsed": "76352",
       "reason": null,
-      "note": "execute(CALL, CVINExecuteTarget, 0, setValue(837729)) — real call, msg.sender==identity: true; target deploy=133519 not counted; op 'changeOwner' mapped to this demo; owner-gated by msg.sender, signature ignored; resolved as did:erc725:0x7a69:0x96F3Ce39Ad2BfDCf92C0F6E2C2CAbF83874660Fc"
+      "note": "execute(CALL, CVINExecuteTarget, 0, setValue(548109)) — real call, msg.sender==identity: true; target deploy=133519 not counted; op 'changeOwner' mapped to this demo; owner-gated by msg.sender, signature ignored; resolved as did:erc725:0x7a69:0x96F3Ce39Ad2BfDCf92C0F6E2C2CAbF83874660Fc"
     },
     {
       "option": "erc-735",

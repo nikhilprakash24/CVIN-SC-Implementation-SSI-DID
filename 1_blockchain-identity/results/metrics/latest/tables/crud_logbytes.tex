@@ -1,0 +1,25 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+Operation & ERC-1056 & ERC-1056 (wrapper) & ERC-721 & ERC-725 & ERC-735 & ERC-1155 & ERC-725xy & LSP8 & ERC-4337 & CVIN-Combined \\
+\midrule
+C1\_create\_identity & 224 & 352 & 416 & 224 & 288 & 544 & 256 & 800 & 288 & 512 \\
+C2\_create\_with\_attributes & 2,272 & 2,400 & 416 & 1,120 & 2,464 & 544 & 1,376 & 3,264 & 1,408 & 1,632 \\
+U1\_rotate\_controller & 128 & 128 & 288 & 96 & 96 & 192 & 96 & 256 & 96 & 128 \\
+U2\_add\_delegate & 192 & 192 & 128 & 128 & n/a & n/a & n/a & n/a & 96 & 192 \\
+U3\_set\_attribute & 288 & 288 & 224 & 128 & 1,024 & 352 & 192 & 416 & 192 & 288 \\
+U4\_transfer\_vehicle & 128 & 128 & 288 & 96 & 96 & 192 & 96 & 256 & 96 & 128 \\
+U5\_meta\_tx & 288 & n/a & n/a & n/a & n/a & n/a & n/a & n/a & 704 & n/a \\
+D1\_revoke\_delegate & 192 & 192 & 128 & 64 & n/a & n/a & n/a & n/a & 96 & 192 \\
+D2\_revoke\_attribute & 288 & n/a & n/a & 64 & 512 & 352 & 128 & 288 & 128 & 288 \\
+D3\_deactivate\_identity & 256 & 256 & 96 & 96 & 96 & 352 & 96 & 352 & 96 & 256 \\
+V1\_issuer\_key\_anchor & 192 & 192 & 416 & 128 & n/a & 128 & 160 & n/a & 160 & 192 \\
+V3\_anchor\_status & 256 & 256 & 256 & 128 & 960 & 352 & 160 & 352 & 160 & 512 \\
+V5\_revoke\_credential & 256 & 256 & 256 & 64 & 480 & 352 & 128 & 288 & 128 & 160 \\
+\bottomrule
+\end{tabular}
+\caption{L1 — Event-log bytes per operation Run 2026-10-04T09-50-29Z\_0eef6af · commit 0eef6af · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30}
+\label{tab:crud_logbytes}
+\end{table}

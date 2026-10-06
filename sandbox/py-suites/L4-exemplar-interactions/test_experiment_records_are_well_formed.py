@@ -28,7 +28,8 @@ def test_record_exists_with_environment_header(name, path):
 @pytest.mark.parametrize("name,path", RECORDS.items())
 def test_record_has_rows_with_latency_stats(name, path):
     d = json.loads(path.read_text())
-    rows = d.get("rows") or d.get("results") or []
+    # "latency" is the review-2 freshness-k record's row list (merged 2026-10-06)
+    rows = d.get("rows") or d.get("results") or d.get("latency") or []
     assert rows, f"{name}: no result rows"
     for r in rows:
         if isinstance(r, dict):

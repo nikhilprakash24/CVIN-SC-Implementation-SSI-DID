@@ -1,51 +1,47 @@
 #!/usr/bin/env python3
 """
-Lifecycle-parity experiment: centralized vehicle registry vs MOBI VID V2 registry
-(plan docs/PLAN_MOBI_SUMO.md step M4; scope entry SC-13).
+M4 lifecycle parity: centralized vehicle registry vs MOBI-VID-V2
+(PLAN_MOBI_SUMO.md step M4, pre-registered in §A.2; review §3.3; SC-13).
 
-The VID II design asked for a "fair comparison" between the MOBI VID blockchain
-registry and a centralized vehicle registry with feature parity. This script runs
-an IDENTICAL operation set, with the same inputs and the same result checks,
-through both backends and reports latency (perf_counter_ns), exact gasUsed from
-the receipt and JSON-RPC round trips per operation for the chain side.
+A sibling of experiment_pki_vs_erc1056.py: it imports that script's harness
+(measure / summarize / RPCCounter / environment) and leaves the #21 run of
+record untouched.
 
-Backends
-  centralized_registry  identity/centralized_vehicle_registry.py (CentralizedVehicleRegistry,
-                        in-process, in-memory "database")
-  mobi_vid_v2           identity/mobi_vid_provider.py (MOBIVIDProvider) for VID I birth
-                        registration + a thin adapter (below) for the VID II functions of
-                        contracts/MOBIVIDRegistryV2.sol on a local Hardhat node
+PRE-REGISTERED (PLAN_MOBI_SUMO.md §A.2, quoted):
+  hypothesis  the centralized registry is >= 10x faster than MOBI-VID-V2 for
+              birth and lifecycle writes (local), equal for history queries
+              once the chain history is cached;
+  metric      median/p95 ms, n = 50, plus gas for chain writes;
+  stopping    none: a single full run;
+  threat      the centralized registry is in-process (no network), so its
+              figures are a lower bound, stated.
 
-Operation set (same order, same inputs, same checks for both backends)
-  register_birth          manufacturer registers a vehicle birth certificate
-  record_lifecycle_event  authorised service centre records one MAINTENANCE event with an
-                          odometer reading
-  attest_event            a second authorised party (dealer) attests that event
-                          (MOBI VID II only: the centralized registry has no equivalent;
-                          recorded as not-equivalent, never substituted)
-  transfer_ownership      current owner transfers the vehicle to a new owner (with odometer)
-  query_history           full history for one vehicle (birth + events + attestations +
-                          ownership transfers + current owner)
+OPERATIONALISATION (fixed in this file BEFORE the run; not in the
+pre-registration, which gives no numeric test for "equal"):
+  * ">= 10x faster": median(MOBI) / median(centralized) >= 10, per write
+    operation. "Lifecycle writes" = lifecycle event AND ownership transfer
+    (both are VID II writes); each gets its own verdict.
+  * "equal ... once cached": 0.5 <= median(MOBI cached) / median(centralized)
+    <= 2.0, where "cached" = the MOBI history served from a local copy of the
+    chain history with no chain contact. Two further MOBI variants are
+    REPORTED but carry no verdict: uncached (every field from the chain) and
+    cached + validated (2 eth_calls to detect a change).
 
-Write operations use a FRESH vehicle per repetition (one-shot per vehicle: first event /
-first transfer on that vehicle). query_history repeats on one vehicle that holds the full
-history. prepare() steps (registering the fresh vehicle, recording the event to attest)
-are untimed.
-
-Measurement helpers (measure, summarize, environment, RPCCounter, Backend) are imported
-from experiment_pki_vs_erc1056.py so the two experiments report identically.
+Operations (same inputs on both backends; identity/lifecycle_backends.py)
+  birth               register a vehicle birth certificate (MOBI: VIN hash +
+                      AES-GCM VIN + registerVehicleBirth tx by the manufacturer)
+  lifecycle_event     MAINTENANCE event by an authorised service centre, on
+                      one vehicle (MOBI: recordLifecycleEvent tx)
+  ownership_transfer  alternate the vehicle between two owners (MOBI:
+                      transferVehicleOwnership tx signed by the current owner)
+  history_query       full history of a vehicle with H lifecycle events and
+                      T transfers (birth, current owner, events, transfers)
 
 Outputs (cv2x-testbed/results/)
-  lifecycle_parity.csv   one row per backend x operation (summary statistics)
-  lifecycle_parity.json  environment header, config, per-row raw samples, sanity checks
-  lifecycle_parity.md    results table, non-equivalences, caveats
+  lifecycle_parity.{json,csv,md}
 
 Usage
-  # start chain + deploy first (optional; without it only the centralized backend runs):
-  #   npx hardhat node [--port 8547] &
-  #   MOBI_VID_CONTRACT=MOBIVIDRegistryV2 npx hardhat run scripts/deploy_mobi_vid.js --network localhost
-  python3 scripts/experiment_lifecycle_parity.py [--n 50] [--warmup 3] \
-      [--rpc-url http://127.0.0.1:8545] [--deployment-file deployments/mobi_vid_localhost.json]
+  python3 scripts/experiment_lifecycle_parity.py --rpc-url http://127.0.0.1:8554 --deploy
 """
 
 import argparse
@@ -57,745 +53,358 @@ import sys
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-import numpy as np
-
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, ROOT)
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'scripts'))
 
-from experiment_pki_vs_erc1056 import (  # noqa: E402
-    Backend, RPCCounter, environment, measure, summarize, _fail,
-)
-from identity.centralized_vehicle_registry import (  # noqa: E402
-    CentralizedVehicleRegistry, EventType as CEventType, IssuerRole as CIssuerRole,
-)
+import experiment_pki_vs_erc1056 as H  # noqa: E402  (the #21 harness, imported read-only)
+from identity.lifecycle_backends import (  # noqa: E402
+    CentralizedLifecycleBackend, MOBIVIDV2LifecycleBackend, event_payload)
 
-# --------------------------------------------------------------------------
-# Identical inputs for both backends
-# --------------------------------------------------------------------------
-VEHICLE_SPEC = {'manufacturer': 'Testbed Motors', 'make': 'Testbed', 'model': 'Lifecycle',
-                'year': 2026, 'color': 'blue'}
-EVENT_DATA = {'service': 'oil_change', 'parts': ['oil_filter', 'engine_oil_5w30'],
-              'labour_hours': 0.5, 'cost_cad': 120.0}
-ODOMETER_EVENT = 15_000        # km, at the MAINTENANCE event
-ODOMETER_TRANSFER = 15_250     # km, at the ownership transfer
-SALE_PRICE = 25_000.0          # centralized-only field (the contract has none); fixed input
-JURISDICTION = 'BC-CA'
-TRANSFER_AUTHORITY = 'BC-ICBC'
-CHAIN_EVENT_MAINTENANCE = 0    # MOBIVIDRegistryV2.EventType.MAINTENANCE
-CHAIN_ROLE_DEALER = 2          # MOBIVIDRegistryV2.IssuerRole.DEALER
-CHAIN_ROLE_SERVICE_CENTER = 3  # MOBIVIDRegistryV2.IssuerRole.SERVICE_CENTER
-TX_GAS_LIMIT = 500_000         # fixed gas limit, as in MOBIVIDProvider (no eth_estimateGas round trip)
-HARDHAT_MNEMONIC = "test test test test test test test test test test test junk"
 V2_ARTIFACT = os.path.join(ROOT, 'artifacts', 'contracts', 'MOBIVIDRegistryV2.sol', 'MOBIVIDRegistryV2.json')
 
+# Operationalisation, fixed before the run (see module docstring)
+WRITE_SPEEDUP_THRESHOLD = 10.0
+EQUAL_BAND = (0.5, 2.0)
+HISTORY_EVENTS = 10
+HISTORY_TRANSFERS = 2
+
 OPERATIONS = [
-    ('register_birth', 'manufacturer registers a vehicle birth certificate'),
-    ('record_lifecycle_event', 'authorised service centre records one MAINTENANCE event with an odometer reading'),
-    ('attest_event', 'a second authorised party (dealer) attests the recorded event'),
-    ('transfer_ownership', 'current owner transfers the vehicle to a new owner (odometer recorded)'),
-    ('query_history', 'full history of one vehicle: birth, events, attestations, transfers, current owner'),
+    ('birth', 'register a vehicle birth certificate', 'write'),
+    ('lifecycle_event', 'record a MAINTENANCE lifecycle event', 'write'),
+    ('ownership_transfer', 'transfer ownership to the other owner', 'write'),
+    ('history_query', f'full history, {HISTORY_EVENTS} events + {HISTORY_TRANSFERS} transfers; MOBI uncached', 'read'),
+    ('history_query_cached', 'MOBI only: history from the local copy of the chain history (no RPC)', 'read'),
+    ('history_query_cached_validated', 'MOBI only: local copy after a 2-eth_call staleness probe', 'read'),
+    ('history_query_unserialised_diagnostic', 'centralized only, POST-HOC diagnostic: history without '
+     'dataclasses.asdict serialisation', 'read'),
 ]
 
 
-def make_vin(tag: str, kind: str, i: int) -> str:
-    # Distinct per backend, run and repetition: the centralized registry rejects duplicate
-    # VINs and the MOBI vehicle identity is derived deterministically from the VIN.
-    return f"VIN-{tag}-{kind}-{i:04d}"
+def artifact_info(path: str) -> Dict[str, Any]:
+    with open(path) as f:
+        art = json.load(f)
+    info = {'mobi_artifact': os.path.relpath(path, ROOT) if path.startswith(ROOT) else path,
+            'mobi_bytecode_sha256': hashlib.sha256(art['bytecode'].encode()).hexdigest(),
+            'mobi_compiler': None}
+    try:
+        with open(os.path.join(os.path.dirname(path), 'MOBIVIDRegistryV2.dbg.json')) as f:
+            bi_path = os.path.normpath(os.path.join(os.path.dirname(path), json.load(f)['buildInfo']))
+        with open(bi_path) as f:
+            bi = json.load(f)
+        st = bi['input']['settings']
+        info['mobi_compiler'] = (f"solc {bi.get('solcLongVersion')}, optimizer {st.get('optimizer')}, "
+                                 f"evmVersion {st.get('evmVersion')}, viaIR {bool(st.get('viaIR'))}")
+    except Exception:
+        pass
+    return info, art
 
 
-# --------------------------------------------------------------------------
-# Adapter 1: centralized registry (forwards calls; no registry logic of its own)
-# --------------------------------------------------------------------------
-class CentralizedRegistryAdapter:
-    is_chain = False
-    supports_attest = False
-    attest_note = ("CentralizedVehicleRegistry has no multi-party attestation: an event carries a "
-                   "single issuer and a `verified` flag derived from that issuer's role at record "
-                   "time; a second party can only record its own separate event. No equivalent "
-                   "operation exists, so nothing was measured for it.")
-
-    def __init__(self):
-        self.reg = CentralizedVehicleRegistry("Central Vehicle Registry")
-        self.manufacturer_id = 'MFR-TESTBED'
-        self.service_center_id = 'SVC-TESTBED'
-        self.dealer_id = 'DLR-TESTBED'
-        self.reg.authorize_issuer(self.manufacturer_id, VEHICLE_SPEC['manufacturer'], CIssuerRole.MANUFACTURER, 'MFR-LIC-1')
-        self.reg.authorize_issuer(self.service_center_id, 'Testbed Service Centre', CIssuerRole.SERVICE_CENTER, 'SVC-LIC-1')
-        self.reg.authorize_issuer(self.dealer_id, 'Testbed Dealer', CIssuerRole.DEALER, 'DLR-LIC-1')
-        self.first_owner = 'OWNER-A'
-        self.new_owner = 'OWNER-B'
-        self.last_receipt = None
-
-    def register_birth(self, vin: str) -> Dict[str, Any]:
-        cert = self.reg.register_vehicle_birth(
-            vin=vin, manufacturer=VEHICLE_SPEC['manufacturer'], make=VEHICLE_SPEC['make'],
-            model=VEHICLE_SPEC['model'], year=VEHICLE_SPEC['year'], color=VEHICLE_SPEC['color'],
-            first_owner=self.first_owner, manufacturer_id=self.manufacturer_id)
-        # The registry keys its tables by vehicle_id = f"vehicle_{certificate_id}" (see
-        # CentralizedVehicleRegistry.register_vehicle_birth); it returns only the certificate.
-        return {'handle': f"vehicle_{cert.certificate_id}", 'vin': cert.vin}
-
-    def record_event(self, handle: str, odometer: int, data: Dict[str, Any]) -> Dict[str, Any]:
-        ev = self.reg.record_lifecycle_event(handle, CEventType.MAINTENANCE, self.service_center_id,
-                                             odometer, data, JURISDICTION)
-        return {'event_id': ev.event_id, 'odometer': ev.odometer}
-
-    def attest_event(self, handle: str, event_id: Any) -> Dict[str, Any]:
-        raise NotImplementedError(self.attest_note)
-
-    def transfer_ownership(self, handle: str, odometer: int) -> Dict[str, Any]:
-        t = self.reg.transfer_ownership(handle, self.new_owner, odometer, SALE_PRICE, TRANSFER_AUTHORITY)
-        return {'to': t.to_owner, 'odometer': t.odometer}
-
-    def query_history(self, handle: str) -> Dict[str, Any]:
-        h = self.reg.get_vehicle_history(handle)
-        if not h:
-            return {}
-        return {
-            'vin': h['birth_certificate']['vin'],
-            'current_owner': h['current_owner'],
-            'event_count': h['event_count'],
-            'events': [{'odometer': e['odometer'], 'type': e['event_type']} for e in h['lifecycle_events']],
-            'transfer_count': h['transfer_count'],
-            'transfers': [{'to': t['to_owner'], 'odometer': t['odometer']} for t in h['ownership_history']],
-            'attestation_count': None,   # no such concept in this registry
-        }
-
-    # untimed sanity probes (same semantics on both sides)
-    def unauthorized_event_rejected(self, handle: str) -> bool:
-        try:
-            self.reg.record_lifecycle_event(handle, CEventType.MAINTENANCE, 'NOBODY', 1, {}, JURISDICTION)
-            return False
-        except ValueError:
-            return True
-
-    def duplicate_vin_rejected(self, vin: str) -> bool:
-        try:
-            self.register_birth(vin)
-            return False
-        except ValueError:
-            return True
+def deploy_v2(rpc_url: str, art: Dict[str, Any]):
+    from eth_account import Account
+    from web3 import Web3
+    w3 = Web3(Web3.HTTPProvider(rpc_url))
+    a = Account.from_key("0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80")
+    tx = w3.eth.contract(abi=art['abi'], bytecode=art['bytecode']).constructor().build_transaction({
+        'from': a.address, 'nonce': w3.eth.get_transaction_count(a.address), 'gas': 8_000_000,
+        'gasPrice': w3.eth.gas_price})
+    signed = a.sign_transaction(tx)
+    raw = getattr(signed, 'raw_transaction', None) or signed.rawTransaction
+    r = w3.eth.wait_for_transaction_receipt(w3.eth.send_raw_transaction(raw))
+    if r.status != 1:
+        raise RuntimeError("MOBIVIDRegistryV2 deployment reverted")
+    return r.contractAddress, int(r.gasUsed)
 
 
-# --------------------------------------------------------------------------
-# Adapter 2: MOBI VID V2 on a local chain. Birth registration goes through the
-# shipped MOBIVIDProvider (salted VIN hash, AES-GCM VIN encryption, key pair,
-# registerVehicleBirth tx). The VID II functions are not wrapped by any provider
-# in the testbed, so this adapter calls MOBIVIDRegistryV2 directly with the same
-# transaction plumbing as the provider (fixed gas, legacy gasPrice, local signing,
-# wait for receipt).
-# --------------------------------------------------------------------------
-class MOBIVIDV2Adapter:
-    is_chain = True
-    supports_attest = True
+def run_backend(adapter, rpc: Optional[H.RPCCounter], n: int, warmup: int, run_tag: str) -> Dict[str, Any]:
+    b = H.Backend(adapter.name, adapter, adapter.is_chain, rpc)
+    chain = adapter.is_chain
+    total = n + warmup
+    res: Dict[str, Dict[str, Any]] = {}
+    print(f"\n=== {adapter.name} ===")
 
-    def __init__(self, rpc_url: str, contract_address: str, artifact_path: str = V2_ARTIFACT):
-        from eth_account import Account
-        from web3 import Web3
-        from identity.mobi_vid_provider import MOBIVIDProvider
-
-        Account.enable_unaudited_hdwallet_features()
-
-        def hh(i: int):  # Hardhat default, pre-funded test accounts (never use on a real network)
-            return Account.from_mnemonic(HARDHAT_MNEMONIC, account_path=f"m/44'/60'/0'/0/{i}")
-
-        self.prov = MOBIVIDProvider(rpc_url, contract_address=contract_address)  # account #0 = deployer
-        self.w3 = self.prov.w3
-        self.Web3 = Web3
-        with open(artifact_path) as f:
-            self.abi = json.load(f)['abi']
-        self.contract = self.w3.eth.contract(address=Web3.to_checksum_address(contract_address), abi=self.abi)
-        self.chain_id = int(self.w3.eth.chain_id)
-        self.manufacturer = self.prov.account            # registry authority + authorised manufacturer
-        self.first_owner = hh(1)                         # signs transferVehicleOwnership (ERC-1056 onlyOwner)
-        self.service_center = hh(2)                      # records MAINTENANCE events
-        self.dealer = hh(3)                              # attests events
-        self.new_owner = hh(4).address                   # receives ownership (never signs)
-        assert self.manufacturer.address == hh(0).address, "MOBIVIDProvider default account is Hardhat #0"
-        self.last_receipt = None
-
-        # Capture the receipt of every transaction, including those sent inside
-        # MOBIVIDProvider.register_vehicle_birth (which does not expose it).
-        orig_wait = self.w3.eth.wait_for_transaction_receipt
-
-        def wait_and_capture(tx_hash, *a, **k):
-            r = orig_wait(tx_hash, *a, **k)
-            self.last_receipt = r
-            return r
-        self.w3.eth.wait_for_transaction_receipt = wait_and_capture
-
-    # ---- transaction plumbing (mirrors MOBIVIDProvider.register_vehicle_birth) ----
-    def _send(self, fn, account):
-        tx = fn.build_transaction({
-            'from': account.address,
-            'nonce': self.w3.eth.get_transaction_count(account.address),
-            'gas': TX_GAS_LIMIT,
-            'gasPrice': self.w3.eth.gas_price,
-        })
-        signed = account.sign_transaction(tx)
-        tx_hash = self.w3.eth.send_raw_transaction(signed.raw_transaction)
-        receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash, timeout=60)
-        if receipt['status'] != 1:
-            raise RuntimeError(f"transaction reverted: {tx_hash.hex()}")
-        return receipt
-
-    def _logs(self, receipt, event_name: str):
-        from web3.logs import DISCARD
-        return getattr(self.contract.events, event_name)().process_receipt(receipt, errors=DISCARD)
-
-    def _addr(self, handle: str) -> str:
-        return self.Web3.to_checksum_address(handle)
-
-    # ---- setup (untimed) ----
-    def setup_issuers(self):
-        for acct, role in ((self.service_center, CHAIN_ROLE_SERVICE_CENTER), (self.dealer, CHAIN_ROLE_DEALER)):
-            current = self.contract.functions.authorizedIssuers(acct.address).call()
-            if current != role:
-                self._send(self.contract.functions.authorizeIssuer(acct.address, role), self.manufacturer)
-
-    # ---- the operation set ----
-    def register_birth(self, vin: str) -> Dict[str, Any]:
-        cred = self.prov.register_vehicle_birth(
-            vin=vin,
-            manufacturer_data={'name': VEHICLE_SPEC['manufacturer']},
-            vehicle_data={'make': VEHICLE_SPEC['make'], 'model': VEHICLE_SPEC['model'],
-                          'year': VEHICLE_SPEC['year'], 'color': VEHICLE_SPEC['color']},
-            first_owner_address=self.first_owner.address)
-        identity = cred.credential_data['vehicle_identity']   # lowercase 0x.. (also the AES-GCM AAD)
-        return {'handle': identity, 'vin': vin, 'did': cred.vehicle_id}
-
-    def record_event(self, handle: str, odometer: int, data: Dict[str, Any]) -> Dict[str, Any]:
-        # Event payload stays off-chain (IPFS in the design); the chain anchors its hash
-        # and the hash of a minimal W3C-VC-shaped credential for the event.
-        data_hash = hashlib.sha256(json.dumps(data, sort_keys=True).encode()).digest()
-        credential = {
-            'type': ['VerifiableCredential', 'MOBIVehicleLifecycleEvent'],
-            'issuer': self.service_center.address,
-            'credentialSubject': {'id': f"did:ethr:0x{self.chain_id:x}:{handle}", 'eventType': 'MAINTENANCE',
-                                  'odometer': odometer, 'dataHash': data_hash.hex(), 'jurisdiction': JURISDICTION},
-        }
-        cred_hash = hashlib.sha256(json.dumps(credential, sort_keys=True).encode()).digest()
-        receipt = self._send(self.contract.functions.recordLifecycleEvent(
-            self._addr(handle), CHAIN_EVENT_MAINTENANCE, odometer, data_hash, cred_hash, JURISDICTION),
-            self.service_center)
-        logs = self._logs(receipt, 'LifecycleEventRecorded')   # decoded locally from the receipt
-        if not logs:
-            raise RuntimeError("LifecycleEventRecorded log missing")
-        return {'event_id': bytes(logs[0]['args']['eventId']), 'odometer': int(logs[0]['args']['odometer'])}
-
-    def attest_event(self, handle: str, event_id: bytes) -> Dict[str, Any]:
-        from eth_account.messages import encode_defunct
-        # Digest the contract verifies: keccak256(abi.encodePacked(address(this), chainid, vehicle, eventId))
-        # under the EIP-191 prefix, recovered on-chain and required to equal msg.sender.
-        digest = self.Web3.solidity_keccak(['address', 'uint256', 'address', 'bytes32'],
-                                           [self.contract.address, self.chain_id, self._addr(handle), event_id])
-        signature = bytes(self.dealer.sign_message(encode_defunct(primitive=digest)).signature)
-        receipt = self._send(self.contract.functions.attestEvent(event_id, self._addr(handle), signature), self.dealer)
-        logs = self._logs(receipt, 'EventAttested')
-        if not logs:
-            raise RuntimeError("EventAttested log missing")
-        return {'attester': logs[0]['args']['attester'], 'signature_bytes': len(signature)}
-
-    def transfer_ownership(self, handle: str, odometer: int) -> Dict[str, Any]:
-        receipt = self._send(self.contract.functions.transferVehicleOwnership(
-            self._addr(handle), self.new_owner, odometer, TRANSFER_AUTHORITY), self.first_owner)
-        logs = self._logs(receipt, 'VehicleOwnershipTransferred')
-        if not logs:
-            raise RuntimeError("VehicleOwnershipTransferred log missing")
-        return {'to': logs[0]['args']['to'], 'odometer': int(logs[0]['args']['odometer'])}
-
-    def query_history(self, handle: str) -> Dict[str, Any]:
-        # Uncached full read: every call goes to the chain (no client-side cache, no multicall).
-        addr = self._addr(handle)
-        birth, current_owner, is_revoked, transfer_count = self.contract.functions.getVehicleInfo(addr).call()
-        event_ids = self.contract.functions.getVehicleEvents(addr).call()
-        events = [self.contract.functions.getEvent(addr, eid).call() for eid in event_ids]
-        attestations = [self.contract.functions.getEventAttestations(eid).call() for eid in event_ids]
-        transfers = self.contract.functions.getOwnershipHistory(addr).call()
-        vin = self.prov._decrypt_vin(birth[1], handle)   # authorised party recovers the VIN (AES-256-GCM)
-        return {
-            'vin': vin,
-            'current_owner': current_owner,
-            'is_revoked': is_revoked,
-            'event_count': len(event_ids),
-            'events': [{'odometer': int(e[4]), 'type': int(e[1])} for e in events],
-            'transfer_count': int(transfer_count),
-            'transfers': [{'to': t[1], 'odometer': int(t[4])} for t in transfers],
-            'attestation_count': sum(len(a) for a in attestations),
-        }
-
-    # untimed sanity probes
-    def unauthorized_event_rejected(self, handle: str) -> bool:
-        try:
-            self._send(self.contract.functions.recordLifecycleEvent(
-                self._addr(handle), CHAIN_EVENT_MAINTENANCE, 1, b'\0' * 32, b'\0' * 32, JURISDICTION),
-                self.first_owner)   # funded account, but not an authorised issuer
-            return False
-        except Exception:
-            return True
-
-    def duplicate_vin_rejected(self, vin: str) -> bool:
-        try:
-            self.register_birth(vin)
-            return False
-        except Exception:
-            return True
-
-
-# --------------------------------------------------------------------------
-# The identical operation set, measured
-# --------------------------------------------------------------------------
-def run_backend(backend: Backend, n: int, warmup: int, run_tag: str) -> Dict[str, Any]:
-    ad = backend.provider
-    tag = f"{backend.name}_{run_tag}"
-    total = warmup + n
-    is_chain = backend.is_chain
-    print(f"\n=== {backend.name} (n={n}, warmup={warmup}, run_tag={run_tag}) ===")
-
-    results: Dict[str, Dict[str, Any]] = {}
-    not_run: Dict[str, str] = {}
-
-    def record(op, samples, chain_round_trip):
-        s = summarize(samples)
-        s['chain_round_trip'] = chain_round_trip
-        s['status'] = 'measured'
+    def record(op, samples):
+        s = H.summarize(samples)
         s['samples_ms'] = [round(x.elapsed_ms, 4) for x in samples]
-        sizes = [x.extra['history_json_bytes'] for x in samples if 'history_json_bytes' in x.extra]
-        if sizes:
-            s['history_json_bytes_median'] = float(np.median(sizes))
-        results[op] = s
-        gas = f" gas={s['gas_used']}" if s['gas_used'] is not None else (
-            f" gas={s['gas_min']}..{s['gas_max']}" if s['gas_min'] is not None else "")
-        rpc = f" rpc/op={s['rpc_calls_median']:.0f}" if is_chain else ""
-        print(f"  {op:<23} median={s['median_ms']:.3f} ms  p95={s['p95_ms']:.3f} ms{gas}{rpc}")
+        s.pop('gas_samples', None)
+        res[op] = s
+        g = f" gas={s['gas_used'] if s['gas_used'] is not None else str(s['gas_min']) + '..' + str(s['gas_max'])}" \
+            if s.get('gas_min') is not None else ''
+        print(f"  {op:<32} median={s['median_ms']:.4f} p95={s['p95_ms']:.4f} ms rpc={s['rpc_calls_median']}{g}")
 
-    def fresh_vehicle(kind: str, i: int) -> str:
-        return ad.register_birth(make_vin(tag, kind, i))['handle']
+    # 1. birth
+    vins = [f"M4-{run_tag}-{adapter.name}-BIRTH-{i:04d}" for i in range(total)]
 
-    # 1. register_birth (fresh VIN per repetition)
-    def check_birth(vin, r):
-        if not r or not r.get('handle') or r.get('vin') != vin:
-            _fail("register_birth returned no handle / wrong VIN")
+    def check_birth(vin, handle):
+        if not handle:
+            H._fail("birth returned no handle")
+        if chain:
+            adapter.last_receipt = adapter.birth_receipt()   # untimed; provider does not expose it
+            if adapter.last_receipt.status != 1:
+                H._fail("birth reverted")
         return {}
-    record('register_birth', measure(
-        backend, 'register_birth', n, warmup,
-        prepare=lambda i: make_vin(tag, 'B', i),
-        run=lambda vin: ad.register_birth(vin),
-        check=check_birth, chain_write=is_chain), is_chain)
+    record('birth', H.measure(b, 'birth', n, warmup, prepare=lambda i: vins[i],
+                              run=lambda vin: adapter.birth(vin, 0), check=check_birth, chain_write=chain))
 
-    # 2. record_lifecycle_event (fresh vehicle per repetition; first event on that vehicle)
-    def check_event(h, r):
-        if not r or not r.get('event_id') or r.get('odometer') != ODOMETER_EVENT:
-            _fail("record_lifecycle_event returned no event id / wrong odometer")
+    # 2. lifecycle_event (one vehicle, odometer increasing)
+    v_event = adapter.birth(f"M4-{run_tag}-{adapter.name}-EVENTS", 0)
+
+    def check_event(ctx, r):
+        if r is None:
+            H._fail("lifecycle_event returned None")
         return {}
-    record('record_lifecycle_event', measure(
-        backend, 'record_lifecycle_event', n, warmup,
-        prepare=lambda i: fresh_vehicle('E', i),
-        run=lambda h: ad.record_event(h, ODOMETER_EVENT, EVENT_DATA),
-        check=check_event, chain_write=is_chain), is_chain)
+    record('lifecycle_event', H.measure(
+        b, 'lifecycle_event', n, warmup,
+        prepare=lambda i: (10_000 + 100 * i, event_payload(10_000 + 100 * i)),
+        run=lambda ctx: adapter.lifecycle_event(v_event, ctx[0], ctx[1]),
+        check=check_event, chain_write=chain))
+    h = adapter.history(v_event)
+    if h['event_count'] != total:
+        H._fail(f"expected {total} events, history has {h['event_count']}")
 
-    # 3. attest_event (fresh vehicle + fresh event per repetition)
-    if ad.supports_attest:
-        def prepare_attest(i):
-            h = fresh_vehicle('A', i)
-            ev = ad.record_event(h, ODOMETER_EVENT, EVENT_DATA)
-            return (h, ev['event_id'])
+    # 3. ownership_transfer (alternating between two owners)
+    v_xfer = adapter.birth(f"M4-{run_tag}-{adapter.name}-TRANSFERS", 0)
+    state = {'owner': adapter.current_owner(v_xfer)}
 
-        def check_attest(ctx, r):
-            if not r or r.get('attester') != ad.dealer.address:
-                _fail("attest_event: attester mismatch")
-            return {}
-        record('attest_event', measure(
-            backend, 'attest_event', n, warmup,
-            prepare=prepare_attest,
-            run=lambda ctx: ad.attest_event(ctx[0], ctx[1]),
-            check=check_attest, chain_write=is_chain), is_chain)
+    def check_xfer(ctx, r):
+        new = adapter.current_owner(v_xfer)          # untimed (eth_call on chain)
+        if new == state['owner']:
+            H._fail("owner did not change")
+        state['owner'] = new
+        return {}
+    record('ownership_transfer', H.measure(
+        b, 'ownership_transfer', n, warmup, prepare=lambda i: 50_000 + 10 * i,
+        run=lambda odo: adapter.transfer(v_xfer, odo), check=check_xfer, chain_write=chain))
+
+    # 4. history_query on a vehicle with HISTORY_EVENTS events and HISTORY_TRANSFERS transfers
+    v_hist = adapter.birth(f"M4-{run_tag}-{adapter.name}-HISTORY", 0)
+    for j in range(HISTORY_EVENTS):
+        adapter.lifecycle_event(v_hist, 1_000 * (j + 1), event_payload(1_000 * (j + 1)))
+    for j in range(HISTORY_TRANSFERS):
+        adapter.transfer(v_hist, 20_000 + j)
+
+    def check_hist(ctx, r):
+        if r.get('event_count') != HISTORY_EVENTS or r.get('transfer_count') != HISTORY_TRANSFERS:
+            H._fail(f"history shape wrong: {r.get('event_count')} events, {r.get('transfer_count')} transfers")
+        return {}
+    record('history_query', H.measure(b, 'history_query', n, warmup, prepare=lambda i: v_hist,
+                                      run=adapter.history, check=check_hist))
+    if chain:
+        adapter.refresh_history_cache(v_hist)          # untimed: the "once cached" condition
+        record('history_query_cached', H.measure(b, 'history_query_cached', n, warmup, prepare=lambda i: v_hist,
+                                                 run=adapter.history_cached, check=check_hist))
+        record('history_query_cached_validated', H.measure(
+            b, 'history_query_cached_validated', n, warmup, prepare=lambda i: v_hist,
+            run=adapter.history_cached_validated, check=check_hist))
+        if adapter.history_cached(v_hist) != adapter.history(v_hist):
+            H._fail("cached history differs from the chain history")
     else:
-        not_run['attest_event'] = ad.attest_note
-        print(f"  {'attest_event':<23} NOT RUN: no equivalent operation in this backend")
-
-    # 4. transfer_ownership (fresh vehicle per repetition; first transfer on that vehicle)
-    def check_transfer(h, r):
-        if not r or r.get('to') != ad.new_owner or r.get('odometer') != ODOMETER_TRANSFER:
-            _fail("transfer_ownership: wrong new owner / odometer")
-        return {}
-    record('transfer_ownership', measure(
-        backend, 'transfer_ownership', n, warmup,
-        prepare=lambda i: fresh_vehicle('T', i),
-        run=lambda h: ad.transfer_ownership(h, ODOMETER_TRANSFER),
-        check=check_transfer, chain_write=is_chain), is_chain)
-
-    # 5. query_history: one vehicle carrying the full history (setup untimed)
-    hist_vin = make_vin(tag, 'H', 0)
-    hist = ad.register_birth(hist_vin)['handle']
-    ev = ad.record_event(hist, ODOMETER_EVENT, EVENT_DATA)
-    if ad.supports_attest:
-        ad.attest_event(hist, ev['event_id'])
-    ad.transfer_ownership(hist, ODOMETER_TRANSFER)
-
-    def check_history(h, r):
-        if not r or r.get('vin') != hist_vin:
-            _fail("query_history: VIN not recovered")
-        if r.get('event_count') != 1 or r['events'][0]['odometer'] != ODOMETER_EVENT:
-            _fail("query_history: event missing / wrong odometer")
-        if r.get('transfer_count') != 1 or r['transfers'][0]['to'] != ad.new_owner:
-            _fail("query_history: transfer missing")
-        if r.get('current_owner') != ad.new_owner:
-            _fail("query_history: current owner not updated")
-        if ad.supports_attest and r.get('attestation_count') != 1:
-            _fail("query_history: attestation missing")
-        return {'history_json_bytes': len(json.dumps(r, default=str).encode())}
-    record('query_history', measure(
-        backend, 'query_history', n, warmup,
-        prepare=lambda i: hist,
-        run=lambda h: ad.query_history(h),
-        check=check_history), is_chain)
-
-    # Untimed sanity: both registries enforce issuer authorisation and VIN uniqueness.
-    sanity = {
-        'unauthorized_issuer_rejected': bool(ad.unauthorized_event_rejected(hist)),
-        'duplicate_vin_rejected': bool(ad.duplicate_vin_rejected(hist_vin)),
-        'history_complete_after_all_operations': True,  # enforced by check_history above
-    }
-    print(f"  sanity: {sanity}")
-    return {'operations': results, 'not_run': not_run, 'sanity': sanity}
+        # POST-HOC DIAGNOSTIC (added after a discarded n=30 development run showed the
+        # cached MOBI history far below the centralized one): the centralized history
+        # without dataclasses.asdict serialisation. No verdict attaches to it.
+        record('history_query_unserialised_diagnostic', H.measure(
+            b, 'history_query_unserialised_diagnostic', n, warmup, prepare=lambda i: v_hist,
+            run=adapter.history_unserialised, check=check_hist))
+    return res
 
 
-# --------------------------------------------------------------------------
-# Output writers
-# --------------------------------------------------------------------------
-CSV_COLUMNS = ['provider', 'operation', 'status', 'chain_round_trip', 'n', 'mean_ms', 'median_ms',
-               'p95_ms', 'min_ms', 'max_ms', 'stdev_ms', 'gas_used', 'gas_median', 'gas_min',
-               'gas_max', 'rpc_calls_median', 'note']
-ENV_KEYS = ('date_utc', 'git_commit', 'git_dirty', 'python_version', 'node_version', 'hardhat_version',
-            'ethers_version', 'web3_version', 'solc_version', 'cryptography_version', 'chain_id',
-            'block_gas_limit', 'automine', 'contract_name', 'contract_address', 'contract_deploy_gas',
-            'rpc_url', 'cpu_model', 'cpu_count', 'os')
+def verdicts(central: Dict[str, Any], mobi: Dict[str, Any]) -> List[Dict[str, Any]]:
+    out = []
+    for op in ('birth', 'lifecycle_event', 'ownership_transfer'):
+        r = mobi[op]['median_ms'] / central[op]['median_ms']
+        r95 = mobi[op]['p95_ms'] / central[op]['p95_ms']
+        out.append({'operation': op, 'claim': 'centralized >= 10x faster (median)',
+                    'mobi_median_ms': mobi[op]['median_ms'], 'central_median_ms': central[op]['median_ms'],
+                    'ratio_median': r, 'ratio_p95': r95,
+                    'verdict': 'PASS' if r >= WRITE_SPEEDUP_THRESHOLD else 'FAIL'})
+    c = central['history_query']
+    for op, pre in (('history_query_cached', True), ('history_query', False), ('history_query_cached_validated', False)):
+        r = mobi[op]['median_ms'] / c['median_ms']
+        r95 = mobi[op]['p95_ms'] / c['p95_ms']
+        within = EQUAL_BAND[0] <= r <= EQUAL_BAND[1]
+        out.append({'operation': op, 'claim': ('equal once cached (median ratio in [0.5, 2.0])' if pre
+                                               else 'reported, no pre-registered verdict'),
+                    'mobi_median_ms': mobi[op]['median_ms'], 'central_median_ms': c['median_ms'],
+                    'ratio_median': r, 'ratio_p95': r95,
+                    'verdict': ('PASS' if within else 'FAIL') if pre else ('(within band)' if within else '(outside band)')})
+    d = central.get('history_query_unserialised_diagnostic')
+    if d:
+        r = mobi['history_query_cached']['median_ms'] / d['median_ms']
+        within = EQUAL_BAND[0] <= r <= EQUAL_BAND[1]
+        out.append({'operation': 'history_query_cached vs centralized unserialised (post-hoc diagnostic)',
+                    'claim': 'post-hoc diagnostic, no verdict',
+                    'mobi_median_ms': mobi['history_query_cached']['median_ms'], 'central_median_ms': d['median_ms'],
+                    'ratio_median': r, 'ratio_p95': mobi['history_query_cached']['p95_ms'] / d['p95_ms'],
+                    'verdict': '(within band)' if within else '(outside band)'})
+    return out
 
 
-def write_csv(path: str, rows: List[Dict[str, Any]]):
-    with open(path, 'w', newline='') as f:
-        w = csv.DictWriter(f, fieldnames=CSV_COLUMNS, extrasaction='ignore')
-        w.writeheader()
-        for r in rows:
-            out = {k: r.get(k) for k in CSV_COLUMNS}
-            for k in ('mean_ms', 'median_ms', 'p95_ms', 'min_ms', 'max_ms', 'stdev_ms'):
-                if out.get(k) is not None:
-                    out[k] = f"{out[k]:.4f}"
-            w.writerow(out)
+CSV_COLUMNS = ['backend', 'operation', 'n', 'median_ms', 'p95_ms', 'mean_ms', 'min_ms', 'max_ms', 'stdev_ms',
+               'gas_used', 'gas_median', 'gas_min', 'gas_max', 'rpc_calls_median']
 
 
-def fmt(x, digits=3):
-    return "-" if x is None else f"{x:.{digits}f}"
+def fmt(x, d=3):
+    if x is None:
+        return '-'
+    return f"{x:.{d}f}" if isinstance(x, float) else str(x)
 
 
-def write_md(path: str, env: Dict[str, Any], rows: List[Dict[str, Any]], sanity: Dict[str, Dict[str, bool]],
-             skipped: Dict[str, str], n: int, warmup: int):
-    backends: List[str] = []
-    for r in rows:
-        if r['provider'] not in backends:
-            backends.append(r['provider'])
-
-    def row_of(b, op):
-        return next((x for x in rows if x['provider'] == b and x['operation'] == op), None)
-
-    L: List[str] = []
-    L.append("# Lifecycle parity: centralized vehicle registry vs MOBI VID V2, measured\n")
-    L.append("Generated by `scripts/experiment_lifecycle_parity.py` (plan M4, scope entry SC-13). Both backends "
-             "run the same operation set with the same inputs and the same result checks; each measured figure is "
-             f"over n={n} warm repetitions after {warmup} discarded warm-up runs, timed with "
-             "`time.perf_counter_ns`. Gas is the exact `gasUsed` from the transaction receipt; RPC calls are "
-             "counted at the web3 HTTP provider. Write operations use a fresh vehicle per repetition; "
-             "`query_history` repeats on one vehicle holding the full history. **Compare only within this run** "
-             "(see `cpu_model`).\n")
-    L.append("## Environment\n")
-    L.append("| Item | Value |\n|---|---|")
-    for k in ENV_KEYS:
+def write_md(path, env, cfg, rows, ver):
+    L = ["# M4 lifecycle parity: centralized vehicle registry vs MOBI-VID-V2\n",
+         "Generated by `scripts/experiment_lifecycle_parity.py` (sibling of `experiment_pki_vs_erc1056.py`, "
+         "reusing its harness). Pre-registered in `docs/PLAN_MOBI_SUMO.md` §A.2; single full run, no stopping "
+         f"rule. n = {cfg['n']} per operation after {cfg['warmup']} discarded warm-ups, `time.perf_counter_ns`; "
+         "gas is the receipt `gasUsed`.\n",
+         "## Environment\n", "| Item | Value |", "|---|---|"]
+    for k in ('date_utc', 'git_commit', 'git_dirty', 'python_version', 'node_version', 'hardhat_version',
+              'web3_version', 'cryptography_version', 'chain_id', 'automine', 'mining_mode', 'rpc_url',
+              'contract_address', 'contract_deploy_gas', 'mobi_artifact', 'mobi_bytecode_sha256', 'mobi_compiler',
+              'cpu_model', 'cpu_count', 'os'):
         L.append(f"| {k} | {env.get(k)} |")
     L.append("")
-    if skipped:
-        L.append("## Backends not run\n")
-        for k, v in skipped.items():
-            L.append(f"- **{k}**: {v}")
-        L.append("")
-
-    L.append("## Results (milliseconds; gas in units)\n")
-    L.append("| Backend | Operation | Chain round trip | n | median | p95 | mean | min | max | gas (receipt) | RPC calls/op |")
-    L.append("|---|---|:---:|---:|---:|---:|---:|---:|---:|---:|---:|")
+    L.append("## Pre-registered hypothesis and verdicts\n")
+    L.append("> the centralized registry is ≥10× faster than MOBI-VID-V2 for birth and lifecycle writes (local), "
+             "equal for history queries once the chain history is cached (PLAN_MOBI_SUMO.md §A.2)\n")
+    L.append(f"Operationalisation fixed in the script before the run: ≥10× = median ratio ≥ "
+             f"{WRITE_SPEEDUP_THRESHOLD:g} per write (lifecycle writes = lifecycle event and ownership transfer, "
+             f"judged separately); equal = median ratio in [{EQUAL_BAND[0]}, {EQUAL_BAND[1]}], with \"cached\" = "
+             "MOBI history served from a local copy of the chain history.\n")
+    L.append("| Operation | Claim | MOBI median (ms) | centralized median (ms) | ratio MOBI / central (median) | "
+             "ratio (p95) | Verdict |")
+    L.append("|---|---|---:|---:|---:|---:|:---:|")
+    for v in ver:
+        L.append(f"| {v['operation']} | {v['claim']} | {fmt(v['mobi_median_ms'])} | {fmt(v['central_median_ms'], 4)} | "
+                 f"{v['ratio_median']:.3g}× | {v['ratio_p95']:.3g}× | **{v['verdict']}** |")
+    L.append("")
+    L.append("## Results (ms; gas in units)\n")
+    L.append("| Backend | Operation | n | median | p95 | mean | min | max | gas (receipt) | RPC calls/op |")
+    L.append("|---|---|---:|---:|---:|---:|---:|---:|---:|---:|")
     for r in rows:
-        if r['status'] != 'measured':
-            L.append(f"| {r['provider']} | {r['operation']} | - | 0 | not run | not run | - | - | - | - | - |")
-            continue
-        gas = r['gas_used'] if r['gas_used'] is not None else (
-            f"{r['gas_median']} ({r['gas_min']}..{r['gas_max']})" if r['gas_min'] is not None else "-")
-        rpc = int(r['rpc_calls_median']) if r['chain_round_trip'] else "-"
-        L.append(f"| {r['provider']} | {r['operation']} | {'yes' if r['chain_round_trip'] else 'no'} | "
-                 f"{r['n']} | {fmt(r['median_ms'])} | {fmt(r['p95_ms'])} | {fmt(r['mean_ms'])} | "
-                 f"{fmt(r['min_ms'])} | {fmt(r['max_ms'])} | {gas} | {rpc} |")
+        gas = r['gas_used'] if r.get('gas_used') is not None else (
+            f"{r['gas_median']} ({r['gas_min']}..{r['gas_max']})" if r.get('gas_min') is not None else '-')
+        rpc = int(r['rpc_calls_median']) if r['backend'] == 'mobi_vid_v2' else '-'
+        d = 4 if r['backend'] == 'centralized_registry' else 3
+        L.append(f"| {r['backend']} | {r['operation']} | {r['n']} | {fmt(r['median_ms'], d)} | {fmt(r['p95_ms'], d)} | "
+                 f"{fmt(r['mean_ms'], d)} | {fmt(r['min_ms'], d)} | {fmt(r['max_ms'], d)} | {gas} | {rpc} |")
     L.append("")
-
-    L.append("### Side-by-side (median / p95, ms) and ratio of medians\n")
-    L.append("| Operation | " + " | ".join(backends) + " | mobi_vid_v2 / centralized (median) |")
-    L.append("|---|" + "---|" * len(backends) + "---:|")
-    for op, _ in OPERATIONS:
-        cells = []
-        for b in backends:
-            r = row_of(b, op)
-            cells.append(f"{fmt(r['median_ms'])} / {fmt(r['p95_ms'])}" if r and r['status'] == 'measured'
-                         else ("not equivalent" if r else "-"))
-        c = row_of('centralized_registry', op)
-        m = row_of('mobi_vid_v2', op)
-        ratio = (f"{m['median_ms'] / c['median_ms']:.0f}x" if c and m and c['status'] == 'measured'
-                 and m['status'] == 'measured' and c['median_ms'] > 0 else "-")
-        L.append(f"| {op} | " + " | ".join(cells) + f" | {ratio} |")
-    L.append("")
-
-    sizes = [(r['provider'], r.get('history_json_bytes_median')) for r in rows
-             if r['operation'] == 'query_history' and r.get('history_json_bytes_median')]
-    if sizes:
-        L.append("Normalised history record size returned by `query_history` (JSON bytes, median): " +
-                 ", ".join(f"{p}={int(s)}" for p, s in sizes) + ".\n")
-    rpc_rows = [r for r in rows if r.get('rpc_methods')]
-    if rpc_rows:
-        L.append("JSON-RPC methods issued per MOBI VID V2 operation (first warm run):\n")
-        for r in rpc_rows:
-            L.append(f"- `{r['operation']}`: {', '.join(r['rpc_methods'])}")
-        L.append("")
-        q = row_of('mobi_vid_v2', 'query_history')
-        if q and q.get('rpc_methods'):
-            methods = q['rpc_methods']
-            chain_id_calls = sum(1 for m in methods if m == 'eth_chainId')
-            calls = sum(1 for m in methods if m == 'eth_call')
-            L.append(f"Of the {len(methods)} round trips in `query_history`, {calls} are registry reads (`eth_call`) "
-                     f"and {chain_id_calls} are `eth_chainId` requests that web3.py {env.get('web3_version')} issues "
-                     "around each call: client-side redundancy, removable by enabling web3's request cache or "
-                     "pinning the chain id. The adapter is measured without that tuning, as the ERC-1056 "
-                     "experiment was.\n")
-
-    # Pre-registered M4 hypothesis (docs/PLAN_MOBI_SUMO.md A.2): centralized >= 10x faster than
-    # MOBI-VID-V2 for birth and lifecycle writes (local); equal for history queries once cached.
-    L.append("## Pre-registered M4 hypothesis, checked against this run\n")
-    L.append("Hypothesis (docs/PLAN_MOBI_SUMO.md A.2): the centralized registry is >= 10x faster than MOBI VID V2 "
-             "for birth and lifecycle writes (local), and equal for history queries once the chain history is cached.\n")
-    L.append("| Operation | centralized median (ms) | mobi_vid_v2 median (ms) | ratio | >= 10x? |")
-    L.append("|---|---:|---:|---:|:---:|")
-    for op in ('register_birth', 'record_lifecycle_event', 'transfer_ownership', 'query_history'):
-        c = row_of('centralized_registry', op)
-        m = row_of('mobi_vid_v2', op)
-        if c and m and c['status'] == 'measured' and m['status'] == 'measured' and c['median_ms'] > 0:
-            ratio = m['median_ms'] / c['median_ms']
-            verdict = ('yes' if ratio >= 10 else 'no') if op != 'query_history' else 'n/a (uncached read; cached case not measured)'
-            L.append(f"| {op} | {fmt(c['median_ms'])} | {fmt(m['median_ms'])} | {ratio:.0f}x | {verdict} |")
-        else:
-            L.append(f"| {op} | {fmt(c['median_ms']) if c else '-'} | {fmt(m['median_ms']) if m else '-'} | - | not measured |")
-    L.append("")
-    L.append("The write part of the hypothesis is tested by the first three rows. The \"equal once cached\" part is "
-             "**not tested**: `query_history` here is the uncached read, and no cached history client exists in the "
-             "testbed. The ratios are between an in-process registry and a localhost chain (caveats 1-2); they bound "
-             "the gap from below on the centralized side and do not transfer to a deployed service or a public network.\n")
-
-    L.append("## Sanity checks (untimed, must all be True)\n")
-    L.append("| Backend | unauthorised issuer rejected | duplicate VIN rejected | history complete after all operations |")
-    L.append("|---|:---:|:---:|:---:|")
-    for b, s in sanity.items():
-        L.append(f"| {b} | {s['unauthorized_issuer_rejected']} | {s['duplicate_vin_rejected']} | "
-                 f"{s['history_complete_after_all_operations']} |")
-    L.append("")
-
-    L.append("## What each operation actually does per backend\n")
-    L.append("| Operation | centralized_registry (CentralizedVehicleRegistry, in-process) | mobi_vid_v2 (MOBIVIDRegistryV2 on Hardhat) |")
+    L.append(f"MOBIVIDRegistryV2 deploy gas: {env.get('contract_deploy_gas')}. Setup (untimed, not in the table): "
+             "fund the service-centre and two owner accounts, `authorizeIssuer(serviceCentre, SERVICE_CENTER)`.\n")
+    L.append("## What each operation does\n")
+    L.append("| Operation | centralized_registry (in-process Python dicts) | mobi_vid_v2 (MOBIVIDRegistryV2 via local RPC) |")
     L.append("|---|---|---|")
-    L.append("| register_birth | issuer-role dict check, duplicate-VIN check, SHA-256 certificate id, plain-text VIN "
-             "and dataclass stored in Python dicts | `MOBIVIDProvider.register_vehicle_birth`: salted SHA-256 VIN hash, "
-             "AES-256-GCM VIN encryption (HKDF per-vehicle key), SHA-256 birth-certificate hash, "
-             "`registerVehicleBirth` tx signed by the manufacturer (1 tx: birth struct + VIN-hash index + ERC-1056 "
-             "owner + ERC-1056 attribute), wait for receipt, secp256k1 vehicle key pair, `did:ethr` credential |")
-    L.append("| record_lifecycle_event | vehicle + issuer-role checks, SHA-256 event id, dataclass with the full event "
-             "payload appended to a list | SHA-256 of the event payload and of a VC-shaped credential (payload stays "
-             "off-chain), `recordLifecycleEvent` tx signed by the service centre (role check on-chain, event struct + "
-             "id list + counters), wait for receipt, event id decoded from the receipt log |")
-    L.append("| attest_event | **no equivalent** (single issuer per event; `verified` flag from the issuer's role) | "
-             "dealer signs the EIP-191 digest of (contract, chainId, vehicle, eventId) off-chain, `attestEvent` tx "
-             "(role check + `ecrecover` must equal msg.sender, attestation struct appended), wait for receipt |")
-    L.append("| transfer_ownership | vehicle check, SHA-256 transfer id, dataclass appended, owner dict updated; "
-             "**no caller authentication** (any caller may transfer any vehicle) | `transferVehicleOwnership` tx "
-             "signed by the current owner's key (ERC-1056 `onlyOwner`), transfer struct appended, ERC-1056 "
-             "`changeOwner`, wait for receipt |")
-    L.append("| query_history | one dict lookup per table, dataclasses serialised to dicts (full event payloads) | "
-             "`getVehicleInfo` + `getVehicleEvents` + `getEvent` x events + `getEventAttestations` x events + "
-             "`getOwnershipHistory` (5 `eth_call` for one event, no caching, no multicall) + AES-GCM VIN decryption; "
-             "returns hashes, not event payloads |")
+    L.append("| birth | `register_vehicle_birth`: authorisation check, plain-VIN index, birth record | "
+             "`MOBIVIDProvider.register_vehicle_birth`: salted VIN hash, HKDF + AES-256-GCM VIN encryption, "
+             "birth-certificate hash, `registerVehicleBirth` tx (manufacturer account), receipt awaited; "
+             "the provider also generates a secp256k1 key pair |")
+    L.append("| lifecycle_event | `record_lifecycle_event` (role check, append) | SHA-256 data and credential hashes, "
+             "`recordLifecycleEvent` tx by the authorised service centre, receipt awaited |")
+    L.append("| ownership_transfer | `transfer_ownership` (append, set owner) | `transferVehicleOwnership` tx signed "
+             "by the current owner, receipt awaited |")
+    L.append(f"| history_query | `get_vehicle_history` ({HISTORY_EVENTS} events, {HISTORY_TRANSFERS} transfers, "
+             "serialised to dicts) | uncached: `getVehicleInfo` + `getVehicleEvents` + "
+             f"{HISTORY_EVENTS}× `getEvent` + `getOwnershipHistory` (eth_calls), rendered to the same dict shape; "
+             "cached: the same rendering from a local copy; cached + validated: `vehicleEventCount` + "
+             "`getOwnershipHistoryCount` first |")
     L.append("")
-
-    L.append("## Caveats (read before quoting any number)\n")
-    L.append("1. **The centralized registry is in-process.** `CentralizedVehicleRegistry` is a Python object in the "
-             "measuring process: no HTTP/REST layer, no database engine, no network, no serialisation on the write "
-             "path, and no cryptographic authentication of callers (issuer authorisation is a dictionary lookup; "
-             "`transfer_ownership` does not authenticate the caller at all). Its figures are therefore the cost of "
-             "the registry logic alone and a *lower bound* on a deployed centralized service (which adds at least "
-             "one network round trip, TLS, authentication and a database commit per write). The comparison "
-             "measures the *shape* of the gap, not a deployed service.")
-    L.append("2. **Hardhat local is not a public network.** The MOBI VID side is a single Hardhat node on "
-             "localhost with automine: a transaction is mined the instant it is received, so the chain figures are "
-             "web3.py + HTTP JSON-RPC + Hardhat's EVM on this machine. On a public or consortium network every "
-             "write (birth, event, attestation, transfer) takes at least one block interval plus confirmation depth "
-             "(seconds to minutes) and reads depend on the RPC endpoint; `gasUsed` transfers unchanged, the "
-             "milliseconds do not.")
-    L.append("3. **Operations that are not strictly equivalent.**")
-    L.append("   - `attest_event` exists only on the MOBI VID side; the centralized registry has no multi-party "
-             "attestation, so the row is recorded as *not equivalent* and nothing was substituted for it.")
-    L.append("   - `register_birth` does more on the MOBI side (VIN privacy: salted hash + AES-GCM; key-pair "
-             "generation; an on-chain ERC-1056 attribute write) than on the centralized side (plain-text VIN in a "
-             "dict).")
-    L.append("   - `record_lifecycle_event` stores the full event payload in the centralized registry but only two "
-             "32-byte hashes (payload + credential) on-chain; the payload would live off-chain (IPFS) in the design. "
-             "The chain row also includes decoding the event id from the receipt log.")
-    L.append("   - `transfer_ownership` is authenticated on-chain (the current owner's secp256k1 signature, checked "
-             "by the node and by ERC-1056 `onlyOwner`) and unauthenticated in the centralized registry.")
-    L.append("   - `query_history` on the MOBI side is the *uncached* full read (5 `eth_call` for one event plus "
-             "web3's own `eth_chainId` traffic) and returns hashes where the centralized side returns payloads. "
-             "The M4 pre-registration's \"equal once the chain history is cached\" case is not measured here: a "
-             "client that caches a vehicle's history and re-validates with one `changed(identity)` call would pay "
-             "one round trip, not five.")
-    L.append("   - Each write is measured on a fresh vehicle (first event / first transfer / first attestation on "
-             "that vehicle), so the chain gas includes zero-to-non-zero storage initialisation of the per-vehicle "
-             "counters and arrays; a second event on the same vehicle costs less gas. The small `min..max` gas "
-             "spread within one operation is EIP-2028 calldata pricing of the varying hash / ciphertext bytes, not "
-             "measurement noise.")
-    L.append("4. **Gas is deterministic; latency is not.** `gasUsed` is exact and reproducible for the same inputs; "
-             "latency varies with scheduling, GC and RPC, hence n repetitions, median (robust) and p95 (tail).")
-    L.append("5. **Single machine, single process, no concurrency; one run.** Throughput under load and multi-client "
-             "contention are out of scope. The absolute values depend on `cpu_model`; only ratios measured within "
-             "one run are meaningful, and even those only for the shapes described above.")
-    L.append("6. **Deploy script change.** `scripts/deploy_mobi_vid.js` deployed only the VID I contract; it now "
-             "takes `MOBI_VID_CONTRACT=MOBIVIDRegistryV2` to deploy V2 (default unchanged). No provider or contract "
-             "was modified; the VID II calls live in the adapter inside this script.")
+    L.append("## Threats to validity\n")
+    L.append("1. **Pre-registered threat: the centralized registry is in-process** (Python dicts, no database, no "
+             "network, no authentication of the caller). Its figures are a *lower bound* on a deployed "
+             "centralized registry (a REST call to a database is typically 1–10+ ms), so every ratio above is an "
+             "*upper bound* on the real advantage of a centralized registry.")
+    L.append("2. **Hardhat local (M1), automine.** A MOBI write here is sign + send + one mined block + receipt on "
+             "localhost; on a public chain a write waits one block interval or more (seconds), which would "
+             "make the write ratios larger, not smaller.")
+    L.append("3. **Work is not identical.** MOBI birth also encrypts the VIN and hashes the birth certificate "
+             "(privacy the centralized baseline does not provide: it stores the plain VIN) and generates a key "
+             "pair; MOBI lifecycle events store hashes, not the event body. The comparison is of the two "
+             "implementations as shipped.")
+    L.append("4. **\"Cached\" is a condition, not a mechanism of the provider.** The cached MOBI history is the "
+             "rendering of a local copy of data previously read from the chain; it does not detect later "
+             "changes. The validated variant shows the cost of detecting them (2 eth_calls).")
+    L.append("5. **Centralized event IDs** are `sha256(vehicle, type, int(time.time()))[:16]`, so two events of one "
+             "type on one vehicle within a second share an ID (the baseline does not enforce uniqueness). The "
+             "timing is unaffected; noted as a defect of the baseline.")
+    L.append("6. **Single machine, serial, one run** (pre-registered: no stopping rule). Development runs of the "
+             "script (n = 30, written to a scratch directory, not committed) preceded this run; the "
+             "operationalisation constants were fixed before them and were not changed. One post-hoc *diagnostic* "
+             "row (centralized history without `dataclasses.asdict`) was added after a development run showed "
+             "the cached MOBI history far *below* the centralized one; it carries no verdict and changes none.")
     L.append("")
     with open(path, 'w') as f:
         f.write("\n".join(L))
 
 
-# --------------------------------------------------------------------------
-# Main
-# --------------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--n', type=int, default=50, help='warm repetitions per operation (>= 30)')
-    ap.add_argument('--warmup', type=int, default=3, help='discarded warm-up runs per operation')
+    ap.add_argument('--n', type=int, default=50)
+    ap.add_argument('--warmup', type=int, default=3)
     ap.add_argument('--rpc-url', default='http://127.0.0.1:8545')
-    ap.add_argument('--contract-address', default=None, help='MOBIVIDRegistryV2 address (default: from --deployment-file)')
-    ap.add_argument('--deployment-file', default=os.path.join(ROOT, 'deployments', 'mobi_vid_localhost.json'),
-                    help='deploy_mobi_vid.js output (contractAddress, gasUsed)')
-    ap.add_argument('--no-chain', action='store_true', help='skip the MOBI VID V2 backend')
+    ap.add_argument('--contract-address', default=None, help='existing MOBIVIDRegistryV2 (else --deploy)')
+    ap.add_argument('--deploy', action='store_true', help='deploy MOBIVIDRegistryV2 from the tracked artifact')
+    ap.add_argument('--artifact', default=V2_ARTIFACT)
     ap.add_argument('--out-dir', default=os.path.join(ROOT, 'results'))
-    ap.add_argument('--render-only', action='store_true',
-                    help='do not measure; re-write the .csv/.md from the existing .json in --out-dir')
+    ap.add_argument('--out-name', default='lifecycle_parity')
     args = ap.parse_args()
     if args.n < 30:
         ap.error('--n must be >= 30')
 
-    base = os.path.join(args.out_dir, 'lifecycle_parity')
-    if args.render_only:
-        with open(base + '.json') as f:
-            saved = json.load(f)
-        write_csv(base + '.csv', saved['results'])
-        write_md(base + '.md', saved['environment'], saved['results'], saved['sanity'],
-                 saved.get('backends_skipped', {}), saved['config']['n'], saved['config']['warmup'])
-        print(f"Re-rendered .csv/.md from {base}.json")
-        return
-
-    backends: List[Backend] = [Backend('centralized_registry', CentralizedRegistryAdapter(), False)]
-    skipped: Dict[str, str] = {}
-    chain_info: Optional[Dict[str, Any]] = None
-
-    if args.no_chain:
-        skipped['mobi_vid_v2'] = 'skipped by --no-chain'
-    else:
-        try:
-            address = args.contract_address
-            deploy_gas = None
-            contract_name = 'MOBIVIDRegistryV2'
-            if address is None:
-                with open(args.deployment_file) as f:
-                    dep = json.load(f)
-                address = dep['contractAddress']
-                deploy_gas = int(dep['gasUsed']) if dep.get('gasUsed') else None
-                contract_name = dep.get('contractName', contract_name)
-                if contract_name != 'MOBIVIDRegistryV2':
-                    raise RuntimeError(f"{args.deployment_file} is a {contract_name} deployment, not MOBIVIDRegistryV2 "
-                                       "(deploy with MOBI_VID_CONTRACT=MOBIVIDRegistryV2)")
-            ad = MOBIVIDV2Adapter(args.rpc_url, address)
-            ad.setup_issuers()
-            w3 = ad.w3
-            latest = w3.eth.get_block('latest')
-            try:
-                automine = w3.provider.make_request('hardhat_getAutomine', []).get('result')
-            except Exception:
-                automine = None
-            chain_info = {
-                'rpc_url': args.rpc_url,
-                'chain_id': int(w3.eth.chain_id),
-                'block_gas_limit': int(latest['gasLimit']),
-                'automine': automine,
-                'contract_name': contract_name,
-                'contract_address': address,
-                'contract_deploy_gas': deploy_gas,
-                'client_version': w3.client_version if hasattr(w3, 'client_version') else None,
-            }
-            backends.append(Backend('mobi_vid_v2', ad, True, RPCCounter(w3)))
-        except Exception as e:  # never fabricate: record precisely why the chain backend is absent
-            skipped['mobi_vid_v2'] = f'not run: {type(e).__name__}: {e}'
-            print(f"WARNING: MOBI VID V2 backend not run: {e}")
-
-    env = environment(chain_info, args.n, args.warmup)
-    if chain_info is None:
-        env['contract_name'] = None
-    print("Environment:", json.dumps(env, indent=2))
+    info, art = artifact_info(args.artifact)
+    deploy_gas = None
+    address = args.contract_address
+    if args.deploy:
+        address, deploy_gas = deploy_v2(args.rpc_url, art)
+    if address is None:
+        ap.error('--deploy or --contract-address is required')
 
     run_tag = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
-    rows: List[Dict[str, Any]] = []
-    sanity: Dict[str, Dict[str, bool]] = {}
-    not_equivalent: Dict[str, Dict[str, str]] = {}
-    for b in backends:
-        out = run_backend(b, args.n, args.warmup, run_tag)
-        sanity[b.name] = out['sanity']
-        not_equivalent[b.name] = out['not_run']
-        for op, _ in OPERATIONS:
-            if op in out['operations']:
-                r = dict(out['operations'][op])
-            else:
-                r = {'status': 'not_equivalent', 'note': out['not_run'][op], 'n': 0, 'chain_round_trip': None,
-                     'mean_ms': None, 'median_ms': None, 'p95_ms': None, 'min_ms': None, 'max_ms': None,
-                     'stdev_ms': None, 'gas_used': None, 'gas_median': None, 'gas_min': None, 'gas_max': None,
-                     'rpc_calls_median': None}
-            r['provider'] = b.name
-            r['operation'] = op
-            rows.append(r)
+    mobi = MOBIVIDV2LifecycleBackend(args.rpc_url, address, art['abi'], seed=f"m4-{run_tag}")
+    w3 = mobi.w3
+    try:
+        automine = w3.provider.make_request('hardhat_getAutomine', []).get('result')
+    except Exception:
+        automine = None
+    chain_info = {'rpc_url': args.rpc_url, 'chain_id': int(w3.eth.chain_id),
+                  'block_gas_limit': int(w3.eth.get_block('latest')['gasLimit']), 'automine': automine,
+                  'mining_mode': 'automine (no interval mining)' if automine else 'unknown/interval',
+                  'contract_address': address, 'contract_deploy_gas': deploy_gas,
+                  'client_version': w3.client_version, **info}
+    env = H.environment(chain_info, args.n, args.warmup)
+    print("Environment:", json.dumps(env, indent=2, default=str))
 
+    central = CentralizedLifecycleBackend()
+    results = {
+        'centralized_registry': run_backend(central, None, args.n, args.warmup, run_tag),
+        'mobi_vid_v2': run_backend(mobi, H.RPCCounter(w3), args.n, args.warmup, run_tag),
+    }
+    rows = []
+    for backend, ops in results.items():
+        for op, _, _ in OPERATIONS:
+            if op in ops:
+                rows.append({'backend': backend, 'operation': op, **ops[op]})
+    ver = verdicts(results['centralized_registry'], results['mobi_vid_v2'])
+    for v in ver:
+        print(f"  {v['operation']:<32} ratio {v['ratio_median']:.3g}x  -> {v['verdict']}")
+
+    cfg = {'n': args.n, 'warmup': args.warmup, 'run_tag': run_tag,
+           'history_events': HISTORY_EVENTS, 'history_transfers': HISTORY_TRANSFERS,
+           'write_speedup_threshold': WRITE_SPEEDUP_THRESHOLD, 'equal_band': list(EQUAL_BAND),
+           'operations': [{'name': o, 'description': d, 'kind': k} for o, d, k in OPERATIONS],
+           'preregistration': 'docs/PLAN_MOBI_SUMO.md §A.2 (M4)'}
     os.makedirs(args.out_dir, exist_ok=True)
-    write_csv(base + '.csv', rows)
+    base = os.path.join(args.out_dir, args.out_name)
     with open(base + '.json', 'w') as f:
-        json.dump({
-            'environment': env,
-            'config': {'n': args.n, 'warmup': args.warmup, 'run_tag': run_tag,
-                       'vehicle_spec': VEHICLE_SPEC, 'event_data': EVENT_DATA,
-                       'odometer_event': ODOMETER_EVENT, 'odometer_transfer': ODOMETER_TRANSFER,
-                       'jurisdiction': JURISDICTION, 'transfer_authority': TRANSFER_AUTHORITY,
-                       'tx_gas_limit': TX_GAS_LIMIT, 'fresh_vehicle_per_write_repetition': True,
-                       'operations': [{'name': o, 'description': d} for o, d in OPERATIONS]},
-            'backends_skipped': skipped,
-            'not_equivalent': not_equivalent,
-            'results': rows,
-            'sanity': sanity,
-        }, f, indent=2, default=str)
-    write_md(base + '.md', env, rows, sanity, skipped, args.n, args.warmup)
-
-    print(f"\nWrote:\n  {base}.csv\n  {base}.json\n  {base}.md")
-    failed = [b for b, s in sanity.items() if not all(s.values())]
-    if failed:
-        print(f"SANITY FAILURES: {failed}")
-        sys.exit(2)
+        json.dump({'environment': env, 'config': cfg, 'results': rows, 'verdicts': ver}, f, indent=2, default=str)
+    with open(base + '.csv', 'w', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=CSV_COLUMNS, extrasaction='ignore')
+        w.writeheader()
+        for r in rows:
+            out = {c: r.get(c) for c in CSV_COLUMNS}
+            for c in out:
+                if isinstance(out[c], float):
+                    out[c] = f"{out[c]:.4f}" if c != 'rpc_calls_median' else out[c]
+            w.writerow(out)
+    write_md(base + '.md', env, cfg, rows, ver)
+    print(f"\nWrote {base}.{{json,csv,md}}")
 
 
 if __name__ == '__main__':

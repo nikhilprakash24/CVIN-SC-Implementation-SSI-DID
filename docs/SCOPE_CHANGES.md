@@ -1,7 +1,4 @@
-# Scope Change Log
 
-**Author:** Nikhil Prakash (MASc, UBC ECE)
-**Started:** 2026-09-24 (closes audit finding F10)
 
 Scope moves in a research master's are normal; unrecorded scope moves are a
 liability at the defence. Every entry here has a date, what changed, why,
@@ -27,5 +24,20 @@ it.
 | SC-13 | 2026-09-25 | Lifecycle-parity comparison against the centralized registry (VID II design's "fair comparison") | **Closed 2026-10-03 — measured (register #30)** | `centralized_vehicle_registry.py` exists with birth/lifecycle/ownership parity, but the PKI-vs-ERC-1056 experiment compares lifecycle operations against the IEEE 1609.2-style PKI provider, not this registry. | review §3.3; `docs/PLAN_MOBI_SUMO.md` M4 | Ch. 5 reports the parity table with its non-equivalences (attest_event has no centralized counterpart; centralized transfer is unauthenticated; history returns hashes vs payloads); the cached-read half remains future work |
 | SC-14 | 2026-10-03 | MOBI VID I conformance claim | **Narrowed to published concepts** | The standard's normative body (sections 1–7) is MOBI-member-only; the public preview gives the TOC, definitions and introduction. The project's requirement checklists were derived from announcements. The standard's own vocabulary (UVI, Entity Certificate, Revocation Certificate, Roles 1–4, Distributed Virtual Machine) was never mapped. | `docs/MOBI_VID_CHECKLIST.md` | Chapters 3/4 use the standard's terms with the mapping table and state the limitation; chapter 7 lists obtaining the member text as future work (or the author requests it from vid@dlt.mobi) |
 
-Add entries above this line as decisions are made. Do not edit past entries;
-append a correction entry instead.
+> **SC-02 — partially closed 2026-10-04 (stream G-K, M5).** A bounded on-chain observability analysis for
+> pseudonymity was run as pre-registered (PLAN_MOBI_SUMO §A.2): `4_comparison-framework/results/pseudonym_pool.*`,
+> register row #38.
+>
+> - **The 20-delegate pool on the standard ERC-1056 registry is fully linkable.** A passive observer needs one
+>   `eth_getLogs` by identity topic. The pool costs ≈1.10 M gas per 5-minute epoch, not the pre-registered ≈1.44 M
+>   (gas claim FAIL).
+> - **Per-pseudonym `did:ethr` identities are not linkable by that query.** They cost 0 gas while they need no
+>   on-chain attribute.
+> - **Once an attribute is written,** pseudonyms are re-linked by their funding transactions when self-funded, or
+>   share a relayer's anonymity set when relayed. Either way they cost more than the pool.
+>
+> **Still deferred:** radio/timing/position linkability, group revocation for implicit pseudonyms, and a measured
+> SCMS baseline. These stay future work.
+
+Add entries above the notes as decisions are made. Do not edit past entries;
+append a correction entry instead. (Their proposed SC-14…SC-20 of `docs/MOBI_VID_CHECKLIST.md` §7 are renumbered SC-15…SC-21 and added at the merge, see `docs/PLAN_MERGE_LINEAGES.md` M-H.)

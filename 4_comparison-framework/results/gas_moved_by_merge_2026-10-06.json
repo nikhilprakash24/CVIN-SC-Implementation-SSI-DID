@@ -1,0 +1,149 @@
+{
+  "generated": "2026-10-06",
+  "event": "merge of the review-2 lineage (fa6188e) into the sandbox lineage (b70081c); decisions M-A..M-D of docs/PLAN_MERGE_LINEAGES.md",
+  "baseline": "sandbox lineage results of record after pass 06 (d06d004)",
+  "condition": "M1: solc 0.8.24, optimizer 200 + viaIR, evm cancun, OpenZeppelin 5.0.2, Hardhat in-process",
+  "cells_moved": 19,
+  "moved": [
+    {
+      "standard": "ERC-735",
+      "operation": "createIdentity",
+      "before_sandbox_pass06": 1598928,
+      "after_merge": 1757881,
+      "delta": 158953
+    },
+    {
+      "standard": "ERC-735",
+      "operation": "addDelegateOrClaim",
+      "before_sandbox_pass06": 295805,
+      "after_merge": 298358,
+      "delta": 2553
+    },
+    {
+      "standard": "ERC-735",
+      "operation": "updateAttribute",
+      "before_sandbox_pass06": 80788,
+      "after_merge": 83341,
+      "delta": 2553
+    },
+    {
+      "standard": "ERC-735",
+      "operation": "revoke",
+      "before_sandbox_pass06": 72064,
+      "after_merge": 72195,
+      "delta": 131
+    },
+    {
+      "standard": "ERC-735",
+      "operation": "transferOwnership",
+      "before_sandbox_pass06": 28768,
+      "after_merge": 28812,
+      "delta": 44
+    },
+    {
+      "standard": "LSP8",
+      "operation": "deployRegistry",
+      "before_sandbox_pass06": 1647805,
+      "after_merge": 1670271,
+      "delta": 22466
+    },
+    {
+      "standard": "LSP8",
+      "operation": "createIdentity",
+      "before_sandbox_pass06": 152453,
+      "after_merge": 152644,
+      "delta": 191
+    },
+    {
+      "standard": "LSP8",
+      "operation": "updateAttribute",
+      "before_sandbox_pass06": 55070,
+      "after_merge": 55133,
+      "delta": 63
+    },
+    {
+      "standard": "LSP8",
+      "operation": "transferOwnership",
+      "before_sandbox_pass06": 80544,
+      "after_merge": 80568,
+      "delta": 24
+    },
+    {
+      "standard": "LSP8",
+      "operation": "revoke",
+      "before_sandbox_pass06": 41812,
+      "after_merge": 42116,
+      "delta": 304
+    },
+    {
+      "standard": "MOBI-VID-V2",
+      "operation": "deployRegistry",
+      "before_sandbox_pass06": 4169921,
+      "after_merge": 4225285,
+      "delta": 55364
+    },
+    {
+      "standard": "MOBI-VID-V2",
+      "operation": "createIdentity",
+      "before_sandbox_pass06": 298941,
+      "after_merge": 299143,
+      "delta": 202
+    },
+    {
+      "standard": "MOBI-VID-V2",
+      "operation": "updateAttribute",
+      "before_sandbox_pass06": 306985,
+      "after_merge": 307210,
+      "delta": 225
+    },
+    {
+      "standard": "CVIN-Combined",
+      "operation": "deployRegistry",
+      "before_sandbox_pass06": 1372501,
+      "after_merge": 1531487,
+      "delta": 158986
+    },
+    {
+      "standard": "CVIN-Combined",
+      "operation": "createIdentity",
+      "before_sandbox_pass06": 52170,
+      "after_merge": 52216,
+      "delta": 46
+    },
+    {
+      "standard": "CVIN-Combined",
+      "operation": "updateAttribute",
+      "before_sandbox_pass06": 35070,
+      "after_merge": 35116,
+      "delta": 46
+    },
+    {
+      "standard": "CVIN-Combined",
+      "operation": "addDelegateOrClaim",
+      "before_sandbox_pass06": 292214,
+      "after_merge": 291977,
+      "delta": -237
+    },
+    {
+      "standard": "CVIN-Combined",
+      "operation": "revoke",
+      "before_sandbox_pass06": 75580,
+      "after_merge": 73248,
+      "delta": -2332
+    },
+    {
+      "standard": "CVIN-Combined",
+      "operation": "transferOwnership",
+      "before_sandbox_pass06": 51725,
+      "after_merge": 51747,
+      "delta": 22
+    }
+  ],
+  "causes": {
+    "CVIN-Combined": "K-2 sticky issuer revocation, K-6 (claim ops no longer advance changed[]), K-11; DIDClaimChanged kept (M-A)",
+    "ERC-735": "K-2 sticky revocation + revokeClaimContent on top of D25a/b",
+    "LSP8": "K-8 generation-versioned data store on top of D13",
+    "ERC-1056 (wrapper rows if any)": "K-1 setVehicleAttributes(address did, ...) selector shift",
+    "MOBI-VID-V2": "K-3 changeOwner override, K-4 pristine-identity guard, K-15 OWNER scoping on top of D10/D11b"
+  }
+}

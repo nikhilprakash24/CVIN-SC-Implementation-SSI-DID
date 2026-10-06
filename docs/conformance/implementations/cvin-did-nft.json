@@ -17,7 +17,7 @@
             "id": "did:nft:0x1:0xabc:123#owner",
             "type": "EcdsaSecp256k1VerificationKey2019",
             "controller": "did:nft:0x1:0xabc:123",
-            "blockchainAccountId": "eip155:0x1:0xabc"
+            "blockchainAccountId": "eip155:1:0xabc"
           }
         ],
         "authentication": [
@@ -41,13 +41,13 @@
           ]
         }
       },
-      "representation": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:nft:0x1:0xabc:123\", \"verificationMethod\": [{\"id\": \"did:nft:0x1:0xabc:123#owner\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:nft:0x1:0xabc:123\", \"blockchainAccountId\": \"eip155:0x1:0xabc\"}], \"authentication\": [\"did:nft:0x1:0xabc:123#owner\"], \"service\": [{\"id\": \"did:nft:0x1:0xabc:123#nft-metadata\", \"type\": \"NFTMetadata\", \"serviceEndpoint\": \"https://api.opensea.io/api/v1/asset/0xabc/123\"}]}",
+      "representation": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:nft:0x1:0xabc:123\", \"verificationMethod\": [{\"id\": \"did:nft:0x1:0xabc:123#owner\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:nft:0x1:0xabc:123\", \"blockchainAccountId\": \"eip155:1:0xabc\"}], \"authentication\": [\"did:nft:0x1:0xabc:123#owner\"], \"service\": [{\"id\": \"did:nft:0x1:0xabc:123#nft-metadata\", \"type\": \"NFTMetadata\", \"serviceEndpoint\": \"https://api.opensea.io/api/v1/asset/0xabc/123\"}]}",
       "didDocumentMetadata": {
-        "created": "2026-10-03T22:33:54Z"
+        "created": "2026-10-04T22:08:26Z"
       },
       "didResolutionMetadata": {
         "contentType": "application/did+ld+json",
-        "retrieved": "2026-10-03T22:33:54Z"
+        "retrieved": "2026-10-04T22:08:26Z"
       }
     }
   }

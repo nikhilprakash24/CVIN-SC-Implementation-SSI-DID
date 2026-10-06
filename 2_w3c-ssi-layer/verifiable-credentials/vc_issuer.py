@@ -27,6 +27,7 @@ Thesis: MASc, UBC ECE
 import hashlib
 import json
 import os
+import re
 import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -59,6 +60,39 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+# XML Schema dateTime as used by VC DM (v1.1 and v2.0): an explicit time
+# zone (``Z`` or ``±hh:mm``) is REQUIRED here — a naive timestamp has no
+# defined instant and is rejected rather than guessed (review 02, S-4).
+_XSD_DATETIME = re.compile(
+    r"^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.\d+)?"
+    r"(Z|[+-]\d{2}:\d{2})$"
+)
+
+
+def parse_datetime(value: Any) -> datetime:
+    """
+    Parse a VC date-time string into a timezone-aware UTC ``datetime``.
+
+    Accepts ``YYYY-MM-DDTHH:MM:SS[.fff](Z|±hh:mm)``. Raises ``ValueError``
+    for non-strings, unparseable strings ("never") and naive timestamps
+    (no zone designator). Comparisons are then made on instants, so
+    ``2026-01-01T10:00:00+12:00`` is correctly earlier than
+    ``2026-01-01T00:00:00Z`` (review 02, S-4: string comparison got this
+    wrong).
+    """
+    if not isinstance(value, str):
+        raise ValueError(f"date-time must be a string, got "
+                         f"{type(value).__name__}")
+    if not _XSD_DATETIME.fullmatch(value):
+        raise ValueError(f"not an XML Schema dateTime with a time zone: "
+                         f"{value!r}")
+    text = value[:-1] + "+00:00" if value.endswith("Z") else value
+    parsed = datetime.fromisoformat(text)
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise ValueError(f"naive date-time (no time zone): {value!r}")
+    return parsed.astimezone(timezone.utc)
+
+
 def claim_digest(name: str, value: Any, salt: str) -> str:
     """
     Salted digest of a single claim for selective disclosure:
@@ -68,6 +102,9 @@ def claim_digest(name: str, value: Any, salt: str) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+STATUS_TYPE = "CvinRevocationRegistry2024"
+
+
 class RevocationRegistry:
     """
     Minimal status registry backing `credentialStatus`.
@@ -75,11 +112,26 @@ class RevocationRegistry:
     In-memory by default; pass `path` for JSON-file persistence. The MOBI
     VID pass replaces this with a smart-contract-anchored registry while
     keeping this interface.
+
+    Binding (review 02, S-2): every registry has a unique ``registry_id``
+    (the ``statusListCredential`` value it writes into credentials) and is
+    bound to exactly one issuer DID (``issuer_did``). A verifier looks the
+    registry up BY the credential's ``statusListCredential`` and accepts it
+    only if it is bound to the credential's issuer — so a verifier holding
+    some other issuer's registry cannot mistake "not in this registry" for
+    "not revoked". A registry created without ``issuer_did`` is bound by the
+    first ``CredentialIssuer`` that adopts it.
     """
 
-    def __init__(self, registry_id: str = f"{CVIN_CONTEXT}/status/default",
-                 path: Optional[str] = None):
-        self.registry_id = registry_id
+    def __init__(self, registry_id: Optional[str] = None,
+                 path: Optional[str] = None,
+                 issuer_did: Optional[str] = None):
+        # A fresh, unique id per registry. The old shared default
+        # (".../status/default") made every issuer's credentials point at
+        # the same status list.
+        self.registry_id = registry_id or \
+            f"{CVIN_CONTEXT}/status/{uuid.uuid4()}"
+        self.issuer_did = issuer_did
         self.path = path
         self._revoked: Dict[str, Dict[str, str]] = {}
         if path and os.path.exists(path):
@@ -104,11 +156,20 @@ class RevocationRegistry:
             with open(self.path, "w") as f:
                 json.dump(self._revoked, f, indent=2)
 
+    def bind_issuer(self, issuer_did: str) -> None:
+        """Bind this registry to its (single) issuer DID."""
+        if self.issuer_did is None:
+            self.issuer_did = issuer_did
+        elif self.issuer_did != issuer_did:
+            raise ValueError(
+                f"revocation registry {self.registry_id} is bound to "
+                f"{self.issuer_did}, not {issuer_did}")
+
     def status_entry(self, credential_id: str) -> Dict[str, str]:
         """The `credentialStatus` object embedded in issued credentials."""
         return {
             "id": f"{self.registry_id}#{credential_id}",
-            "type": "CvinRevocationRegistry2024",
+            "type": STATUS_TYPE,
             "statusListCredential": self.registry_id,
         }
 
@@ -134,7 +195,11 @@ class CredentialIssuer:
             Account.from_key(private_key) if private_key
             else Account.create()
         )
-        self.revocation_registry = revocation_registry or RevocationRegistry()
+        self.revocation_registry = revocation_registry or \
+            RevocationRegistry(issuer_did=issuer_did)
+        # S-2: the registry this issuer writes into credentialStatus is
+        # bound to this issuer; sharing one across issuers is refused.
+        self.revocation_registry.bind_issuer(issuer_did)
 
     @property
     def address(self) -> str:
@@ -294,15 +359,46 @@ def sign_document(document: Dict[str, Any],
     return signed.signature.hex()
 
 
+# secp256k1 group order; canonical (EIP-2) signatures have s <= N/2.
+SECP256K1_N = int(
+    "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", 16)
+
+
+def check_signature_encoding(signature: str) -> bytes:
+    """
+    Enforce one canonical encoding per signature (review 02, S-7):
+    exactly 65 bytes r||s||v, ``v`` in {27, 28}, and low-s
+    (``1 <= s <= N/2``). ``eth_account`` signs in this form; the high-s
+    twin ``(r, N - s, v ^ 1)`` and ``v`` in {0, 1} also recover to the
+    same address, so without this check every proof had two or more valid
+    byte encodings. Returns the decoded bytes; raises ``ValueError``.
+    """
+    if not isinstance(signature, str):
+        raise ValueError("proofValue must be a hex string")
+    hex_part = signature[2:] if signature.startswith("0x") else signature
+    try:
+        raw = bytes.fromhex(hex_part)
+    except ValueError as exc:
+        raise ValueError(f"proofValue is not hex: {exc}") from None
+    if len(raw) != 65:
+        raise ValueError(f"signature must be 65 bytes, got {len(raw)}")
+    s_val = int.from_bytes(raw[32:64], "big")
+    v_val = raw[64]
+    if v_val not in (27, 28):
+        raise ValueError(f"non-canonical recovery id v={v_val} "
+                         f"(must be 27 or 28)")
+    if not 1 <= s_val <= SECP256K1_N // 2:
+        raise ValueError("non-canonical (high-s) signature")
+    return raw
+
+
 def recover_signer(document: Dict[str, Any],
                    proof: Dict[str, Any]) -> str:
     """Recover the Ethereum address that signed a proofed document."""
+    raw = check_signature_encoding(proof["proofValue"])
     payload = signing_payload(document, proof)
     message = encode_defunct(hashlib.sha256(payload).digest())
-    signature = proof["proofValue"]
-    if not signature.startswith("0x"):
-        signature = "0x" + signature
-    return Account.recover_message(message, signature=signature)
+    return Account.recover_message(message, signature=raw)
 
 
 if __name__ == "__main__":

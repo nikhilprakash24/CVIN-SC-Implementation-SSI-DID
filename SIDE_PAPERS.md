@@ -31,7 +31,7 @@ contribution; the thesis reports it only as one security finding. **Overlap:** �
 
 ### SP-2 — "The Account-Abstraction Tax"
 **Premise.** The same `setAttribute` costs 49,366 gas direct vs 96,228 through a
-minimal EntryPoint — a cleanly isolated **46,862-gas/op** indirection overhead
+minimal EntryPoint — a cleanly isolated **46,830-gas/op** indirection overhead
 (bundler/paymaster excluded). **Material:** `contracts/ERC4337/*`, `gas_benchmark.json`;
 Ch5 §5.2. **Why side-paper:** a focused ERC-4337-costing result of interest beyond
 vehicles. **Overlap:** §5.2 finding 3.

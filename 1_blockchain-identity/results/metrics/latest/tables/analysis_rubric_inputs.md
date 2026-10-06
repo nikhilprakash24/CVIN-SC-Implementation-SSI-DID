@@ -1,0 +1,18 @@
+### A5 — W3C DID Method Rubric: measured inputs per criterion (▲ = quantitative cell fed by this run)
+
+| Rubric criterion | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 3.2.5 Offline creation (identity exists before any tx?) | yes (implicit identity; C1 only binds the VIN) | yes (implicit identity; C1 only binds the VIN) | no (mint / deploy / register tx) | no (mint / deploy / register tx) | no (mint / deploy / register tx) | no (mint / deploy / register tx) | no (mint / deploy / register tx) | no (mint / deploy / register tx) | no (mint / deploy / register tx) | yes (implicit identity; C1 only binds the VIN) |
+| 3.2.7 ▲ Creation cost: C1 bind VIN (gas) | 76,808 | 145,662 (2 tx) | 399,844 | 656,480 (2 tx) | 1,535,776 | 103,913 | 1,730,753 (2 tx) | 132,515 | 808,431 (2 tx) | 266,995 |
+| 3.2.7 ▲ Creation incl. VID-I attributes: C2 (gas) | 366,978 (9 tx) | 234,587 (3 tx) | 568,074 | 1,496,440 (9 tx) | 2,285,459 (2 tx) | 103,913 | 1,963,543 (2 tx) | 370,025 (2 tx) | 1,153,124 (9 tx) | 1,006,919 (2 tx) |
+| 3.2.8 ▲ Update cost: U3 attribute (gas) | 35,024 | 44,677 | 120,061 | 119,996 | 317,814 | 57,147 | 95,334 | 100,573 | 94,651 | 51,742 |
+| 3.2.8 ▲ Controller rotation: U1 (gas) | 51,754 | 57,188 | 179,470 | 28,390 | 28,746 | 83,959 | 28,834 | 83,412 | 28,539 | 68,847 |
+| 3.2.8 ▲ Deletion: D3 deactivate (gas) | 34,230 | 43,809 | 27,689 | 23,091 | 28,530 | 37,443 | 23,182 | 43,076 | 28,323 | 51,016 |
+| 3.3.2 ▲ Limited-resource resolution: R3 RPC calls at h=50 | 112 | 55 | 7 | 61 | 3 | 3 | 2 | 3 | 61 | 107 |
+| 3.3.2 ▲ Resolution median ms after lifecycle | 20.31 | 12.23 | 7.00 | 15.32 | 7.62 | 2.63 | 4.25 | 3.89 | 8.33 | 12.80 |
+| 3.4.1 Auditability: linked event chain vs state snapshot | full linked history (previousChange chain) | full linked history (previousChange chain) | events + current state (no chain pointer) | current state (events unlinked) | events + current state (no chain pointer) | current state (events unlinked) | current state (events unlinked) | current state (events unlinked) | current state (events unlinked) | full linked history (previousChange chain) |
+| 3.4.7 Verification relationships: delegate keys | delegates with TTL | delegates with TTL | approval (no expiry) | delegates with TTL | none | none | none | none | recovery guardian only | delegates with TTL |
+| 3.4.8 Relayed / signed operations (meta-tx) | yes | no | no | no | no | no | no | no | yes | no |
+| 3.7.2 ▲ Incentive for many DIDs: lifetime gas × baseline | 1 | 0.98 | 2.57 | 3 | 5.11† | 1.1† | 2.81† | 1.43† | 2.11 | 2.41 |
+
+_Run 2026-10-04T09-50-29Z_0eef6af · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_

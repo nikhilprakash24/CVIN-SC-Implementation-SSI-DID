@@ -36,6 +36,17 @@ pragma solidity ^0.8.24;
  *      (no EIP-191 envelope), binding the claim to this registry instance and
  *      the subject identity. This mirrors the bare-digest signing pattern of
  *      the ERC-1056 reference registry's signed meta-transactions.
+ *
+ *      Issuer revocation is sticky (REVIEW_02 K-2): when the ISSUER removes a
+ *      claim, keccak256(issuer, digest) is recorded and addClaim rejects that
+ *      signed content from then on. Keying on the digest rather than the
+ *      signature bytes also rejects a malleated (high-s) copy of the old
+ *      signature. The issuer re-issues by signing new data. An OWNER removal
+ *      is not a revocation and records nothing; the issuer can still revoke
+ *      the content afterwards with revokeClaimContent, which does not need
+ *      the claim to be anchored (Pass 2). There is still no nonce or
+ *      expiry in the signed payload, so an older, never-revoked claim for the
+ *      same (issuer, topic) can be re-anchored after the issuer replaced it.
  */
 contract CVINCombinedIdentity {
     // ============ Claim topics (safety-critical subset) ============
@@ -55,7 +66,11 @@ contract CVINCombinedIdentity {
     /// @dev delegates[identity][delegateType][delegate] = validity expiry timestamp.
     mapping(address => mapping(bytes32 => mapping(address => uint256))) public delegates;
 
-    /// @dev Block number of the identity's last change (event-log linked list).
+    /// @dev Block number of the identity's last DID event (DIDOwnerChanged,
+    ///      DIDDelegateChanged, DIDAttributeChanged): the head of the ERC-1056
+    ///      changed -> previousChange event-log linked list. Claim add/remove
+    ///      does not touch it (REVIEW_02 K-6), so a resolver walking the chain
+    ///      never lands on a block that holds only a claim event.
     mapping(address => uint256) public changed;
 
     // ============ ERC-735-style claim state ============
@@ -74,6 +89,13 @@ contract CVINCombinedIdentity {
 
     /// @dev claimIdsByTopic[identity][topic] -> list of claim ids.
     mapping(address => mapping(uint256 => bytes32[])) private _claimIdsByTopic;
+
+    /// @notice Issuer-revoked claim content (REVIEW_02 K-2).
+    /// @dev key = keccak256(abi.encodePacked(issuer, keccak256(abi.encodePacked(address(this), identity, topic, data)))),
+    ///      i.e. the issuer and the raw digest it signed. Set by an issuer
+    ///      removal or by revokeClaimContent. No extra event or view, to keep the deployment
+    ///      cost of the fix small; verifiers query this getter.
+    mapping(bytes32 => bool) public revokedClaims;
 
     // ============ Events ============
 
@@ -240,9 +262,14 @@ contract CVINCombinedIdentity {
     ) external onlyIdentityOwner(identity) returns (bytes32 claimId) {
         require(scheme == SCHEME_ECDSA, "CVINCombined: unsupported scheme");
         require(issuer != address(0), "CVINCombined: zero issuer");
+        bytes32 digest = _claimDigest(identity, topic, data);
         require(
-            _recoverRawDigest(identity, topic, data, signature) == issuer,
+            _recoverRawDigest(digest, signature) == issuer,
             "CVINCombined: invalid claim signature"
+        );
+        require(
+            !revokedClaims[keccak256(abi.encodePacked(issuer, digest))],
+            "CVINCombined: claim revoked by issuer"
         );
 
         claimId = keccak256(abi.encodePacked(issuer, topic));
@@ -262,11 +289,17 @@ contract CVINCombinedIdentity {
         });
 
         emit ClaimAdded(claimId, identity, topic, scheme, issuer, signature, data, uri);
+        // changed[] is deliberately NOT advanced (REVIEW_02 K-6): it is the ERC-1056
+        // DID-event chain head and claims are not DID-document state. The claim history
+        // stays indexable through DIDClaimChanged (defect D22); its last argument is the
+        // chain head at the time of the claim, for correlation, not a pointer the
+        // resolver walk follows (merge decision M-A, 2026-10-06).
         emit DIDClaimChanged(identity, claimId, topic, false, changed[identity]);
-        changed[identity] = block.number;
     }
 
     /// @notice Remove a claim (identity owner or the claim's issuer).
+    /// @dev An issuer removal also records the signed content in revokedClaims
+    ///      so addClaim cannot bring it back (K-2). An owner removal does not.
     function removeClaim(address identity, bytes32 claimId) external {
         Claim memory claim = _claims[identity][claimId];
         require(claim.issuer != address(0), "CVINCombined: claim not found");
@@ -275,8 +308,45 @@ contract CVINCombinedIdentity {
             "CVINCombined: unauthorized"
         );
 
-        // Remove from topic index (swap-and-pop).
-        bytes32[] storage ids = _claimIdsByTopic[identity][claim.topic];
+        if (msg.sender == claim.issuer) {
+            revokedClaims[
+                keccak256(
+                    abi.encodePacked(
+                        claim.issuer,
+                        keccak256(abi.encodePacked(address(this), identity, claim.topic, claim.data))
+                    )
+                )
+            ] = true;
+        }
+
+        _deleteClaim(identity, claimId, claim.topic, claim.issuer);
+    }
+
+    /**
+     * @notice Issuer-side revocation of signed claim CONTENT about `identity`,
+     *         whether or not it is currently anchored (REVIEW_02 K-2, Pass 2).
+     * @dev removeClaim needs the claim to exist, so an owner could pre-empt a
+     *      revocation by removing the claim first (the issuer's removeClaim
+     *      then reverts) and re-anchor the old signature later. This records
+     *      keccak256(msg.sender, digest) unconditionally; it can only ever
+     *      block claims signed by the caller itself, so it needs no access
+     *      control. If the caller's claim for `topic` is anchored with exactly
+     *      this data it is removed too; other (re-issued) data is left alone.
+     */
+    function revokeClaimContent(address identity, uint256 topic, bytes calldata data) external {
+        revokedClaims[keccak256(abi.encodePacked(msg.sender, _claimDigest(identity, topic, data)))] = true;
+
+        bytes32 claimId = keccak256(abi.encodePacked(msg.sender, topic));
+        Claim storage claim = _claims[identity][claimId];
+        if (claim.issuer != address(0) && keccak256(claim.data) == keccak256(data)) {
+            _deleteClaim(identity, claimId, topic, msg.sender);
+        }
+    }
+
+    /// @dev Unindex (swap-and-pop), delete and emit ClaimRemoved. changed[]
+    ///      is not advanced (K-6), see addClaim.
+    function _deleteClaim(address identity, bytes32 claimId, uint256 topic, address issuer) private {
+        bytes32[] storage ids = _claimIdsByTopic[identity][topic];
         for (uint256 i = 0; i < ids.length; i++) {
             if (ids[i] == claimId) {
                 ids[i] = ids[ids.length - 1];
@@ -286,9 +356,9 @@ contract CVINCombinedIdentity {
         }
 
         delete _claims[identity][claimId];
-        emit ClaimRemoved(claimId, identity, claim.topic, claim.issuer);
-        emit DIDClaimChanged(identity, claimId, claim.topic, true, changed[identity]);
-        changed[identity] = block.number;
+
+        emit ClaimRemoved(claimId, identity, topic, issuer);
+        emit DIDClaimChanged(identity, claimId, topic, true, changed[identity]);
     }
 
     /// @notice O(1) claim lookup for on-chain verifiers.
@@ -320,11 +390,16 @@ contract CVINCombinedIdentity {
     }
 
     /// @notice Convenience predicate: does `identity` hold a claim on `topic` from `issuer`?
+    /// @dev An empty slot (issuer == address(0)) is never a valid claim
+    ///      (REVIEW_02 K-11: hasValidClaim(id, 0, address(0)) used to be true).
     function hasValidClaim(
         address identity,
         uint256 topic,
         address issuer
     ) external view returns (bool) {
+        if (issuer == address(0)) {
+            return false;
+        }
         bytes32 claimId = keccak256(abi.encodePacked(issuer, topic));
         Claim storage claim = _claims[identity][claimId];
         return claim.issuer == issuer && claim.topic == topic;
@@ -332,17 +407,23 @@ contract CVINCombinedIdentity {
 
     // ============ Internal ============
 
-    /// @dev ecrecover over the raw (non-EIP-191) claim digest.
-    function _recoverRawDigest(
+    /// @dev The raw claim digest the issuer signs.
+    function _claimDigest(
         address identity,
         uint256 topic,
-        bytes calldata data,
+        bytes calldata data
+    ) internal view returns (bytes32) {
+        return keccak256(abi.encodePacked(address(this), identity, topic, data));
+    }
+
+    /// @dev ecrecover over the raw (non-EIP-191) claim digest.
+    function _recoverRawDigest(
+        bytes32 digest,
         bytes calldata signature
-    ) internal view returns (address) {
+    ) internal pure returns (address) {
         if (signature.length != 65) {
             return address(0);
         }
-        bytes32 digest = keccak256(abi.encodePacked(address(this), identity, topic, data));
         bytes32 r = bytes32(signature[0:32]);
         bytes32 s = bytes32(signature[32:64]);
         uint8 v = uint8(signature[64]);

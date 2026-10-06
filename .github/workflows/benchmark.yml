@@ -14,7 +14,9 @@ name: Performance Benchmarks
 
 on:
   push:
-    branches: [ main ]
+    # claude/** added in review 2 (Q-1): the trunk has no `main`, so with
+    # `[ main ]` alone none of these jobs ran on push.
+    branches: [ main, claude/** ]
   schedule:
     # Nightly at 00:00 UTC
     - cron: '0 0 * * *'
@@ -117,9 +119,13 @@ jobs:
         a = cells(json.load(open("/tmp/gas_benchmark.committed.json")))
         b = cells(json.load(open("4_comparison-framework/results/gas_benchmark.json")))
         diff = [(k, a[k], b[k]) for k in a if k in b and a[k] != b[k]]
-        print(f"{len(a)} committed cells, {len(diff)} differ")
+        # Review 2 (Q-12): a cell that appears or disappears is also drift.
+        missing, added = sorted(set(a) - set(b)), sorted(set(b) - set(a))
+        print(f"{len(a)} committed cells, {len(diff)} differ, {len(missing)} missing, {len(added)} new")
         for k, x, y in diff: print(f"  {k}: {x} -> {y}")
-        sys.exit(1 if diff else 0)
+        for k in missing: print(f"  missing: {k}")
+        for k in added: print(f"  new: {k}")
+        sys.exit(1 if (diff or missing or added) else 0)
         PY
 
     - name: Upload gas results
@@ -132,4 +138,36 @@ jobs:
           4_comparison-framework/results/gas_benchmark_stats.json
           4_comparison-framework/results/gas_comparison.csv
           4_comparison-framework/results/gas_comparison.tex
+        if-no-files-found: error
+
+  metrics-harness:
+    name: CRUD-and-beyond metrics harness (adapter gate + run)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 1_blockchain-identity
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: 1_blockchain-identity/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Adapter conformance gate
+      run: npm run test:conformance
+
+    - name: Run metrics harness
+      run: npm run metrics
+
+    - name: Upload metrics run
+      uses: actions/upload-artifact@v4
+      with:
+        name: cvin-metrics
+        path: 1_blockchain-identity/results/metrics/latest
         if-no-files-found: error

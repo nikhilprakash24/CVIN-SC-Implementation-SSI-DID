@@ -8,51 +8,45 @@ its representation and the resolution/document metadata; for each resolver it
 needs recorded `resolve` / `resolveRepresentation` executions.
 
 Every value written here is taken UNCHANGED from
-    2_w3c-ssi-layer/did-resolution/did_resolver.py ::
-        DIDResolver.resolve(did)                      (resolve executions)
-        DIDResolver.resolve_representation(did, accept) (resolveRepresentation
-                                                         executions, method files)
-via DIDResolutionResult.to_dict(). Nothing is edited to make tests pass: the
-metadata structures (`retrieved`, the XML-Datetime `created`, `versionId`,
-the `error` / `errorMessage` pair on failures), the serialised document and
+    2_w3c-ssi-layer/did-resolution/did_resolver.py :: DIDResolver.resolve(did)
+via DIDResolutionResult.to_dict(), and (since stream G-R, 2026-10-04) from
+    DIDResolver.resolve_representation(did) via DIDRepresentationResult.to_dict()
+for the resolveRepresentation executions and the method file's representation.
+Nothing is edited to make tests pass: the metadata keys, the timestamps and
 the placeholder key material (`publicKeyHex: "0x..."`) are exactly what the
 resolver emits.
+
+G-R adaptation (the only change; inputs, vectors and mapping unchanged): the
+resolver no longer emits `error: null` or a `contentType` on resolve(), and
+it now has a resolveRepresentation function. So (a) the success assertion
+tests for an absent `error` key instead of `error is None`, and (b)
+`supportedContentTypes`, the method file's representation entry and the
+`resolveRepresentation` execution are taken from resolve_representation()
+instead of re-labelling the resolve() output.
 
 Mapping to the suite's input format (see did-example-didwg.json and
 resolver-example-didwg.json in the suite):
 
   * didDocumentDataModel.properties  = didDocument minus "@context"
   * representationSpecificEntries    = {"@context": didDocument["@context"]}
-  * representation / didDocumentStream = didDocumentStream of
-    resolve_representation(), i.e. json.dumps(didDocument) - the same
-    serialization the resolver CLI prints (main() -> json.dumps(to_dict()))
-  * supportedContentTypes = [didResolutionMetadata.contentType of the
-    resolveRepresentation result] - the resolver only ever produces
-    "application/did+ld+json".
-  * `resolve` executions use the raw resolve() output (no contentType).
+  * representation / didDocumentStream = json.dumps(didDocument), i.e. the
+    same serialization the resolver CLI prints (main() -> json.dumps(to_dict()))
+  * supportedContentTypes = [contentType of resolve_representation()] - the
+    resolver only ever produces "application/did+ld+json".
+  * `resolve` executions use the raw resolve() output.
   * `resolveRepresentation` executions use the raw resolve_representation()
-    output (didDocumentStream + contentType).
-  * The method file's per-content-type block carries the metadata of the
-    resolveRepresentation result (which includes contentType), as in the
-    WG example.
+    output (default accept). Before G-R the project had no such function and
+    the resolve() output, which then carried a contentType, was registered
+    under both function names.
 
 No `didParameters` (the resolver does not parse DID URL query parameters), no
 `conformingConsumers` (there is no consumer function) and no dereferencer file
 (there is no dereference function) are registered.
 
 Usage:
-    python3 docs/conformance/generate_implementations.py [<output-dir>] [--ethr-did <did>]
-
-By default the did:ethr entry uses the static fixture
-did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678. `--ethr-did` (or the
-environment variable CVIN_ETHR_DID) replaces that identifier in the did:ethr
-method file and in its resolver executions, e.g. with a DID minted by
-MOBIVIDRegistry.getVehicleDID() on a Hardhat chain
-(did:ethr:0x7a69:0x<40 hex>). The error-case inputs and the did:mobi / did:nft
-entries are not affected. Without the flag the output is unchanged.
+    python3 docs/conformance/generate_implementations.py <output-dir>
 """
 
-import argparse
 import json
 import os
 import sys
@@ -95,19 +89,14 @@ METHODS = {
 
 
 def resolve(resolver, did):
-    """Call the project's resolve() and return the raw dict it produces."""
+    """Call the project's resolver and return the raw dict it produces."""
     return resolver.resolve(did).to_dict()
 
 
-def resolve_representation(resolver, did, accept=None):
-    """Call the project's resolve_representation() and return the raw dict."""
-    return resolver.resolve_representation(did, accept).to_dict()
-
-
-def method_file(method, did, result, representation):
+def method_file(method, did, result, rep):
     doc = deepcopy(result["didDocument"])
     context = doc.pop("@context")
-    content_type = representation["didResolutionMetadata"]["contentType"]
+    content_type = rep["didResolutionMetadata"]["contentType"]
     return {
         "didMethod": f"did:{method}",
         "implementation": f"CVIN did_resolver.py ({METHODS[method]['label']})",
@@ -120,15 +109,15 @@ def method_file(method, did, result, representation):
                 "didDocumentDataModel": {
                     "representationSpecificEntries": {"@context": context}
                 },
-                "representation": representation["didDocumentStream"],
-                "didDocumentMetadata": representation["didDocumentMetadata"],
-                "didResolutionMetadata": representation["didResolutionMetadata"],
+                "representation": rep["didDocumentStream"],
+                "didDocumentMetadata": rep["didDocumentMetadata"],
+                "didResolutionMetadata": rep["didResolutionMetadata"],
             },
         },
     }
 
 
-def resolver_file(method, did, result, representation, resolver):
+def resolver_file(method, did, result, rep, resolver):
     executions = []
     outcomes = {
         "defaultOutcome": [],
@@ -152,15 +141,15 @@ def resolver_file(method, did, result, representation, resolver):
     })
 
     # 1: resolveRepresentation()
-    content_type = representation["didResolutionMetadata"]["contentType"]
+    content_type = rep["didResolutionMetadata"]["contentType"]
     outcomes["defaultOutcome"].append(len(executions))
     executions.append({
         "function": "resolveRepresentation",
         "input": {"did": did, "resolutionOptions": {"accept": content_type}},
         "output": {
-            "didResolutionMetadata": representation["didResolutionMetadata"],
-            "didDocumentStream": representation["didDocumentStream"],
-            "didDocumentMetadata": representation["didDocumentMetadata"],
+            "didResolutionMetadata": rep["didResolutionMetadata"],
+            "didDocumentStream": rep["didDocumentStream"],
+            "didDocumentMetadata": rep["didDocumentMetadata"],
         },
     })
 
@@ -187,43 +176,19 @@ def resolver_file(method, did, result, representation, resolver):
     }
 
 
-ETHR_DID_ENV = "CVIN_ETHR_DID"
-
-
-def parse_args(argv):
-    parser = argparse.ArgumentParser(
-        description="Generate W3C DID Test Suite implementation files from did_resolver.py")
-    parser.add_argument("output_dir", nargs="?", default=os.path.join(HERE, "implementations"))
-    parser.add_argument(
-        "--ethr-did", default=os.environ.get(ETHR_DID_ENV) or None, metavar="DID",
-        help="did:ethr identifier to register instead of the static fixture "
-             f"(default: {METHODS['ethr']['did']}; env {ETHR_DID_ENV})")
-    args = parser.parse_args(argv)
-    if args.ethr_did is not None and not args.ethr_did.startswith("did:ethr:"):
-        parser.error(f"--ethr-did must be a did:ethr identifier, got {args.ethr_did!r}")
-    return args
-
-
-def main(argv=None):
-    args = parse_args(sys.argv[1:] if argv is None else argv)
-    out_dir = args.output_dir
-    if args.ethr_did:
-        # Only the identifier changes; the error cases and the other methods
-        # are the same as in the default run.
-        METHODS["ethr"]["did"] = args.ethr_did
+def main():
+    out_dir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "implementations")
     os.makedirs(out_dir, exist_ok=True)
     resolver = DIDResolver()
     written = []
     for method, cfg in METHODS.items():
         result = resolve(resolver, cfg["did"])
         assert "error" not in result["didResolutionMetadata"], result
-        representation = resolve_representation(resolver, cfg["did"])
-        assert "error" not in representation["didResolutionMetadata"], representation
+        rep = resolver.resolve_representation(cfg["did"]).to_dict()
+        assert "error" not in rep["didResolutionMetadata"], rep
         for name, data in (
-            (f"cvin-did-{method}.json",
-             method_file(method, cfg["did"], result, representation)),
-            (f"cvin-resolver-{method}.json",
-             resolver_file(method, cfg["did"], result, representation, resolver)),
+            (f"cvin-did-{method}.json", method_file(method, cfg["did"], result, rep)),
+            (f"cvin-resolver-{method}.json", resolver_file(method, cfg["did"], result, rep, resolver)),
         ):
             path = os.path.join(out_dir, name)
             with open(path, "w") as f:

@@ -78,7 +78,7 @@ describe("MOBIVIDRegistry — D10 / D16 regression", function () {
     it("changeOwner and transferVehicleOwnership revert for a revoked vehicle; the owner record is frozen", async function () {
       const { v2, firstOwner, buyer, vehicle } = await loadFixture(deployFixture);
       await v2.connect(firstOwner).revokeIdentity(vehicle);
-      await expect(v2.connect(firstOwner).changeOwner(vehicle, buyer.address)).to.be.revertedWith("Identity is revoked");
+      await expect(v2.connect(firstOwner).changeOwner(vehicle, buyer.address)).to.be.revertedWith("MOBIVID: use transferVehicleOwnership"); // K-3 (merge 2026-10-06): the public changeOwner is closed for born vehicles before the revoked check is reached
       await expect(
         v2.connect(firstOwner).transferVehicleOwnership(vehicle, buyer.address, 1000, "CA DMV")
       ).to.be.revertedWith("Vehicle identity is revoked");
@@ -90,7 +90,9 @@ describe("MOBIVIDRegistry — D10 / D16 regression", function () {
 
     it("a non-revoked vehicle still changes hands (control case for the gate)", async function () {
       const { v2, firstOwner, buyer, vehicle } = await loadFixture(deployFixture);
-      await expect(v2.connect(firstOwner).changeOwner(vehicle, buyer.address)).to.emit(v2, "DIDOwnerChanged");
+      // K-3 (merge 2026-10-06): born vehicles change hands only through transferVehicleOwnership
+      await expect(v2.connect(firstOwner).changeOwner(vehicle, buyer.address)).to.be.revertedWith("MOBIVID: use transferVehicleOwnership");
+      await expect(v2.connect(firstOwner).transferVehicleOwnership(vehicle, buyer.address, 1000, "CA DMV")).to.emit(v2, "DIDOwnerChanged");
       expect(await v2.identityOwner(vehicle)).to.equal(buyer.address);
     });
   });

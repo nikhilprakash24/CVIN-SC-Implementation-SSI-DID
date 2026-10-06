@@ -83,6 +83,48 @@ unrelated planning project (`npat-planning/`, "Inkwell"); a fourth (`testing-sui
   passes both test bodies) under the plan's defaults, each default recorded as a decision the
   author may overturn.
 
+- **S0 done**: local tags `pre-merge/sandbox` (`b70081c`) and `pre-merge/review2` (`fa6188e`).
+- **S1–S3 executed** (`git merge --no-commit --no-ff` of the review-2 trunk; 64 unmerged paths):
+  - *Mechanical, per the defaults:* research copies kept (M-D); their two new tests re-homed
+    into the layered tree (M-E) and one relative `require` repaired; their three same-named
+    after-action reports written to `docs/review02/AAR_REVIEW2_03/04/05.md`, ours kept (M-I);
+    their clause-level MOBI checklist taken, ours kept as `…_2026-10-03_preview.md`; their
+    experiment scripts and results of record taken, ours archived under
+    `cv2x-testbed/{scripts,results}/archive-2026-10-03/` (M-G); their resolver, conformance
+    generator and inputs, and ERC-1056 provider taken (M-F); the 14 benchmark result files and
+    the testbed artifacts kept as placeholders for regeneration.
+  - *Contracts, by hand:* `ERC1056Registry` ours (modifier form, three-arg `DIDRevoked`,
+    M-B) with their `virtual`; `MOBIVIDRegistry` union (D10 ≡ K-15 comment merged; K-3
+    override, K-4 guard and `anchorVehicleKey` all present); `CVINVehicleDIDRegistry` K-1 (M-C);
+    ERC-1155 ours (K-13 ⊂ D7/D8); LSP8 union (`_normalizeVIN` + generation store); ERC-735
+    union (K-2 revoked-content check, then D25a authorisation, then D25b VIN binding);
+    CVIN-Combined per M-A (no `changed[]` advance; `DIDClaimChanged` kept). MOBI mirrors copied
+    byte-identically; both Hardhat projects compile; testbed flat ABI/bytecode rewritten; their
+    `check_artifacts_fresh.js` passes.
+  - *Documents:* `INDEX.md` union with a dual resume pointer; `SCOPE_CHANGES.md` rebuilt from
+    ours plus their SC-02/M5 note; `README.md` H-lines from theirs with 335/336, gas table
+    regenerated; register: their rows kept, ours appended as #40–#43 with their status
+    (M-H); conformance write-up keeps both histories (their §7–§9 → §9–§11).
+  - *Provider:* `mobi_vid_provider.py` ours plus their `_registered_key_for` seam (sender by
+    `vehicle_identity` or DID, case-insensitive), `vehicle_identity` on signed messages, and the
+    `receipt.status` check; our on-chain key fallback sits inside the seam.
+  - *Tests adjusted to the decisions:* K-1 `did` argument (3 call sites), K-3 `changeOwner`
+    expectations (2), M-A `changed[]` and walk assertions (4), M3 `attestEvent` pin re-measured
+    169,295 → **169,361** (+66 dispatch from `anchorVehicleKey`/K-3/K-4), ERC-1155 revert string
+    (theirs → ours), the strict security harness's ERC-1155 hijack cell now expects the D7
+    reason string instead of the OZ approval error; their harness adapters updated for our
+    contracts (ERC-721 issuer VIN without I; ERC-735 per-topic `authorizeIssuer` as part of the
+    operation; ERC-1155 credential hash → type 6..255, `issuerTransferIdentity`, revoke-then-burn
+    on deactivate); the sandbox MOBI adapter's `changeController` uses
+    `transferVehicleOwnership` (K-3). `package.json` globs and `security_scenarios.js` import
+    repointed to the layered tree.
+  - *Gate results:* Hardhat **536 passing / 23 pending / 0 failing**; review-2 Python suite
+    **358 passed, 0 skipped** (fresh node on 8548; a leftover node from the analysis worktree
+    had been answering on that port and failing the fixtures' probe — found and stopped by pid);
+    sandbox Python **260 passed** (one L4 schema test taught the review-2 freshness record's
+    `latency` row list); adapter smoke 11/11; checker on the merged resolver **94.3 %** (floor
+    stays 94.0, M-L).
+
 ## 3. Decisions
 - **R-A** — the merge is executed on this branch by merging the parallel trunk in, not the other
   way round: the session's push scope is this branch only, and the merged history is identical

@@ -118,9 +118,11 @@ session (container is ephemeral — nothing here is pre-provisioned).
 ## 3. What Exists, By Layer
 
 ### 3.1 Blockchain identity contracts — `1_blockchain-identity/`
-- **ERC-721** vehicle DID/NFT: `CVIN_NFT_DID_ERC721.sol` (modular),
-  `..._monolithic.sol`, `..._monolithic_alt.sol`, plus `CVINVehicleNFT.sol`
-  (400 lines) — full NFT-as-identity implementation.
+- **ERC-721** vehicle DID/NFT: `contracts/ERC721/CVIN_NFT_DID_ERC721.sol` (modular),
+  `CVIN_NFT_DID_ERC721_Monolithic.sol`, plus `CVINVehicleNFT.sol` (400 lines), the full
+  NFT-as-identity implementation. (Review 02, K-16: the uncompiled, drifted copies in
+  `1_blockchain-identity/ERC721/contracts/` (`..._monolithic.sol`, `..._monolithic_alt.sol`, one
+  still carrying the `_balances` bug) and `ERC725/contracts/` were deleted.)
 - **ERC-725** identity: `CVIN_DID_ERC725.sol` (89 lines).
 - **ERC-1056** lightweight DID: `CVINVehicleDIDRegistry.sol` (331 lines) +
   `EthereumDIDRegistry.sol` (408 lines) — the minimal-state substrate,

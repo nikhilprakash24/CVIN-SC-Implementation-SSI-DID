@@ -334,7 +334,12 @@ def use_case_3_used_car_sale():
     print()
     print_step(3, "Buyer verifies presentation")
 
-    verifier = CredentialVerifier()
+    # Verifier config (review 02, T-3 / S-1 / S-2): explicit trusted issuer
+    # (its revocation registry comes with it) and the owner->vehicle
+    # relation that lets the owner present the vehicle's credentials.
+    verifier = CredentialVerifier(
+        trusted_issuers=[issuer],
+        subject_holder_binding={"did:ethr:0x1:0xVEHICLE123": {wallet.holder_did}})
     is_valid, result = verifier.verify_presentation(vp, "buyer_challenge_123", "carsales.example.com")
 
     if is_valid:
@@ -656,7 +661,12 @@ def use_case_6_cross_border():
     print()
     print_step(3, "US Customs verifies vehicle eligibility")
 
-    verifier = CredentialVerifier()
+    # Verifier config (review 02, T-3 / S-1 / S-2): explicit trusted issuer
+    # (its revocation registry comes with it) and the owner->vehicle
+    # relation that lets the owner present the vehicle's credentials.
+    verifier = CredentialVerifier(
+        trusted_issuers=[issuer],
+        subject_holder_binding={"did:ethr:0x1:0xVEHICLE456": {wallet.holder_did}})
     is_valid, result = verifier.verify_presentation(vp, "customs_verification", "cbp.gov")
 
     if not is_valid:
@@ -1250,7 +1260,12 @@ def use_case_10_autonomous_data():
         domain="openai.com"
     )
 
-    verifier = CredentialVerifier()
+    # Verifier config (review 02, T-3 / S-1 / S-2): explicit trusted issuer
+    # (its revocation registry comes with it) and the owner->vehicle
+    # relation that lets the owner present the vehicle's credentials.
+    verifier = CredentialVerifier(
+        trusted_issuers=[issuer],
+        subject_holder_binding={"did:ethr:0x1:0xVEHICLE789": {wallet.holder_did}})
     is_valid, result = verifier.verify_presentation(vp, "ai_company_data_request", "openai.com")
 
     if not is_valid:
@@ -1448,7 +1463,8 @@ def use_case_11_dealership_sale():
         domain="dmv.ca.gov"
     )
 
-    verifier = CredentialVerifier()
+    # Verifier config (review 02, T-3 / S-2): explicit trusted issuer.
+    verifier = CredentialVerifier(trusted_issuers=[dealer_issuer])
     is_valid, result = verifier.verify_presentation(vp, "dmv_title_challenge", "dmv.ca.gov")
     if not is_valid:
         raise RuntimeError(f"Sale credential verification failed: {result.get('errors')}")

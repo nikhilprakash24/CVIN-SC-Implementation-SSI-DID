@@ -74,6 +74,7 @@ from eth_account import Account
 from eth_account.messages import encode_defunct
 
 from identity.centralized_provider import CentralizedIdentityProvider
+from identity.freshness import FreshnessPolicy, signed_bytes
 from identity.w3c_verifiable_credentials import (
     CredentialIssuer,
     CredentialVerifier,
@@ -98,9 +99,25 @@ NEIGHBOR_RADIUS_M = 300.0      # DSRC/C-V2X plausible reception range
 MAX_NEIGHBORS = 8              # cap receivers per broadcast (runtime sanity)
 
 
-def _pki_payload_bytes(message: Dict[str, Any]) -> bytes:
-    """Serialization used by CentralizedIdentityProvider.sign_message."""
-    return json.dumps(message, sort_keys=True).encode()
+def _pki_payload_bytes(signed: Dict[str, Any]) -> bytes:
+    """Bytes CentralizedIdentityProvider.sign_message signs: message + its
+    generation time (review 02, T-9)."""
+    return signed_bytes(signed["message"], signed.get("timestamp"))
+
+
+def _bsm_freshness(clock=None) -> FreshnessPolicy:
+    """
+    Freshness window for the BSM's own signed `timestamp` (review 02, T-9).
+
+    In this module a BSM's `timestamp` is SIMULATION time (seconds), so the
+    integration passes a clock that returns the current simulation time. A
+    layer constructed without a clock compares against the wall clock
+    (time.time()). Same default window as the cv2x providers
+    (identity/freshness.py: 1.0 s past, 0.1 s future). No replay cache here:
+    the warm path re-verifies cached peers and a duplicate inside the window
+    is accepted (limitation; the cv2x providers have the cache).
+    """
+    return FreshnessPolicy(replay_cache=False, clock=clock)
 
 
 def _ssi_payload_bytes(message: Dict[str, Any]) -> bytes:
@@ -131,8 +148,9 @@ def _cert_validity_window(cert) -> Tuple[datetime, datetime]:
 class PKIIdentityLayer:
     """IEEE 1609.2-style PKI: pseudonym certificates + ECDSA P-256."""
 
-    def __init__(self):
+    def __init__(self, clock=None):
         self.provider = CentralizedIdentityProvider(ca_name="V2X-CA-CVIN")
+        self.freshness = _bsm_freshness(clock)
         self.ca_public_key = self.provider.ca_certificate.public_key()
         # Per-receiver cache: receiver_id -> {cert_fingerprint: public_key}
         self._cert_cache: Dict[str, Dict[str, Any]] = {}
@@ -146,9 +164,13 @@ class PKIIdentityLayer:
         signed = self.provider.sign_message(vehicle_id, message)
         return signed, (time.perf_counter() - t0) * 1000.0
 
-    def verify(self, receiver_id: str, signed: Dict) -> Tuple[bool, float, bool]:
+    def verify(self, receiver_id: str, signed: Dict,
+               now: Optional[float] = None) -> Tuple[bool, float, bool]:
         """
         Verify at the receiver. Returns (ok, latency_ms, cold).
+
+        Every message: the BSM's signed `timestamp` must be inside the
+        freshness window of `now` (default: the layer's clock), T-9.
 
         cold  = first contact with this pseudonym certificate: full chain
                 validation (CA signature, validity window, CRL) + message
@@ -161,7 +183,11 @@ class PKIIdentityLayer:
         try:
             cert_pem: str = signed["certificate"]
             signature = bytes.fromhex(signed["signature"])
-            payload = _pki_payload_bytes(signed["message"])
+            payload = _pki_payload_bytes(signed)
+            reason = self.freshness.check(
+                signed["message"].get("timestamp"), cert_pem, payload, now=now)
+            if reason is not None:
+                raise ValueError(reason)
             fingerprint = hashlib.sha256(cert_pem.encode()).hexdigest()
 
             cold = fingerprint not in cache
@@ -199,14 +225,19 @@ class PKIIdentityLayer:
 class SSIIdentityLayer:
     """did:ethr + W3C Verifiable Credentials (canonical VC layer)."""
 
-    def __init__(self):
+    def __init__(self, clock=None):
+        self.freshness = _bsm_freshness(clock)
         issuer_account = Account.create()
         self.issuer = CredentialIssuer(
             f"did:ethr:0x1:{issuer_account.address}",
             issuer_account.key.hex(),
             "CVIN Manufacturer Consortium",
         )
-        self.verifier = CredentialVerifier()
+        # Explicit trusted-issuer allow-list: only the consortium issuer
+        # (and its revocation registry). Before review 02 (T-3) every
+        # issuer/wallet self-registered as trusted, so a vehicle could
+        # issue itself a V2VSafetyCredential and be accepted here.
+        self.verifier = CredentialVerifier(trusted_issuers=[self.issuer])
         # vehicle_id -> {"account", "did", "credential"}
         self.wallets: Dict[str, Dict[str, Any]] = {}
         # Per-receiver cache: receiver_id -> {sender_did: signing_address}
@@ -249,9 +280,15 @@ class SSIIdentityLayer:
         }
         return package, (time.perf_counter() - t0) * 1000.0
 
-    def verify(self, receiver_id: str, package: Dict) -> Tuple[bool, float, bool]:
+    def verify(self, receiver_id: str, package: Dict,
+               now: Optional[float] = None) -> Tuple[bool, float, bool]:
         """
         Verify at the receiver. Returns (ok, latency_ms, cold).
+
+        Every message: the BSM's signed `timestamp` (inside the EIP-191
+        signed payload) must be inside the freshness window of `now`
+        (default: the layer's clock), T-9. Before review 02 it was signed
+        but never compared with any clock.
 
         cold  = first contact with this DID: full VC verification (issuer
                 signature recovery, trusted-issuer check, validity window,
@@ -265,6 +302,9 @@ class SSIIdentityLayer:
         sender_did = package.get("sender_did", "")
         cold = sender_did not in cache
         try:
+            if self.freshness.check(package["message"].get("timestamp"),
+                                    sender_did, b"", now=now) is not None:
+                return False, (time.perf_counter() - t0) * 1000.0, cold
             recovered = Account.recover_message(
                 _ssi_signable(package["message"]),
                 signature=package["signature"],
@@ -414,9 +454,11 @@ class SUMOIdentityIntegration:
         self.results_path = results_path or (
             self.sumo_dir / "results" / "v2v_latency.json")
 
-        # Identity layers (REAL crypto)
-        self.pki = PKIIdentityLayer()
-        self.ssi = SSIIdentityLayer()
+        # Identity layers (REAL crypto). Both check the BSM's signed
+        # timestamp (simulation time) against the simulation clock (T-9).
+        self._sim_now = 0.0
+        self.pki = PKIIdentityLayer(clock=lambda: self._sim_now)
+        self.ssi = SSIIdentityLayer(clock=lambda: self._sim_now)
 
         # Optional provenance registry for the MOBI VID population
         self.registry = None
@@ -647,7 +689,8 @@ class SUMOIdentityIntegration:
     # ------------------------------------------------------------------
 
     def run_attack_tests(self, sim_time: float):
-        """Tampered and unknown-sender messages MUST be rejected."""
+        """Tampered, stale and unknown-sender messages MUST be rejected."""
+        self._sim_now = sim_time
         print("\nAttack injection tests:")
         pki_vehicles = [v for v in self.vehicles.values()
                         if v.identity_type == "PKI"]
@@ -681,6 +724,24 @@ class SUMOIdentityIntegration:
                 self.metrics.verification_failures += 1
                 self.metrics.ssi.failed += 1
             print(f"  Tampered SSI BSM rejected:        {not ok}")
+
+        # 2b. Stale messages (review 02, T-9): genuinely signed, but the signed
+        #     timestamp is 5 s older than the simulation clock -> rejected.
+        stale_time = sim_time - 5.0
+        for name, population, layer, stats in (
+                ("pki", pki_vehicles, self.pki, self.metrics.pki),
+                ("ssi", ssi_vehicles, self.ssi, self.metrics.ssi)):
+            if not population:
+                continue
+            vid = population[0].vehicle_id
+            payload = self._build_bsm(vid, "BSM", stale_time, False)
+            package, _ = layer.sign(vid, payload)
+            ok, _, _ = layer.verify("attack_probe_rx", package)
+            self.attack_results[f"stale_{name}_rejected"] = not ok
+            if not ok:
+                self.metrics.verification_failures += 1
+                stats.failed += 1
+            print(f"  Stale {name.upper()} BSM rejected:           {not ok}")
 
         # 3. Unknown / uncredentialed sender (valid key, no credential)
         rogue = Account.create()
@@ -726,6 +787,7 @@ class SUMOIdentityIntegration:
         try:
             for step in range(total_steps):
                 sim_time = step * STEP_LENGTH_S
+                self._sim_now = sim_time
 
                 if not self.simulation_mode:
                     traci.simulationStep()

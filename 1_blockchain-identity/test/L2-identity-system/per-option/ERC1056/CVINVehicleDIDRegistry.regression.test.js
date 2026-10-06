@@ -54,7 +54,7 @@ describe("CVINVehicleDIDRegistry — D18 regression (setVehicleAttributes reacha
     const did = vehicleOwner.address;
 
     const tx = await wrapper.connect(vehicleOwner).setVehicleAttributes(
-      CAR.make, CAR.model, CAR.year, CAR.color, CAR.engineNumber, CAR.manufacturingDate, CAR.autonomyLevel
+      did, CAR.make, CAR.model, CAR.year, CAR.color, CAR.engineNumber, CAR.manufacturingDate, CAR.autonomyLevel
     );
     const receipt = await tx.wait();
     console.log("       Gas setVehicleAttributes (8 attributes, fixed validity):", receipt.gasUsed.toString());
@@ -86,16 +86,17 @@ describe("CVINVehicleDIDRegistry — D18 regression (setVehicleAttributes reacha
   it("still rejects an unregistered DID and a DID whose ERC-1056 control was not handed to the wrapper", async function () {
     const { didRegistry, wrapper, manufacturer } = await loadFixture(deployFixture);
     const [, , , other] = await ethers.getSigners();
+    const did = other.address; // K-1 (merged 2026-10-06): the DID is an explicit argument
     await expect(
-      wrapper.connect(other).setVehicleAttributes(CAR.make, CAR.model, CAR.year, CAR.color, CAR.engineNumber, CAR.manufacturingDate, CAR.autonomyLevel)
-    ).to.be.revertedWith("CVINRegistry: DID not registered");
+      wrapper.connect(other).setVehicleAttributes(did, CAR.make, CAR.model, CAR.year, CAR.color, CAR.engineNumber, CAR.manufacturingDate, CAR.autonomyLevel)
+    ).to.be.revertedWith("CVINRegistry: registry does not control DID"); // K-1 (merged 2026-10-06): the wrapper first checks it controls the DID on the registry
 
     await wrapper.connect(manufacturer).createVehicleDID(
       "2HGBH41JXMN109187", other.address, CAR.make, CAR.model, CAR.year, CAR.color, CAR.engineNumber, CAR.manufacturingDate, CAR.autonomyLevel
     );
     expect(await didRegistry.identityOwner(other.address)).to.equal(other.address);
     await expect(
-      wrapper.connect(other).setVehicleAttributes(CAR.make, CAR.model, CAR.year, CAR.color, CAR.engineNumber, CAR.manufacturingDate, CAR.autonomyLevel)
-    ).to.be.revertedWith("DIDRegistry: unauthorized");
+      wrapper.connect(other).setVehicleAttributes(did, CAR.make, CAR.model, CAR.year, CAR.color, CAR.engineNumber, CAR.manufacturingDate, CAR.autonomyLevel)
+    ).to.be.revertedWith("CVINRegistry: registry does not control DID"); // K-1: ERC-1056 control was never handed to the wrapper
   });
 });

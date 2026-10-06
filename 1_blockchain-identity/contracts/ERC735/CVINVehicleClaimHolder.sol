@@ -121,6 +121,22 @@ interface IERC735 {
  *   removeClaim.
  * - VIN binding (D25b): a VIN_ATTESTATION (topic 1) claim must attest THIS
  *   holder's VIN — see _encodesHolderVin for the exact encoding rule.
+ * - Issuer revocation is sticky (REVIEW_02 K-2): when the ISSUER removes a
+ *   claim, the signed content (issuer, keccak256(identity, topic, data)) is
+ *   recorded in `revokedClaims`, and addClaim rejects that content from then
+ *   on, so the owner cannot re-anchor a revoked attestation with the old
+ *   signature. The key is the signed digest, not the signature bytes, so a
+ *   re-encoded signature over the same content is rejected too. The issuer
+ *   re-issues by signing new data (e.g. a new inspection record). An OWNER
+ *   removal is not a revocation (the owner merely stops presenting a claim
+ *   it holds) and records nothing, so the owner may re-anchor it later -
+ *   unless the issuer revokes the content with revokeClaimContent(topic,
+ *   data), which works whether or not the claim is currently anchored (an
+ *   owner can no longer pre-empt revocation by removing the claim first).
+ *   The signature still carries no nonce or expiry: an older, never-revoked
+ *   claim for the same (issuer, topic) can be re-anchored after the issuer
+ *   replaced it with newer data. Closing that needs an issuer-side nonce or
+ *   expiry in the signed payload (not done; see docs/review02/PASS1_K.md).
  */
 contract CVINVehicleClaimHolder is IERC735 {
     // ============ Vehicle claim topics ============
@@ -160,6 +176,13 @@ contract CVINVehicleClaimHolder is IERC735 {
 
     /// @dev Issuer registry (D25a): issuer => topic => authorized to issue on that topic
     mapping(address => mapping(uint256 => bool)) private authorizedIssuers;
+    /// @notice Issuer-revoked claim content (REVIEW_02 K-2).
+    /// @dev key = keccak256(abi.encodePacked(issuer, keccak256(abi.encodePacked(address(this), topic, data)))),
+    ///      i.e. the issuer and the digest it signed. Set by an issuer
+    ///      removal (the ClaimRemoved whose tx sender is the issuer) or by
+    ///      revokeClaimContent (a tx from the issuer to that function). No extra event or view, to keep the per-vehicle
+    ///      deployment cost of the fix small; verifiers query this getter.
+    mapping(bytes32 => bool) public revokedClaims;
 
     // ============ Events (identity lifecycle, beyond ERC-735) ============
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
@@ -209,12 +232,14 @@ contract CVINVehicleClaimHolder is IERC735 {
     ) external onlyOwner returns (bytes32 claimRequestId) {
         require(issuer != address(0), "ERC735: issuer is zero address");
         require(scheme == ECDSA_SCHEME, "ERC735: unsupported signature scheme");
+        bytes32 digest = keccak256(abi.encodePacked(address(this), topic, data));
         require(
-            _recoverSigner(
-                keccak256(abi.encodePacked(address(this), topic, data)),
-                signature
-            ) == issuer,
+            _recoverSigner(digest, signature) == issuer,
             "ERC735: invalid issuer signature"
+        );
+        require(
+            !revokedClaims[keccak256(abi.encodePacked(issuer, digest))],
+            "ERC735: claim revoked by issuer"
         );
         require(
             issuer == owner || authorizedIssuers[issuer][topic],
@@ -258,6 +283,9 @@ contract CVINVehicleClaimHolder is IERC735 {
     /**
      * @notice Remove (revoke) a claim. Callable by the identity owner or the
      *         claim's issuer (issuer-side revocation).
+     * @dev An issuer removal also records the claim's signed content in
+     *      revokedClaims so addClaim cannot bring it back (K-2). An owner
+     *      removal records nothing.
      */
     function removeClaim(bytes32 claimId) external returns (bool success) {
         Claim memory claim = claims[claimId];
@@ -267,7 +295,46 @@ contract CVINVehicleClaimHolder is IERC735 {
             "ERC735: caller is not owner nor issuer"
         );
 
-        // Remove from topic index (swap and pop)
+        if (msg.sender == claim.issuer) {
+            revokedClaims[
+                keccak256(
+                    abi.encodePacked(
+                        claim.issuer,
+                        keccak256(abi.encodePacked(address(this), claim.topic, claim.data))
+                    )
+                )
+            ] = true;
+        }
+
+        _deleteClaim(claimId, claim);
+        return true;
+    }
+
+    /**
+     * @notice Issuer-side revocation of signed claim CONTENT, whether or not
+     *         it is currently anchored (REVIEW_02 K-2, Pass 2).
+     * @dev removeClaim needs the claim to exist, so an owner could pre-empt a
+     *      revocation by removing the claim first (the issuer's removeClaim
+     *      then reverts) and re-anchor the old signature later. This records
+     *      keccak256(msg.sender, digest(topic, data)) unconditionally, i.e. it
+     *      can only ever block claims signed by the caller itself, so it needs
+     *      no access control. If the caller's claim for `topic` is anchored
+     *      with exactly this data it is removed too; an anchored claim with
+     *      other (e.g. re-issued) data is left alone.
+     */
+    function revokeClaimContent(uint256 topic, bytes calldata data) external {
+        bytes32 digest = keccak256(abi.encodePacked(address(this), topic, data));
+        revokedClaims[keccak256(abi.encodePacked(msg.sender, digest))] = true;
+
+        bytes32 claimId = keccak256(abi.encodePacked(msg.sender, topic));
+        Claim memory claim = claims[claimId];
+        if (claim.issuer != address(0) && keccak256(claim.data) == keccak256(data)) {
+            _deleteClaim(claimId, claim);
+        }
+    }
+
+    /// @dev Unindex (swap-and-pop), delete and emit ClaimRemoved.
+    function _deleteClaim(bytes32 claimId, Claim memory claim) private {
         bytes32[] storage ids = claimIdsByTopic[claim.topic];
         for (uint256 i = 0; i < ids.length; i++) {
             if (ids[i] == claimId) {
@@ -288,7 +355,6 @@ contract CVINVehicleClaimHolder is IERC735 {
             claim.data,
             claim.uri
         );
-        return true;
     }
 
     function getClaim(bytes32 claimId)

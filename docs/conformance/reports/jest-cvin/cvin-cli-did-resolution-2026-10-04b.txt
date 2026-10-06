@@ -1,0 +1,318 @@
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+FAIL suites/did-resolution/did-resolution.spec.js
+  suites/did-resolution
+    IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      7.1.x DID Resolution - CVIN did_resolver.py (ERC-1056) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        ✓ All conformant DID resolvers MUST implement the DID resolution functions for at least one DID method and MUST be able to return a DID document in at least one conformant representation. (4 ms)
+        did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678
+          PARAMETER expected outcome: defaultOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax. (1 ms)
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty. (1 ms)
+              ✓ 7.1 DID Resolution - A metadata structure. (1 ms)
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure. (1 ms)
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty. (1 ms)
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream. (1 ms)
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation. (1 ms)
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty. (1 ms)
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+                ✓ 7.1.1 DID Resolution Options - The Media Type of the caller's preferred representation of the DID document. (1 ms)
+                ✓ 7.1.1 DID Resolution Options - The Media Type MUST be expressed as an ASCII string.
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations. (1 ms)
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model. (1 ms)
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+            DID Document Metadata
+              created
+                ✓ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. (1 ms)
+                ✓ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+              versionId
+                ✓ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+                ✓ 7.1.3 DID Document Metadata - versionId - The value of the property MUST be an ASCII string.
+            didDocumentStream
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolveRepresentation function was called, this MUST be a byte stream of the resolved DID document in one of the conformant representations. (1 ms)
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream.
+        did:ethr_0x1234
+          PARAMETER expected outcome: invalidDidErrorOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty. (3 ms)
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty. (1 ms)
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved. (1 ms)
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called. (1 ms)
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+                ✓ 7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax. (1 ms)
+        did:web:example.com
+          PARAMETER expected outcome: methodNotSupportedErrorOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error. (1 ms)
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+    IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      7.1.x DID Resolution - CVIN did_resolver.py (MOBI VID) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        ✓ All conformant DID resolvers MUST implement the DID resolution functions for at least one DID method and MUST be able to return a DID document in at least one conformant representation.
+        did:mobi:5YJ3E1EA0PF123456
+          PARAMETER expected outcome: defaultOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty. (1 ms)
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream. (1 ms)
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved. (1 ms)
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+                ✓ 7.1.1 DID Resolution Options - The Media Type of the caller's preferred representation of the DID document.
+                ✓ 7.1.1 DID Resolution Options - The Media Type MUST be expressed as an ASCII string.
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations. (2 ms)
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model. (1 ms)
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+            DID Document Metadata
+              created
+                ✓ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. (1 ms)
+                ✓ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+            didDocumentStream
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolveRepresentation function was called, this MUST be a byte stream of the resolved DID document in one of the conformant representations.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream.
+        did:mobi:
+          PARAMETER expected outcome: invalidDidErrorOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure. (1 ms)
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty. (1 ms)
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string. (1 ms)
+                ✓ 7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.
+    IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        ✓ All conformant DID resolvers MUST implement the DID resolution functions for at least one DID method and MUST be able to return a DID document in at least one conformant representation. (1 ms)
+        did:nft:0x1:0xabc:123
+          PARAMETER expected outcome: defaultOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax.
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty. (1 ms)
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty. (1 ms)
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream. (1 ms)
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error.
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved. (1 ms)
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+                ✓ 7.1.1 DID Resolution Options - The Media Type of the caller's preferred representation of the DID document.
+                ✓ 7.1.1 DID Resolution Options - The Media Type MUST be expressed as an ASCII string.
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function. (1 ms)
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be an ASCII string that is the Media Type of the conformant representations.
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model. (3 ms)
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+            DID Document Metadata
+              created
+                ✓ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. (1 ms)
+                ✓ 7.1.3 DID Document Metadata - created - The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision.
+            didDocumentStream
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolveRepresentation function was called, this MUST be a byte stream of the resolved DID document in one of the conformant representations. (1 ms)
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be an empty stream.
+        did:nft:0x1:0xabc
+          PARAMETER expected outcome: invalidDidErrorOutcome
+            ✓ 7.1 DID Resolution - This input is REQUIRED and the value MUST be a conformant DID as defined in § 3.1 DID Syntax. (1 ms)
+            resolutionOptions
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This input is REQUIRED, but the structure MAY be empty.
+            didResolutionMetadata
+              ✓ 7.1 DID Resolution - A metadata structure.
+              ✓ 7.1 DID Resolution - This structure is REQUIRED, and in the case of an error in the resolution process, this MUST NOT be empty.
+              ✓ 7.1 DID Resolution - If resolveRepresentation was called, this structure MUST contain a contentType property containing the Media Type of the representation found in the didDocumentStream.
+              ✓ 7.1 DID Resolution - If the resolution is not successful, this structure MUST contain an error property describing the error. (1 ms)
+            didDocument
+              ✓ 7.1 DID Resolution - If the resolution is successful, and if the resolve function was called, this MUST be a DID document abstract data model (a map) as described in § 4. Data Model that is capable of being transformed into a conforming DID Document (representation), using the production rules specified by the representation.
+              ✓ 7.1 DID Resolution - The value of id in the resolved DID document MUST match the DID that was resolved.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this value MUST be empty.
+            didDocumentMetadata
+              ✓ 7.1 DID Resolution - If the resolution is successful, this MUST be a metadata structure.
+              ✓ 7.1 DID Resolution - If the resolution is unsuccessful, this output MUST be an empty metadata structure.
+            DID Resolution Options
+              accept
+                ✓ 7.1.1 DID Resolution Options - This property is OPTIONAL for the resolveRepresentation function and MUST NOT be used with the resolve function.
+            DID Resolution Metadata
+              contentType
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED if resolution is successful and if the resolveRepresentation function was called.
+                ✓ 7.1.2 DID Resolution Metadata - This property MUST NOT be present if the resolve function was called. (1 ms)
+                ✓ 7.1.2 DID Resolution Metadata - The caller of the resolveRepresentation function MUST use this value when determining how to parse and process the didDocumentStream returned by this function into the data model.
+              error
+                ✓ 7.1.2 DID Resolution Metadata - This property is REQUIRED when there is an error in the resolution process.
+                ✓ 7.1.2 DID Resolution Metadata - The value of this property MUST be a single keyword ASCII string.
+                ✕ 7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax. (2 ms)
+
+  ● suites/did-resolution › IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis):: › 7.1.x DID Resolution - CVIN did_resolver.py (ERC-721) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis) › did:nft:0x1:0xabc › PARAMETER expected outcome: invalidDidErrorOutcome › DID Resolution Metadata › error › 7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.
+
+    expect(received).not.toBeValidDid()
+
+    Expected value to not be of valid DID received:
+      "did:nft:0x1:0xabc"
+
+      157 |             it('7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax.', async () => {
+      158 |               expect(didResolutionMetadata['error']).toBe('invalidDid');
+    > 159 |               expect(did).not.toBeValidDid();
+          |                               ^
+      160 |               expect(didDocument).toBeFalsy();
+      161 |             });
+      162 |           }
+
+      at Object.<anonymous> (suites/did-resolution/did-resolution.js:159:31)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 193 passed, 194 total
+Snapshots:   0 total
+Time:        0.977 s, estimated 1 s
+Ran all test suites matching /suites\/did-resolution/i.
+Test results written to: report/tmp/cvin-cli-did-resolution.json

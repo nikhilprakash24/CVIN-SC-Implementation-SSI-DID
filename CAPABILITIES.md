@@ -67,7 +67,7 @@ deterministic for fixed calldata and pre-state.
 identity creation; the minimal registries (CVIN-Combined, ERC-1056) are ~10×
 cheaper to create than ERC-721/ERC-725. For ERC-4337, routing the same
 `setAttribute` through the EntryPoint as a UserOperation costs 96,228 gas vs
-49,366 direct — a **+46,862 gas / op** indirection overhead (bundler overhead
+49,366 direct — a **+46,830 gas / op** indirection overhead (bundler overhead
 excluded).
 
 *Gas is dimensionless; any fiat figure depends on the live gas price and token
@@ -119,7 +119,7 @@ standard that structurally resists identity theft. Create 103,905 gas.
 and **guardian-based social recovery** — the only standard here with genuine
 on-chain key recovery. **Deliberately minimal** (documented in the contract
 headers); its gas is a lower bound. Create 768,204 gas; the EntryPoint
-indirection adds +46,862 gas per routed op.
+indirection adds +46,830 gas per routed op.
 
 ### LSP8 — LUKSO Identifiable Digital Asset (minimal representative) ✅ ⚠️
 A minimal LSP8 vehicle asset for cross-ecosystem comparison. Create 149,352

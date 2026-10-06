@@ -1,0 +1,93 @@
+{
+  "runId": "2026-10-04T09-50-29Z_0eef6af",
+  "commit": "0eef6af562589fbd58253f517b6ebdac0facf0db",
+  "commitShort": "0eef6af",
+  "branch": "claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt",
+  "measured": {
+    "benchmarksTree": "2c821dedf6d4fbfe1b47b36f0bcfbfcfaa3d1cd9",
+    "contractsTree": "6c58b31e9a58101aac8e5d07ea0341e363077471",
+    "hardhatConfigBlob": "3c665d67e00f3d3290584dd0addf2e4e98470937",
+    "lockfileBlob": "7115e9d1ea9bd8cfe975560066c46a30cde2637c"
+  },
+  "dirty": false,
+  "dirtyMeasured": false,
+  "date": "2026-10-04T09:50:30.375Z",
+  "node": "v22.22.2",
+  "hardhat": "2.28.6",
+  "ethers": "6.17.0",
+  "solc": "0.8.24",
+  "evmVersion": "cancun",
+  "optimizerRuns": 200,
+  "viaIR": true,
+  "network": {
+    "name": "hardhat",
+    "chainId": 31337,
+    "automine": true,
+    "hardfork": "osaka",
+    "blockGasLimit": 60000000,
+    "blockGasLimitConfig": 60000000
+  },
+  "conditions": {
+    "repetitions": 30,
+    "warmup": 5,
+    "scaleN": [
+      0,
+      100,
+      1000
+    ],
+    "scaleH": [
+      1,
+      10,
+      50
+    ],
+    "throughput": {
+      "senders": 10,
+      "perSender": 20,
+      "bursts": 3
+    },
+    "sampling": {
+      "txOps": "1 exact + 5 warm-up + 30 latency samples per op (crud)",
+      "reads": "5 warm-up + 30 samples (crud, resolve)",
+      "scaleReads": "2 warm-up + 10 samples",
+      "lifecycleAndBatchAndScaleTx": "1 measurement per event / cell (gas is exact)"
+    },
+    "trace": true,
+    "datasetSeed": 42,
+    "datasetSize": 1100,
+    "freshKeys": "sk_i = keccak256(abi.encode('cvin-bench/fresh-key/v1', 42, i)), i restarts per chain reset; addresses with a 0x00 byte skipped",
+    "credentialIssuer": "crud V1/V3/V5/V6: fresh issuer per iteration (identity + key anchor unmeasured)"
+  },
+  "scenarios": [
+    "crud",
+    "lifecycle",
+    "scale",
+    "batch",
+    "throughput",
+    "resolve"
+  ],
+  "adapters": [
+    "erc1056",
+    "erc1056w",
+    "erc721",
+    "erc725",
+    "erc735",
+    "erc1155",
+    "erc725xy",
+    "lsp8",
+    "erc4337",
+    "cvin"
+  ],
+  "derivedCostParams": {
+    "gasPriceGweiL1": 20,
+    "gasPriceGweiL2": 0.05,
+    "ethUSD": 3000
+  },
+  "scenarioSeconds": {
+    "crud": 236.078,
+    "lifecycle": 4.344,
+    "scale": 245.382,
+    "batch": 31.514,
+    "throughput": 43.003,
+    "resolve": 8.869
+  }
+}

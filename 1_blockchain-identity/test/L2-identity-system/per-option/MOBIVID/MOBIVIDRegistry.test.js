@@ -219,6 +219,122 @@ describe("MOBI VID Registry V1 (birth certificates)", function () {
       ).to.be.revertedWith("Only owner can perform this action");
     });
   });
+
+  // K-3 (REVIEW_02): the public ERC-1056 changeOwner bypassed ownershipHistory,
+  // and changeOwner / revokeDelegate / revokeAttribute ignored revoked[].
+  describe("K-3: no ownership bypass, revoked identities are frozen", function () {
+    const KEY = ethers.encodeBytes32String("sigAuth");
+    const ATTR = ethers.keccak256(ethers.toUtf8Bytes("did/svc/Endpoint"));
+
+    async function bornFixture() {
+      const f = await deployV1Fixture();
+      await f.registry.connect(f.manufacturer).registerVehicleBirth(
+        f.vehicle.address, VIN_HASH, "encrypted:VIN", BIRTH_CERT_HASH,
+        f.firstOwner.address, BIRTH_ATTRS
+      );
+      return f;
+    }
+
+    it("public changeOwner cannot move a registered vehicle outside transferVehicleOwnership", async function () {
+      const { registry, firstOwner, outsider, vehicle } = await loadFixture(bornFixture);
+      await expect(
+        registry.connect(firstOwner).changeOwner(vehicle.address, outsider.address)
+      ).to.be.revertedWith("MOBIVID: use transferVehicleOwnership");
+      expect(await registry.identityOwner(vehicle.address)).to.equal(firstOwner.address);
+      expect(await registry.getOwnershipHistoryCount(vehicle.address)).to.equal(0n);
+    });
+
+    it("public changeOwner still works for an identity with no birth certificate (plain ERC-1056)", async function () {
+      const { registry, outsider, secondOwner } = await loadFixture(deployV1Fixture);
+      await expect(registry.connect(outsider).changeOwner(outsider.address, secondOwner.address))
+        .to.emit(registry, "DIDOwnerChanged");
+      expect(await registry.identityOwner(outsider.address)).to.equal(secondOwner.address);
+    });
+
+    it("a revoked vehicle cannot be transferred, re-owned, or have delegates/attributes revoked", async function () {
+      const { registry, firstOwner, secondOwner, vehicle } = await loadFixture(bornFixture);
+      await registry.connect(firstOwner).addDelegate(vehicle.address, KEY, secondOwner.address, 3600);
+      await registry.connect(firstOwner).revokeIdentity(vehicle.address);
+
+      await expect(
+        registry.connect(firstOwner).transferVehicleOwnership(vehicle.address, secondOwner.address, 1, "X")
+      ).to.be.revertedWith("Vehicle identity is revoked");
+      await expect(
+        registry.connect(firstOwner).revokeDelegate(vehicle.address, KEY, secondOwner.address)
+      ).to.be.revertedWith("Identity is revoked");
+      await expect(
+        registry.connect(firstOwner).revokeAttribute(vehicle.address, ATTR, "0x01")
+      ).to.be.revertedWith("Identity is revoked");
+      await expect(
+        registry.connect(firstOwner).revokeIdentity(vehicle.address)
+      ).to.be.revertedWith("Identity already revoked");
+    });
+
+    it("a revoked non-vehicle identity cannot be re-assigned through public changeOwner", async function () {
+      const { registry, outsider, secondOwner } = await loadFixture(deployV1Fixture);
+      await registry.connect(outsider).revokeIdentity(outsider.address);
+      await expect(
+        registry.connect(outsider).changeOwner(outsider.address, secondOwner.address)
+      ).to.be.revertedWith("Identity is revoked");
+      expect(await registry.identityOwner(outsider.address)).to.equal(outsider.address);
+    });
+  });
+
+  // K-15 (REVIEW_02): getVehicleDID left out the "0x" before the address
+  // (did:ethr:0x7a69:7099…), which did:ethr and did_resolver.py reject.
+  describe("K-15: getVehicleDID emits a well-formed did:ethr", function () {
+    it("returns did:ethr:0x<chainId hex>:0x<40 lowercase hex address>", async function () {
+      const { registry, vehicle } = await loadFixture(deployV1Fixture);
+      const { chainId } = await ethers.provider.getNetwork();
+      expect(chainId).to.equal(31337n);
+      const did = await registry.getVehicleDID(vehicle.address);
+      expect(did).to.equal(`did:ethr:0x7a69:${vehicle.address.toLowerCase()}`);
+      expect(did).to.match(/^did:ethr:0x[0-9a-f]+:0x[0-9a-f]{40}$/);
+      expect(did.length).to.equal("did:ethr:0x7a69:".length + 42);
+    });
+
+    it("zero-pads addresses with leading zero nibbles to 40 hex digits", async function () {
+      const { registry } = await loadFixture(deployV1Fixture);
+      const addr = "0x000000000000000000000000000000000000beef";
+      expect(await registry.getVehicleDID(addr)).to.equal(`did:ethr:0x7a69:${addr}`);
+    });
+  });
+
+  // K-4 (REVIEW_02): registerVehicleBirth overwrote owners[] with no check, so
+  // an authorised manufacturer could take over any existing did:ethr or
+  // re-birth a revoked one.
+  describe("K-4: registerVehicleBirth only accepts a pristine identity", function () {
+    async function birth(f, identity, attrs = BIRTH_ATTRS) {
+      return f.registry.connect(f.manufacturer).registerVehicleBirth(
+        identity, VIN_HASH, "encrypted:VIN", BIRTH_CERT_HASH,
+        f.firstOwner.address, attrs
+      );
+    }
+
+    it("rejects an identity whose ERC-1056 owner was already changed", async function () {
+      const f = await loadFixture(deployV1Fixture);
+      await f.registry.connect(f.vehicle).changeOwner(f.vehicle.address, f.secondOwner.address);
+      await expect(birth(f, f.vehicle.address)).to.be.revertedWith("MOBIVID: identity already has DID history");
+      expect(await f.registry.identityOwner(f.vehicle.address)).to.equal(f.secondOwner.address);
+    });
+
+    it("rejects a revoked identity", async function () {
+      const f = await loadFixture(deployV1Fixture);
+      await f.registry.connect(f.vehicle).revokeIdentity(f.vehicle.address);
+      // Empty birth attributes: the pre-fix code then reached no revoked[]
+      // check at all and re-birthed the revoked identity.
+      await expect(birth(f, f.vehicle.address, "0x")).to.be.revertedWith("MOBIVID: identity already has DID history");
+      await expect(birth(f, f.vehicle.address)).to.be.revertedWith("MOBIVID: identity already has DID history");
+    });
+
+    it("rejects an identity that already published DID attributes", async function () {
+      const f = await loadFixture(deployV1Fixture);
+      await f.registry.connect(f.vehicle).setAttribute(
+        f.vehicle.address, ethers.keccak256(ethers.toUtf8Bytes("did/pub/k")), "0x01", 3600
+      );
+      await expect(birth(f, f.vehicle.address)).to.be.revertedWith("MOBIVID: identity already has DID history");
+    });
+  });
 });
 
 describe("MOBI VID Registry V2 (lifecycle events)", function () {
@@ -247,6 +363,13 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
 
   const DATA_HASH = ethers.keccak256(ethers.toUtf8Bytes("event-data"));
   const CRED_HASH = ethers.keccak256(ethers.toUtf8Bytes("signed-event-vc"));
+
+  it("K-3: V2 inherits the changeOwner guard (no transfer outside ownershipHistory)", async function () {
+    const { registry, firstOwner, outsider, vehicle } = await loadFixture(deployV2Fixture);
+    await expect(
+      registry.connect(firstOwner).changeOwner(vehicle.address, outsider.address)
+    ).to.be.revertedWith("MOBIVID: use transferVehicleOwnership");
+  });
 
   describe("recordLifecycleEvent", function () {
     it("records MAINTENANCE, INSPECTION, ACCIDENT, RECALL and REGISTRATION events", async function () {
@@ -325,6 +448,87 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
     });
   });
 
+  // K-15 (REVIEW_02): OWNER is a global role; before the fix any OWNER-role
+  // address could file owner-reportable events against any vehicle.
+  describe("K-15: OWNER-role events are limited to the vehicle's current owner", function () {
+    const OWNER_TYPES = [
+      ["MAINTENANCE", EventType.MAINTENANCE], ["ACCIDENT", EventType.ACCIDENT],
+      ["MODIFICATION", EventType.MODIFICATION], ["THEFT_REPORT", EventType.THEFT_REPORT],
+      ["INSURANCE_CLAIM", EventType.INSURANCE_CLAIM],
+    ];
+    const NOT_OWNER = "OWNER role: not the current owner of this vehicle";
+
+    // Vehicle A (fixture vehicle) is owned by firstOwner; vehicle B by ownerB.
+    async function twoVehiclesFixture() {
+      const f = await deployV2Fixture();
+      const signers = await ethers.getSigners();
+      const ownerB = signers[9], vehicleB = signers[10], buyer = signers[11];
+      await f.registry.connect(f.manufacturer).registerVehicleBirth(
+        vehicleB.address, ethers.keccak256(ethers.toUtf8Bytes("VIN-B:salt")),
+        "encrypted:VIN-B", BIRTH_CERT_HASH, ownerB.address, BIRTH_ATTRS
+      );
+      await f.registry.authorizeIssuer(f.firstOwner.address, IssuerRole.OWNER);
+      await f.registry.authorizeIssuer(ownerB.address, IssuerRole.OWNER);
+      await f.registry.authorizeIssuer(buyer.address, IssuerRole.OWNER);
+      return { ...f, ownerB, vehicleB, buyer };
+    }
+
+    function file(registry, signer, vehicle, type) {
+      return registry.connect(signer).recordLifecycleEvent(
+        vehicle, type, 12000, DATA_HASH, CRED_HASH, "BC-CAN");
+    }
+
+    it("the owner of vehicle A cannot file a THEFT_REPORT on vehicle B", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      await expect(file(f.registry, f.firstOwner, f.vehicleB.address, EventType.THEFT_REPORT))
+        .to.be.revertedWith(NOT_OWNER);
+      expect(await f.registry.vehicleEventCount(f.vehicleB.address)).to.equal(0n);
+    });
+
+    it("rejects every OWNER-gated event type on a vehicle the caller does not own", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      for (const [, type] of OWNER_TYPES) {
+        await expect(file(f.registry, f.firstOwner, f.vehicleB.address, type))
+          .to.be.revertedWith(NOT_OWNER);
+      }
+    });
+
+    it("the owner of vehicle A can file every OWNER-gated event type on A", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      for (const [, type] of OWNER_TYPES) {
+        const receipt = await (await file(f.registry, f.firstOwner, f.vehicle.address, type)).wait();
+        const evt = await f.registry.getFunction("getEvent")(f.vehicle.address, extractEventId(f.registry, receipt));
+        expect(evt.issuer).to.equal(f.firstOwner.address);
+        expect(evt.verified).to.equal(false);
+      }
+      expect(await f.registry.getEventTypeCount(f.vehicle.address, EventType.THEFT_REPORT)).to.equal(1n);
+    });
+
+    it("after a transfer the previous owner cannot file, the new owner can", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      await f.registry.connect(f.firstOwner).transferVehicleOwnership(
+        f.vehicle.address, f.buyer.address, 15000, "BC-ICBC");
+      await expect(file(f.registry, f.firstOwner, f.vehicle.address, EventType.THEFT_REPORT))
+        .to.be.revertedWith(NOT_OWNER);
+      await expect(file(f.registry, f.buyer, f.vehicle.address, EventType.THEFT_REPORT))
+        .to.emit(f.registry, "LifecycleEventRecorded");
+    });
+
+    it("the role matrix still applies first (OWNER cannot file RECALL even on its own vehicle)", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      await expect(file(f.registry, f.firstOwner, f.vehicle.address, EventType.RECALL))
+        .to.be.revertedWith("Not authorized to issue this event type");
+    });
+
+    it("organisational roles keep registry-wide scope (police and service centre on any vehicle)", async function () {
+      const f = await loadFixture(twoVehiclesFixture);
+      await expect(file(f.registry, f.police, f.vehicleB.address, EventType.THEFT_REPORT))
+        .to.emit(f.registry, "LifecycleEventRecorded");
+      await expect(file(f.registry, f.serviceCenter, f.vehicleB.address, EventType.MAINTENANCE))
+        .to.emit(f.registry, "LifecycleEventRecorded");
+    });
+  });
+
   describe("issuer management", function () {
     it("only the registry authority can authorize issuers, and revocation disables issuance", async function () {
       const { registry, serviceCenter, vehicle, outsider } =
@@ -395,7 +599,8 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       const garbage = ethers.toUtf8Bytes("0xsignature-placeholder");
       await expect(
         registry.connect(dmv).attestEvent(eventId, vehicle.address, garbage)
-      ).to.be.reverted;
+      ).to.be.revertedWithCustomError(registry, "ECDSAInvalidSignatureLength")
+        .withArgs(garbage.length); // REVIEW_02 Q-14: assert the ECDSA length check, not any revert
 
       // (3) A well-formed signature by the WRONG key (a role-holder forging
       //     another party's attestation) reverts.
