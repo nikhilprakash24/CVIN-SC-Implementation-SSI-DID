@@ -1,8 +1,9 @@
 {
   "environment": {
-    "date_utc": "2026-10-09T03:54:55+00:00",
-    "commit": "1e690c3132a84c15cd7f6cf37f3d1f80df9d1022",
+    "date_utc": "2026-10-09T05:38:02+00:00",
+    "commit": "f1f9e37cc516b318892dd1246b42d4cb6e49bf32",
     "tree_clean": false,
+    "code_clean": true,
     "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
     "logical_cpus": 4,
     "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39",
@@ -25,190 +26,222 @@
   },
   "I3": {
     "claim": "for every finite k, max SPaT accepted from the revoked RSU per receiver <= k - 1",
+    "scope": "a count of messages, not a time: the cache does not expire, and the revocation registry is in-process (zero propagation delay, lookup cost not modelled). The bound follows from the re-check cadence, so I3 checks that the implementation honours it.",
     "per_k": {
       "1": {
         "bound_k_minus_1": 0,
         "max_accepted_after_revocation": 0,
+        "runs_reaching_bound": 30,
         "mean_total_accepted_after_revocation": 0.0,
         "verdict": "PASS",
         "per_run": [
           {
             "seed": 1,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 2,
             "receivers_after_revocation": 4,
+            "cached_at_revocation": 3,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 3,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 4,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 4,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 5,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 6,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 7,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 14,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 8,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 9,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 10,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 5,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 11,
             "receivers_after_revocation": 14,
+            "cached_at_revocation": 11,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 12,
             "receivers_after_revocation": 14,
+            "cached_at_revocation": 13,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 13,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 11,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 14,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 15,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 5,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 16,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 17,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 18,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 19,
             "receivers_after_revocation": 10,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 20,
             "receivers_after_revocation": 10,
+            "cached_at_revocation": 13,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 21,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 22,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 6,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 23,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 24,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 25,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 12,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 26,
             "receivers_after_revocation": 12,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 27,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 28,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 29,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 30,
             "receivers_after_revocation": 12,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           }
@@ -217,186 +250,217 @@
       "5": {
         "bound_k_minus_1": 4,
         "max_accepted_after_revocation": 4,
+        "runs_reaching_bound": 16,
         "mean_total_accepted_after_revocation": 6.73,
         "verdict": "PASS",
         "per_run": [
           {
             "seed": 1,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 9
           },
           {
             "seed": 2,
             "receivers_after_revocation": 4,
+            "cached_at_revocation": 3,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 4
           },
           {
             "seed": 3,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 4,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 5
           },
           {
             "seed": 4,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 9
           },
           {
             "seed": 5,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 7
           },
           {
             "seed": 6,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 2,
             "total_accepted_after_revocation": 4
           },
           {
             "seed": 7,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 14,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 18
           },
           {
             "seed": 8,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 3,
             "total_accepted_after_revocation": 4
           },
           {
             "seed": 9,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 3,
             "total_accepted_after_revocation": 8
           },
           {
             "seed": 10,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 5,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 11,
             "receivers_after_revocation": 14,
+            "cached_at_revocation": 11,
             "max_accepted_after_revocation": 3,
             "total_accepted_after_revocation": 7
           },
           {
             "seed": 12,
             "receivers_after_revocation": 14,
+            "cached_at_revocation": 13,
             "max_accepted_after_revocation": 3,
             "total_accepted_after_revocation": 11
           },
           {
             "seed": 13,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 11,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 4
           },
           {
             "seed": 14,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 9
           },
           {
             "seed": 15,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 5,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 4
           },
           {
             "seed": 16,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 8
           },
           {
             "seed": 17,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 8
           },
           {
             "seed": 18,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 2,
             "total_accepted_after_revocation": 2
           },
           {
             "seed": 19,
             "receivers_after_revocation": 10,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 1,
             "total_accepted_after_revocation": 3
           },
           {
             "seed": 20,
             "receivers_after_revocation": 10,
+            "cached_at_revocation": 13,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 14
           },
           {
             "seed": 21,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 3,
             "total_accepted_after_revocation": 3
           },
           {
             "seed": 22,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 6,
             "max_accepted_after_revocation": 3,
             "total_accepted_after_revocation": 6
           },
           {
             "seed": 23,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 14
           },
           {
             "seed": 24,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 25,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 12,
             "max_accepted_after_revocation": 2,
             "total_accepted_after_revocation": 5
           },
           {
             "seed": 26,
             "receivers_after_revocation": 12,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 19
           },
           {
             "seed": 27,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 3,
             "total_accepted_after_revocation": 3
           },
           {
             "seed": 28,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 1,
             "total_accepted_after_revocation": 2
           },
           {
             "seed": 29,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 5
           },
           {
             "seed": 30,
             "receivers_after_revocation": 12,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 4,
             "total_accepted_after_revocation": 7
           }
@@ -405,186 +469,217 @@
       "25": {
         "bound_k_minus_1": 24,
         "max_accepted_after_revocation": 24,
+        "runs_reaching_bound": 6,
         "mean_total_accepted_after_revocation": 40.97,
         "verdict": "PASS",
         "per_run": [
           {
             "seed": 1,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 24,
             "total_accepted_after_revocation": 64
           },
           {
             "seed": 2,
             "receivers_after_revocation": 4,
+            "cached_at_revocation": 3,
             "max_accepted_after_revocation": 20,
             "total_accepted_after_revocation": 39
           },
           {
             "seed": 3,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 4,
             "max_accepted_after_revocation": 21,
             "total_accepted_after_revocation": 35
           },
           {
             "seed": 4,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 22,
             "total_accepted_after_revocation": 74
           },
           {
             "seed": 5,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 24,
             "total_accepted_after_revocation": 32
           },
           {
             "seed": 6,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 22,
             "total_accepted_after_revocation": 24
           },
           {
             "seed": 7,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 14,
             "max_accepted_after_revocation": 23,
             "total_accepted_after_revocation": 78
           },
           {
             "seed": 8,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 23,
             "total_accepted_after_revocation": 34
           },
           {
             "seed": 9,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 23,
             "total_accepted_after_revocation": 73
           },
           {
             "seed": 10,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 5,
             "max_accepted_after_revocation": 0,
             "total_accepted_after_revocation": 0
           },
           {
             "seed": 11,
             "receivers_after_revocation": 14,
+            "cached_at_revocation": 11,
             "max_accepted_after_revocation": 8,
             "total_accepted_after_revocation": 19
           },
           {
             "seed": 12,
             "receivers_after_revocation": 14,
+            "cached_at_revocation": 13,
             "max_accepted_after_revocation": 22,
             "total_accepted_after_revocation": 46
           },
           {
             "seed": 13,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 11,
             "max_accepted_after_revocation": 20,
             "total_accepted_after_revocation": 44
           },
           {
             "seed": 14,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 14,
             "total_accepted_after_revocation": 39
           },
           {
             "seed": 15,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 5,
             "max_accepted_after_revocation": 14,
             "total_accepted_after_revocation": 19
           },
           {
             "seed": 16,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 24,
             "total_accepted_after_revocation": 68
           },
           {
             "seed": 17,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 24,
             "total_accepted_after_revocation": 53
           },
           {
             "seed": 18,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 22,
             "total_accepted_after_revocation": 22
           },
           {
             "seed": 19,
             "receivers_after_revocation": 10,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 21,
             "total_accepted_after_revocation": 33
           },
           {
             "seed": 20,
             "receivers_after_revocation": 10,
+            "cached_at_revocation": 13,
             "max_accepted_after_revocation": 16,
             "total_accepted_after_revocation": 39
           },
           {
             "seed": 21,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 15,
             "total_accepted_after_revocation": 28
           },
           {
             "seed": 22,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 6,
             "max_accepted_after_revocation": 18,
             "total_accepted_after_revocation": 31
           },
           {
             "seed": 23,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 24,
             "total_accepted_after_revocation": 69
           },
           {
             "seed": 24,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 20,
             "total_accepted_after_revocation": 20
           },
           {
             "seed": 25,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 12,
             "max_accepted_after_revocation": 22,
             "total_accepted_after_revocation": 55
           },
           {
             "seed": 26,
             "receivers_after_revocation": 12,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 17,
             "total_accepted_after_revocation": 64
           },
           {
             "seed": 27,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 13,
             "total_accepted_after_revocation": 13
           },
           {
             "seed": 28,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 16,
             "total_accepted_after_revocation": 22
           },
           {
             "seed": 29,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 24,
             "total_accepted_after_revocation": 40
           },
           {
             "seed": 30,
             "receivers_after_revocation": 12,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 21,
             "total_accepted_after_revocation": 52
           }
@@ -593,186 +688,217 @@
       "inf": {
         "bound_k_minus_1": null,
         "max_accepted_after_revocation": 100,
+        "runs_reaching_bound": null,
         "mean_total_accepted_after_revocation": 496.23,
         "verdict": "reported (expected never to stop)",
         "per_run": [
           {
             "seed": 1,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 556
           },
           {
             "seed": 2,
             "receivers_after_revocation": 4,
+            "cached_at_revocation": 3,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 247
           },
           {
             "seed": 3,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 4,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 291
           },
           {
             "seed": 4,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 600
           },
           {
             "seed": 5,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 481
           },
           {
             "seed": 6,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 411
           },
           {
             "seed": 7,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 14,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 751
           },
           {
             "seed": 8,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 598
           },
           {
             "seed": 9,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 660
           },
           {
             "seed": 10,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 5,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 100
           },
           {
             "seed": 11,
             "receivers_after_revocation": 14,
+            "cached_at_revocation": 11,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 529
           },
           {
             "seed": 12,
             "receivers_after_revocation": 14,
+            "cached_at_revocation": 13,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 479
           },
           {
             "seed": 13,
             "receivers_after_revocation": 8,
+            "cached_at_revocation": 11,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 482
           },
           {
             "seed": 14,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 622
           },
           {
             "seed": 15,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 5,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 365
           },
           {
             "seed": 16,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 569
           },
           {
             "seed": 17,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 640
           },
           {
             "seed": 18,
             "receivers_after_revocation": 5,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 300
           },
           {
             "seed": 19,
             "receivers_after_revocation": 10,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 574
           },
           {
             "seed": 20,
             "receivers_after_revocation": 10,
+            "cached_at_revocation": 13,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 631
           },
           {
             "seed": 21,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 425
           },
           {
             "seed": 22,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 6,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 355
           },
           {
             "seed": 23,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 465
           },
           {
             "seed": 24,
             "receivers_after_revocation": 6,
+            "cached_at_revocation": 8,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 434
           },
           {
             "seed": 25,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 12,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 627
           },
           {
             "seed": 26,
             "receivers_after_revocation": 12,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 576
           },
           {
             "seed": 27,
             "receivers_after_revocation": 9,
+            "cached_at_revocation": 7,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 467
           },
           {
             "seed": 28,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 444
           },
           {
             "seed": 29,
             "receivers_after_revocation": 11,
+            "cached_at_revocation": 10,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 572
           },
           {
             "seed": 30,
             "receivers_after_revocation": 12,
+            "cached_at_revocation": 9,
             "max_accepted_after_revocation": 100,
             "total_accepted_after_revocation": 636
           }
@@ -781,5 +907,5 @@
     },
     "verdict": "PASS"
   },
-  "wall_clock_s": 1690.6
+  "wall_clock_s": 1763.8
 }

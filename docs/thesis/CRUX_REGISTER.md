@@ -8,7 +8,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 |---|---|---|---|---|
 | C1 CAV identity substrate | **partial** | H1, H5 | #25 (V), #26 (V), #34 (V), #35 (V), #36 (V), #42 (V), #43 (V) | 2 |
 | C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (V) | 2 |
-| C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **partial** | — | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V) | 3 |
+| C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **partial** | — | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V) | 5 |
 | C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S) | 2 |
 | C5 W3C conformance | **partial** | H2 | #4 (V), #24 (V) | 2 |
 | C6 MOBI VID lifecycle | **partial** | H4 | #30 (V), #33 (V), #41 (S) | 1 |
@@ -69,20 +69,22 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 **Question.** Does the same identity layer secure roadside-unit and infrastructure messages (SPaT/MAP, RSU-to-RSU, RSU-to-traffic-management)?
 
-**Claim.** An RSU is a DID with a road-authority issuer; signed SPaT reuses the BSM path at the same cost; every injected infrastructure attack is rejected; a revoked RSU is honoured for at most k-1 further messages by a cached verifier.
+**Claim.** An RSU is a DID with a road-authority issuer; warm verification of its signed SPaT costs about what a warm BSM does (about 10 % more after the binding, replay and expiry checks); 13 registered attacks are rejected for their expected reasons; a cached verifier honours a revoked RSU for at most k-1 further messages.
 
 **Thrusts:** 3 · **Hypotheses:** none yet · **Defects bearing on it:** none
 
 | Row | Status | Claim (from the register) |
 |---|---|---|
-| #44 | V | (pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`; verdict PASS) Signed SPaT from a credentialed RSU verifies at the cost of an SSI BSM: median ratio of per-run median warm SPaT verify to per-run median warm SSI… |
-| #45 | V | (pre-registered I2; verdict PASS) All 7 infrastructure attacks rejected in 30/30 runs: (a) unsigned SPaT, (b) SPaT under an RSU DID with the wrong key, (c) SPaT from an RSU whose credential permits MAP only, (d) SPaT sig… |
-| #46 | V | (pre-registered I3; verdict PASS) A vehicle that has cached a revoked RSU keeps accepting its SPaT for at most k − 1 further messages: `rsu_1`'s credential revoked at t = 10 s, verifiers re-check revocation every k-th me… |
-| #47 | V | (pre-registered I4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`): identity creation 0 (did:ethr is implicit); RSU anchors its verification key 52,594 (`setAttribute`; … |
-| #48 | V | (pre-registered I5; reported, no verdict) In-process I2I back-haul, the sum of per-run medians of controller sign + RSU warm verify + RSU SPaT sign + vehicle warm SPaT verify: 0.840 ms, 95 % CI [0.832, 0.845], N=30; TMC … |
+| #44 | V | (pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1 and A4; verdict PASS) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same run: median of 30 per-run rat… |
+| #45 | V | (pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks rejected for its expected reason in 30/30 runs (a deterministic check repeated per run). First contact: (a) unsigned → unsigned; (b) wrong key … |
+| #46 | V | (pre-registered I3; verdict PASS) A verifier that has cached a revoked RSU accepts at most k − 1 further SPaT from it: `rsu_1`'s credential revoked at t = 10 s, re-check of the authority's (in-process) registry every k-t… |
+| #47 | V | (pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`, two runs at `f1f9e37`): identity creation 0 (did:ethr is implicit); RSU anchors … |
+| #48 | V | (pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path: per run the sum of four per-run medians (controller sign + RSU warm verify + RSU SPaT s… |
 
 **Open gaps:**
-- Mobility is the mock model (no SUMO run); no radio channel; the I2I back-haul is in-process.
+- Mobility is the mock model (no SUMO run); no radio channel; the I2I back-haul and the revocation registry are in-process (no propagation delay, no lookup cost).
+- A fresh message relayed within the 1 s window to a receiver that never heard it is not detected (as for V2V).
+- I3 bounds a message count, not a time; the verifier cache does not expire.
 - RSU-to-RSU messaging is not modelled; I2I covers controller-to-RSU and TMC-to-controller only.
 - The k the thesis defends is the open C4 decision; it applies to RSUs as to vehicles.
 

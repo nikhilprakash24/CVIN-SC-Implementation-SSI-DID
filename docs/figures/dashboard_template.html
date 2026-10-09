@@ -183,7 +183,7 @@ a { color: var(--bar); }
       <h2 id="h-infra">Infrastructure messaging (V2I and I2I)</h2>
       <p class="lede" style="font-size:13px">Roadside units, signal controllers and a traffic-management centre as credentialed DIDs, issued by a road authority. Pre-registered experiments I1 to I5.</p>
       <div class="scroll"><table id="infra-table"></table></div>
-      <div class="caveat">Simulated mobility, in-process delivery, no radio channel. The back-haul is in-process; real back-haul is a wired network.</div>
+      <div class="caveat">Simulated mobility, in-process delivery, no radio channel. The back-haul and the revocation registry are in-process (no network, no lookup cost); real back-haul is a wired network.</div>
       <div class="src" id="infra-src"></div>
     </section>
 
@@ -352,10 +352,11 @@ a { color: var(--bar); }
   const irows = [];
   if (I.I1) irows.push(["I1 SPaT fits the BSM budget", `warm SPaT ${I.I1.spat_warm_ms.toFixed(3)} ms vs BSM ${I.I1.bsm_warm_ms.toFixed(3)} ms; ratio ${I.I1.ratio_median.toFixed(3)} [${I.I1.ratio_ci95[0].toFixed(3)}, ${I.I1.ratio_ci95[1].toFixed(3)}], ${I.I1.runs} runs`, vchip(I.I1.verdict)]);
   else irows.push(["I1 SPaT fits the BSM budget", "—", vchip(null)]);
-  if (I.I2) irows.push(["I2 forged infrastructure messages rejected", `${I.I2.attacks} attack types, all rejected in ${I.I2.runs_all_rejected} of ${I.I2.runs} runs`, vchip(I.I2.verdict)]);
-  if (I.I3) irows.push(["I3 revoked RSU trusted ≤ k − 1 messages", Object.entries(I.I3.per_k).map(([k, v]) => `k=${k === "inf" ? "∞" : k}: ${v.max}${v.bound === null ? "" : " (≤ " + v.bound + ")"}`).join(" · "), vchip(I.I3.verdict)]);
-  if (I.I4) irows.push(["I4 RSU identity on chain (gas)", `key anchor ${fmt(I.I4.anchor_key_by_rsu)} · hand to authority ${fmt(I.I4.hand_control_to_authority)} · rotate ${fmt(I.I4.rotate_key_by_authority)} · revoke old key ${fmt(I.I4.revoke_old_key)}`, chip("reported", "s-na")]);
-  if (I.I5) irows.push(["I5 controller → RSU → vehicle", `${I.I5.controller_to_vehicle_ms.toFixed(3)} ms signed end to end; TMC hop ${I.I5.tmc_to_controller_ms.toFixed(3)} ms`, chip("reported", "s-na")]);
+  if (I.I2) irows.push(["I2 forged infrastructure messages rejected", `${I.I2.checks} checks, each rejected for its expected reason in ${I.I2.runs_all_as_expected} of ${I.I2.runs} runs`, vchip(I.I2.verdict)]);
+  if (I.I3) irows.push(["I3 revoked RSU trusted ≤ k − 1 messages", Object.entries(I.I3.per_k).map(([k, v]) => `k=${k === "inf" ? "∞" : k}: ${v.max}${v.bound === null ? "" : " (≤ " + v.bound + "; reached in " + v.runs_reaching_bound + "/" + I.I3.runs + " runs)"}`).join(" · ") + " — message counts, not time", vchip(I.I3.verdict)]);
+  const rg = (r) => r[0] === r[1] ? fmt(r[0]) : fmt(r[0]) + "–" + fmt(r[1]);
+  if (I.I4) irows.push(["I4 RSU identity on chain (gas)", `key anchor ${rg(I.I4.anchor_key_by_rsu)} · hand to authority ${rg(I.I4.hand_control_to_authority)} · rotate ${rg(I.I4.rotate_key_by_authority)} · revoke old key ${rg(I.I4.revoke_old_key)} (${I.I4_runs} runs)`, chip("reported", "s-na")]);
+  if (I.I5) irows.push(["I5 controller → RSU → vehicle", `${I.I5.controller_to_vehicle_ms.toFixed(3)} ms, a sum of four operation costs (not a path latency); TMC hop ${I.I5.tmc_to_controller_ms.toFixed(3)} ms`, chip("reported", "s-na")]);
   $("infra-table").innerHTML = table(["Experiment", "Measured", "Verdict"], irows);
   $("infra-src").textContent = [I.source_stats, I.source_revocation, I.source_gas].filter(Boolean).map(src).join(" · ") + " · register #" + (I.register || []).join(", #");
 

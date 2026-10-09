@@ -2,7 +2,7 @@
 
 **Generated** by `docs/testing/check_stamps.py`. A stamp = date, commit, producing-code cleanliness, toolchain. Columns *code* and *any* are both "dirty" (True = not clean): *code* covers the producing code only (what a run of record requires, guide rule 1.1.6); *any* covers every file, so False there implies clean code and True says nothing. *inert*: the code flag's source at that commit could not detect a change (after-action report 11); such a stamp is vouched for by *any* or by the hand check in the claim register. Rows without a complete stamp carry a class: *stamp producer* (the work list), *history* (a diff of two runs, exempt), *single run* (not a result of record).
 
-19 of 28 result files carry a complete stamp.
+20 of 29 result files carry a complete stamp.
 
 | File | date | commit | dirty (code) | dirty (any) | toolchain | class |
 |---|---|---|---|---|---|---|
@@ -11,7 +11,8 @@
 | `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json` | MISSING | MISSING | MISSING | MISSING | MISSING | history: a diff between two runs of record, each stamped or registered; not a measurement |
 | `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json` | 2026-10-04 | a764387 (results of reco | MISSING | MISSING | M1: solc 0.8.24, optimiz | history: same |
 | `4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json` | 2026-10-06 | MISSING | MISSING | MISSING | M1: solc 0.8.24, optimiz | history: same |
-| `4_comparison-framework/results/infrastructure_gas.json` | 2026-10-09T03:55:19.115Z | 1e690c3 | False (hand check) | True | 0.8.24 | hand check: AAR-11 R3: producing paths unchanged since 1e690c3, newest producer 03:47 < run 03:55 |
+| `4_comparison-framework/results/infrastructure_gas.json` | 2026-10-09T06:08:44.765Z | f1f9e37 | False | True | 0.8.24 |  |
+| `4_comparison-framework/results/infrastructure_gas_run1.json` | 2026-10-09T06:08:42.697Z | f1f9e37 | False | True | 0.8.24 |  |
 | `4_comparison-framework/results/mobi_vid_backends.json` | 2026-10-09T02:27:44.231Z | d0cc19c | False (hand check) | True | 0.8.24 | hand check: AAR-11 R3: tree clean at 02:27:39 (gas_benchmark), outputs-only commit d54178e |
 | `4_comparison-framework/results/pseudonym_pool.json` | 2026-10-04T22:17:54.329Z | e49bcb4 | False (from any) | False | 2.28.6 |  |
 | `4_comparison-framework/results/scaling_lifetime.json` | 2026-10-09T02:27:41.957Z | d0cc19c | False (hand check) | True | 0.8.24 | hand check: same |
@@ -29,8 +30,8 @@
 | `cv2x-testbed/results/freshness_k_probe_r2.json` | 2026-10-04T22:18:19+00:0 | 439b118 | False (from any) | False | 3.11.15 |  |
 | `cv2x-testbed/results/lifecycle_parity.json` | 2026-10-04T22:17:02+00:0 | 4f09875 | False (from any) | False | 3.11.15 |  |
 | `cv2x-testbed/results/pki_vs_erc1056.json` | 2026-10-04T05:26:56+00:0 | 1c1b8e1 | False (from any) | False | 2.28.6 |  |
-| `cv2x-testbed/sumo/results/infrastructure_revocation.json` | 2026-10-09T03:54:55+00:0 | 1e690c3132a84c15cd7f6cf3 | False (hand check) | True | 3.11.15 | hand check: register #46 (F-C): producing code equal to 1e690c3, mtimes before start |
-| `cv2x-testbed/sumo/results/infrastructure_stats.json` | 2026-10-09T03:48:03+00:0 | 1e690c3132a84c15cd7f6cf3 | False (from any) | False | 3.11.15 |  |
+| `cv2x-testbed/sumo/results/infrastructure_revocation.json` | 2026-10-09T05:38:02+00:0 | f1f9e37cc516b318892dd124 | False | True | 3.11.15 |  |
+| `cv2x-testbed/sumo/results/infrastructure_stats.json` | 2026-10-09T05:30:59+00:0 | f1f9e37cc516b318892dd124 | False | False | 3.11.15 |  |
 | `cv2x-testbed/sumo/results/v2v_latency.json` | 2026-10-04T09:19:33.3911 | MISSING | MISSING | MISSING | MISSING | single run: default output of one harness run; the results of record are v2v_latency_stats.json |
 | `cv2x-testbed/sumo/results/v2v_latency_stats.json` | 2026-10-04T09:13:58+00:0 | 58a65132bf38c37e0f0467b3 | False (from any) | False | 3.11.15 |  |
 | `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-09T02:09:37.654Z | 7a9a996edb246661f32a5565 | False (from any) | False | 0.8.24 |  |

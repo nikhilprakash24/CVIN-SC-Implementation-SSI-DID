@@ -43,6 +43,8 @@ CLASSES = {
     "4_comparison-framework/security-analysis/results/security_matrix.json": ("stamp producer", "4_comparison-framework/security-analysis/attack_scenarios.py"),
     "cv2x-testbed/sumo/results/v2v_latency.json": ("single run", "default output of one harness run; the results of record are v2v_latency_stats.json"),
 }
+# (The first I3 and I4 runs at 1e690c3 were hand-checked too; they were replaced by the runs at f1f9e37,
+# whose flags are live. Record: after-action report 11 R3.)
 # Runs whose code flag was inert or absent and whose tree had other files changed: producing code
 # checked by hand (diff against the stamp's commit, producer mtimes before the run, or a clean tree
 # seconds before in the same scripted sequence). Shown as "False (hand check)" with the reference.
@@ -51,8 +53,6 @@ HAND_CHECKED = {
     "4_comparison-framework/results/scaling_lifetime.json": "same",
     "4_comparison-framework/results/scaling_marginal.json": "same",
     "4_comparison-framework/security-analysis/results/onchain_security.json": "same",
-    "4_comparison-framework/results/infrastructure_gas.json": "AAR-11 R3: producing paths unchanged since 1e690c3, newest producer 03:47 < run 03:55",
-    "cv2x-testbed/sumo/results/infrastructure_revocation.json": "register #46 (F-C): producing code equal to 1e690c3, mtimes before start",
 }
 CODE_DIRTY = [("dirty", False, "run_stamp"), ("dirtyMeasured", False, "harness"), ("code_clean", True, None), ("code_dirty", False, "sumo")]
 ANY_DIRTY = [("dirtyAnyFile", False), ("tree_clean", True), ("git_dirty", False)]

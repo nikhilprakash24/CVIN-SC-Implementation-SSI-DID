@@ -665,25 +665,25 @@
   "infrastructure": {
     "I1": {
       "verdict": "PASS",
-      "ratio_median": 0.996037,
+      "ratio_median": 1.096422,
       "ratio_ci95": [
-        0.99456,
-        1.000931
+        1.091188,
+        1.100856
       ],
-      "spat_warm_ms": 0.1634,
-      "bsm_warm_ms": 0.16365,
-      "spat_cold_ms": 0.45205,
+      "spat_warm_ms": 0.18225,
+      "bsm_warm_ms": 0.166,
+      "spat_cold_ms": 0.4772,
       "runs": 30
     },
     "I2": {
       "verdict": "PASS",
-      "attacks": 7,
-      "runs_all_rejected": 30,
+      "checks": 13,
+      "runs_all_as_expected": 30,
       "runs": 30
     },
     "I5": {
-      "controller_to_vehicle_ms": 0.8396,
-      "tmc_to_controller_ms": 0.4327
+      "controller_to_vehicle_ms": 0.88555,
+      "tmc_to_controller_ms": 0.4637
     },
     "source_stats": {
       "path": "cv2x-testbed/sumo/results/infrastructure_stats.json"
@@ -694,36 +694,60 @@
         "1": {
           "max": 0,
           "bound": 0,
-          "verdict": "PASS"
+          "verdict": "PASS",
+          "runs_reaching_bound": 30
         },
         "5": {
           "max": 4,
           "bound": 4,
-          "verdict": "PASS"
+          "verdict": "PASS",
+          "runs_reaching_bound": 16
         },
         "25": {
           "max": 24,
           "bound": 24,
-          "verdict": "PASS"
+          "verdict": "PASS",
+          "runs_reaching_bound": 6
         },
         "inf": {
           "max": 100,
           "bound": null,
-          "verdict": "reported (expected never to stop)"
+          "verdict": "reported (expected never to stop)",
+          "runs_reaching_bound": null
         }
-      }
+      },
+      "runs": 30
     },
     "source_revocation": {
       "path": "cv2x-testbed/sumo/results/infrastructure_revocation.json"
     },
     "I4": {
-      "create_identity": 0,
-      "anchor_key_by_rsu": 52594,
-      "anchor_service_endpoint": 34050,
-      "hand_control_to_authority": 51754,
-      "rotate_key_by_authority": 35498,
-      "revoke_old_key": 35050
+      "create_identity": [
+        0,
+        0
+      ],
+      "anchor_key_by_rsu": [
+        52594,
+        52606
+      ],
+      "anchor_service_endpoint": [
+        34038,
+        34050
+      ],
+      "hand_control_to_authority": [
+        51742,
+        51754
+      ],
+      "rotate_key_by_authority": [
+        35486,
+        35498
+      ],
+      "revoke_old_key": [
+        35050,
+        35062
+      ]
     },
+    "I4_runs": 2,
     "source_gas": {
       "path": "4_comparison-framework/results/infrastructure_gas.json"
     },
@@ -1120,7 +1144,7 @@
       "id": "C3",
       "title": "Infrastructure messaging (V2I and infrastructure-to-infrastructure)",
       "question": "Does the same identity layer secure roadside-unit and infrastructure messages (SPaT/MAP, RSU-to-RSU, RSU-to-traffic-management)?",
-      "claim": "An RSU is a DID with a road-authority issuer; signed SPaT reuses the BSM path at the same cost; every injected infrastructure attack is rejected; a revoked RSU is honoured for at most k-1 further messages by a cached verifier.",
+      "claim": "An RSU is a DID with a road-authority issuer; warm verification of its signed SPaT costs about what a warm BSM does (about 10 % more after the binding, replay and expiry checks); 13 registered attacks are rejected for their expected reasons; a cached verifier honours a revoked RSU for at most k-1 further messages.",
       "hypotheses": [],
       "thrusts": [
         3
@@ -1134,7 +1158,9 @@
         "4_comparison-framework/results/infrastructure_gas.json"
       ],
       "gaps": [
-        "Mobility is the mock model (no SUMO run); no radio channel; the I2I back-haul is in-process.",
+        "Mobility is the mock model (no SUMO run); no radio channel; the I2I back-haul and the revocation registry are in-process (no propagation delay, no lookup cost).",
+        "A fresh message relayed within the 1 s window to a receiver that never heard it is not detected (as for V2V).",
+        "I3 bounds a message count, not a time; the verifier cache does not expire.",
         "RSU-to-RSU messaging is not modelled; I2I covers controller-to-RSU and TMC-to-controller only.",
         "The k the thesis defends is the open C4 decision; it applies to RSUs as to vehicles."
       ],
@@ -1143,27 +1169,27 @@
         {
           "row": 44,
           "status": "V",
-          "claim": "(pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`; verdict PASS) Signed SPaT from a credentialed RSU verifies at the cost of an SSI BSM: median ratio of per-run median warm SPaT verify to per-run median warm SSI…"
+          "claim": "(pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1 and A4; verdict PASS) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same run: median of 30 per-run rat…"
         },
         {
           "row": 45,
           "status": "V",
-          "claim": "(pre-registered I2; verdict PASS) All 7 infrastructure attacks rejected in 30/30 runs: (a) unsigned SPaT, (b) SPaT under an RSU DID with the wrong key, (c) SPaT from an RSU whose credential permits MAP only, (d) SPaT sig…"
+          "claim": "(pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks rejected for its expected reason in 30/30 runs (a deterministic check repeated per run). First contact: (a) unsigned → unsigned; (b) wrong key …"
         },
         {
           "row": 46,
           "status": "V",
-          "claim": "(pre-registered I3; verdict PASS) A vehicle that has cached a revoked RSU keeps accepting its SPaT for at most k − 1 further messages: `rsu_1`'s credential revoked at t = 10 s, verifiers re-check revocation every k-th me…"
+          "claim": "(pre-registered I3; verdict PASS) A verifier that has cached a revoked RSU accepts at most k − 1 further SPaT from it: `rsu_1`'s credential revoked at t = 10 s, re-check of the authority's (in-process) registry every k-t…"
         },
         {
           "row": 47,
           "status": "V",
-          "claim": "(pre-registered I4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`): identity creation 0 (did:ethr is implicit); RSU anchors its verification key 52,594 (`setAttribute`; …"
+          "claim": "(pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`, two runs at `f1f9e37`): identity creation 0 (did:ethr is implicit); RSU anchors …"
         },
         {
           "row": 48,
           "status": "V",
-          "claim": "(pre-registered I5; reported, no verdict) In-process I2I back-haul, the sum of per-run medians of controller sign + RSU warm verify + RSU SPaT sign + vehicle warm SPaT verify: 0.840 ms, 95 % CI [0.832, 0.845], N=30; TMC …"
+          "claim": "(pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path: per run the sum of four per-run medians (controller sign + RSU warm verify + RSU SPaT s…"
         }
       ],
       "state": "partial"
@@ -1626,31 +1652,31 @@
     "44": {
       "row": 44,
       "status": "V",
-      "claim": "(pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`; verdict PASS) Signed SPaT from a credentialed RSU verifies at the cost of an SSI BSM: median ratio of per-run median warm SPaT verify to per-run median warm SSI…",
+      "claim": "(pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1 and A4; verdict PASS) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same run: median of 30 per-run rat…",
       "tag": "M0"
     },
     "45": {
       "row": 45,
       "status": "V",
-      "claim": "(pre-registered I2; verdict PASS) All 7 infrastructure attacks rejected in 30/30 runs: (a) unsigned SPaT, (b) SPaT under an RSU DID with the wrong key, (c) SPaT from an RSU whose credential permits MAP only, (d) SPaT sig…",
+      "claim": "(pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks rejected for its expected reason in 30/30 runs (a deterministic check repeated per run). First contact: (a) unsigned → unsigned; (b) wrong key …",
       "tag": "M0"
     },
     "46": {
       "row": 46,
       "status": "V",
-      "claim": "(pre-registered I3; verdict PASS) A vehicle that has cached a revoked RSU keeps accepting its SPaT for at most k − 1 further messages: `rsu_1`'s credential revoked at t = 10 s, verifiers re-check revocation every k-th me…",
+      "claim": "(pre-registered I3; verdict PASS) A verifier that has cached a revoked RSU accepts at most k − 1 further SPaT from it: `rsu_1`'s credential revoked at t = 10 s, re-check of the authority's (in-process) registry every k-t…",
       "tag": "M0"
     },
     "47": {
       "row": 47,
       "status": "V",
-      "claim": "(pre-registered I4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`): identity creation 0 (did:ethr is implicit); RSU anchors its verification key 52,594 (`setAttribute`; …",
+      "claim": "(pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`, two runs at `f1f9e37`): identity creation 0 (did:ethr is implicit); RSU anchors …",
       "tag": "M1"
     },
     "48": {
       "row": 48,
       "status": "V",
-      "claim": "(pre-registered I5; reported, no verdict) In-process I2I back-haul, the sum of per-run medians of controller sign + RSU warm verify + RSU SPaT sign + vehicle warm SPaT verify: 0.840 ms, 95 % CI [0.832, 0.845], N=30; TMC …",
+      "claim": "(pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path: per run the sum of four per-run medians (controller sign + RSU warm verify + RSU SPaT s…",
       "tag": "M0"
     }
   }

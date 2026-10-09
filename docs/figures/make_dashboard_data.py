@@ -231,19 +231,24 @@ def infrastructure():
         out["I1"] = {"verdict": d["I1"]["verdict"], "ratio_median": d["I1"]["ratio"]["median"], "ratio_ci95": d["I1"]["ratio"]["ci95"],
                      "spat_warm_ms": d["I1"]["spat_warm_ms"]["median"], "bsm_warm_ms": d["I1"]["bsm_ssi_warm_ms"]["median"],
                      "spat_cold_ms": d["I1"]["spat_cold_ms"]["median"], "runs": d["config"]["runs"]}
-        out["I2"] = {"verdict": d["I2"]["verdict"], "attacks": len(d["I2"]["attacks"]), "runs_all_rejected": d["I2"]["runs_all_rejected"],
-                     "runs": d["I2"]["runs"]}
+        out["I2"] = {"verdict": d["I2"]["verdict"], "checks": len(d["I2"]["expected_reasons"]),
+                     "runs_all_as_expected": d["I2"]["runs_all_as_expected"], "runs": d["I2"]["runs"]}
         out["I5"] = {"controller_to_vehicle_ms": d["I5"]["controller_to_vehicle_ms"]["median"],
                      "tmc_to_controller_ms": d["I5"]["tmc_to_controller_ms"]["median"]}
         out["source_stats"] = src(base + "infrastructure_stats.json")
     if (ROOT / base / "infrastructure_revocation.json").exists():
         d = load(base + "infrastructure_revocation.json")
         out["I3"] = {"verdict": d["I3"]["verdict"], "per_k": {k: {"max": v["max_accepted_after_revocation"], "bound": v["bound_k_minus_1"],
-                     "verdict": v["verdict"]} for k, v in d["I3"]["per_k"].items()}}
+                     "verdict": v["verdict"], "runs_reaching_bound": v.get("runs_reaching_bound")} for k, v in d["I3"]["per_k"].items()},
+                     "runs": d["config"]["runs"]}
         out["source_revocation"] = src(base + "infrastructure_revocation.json")
     if (ROOT / "4_comparison-framework/results/infrastructure_gas.json").exists():
-        d = load("4_comparison-framework/results/infrastructure_gas.json")
-        out["I4"] = {k: v["gasUsed"] for k, v in d["operations"].items()}
+        # I4 is run twice (amendment A4); gas varies by multiples of 12 with the random RSU key, so a range is shown
+        runs = [load(f) for f in ("4_comparison-framework/results/infrastructure_gas.json",
+                                  "4_comparison-framework/results/infrastructure_gas_run1.json") if (ROOT / f).exists()]
+        out["I4"] = {k: [min(r["operations"][k]["gasUsed"] for r in runs), max(r["operations"][k]["gasUsed"] for r in runs)]
+                     for k in runs[0]["operations"]}
+        out["I4_runs"] = len(runs)
         out["source_gas"] = src("4_comparison-framework/results/infrastructure_gas.json")
     out["register"] = [44, 45, 46, 47, 48]
     return out

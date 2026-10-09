@@ -316,65 +316,92 @@ effect of +2.4 % warm / +9 % cold on the same host).
 
 **Provenance**: design `docs/design/INFRASTRUCTURE_MESSAGING.md`; claims,
 conditions and verdict rules pre-registered in
-`docs/design/INFRASTRUCTURE_PREREG.md` before any code or run;
+`docs/design/INFRASTRUCTURE_PREREG.md` before any code or run, with dated
+amendments (A1–A3 recorded after the first run, A4 before the second);
 `cv2x-testbed/sumo/results/infrastructure_stats.json` (I1, I2, I5) and
 `infrastructure_revocation.json` (I3), produced by
 `python3 cv2x-testbed/sumo/run_infra_stats.py --runs 30 --duration 20
-[--revocation]` at commit `1e690c3` with a clean tree;
-`4_comparison-framework/results/infrastructure_gas.json` (I4). Register
-#44–#48. Same harness and seeds 1–30 as §5.4, with `--rsu`: 4 RSUs along the
-corridor, a signal controller per RSU updating every 1 s and a traffic
-management centre (TMC) issuing a timing plan every 5 s. Every RSU,
+[--revocation]` at commit `f1f9e37` (producing code clean for both runs;
+the I3 run's whole tree was not, because I1's output existed);
+`4_comparison-framework/results/infrastructure_gas*.json` (I4, two runs).
+Register #44–#48. Same harness and seeds 1–30 as §5.4, with `--rsu`: 4 RSUs
+along the corridor, a signal controller per RSU updating every 1 s and a
+traffic management centre (TMC) issuing a timing plan every 5 s. Every RSU,
 controller and the TMC is a `did:ethr` identity holding a credential from a
 road authority, the only issuer the infrastructure verifier trusts; the
-credential lists the message types the station may sign.
+credential lists the message types the station may sign and the
+intersection it serves.
 
-**I1 — SPaT costs what a BSM costs (PASS).** Median warm SPaT verify over
-median warm SSI BSM verify, within the same run: **0.996** (95 % CI
-[0.995, 1.001], N=30; pass band [0.80, 1.20]). The signed-SPaT path is the
-BSM path with a different credential type and a permitted-message check, and
-the check is free at this resolution. Absolute values (SPaT warm 0.163 ms,
-cold 0.452 ms) were measured on `cryptography` 41.0.7 and are not comparable
-with §5.4's 0.153 ms (49.0.0); the ratio is the claim.
+**Two runs, and why.** The first run (`1e690c3`) passed every pre-registered
+check. An adversarial review then showed that its verifier accepted SPaT a
+valid RSU signed for *another* intersection, and replays inside the
+freshness window — two attacks the seven registered ones did not cover. The
+verifier was hardened (message fields bound to the credential, a
+per-receiver replay check, expiry re-checked on the warm path), the attack
+set extended to 13 checks with expected rejection reasons (amendment A4),
+and every experiment re-run. The figures below are the second run; the
+first run's values are kept in the register as history.
 
-**I2 — Every infrastructure attack is rejected (PASS).** Seven injected
-attacks, each in all 30 runs: unsigned SPaT; SPaT under an RSU DID with the
-wrong key; SPaT from an RSU credentialed for MAP only; SPaT signed with a
-vehicle credential; an RSU credentialed by an untrusted authority; stale SPaT;
-a forged controller-to-RSU update. No legitimate SPaT was rejected among
-138,895 verifications.
+**I1 — Warm SPaT verification costs about what a warm BSM does (PASS).**
+Median of per-run ratios of warm SPaT to warm SSI BSM verification:
+**1.096** (95 % CI [1.091, 1.101], N=30; pass band [0.80, 1.20]); 0.996
+before the hardening. The roughly 10 % premium is the extra checks the SPaT
+path now makes (binding, replay, expiry) and the BSM path does not; message
+sizes also differ. Both paths are compared without a revocation re-check
+(k = ∞): in this harness a re-check is an in-process lookup, whereas a chain
+read costs milliseconds (#37, #40), so I1 is the cheapest case. Absolute
+values (SPaT warm 0.182 ms, cold 0.477 ms) come from a different host and
+library set than §5.4's 0.153 ms and are not compared with it.
 
-**I3 — Revoked RSU, bounded staleness (PASS).** The authority revokes RSU 1's
-credential at t = 10 s; a vehicle that has already cached RSU 1 re-checks
-revocation every k-th message. The most SPaT messages any vehicle accepted
-after revocation, over 30 runs, was 0, 4 and 24 for k = 1, 5 and 25, so the
-pre-registered bound k − 1 holds and is reached. With no re-check (k = ∞) a
-cached vehicle accepts every remaining message (100 in 10 s at 10 Hz). A
-vehicle meeting RSU 1 for the first time after revocation rejects at once,
-because the cold path checks the credential (shown by the L3 test
-`test_i3_k_infinity_never_stops_for_cached_receiver_but_new_receiver_rejects`,
-not by the sweep). At 10 Hz, k − 1 messages means
-staleness of (k − 1) × 0.1 s; choosing k is the same open decision as for
-vehicles (§5.4, crux C4).
+**I2 — Registered attacks are rejected for the expected reason (PASS).**
+Thirteen checks per run, each rejected for its expected reason in all 30
+runs: unsigned; wrong key; an RSU credentialed for MAP only; a vehicle
+credential; an untrusted authority; stale; future-dated; a forged controller
+update; SPaT for another intersection; a replay to the same receiver; and,
+against a receiver that already trusts the RSU, wrong key, unpermitted type
+and stale. Each check is deterministic, so 30/30 is repetition, not a rate.
+No legitimate SPaT was rejected among 138,895 verifications. Not covered: a
+fresh message relayed, within the 1 s window, to a vehicle that never heard
+it, which a replay cache cannot detect (the same limit as for V2V).
+
+**I3 — A revoked RSU is honoured for at most k − 1 messages (PASS).** The
+authority revokes RSU 1's credential at t = 10 s; a vehicle that has cached
+RSU 1 re-checks revocation every k-th message. The most SPaT any vehicle
+accepted afterwards, over 30 runs, was 0, 4 and 24 for k = 1, 5 and 25, so
+the pre-registered bound holds and is reached in the worst run (in 16 and 6
+of the 30 runs for k = 5 and 25). With no re-check (k = ∞) a cached vehicle
+accepts every remaining message (100). The bound follows from the re-check
+cadence, so I3 shows that the implementation honours it; it is a count of
+messages, not a time, because the cache does not expire, and the registry is
+in-process (no propagation delay). A vehicle meeting RSU 1 for the first time
+after revocation rejects at once, because the cold path checks the
+credential (L3 test, and visible in the revocation figure). Choosing k is the
+same open decision as for vehicles (crux C4), and a time bound would also need
+a cache lifetime.
 
 **I4 — On-chain cost of an RSU identity (reported).** Creation is free
-(did:ethr is implicit); the RSU anchoring its key costs 52,594 gas, the same
-write as the ERC-1056 creation cell of §5.2; handing control to the road
-authority 51,754; an authority key rotation 35,498 and revocation of the old
-key 35,050. ERC-1056 has no identity-level revocation, so message-level RSU
-revocation runs through the credential registry (I3) — a disclosed deviation
-from the pre-registration's wording.
+(did:ethr is implicit). Over two runs: the RSU anchoring its key costs
+52,594–52,606 gas; handing control to the road authority 51,742–51,754; an
+authority key rotation 35,486–35,498; revocation of the old key
+35,050–35,062. The ±12 gas differences are consistent with calldata
+zero-byte variation under a fresh random key; the pre-registered expectation
+of identical runs did not hold. ERC-1056 has no identity-level revocation, so
+message-level RSU revocation runs through the credential registry (I3).
 
-**I5 — I2I back-haul (reported).** Controller → RSU → vehicle, the
-cryptographic terms only: 0.840 ms (95 % CI [0.832, 0.845]); TMC → controller
-hop 0.433 ms.
+**I5 — Cost of the operations on the I2I path (reported).** The sum of four
+median operation costs on the controller → RSU → vehicle path is 0.886 ms
+(95 % CI [0.879, 0.913]); the TMC → controller hop 0.464 ms. This is not a
+path latency: the harness does not chain the SPaT to the controller's
+update, and the update period, queuing and network are excluded.
 
 **Scope.** Mobility is the mock model (no SUMO binary), there is no radio
-channel, and the back-haul is in-process; these figures bound the identity
-terms of V2I and I2I messaging, as §5.4 does for V2V. Figures from the
-traces of record (`cv2x-testbed/sumo/results/figures/`,
-`docs/PLAN_SUMO_VISUALISATION.md`) show the message paths and the revocation
-cut-off; they are illustrations of seed 1, not additional evidence.
+channel, and the back-haul and revocation registry are in-process; these
+figures bound the cryptographic and credential terms of V2I and I2I
+messaging, as §5.4 does for V2V. RSU-to-RSU messaging is not modelled.
+Figures from the traces of record (`cv2x-testbed/sumo/results/figures/`,
+`docs/PLAN_SUMO_VISUALISATION.md`) show the message paths and the
+revocation cut-off; they are illustrations of seed 1, not additional
+evidence.
 
 ---
 

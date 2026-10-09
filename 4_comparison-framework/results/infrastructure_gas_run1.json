@@ -6,7 +6,7 @@
     "network": "hardhat-local",
     "chainId": 31337,
     "solcVersion": "0.8.24",
-    "date": "2026-10-09T06:08:44.765Z",
+    "date": "2026-10-09T06:08:42.697Z",
     "condition": "M1",
     "commit": "f1f9e37",
     "dirty": false,
@@ -20,23 +20,23 @@
       "note": "did:ethr is implicit: identityOwner(rsu) = rsu until changed"
     },
     "anchor_key_by_rsu": {
-      "gasUsed": 52594,
+      "gasUsed": 52606,
       "note": "RSU publishes its verification key (setAttribute, 1 year)"
     },
     "anchor_service_endpoint": {
-      "gasUsed": 34038,
+      "gasUsed": 34050,
       "note": "SPaT service endpoint attribute"
     },
     "hand_control_to_authority": {
-      "gasUsed": 51742,
+      "gasUsed": 51754,
       "note": "changeOwner: the road authority controls the RSU's identity from here on"
     },
     "rotate_key_by_authority": {
-      "gasUsed": 35486,
+      "gasUsed": 35498,
       "note": "authority rotates the RSU key (new attribute; the old one stays until it expires or is revoked)"
     },
     "revoke_old_key": {
-      "gasUsed": 35050,
+      "gasUsed": 35062,
       "note": "revokeAttribute of the old key (ERC-1056 has no identity-level revocation; the credential registry is the revocation path for messages)"
     }
   }
