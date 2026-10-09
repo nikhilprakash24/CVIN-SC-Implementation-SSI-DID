@@ -16,9 +16,9 @@
 This system implements **Self-Sovereign Identity (SSI) for Connected and
 Autonomous Vehicles** and compares **9 blockchain identity standards** plus the
 MOBI VID application profile under one measurement harness. Every layer listed
-below is **built and tested** — automated suites total ~295 passing tests
-(**217 Hardhat contract tests + 28 W3C VC + 32 MOBI VID + 6 VIN-cipher +
-12/12 lifecycle use cases**).
+below is **built and tested**, with all automated suites green
+(**Hardhat contract tests + W3C VC + MOBI VID + VIN-cipher + 12/12 lifecycle
+use cases**; current totals in `sandbox/grand/report/GRAND_REPORT.md`).
 
 - ✅ Vehicle identity across **9 blockchain standards** (real on-chain gas)
 - ✅ W3C DID resolution (4 methods)
@@ -52,18 +52,18 @@ deterministic for fixed calldata and pre-state.
 
 | Standard | Create identity | Update attribute | Transfer |
 |----------|----------------:|-----------------:|---------:|
-| **CVIN-Combined** (ERC-1056 + ERC-735 hybrid) | 52,178 | 35,078 | 51,734 |
-| **ERC-1056** (lightweight DID registry) | 52,612 | 35,512 | 51,764 |
-| **ERC-1155** (multi-token, soulbound) | 103,905 | 49,156 | 83,641 |
-| **LSP8** (LUKSO NFT, *minimal repr.*) | 149,352 | 55,065 | 80,526 |
-| **MOBI-VID-V2** (application profile) | 298,923 | 306,980 | 200,018 |
-| **ERC-725** (proxy account) | 528,647 | 137,107 | 28,397 |
-| **ERC-721** (vehicle NFT) | 542,429 | 119,753 | 174,707 |
-| **ERC-4337** (account abstraction, *minimal repr.*) | 768,204 | 49,366 | 28,561 |
-| **ERC-735** (claim holder) | 1,404,108 | 75,188 | 28,704 |
-| **ERC-725xy** (full ERC-725 X+Y smart account) | 1,704,992 | 49,950 | 28,839 |
+| **CVIN-Combined** (ERC-1056 + ERC-735 hybrid) | 52,216 | 35,116 | 51,747 |
+| **ERC-1056** (lightweight DID registry) | 52,594 | 35,494 | 51,754 |
+| **ERC-1155** (multi-token, soulbound) | 107,729 | 51,199 | 86,298 |
+| **LSP8** (LUKSO NFT, *minimal repr.*) | 152,644 | 55,133 | 80,568 |
+| **MOBI-VID-V2** (application profile) | 299,143 | 307,210 | 200,089 |
+| **ERC-725** (proxy account) | 519,384 | 137,096 | 28,390 |
+| **ERC-721** (vehicle NFT) | 545,101 | 119,737 | 174,670 |
+| **ERC-4337** (account abstraction, *minimal repr.*) | 759,088 | 49,343 | 28,539 |
+| **ERC-725xy** (full ERC-725 X+Y smart account) | 1,680,816 | 49,937 | 28,834 |
+| **ERC-735** (claim holder) | 1,757,881 | 83,341 | 28,812 |
 
-**Key finding (H1 SUPPORTED):** ~33× spread from cheapest to most expensive
+**Key finding (H1 SUPPORTED):** ~34× spread from cheapest to most expensive
 identity creation; the minimal registries (CVIN-Combined, ERC-1056) are ~10×
 cheaper to create than ERC-721/ERC-725. For ERC-4337, routing the same
 `setAttribute` through the EntryPoint as a UserOperation costs 96,228 gas vs
@@ -93,20 +93,20 @@ await registry.changeOwner(vehicle, newOwner);                      // 51,764 ga
 rotation, attribute timestamping. This is also the CVIN-Combined base.
 
 ### ERC-721 — NFT-Based Identity ✅
-Each vehicle is a unique, transferable NFT (`did:nft`). Mint 542,429 gas;
-`safeTransferFrom` 174,707 gas; metadata is read-only. Use cases: unique
+Each vehicle is a unique, transferable NFT (`did:nft`). Mint 545,101 gas;
+`safeTransferFrom` 174,670 gas; metadata is read-only. Use cases: unique
 vehicle identity, ownership-transfer tracking, marketplaces.
 
 ### ERC-725 / ERC-725xy — Proxy / Smart-Account Identity ✅
 `ERC-725` separates identity from keys (key rotation, multi-key control,
 generic `execute`). `ERC-725xy` is the **full ERC-725 X+Y smart account** added
-in v0.8.0 — the heaviest to deploy (1,704,992 gas create) but cheap to transfer
-control (28,839 gas). Use cases: multi-sig / fleet ownership, meta-transactions,
+in v0.8.0. It is the second-heaviest to create (1,680,816 gas; ERC-735 is now the
+heaviest) but cheap to transfer control (28,834 gas). Use cases: multi-sig / fleet ownership, meta-transactions,
 key rotation without changing the identity.
 
 ### ERC-735 — Claim Holder ✅
 On-chain claim registry (addClaim / removeClaim). Expensive to deploy
-(1,404,108 gas) because it carries the full claim-management state machine.
+(1,757,881 gas create, the heaviest measured) because it carries the full claim-management state machine.
 Use cases: manufacturer/regulator attestations bound to an identity.
 
 ### ERC-1155 — Multi-Token Credentials (soulbound) ✅
@@ -127,7 +127,7 @@ gas; also a lower-bound reference implementation.
 
 ### CVIN-Combined — the thesis's own hybrid ✅
 `CVINCombinedIdentity` fuses ERC-1056 lightweight DID semantics with ERC-735
-claims. Cheapest identity creation measured (52,178 gas) while still supporting
+claims. Cheapest identity creation measured (52,216 gas) while still supporting
 claims — placing it on the security/performance frontier (H5 SUPPORTED).
 
 ---
@@ -308,12 +308,12 @@ path. `run_v2v_stats.py` aggregates **N=30 seeded runs**.
 
 | Path | Warm verify | Cold verify |
 |------|------------:|------------:|
-| SSI (blockchain credential) | **0.165 [0.162, 0.168]** | 0.400 [0.392, 0.405] |
-| PKI baseline | 0.102 [0.101, 0.104] | — |
+| SSI (blockchain credential) | **0.153 [0.151, 0.154]** | 0.399 [0.381, 0.411] |
+| PKI baseline | 0.094 [0.093, 0.095] | — |
 
-Across the campaign: **1,650,318 verifications, 90 failures** — exactly the 3
-injected attacks × 30 runs (all caught). **H3 SUPPORTED:** the warm SSI verify
-sits ~600× under the 100 ms V2V budget.
+Across the campaign: **1,650,318 verifications, 150 failures**, exactly the 5
+injected attacks × 30 runs (all caught; register #27). **H3 SUPPORTED:** the warm SSI verify
+sits ~650× under the 100 ms V2V budget.
 
 **Caveats (stated in the results):** figures are pure identity-verification CPU
 time — no radio/MAC/propagation/queueing; mobility is a mock kinematic model
@@ -336,7 +336,7 @@ N=30 and records determinism (`gas_benchmark_stats.json`).
 ### W3C compliance checker
 `cv2x-testbed/scripts/w3c_compliance_checker.py` is an **executable** checker
 (negative checks are first-class: forged/tampered/expired/unsupported inputs
-must be rejected). Measured score **93.2%** (44 executed checks), CI-gated at
+must be rejected). Measured score **94.3%** (44 executed checks), CI-gated at
 ≥90% — **H2 SUPPORTED**. The 2 documented deviations are canonical JSON vs
 URDNA2015 and the thesis-defined cryptosuite.
 
@@ -400,7 +400,7 @@ never verifying it (a forgery/replay gap). It now recovers the signer on-chain
 5. Run **12 lifecycle use cases** end-to-end with real crypto (12/12).
 6. Simulate **V2V** with real signature verification and measured latency.
 7. Generate the comparison artifacts: gas benchmark (LaTeX/CSV), security
-   matrix, and the executable **93.2%** W3C-compliance report.
+   matrix, and the executable **94.3%** W3C-compliance report.
 
 ### 🔜 Remaining
 1. Public-testnet (**Sepolia**) validation run (harness ready; needs RPC + key).
@@ -413,9 +413,9 @@ never verifying it (a forgery/replay gap). It now recovers the signer on-chain
 
 | # | Hypothesis | Status | Evidence |
 |---|------------|--------|----------|
-| H1 | Minimal standards ≥10× cheaper to create | **Supported** | ERC-1056/CVIN-Combined ~10× under ERC-721/725; ~33× total spread |
-| H2 | ≥90% W3C compliance | **Supported** | 93.2% executable checker |
-| H3 | Off-chain verify meets V2V budget | **Supported** | 0.165 ms warm SSI verify, ~600× margin |
+| H1 | Minimal standards ≥10× cheaper to create | **Supported** | ERC-1056/CVIN-Combined ~10× under ERC-721/725; ~34× total spread |
+| H2 | ≥90% W3C compliance | **Supported** | 94.3% executable checker |
+| H3 | Off-chain verify meets V2V budget | **Supported** | 0.153 ms warm SSI verify, ~650× margin |
 | H4 | MOBI VID across backends | **Supported** | 5-backend sweep; fidelity gradient (birth+lifecycle native on all; attestation native on claim-capable) |
 | H5 | Hybrid on the security/perf frontier | **Supported** | CVIN-Combined |
 

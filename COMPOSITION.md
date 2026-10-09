@@ -37,9 +37,9 @@ it is with the open SSI standards it must interoperate with.
 The argument runs in five measured claims, each a hypothesis held from the outset and
 then tested:
 
-- **The substrate choice is a ~33× cost decision, and the minimal one wins the common
-  path (H1).** Creating an identity ranges from 52,178 gas (the hybrid) to 1,704,992
-  (a full ERC-725 account); the lightweight event-log substrate (ERC-1056) is ~10×
+- **The substrate choice is a ~34× cost decision, and the minimal one wins the common
+  path (H1).** Creating an identity ranges from 52,216 gas (the hybrid) to 1,757,881
+  (the ERC-735 claim holder); the lightweight event-log substrate (ERC-1056) is ~10×
   cheaper than the NFT and proxy designs. The decision to build on ERC-1056 was made
   *first*; the measurement confirms it.
 - **No single standard dominates — security and performance are the same decision seen
@@ -50,14 +50,14 @@ then tested:
   requirements-driven move along it.
 - **Blockchain-credential verification fits the V2V safety budget (H3).** With real
   cryptography over thirty seeded runs and 1.65 million verifications, a
-  blockchain-rooted credential verifies in 0.165 ms (95% CI [0.162, 0.168]) — well
+  blockchain-rooted credential verifies in 0.153 ms (95% CI [0.151, 0.154]) — well
   under the ~10 ms budget for the message-authentication step, so identity verification
   is not the V2V latency bottleneck (the end-to-end ~100 ms budget's network terms are
   out of scope) — while catching every injected attack. The cost of
   blockchain identity lives at issuance, not at verification.
 - **Open-standard compliance is a bounded last mile (H2).** A blockchain-rooted
-  identity reaches 93.2% measured W3C DID/VC conformance; the residual is two
-  deliberate, documented deviations, not a structural incompatibility.
+  identity reaches 94.3% measured W3C DID/VC conformance; the residual is two
+  deliberate, documented deviations and one partial check (register #4), not a structural incompatibility.
 - **A hybrid sits on the favourable corner of the frontier (H4/H5).** Composing a
   cheap event-log identity with on-chain claims (CVIN-Combined) reaches full MOBI VID
   fidelity at the lowest total gas of any full-fidelity backend — paying the cheap
@@ -110,14 +110,14 @@ Every chapter draft is measured against this list before it is called done.
 
 | Claim | Hypothesis | Measured source | Chapter |
 |---|---|---|---|
-| ~33× gas spread; ERC-1056 ~10× cheaper | H1 | `gas_benchmark.json` (N=30, σ=0) | §5.2 |
+| ~34× gas spread; ERC-1056 ~10× cheaper | H1 | `gas_benchmark.json` (N=30, σ=0) | §5.2 |
 | Hybrid Pareto-optimal on fidelity-per-gas | H5 | `gas_benchmark.json`, `mobi_vid_backends.json` | §5.3, §5.3.1 |
 | MOBI VID portable across 5 backends (fidelity gradient) | H4 | `mobi_vid_backends.json` | §5.3.1 |
-| SSI warm verify 0.165 ms ≤ 10 ms auth budget (verification not the bottleneck; network terms excluded) | H3 | `v2v_latency_stats.json` (N=30, bootstrap CI) | §5.4 |
-| 93.2% W3C compliance | H2 | `w3c_compliance_checker.py` (live; snapshot pending) | §5.5 |
+| SSI warm verify 0.153 ms ≤ 10 ms auth budget (verification not the bottleneck; network terms excluded) | H3 | `v2v_latency_stats.json` (N=30, bootstrap CI) | §5.4 |
+| 94.3% W3C compliance | H2 | `w3c_compliance_checker.py` (live; snapshot pending) | §5.5 |
 | No standard dominates; found-and-fixed attestation gap | H5/security | `security_matrix.json`, `attack_results.json` | §5.6 |
 | Marginal cost O(1) (no history degradation); lifetime cost reverses point ranking; hybrid tunable via claim fraction *f* | H5 (lifetime) | `scaling_marginal.json`, `scaling_lifetime.json` | §5.9 |
-| Verify O(1) in claims, linear in peers; V2V saturation P\*≈772 ≫ realistic | H3 (scaling) | `scaling_verify.json` | §5.9 |
+| Verify O(1) in claims, linear in peers; V2V saturation P\*≈609 (extrapolated) ≫ realistic | H3 (scaling) | `scaling_verify.json` | §5.9 |
 
 ---
 

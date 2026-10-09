@@ -418,18 +418,18 @@ Layers 1–3 and never modifies them. Five instruments make up the framework.
 
 ## 4.6 Testing & Reproducibility
 
-The implementation is backed by roughly **295 automated tests, all green**,
-across both runtimes:
+The implementation is backed by automated suites, **all green**, across both
+runtimes (current totals in `sandbox/grand/report/GRAND_REPORT.md`, register #5):
 
 | Suite | Count | Location |
 |---|--:|---|
-| Hardhat contract tests | 217 | `1_blockchain-identity/test/**` |
+| Hardhat contract tests | see `sandbox/grand/report/GRAND_REPORT.md` | `1_blockchain-identity/test/**` |
 | W3C Verifiable Credentials | 28 | `2_w3c-ssi-layer/verifiable-credentials/tests/test_vc_layer.py` |
 | MOBI VID layer | 32 | `2_w3c-ssi-layer/mobi-vid/tests/` (incl. VIN cipher) |
 | VIN cipher (subset of MOBI VID) | 6 | `2_w3c-ssi-layer/mobi-vid/tests/test_vin_cipher.py` |
 | Lifecycle use cases | 12/12 | `cv2x-testbed/scripts/test_use_cases.py` |
 
-The 217 Hardhat total exceeds the raw `it()` count because several suites
+The Hardhat total exceeds the raw `it()` count because several suites
 generate parameterized cases per standard/operation at runtime. The
 security suite (`test/security/securityScenarios.test.js`, 54 scenarios,
 43/43 applicable cells defended) stays green *because* the contracts
@@ -439,13 +439,13 @@ defend, so a regression would surface as a real CI failure.
 
 - **Committed lockfile** — `1_blockchain-identity` ships an npm lockfile so
   `npm ci` installs a byte-identical dependency tree; the getting-started
-  path is `npm ci && npx hardhat test` → 217 passing.
+  path is `npm ci && npx hardhat test`, with all tests passing.
 - **Deterministic outputs** — gas is exact `receipt.gasUsed` and was
   verified byte-identical across N=30 runs (σ=0, 95% CI width 0); the
   benchmark, compliance, and V2V commands regenerate every number reported
   in Chapter 5.
 - **CI workflows** (`.github/workflows/`) — three gates:
-  `test-contracts.yml` (the 217 Hardhat tests), `benchmark.yml` (gas
+  `test-contracts.yml` (the Hardhat suite), `benchmark.yml` (gas
   benchmark), and `w3c-compliance.yml` (the ≥90% compliance gate).
 - **Verified commands** (from `INVENTORY.md` / `CAPABILITIES.md`):
   - Contracts: `cd 1_blockchain-identity && npm ci && npx hardhat test`

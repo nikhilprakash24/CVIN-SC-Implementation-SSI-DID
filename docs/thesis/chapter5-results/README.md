@@ -22,7 +22,7 @@ wall-clock medians/percentiles over the sample sizes stated.
 | Solidity compiler | 0.8.24, optimizer (200), viaIR | same |
 | Contract library | OpenZeppelin 5.0.2 | same |
 | Standards implemented | 9 (all thesis standards) | `gas_benchmark.json:metadata.contracts` |
-| Automated tests | 217 Hardhat + 28 VC + 32 MOBI VID + 6 VIN cipher + 12 use cases (~295) | test suites |
+| Automated tests | Hardhat + VC + MOBI VID + VIN cipher + 12 use cases, all green (current totals in the report) | `sandbox/grand/report/GRAND_REPORT.md` |
 | V2V simulation | 50 vehicles, 10 Hz BSM, 300 m radius | `v2v_latency.json` |
 | Signature backend | secp256k1 (coincurve), ECDSA P-256 (cryptography) | `sumo/README.md` |
 

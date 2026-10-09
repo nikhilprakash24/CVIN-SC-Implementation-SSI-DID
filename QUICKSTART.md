@@ -146,7 +146,7 @@ Expected tail:
 ✅ All use cases passed (result computed from actual runs)
 ```
 
-### 5. W3C compliance checker — 93.2%
+### 5. W3C compliance checker — 94.3%
 
 Executable checker (CI-gated at ≥90%):
 ```bash
@@ -154,7 +154,7 @@ python3 cv2x-testbed/scripts/w3c_compliance_checker.py
 ```
 Expected tail:
 ```
-Result: 93.2% ≥ 90% — exit 0
+Result: 94.3% ≥ 90% — exit 0
 ```
 The 2 documented deviations (canonical JSON vs URDNA2015, thesis-defined
 cryptosuite) are counted as failures by design and reported honestly.
@@ -177,14 +177,14 @@ npx hardhat run scripts/benchmark_gas.js
 === Gas benchmark summary (gasUsed) ===
 operation	ERC-1056	ERC-721	ERC-725	ERC-725xy	ERC-735	ERC-1155	ERC-4337	LSP8	MOBI-VID-V2	CVIN-Combined
 ...
-createIdentity	52612	542429	528647	1704992	1404108	103905	768204	149352	298923	52178
+createIdentity	52594	545101	519384	1680816	1757881	107729	759088	152644	299143	52216
 ...
 Results written to .../4_comparison-framework/results/gas_benchmark.json
 ```
 
-Reading it: the thesis's hybrid **CVIN-Combined (52,178 gas)** and **ERC-1056
-(52,612)** are ~10× cheaper to create than ERC-721/725, with a ~33× spread up
-to the full **ERC-725xy** account deploy (1,704,992). This is the evidence for
+Reading it: the thesis's hybrid **CVIN-Combined (52,216 gas)** and **ERC-1056
+(52,594)** are ~10× cheaper to create than ERC-721/725, with a ~34× spread up
+to the **ERC-735** claim-holder deploy (1,757,881). This is the evidence for
 H1 (minimal DID standards are ≥10× cheaper). Numbers are Hardhat-local, solc
 0.8.24, OZ 5.0.2, and are deterministic (byte-identical across N=30 runs).
 
@@ -243,7 +243,7 @@ All of the following are **built and tested** in the current repo:
    python3 cv2x-testbed/sumo/sumo_identity_integration.py --simulate
    python3 cv2x-testbed/sumo/run_v2v_stats.py     # N=30 seeded stats
    ```
-   Headline: SSI warm verify ~0.165 ms median (~600× margin to the 100 ms V2V
+   Headline: SSI warm verify ~0.153 ms median (~650× margin to the 100 ms V2V
    budget, H3). *Caveat: excludes the radio/MAC/network stack; mobility is
    simulated (no SUMO binary).*
 7. **Run the security suites** — 54 Mocha attack scenarios (43/43 applicable
@@ -342,9 +342,9 @@ See `1_blockchain-identity/SEPOLIA_VALIDATION.md` for the full procedure.
 After this quickstart you should have:
 
 - [x] Cloned the repo and installed Node + Python dependencies
-- [x] Run `npx hardhat test` — **217 passing**
+- [x] Run `npx hardhat test`: **all passing** (current totals in `sandbox/grand/report/GRAND_REPORT.md`)
 - [x] Run the VC (28), MOBI VID (32), and use-case (12/12) suites
-- [x] Confirmed **93.2%** W3C compliance
+- [x] Confirmed **94.3%** W3C compliance
 - [x] Reproduced the gas benchmark (and/or resolved a DID)
 
 ---

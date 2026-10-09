@@ -41,13 +41,13 @@ citation set). Chapters 3–7 are grounded in the measured artifacts.
 ## Key Contributions (Chapter 4-5)
 
 ### Implementation Contributions
-1. **9 Blockchain Identity Standards + MOBI VID profile** - all implemented, tested (217 Hardhat tests), and gas-benchmarked on-chain
+1. **9 Blockchain Identity Standards + MOBI VID profile** - all implemented, tested (Hardhat suite; current totals in `sandbox/grand/report/GRAND_REPORT.md`), and gas-benchmarked on-chain
 2. **W3C Compliant System** - 94.3% (after the 2026-10-03 resolver fixes; 93.2% at the merge) measured compliance (executable checker, CI-gated ≥90%)
 3. **Real-time V2V Integration** - blockchain identity verified in the V2V message path with real cryptography (SSI warm verify 0.153 ms)
 4. **MOBI VID** - VID I birth certificate + VID II (11 lifecycle event types), on-chain `attestEvent` signature verification, AES-256-GCM VIN encryption
 
 ### Experimental Results (Chapter 5 — measured; see `chapter5-results/`)
-1. **Performance Comparison** - exact gas costs across all 9 standards (N=30, byte-identical, σ=0); ~33× spread
+1. **Performance Comparison** - exact gas costs across all 9 standards (N=30, byte-identical, σ=0); ~34× create spread
 2. **Security Analysis** - two complementary lenses: 54-scenario revert suite (43/43 applicable cells defended) + threat matrix
 3. **Use-Case Validation** - 12/12 lifecycle use cases with real cryptographic verification (forged/replayed credentials fail)
 4. **V2V Latency** - N=30 seeded runs, 50 vehicles, 10 Hz BSM; 1.65 M verifications; mobility simulated (no SUMO binary)
@@ -116,7 +116,7 @@ optional real-SUMO, and thesis writing.
 - **References**: 100+ (currently ~60)
 - **Figures**: 30-40
 - **Tables**: 20-30
-- **Test Cases**: 200+ — **met**: ~295 automated tests green (217 Hardhat + 28 VC + 32 MOBI VID + 12/12 use cases)
+- **Test Cases**: 200+ — **met**: all automated suites green (Hardhat + VC + MOBI VID + 12/12 use cases; current totals in `sandbox/grand/report/GRAND_REPORT.md`)
 - **W3C Compliance**: ≥90% target — **met**: 94.3% (after the 2026-10-03 resolver fixes; 93.2% at the merge) measured
 
 ## Committee

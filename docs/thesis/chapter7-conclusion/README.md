@@ -50,9 +50,9 @@ The work comprises four integrated artifacts:
 
 4. **A reproducible, open comparison framework.** A gas benchmark, two
    complementary security lenses, and table generators that regenerate every
-   figure in Chapter 5 from source. The whole is exercised by **~295
-   automated tests, all green** (217 Hardhat contract tests + 28 W3C VC + 32
-   MOBI VID + 6 VIN-cipher + 12/12 lifecycle use cases).
+   figure in Chapter 5 from source. The whole is exercised by **automated
+   suites, all green** (Hardhat contract tests + W3C VC + MOBI VID + VIN-cipher
+   + 12/12 lifecycle use cases; current totals in `sandbox/grand/report/GRAND_REPORT.md`).
 
 The central methodological commitment throughout is *measured, not asserted*:
 gas figures are exact `receipt.gasUsed`, verified byte-identical across N=30
@@ -67,11 +67,11 @@ can be re-run and independently checked.
 ## 7.2 Answers to the Research Questions
 
 **RQ1 — Performance (cost).** *How do blockchain identity standards compare
-in on-chain cost?* Identity-creation gas spans **~33×** across the nine
-standards, from 52,178 gas (CVIN-Combined) to 1,704,992 gas (ERC-725xy).
+in on-chain cost?* Identity-creation gas spans **~34×** across the nine
+standards, from 52,216 gas (CVIN-Combined) to 1,757,881 gas (ERC-735).
 Minimal event-log designs are cheapest and full smart-account / on-chain-claim
-designs are most expensive; concretely, **ERC-1056 (52,612) is ~10× cheaper**
-than the NFT/proxy designs ERC-721 (542,429) and ERC-725 (528,647), and the
+designs are most expensive; concretely, **ERC-1056 (52,594) is ~10× cheaper**
+than the NFT/proxy designs ERC-721 (545,101) and ERC-725 (519,384), and the
 ERC-4337 EntryPoint indirection adds a measured 46,830 gas per operation. Gas
 is deterministic (byte-identical across N=30), so the ranking is exact, not a
 sampling artifact (§5.2).
@@ -88,20 +88,21 @@ defends **43/43 applicable attack cells**, and the analysis surfaced and then
 fixed a real `attestEvent` signature-verification gap (§5.6).
 
 **RQ3 — W3C compliance.** *Can blockchain-rooted identity meet W3C SSI
-standards while serving automotive needs?* Yes — **93.2% aggregate compliance
-is achievable and measured** by an executable checker (DID Core v1.0 93.3%,
-13/15; VC Data Model v2.0 93.1%, 27/29), above the ≥90% CI gate. The residual
-~7% is two documented, deliberate deviations (deterministic sorted-key JSON
+standards while serving automotive needs?* Yes — **94.3% aggregate compliance
+is achievable and measured** by an executable checker (DID Core v1.0 14/15
+passing with one PARTIAL; VC Data Model v2.0 93.1%, 27/29; register #4), above the
+≥90% CI gate. Apart from the one PARTIAL, the residual ~6% is two documented,
+deliberate deviations (deterministic sorted-key JSON
 rather than URDNA2015 canonicalization; a thesis-defined, Ethereum-native
 cryptosuite), i.e. registration/canonicalization choices, not any structural
 incompatibility (§5.5).
 
 **RQ4 — Real-time feasibility.** *Are blockchain identities viable for
 safety-critical, real-time V2V?* Yes, for the cryptographic path. SSI warm
-verification is **0.165 ms [0.162, 0.168]** (N=30) against the ~100 ms
-end-to-end V2V budget — a ~600× margin — and even the cold full-credential
-path (0.400 ms) clears a 10 ms signature-check target by 25×. SSI costs ~1.6×
-the PKI baseline (0.102 ms) per warm message, but both are immaterial at the
+verification is **0.153 ms [0.151, 0.154]** (N=30) against the ~100 ms
+end-to-end V2V budget — a ~650× margin — and even the cold full-credential
+path (0.399 ms) clears a 10 ms signature-check target by 25×. SSI costs ~1.6×
+the PKI baseline (0.094 ms) per warm message, but both are immaterial at the
 safety timescale: the cost of blockchain identity is at issuance (RQ1 gas),
 not at verification time. Caveat: these bound the *cryptographic* cost and
 exclude radio/MAC/network-stack latency; mobility is simulated (§5.4).
@@ -114,9 +115,9 @@ All five hypotheses are **supported**, with H4 carrying a documented nuance.
 
 | # | Hypothesis | Verdict | Evidence (one line) |
 |---|---|---|---|
-| **H1** | Minimal-state standards are ≥10× cheaper for identity creation | **Supported** | ERC-1056 52,612 vs ERC-721 542,429 = 10.3× (§5.2). |
-| **H2** | ≥90% W3C compliance is achievable via a translation layer | **Supported** | 93.2% measured; the two gaps are canonicalization/cryptosuite only (§5.5). |
-| **H3** | Off-chain credential verification meets the V2V real-time budget | **Supported** | SSI warm 0.165 ms ≪ 100 ms (~600× margin), N=30 (§5.4). |
+| **H1** | Minimal-state standards are ≥10× cheaper for identity creation | **Supported** | ERC-1056 52,594 vs ERC-721 545,101 = 10.4× (§5.2). |
+| **H2** | ≥90% W3C compliance is achievable via a translation layer | **Supported** | 94.3% measured; the two FAILs are canonicalization/cryptosuite only, plus one PARTIAL (register #4) (§5.5). |
+| **H3** | Off-chain credential verification meets the V2V real-time budget | **Supported** | SSI warm 0.153 ms ≪ 100 ms (~650× margin), N=30 (§5.4). |
 | **H4** | MOBI VID's semantics are realizable across backends | **Supported (fidelity gradient)** | Birth + lifecycle native on all 5 backends; multi-party attestation native on 3/5 (ERC-735, CVIN-Combined, MOBI-VID-V2 = 5/5), only partial on ERC-1056/ERC-1155 (3/5) (§5.3.1). |
 | **H5** | A hybrid design can sit on the cost/capability frontier | **Supported** | CVIN-Combined pays ERC-1056 identity cost yet adds on-chain claims; Pareto-optimal among 5/5 backends (§5.3, §5.3.1, §5.6). |
 
@@ -137,14 +138,14 @@ backends. H4 is therefore supported *with a fidelity gradient*, not as a flat
   identity standards for automotive SSI, all implemented and benchmarked on
   one identical testbed rather than compared on paper.
 - **Exact, deterministic performance data** (gas across all nine standards,
-  N=30, byte-identical, σ=0), quantifying a ~33× cost spread and the ~10×
+  N=30, byte-identical, σ=0), quantifying a ~34× cost spread and the ~10×
   minimal-vs-NFT gap, plus an isolated 46,830-gas ERC-4337 indirection tax.
-- **A W3C-compliant SSI layer for blockchain vehicle identity** achieving 93.2%
+- **A W3C-compliant SSI layer for blockchain vehicle identity** achieving 94.3%
   executable, CI-gated compliance (DID Core + VC Data Model) with a full
   offline VC pipeline and four-method DID resolver.
 - **A real-cryptography CV2X testbed** demonstrating that blockchain identity
-  verification fits the V2V safety budget with ~600× margin (SSI warm
-  0.165 ms), with attacks caught at zero false-negative/positive over 1.65 M
+  verification fits the V2V safety budget with ~650× margin (SSI warm
+  0.153 ms), with attacks caught at zero false-negative/positive over 1.65 M
   verifications.
 - **A dual-lens security analysis** (54-scenario executable revert suite +
   threat matrix) establishing that no standard dominates and mapping the
@@ -226,7 +227,7 @@ The thesis converts a design debate that has largely been conducted on paper
 into an empirical, reproducible comparison. The headline result is not that
 one standard wins, but that **the choice is a measurable trade-off**: minimal
 event-log designs are an order of magnitude cheaper, no standard dominates on
-security, W3C compliance is reachable (93.2%), and blockchain identity clears
+security, W3C compliance is reachable (94.3%), and blockchain identity clears
 the real-time V2V bar by a wide margin. The CVIN-Combined hybrid shows that a
 purpose-built design can occupy the favorable corner of that frontier. With
 the Sepolia run and real network-stack modeling as the next concrete steps,
