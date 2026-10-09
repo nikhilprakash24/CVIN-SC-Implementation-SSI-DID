@@ -35,4 +35,50 @@ as a FAIL. The `--rsu` flag is off by default, so the V2V results of record (#27
 a run without `--rsu` must reproduce the same message, verification and attack counts.
 
 ## 4. Amendments
-*(none)*
+
+### Amendments A1–A3 — 2026-10-09, **post hoc** (recorded after the first runs at `1e690c3`)
+Raised by the adversarial review of after-action report 11 (finding A-F2): three departures had been
+recorded only in after-action report 10 and the register. They are recorded here, marked post hoc.
+- **A1 (I1).** I1 runs with k = ∞ (no revocation re-check on the warm SPaT path), because the warm
+  BSM path it is compared with has none (decision F-A). I1 therefore compares warm paths without
+  revocation checking; the cost of a re-check is **not** measured by I3 either (I3 counts messages).
+  In this harness the re-check is an in-process lookup; a chain read costs milliseconds (#37, #40).
+- **A2 (I4).** ERC-1056 has no identity-level revocation. The nearest operation, revocation of the
+  RSU's key attribute (`revokeAttribute`), is measured; message-level RSU revocation is the
+  credential registry (I3).
+- **A3 (I5).** The measure as specified (median of the per-message sum along controller → RSU →
+  vehicle) is not computable: in the harness the RSU's SPaT does not consume the controller's update,
+  so there is no per-message chain. What is computed is the median across runs of the **sum of four
+  per-run median operation costs**. It is a cost of the cryptographic operations on that path, not a
+  path latency (no update period, queuing, network or tail).
+
+### Amendment A4 — 2026-10-09, **before any code change or run of pass 11**
+The adversarial review (after-action report 11, findings B-F1…B-F5) showed that the verifier did not
+bind message fields to the credential (a valid RSU could sign SPaT for another intersection), did not
+reject replays inside the freshness window (the design promised a replay check), did not re-check
+credential expiry on the warm path, and reported every timestamp failure as "stale"; and that I2
+recorded only whether an attack was rejected, not why, and only against first-contact receivers.
+The verifier is hardened (field binding to `intersectionId` and `stationId`; a per-receiver replay
+cache inside the window; warm-path expiry; reasons stale, future, replay, binding kept distinct),
+and the experiments are re-run at the new commit as the runs of record. The first runs (#44–#48 at
+`1e690c3`) stay in the register as history.
+- **I2 (extended).** Thirteen checks per run, each with an expected rejection reason. Against a
+  receiver with no cached state: (a) unsigned → `unsigned`; (b) wrong key → `wrong_key`; (c) MAP-only
+  RSU signs SPaT → `not_permitted`; (d) vehicle credential (issuer outside the infrastructure trust
+  list) → `credential_invalid`; (e) untrusted authority → `credential_invalid`; (f) stale (5 s) →
+  `stale`; (g) forged controller update → `wrong_key`; **(h)** a valid RSU signs SPaT naming another
+  RSU's intersection → `binding`; **(i)** a captured legitimate SPaT replayed to the same receiver
+  inside the window → `replay`; **(j)** SPaT timestamped 0.5 s in the future → `future`. Against a
+  receiver that has already cached the signer (warm): **(b-w)** → `wrong_key`; **(c-w)** → `not_permitted`;
+  **(f-w)** → `stale`. **PASS** iff all 13 are rejected with their expected reason in every run;
+  **FAIL** if any is accepted, or rejected for a different reason, in any run.
+- **I1** rule unchanged (A1 applies). The hardened SPaT warm path does work the BSM warm path does not
+  (binding compare, replay lookup; the BSM replay cache is off in the harness), so any bias is against
+  SPaT. I1 is run with no other job on the host.
+- **I3** rule unchanged.
+- **I4** is run twice; the two gas tables are expected to be byte-identical (reported).
+- **I5** is reported under the A3 definition.
+- **Bootstrap.** Each reported quantity gets its own `random.Random(20260719)` (finding A-F9), so a
+  quantity's CI no longer depends on how many quantities were computed before it. The I1 ratio CI was
+  the first computed and is unaffected by this change.
+
