@@ -3,17 +3,17 @@
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | C1_create_identity | 2 / 2 | 4 / 4 | 24 / 15 | 6 / 6 | 3 / 3 | 3 / 3 | 2 / 2 | 6 / 5 | 2 / 2 | 11 / 10 |
-| C2_create_with_attributes | 10 / 3 | 12 / 4 | 27 / 23 | 41 / 34 | 34 / 34 | 3 / 3 | 11 / 11 | 13 / 11 | 9 / 9 | 42 / 41 |
+| C2_create_with_attributes | 10 / 3 | 12 / 4 | 27 / 23 | 41 / 34 | 35 / 35 | 3 / 3 | 11 / 11 | 13 / 11 | 9 / 9 | 42 / 41 |
 | U1_rotate_controller | 2 / 1 | 1 / 1 | 13 / 6 | 1 / 0 | 1 / 0 | 5 / 2 | 1 / 0 | 8 / 2 | 1 / 0 | 2 / 2 |
 | U2_add_delegate | 2 / 1 | 2 / 1 | 1 / 1 | 5 / 4 | n/a | n/a | n/a | n/a | 1 / 1 | 2 / 2 |
-| U3_set_attribute | 1 / 0 | 1 / 0 | 4 / 4 | 5 / 4 | 13 / 12 | 1 / 1 | 3 / 3 | 3 / 3 | 3 / 3 | 1 / 1 |
+| U3_set_attribute | 1 / 0 | 1 / 0 | 4 / 4 | 5 / 4 | 13 / 12 | 2 / 2 | 3 / 3 | 3 / 3 | 3 / 3 | 1 / 1 |
 | U4_transfer_vehicle | 2 / 1 | 1 / 1 | 13 / 6 | 1 / 0 | 1 / 0 | 5 / 2 | 1 / 0 | 8 / 2 | 1 / 0 | 2 / 2 |
 | U5_meta_tx | 2 / 1 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 4 / 4 | n/a |
 | D1_revoke_delegate | 2 / 0 | 2 / 0 | 1 / 0 | 6 / 0 | n/a | n/a | n/a | n/a | 1 / 0 | 2 / 0 |
-| D2_revoke_attribute | 1 / 0 | n/a | n/a | 6 / 0 | 14 / 1 | 1 / 0 | 3 / 0 | 3 / 0 | 3 / 0 | 1 / 0 |
+| D2_revoke_attribute | 1 / 0 | n/a | n/a | 6 / 0 | 14 / 1 | 2 / 0 | 3 / 0 | 3 / 0 | 3 / 0 | 1 / 0 |
 | D3_deactivate_identity | 1 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 3 / 0 | 1 / 0 | 6 / 0 | 1 / 0 | 1 / 1 |
 | V1_issuer_key_anchor | 2 / 1 | 2 / 1 | 24 / 16 | 5 / 4 | n/a | 1 / 1 | 1 / 1 | n/a | 1 / 1 | 2 / 1 |
-| V3_anchor_status | 1 / 0 | 1 / 0 | 5 / 5 | 5 / 4 | 12 / 11 | 1 / 1 | 1 / 1 | 1 / 1 | 1 / 1 | 12 / 11 |
-| V5_revoke_credential | 1 / 0 | 1 / 0 | 5 / 4 | 6 / 0 | 13 / 1 | 1 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 13 / 1 |
+| V3_anchor_status | 1 / 0 | 1 / 0 | 5 / 5 | 5 / 4 | 13 / 12 | 2 / 2 | 1 / 1 | 1 / 1 | 1 / 1 | 12 / 11 |
+| V5_revoke_credential | 1 / 0 | 1 / 0 | 5 / 4 | 6 / 0 | 13 / 1 | 2 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 13 / 1 |
 
-_Run 2026-10-04T09-50-29Z_0eef6af · commit 0eef6af · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-09T02-09-36Z_7a9a996 · commit 7a9a996 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_

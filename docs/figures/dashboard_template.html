@@ -1,0 +1,307 @@
+<title>CVIN Results Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a roadside board. One status strip of cruxes on top, then evidence panels in a two-column grid that collapses to one. */
+:root {
+  --bg: #f3f4f2;
+  --panel: #ffffff;
+  --ink: #15191c;
+  --ink-2: #4c555b;
+  --muted: #7d868b;
+  --rule: #dde1df;
+  --accent: #c27a00;      /* signal amber */
+  --accent-soft: #f6e7c8;
+  --good: #217a3c;
+  --warn: #a86400;
+  --crit: #b3261e;
+  --na: #8a9399;
+  --bar: #2f5d73;
+  --font-display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101416; --panel: #171d20; --ink: #e8ecea; --ink-2: #b4bdc1; --muted: #87929a; --rule: #2a3236;
+    --accent: #f0a529; --accent-soft: #3a2d14; --good: #5cc27a; --warn: #f0a529; --crit: #ef6b62; --na: #7d878d; --bar: #6aa6c2;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101416; --panel: #171d20; --ink: #e8ecea; --ink-2: #b4bdc1; --muted: #87929a; --rule: #2a3236;
+  --accent: #f0a529; --accent-soft: #3a2d14; --good: #5cc27a; --warn: #f0a529; --crit: #ef6b62; --na: #7d878d; --bar: #6aa6c2;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 48px; display: grid; gap: 20px; }
+header { display: grid; gap: 6px; border-bottom: 3px solid var(--accent); padding-bottom: 14px; }
+.eyebrow { font-family: var(--font-display); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; color: var(--accent); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 4vw, 40px); line-height: 1.05; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 20px; margin: 0; text-wrap: balance; }
+.lede { color: var(--ink-2); max-width: 70ch; margin: 0; }
+.meta { font-family: var(--font-data); font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 18px; display: grid; gap: 12px; min-width: 0; }
+.panel .src { font-family: var(--font-data); font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+.cruxes { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.crux { border: 1px solid var(--rule); border-left: 4px solid var(--na); border-radius: 4px; padding: 10px 12px; display: grid; gap: 4px; background: var(--panel); min-width: 0; }
+.crux[data-state="partial"] { border-left-color: var(--warn); }
+.crux[data-state="gap"] { border-left-color: var(--crit); }
+.crux[data-state="evidenced"] { border-left-color: var(--good); }
+.crux .id { font-family: var(--font-data); font-size: 12px; color: var(--muted); }
+.crux .t { font-family: var(--font-display); font-weight: 600; font-size: 16px; line-height: 1.2; }
+.crux .rows { font-family: var(--font-data); font-size: 11px; color: var(--ink-2); }
+.chip { display: inline-block; font-family: var(--font-display); font-weight: 600; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; padding: 1px 8px; border-radius: 999px; border: 1px solid currentColor; justify-self: start; }
+.s-good { color: var(--good); } .s-warn { color: var(--warn); } .s-crit { color: var(--crit); } .s-na { color: var(--na); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; color: var(--ink-2); font-size: 13px; }
+td.num, th.num { text-align: right; font-family: var(--font-data); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll { overflow-x: auto; }
+.bars { display: grid; gap: 6px; }
+.bar-row { display: grid; grid-template-columns: 112px minmax(0, 1fr) 92px; gap: 10px; align-items: center; font-size: 13px; }
+.bar-row .lab { font-family: var(--font-display); font-weight: 500; }
+.bar-track { height: 12px; background: var(--rule); border-radius: 2px; position: relative; overflow: hidden; }
+.bar-fill { position: absolute; inset: 0 auto 0 0; background: var(--bar); border-radius: 2px; }
+.bar-row .v { font-family: var(--font-data); font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; }
+.kpis { display: flex; flex-wrap: wrap; gap: 10px 28px; }
+.kpi { display: grid; gap: 0; }
+.kpi .k { font-family: var(--font-data); font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 12px; color: var(--ink-2); }
+.caveat { background: var(--accent-soft); border-radius: 4px; padding: 8px 12px; font-size: 13px; color: var(--ink); }
+ul.plain { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.hyp { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 8px; align-items: baseline; }
+.hyp b { font-family: var(--font-data); font-weight: 500; color: var(--accent); }
+footer { color: var(--muted); font-size: 12px; }
+a { color: var(--bar); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">MASc thesis · blockchain self-sovereign identity for connected vehicles</div>
+    <h1>CVIN Results Board</h1>
+    <p class="lede">Nine blockchain identity standards compared as identity substrates for connected and autonomous vehicles. Every figure below is generated from a committed results file and the claim register; each panel names its source.</p>
+    <div class="meta" id="meta"></div>
+  </header>
+
+  <section class="panel" aria-labelledby="h-cruxes">
+    <h2 id="h-cruxes">Thesis cruxes</h2>
+    <p class="lede">What an examiner will ask, and how much evidence each question has. Green: every evidence row verified and no open gap. Amber: evidence with open gaps. Red: no evidence yet.</p>
+    <div class="cruxes" id="cruxes"></div>
+    <div class="src">docs/thesis/CRUX_REGISTER.md · docs/thesis/cruxes.yaml · docs/MEASUREMENT_CONDITIONS.md</div>
+  </section>
+
+  <div class="grid">
+    <section class="panel" aria-labelledby="h-gas">
+      <h2 id="h-gas">Gas to create one vehicle identity</h2>
+      <div class="kpis" id="gas-kpis"></div>
+      <div class="bars" id="gas-bars"></div>
+      <div class="caveat">Exact <code>receipt.gasUsed</code>, Hardhat local (condition M1). Repeated runs are byte-identical, so N is a determinism check, not a confidence interval.</div>
+      <div class="src" id="gas-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-life">
+      <h2 id="h-life">Lifetime cost over a 15-year vehicle</h2>
+      <div class="bars" id="life-bars"></div>
+      <div class="caveat">A model over an assumed event profile (birth, maintenance, inspections, recall, transfers). The band varies event frequency by ±50 %.</div>
+      <div class="src" id="life-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-v2v">
+      <h2 id="h-v2v">V2V message verification</h2>
+      <div class="kpis" id="v2v-kpis"></div>
+      <div class="scroll"><table id="v2v-table"></table></div>
+      <div class="caveat">Cryptographic verification only: simulated mobility, no radio channel, no MAC. Against a 100 ms V2V safety budget.</div>
+      <div class="src" id="v2v-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-fresh">
+      <h2 id="h-fresh">Revocation freshness (verify latency by refresh interval k)</h2>
+      <div class="scroll"><table id="fresh-table"></table></div>
+      <div class="caveat">A cached verifier honours a revoked key for at most k − 1 further messages. Latency is host-dependent; compare within a run.</div>
+      <div class="src" id="fresh-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-w3c">
+      <h2 id="h-w3c">W3C conformance</h2>
+      <div class="kpis" id="w3c-kpis"></div>
+      <div class="scroll"><table id="w3c-table"></table></div>
+      <div class="src" id="w3c-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-sec">
+      <h2 id="h-sec">Attack scenarios on chain</h2>
+      <div class="kpis" id="sec-kpis"></div>
+      <div class="scroll"><table id="sec-table"></table></div>
+      <div class="caveat">Strict harness: an attack counts as defended only when it reverts with the documented expected reason.</div>
+      <div class="src" id="sec-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-mobi">
+      <h2 id="h-mobi">MOBI VID across five backends</h2>
+      <div class="scroll"><table id="mobi-table"></table></div>
+      <div class="caveat">A MOBI-VID-inspired profile, checked against the public texts. A dagger marks an approximation where the concept is not native.</div>
+      <div class="src" id="mobi-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-exp">
+      <h2 id="h-exp">Pre-registered verdicts</h2>
+      <div class="scroll"><table id="exp-table"></table></div>
+      <div class="src" id="exp-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-tests">
+      <h2 id="h-tests">Test bodies and demos</h2>
+      <div class="scroll"><table id="tests-table"></table></div>
+      <div class="src" id="tests-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-def">
+      <h2 id="h-def">Defects found by exercising every function</h2>
+      <div class="kpis" id="def-kpis"></div>
+      <div class="scroll"><table id="def-table"></table></div>
+      <div class="src">docs/DEFECT_LOG.md</div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-hyp">
+      <h2 id="h-hyp">Hypotheses</h2>
+      <div id="hyp" style="display:grid;gap:6px"></div>
+      <div class="src">README.md · verdicts with evidence in the crux register</div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-reg">
+      <h2 id="h-reg">Claim register health</h2>
+      <div class="kpis" id="reg-kpis"></div>
+      <p class="lede" style="font-size:13px">A number enters a chapter only with a register row of status V. S = superseded, E = estimate, U = unverified, B = awaiting re-run.</p>
+      <div class="src">docs/MEASUREMENT_CONDITIONS.md</div>
+    </section>
+  </div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script id="snapshot" type="application/json">__SNAPSHOT__</script>
+<script>
+(function () {
+  const S = JSON.parse(document.getElementById("snapshot").textContent);
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => (n === null || n === undefined) ? "—" : Number(n).toLocaleString("en-US");
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const src = (o) => o ? (o.path + (o.key ? " → " + o.key : "")) : "";
+  const kpi = (k, l) => `<div class="kpi"><span class="k">${k}</span><span class="l">${esc(l)}</span></div>`;
+  const chip = (text, cls) => `<span class="chip ${cls}">${esc(text)}</span>`;
+  const table = (head, rows, numCols) => {
+    const n = new Set(numCols || []);
+    return `<thead><tr>${head.map((h, i) => `<th class="${n.has(i) ? "num" : ""}">${esc(h)}</th>`).join("")}</tr></thead>` +
+      `<tbody>${rows.map((r) => `<tr>${r.map((c, i) => `<td class="${n.has(i) ? "num" : ""}">${c}</td>`).join("")}</tr>`).join("")}</tbody>`;
+  };
+  const bars = (items, max, label) => items.map((it) =>
+    `<div class="bar-row"><span class="lab">${esc(it.name)}</span><span class="bar-track"><span class="bar-fill" style="width:${Math.max(0.6, 100 * it.value / max).toFixed(2)}%"></span></span><span class="v">${label(it)}</span></div>`).join("");
+
+  $("meta").innerHTML = [
+    `register ${S.register.rows} rows`,
+    `tests generated at ${esc(S.tests.commit || "?")}`,
+    `gas measured ${esc((S.gas.measured || "").slice(0, 10))}`,
+    `harness run ${esc(S.harness.runId)}${S.harness.dirty ? " (dirty tree)" : ""}`,
+  ].map((t) => `<span>${t}</span>`).join("");
+
+  // cruxes
+  const stateCls = { evidenced: "s-good", partial: "s-warn", gap: "s-crit" };
+  $("cruxes").innerHTML = S.cruxes.map((c) => `<div class="crux" data-state="${c.state}">
+      <span class="id">${c.id}${c.hypotheses.length ? " · " + c.hypotheses.join(", ") : ""}</span>
+      <span class="t">${esc(c.title)}</span>
+      ${chip(c.state, stateCls[c.state])}
+      <span class="rows">${c.evidence.length ? c.evidence.map((e) => "#" + e.row + " " + e.status).join(" · ") : "no evidence row"}${c.gaps.length ? " · " + c.gaps.length + " open gap" + (c.gaps.length > 1 ? "s" : "") : ""}</span>
+    </div>`).join("");
+
+  // gas
+  const g = S.gas;
+  const creates = Object.entries(g.table).filter(([, t]) => t.createIdentity).map(([k, t]) => ({ name: k, value: t.createIdentity })).sort((a, b) => a.value - b.value);
+  $("gas-kpis").innerHTML = kpi(g.create_spread + "×", `spread, ${g.create_min.standard} to ${g.create_max.standard}`) +
+    kpi(g.determinism.all_deterministic ? "0" : "≠0", `variance across ${g.determinism.n_runs} runs`) +
+    kpi(fmt(g.table["ERC-4337"].updateAttributeVia4337 - g.table["ERC-4337"].updateAttribute), "gas added per op by the 4337 EntryPoint");
+  $("gas-bars").innerHTML = bars(creates, creates[creates.length - 1].value, (it) => fmt(it.value));
+  $("gas-src").textContent = src(g.source) + " · register #" + g.register.join(", #") + " · moved-cell history: " + g.moved_by_fixes.join(", ");
+
+  // lifetime
+  const L = S.lifetime;
+  const maxL = Math.max(...L.ranking.map((r) => r.high));
+  $("life-bars").innerHTML = bars(L.ranking.map((r) => ({ name: r.standard, value: r.total, r })), maxL, (it) => (it.value / 1e6).toFixed(2) + " M");
+  $("life-src").textContent = src(L.source) + " · register #" + L.register.join(", #");
+
+  // v2v
+  const V = S.v2v, ssi = V.per_population.ssi, pki = V.per_population.pki;
+  $("v2v-kpis").innerHTML = kpi(ssi.warm.median.toFixed(3) + " ms", "SSI warm verify, median of " + V.n_runs + " runs") +
+    kpi(Math.round(100 / ssi.warm.median) + "×", "margin inside a 100 ms budget") +
+    kpi(fmt(V.totals.verification_failures), "rejections, all injected attacks");
+  const ci = (m) => `${m.median.toFixed(3)} <span style="color:var(--muted)">[${m.ci95[0].toFixed(3)}, ${m.ci95[1].toFixed(3)}]</span>`;
+  $("v2v-table").innerHTML = table(["Path", "Sign ms", "Cold verify ms", "Warm verify ms"],
+    [["SSI (W3C credential, secp256k1)", ci(ssi.sign), ci(ssi.cold), ci(ssi.warm)], ["PKI (IEEE 1609.2-style)", ci(pki.sign), ci(pki.cold), ci(pki.warm)]], [1, 2, 3]);
+  $("v2v-src").textContent = src(V.source) + " · " + V.condition + " · register #" + V.register;
+
+  // freshness
+  const F = S.freshness;
+  const ks = F.full.by_k.map((r) => r.k);
+  $("fresh-table").innerHTML = table(["k", "Full refresh median ms", "Probe refresh median ms"],
+    ks.map((k) => { const p = F.probe.by_k.find((r) => r.k === k); const f = F.full.by_k.find((r) => r.k === k); return [k === "inf" ? "∞" : k, f.median_ms.toFixed(3), p ? p.median_ms.toFixed(3) : "—"]; }), [1, 2]);
+  $("fresh-src").textContent = src(F.full.source) + " (#" + F.full.register + ") · " + src(F.probe.source) + " (#" + F.probe.register + ")";
+
+  // w3c
+  const C = S.compliance, CF = S.conformance.runs;
+  $("w3c-kpis").innerHTML = kpi(C.score.toFixed(1) + " %", `internal checker, ${C.pass} pass / ${C.partial} partial / ${C.fail} fail of ${C.executed}`) +
+    kpi(CF.default.passed + "/" + CF.default.total, "external W3C DID suite, fixtures") +
+    kpi(CF["registry-did"].passed + "/" + CF["registry-did"].total, "external suite, registry-minted did:ethr");
+  $("w3c-table").innerHTML = table(["Suite", "Fixtures", "Registry-minted DID"],
+    Object.keys(CF.default.suites).map((k) => [esc(k), CF.default.suites[k], CF["registry-did"].suites[k] || "—"]), [1, 2]);
+  $("w3c-src").textContent = src(C.source) + " (#4) · docs/conformance/reports/merged-2026-10-06 (#24)";
+
+  // security
+  const X = S.security;
+  $("sec-kpis").innerHTML = kpi((X.total.DEFENDED || 0) + "/" + ((X.total.DEFENDED || 0) + (X.total.VULNERABLE || 0) + (X.total["UNEXPECTED-REVERT"] || 0) + (X.total["FAILED-TO-RUN"] || 0)), "applicable attack cells defended") + kpi(X.total["N/A"] || 0, "cells not applicable");
+  $("sec-table").innerHTML = table(["Standard", "Defended", "Not applicable", "Other"],
+    Object.entries(X.per_standard).map(([k, c]) => [esc(k), c.DEFENDED || 0, c["N/A"] || 0, Object.entries(c).filter(([o]) => o !== "DEFENDED" && o !== "N/A").map(([o, n]) => o + " " + n).join(", ") || "0"]), [1, 2]);
+  $("sec-src").textContent = src(X.source) + " · register #" + X.register;
+
+  // mobi
+  const M = S.mobi_sweep.backends;
+  const cell = (c) => fmt(c.gas) + (c.native ? "" : " †");
+  $("mobi-table").innerHTML = table(["Backend", "Birth (VID I)", "Lifecycle event (VID II)", "Third-party attestation", "Fidelity"],
+    Object.entries(M).map(([k, b]) => [esc(k), cell(b.birthAttestation), cell(b.lifecycleEvent), cell(b.thirdPartyAttestation), b.fidelity]), [1, 2, 3, 4]);
+  $("mobi-src").textContent = src(S.mobi_sweep.source) + " · gas per native-mapped transaction";
+
+  // experiments
+  const vcls = (v) => v === "PASS" ? "s-good" : (v === "FAIL" ? "s-crit" : "s-na");
+  const ex = S.lifecycle_parity.verdicts.filter((v) => v.verdict === "PASS" || v.verdict === "FAIL")
+    .map((v) => ["M4 lifecycle parity: " + esc(v.operation), esc(v.claim), chip(v.verdict, vcls(v.verdict))]);
+  ex.push(["M5 pseudonym pool: gas", "≈ pre-registered gas per epoch (±10 %)", chip(S.pseudonyms.gas_verdict, vcls(S.pseudonyms.gas_verdict))]);
+  ex.push(["M5 pseudonym pool: linkability", "delegate pool fully linkable from chain data", chip(S.pseudonyms.linkability_verdict, vcls(S.pseudonyms.linkability_verdict))]);
+  $("exp-table").innerHTML = table(["Experiment", "Pre-registered claim", "Verdict"], ex);
+  $("exp-src").textContent = src(S.lifecycle_parity.source) + " (#33) · " + src(S.pseudonyms.source) + " (#38). Failed verdicts are reported as they fell.";
+
+  // tests
+  const T = S.tests.stages;
+  const trow = (k, label) => T[k] ? [esc(label), chip(T[k].ok ? "pass" : "fail", T[k].ok ? "s-good" : "s-crit"), esc(T[k].result.replace(/[{}']/g, ""))] : null;
+  $("tests-table").innerHTML = table(["Stage", "State", "Result"], [trow("smoke", "Adapter smoke"), trow("L1", "L1 uniform mechanisms"), trow("L1+L2", "L1 + L2 Hardhat"), trow("L3+L4", "L3 + L4 Python"), trow("demos", "Feature demos")].filter(Boolean));
+  $("tests-src").textContent = src(S.tests.source) + " · generated " + (S.tests.generated || "?") + " at " + (S.tests.commit || "?");
+
+  // defects
+  const D = S.defects.rows;
+  const by = (sev, st) => D.filter((d) => d.severity === sev && d.status === st).length;
+  $("def-kpis").innerHTML = kpi(D.length, "defects logged") + kpi(D.filter((d) => d.status !== "open").length, "fixed or partly fixed") + kpi(D.filter((d) => d.severity === "H" && d.status === "open").length, "high severity still open");
+  $("def-table").innerHTML = table(["Severity", "Fixed", "Partly fixed", "Open"], ["H", "M", "L"].map((s) => [s, by(s, "fixed"), by(s, "partly fixed"), by(s, "open")]), [1, 2, 3]);
+
+  // hypotheses
+  const hc = {}; S.cruxes.forEach((c) => c.hypotheses.forEach((h) => { (hc[h] = hc[h] || []).push(c.id); }));
+  $("hyp").innerHTML = ["H1", "H2", "H3", "H4", "H5"].map((h) => `<div class="hyp"><b>${h}</b><span>${esc(S.hypotheses[h])}${hc[h] ? ` <span style="color:var(--muted);font-size:12px">(${hc[h].join(", ")})</span>` : ""}</span></div>`).join("");
+
+  // register
+  const R = S.register.by_status;
+  $("reg-kpis").innerHTML = ["V", "S", "E", "U", "B"].filter((k) => R[k]).map((k) => kpi(R[k], "status " + k)).join("");
+
+  $("foot").textContent = "Generated by docs/figures/make_dashboard_page.py from docs/figures/dashboard_snapshot.json. Author: Nikhil Prakash, MASc, UBC ECE.";
+})();
+</script>

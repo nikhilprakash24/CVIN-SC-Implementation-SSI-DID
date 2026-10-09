@@ -1,13 +1,13 @@
 Rubric criterion,erc1056,erc1056w,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
 3.2.5 Offline creation (identity exists before any tx?),yes (implicit identity; C1 only binds the VIN),yes (implicit identity; C1 only binds the VIN),no (mint / deploy / register tx),no (mint / deploy / register tx),no (mint / deploy / register tx),no (mint / deploy / register tx),no (mint / deploy / register tx),no (mint / deploy / register tx),no (mint / deploy / register tx),yes (implicit identity; C1 only binds the VIN)
-3.2.7 ▲ Creation cost: C1 bind VIN (gas),"76,808","145,662 (2 tx)","399,844","656,480 (2 tx)","1,535,776","103,913","1,730,753 (2 tx)","132,515","808,431 (2 tx)","266,995"
-3.2.7 ▲ Creation incl. VID-I attributes: C2 (gas),"366,978 (9 tx)","234,587 (3 tx)","568,074","1,496,440 (9 tx)","2,285,459 (2 tx)","103,913","1,963,543 (2 tx)","370,025 (2 tx)","1,153,124 (9 tx)","1,006,919 (2 tx)"
-3.2.8 ▲ Update cost: U3 attribute (gas),"35,024","44,677","120,061","119,996","317,814","57,147","95,334","100,573","94,651","51,742"
-3.2.8 ▲ Controller rotation: U1 (gas),"51,754","57,188","179,470","28,390","28,746","83,959","28,834","83,412","28,539","68,847"
-3.2.8 ▲ Deletion: D3 deactivate (gas),"34,230","43,809","27,689","23,091","28,530","37,443","23,182","43,076","28,323","51,016"
+3.2.7 ▲ Creation cost: C1 bind VIN (gas),"76,830","145,684 (2 tx)","402,567","656,480 (2 tx)","1,757,881","107,729","1,730,753 (2 tx)","135,544","808,431 (2 tx)","271,402"
+3.2.7 ▲ Creation incl. VID-I attributes: C2 (gas),"367,000 (9 tx)","234,631 (3 tx)","570,797","1,496,440 (9 tx)","2,558,484 (3 tx)","107,729","1,963,543 (2 tx)","373,187 (2 tx)","1,153,124 (9 tx)","1,015,730 (2 tx)"
+3.2.8 ▲ Update cost: U3 attribute (gas),"35,024","44,677","120,061","119,996","318,054","80,131","95,334","100,574","94,651","51,742"
+3.2.8 ▲ Controller rotation: U1 (gas),"51,754","57,188","179,470","28,390","28,812","89,805","28,834","83,380","28,539","68,847"
+3.2.8 ▲ Deletion: D3 deactivate (gas),"34,230","43,809","27,689","23,091","28,596","39,565","23,182","43,044","28,323","51,016"
 3.3.2 ▲ Limited-resource resolution: R3 RPC calls at h=50,112,55,7,61,3,3,2,3,61,107
-3.3.2 ▲ Resolution median ms after lifecycle,20.306,12.23,6.996,15.317,7.619,2.625,4.246,3.886,8.329,12.796
+3.3.2 ▲ Resolution median ms after lifecycle,16.704,13.452,6.649,15.963,10.417,3.566,4.332,4.697,9.746,13.303
 3.4.1 Auditability: linked event chain vs state snapshot,full linked history (previousChange chain),full linked history (previousChange chain),events + current state (no chain pointer),current state (events unlinked),events + current state (no chain pointer),current state (events unlinked),current state (events unlinked),current state (events unlinked),current state (events unlinked),full linked history (previousChange chain)
 3.4.7 Verification relationships: delegate keys,delegates with TTL,delegates with TTL,approval (no expiry),delegates with TTL,none,none,none,none,recovery guardian only,delegates with TTL
 3.4.8 Relayed / signed operations (meta-tx),yes,no,no,no,no,no,no,no,yes,no
-3.7.2 ▲ Incentive for many DIDs: lifetime gas × baseline,1,0.98,2.57,3,5.11†,1.1†,2.81†,1.43†,2.11,2.41
+3.7.2 ▲ Incentive for many DIDs: lifetime gas × baseline,1,0.98,2.58,3,5.52†,1.2†,2.81†,1.44†,2.11,2.44

@@ -1,0 +1,307 @@
+<title>CVIN Results Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a roadside board. One status strip of cruxes on top, then evidence panels in a two-column grid that collapses to one. */
+:root {
+  --bg: #f3f4f2;
+  --panel: #ffffff;
+  --ink: #15191c;
+  --ink-2: #4c555b;
+  --muted: #7d868b;
+  --rule: #dde1df;
+  --accent: #c27a00;      /* signal amber */
+  --accent-soft: #f6e7c8;
+  --good: #217a3c;
+  --warn: #a86400;
+  --crit: #b3261e;
+  --na: #8a9399;
+  --bar: #2f5d73;
+  --font-display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101416; --panel: #171d20; --ink: #e8ecea; --ink-2: #b4bdc1; --muted: #87929a; --rule: #2a3236;
+    --accent: #f0a529; --accent-soft: #3a2d14; --good: #5cc27a; --warn: #f0a529; --crit: #ef6b62; --na: #7d878d; --bar: #6aa6c2;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101416; --panel: #171d20; --ink: #e8ecea; --ink-2: #b4bdc1; --muted: #87929a; --rule: #2a3236;
+  --accent: #f0a529; --accent-soft: #3a2d14; --good: #5cc27a; --warn: #f0a529; --crit: #ef6b62; --na: #7d878d; --bar: #6aa6c2;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 48px; display: grid; gap: 20px; }
+header { display: grid; gap: 6px; border-bottom: 3px solid var(--accent); padding-bottom: 14px; }
+.eyebrow { font-family: var(--font-display); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; color: var(--accent); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 4vw, 40px); line-height: 1.05; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 20px; margin: 0; text-wrap: balance; }
+.lede { color: var(--ink-2); max-width: 70ch; margin: 0; }
+.meta { font-family: var(--font-data); font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 18px; display: grid; gap: 12px; min-width: 0; }
+.panel .src { font-family: var(--font-data); font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+.cruxes { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.crux { border: 1px solid var(--rule); border-left: 4px solid var(--na); border-radius: 4px; padding: 10px 12px; display: grid; gap: 4px; background: var(--panel); min-width: 0; }
+.crux[data-state="partial"] { border-left-color: var(--warn); }
+.crux[data-state="gap"] { border-left-color: var(--crit); }
+.crux[data-state="evidenced"] { border-left-color: var(--good); }
+.crux .id { font-family: var(--font-data); font-size: 12px; color: var(--muted); }
+.crux .t { font-family: var(--font-display); font-weight: 600; font-size: 16px; line-height: 1.2; }
+.crux .rows { font-family: var(--font-data); font-size: 11px; color: var(--ink-2); }
+.chip { display: inline-block; font-family: var(--font-display); font-weight: 600; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; padding: 1px 8px; border-radius: 999px; border: 1px solid currentColor; justify-self: start; }
+.s-good { color: var(--good); } .s-warn { color: var(--warn); } .s-crit { color: var(--crit); } .s-na { color: var(--na); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; color: var(--ink-2); font-size: 13px; }
+td.num, th.num { text-align: right; font-family: var(--font-data); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll { overflow-x: auto; }
+.bars { display: grid; gap: 6px; }
+.bar-row { display: grid; grid-template-columns: 112px minmax(0, 1fr) 92px; gap: 10px; align-items: center; font-size: 13px; }
+.bar-row .lab { font-family: var(--font-display); font-weight: 500; }
+.bar-track { height: 12px; background: var(--rule); border-radius: 2px; position: relative; overflow: hidden; }
+.bar-fill { position: absolute; inset: 0 auto 0 0; background: var(--bar); border-radius: 2px; }
+.bar-row .v { font-family: var(--font-data); font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; }
+.kpis { display: flex; flex-wrap: wrap; gap: 10px 28px; }
+.kpi { display: grid; gap: 0; }
+.kpi .k { font-family: var(--font-data); font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 12px; color: var(--ink-2); }
+.caveat { background: var(--accent-soft); border-radius: 4px; padding: 8px 12px; font-size: 13px; color: var(--ink); }
+ul.plain { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.hyp { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 8px; align-items: baseline; }
+.hyp b { font-family: var(--font-data); font-weight: 500; color: var(--accent); }
+footer { color: var(--muted); font-size: 12px; }
+a { color: var(--bar); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">MASc thesis · blockchain self-sovereign identity for connected vehicles</div>
+    <h1>CVIN Results Board</h1>
+    <p class="lede">Nine blockchain identity standards compared as identity substrates for connected and autonomous vehicles. Every figure below is generated from a committed results file and the claim register; each panel names its source.</p>
+    <div class="meta" id="meta"></div>
+  </header>
+
+  <section class="panel" aria-labelledby="h-cruxes">
+    <h2 id="h-cruxes">Thesis cruxes</h2>
+    <p class="lede">What an examiner will ask, and how much evidence each question has. Green: every evidence row verified and no open gap. Amber: evidence with open gaps. Red: no evidence yet.</p>
+    <div class="cruxes" id="cruxes"></div>
+    <div class="src">docs/thesis/CRUX_REGISTER.md · docs/thesis/cruxes.yaml · docs/MEASUREMENT_CONDITIONS.md</div>
+  </section>
+
+  <div class="grid">
+    <section class="panel" aria-labelledby="h-gas">
+      <h2 id="h-gas">Gas to create one vehicle identity</h2>
+      <div class="kpis" id="gas-kpis"></div>
+      <div class="bars" id="gas-bars"></div>
+      <div class="caveat">Exact <code>receipt.gasUsed</code>, Hardhat local (condition M1). Repeated runs are byte-identical, so N is a determinism check, not a confidence interval.</div>
+      <div class="src" id="gas-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-life">
+      <h2 id="h-life">Lifetime cost over a 15-year vehicle</h2>
+      <div class="bars" id="life-bars"></div>
+      <div class="caveat">A model over an assumed event profile (birth, maintenance, inspections, recall, transfers). The band varies event frequency by ±50 %.</div>
+      <div class="src" id="life-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-v2v">
+      <h2 id="h-v2v">V2V message verification</h2>
+      <div class="kpis" id="v2v-kpis"></div>
+      <div class="scroll"><table id="v2v-table"></table></div>
+      <div class="caveat">Cryptographic verification only: simulated mobility, no radio channel, no MAC. Against a 100 ms V2V safety budget.</div>
+      <div class="src" id="v2v-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-fresh">
+      <h2 id="h-fresh">Revocation freshness (verify latency by refresh interval k)</h2>
+      <div class="scroll"><table id="fresh-table"></table></div>
+      <div class="caveat">A cached verifier honours a revoked key for at most k − 1 further messages. Latency is host-dependent; compare within a run.</div>
+      <div class="src" id="fresh-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-w3c">
+      <h2 id="h-w3c">W3C conformance</h2>
+      <div class="kpis" id="w3c-kpis"></div>
+      <div class="scroll"><table id="w3c-table"></table></div>
+      <div class="src" id="w3c-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-sec">
+      <h2 id="h-sec">Attack scenarios on chain</h2>
+      <div class="kpis" id="sec-kpis"></div>
+      <div class="scroll"><table id="sec-table"></table></div>
+      <div class="caveat">Strict harness: an attack counts as defended only when it reverts with the documented expected reason.</div>
+      <div class="src" id="sec-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-mobi">
+      <h2 id="h-mobi">MOBI VID across five backends</h2>
+      <div class="scroll"><table id="mobi-table"></table></div>
+      <div class="caveat">A MOBI-VID-inspired profile, checked against the public texts. A dagger marks an approximation where the concept is not native.</div>
+      <div class="src" id="mobi-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-exp">
+      <h2 id="h-exp">Pre-registered verdicts</h2>
+      <div class="scroll"><table id="exp-table"></table></div>
+      <div class="src" id="exp-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-tests">
+      <h2 id="h-tests">Test bodies and demos</h2>
+      <div class="scroll"><table id="tests-table"></table></div>
+      <div class="src" id="tests-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-def">
+      <h2 id="h-def">Defects found by exercising every function</h2>
+      <div class="kpis" id="def-kpis"></div>
+      <div class="scroll"><table id="def-table"></table></div>
+      <div class="src">docs/DEFECT_LOG.md</div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-hyp">
+      <h2 id="h-hyp">Hypotheses</h2>
+      <div id="hyp" style="display:grid;gap:6px"></div>
+      <div class="src">README.md · verdicts with evidence in the crux register</div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-reg">
+      <h2 id="h-reg">Claim register health</h2>
+      <div class="kpis" id="reg-kpis"></div>
+      <p class="lede" style="font-size:13px">A number enters a chapter only with a register row of status V. S = superseded, E = estimate, U = unverified, B = awaiting re-run.</p>
+      <div class="src">docs/MEASUREMENT_CONDITIONS.md</div>
+    </section>
+  </div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script id="snapshot" type="application/json">{"about": "Results dashboard snapshot. Generated by docs/figures/make_dashboard_data.py from committed files only; every block names its source and register rows.", "register": {"source": {"path": "docs/MEASUREMENT_CONDITIONS.md"}, "rows": 43, "by_status": {"V": 26, "S": 10, "E": 7}}, "hypotheses": {"H1": "minimal-state identity standards are cheaper to create than heavyweight account standards", "H2": "a blockchain identity layer can reach ≥90 % W3C compliance", "H3": "off-chain credential verification fits the V2V latency budget", "H4": "MOBI VID is realisable across blockchain backends", "H5": "the hybrid sits on the cost/capability frontier", "source": {"path": "README.md", "key": "Hypotheses"}}, "gas": {"source": {"path": "4_comparison-framework/results/gas_benchmark.json"}, "measured": "2026-10-06T04:24:20.646Z", "condition": "M1", "operations": ["deployRegistry", "createIdentity", "updateAttribute", "updateAttributeVia4337", "addDelegateOrClaim", "revoke", "transferOwnership"], "table": {"ERC-1056": {"deployRegistry": 958726, "createIdentity": 52594, "updateAttribute": 35494, "updateAttributeVia4337": null, "addDelegateOrClaim": 54831, "revoke": 35046, "transferOwnership": 51754}, "ERC-721": {"deployRegistry": 2787288, "createIdentity": 545101, "updateAttribute": 119737, "updateAttributeVia4337": null, "addDelegateOrClaim": 48302, "revoke": 27677, "transferOwnership": 174670}, "ERC-725": {"deployRegistry": null, "createIdentity": 519384, "updateAttribute": 137096, "updateAttributeVia4337": null, "addDelegateOrClaim": 119996, "revoke": 43388, "transferOwnership": 28390}, "ERC-725xy": {"deployRegistry": null, "createIdentity": 1680816, "updateAttribute": 49937, "updateAttributeVia4337": null, "addDelegateOrClaim": null, "revoke": null, "transferOwnership": 28834}, "ERC-735": {"deployRegistry": null, "createIdentity": 1757881, "updateAttribute": 83341, "updateAttributeVia4337": null, "addDelegateOrClaim": 298358, "revoke": 72195, "transferOwnership": 28812}, "ERC-1155": {"deployRegistry": 2871435, "createIdentity": 107729, "updateAttribute": 51199, "updateAttributeVia4337": null, "addDelegateOrClaim": 80131, "revoke": 33049, "transferOwnership": 86298}, "ERC-4337": {"deployRegistry": 456294, "createIdentity": 759088, "updateAttribute": 49343, "updateAttributeVia4337": 96173, "addDelegateOrClaim": 47557, "revoke": 25429, "transferOwnership": 28539}, "LSP8": {"deployRegistry": 1670271, "createIdentity": 152644, "updateAttribute": 55133, "updateAttributeVia4337": null, "addDelegateOrClaim": null, "revoke": 42116, "transferOwnership": 80568}, "MOBI-VID-V2": {"deployRegistry": 4225285, "createIdentity": 299143, "updateAttribute": 307210, "updateAttributeVia4337": null, "addDelegateOrClaim": 35321, "revoke": 75382, "transferOwnership": 200089}, "CVIN-Combined": {"deployRegistry": 1531487, "createIdentity": 52216, "updateAttribute": 35116, "updateAttributeVia4337": null, "addDelegateOrClaim": 291977, "revoke": 73248, "transferOwnership": 51747}}, "create_min": {"standard": "CVIN-Combined", "gas": 52216}, "create_max": {"standard": "ERC-735", "gas": 1757881}, "create_spread": 33.67, "determinism": {"n_runs": 30, "all_deterministic": true, "source": {"path": "4_comparison-framework/results/gas_benchmark_stats.json"}}, "moved_by_fixes": ["4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json", "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json", "4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json"], "register": [25]}, "lifetime": {"source": {"path": "4_comparison-framework/results/scaling_lifetime.json"}, "ranking": [{"standard": "ERC-1056", "total": 1450146, "low": 751370, "high": 2148922}, {"standard": "ERC-1155", "total": 1865183, "low": 986456, "high": 2743910}, {"standard": "CVIN-Combined", "total": 9831477, "low": 4941847, "high": 14721108}, {"standard": "MOBI-VID-V2", "total": 9856260, "low": 5077702, "high": 14634819}, {"standard": "ERC-735", "total": 11692092, "low": 6724987, "high": 16659198}], "register": [26], "note": "model over an assumed 15-year profile"}, "mobi_sweep": {"source": {"path": "4_comparison-framework/results/mobi_vid_backends.json"}, "backends": {"ERC-1056": {"birthAttestation": {"gas": 51944, "native": true}, "lifecycleEvent": {"gas": 34928, "native": true}, "thirdPartyAttestation": {"gas": 61501, "native": false}, "fidelity": "3/5"}, "ERC-735": {"birthAttestation": {"gas": 295242, "native": true}, "lifecycleEvent": {"gas": 295277, "native": true}, "thirdPartyAttestation": {"gas": 295289, "native": true}, "fidelity": "5/5"}, "ERC-1155": {"birthAttestation": {"gas": 107729, "native": true}, "lifecycleEvent": {"gas": 80131, "native": true}, "thirdPartyAttestation": {"gas": 63031, "native": false}, "fidelity": "3/5"}, "CVIN-Combined": {"birthAttestation": {"gas": 51766, "native": true}, "lifecycleEvent": {"gas": 34690, "native": true}, "thirdPartyAttestation": {"gas": 336896, "native": true}, "fidelity": "5/5"}, "MOBI-VID-V2": {"birthAttestation": {"gas": 299143, "native": true}, "lifecycleEvent": {"gas": 307210, "native": true}, "thirdPartyAttestation": {"gas": 192749, "native": true}, "fidelity": "5/5"}}, "register": [25]}, "security": {"source": {"path": "4_comparison-framework/security-analysis/results/attack_results.json"}, "per_standard": {"ERC-1056": {"N/A": 1, "DEFENDED": 5}, "ERC-721": {"DEFENDED": 5, "N/A": 1}, "ERC-725": {"N/A": 2, "DEFENDED": 4}, "ERC-735": {"N/A": 1, "DEFENDED": 5}, "ERC-1155": {"DEFENDED": 5, "N/A": 1}, "ERC-4337": {"N/A": 1, "DEFENDED": 5}, "LSP8": {"DEFENDED": 4, "N/A": 2}, "MOBI-VID-V2": {"DEFENDED": 5, "N/A": 1}, "CVIN-Combined": {"N/A": 1, "DEFENDED": 5}}, "total": {"N/A": 11, "DEFENDED": 43}, "register": [28], "harness": "strict: DEFENDED only when the revert matches the documented expected reason"}, "compliance": {"source": {"path": "4_comparison-framework/results/w3c_compliance.json", "key": "summary"}, "score": 94.3, "executed": 44, "pass": 41, "partial": 1, "fail": 2, "register": [4]}, "conformance": {"runs": {"default": {"passed": 335, "total": 336, "suites": {"did-consumption": "3/3", "did-core-properties": "88/88", "did-identifier": "3/3", "did-production": "48/48", "did-resolution": "193/194"}, "source": {"path": "docs/conformance/reports/merged-2026-10-06/default/jest-cvin/"}}, "registry-did": {"passed": 335, "total": 336, "suites": {"did-consumption": "3/3", "did-core-properties": "88/88", "did-identifier": "3/3", "did-production": "48/48", "did-resolution": "193/194"}, "source": {"path": "docs/conformance/reports/merged-2026-10-06/registry-did/jest-cvin/"}}}, "register": [24]}, "v2v": {"source": {"path": "cv2x-testbed/sumo/results/v2v_latency_stats.json"}, "n_runs": 30, "vehicles": 50, "per_population": {"ssi": {"sign": {"median": 0.2241, "ci95": [0.2214, 0.22705]}, "cold": {"median": 0.3991, "ci95": [0.3809, 0.4107]}, "warm": {"median": 0.1528, "ci95": [0.1513, 0.1538]}}, "pki": {"sign": {"median": 0.0776, "ci95": [0.0754, 0.0783]}, "cold": {"median": 0.22025, "ci95": [0.2182, 0.223]}, "warm": {"median": 0.0939, "ci95": [0.093, 0.0945]}}}, "totals": {"messages_sent": 300591, "messages_verified": 1650318, "verification_failures": 150}, "condition": "M0, simulated mobility, real cryptography", "register": [27]}, "freshness": {"full": {"source": {"path": "cv2x-testbed/results/freshness_k.json"}, "register": 32, "by_k": [{"k": "1", "median_ms": 10.946, "p95_ms": 16.153}, {"k": "5", "median_ms": 0.456, "p95_ms": 10.479}, {"k": "25", "median_ms": 0.425, "p95_ms": 0.764}, {"k": "inf", "median_ms": 0.428, "p95_ms": 0.631}], "t_local_ms": 0.428, "t_chain_ms": 10.518, "host": "Intel(R) Xeon(R) Processor @ 2.10GHz"}, "probe": {"source": {"path": "cv2x-testbed/results/freshness_k_probe.json"}, "register": 37, "by_k": [{"k": "1", "median_ms": 3.298, "p95_ms": 5.769}, {"k": "5", "median_ms": 0.522, "p95_ms": 3.875}, {"k": "25", "median_ms": 0.522, "p95_ms": 1.26}, {"k": "inf", "median_ms": 0.54, "p95_ms": 0.975}], "t_local_ms": 0.54, "t_chain_ms": 2.758, "host": "Intel(R) Xeon(R) Processor @ 2.80GHz"}}, "lifecycle_parity": {"source": {"path": "cv2x-testbed/results/lifecycle_parity.json", "key": "verdicts"}, "register": [33], "verdicts": [{"operation": "birth", "claim": "centralized >= 10x faster (median)", "verdict": "PASS", "ratio_median": 4862.289}, {"operation": "lifecycle_event", "claim": "centralized >= 10x faster (median)", "verdict": "PASS", "ratio_median": 1636.209}, {"operation": "ownership_transfer", "claim": "centralized >= 10x faster (median)", "verdict": "PASS", "ratio_median": 6044.237}, {"operation": "history_query_cached", "claim": "equal once cached (median ratio in [0.5, 2.0])", "verdict": "FAIL", "ratio_median": 0.041}, {"operation": "history_query", "claim": "reported, no pre-registered verdict", "verdict": "(outside band)", "ratio_median": 434.831}, {"operation": "history_query_cached_validated", "claim": "reported, no pre-registered verdict", "verdict": "(outside band)", "ratio_median": 58.636}, {"operation": "history_query_cached vs centralized unserialised (post-hoc diagnostic)", "claim": "post-hoc diagnostic, no verdict", "verdict": "(outside band)", "ratio_median": 16.67}]}, "pseudonyms": {"source": {"path": "4_comparison-framework/results/pseudonym_pool.json", "key": "verdicts"}, "register": [38], "gas_verdict": "FAIL", "epoch_gas": [1113456, 1096368, 1096368], "prereg_gas": 1444380, "linkability_verdict": "PASS"}, "harness": {"source": {"path": "1_blockchain-identity/results/metrics/latest/analysis.json"}, "runId": "2026-10-09T02-09-36Z_7a9a996", "dirty": false, "criteria": ["Lifetime gas", "Zero→nonzero SSTOREs", "R3 RPC calls at h=50", "R3 median ms after lifecycle", "Core ops supported", "O(1) on-chain credential check (view)"], "frontier": {"cost": ["erc1056", "erc1056w"], "costRead": ["erc1056", "erc1056w", "erc1155", "erc725xy"], "all": ["erc1056", "erc1056w", "erc721", "erc1155", "erc725xy", "erc4337"]}, "dominated_by_all": {"erc1056": [], "erc1056w": [], "erc721": [], "erc725": ["erc4337"], "erc735": ["erc1155", "erc725xy", "lsp8"], "erc1155": [], "erc725xy": [], "lsp8": ["erc1155"], "erc4337": [], "cvin": ["erc4337"]}, "register": [34, 35, 36]}, "tests": {"source": {"path": "sandbox/grand/report/GRAND_REPORT.md"}, "generated": "2026-10-04T22:31:10Z", "commit": "7404e94", "stages": {"smoke": {"ok": true, "result": "{}"}, "L1": {"ok": true, "result": "{'passing': 99, 'failing': 0}"}, "L1+L2": {"ok": true, "result": "{'passing': 386, 'failing': 0}"}, "L3+L4": {"ok": true, "result": "{'passed': 94}"}, "demos": {"ok": true, "result": "{'demos': 92, 'steps': 1722, 'flagged': 62, 'failures': []}"}}}, "demos": {"source": {"path": "sandbox/grand/report/demos.json"}, "per_option": {"cvin-combined": {"demos": 10, "ok": 10, "steps": 144, "flagged": 5}, "erc-1056-uport": {"demos": 11, "ok": 11, "steps": 200, "flagged": 6}, "erc-1056-vehicle": {"demos": 9, "ok": 9, "steps": 115, "flagged": 4}, "erc-1155": {"demos": 9, "ok": 9, "steps": 185, "flagged": 11}, "erc-4337": {"demos": 6, "ok": 6, "steps": 109, "flagged": 1}, "erc-721": {"demos": 9, "ok": 9, "steps": 222, "flagged": 4}, "erc-725": {"demos": 5, "ok": 5, "steps": 74, "flagged": 7}, "erc-725xy": {"demos": 7, "ok": 7, "steps": 125, "flagged": 2}, "erc-735": {"demos": 7, "ok": 7, "steps": 147, "flagged": 0}, "lsp8": {"demos": 8, "ok": 8, "steps": 137, "flagged": 5}, "mobi-vid": {"demos": 11, "ok": 11, "steps": 264, "flagged": 17}}}, "defects": {"source": {"path": "docs/DEFECT_LOG.md"}, "rows": [{"id": "D1", "severity": "H", "status": "fixed"}, {"id": "D2", "severity": "M", "status": "fixed"}, {"id": "D3", "severity": "L", "status": "fixed"}, {"id": "D4", "severity": "H", "status": "fixed"}, {"id": "D5", "severity": "M", "status": "fixed"}, {"id": "D6", "severity": "H", "status": "fixed"}, {"id": "D7", "severity": "H", "status": "fixed"}, {"id": "D8", "severity": "M", "status": "partly fixed"}, {"id": "D9", "severity": "M", "status": "fixed"}, {"id": "D10", "severity": "H", "status": "fixed"}, {"id": "D11", "severity": "H", "status": "fixed"}, {"id": "D11b", "severity": "H", "status": "fixed"}, {"id": "D12", "severity": "M", "status": "partly fixed"}, {"id": "D13", "severity": "H", "status": "fixed"}, {"id": "D14", "severity": "L", "status": "open"}, {"id": "D15", "severity": "M", "status": "open"}, {"id": "D16", "severity": "M", "status": "fixed"}, {"id": "D17", "severity": "L", "status": "open"}, {"id": "D18", "severity": "H", "status": "fixed"}, {"id": "D19", "severity": "M", "status": "open"}, {"id": "D20", "severity": "M", "status": "open"}, {"id": "D21", "severity": "H", "status": "fixed"}, {"id": "D22", "severity": "H", "status": "fixed"}, {"id": "D23", "severity": "M", "status": "open"}, {"id": "D24", "severity": "M", "status": "open"}, {"id": "D25", "severity": "H", "status": "partly fixed"}, {"id": "D26", "severity": "M", "status": "open"}, {"id": "D27", "severity": "L", "status": "fixed"}], "counts": {"H:fixed": 11, "M:fixed": 4, "L:fixed": 2, "M:partly fixed": 2, "L:open": 2, "M:open": 6, "H:partly fixed": 1}}, "cruxes": [{"id": "C1", "title": "CAV identity substrate", "question": "On which blockchain identity standard should a connected or autonomous vehicle's DID be anchored?", "claim": "Minimal-state standards are an order of magnitude cheaper to create an identity on; the hybrid sits on the cost/capability frontier at creation and over a vehicle's lifetime.", "hypotheses": ["H1", "H5"], "thrusts": [1, 5], "defects": ["D7", "D13", "D25"], "artefacts": ["4_comparison-framework/results/gas_benchmark.json", "4_comparison-framework/results/scaling_lifetime.json", "docs/FEATURE_ASYMMETRY_MATRIX.md", "sandbox/grand/report/L1-asymmetry.md"], "gaps": ["After the 2026-10 fixes ERC-735 is the heaviest create (veracity has a deployment price); chapters 5 and 6 need the sentence.", "The harness analysis (#36) finds CVIN-Combined dominated by ERC-4337 on six criteria; H5's wording must reconcile with it."], "examiner": "Is \"cheaper\" robust to the operation definition, and does the frontier survive the harness's six criteria?", "evidence": [{"row": 25, "status": "V", "claim": "Nine-standard gas table (deploy / create / update / delegate-or-claim / revoke / transfer per standard; MOBI-VID-V2 as application profile; ERC-4337 EntryPoint indirection +46,830 gas/op; create-identity spread 52,216 (C…"}, {"row": 26, "status": "V", "claim": "Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,146 gas on the merged contracts); verify O(1) in claim count; V2V warm verification linear at 0.164 ms/neighbour (…"}, {"row": 34, "status": "V", "claim": "Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,808 / 145,662 / 399,844 / 656,480 / 1,535,776 (ERC-735) / 103,913 (ERC-1155) / 1,730,753 (ERC-725xy) / 132,515 (LS…"}, {"row": 35, "status": "V", "claim": "Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,787 (wrapper 1,025,381) · ERC-1155 1,150,981 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,505,258 (excl. 3 n/a) · ERC-4337 2,221…"}, {"row": 36, "status": "V", "claim": "H5 dominance analysis over six declared criteria (lifetime gas ↓, zero→nonzero SSTOREs ↓, R3 RPC at h=50 ↓, R3 median ms after lifecycle ↓, core ops supported ↑, O(1) on-chain credential check ↑ [design property, assigne…"}, {"row": 42, "status": "V", "claim": "(sandbox lineage, was #31; history row for the pre-merge contracts) Gas moved by the 2026-10-04 defect fixes (D13 VIN normalisation on three mint paths; D21 `revoked` check and `previousChange` on the vehicle-profile reg…"}, {"row": 43, "status": "V", "claim": "(sandbox lineage, was #32; history row for the pre-merge contracts) Gas moved by the 2026-10-04 pass-06 fixes (D7/D8 ERC-1155: standard transfers closed, held-type bitmap, `issuerTransferIdentity`; D11b MOBI `anchorVehic…"}], "state": "partial"}, {"id": "C2", "title": "Secure V2V messaging", "question": "Does blockchain-rooted identity verification fit the V2V safety-message budget?", "claim": "Off-chain verification of pre-issued credentials adds well under a millisecond per message; uncached on-chain resolution does not fit and needs a freshness policy.", "hypotheses": ["H3"], "thrusts": [3], "defects": ["D11", "D11b"], "artefacts": ["cv2x-testbed/sumo/results/v2v_latency_stats.json", "cv2x-testbed/results/pki_vs_erc1056.json", "cv2x-testbed/results/freshness_k.json"], "gaps": ["Mobility is simulated (no SUMO run); radio, MAC and channel are out of scope.", "The freshness knee is host-dependent (#37)."], "examiner": "What part of the 100 ms budget did you measure, and on which host?", "evidence": [{"row": 21, "status": "V", "claim": "PKI vs ERC-1056 identical operations, n=50 (median / p95 ms): verify 0.253 / 0.329 PKI (pki_standard; pki_centralized 0.254 / 0.325; CA signature + issuer + validity + CRL + message signature) vs 9.654 / 15.984 ERC-1056 …"}, {"row": 27, "status": "V", "claim": "V2V SSI verify warm 0.153 ms [0.151, 0.154] (median of 30 seeded-run medians, 95 % bootstrap CI; p95 of run medians 0.158), cold 0.399 [0.381, 0.411]; PKI warm 0.094 [0.093, 0.095], cold 0.220 [0.218, 0.223]; 1,650,318 v…"}, {"row": 32, "status": "V", "claim": "Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_…"}, {"row": 37, "status": "V", "claim": "Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu…"}, {"row": 39, "status": "V", "claim": "HTTP-RPC condition, all ten columns (N=30): every gas table byte-identical to #34/#35; latency ≈2–2.5× the in-process figures (U3 tx median 8.0 → 18.1 ms ERC-1056; R1 0.9 → 2.0 ms). R3 resolve at history h=50, median / p…"}], "state": "partial"}, {"id": "C3", "title": "Infrastructure messaging (V2I and infrastructure-to-infrastructure)", "question": "Does the same identity layer secure roadside-unit and infrastructure messages (SPaT/MAP, RSU-to-RSU, RSU-to-traffic-management)?", "claim": "An RSU is a DID with a road-authority issuer; signed SPaT reuses the BSM path; revocation of a compromised RSU key is observed within a bounded number of messages.", "hypotheses": [], "thrusts": [3], "defects": [], "artefacts": ["cv2x-testbed/V2_DESIGN.md", "docs/design/INFRASTRUCTURE_MESSAGING.md"], "gaps": ["No implementation and no measurement exist; design note written 2026-10-09, code waits for audit."], "examiner": "Your title says connected vehicles; where is the infrastructure?", "evidence": [], "state": "gap"}, {"id": "C4", "title": "Revocation freshness", "question": "How quickly does a verifier stop trusting a revoked vehicle key, and at what latency cost?", "claim": "A cached verifier honours a revoked key for at most k-1 further messages; the k that meets the neighbour-saturation target depends on the host and on the refresh mode.", "hypotheses": ["H3"], "thrusts": [3, 5], "defects": ["D21"], "artefacts": ["cv2x-testbed/results/freshness_k.json", "cv2x-testbed/results/freshness_k_probe.json"], "gaps": ["Choose the k the thesis defends (review-2 decisions 10 and 14)."], "examiner": "Is k-1 messages of revocation staleness at 10 Hz acceptable for a safety system?", "evidence": [{"row": 32, "status": "V", "claim": "Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_…"}, {"row": 37, "status": "V", "claim": "Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu…"}, {"row": 40, "status": "S", "claim": "(sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=…"}], "state": "partial"}, {"id": "C5", "title": "W3C conformance", "question": "Can blockchain identities be lifted to W3C DID and VC conformance?", "claim": "The executable checker clears the 90 % target and the external W3C DID test suite passes all but one generated test, also on a registry-minted did:ethr.", "hypotheses": ["H2"], "thrusts": [2], "defects": ["D10", "D27"], "artefacts": ["4_comparison-framework/results/w3c_compliance.json", "docs/conformance/W3C_DID_TEST_SUITE.md"], "gaps": ["The DID Core checks test a synthesised document; label them structural (review-2 decision 2).", "The resolver builds did:ethr documents from the identifier, not from chain state."], "examiner": "Does conformance of the document shape say anything about the chain state behind it?", "evidence": [{"row": 4, "status": "V", "claim": "W3C compliance, internal checker: 94.3% on the review-02 tree (executable score = PASS + 0.5×PARTIAL over 44 executed checks: 41 PASS, 1 PARTIAL, 2 FAIL; DID Core v1.0, VC Data Model v2.0; the 10 SSI-principle items are …"}, {"row": 24, "status": "V", "claim": "External W3C DID test suite: 335/336 generated tests (also 335/336 on a `did:ethr` minted by `MOBIVIDRegistry.getVehicleDID` on Hardhat, sandbox lineage 2026-10-04, `docs/conformance/W3C_DID_TEST_SUITE.md` §8 of the sand…"}], "state": "partial"}, {"id": "C6", "title": "MOBI VID lifecycle", "question": "Is the MOBI VID birth certificate and lifecycle realisable across substrates?", "claim": "Birth and lifecycle are native on all five backends; multi-party attestation on three; the profile is MOBI-VID-inspired, checked against the public texts.", "hypotheses": ["H4"], "thrusts": [4], "defects": ["D16"], "artefacts": ["4_comparison-framework/results/mobi_vid_backends.json", "docs/MOBI_VID_CHECKLIST.md"], "gaps": ["Few of the VID I MUSTs are met and the birth certificate lacks mandatory fields (checklist §1; SC-17, SC-18 pending)."], "examiner": "Why call it MOBI if most normative requirements are unmet?", "evidence": [{"row": 30, "status": "V", "claim": "Harness L2 MOBI-VID lifecycle (17 events, including the delegate add that the rotation retires): 1,050,787 / 2,701,239 / 3,155,103 gas, ERC-1056 cheapest by 2.57× / 3.00×; zero→nonzero SSTOREs 8 / 92 / 83 (writes, not ne…"}, {"row": 33, "status": "V", "claim": "M4 lifecycle parity (pre-registered, `PLAN_MOBI_SUMO.md` §A.2), n=50, median / p95 ms, centralized vs MOBI-VID-V2: birth 0.0028 / 0.0076 vs 14.13 / 20.77 (398,298 gas); lifecycle event 0.0064 / 0.0109 vs 11.86 / 14.88 (2…"}, {"row": 41, "status": "S", "claim": "(sandbox lineage, was #30; S by instrument — superseded by #33; its `attest_event` row, which #33 lacks, is kept here) Lifecycle parity, centralized registry vs MOBI VID V2 (n=50, median / p95 ms): register_birth 0.004 /…"}], "state": "partial"}, {"id": "C7", "title": "Privacy and linkability", "question": "What does pseudonymity cost on a public identity registry, and is it effective?", "claim": "A delegate pool is fully linkable by one log query; per-pseudonym DIDs are unlinkable only while attribute-free or relayed.", "hypotheses": [], "thrusts": [5], "defects": [], "artefacts": ["4_comparison-framework/results/pseudonym_pool.json"], "gaps": ["Radio, timing and position linkability are future work (SC-02)."], "examiner": "Is a public chain compatible with V2X pseudonymity at all?", "evidence": [{"row": 38, "status": "V", "claim": "M5 pseudonym pool on `EthereumDIDRegistry` (pre-registered, `PLAN_MOBI_SUMO.md` §A.2): 20 `addDelegate` per 5-min epoch cost 1,113,456 gas (first epoch), then 1,096,368 (71,919 for the identity's first write, then 54,807…"}], "state": "partial"}, {"id": "C8", "title": "Veracity versus automation asymmetry", "question": "What does implemented-but-uncompared surface cost in correctness and security?", "claim": "Exercising every public function found latent defects the comparison never priced; fixing them moved the gas table.", "hypotheses": ["H5"], "thrusts": [5], "defects": ["D7", "D11b", "D13", "D21", "D22", "D25"], "artefacts": ["docs/DEFECT_LOG.md", "sandbox/grand/report/demos.md", "docs/thesis/chapter6-discussion/section-feature-asymmetry.md"], "gaps": ["The chapter-6 section is a draft."], "examiner": "Would a different implementation of the same standard have different defects, and does that undermine the comparison?", "evidence": [{"row": 28, "status": "V", "claim": "Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); on the current build the fixed pa…"}, {"row": 42, "status": "V", "claim": "(sandbox lineage, was #31; history row for the pre-merge contracts) Gas moved by the 2026-10-04 defect fixes (D13 VIN normalisation on three mint paths; D21 `revoked` check and `previousChange` on the vehicle-profile reg…"}, {"row": 43, "status": "V", "claim": "(sandbox lineage, was #32; history row for the pre-merge contracts) Gas moved by the 2026-10-04 pass-06 fixes (D7/D8 ERC-1155: standard transfers closed, held-type bitmap, `issuerTransferIdentity`; D11b MOBI `anchorVehic…"}], "state": "partial"}]}</script>
+<script>
+(function () {
+  const S = JSON.parse(document.getElementById("snapshot").textContent);
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => (n === null || n === undefined) ? "—" : Number(n).toLocaleString("en-US");
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const src = (o) => o ? (o.path + (o.key ? " → " + o.key : "")) : "";
+  const kpi = (k, l) => `<div class="kpi"><span class="k">${k}</span><span class="l">${esc(l)}</span></div>`;
+  const chip = (text, cls) => `<span class="chip ${cls}">${esc(text)}</span>`;
+  const table = (head, rows, numCols) => {
+    const n = new Set(numCols || []);
+    return `<thead><tr>${head.map((h, i) => `<th class="${n.has(i) ? "num" : ""}">${esc(h)}</th>`).join("")}</tr></thead>` +
+      `<tbody>${rows.map((r) => `<tr>${r.map((c, i) => `<td class="${n.has(i) ? "num" : ""}">${c}</td>`).join("")}</tr>`).join("")}</tbody>`;
+  };
+  const bars = (items, max, label) => items.map((it) =>
+    `<div class="bar-row"><span class="lab">${esc(it.name)}</span><span class="bar-track"><span class="bar-fill" style="width:${Math.max(0.6, 100 * it.value / max).toFixed(2)}%"></span></span><span class="v">${label(it)}</span></div>`).join("");
+
+  $("meta").innerHTML = [
+    `register ${S.register.rows} rows`,
+    `tests generated at ${esc(S.tests.commit || "?")}`,
+    `gas measured ${esc((S.gas.measured || "").slice(0, 10))}`,
+    `harness run ${esc(S.harness.runId)}${S.harness.dirty ? " (dirty tree)" : ""}`,
+  ].map((t) => `<span>${t}</span>`).join("");
+
+  // cruxes
+  const stateCls = { evidenced: "s-good", partial: "s-warn", gap: "s-crit" };
+  $("cruxes").innerHTML = S.cruxes.map((c) => `<div class="crux" data-state="${c.state}">
+      <span class="id">${c.id}${c.hypotheses.length ? " · " + c.hypotheses.join(", ") : ""}</span>
+      <span class="t">${esc(c.title)}</span>
+      ${chip(c.state, stateCls[c.state])}
+      <span class="rows">${c.evidence.length ? c.evidence.map((e) => "#" + e.row + " " + e.status).join(" · ") : "no evidence row"}${c.gaps.length ? " · " + c.gaps.length + " open gap" + (c.gaps.length > 1 ? "s" : "") : ""}</span>
+    </div>`).join("");
+
+  // gas
+  const g = S.gas;
+  const creates = Object.entries(g.table).filter(([, t]) => t.createIdentity).map(([k, t]) => ({ name: k, value: t.createIdentity })).sort((a, b) => a.value - b.value);
+  $("gas-kpis").innerHTML = kpi(g.create_spread + "×", `spread, ${g.create_min.standard} to ${g.create_max.standard}`) +
+    kpi(g.determinism.all_deterministic ? "0" : "≠0", `variance across ${g.determinism.n_runs} runs`) +
+    kpi(fmt(g.table["ERC-4337"].updateAttributeVia4337 - g.table["ERC-4337"].updateAttribute), "gas added per op by the 4337 EntryPoint");
+  $("gas-bars").innerHTML = bars(creates, creates[creates.length - 1].value, (it) => fmt(it.value));
+  $("gas-src").textContent = src(g.source) + " · register #" + g.register.join(", #") + " · moved-cell history: " + g.moved_by_fixes.join(", ");
+
+  // lifetime
+  const L = S.lifetime;
+  const maxL = Math.max(...L.ranking.map((r) => r.high));
+  $("life-bars").innerHTML = bars(L.ranking.map((r) => ({ name: r.standard, value: r.total, r })), maxL, (it) => (it.value / 1e6).toFixed(2) + " M");
+  $("life-src").textContent = src(L.source) + " · register #" + L.register.join(", #");
+
+  // v2v
+  const V = S.v2v, ssi = V.per_population.ssi, pki = V.per_population.pki;
+  $("v2v-kpis").innerHTML = kpi(ssi.warm.median.toFixed(3) + " ms", "SSI warm verify, median of " + V.n_runs + " runs") +
+    kpi(Math.round(100 / ssi.warm.median) + "×", "margin inside a 100 ms budget") +
+    kpi(fmt(V.totals.verification_failures), "rejections, all injected attacks");
+  const ci = (m) => `${m.median.toFixed(3)} <span style="color:var(--muted)">[${m.ci95[0].toFixed(3)}, ${m.ci95[1].toFixed(3)}]</span>`;
+  $("v2v-table").innerHTML = table(["Path", "Sign ms", "Cold verify ms", "Warm verify ms"],
+    [["SSI (W3C credential, secp256k1)", ci(ssi.sign), ci(ssi.cold), ci(ssi.warm)], ["PKI (IEEE 1609.2-style)", ci(pki.sign), ci(pki.cold), ci(pki.warm)]], [1, 2, 3]);
+  $("v2v-src").textContent = src(V.source) + " · " + V.condition + " · register #" + V.register;
+
+  // freshness
+  const F = S.freshness;
+  const ks = F.full.by_k.map((r) => r.k);
+  $("fresh-table").innerHTML = table(["k", "Full refresh median ms", "Probe refresh median ms"],
+    ks.map((k) => { const p = F.probe.by_k.find((r) => r.k === k); const f = F.full.by_k.find((r) => r.k === k); return [k === "inf" ? "∞" : k, f.median_ms.toFixed(3), p ? p.median_ms.toFixed(3) : "—"]; }), [1, 2]);
+  $("fresh-src").textContent = src(F.full.source) + " (#" + F.full.register + ") · " + src(F.probe.source) + " (#" + F.probe.register + ")";
+
+  // w3c
+  const C = S.compliance, CF = S.conformance.runs;
+  $("w3c-kpis").innerHTML = kpi(C.score.toFixed(1) + " %", `internal checker, ${C.pass} pass / ${C.partial} partial / ${C.fail} fail of ${C.executed}`) +
+    kpi(CF.default.passed + "/" + CF.default.total, "external W3C DID suite, fixtures") +
+    kpi(CF["registry-did"].passed + "/" + CF["registry-did"].total, "external suite, registry-minted did:ethr");
+  $("w3c-table").innerHTML = table(["Suite", "Fixtures", "Registry-minted DID"],
+    Object.keys(CF.default.suites).map((k) => [esc(k), CF.default.suites[k], CF["registry-did"].suites[k] || "—"]), [1, 2]);
+  $("w3c-src").textContent = src(C.source) + " (#4) · docs/conformance/reports/merged-2026-10-06 (#24)";
+
+  // security
+  const X = S.security;
+  $("sec-kpis").innerHTML = kpi((X.total.DEFENDED || 0) + "/" + ((X.total.DEFENDED || 0) + (X.total.VULNERABLE || 0) + (X.total["UNEXPECTED-REVERT"] || 0) + (X.total["FAILED-TO-RUN"] || 0)), "applicable attack cells defended") + kpi(X.total["N/A"] || 0, "cells not applicable");
+  $("sec-table").innerHTML = table(["Standard", "Defended", "Not applicable", "Other"],
+    Object.entries(X.per_standard).map(([k, c]) => [esc(k), c.DEFENDED || 0, c["N/A"] || 0, Object.entries(c).filter(([o]) => o !== "DEFENDED" && o !== "N/A").map(([o, n]) => o + " " + n).join(", ") || "0"]), [1, 2]);
+  $("sec-src").textContent = src(X.source) + " · register #" + X.register;
+
+  // mobi
+  const M = S.mobi_sweep.backends;
+  const cell = (c) => fmt(c.gas) + (c.native ? "" : " †");
+  $("mobi-table").innerHTML = table(["Backend", "Birth (VID I)", "Lifecycle event (VID II)", "Third-party attestation", "Fidelity"],
+    Object.entries(M).map(([k, b]) => [esc(k), cell(b.birthAttestation), cell(b.lifecycleEvent), cell(b.thirdPartyAttestation), b.fidelity]), [1, 2, 3, 4]);
+  $("mobi-src").textContent = src(S.mobi_sweep.source) + " · gas per native-mapped transaction";
+
+  // experiments
+  const vcls = (v) => v === "PASS" ? "s-good" : (v === "FAIL" ? "s-crit" : "s-na");
+  const ex = S.lifecycle_parity.verdicts.filter((v) => v.verdict === "PASS" || v.verdict === "FAIL")
+    .map((v) => ["M4 lifecycle parity: " + esc(v.operation), esc(v.claim), chip(v.verdict, vcls(v.verdict))]);
+  ex.push(["M5 pseudonym pool: gas", "≈ pre-registered gas per epoch (±10 %)", chip(S.pseudonyms.gas_verdict, vcls(S.pseudonyms.gas_verdict))]);
+  ex.push(["M5 pseudonym pool: linkability", "delegate pool fully linkable from chain data", chip(S.pseudonyms.linkability_verdict, vcls(S.pseudonyms.linkability_verdict))]);
+  $("exp-table").innerHTML = table(["Experiment", "Pre-registered claim", "Verdict"], ex);
+  $("exp-src").textContent = src(S.lifecycle_parity.source) + " (#33) · " + src(S.pseudonyms.source) + " (#38). Failed verdicts are reported as they fell.";
+
+  // tests
+  const T = S.tests.stages;
+  const trow = (k, label) => T[k] ? [esc(label), chip(T[k].ok ? "pass" : "fail", T[k].ok ? "s-good" : "s-crit"), esc(T[k].result.replace(/[{}']/g, ""))] : null;
+  $("tests-table").innerHTML = table(["Stage", "State", "Result"], [trow("smoke", "Adapter smoke"), trow("L1", "L1 uniform mechanisms"), trow("L1+L2", "L1 + L2 Hardhat"), trow("L3+L4", "L3 + L4 Python"), trow("demos", "Feature demos")].filter(Boolean));
+  $("tests-src").textContent = src(S.tests.source) + " · generated " + (S.tests.generated || "?") + " at " + (S.tests.commit || "?");
+
+  // defects
+  const D = S.defects.rows;
+  const by = (sev, st) => D.filter((d) => d.severity === sev && d.status === st).length;
+  $("def-kpis").innerHTML = kpi(D.length, "defects logged") + kpi(D.filter((d) => d.status !== "open").length, "fixed or partly fixed") + kpi(D.filter((d) => d.severity === "H" && d.status === "open").length, "high severity still open");
+  $("def-table").innerHTML = table(["Severity", "Fixed", "Partly fixed", "Open"], ["H", "M", "L"].map((s) => [s, by(s, "fixed"), by(s, "partly fixed"), by(s, "open")]), [1, 2, 3]);
+
+  // hypotheses
+  const hc = {}; S.cruxes.forEach((c) => c.hypotheses.forEach((h) => { (hc[h] = hc[h] || []).push(c.id); }));
+  $("hyp").innerHTML = ["H1", "H2", "H3", "H4", "H5"].map((h) => `<div class="hyp"><b>${h}</b><span>${esc(S.hypotheses[h])}${hc[h] ? ` <span style="color:var(--muted);font-size:12px">(${hc[h].join(", ")})</span>` : ""}</span></div>`).join("");
+
+  // register
+  const R = S.register.by_status;
+  $("reg-kpis").innerHTML = ["V", "S", "E", "U", "B"].filter((k) => R[k]).map((k) => kpi(R[k], "status " + k)).join("");
+
+  $("foot").textContent = "Generated by docs/figures/make_dashboard_page.py from docs/figures/dashboard_snapshot.json. Author: Nikhil Prakash, MASc, UBC ECE.";
+})();
+</script>

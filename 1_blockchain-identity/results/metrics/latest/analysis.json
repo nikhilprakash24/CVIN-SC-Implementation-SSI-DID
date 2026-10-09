@@ -1,5 +1,5 @@
 {
-  "runId": "2026-10-04T09-50-29Z_0eef6af",
+  "runId": "2026-10-09T02-09-36Z_7a9a996",
   "baseline": "erc1056",
   "criteria": [
     {
@@ -35,26 +35,26 @@
   ],
   "values": {
     "erc1056": {
-      "lifetime": 1050787,
+      "lifetime": 1050809,
       "z2nz": 8,
       "r3rpc": 112,
-      "r3ms": 20.306,
+      "r3ms": 16.704,
       "caps": 17,
       "onchainVerify": 0
     },
     "erc1056w": {
-      "lifetime": 1025381,
+      "lifetime": 1025469,
       "z2nz": 9,
       "r3rpc": 55,
-      "r3ms": 12.23,
+      "r3ms": 13.452,
       "caps": 16,
       "onchainVerify": 0
     },
     "erc721": {
-      "lifetime": 2701239,
+      "lifetime": 2706685,
       "z2nz": 92,
       "r3rpc": 7,
-      "r3ms": 6.996,
+      "r3ms": 6.649,
       "caps": 16,
       "onchainVerify": 1
     },
@@ -62,23 +62,23 @@
       "lifetime": 3155103,
       "z2nz": 83,
       "r3rpc": 61,
-      "r3ms": 15.317,
+      "r3ms": 15.963,
       "caps": 16,
       "onchainVerify": 1
     },
     "erc735": {
-      "lifetime": 5369010,
-      "z2nz": 145,
+      "lifetime": 5797549,
+      "z2nz": 149,
       "r3rpc": 3,
-      "r3ms": 7.619,
+      "r3ms": 10.417,
       "caps": 12,
       "onchainVerify": 1
     },
     "erc1155": {
-      "lifetime": 1150981,
-      "z2nz": 18,
+      "lifetime": 1261575,
+      "z2nz": 21,
       "r3rpc": 3,
-      "r3ms": 2.625,
+      "r3ms": 3.566,
       "caps": 14,
       "onchainVerify": 1
     },
@@ -86,15 +86,15 @@
       "lifetime": 2956507,
       "z2nz": 38,
       "r3rpc": 2,
-      "r3ms": 4.246,
+      "r3ms": 4.332,
       "caps": 13,
       "onchainVerify": 1
     },
     "lsp8": {
-      "lifetime": 1505258,
+      "lifetime": 1508413,
       "z2nz": 42,
       "r3rpc": 3,
-      "r3ms": 3.886,
+      "r3ms": 4.697,
       "caps": 13,
       "onchainVerify": 1
     },
@@ -102,15 +102,15 @@
       "lifetime": 2221290,
       "z2nz": 37,
       "r3rpc": 61,
-      "r3ms": 8.329,
+      "r3ms": 9.746,
       "caps": 16,
       "onchainVerify": 1
     },
     "cvin": {
-      "lifetime": 2533978,
+      "lifetime": 2559537,
       "z2nz": 81,
       "r3rpc": 107,
-      "r3ms": 12.796,
+      "r3ms": 13.303,
       "caps": 16,
       "onchainVerify": 1
     }
@@ -203,7 +203,6 @@
         "erc1155"
       ],
       "cvin": [
-        "erc1056w",
         "erc1155",
         "lsp8",
         "erc4337"
