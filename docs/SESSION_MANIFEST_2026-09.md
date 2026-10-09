@@ -145,3 +145,15 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `cv2x-testbed/sumo/render_trace.py`, `results/traces/*.jsonl.gz`, `results/figures/*` | two traces of record, figures, GIF, dashboard replay | B5, V2, V3, V5 |
 | `docs/thesis/chapter5-results/README.md` §5.4.1 | chapter section for I1–I5 | I-d |
 | `docs/AFTER_ACTION_REPORT_10.md` | log, decisions F-A/F-B, closing | standing rule |
+
+## Pass 11 — Adversarial review of passes 9–10 and the run-identity fixes (2026-10-09)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_11.md` | plan, log, findings register (33 findings, every one with a disposition), decisions G-A…G-E, closing, team assessment | standing rule; next executable |
+| `1_blockchain-identity/scripts/lib/run_stamp.js`, `cv2x-testbed/sumo/{sumo_identity_integration,run_v2v_stats}.py`, `docs/testing/probe_run_identity.sh` | producing-code clean flags that fire (`:(top)` pathspecs, results excluded), `code_clean`, CI probe | R0/R3, N-14, C1 |
+| `docs/testing/check_stamps.py`, `STAMP_INVENTORY.md` | both polarities, inert and hand-check marks, classes for unstamped files | R3, R4, C2 |
+| `docs/design/INFRASTRUCTURE_PREREG.md` §4 | amendments A1–A3 (post hoc) and A4 (before the re-run) | A2, B1–B5 |
+| `cv2x-testbed/sumo/infrastructure_layer.py`, harness attacks, `run_infra_stats.py`, L3 tests (16 → 31) | verifier hardened: binding, replay, warm expiry, distinct reasons; 13 I2 checks | B1–B7 |
+| `cv2x-testbed/sumo/results/infrastructure_{stats,revocation}.json`, traces, figures, `4_comparison-framework/results/infrastructure_gas{,_run1}.json` | results of record at `f1f9e37`; register #44–#48 rewritten with history | A4 re-run |
+| `docs/testing/{check_docs_numbers.py,stale_numbers.yaml}`, `docs/figures/make_dashboard_{data,page}.py`, `dashboard_template.html`, `docs/testing/build_register.py` | hardened generated-document checks | C3–C9 |
+| chapter 5 §5.4.1, `docs/thesis/cruxes.yaml` C3/C4, meta commentary §7–§8, INVENTORY, SOURCES, MASTER_UPDATE banner, `3_cv2x-testbed/README.md` | claims reworded to what was measured; stale figures fixed | A1–A7, C4, C10, C11 |

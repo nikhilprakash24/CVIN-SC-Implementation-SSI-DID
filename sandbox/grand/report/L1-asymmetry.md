@@ -1,6 +1,6 @@
 # L1 identity mechanisms — cross-option asymmetry (from tests)
 
-Generated 2026-10-09T04:27:00.768Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
+Generated 2026-10-09T06:12:34.806Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
 
 ✓ gas = the adapter ran the mechanism (exact gasUsed of the measured transaction; 0 = no transaction, e.g. implicit creation or a view) · — = NotApplicable (reason below) · ✗ = adapter error or failed assertion · · = not run
 
@@ -10,10 +10,10 @@ Generated 2026-10-09T04:27:00.768Z by `cd 1_blockchain-identity && npx hardhat t
 | controller-change | ✓ 68835 | ✓ 68842 | ✓ 53882 | ✓ 89793 | ✓ 28527 | ✓ 179562 | ✓ 28378 | ✓ 28822 | ✓ 28800 | ✓ 80568 | ✓ 180105 |
 | key-or-delegate | ✓ 72284 | ✓ 72219 | ✓ 35044 | — | ✓ 47569 | — | ✓ 137096 | — | — | — | ✓ 35309 |
 | attribute | ✓ 51622 | ✓ 52016 | ✓ 37180 | ✓ 96478 | ✓ 94471 | ✓ 120137 | — | ✓ 95166 | — | ✓ 100346 | ✓ 37485 |
-| claim | ✓ 316451 | — | — | ✓ 80131 | — | — | — | — | ✓ 322950 | ✓ 148879 | ✓ 287310 |
-| revoke | ✓ 70873 | ✓ 32868 | ✓ 75370 | ✓ 72614 | — | ✓ 27677 | ✓ 41399 | ✓ 33870 | ✓ 78143 | ✓ 42116 | ✓ 75382 |
+| claim | ✓ 316477 | — | — | ✓ 80131 | — | — | — | — | ✓ 322950 | ✓ 148879 | ✓ 287310 |
+| revoke | ✓ 70883 | ✓ 32868 | ✓ 75370 | ✓ 72614 | — | ✓ 27677 | ✓ 41399 | ✓ 33870 | ✓ 78143 | ✓ 42116 | ✓ 75382 |
 | transfer | — | — | — | ✓ 89793 | ✓ 28527 | ✓ 179562 | — | — | — | ✓ 80568 | ✓ 180105 |
-| signed-op | — | ✓ 96065 | — | — | ✓ 69393 | — | ✓ 28358 | ✓ 76340 | — | — | — |
+| signed-op | — | ✓ 96065 | — | — | ✓ 69393 | — | ✓ 28358 | ✓ 76352 | — | — | — |
 | resolve | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 | ✓ 0 |
 
 Per mechanism: create ok 11 / na 0 / fail 0 · controller-change ok 11 / na 0 / fail 0 · key-or-delegate ok 6 / na 5 / fail 0 · attribute ok 9 / na 2 / fail 0 · claim ok 5 / na 6 / fail 0 · revoke ok 10 / na 1 / fail 0 · transfer ok 5 / na 6 / fail 0 · signed-op ok 4 / na 7 / fail 0 · resolve ok 11 / na 0 / fail 0

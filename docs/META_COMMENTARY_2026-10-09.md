@@ -96,3 +96,25 @@ tells us whether the infrastructure experiment is in or out.
   and RSU-to-RSU messaging is not modelled. These are the same limits as for V2V, stated in the same
   words. An examiner who asks "where is the infrastructure?" now gets an answer with five register
   rows behind it, and the scope that goes with it.
+
+## 8. After pass 11 (the adversarial review)
+- **The review found what the pre-registration could not.** A pre-registration fixes the questions
+  before the answers; it cannot fix questions nobody thought to ask. Seven registered attacks all
+  passed, and a reviewer with no stake in them found two more that the verifier accepted: SPaT
+  signed for someone else's intersection, and replay inside the freshness window. Of everything in
+  this period, that is the most useful finding for the thesis's method chapter: pre-registration
+  protects against moving the goalposts, adversarial review against having put them in the wrong
+  place. The thesis needs both, and should say so.
+- **The flags that guard runs of record had never worked.** Three "is the producing code clean?"
+  flags resolved their paths relative to the wrong directory and could not fire. Two of them I wrote
+  or extended. Every affected result turned out clean on other evidence, so no number moved, but for
+  two passes the reports said "dirty: false" as if it meant something. The fix is not the pathspec;
+  it is the probe in CI that proves the flag fires. A guard that is never seen to trip is not a guard.
+- **"Secures" was the wrong verb.** The claims reviewer read the documents the way an examiner will.
+  "Costs exactly", "secures V2I and I2I", "2.4 s of trust" — each said more than the measurement.
+  Rewritten, the claims are smaller and true: the warm path costs about 10 % more than a BSM's after
+  hardening, thirteen registered attacks are rejected for the right reason, and the revocation bound
+  is a count of messages, not a time.
+- **What I would watch for next.** The reviewers' scope was set by me. The Python suites outside L3,
+  the contracts, and chapters 1–4 and 6–7 were not reviewed this pass (N-22). The most valuable next
+  review is one whose briefs I do not write.

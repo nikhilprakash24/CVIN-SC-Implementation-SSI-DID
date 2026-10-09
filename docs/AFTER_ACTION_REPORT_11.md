@@ -47,8 +47,28 @@ the author may run later (N-10) remains open; this pass narrows it, it does not 
   dry run (disclosed, not a result) showed every check rejected for its expected reason and an I1
   ratio near 1.1, inside the band — the hardened SPaT path does work the BSM path does not, the bias
   A4 predicted. The verifier was not optimised after seeing it.
-- **Registered re-run** started at `f1f9e37` in a separate worktree (I1 alone on the host; then I3,
-  the two traces, I4 twice).
+- **Registered re-run** at `f1f9e37` in a separate worktree (I1 alone on the host; then I3, the two
+  traces, I4 twice). Verdicts as they fell:
+  - **I1 PASS** — 1.096 [1.091, 1.101] (was 0.996): the hardened SPaT path costs about 10 % more than
+    the BSM path, the direction A4 predicted. `tree_clean` and `code_clean` true. 7 min.
+  - **I2 PASS** — 13 of 13 checks rejected for their expected reason in 30/30 runs.
+  - **I3 PASS** — 0 / 4 / 24 (identical to the first run; bound reached in 30 / 16 / 6 runs).
+    `tree_clean` false (I1's output), `code_clean` true: the new flag records the F-C situation
+    without a hand check. 29 min.
+  - **I4** — the two runs differ by ±12 gas in five of six cells (calldata zero bytes under a random
+    key, consistent with EIP-2028, not isolated). A4 expected byte-identical runs; **that expectation
+    failed** and is reported. Both runs committed; the register gives ranges.
+  - **I5** — 0.886 ms [0.879, 0.913], reported under the A3 definition.
+- **R2, tooling (`36e0309`).** Stale-figure checker: scope from 7 files to all tracked Markdown less a
+  named history list (87 files), number normalisation, whole-word markers, arrow direction; it
+  surfaced 60 hits, the live ones fixed (INVENTORY, SOURCES, `3_cv2x-testbed/README.md` — which
+  closes N-13), MASTER_UPDATE marked as a July snapshot, and one false entry removed (1,535,776 is
+  the current harness C1 value, #34). All reviewer variants are now caught. Dashboard `--check`
+  rebuilds the page (tampering test: caught); register parser anchored; crux evidence counts V
+  rows only; constants carry sources; all parity verdicts shown; coverage matrix `T*` (40 cells)
+  and one manifest/demo mismatch listed.
+- **R4.** Every result file without a complete stamp is classified (5 stamp producer, 3 history,
+  1 single run); stamping the producers is N-20.
 
 ## 4. Findings register (every reviewer finding, with its disposition)
 Reviewers ran on a different model from the orchestrator's, on the frozen checkout of `0ba7c6c`.
@@ -92,5 +112,54 @@ rejected.** Two (C1, C2) the orchestrator had found itself while the review ran.
 | C11 | tooling | A model name in `docs/PROJECT_SUMMARY.md`; historical commit authors and scratchpad paths in some results | **Confirmed for the model name** (reworded). Commit authorship is history (rewriting needs a force push; not done); scratchpad paths are not model identifiers (no change) | docs |
 
 ## 5. Decisions
+- **G-A.** The review was run on a different model inside this session rather than waiting for a
+  separate session: the brief was "continue to the next executable", and the reviewers' isolation
+  (frozen checkout, fresh context, read-only) was enforced; the remaining dependence is stated in §1.
+- **G-B.** Hardened and re-ran rather than disclose-only, because B1 (cross-intersection SPaT) is a
+  hole in the thesis claim itself. The amendment was committed before any code (`98e64e4`).
+- **G-C.** Register rows rewritten in place with the first-run values as history (the convention of
+  rows #1, #2), not superseded by new row numbers.
+- **G-D.** The verifier was not optimised after the dry run showed a higher I1 ratio (e.g. computing
+  the canonical bytes once); doing so after seeing a number would look like tuning to the band.
+- **G-E.** `benchmarks/run.js` left unfixed (N-19): fixing it changes the harness's measured-code hash
+  and would detach the metrics run of record; that run's whole-tree flag is false, so it is unaffected.
 
-## 6. Closing — *(written last)*
+## 6. Closing
+**Plan vs done.** R0–R5 closed. Commits: `5cc39c2` (opened), `b1d3f72` (run-identity flags),
+`98e64e4` (amendments, before code), `f1f9e37` (verifier), `36e0309` (tooling and wording),
+`601e1de` (results of record), and the close. CI and grand run: §3 log and the handback addendum.
+
+**What the review changed.** Two security holes in the infrastructure verifier (cross-intersection
+SPaT; replay) that the registered attacks did not cover; a revocation-expiry gap; four test mutants
+surviving; three producing-code "dirty" flags that could never fire (one mine from pass 9, one from
+pass 10, one inherited); a stale-figure checker that scanned seven files and could be fooled by
+formatting; a dashboard check that did not cover the page; and a dozen sentences that said more than
+was measured. No register number was wrong; several were described wrongly.
+
+**What it did not change.** Every pre-registered verdict still passes. The counts of I3 and I2's
+original seven attacks are identical; I1 moved from 0.996 to 1.096 because the verifier now does more.
+
+**What went wrong in this pass.** The first expiry fix read the wrong field (`expirationDate`; the
+layer writes `validUntil`) and was inert — caught by the new test, not by reading. The A4 expectation
+that I4 runs would be byte-identical was wrong; the TSR plan had already recorded the same
+input-dependence for harness cells, and the orchestrator did not connect the two before writing it.
+
+**For the author.** Rows #44–#48 and §5.4.1 (rewritten); the findings register §4; N-17 (k, now with
+"count not time"); N-19…N-22.
+
+### 6.1 How the team structure performed
+| Role | Work | Outcome | Gate re-run by the orchestrator |
+|---|---|---|---|
+| Orchestrator | plan, R0 stamp finding, flag fixes, amendments, verifier, tooling, re-run, documents | all steps closed | probe (passes; fails on old code), mutation set, no-change gate, checks, grand run, CI |
+| Claims reviewer (agent, different model) | register, pre-registration, statistics, chapter, reports | 11 findings, all confirmed or accepted; no wrong number | recomputed I1 CI and per-run maxima from the JSON |
+| Code/security reviewer (agent, different model) | verifier, attacks, harness, tests | 11 findings incl. 2 holes with PoCs | PoC re-run before acting; mutants re-run after the fix (26/26 killed) |
+| Tooling reviewer (agent, different model) | generators, checkers, CI, reports | 11 findings incl. 2 the orchestrator had found | each checker re-tested with the reviewer's own variants |
+
+The structure worked better than in passes 9–10 for one reason: the reviewers did not share the
+orchestrator's model or context, and their briefs asked for what is *wrong*, with evidence. Every
+high-severity finding came with a reproduction, which made disposition fast and left no room to
+argue a finding away. Two limits remain. The orchestrator wrote the briefs, so a blind spot in the
+briefs is a blind spot in the review (nothing was asked about the Python suites outside L3, the
+contracts, or chapters other than 5). And the orchestrator decided the dispositions; that none was
+rejected is a fact about these findings, not a guarantee of neutrality. A session-level review by a
+different configuration, with briefs written by someone else, remains the stronger test (N-10).
