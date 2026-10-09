@@ -196,6 +196,33 @@ def harness():
             "dominated_by_all": d["dominatedBy"]["all"], "register": [34, 35, 36]}
 
 
+def infrastructure():
+    """Infrastructure messaging I1-I5 (docs/design/INFRASTRUCTURE_PREREG.md); absent until run."""
+    base = "cv2x-testbed/sumo/results/"
+    out = {}
+    if (ROOT / base / "infrastructure_stats.json").exists():
+        d = load(base + "infrastructure_stats.json")
+        out["I1"] = {"verdict": d["I1"]["verdict"], "ratio_median": d["I1"]["ratio"]["median"], "ratio_ci95": d["I1"]["ratio"]["ci95"],
+                     "spat_warm_ms": d["I1"]["spat_warm_ms"]["median"], "bsm_warm_ms": d["I1"]["bsm_ssi_warm_ms"]["median"],
+                     "spat_cold_ms": d["I1"]["spat_cold_ms"]["median"], "runs": d["config"]["runs"]}
+        out["I2"] = {"verdict": d["I2"]["verdict"], "attacks": len(d["I2"]["attacks"]), "runs_all_rejected": d["I2"]["runs_all_rejected"],
+                     "runs": d["I2"]["runs"]}
+        out["I5"] = {"controller_to_vehicle_ms": d["I5"]["controller_to_vehicle_ms"]["median"],
+                     "tmc_to_controller_ms": d["I5"]["tmc_to_controller_ms"]["median"]}
+        out["source_stats"] = src(base + "infrastructure_stats.json")
+    if (ROOT / base / "infrastructure_revocation.json").exists():
+        d = load(base + "infrastructure_revocation.json")
+        out["I3"] = {"verdict": d["I3"]["verdict"], "per_k": {k: {"max": v["max_accepted_after_revocation"], "bound": v["bound_k_minus_1"],
+                     "verdict": v["verdict"]} for k, v in d["I3"]["per_k"].items()}}
+        out["source_revocation"] = src(base + "infrastructure_revocation.json")
+    if (ROOT / "4_comparison-framework/results/infrastructure_gas.json").exists():
+        d = load("4_comparison-framework/results/infrastructure_gas.json")
+        out["I4"] = {k: v["gasUsed"] for k, v in d["operations"].items()}
+        out["source_gas"] = src("4_comparison-framework/results/infrastructure_gas.json")
+    out["register"] = [44, 45, 46, 47, 48]
+    return out
+
+
 def tests():
     p = "sandbox/grand/report/GRAND_REPORT.md"
     text = (ROOT / p).read_text()
@@ -292,6 +319,7 @@ def build():
         "gas": gas(), "lifetime": lifetime(), "mobi_sweep": sweep(), "security": security(),
         "compliance": compliance(), "conformance": conformance(), "v2v": v2v(), "freshness": freshness(),
         "lifecycle_parity": parity(), "pseudonyms": pseudonyms(), "harness": harness(),
+        "infrastructure": infrastructure(),
         "tests": tests(), "demos": demos(), "defects": defects(),
         "cruxes": cruxes(register),
         "register_rows": {str(k): v for k, v in sorted(register.items())},

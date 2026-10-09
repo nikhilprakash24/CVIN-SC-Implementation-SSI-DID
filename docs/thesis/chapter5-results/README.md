@@ -312,6 +312,70 @@ effect of +2.4 % warm / +9 % cold on the same host).
    contribution is out of scope for this measurement and is the dominant
    remaining term in a real end-to-end budget.
 
+## 5.4.1 Thrust 3 — Infrastructure Messaging (V2I and I2I)
+
+**Provenance**: design `docs/design/INFRASTRUCTURE_MESSAGING.md`; claims,
+conditions and verdict rules pre-registered in
+`docs/design/INFRASTRUCTURE_PREREG.md` before any code or run;
+`cv2x-testbed/sumo/results/infrastructure_stats.json` (I1, I2, I5) and
+`infrastructure_revocation.json` (I3), produced by
+`python3 cv2x-testbed/sumo/run_infra_stats.py --runs 30 --duration 20
+[--revocation]` at commit `1e690c3` with a clean tree;
+`4_comparison-framework/results/infrastructure_gas.json` (I4). Register
+#44–#48. Same harness and seeds 1–30 as §5.4, with `--rsu`: 4 RSUs along the
+corridor, a signal controller per RSU updating every 1 s and a traffic
+management centre (TMC) issuing a timing plan every 5 s. Every RSU,
+controller and the TMC is a `did:ethr` identity holding a credential from a
+road authority, the only issuer the infrastructure verifier trusts; the
+credential lists the message types the station may sign.
+
+**I1 — SPaT costs what a BSM costs (PASS).** Median warm SPaT verify over
+median warm SSI BSM verify, within the same run: **0.996** (95 % CI
+[0.995, 1.001], N=30; pass band [0.80, 1.20]). The signed-SPaT path is the
+BSM path with a different credential type and a permitted-message check, and
+the check is free at this resolution. Absolute values (SPaT warm 0.163 ms,
+cold 0.452 ms) were measured on `cryptography` 41.0.7 and are not comparable
+with §5.4's 0.153 ms (49.0.0); the ratio is the claim.
+
+**I2 — Every infrastructure attack is rejected (PASS).** Seven injected
+attacks, each in all 30 runs: unsigned SPaT; SPaT under an RSU DID with the
+wrong key; SPaT from an RSU credentialed for MAP only; SPaT signed with a
+vehicle credential; an RSU credentialed by an untrusted authority; stale SPaT;
+a forged controller-to-RSU update. No legitimate SPaT was rejected among
+138,895 verifications.
+
+**I3 — Revoked RSU, bounded staleness (PASS).** The authority revokes RSU 1's
+credential at t = 10 s; a vehicle that has already cached RSU 1 re-checks
+revocation every k-th message. The most SPaT messages any vehicle accepted
+after revocation, over 30 runs, was 0, 4 and 24 for k = 1, 5 and 25, so the
+pre-registered bound k − 1 holds and is reached. With no re-check (k = ∞) a
+cached vehicle accepts every remaining message (100 in 10 s at 10 Hz). A
+vehicle meeting RSU 1 for the first time after revocation rejects at once,
+because the cold path checks the credential (shown by the L3 test
+`test_i3_k_infinity_never_stops_for_cached_receiver_but_new_receiver_rejects`,
+not by the sweep). At 10 Hz, k − 1 messages means
+staleness of (k − 1) × 0.1 s; choosing k is the same open decision as for
+vehicles (§5.4, crux C4).
+
+**I4 — On-chain cost of an RSU identity (reported).** Creation is free
+(did:ethr is implicit); the RSU anchoring its key costs 52,594 gas, the same
+write as the ERC-1056 creation cell of §5.2; handing control to the road
+authority 51,754; an authority key rotation 35,498 and revocation of the old
+key 35,050. ERC-1056 has no identity-level revocation, so message-level RSU
+revocation runs through the credential registry (I3) — a disclosed deviation
+from the pre-registration's wording.
+
+**I5 — I2I back-haul (reported).** Controller → RSU → vehicle, the
+cryptographic terms only: 0.840 ms (95 % CI [0.832, 0.845]); TMC → controller
+hop 0.433 ms.
+
+**Scope.** Mobility is the mock model (no SUMO binary), there is no radio
+channel, and the back-haul is in-process; these figures bound the identity
+terms of V2I and I2I messaging, as §5.4 does for V2V. Figures from the
+traces of record (`cv2x-testbed/sumo/results/figures/`,
+`docs/PLAN_SUMO_VISUALISATION.md`) show the message paths and the revocation
+cut-off; they are illustrations of seed 1, not additional evidence.
+
 ---
 
 ## 5.5 RQ3 — W3C Standards Compliance

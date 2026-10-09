@@ -179,6 +179,27 @@ a { color: var(--bar); }
       <p class="lede" style="font-size:13px">A number enters a chapter only with a register row of status V. S = superseded, E = estimate, U = unverified, B = awaiting re-run.</p>
       <div class="src">docs/MEASUREMENT_CONDITIONS.md</div>
     </section>
+    <section class="panel" aria-labelledby="h-infra">
+      <h2 id="h-infra">Infrastructure messaging (V2I and I2I)</h2>
+      <p class="lede" style="font-size:13px">Roadside units, signal controllers and a traffic-management centre as credentialed DIDs, issued by a road authority. Pre-registered experiments I1 to I5.</p>
+      <div class="scroll"><table id="infra-table"></table></div>
+      <div class="caveat">Simulated mobility, in-process delivery, no radio channel. The back-haul is in-process; real back-haul is a wired network.</div>
+      <div class="src" id="infra-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-replay" style="align-content:start">
+      <h2 id="h-replay">Message path replay</h2>
+      <p class="lede" style="font-size:13px">Seed 1 of the trace of record, every fifth step: four RSUs along a 5 km corridor send signed SPaT to the vehicles in range. An illustration, not additional evidence.</p>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button id="replay-play" type="button" style="font:inherit;padding:4px 12px;border:1px solid var(--rule);border-radius:4px;background:var(--panel);color:var(--ink);cursor:pointer">Play</button>
+        <input id="replay-t" type="range" min="0" max="0" value="0" style="flex:1;min-width:140px" aria-label="Replay time">
+        <span id="replay-label" style="font-family:var(--font-data);font-size:12px;color:var(--ink-2)"></span>
+      </div>
+      <canvas id="replay" width="900" height="220" style="width:100%;height:auto;border:1px solid var(--rule);border-radius:4px;background:var(--bg)"></canvas>
+      <div class="caveat" id="replay-cap"></div>
+      <div class="src">cv2x-testbed/sumo/results/traces (trace of record) → render_trace.py replay · blue dots SSI vehicles, amber PKI, purple triangles RSUs, green lines verified SPaT, red rejected</div>
+    </section>
+
     <section class="panel" aria-labelledby="h-links" style="grid-column: 1 / -1">
       <h2 id="h-links">Where the evidence lives</h2>
       <ul class="plain" style="columns: 2 220px; display: block">
@@ -189,6 +210,7 @@ a { color: var(--bar); }
         <li><a href="https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/testing/coverage_matrix.md" target="_blank" rel="noopener">Coverage matrix</a></li>
         <li><a href="https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/testing/README.md" target="_blank" rel="noopener">Testing entry point</a></li>
         <li><a href="https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/design/INFRASTRUCTURE_MESSAGING.md" target="_blank" rel="noopener">Infrastructure messaging design</a></li>
+        <li><a href="https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/design/INFRASTRUCTURE_PREREG.md" target="_blank" rel="noopener">Infrastructure pre-registration</a></li>
         <li><a href="https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/PLAN_SUMO_VISUALISATION.md" target="_blank" rel="noopener">SUMO visualisation plan</a></li>
         <li><a href="https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/conformance/W3C_DID_TEST_SUITE.md" target="_blank" rel="noopener">W3C DID test-suite record</a></li>
         <li><a href="https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/STYLE_AND_RIGOUR_GUIDE.md" target="_blank" rel="noopener">Style and rigour guide</a></li>
@@ -200,6 +222,7 @@ a { color: var(--bar); }
 </div>
 
 <script id="snapshot" type="application/json">__SNAPSHOT__</script>
+<script id="replay-data" type="application/json">__REPLAY__</script>
 <script>
 (function () {
   const S = JSON.parse(document.getElementById("snapshot").textContent);
@@ -314,8 +337,56 @@ a { color: var(--bar); }
   $("hyp").innerHTML = ["H1", "H2", "H3", "H4", "H5"].map((h) => `<div class="hyp"><b>${h}</b><span>${esc(S.hypotheses[h])}${hc[h] ? ` <span style="color:var(--muted);font-size:12px">(${hc[h].join(", ")})</span>` : ""}</span></div>`).join("");
 
   // register
-  const R = S.register.by_status;
-  $("reg-kpis").innerHTML = ["V", "S", "E", "U", "B"].filter((k) => R[k]).map((k) => kpi(R[k], "status " + k)).join("");
+  const RS = S.register.by_status;
+  $("reg-kpis").innerHTML = ["V", "S", "E", "U", "B"].filter((k) => RS[k]).map((k) => kpi(RS[k], "status " + k)).join("");
+  // infrastructure
+  const I = S.infrastructure || {};
+  const vchip = (v) => v ? chip(v, v === "PASS" ? "s-good" : (v === "FAIL" ? "s-crit" : "s-warn")) : chip("not run", "s-na");
+  const irows = [];
+  if (I.I1) irows.push(["I1 SPaT fits the BSM budget", `warm SPaT ${I.I1.spat_warm_ms.toFixed(3)} ms vs BSM ${I.I1.bsm_warm_ms.toFixed(3)} ms; ratio ${I.I1.ratio_median.toFixed(3)} [${I.I1.ratio_ci95[0].toFixed(3)}, ${I.I1.ratio_ci95[1].toFixed(3)}], ${I.I1.runs} runs`, vchip(I.I1.verdict)]);
+  else irows.push(["I1 SPaT fits the BSM budget", "—", vchip(null)]);
+  if (I.I2) irows.push(["I2 forged infrastructure messages rejected", `${I.I2.attacks} attack types, all rejected in ${I.I2.runs_all_rejected} of ${I.I2.runs} runs`, vchip(I.I2.verdict)]);
+  if (I.I3) irows.push(["I3 revoked RSU trusted ≤ k − 1 messages", Object.entries(I.I3.per_k).map(([k, v]) => `k=${k === "inf" ? "∞" : k}: ${v.max}${v.bound === null ? "" : " (≤ " + v.bound + ")"}`).join(" · "), vchip(I.I3.verdict)]);
+  if (I.I4) irows.push(["I4 RSU identity on chain (gas)", `key anchor ${fmt(I.I4.anchor_key_by_rsu)} · hand to authority ${fmt(I.I4.hand_control_to_authority)} · rotate ${fmt(I.I4.rotate_key_by_authority)} · revoke old key ${fmt(I.I4.revoke_old_key)}`, chip("reported", "s-na")]);
+  if (I.I5) irows.push(["I5 controller → RSU → vehicle", `${I.I5.controller_to_vehicle_ms.toFixed(3)} ms signed end to end; TMC hop ${I.I5.tmc_to_controller_ms.toFixed(3)} ms`, chip("reported", "s-na")]);
+  $("infra-table").innerHTML = table(["Experiment", "Measured", "Verdict"], irows);
+  $("infra-src").textContent = [I.source_stats, I.source_revocation, I.source_gas].filter(Boolean).map(src).join(" · ") + " · register #" + (I.register || []).join(", #");
+
+  // replay
+  const R = JSON.parse(document.getElementById("replay-data").textContent);
+  const cv = $("replay"), slider = $("replay-t"), lab = $("replay-label"), btn = $("replay-play");
+  if (!R || !R.frames || !R.frames.length) {
+    $("replay-cap").textContent = "No trace of record yet.";
+  } else {
+    $("replay-cap").textContent = R.caption;
+    slider.max = String(R.frames.length - 1);
+    const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+    const rsuPos = Object.fromEntries((R.rsus || []).map((r) => [r.id, r]));
+    const draw = (i) => {
+      const f = R.frames[i], g = cv.getContext("2d"), W = cv.width, H = cv.height;
+      const X = (x) => 20 + (W - 40) * x / 5000, Y = (y) => H - 30 - (y - 498) * ((H - 60) / 14);
+      g.clearRect(0, 0, W, H);
+      g.strokeStyle = css("--rule"); g.lineWidth = 1;
+      [500, 503.5, 507].forEach((y) => { g.beginPath(); g.moveTo(X(0), Y(y)); g.lineTo(X(5000), Y(y)); g.stroke(); });
+      const pos = Object.fromEntries(f.v.map((v) => [v[0], v]));
+      f.spat.forEach(([from, to, ok]) => { const a = rsuPos[from], b = pos[to]; if (!a || !b) return;
+        g.strokeStyle = ok ? css("--good") : css("--crit"); g.globalAlpha = 0.8; g.beginPath(); g.moveTo(X(a.x), Y(a.y)); g.lineTo(X(b[1]), Y(b[2])); g.stroke(); g.globalAlpha = 1; });
+      f.v.forEach(([, x, y, ssi]) => { g.fillStyle = ssi ? css("--bar") : css("--accent"); g.beginPath(); g.arc(X(x), Y(y), 3.2, 0, 6.3); g.fill(); });
+      (R.rsus || []).forEach((r) => { g.fillStyle = "#6b3fa0"; g.beginPath(); g.moveTo(X(r.x), Y(r.y) - 7); g.lineTo(X(r.x) - 6, Y(r.y) + 4); g.lineTo(X(r.x) + 6, Y(r.y) + 4); g.closePath(); g.fill(); });
+      g.fillStyle = css("--ink-2"); g.font = "11px " + css("--font-data");
+      [0, 1000, 2000, 3000, 4000, 5000].forEach((x) => g.fillText(x + " m", X(x) - 12, H - 8));
+      lab.textContent = "t = " + f.t.toFixed(1) + " s";
+    };
+    let timer = null;
+    slider.addEventListener("input", () => draw(+slider.value));
+    btn.addEventListener("click", () => {
+      if (timer) { clearInterval(timer); timer = null; btn.textContent = "Play"; return; }
+      btn.textContent = "Pause";
+      timer = setInterval(() => { slider.value = String((+slider.value + 1) % R.frames.length); draw(+slider.value); }, 250);
+    });
+    draw(0);
+  }
+
 
   $("foot").textContent = "Generated by docs/figures/make_dashboard_page.py from docs/figures/dashboard_snapshot.json. Author: Nikhil Prakash, MASc, UBC ECE.";
 })();

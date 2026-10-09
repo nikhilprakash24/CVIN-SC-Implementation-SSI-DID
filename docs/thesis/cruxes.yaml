@@ -35,12 +35,14 @@ cruxes:
     question: Does the same identity layer secure roadside-unit and infrastructure messages (SPaT/MAP, RSU-to-RSU, RSU-to-traffic-management)?
     hypotheses: []
     thrusts: [3]
-    claim: An RSU is a DID with a road-authority issuer; signed SPaT reuses the BSM path; revocation of a compromised RSU key is observed within a bounded number of messages.
-    evidence_rows: []
+    claim: An RSU is a DID with a road-authority issuer; signed SPaT reuses the BSM path at the same cost; every injected infrastructure attack is rejected; a revoked RSU is honoured for at most k-1 further messages by a cached verifier.
+    evidence_rows: [44, 45, 46, 47, 48]
     defects: []
-    artefacts: [cv2x-testbed/V2_DESIGN.md, docs/design/INFRASTRUCTURE_MESSAGING.md]
+    artefacts: [docs/design/INFRASTRUCTURE_MESSAGING.md, docs/design/INFRASTRUCTURE_PREREG.md, cv2x-testbed/sumo/results/infrastructure_stats.json, cv2x-testbed/sumo/results/infrastructure_revocation.json, 4_comparison-framework/results/infrastructure_gas.json]
     gaps:
-      - No implementation and no measurement exist; design note written 2026-10-09, code waits for audit.
+      - Mobility is the mock model (no SUMO run); no radio channel; the I2I back-haul is in-process.
+      - RSU-to-RSU messaging is not modelled; I2I covers controller-to-RSU and TMC-to-controller only.
+      - The k the thesis defends is the open C4 decision; it applies to RSUs as to vehicles.
     examiner: Your title says connected vehicles; where is the infrastructure?
   - id: C4
     title: Revocation freshness
@@ -48,7 +50,7 @@ cruxes:
     hypotheses: [H3]
     thrusts: [3, 5]
     claim: A cached verifier honours a revoked key for at most k-1 further messages; the k that meets the neighbour-saturation target depends on the host and on the refresh mode.
-    evidence_rows: [32, 37, 40]
+    evidence_rows: [32, 37, 40, 46]
     defects: [D21]
     artefacts: [cv2x-testbed/results/freshness_k.json, cv2x-testbed/results/freshness_k_probe.json]
     gaps:

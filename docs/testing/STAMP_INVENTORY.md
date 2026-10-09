@@ -2,7 +2,7 @@
 
 **Generated** by `docs/testing/check_stamps.py`. A stamp = date, commit, dirty flag, toolchain. MISSING entries are the work list for stamping their producers (plan 2026-10-09 P3.3).
 
-16 of 25 result files carry a complete stamp.
+19 of 28 result files carry a complete stamp.
 
 | File | date | commit | dirty | toolchain |
 |---|---|---|---|---|
@@ -11,6 +11,7 @@
 | `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json` | MISSING | MISSING | MISSING | MISSING |
 | `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json` | 2026-10-04 | a764387 (results of reco | MISSING | M1: solc 0.8.24, optimiz |
 | `4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json` | 2026-10-06 | MISSING | MISSING | M1: solc 0.8.24, optimiz |
+| `4_comparison-framework/results/infrastructure_gas.json` | 2026-10-09T03:55:19.115Z | 1e690c3 | False | 0.8.24 |
 | `4_comparison-framework/results/mobi_vid_backends.json` | 2026-10-09T02:27:44.231Z | d0cc19c | False | 0.8.24 |
 | `4_comparison-framework/results/pseudonym_pool.json` | 2026-10-04T22:17:54.329Z | e49bcb4 | False | 2.28.6 |
 | `4_comparison-framework/results/scaling_lifetime.json` | 2026-10-09T02:27:41.957Z | d0cc19c | False | 0.8.24 |
@@ -28,6 +29,8 @@
 | `cv2x-testbed/results/freshness_k_probe_r2.json` | 2026-10-04T22:18:19+00:0 | 439b118 | False | 3.11.15 |
 | `cv2x-testbed/results/lifecycle_parity.json` | 2026-10-04T22:17:02+00:0 | 4f09875 | False | 3.11.15 |
 | `cv2x-testbed/results/pki_vs_erc1056.json` | 2026-10-04T05:26:56+00:0 | 1c1b8e1 | False | 2.28.6 |
+| `cv2x-testbed/sumo/results/infrastructure_revocation.json` | 2026-10-09T03:54:55+00:0 | 1e690c3132a84c15cd7f6cf3 | False | 3.11.15 |
+| `cv2x-testbed/sumo/results/infrastructure_stats.json` | 2026-10-09T03:48:03+00:0 | 1e690c3132a84c15cd7f6cf3 | True | 3.11.15 |
 | `cv2x-testbed/sumo/results/v2v_latency.json` | 2026-10-04T09:19:33.3911 | MISSING | MISSING | MISSING |
 | `cv2x-testbed/sumo/results/v2v_latency_stats.json` | 2026-10-04T09:13:58+00:0 | 58a65132bf38c37e0f0467b3 | True | 3.11.15 |
 | `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-09T02:09:37.654Z | 7a9a996edb246661f32a5565 | False | 0.8.24 |

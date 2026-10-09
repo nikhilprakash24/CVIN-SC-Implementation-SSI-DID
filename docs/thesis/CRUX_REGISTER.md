@@ -8,8 +8,8 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 |---|---|---|---|---|
 | C1 CAV identity substrate | **partial** | H1, H5 | #25 (V), #26 (V), #34 (V), #35 (V), #36 (V), #42 (V), #43 (V) | 2 |
 | C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (V) | 2 |
-| C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **gap** | — | none | 1 |
-| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S) | 1 |
+| C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **partial** | — | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V) | 3 |
+| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S), #46 (V) | 1 |
 | C5 W3C conformance | **partial** | H2 | #4 (V), #24 (V) | 2 |
 | C6 MOBI VID lifecycle | **partial** | H4 | #30 (V), #33 (V), #41 (S) | 1 |
 | C7 Privacy and linkability | **partial** | — | #38 (V) | 1 |
@@ -69,18 +69,26 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 **Question.** Does the same identity layer secure roadside-unit and infrastructure messages (SPaT/MAP, RSU-to-RSU, RSU-to-traffic-management)?
 
-**Claim.** An RSU is a DID with a road-authority issuer; signed SPaT reuses the BSM path; revocation of a compromised RSU key is observed within a bounded number of messages.
+**Claim.** An RSU is a DID with a road-authority issuer; signed SPaT reuses the BSM path at the same cost; every injected infrastructure attack is rejected; a revoked RSU is honoured for at most k-1 further messages by a cached verifier.
 
 **Thrusts:** 3 · **Hypotheses:** none yet · **Defects bearing on it:** none
 
-_No evidence row exists._
+| Row | Status | Claim (from the register) |
+|---|---|---|
+| #44 | V | (pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`; verdict PASS) Signed SPaT from a credentialed RSU verifies at the cost of an SSI BSM: median ratio of per-run median warm SPaT verify to per-run median warm SSI… |
+| #45 | V | (pre-registered I2; verdict PASS) All 7 infrastructure attacks rejected in 30/30 runs: (a) unsigned SPaT, (b) SPaT under an RSU DID with the wrong key, (c) SPaT from an RSU whose credential permits MAP only, (d) SPaT sig… |
+| #46 | V | (pre-registered I3; verdict PASS) A vehicle that has cached a revoked RSU keeps accepting its SPaT for at most k − 1 further messages: `rsu_1`'s credential revoked at t = 10 s, verifiers re-check revocation every k-th me… |
+| #47 | V | (pre-registered I4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`): identity creation 0 (did:ethr is implicit); RSU anchors its verification key 52,594 (`setAttribute`; … |
+| #48 | V | (pre-registered I5; reported, no verdict) In-process I2I back-haul, the sum of per-run medians of controller sign + RSU warm verify + RSU SPaT sign + vehicle warm SPaT verify: 0.840 ms, 95 % CI [0.832, 0.845], N=30; TMC … |
 
 **Open gaps:**
-- No implementation and no measurement exist; design note written 2026-10-09, code waits for audit.
+- Mobility is the mock model (no SUMO run); no radio channel; the I2I back-haul is in-process.
+- RSU-to-RSU messaging is not modelled; I2I covers controller-to-RSU and TMC-to-controller only.
+- The k the thesis defends is the open C4 decision; it applies to RSUs as to vehicles.
 
 **The examiner will ask:** Your title says connected vehicles; where is the infrastructure?
 
-**Artefacts:** `cv2x-testbed/V2_DESIGN.md`, `docs/design/INFRASTRUCTURE_MESSAGING.md`
+**Artefacts:** `docs/design/INFRASTRUCTURE_MESSAGING.md`, `docs/design/INFRASTRUCTURE_PREREG.md`, `cv2x-testbed/sumo/results/infrastructure_stats.json`, `cv2x-testbed/sumo/results/infrastructure_revocation.json`, `4_comparison-framework/results/infrastructure_gas.json`
 
 ## C4 — Revocation freshness
 
@@ -95,6 +103,7 @@ _No evidence row exists._
 | #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_… |
 | #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu… |
 | #40 | S | (sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=… |
+| #46 | V | (pre-registered I3; verdict PASS) A vehicle that has cached a revoked RSU keeps accepting its SPaT for at most k − 1 further messages: `rsu_1`'s credential revoked at t = 10 s, verifiers re-check revocation every k-th me… |
 
 **Open gaps:**
 - Choose the k the thesis defends (review-2 decisions 10 and 14).
