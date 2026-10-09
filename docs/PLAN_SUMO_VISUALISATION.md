@@ -1,7 +1,7 @@
 # Plan — SUMO Visualisation of the Identity-Verified Message Path
 
 **Author:** Nikhil Prakash (MASc, UBC ECE)
-**Status:** design (plan 2026-10-09 P2a). **P2b, which installs SUMO and runs it, waits for the author's
+**Status:** **APPROVED by the author 2026-10-09 with defaults S-a (approve), S-b (no SUMO install), S-c (one trace of record per figure).** Design written under plan 2026-10-09 P2a. **P2b, which installs SUMO and runs it, waits for the author's
 go-ahead (default Q2: no install).** The trace recorder works with the mock mobility too, so most of
 this plan is executable without SUMO once the design is approved.
 **Written:** 2026-10-09. **Serves:** cruxes C2 and C3 (`docs/thesis/CRUX_REGISTER.md`), thrust 3, the

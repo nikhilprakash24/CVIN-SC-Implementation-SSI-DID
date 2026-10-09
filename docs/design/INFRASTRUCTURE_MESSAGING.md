@@ -1,9 +1,9 @@
 # Design Note — Infrastructure Messaging (V2I and Infrastructure-to-Infrastructure) on the Thesis Identity Layer
 
 **Author:** Nikhil Prakash (MASc, UBC ECE)
-**Status:** **DESIGN, for the author's audit. No code until approved** (plan 2026-10-09 P4.3; scope
+**Status:** **APPROVED by the author 2026-10-09 with defaults I-a…I-d; pre-registration locked in `docs/design/INFRASTRUCTURE_PREREG.md`.** (Was: design for audit, no code until approved (plan 2026-10-09 P4.3; scope
 default Q1: V2I and infrastructure-to-infrastructure, starting with signed SPaT from a
-DID-identified roadside unit).
+DID-identified roadside unit).)
 **Written:** 2026-10-09. **Fills:** crux C3 in `docs/thesis/CRUX_REGISTER.md`, the only crux with no
 evidence. **Builds on:** `cv2x-testbed/V2_DESIGN.md` §"Infrastructure Integration" (an RSU class with
 SPaT/MAP, designed 2025-11, never built).
