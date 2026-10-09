@@ -49,4 +49,4 @@ it.
 SC-15…SC-20 were proposed by the review-2 lineage's MOBI checklist (§7, 2026-10-04, as P-1…P-6) and added here at the merge of 2026-10-06; the ones marked *Decision pending* are the author's.
 
 Add entries above the notes as decisions are made. Do not edit past entries;
-append a correction entry instead. (Their proposed SC-14…SC-20 of `docs/MOBI_VID_CHECKLIST.md` §7 are renumbered SC-15…SC-21 and added at the merge, see `docs/PLAN_MERGE_LINEAGES.md` M-H.)
+append a correction entry instead. (Their proposed P-1…P-6 of `docs/MOBI_VID_CHECKLIST.md` §7 became SC-15…SC-20 on 2026-10-09; their P-7 was folded into SC-14a. This corrects the 2026-10-06 note, which said SC-15…SC-21.)

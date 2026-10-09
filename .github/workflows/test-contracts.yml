@@ -1,8 +1,8 @@
 name: Smart Contract Tests
 
 # Compiles and tests the Hardhat project in 1_blockchain-identity.
-# Verified locally on this trunk: 32 contracts compile (solc 0.8.24, cancun),
-# 47 tests pass. The VC-layer pytest suite runs in w3c-compliance.yml.
+# Compiles every contract (solc 0.8.24, cancun) and runs the whole Hardhat tree; current totals are
+# in sandbox/grand/report/GRAND_REPORT.md. The Python suites run in w3c-compliance.yml.
 
 on:
   push:

@@ -171,4 +171,22 @@ unrelated planning project (`npat-planning/`, "Inkwell"); a fourth (`testing-sui
 - **R-C** — defaults M-A…M-L in `PLAN_MERGE_LINEAGES.md` §1 are taken as written unless the author
   overturns them; each is restated in the merge commit's resolution notes.
 
-## 4. Closing — *(written last)*
+## 4. Closing (written 2026-10-09, when the remaining merge steps finished under report 09)
+
+**Done.** The two lineages and the TSR plan are one trunk. Steps S0–S9 of
+`docs/PLAN_MERGE_LINEAGES.md` ran in this report (merge `bd90004`; results re-executed in
+`19aed0a`, `d517c56`, `db6c381`; text in `8658a0f`, `2c03a3d`). The rest closed under report 09:
+the nine demos and four option READMEs (`dc8348c`, `aef16af`), the grand run ALL OK on the merged
+trunk (`8885a7f`), the clean-tree metrics-harness run of record (`f976e57`), and the handback that
+supersedes both lineages' handbacks (`docs/HANDBACK_2026-10-09.md`). S10, adopting the TSR plan's
+documentation half, began with the generated test register, coverage matrix, stamping and the
+stale-figure check (report 09).
+
+**What the merge taught.** Two sessions working the same base for 48 hours fixed the same
+defect identically once (D10/K-15), complementarily four times, and incompatibly once (D22/K-6).
+Neither lineage's numbers described the merged code, so every result of record was re-executed;
+none of the hypotheses' verdicts changed. The heaviest create moved from ERC-725xy to ERC-735,
+because veracity fixes on both sides landed in the claim holder.
+
+**Not done.** The adversarial review of the merge decisions M-A…M-L is reserved for a later
+session under a different assistant configuration (plan 2026-10-09 Q7).

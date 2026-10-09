@@ -53,3 +53,20 @@ had a hazards register before the trunk had a defect log. It belongs in the thes
 Close the merge pass, because an open pass is debt. Then the generated dashboard, because it
 forces every number through the register one more time. Then the crux register, because it
 tells us whether the infrastructure experiment is in or out.
+
+## 6. After the pass (same day, after executing the plan under its defaults)
+- **The generators were the best reviewers of the day.** Five register rows contradicted themselves,
+  82 superseded figures sat in the documents a reader actually opens, and the crux register quoted two
+  stale numbers because the register itself did. No human reading caught these in five passes. The
+  lesson for the thesis: the claim register is only as good as the thing that reads it mechanically.
+- **The agents caught the orchestrator.** The sheet agent found that my coverage matrix and test
+  register had borrowed letters the TSR plan had already assigned other meanings (X, S). My own first
+  stamping helper marked clean runs dirty. Small, but it is exactly the class of slip that makes the
+  adversarial review worth keeping for a different configuration.
+- **The thesis's hole is now one red tile.** Seven cruxes are partial and one is a gap: infrastructure
+  messaging. Building it is a contained piece of work (an RSU is a DID; SPaT reuses the BSM path), and
+  the design is waiting for audit. Of everything open, approving that design changes the thesis most.
+- **ERC-735 being the heaviest create is a finding, not a footnote.** The two lineages each added
+  veracity to the claim holder (an issuer registry, VIN binding, sticky revocation), and its create cost
+  rose by a quarter since July (1,404,108 → 1,757,881 gas, register #25). Chapter 6 can say plainly that making a claim trustworthy on chain has a
+  deployment price, and the asymmetry section now has its sharpest example.

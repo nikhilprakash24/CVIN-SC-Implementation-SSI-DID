@@ -109,3 +109,26 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/thesis/chapter5-results/README.md` (regenerated tables + prose), README.md, thesis README, chapters 6–7 (cells) | no document quotes a pre-fix number | register discipline |
 | `docs/conformance/` — `generate_implementations.py --ethr-did`, `implementations-registry-did/`, `reports/registry-did-2026-10-04/`, write-up §8 | external DID suite on a registry-minted `did:ethr`: 335/336 | D10 follow-up |
 | `docs/MEASUREMENT_CONDITIONS.md` #26 → V, #30 note, #32; `docs/DEFECT_LOG.md` (D7/D8/D9/D11b fixed, D27 added, §C refreshed) | the register and the log reflect the pass | — |
+
+## Pass 8 — Orientation after a change of assistant; plan of 2026-10-09 (2026-10-09)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/PLAN_2026-10-09.md` | the plan, delivered for audit before execution | the author asked to audit first |
+| `docs/STYLE_AND_RIGOUR_GUIDE.md`, `docs/TEAM_STRUCTURE.md` | the rules in one place; the agentic team and what it learned | requested |
+| `docs/AFTER_ACTION_REPORT_08.md`, `docs/META_COMMENTARY_2026-10-09.md` | report and thinking-out-loud for the orientation | standing rule |
+
+## Pass 9 — Executing the plan under its defaults (2026-10-09)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_09.md` | log, decisions E-A…E-E, closing, team-structure assessment | standing rule; requested |
+| `docs/HANDBACK_2026-10-09.md` | the single entry point; supersedes both lineages' handbacks | P0.5 |
+| `1_blockchain-identity/results/metrics/latest/` | metrics-harness run of record on a clean tree | P0.3 |
+| `sandbox/options/{cvin-combined,erc-1056-uport,lsp8,mobi-vid}/README.md`, `sandbox/grand/report/*` | READMEs at the merged contracts; grand run ALL OK | P0.1, P0.2 |
+| `docs/figures/make_dashboard_data.py`, `dashboard_snapshot.json`, `dashboard_template.html`, `make_dashboard_page.py`, `results_dashboard.html` | the generated, CI-checked results dashboard; published at https://claude.ai/artifact/1C5X9GpPcEwyCRDMYxYhpa | P1 |
+| `docs/thesis/cruxes.yaml` → `docs/thesis/CRUX_REGISTER.md` | eight thesis cruxes with their evidence state | P4.1 |
+| `docs/design/INFRASTRUCTURE_MESSAGING.md`, `docs/PLAN_SUMO_VISUALISATION.md` | designs awaiting audit | P4.3, P2a |
+| `docs/testing/{build_register.py,test_register.yaml,coverage_matrix.md,check_stamps.py,STAMP_INVENTORY.md,stale_numbers.yaml,check_docs_numbers.py}`, `1_blockchain-identity/scripts/lib/run_stamp.js` | TSR phases 1–3 on the trunk: generated register and matrix, stamping, stale-figure check | P3.1, P3.3, P3.4 |
+| `docs/prior-survey/` | the onboarding lineage, imported as provenance | P3.5 |
+| `docs/planning/TESTING_SUITE_SECOND_PASS_SHEET.md` v1.1 | pre-filled from the trunk; author decisions marked | P3.6 |
+| 12 citing documents (README, CAPABILITIES, COMPOSITION, SIDE_PAPERS, QUICKSTART, INVENTORY, thesis README and chapters 1, 4–7) | 82 superseded figures replaced | P3.4 |
+

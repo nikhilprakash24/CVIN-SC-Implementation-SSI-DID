@@ -9,5 +9,3 @@ This repo also hosts the **gated onboarding of `CVIN-ID/TEST`** (the programme's
 **Open reconciliation item:** this repo's 47/47 suite + W3C checker vs. the canonical 12-test IMinimalSSI compliance regime are not yet mapped — architect ruling pending (see the handoff doc, Q-list).
 
 Upstream PRs of the same material: CVIN-ID/TEST [#1](https://github.com/CVIN-ID/TEST/pull/1) [#2](https://github.com/CVIN-ID/TEST/pull/2) [#3](https://github.com/CVIN-ID/TEST/pull/3) [#4](https://github.com/CVIN-ID/TEST/pull/4).
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)

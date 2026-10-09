@@ -6,11 +6,11 @@ not relocate": no test title is changed. Each test cell gets a deterministic TC 
 derived from the record that already identifies it:
 
     L1 uniform mechanisms   sandbox/grand/report/L1-asymmetry.json     TC-<slug>-<op>-F (and -G when gas is measured)
-    strict security harness 4_comparison-framework/security-analysis/results/attack_results.json  TC-<slug>-<attack>-S
+    strict security harness 4_comparison-framework/security-analysis/results/attack_results.json  TC-<slug>-<attack>-A
     feature demos           sandbox/grand/report/demos.json             TC-<slug>-<family>-F
 The coverage matrix (option x capability family) is derived from the manifests' stances and the
-demo runs: N = not applicable (manifest reason), T = exercised by a passing demo, X = demo
-failing, G = implemented but no demo; "+M" marks families measured in the comparison.
+demo runs: N = not applicable (manifest reason), T = exercised by a passing demo, F = demo
+failing (X is reserved by the TSR plan for out of scope), G = implemented but no demo; "+M" marks families measured in the comparison.
 
     python3 docs/testing/build_register.py           # writes docs/testing/{test_register.yaml,coverage_matrix.md}
     python3 docs/testing/build_register.py --check   # exit 1 if either is stale
@@ -69,8 +69,8 @@ def build():
         for attack, v in cells.items():
             if not isinstance(v, dict) or "outcome" not in v:
                 continue
-            tcs.append({"id": f'TC-{STD_TO_SLUG.get(std, std)}-{attack}-S', "layer": "L2", "sut": STD_TO_SLUG.get(std, std),
-                        "op": attack, "class": "S", "evidence": "E3", "verdict": v["outcome"],
+            tcs.append({"id": f'TC-{STD_TO_SLUG.get(std, std)}-{attack}-A', "layer": "L2", "sut": STD_TO_SLUG.get(std, std),
+                        "op": attack, "class": "A", "evidence": "E3", "verdict": v["outcome"],
                         "expected": v.get("expectedRevert"), "location": "1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js",
                         "source": "4_comparison-framework/security-analysis/results/attack_results.json"})
     demos = load("sandbox/grand/report/demos.json")["options"]
@@ -101,7 +101,7 @@ def build():
             if fam["stance"] == "not-applicable":
                 c = "N"
             elif (opt, slug) in demo_ok:
-                c = "T" if demo_ok[(opt, slug)] else "X"
+                c = "T" if demo_ok[(opt, slug)] else "F"
             else:
                 c = "G"
             if fam["stance"] == "measured-in-comparison" and c != "N":
@@ -123,7 +123,7 @@ def render(tcs, rows, fam_order):
     lines = ["# Coverage Matrix — option × capability family", "",
              "**Generated** by `docs/testing/build_register.py` from `sandbox/options/*/manifest.yaml` and "
              "`sandbox/grand/report/demos.json`. Do not edit; regenerate.", "",
-             "T = exercised by a passing demo · X = demo failing · G = implemented, no demo · N = not applicable "
+             "T = exercised by a passing demo · F = demo failing · G = implemented, no demo · N = not applicable "
              "(reason in the manifest) · +M = measured in the comparison.", "",
              "| Option | " + " | ".join(short[n] for n in fam_order) + " |",
              "|---|" + "---|" * len(fam_order)]

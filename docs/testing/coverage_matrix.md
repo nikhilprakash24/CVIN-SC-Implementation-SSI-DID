@@ -2,7 +2,7 @@
 
 **Generated** by `docs/testing/build_register.py` from `sandbox/options/*/manifest.yaml` and `sandbox/grand/report/demos.json`. Do not edit; regenerate.
 
-T = exercised by a passing demo · X = demo failing · G = implemented, no demo · N = not applicable (reason in the manifest) · +M = measured in the comparison.
+T = exercised by a passing demo · F = demo failing · G = implemented, no demo · N = not applicable (reason in the manifest) · +M = measured in the comparison.
 
 | Option | creation | controller | keys-delegates | attributes | claims | revocation | signed-execution | lifecycle-history | authorisation-roles | token-economics | vin-linkage | did-resolution | offchain-creation | offchain-messaging |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

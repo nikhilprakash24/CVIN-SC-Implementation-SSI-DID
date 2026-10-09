@@ -3,8 +3,8 @@ counts:
   L1:F:n/a: 27
   L1:F:pass: 72
   L1:G:measured: 60
-  L2:S:DEFENDED: 43
-  L2:S:N/A: 11
+  L2:A:DEFENDED: 43
+  L2:A:N/A: 11
   demo:F:pass: 92
 tests:
 - id: TC-cvin-combined-C1-F
@@ -197,11 +197,11 @@ tests:
   steps: 12
   location: sandbox/options/cvin-combined/demos/did-resolution.js
   source: sandbox/grand/report/demos.json
-- id: TC-cvin-combined-identityHijack-S
+- id: TC-cvin-combined-identityHijack-A
   layer: L2
   sut: cvin-combined
   op: identityHijack
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("CVINCombined: unauthorized")'
@@ -247,51 +247,51 @@ tests:
   steps: 15
   location: sandbox/options/cvin-combined/demos/revocation.js
   source: sandbox/grand/report/demos.json
-- id: TC-cvin-combined-signatureReplay-S
+- id: TC-cvin-combined-signatureReplay-A
   layer: L2
   sut: cvin-combined
   op: signatureReplay
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("CVINCombined: invalid claim signature")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-cvin-combined-unauthorizedAttributeWrite-S
+- id: TC-cvin-combined-unauthorizedAttributeWrite-A
   layer: L2
   sut: cvin-combined
   op: unauthorizedAttributeWrite
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("CVINCombined: unauthorized")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-cvin-combined-unauthorizedDelegateOrClaim-S
+- id: TC-cvin-combined-unauthorizedDelegateOrClaim-A
   layer: L2
   sut: cvin-combined
   op: unauthorizedDelegateOrClaim
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("CVINCombined: invalid claim signature")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-cvin-combined-unauthorizedIssuance-S
+- id: TC-cvin-combined-unauthorizedIssuance-A
   layer: L2
   sut: cvin-combined
   op: unauthorizedIssuance
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-cvin-combined-unauthorizedRevocation-S
+- id: TC-cvin-combined-unauthorizedRevocation-A
   layer: L2
   sut: cvin-combined
   op: unauthorizedRevocation
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("CVINCombined: unauthorized")'
@@ -507,11 +507,11 @@ tests:
   steps: 14
   location: sandbox/options/erc-1056-uport/demos/did-resolution.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-1056-uport-identityHijack-S
+- id: TC-erc-1056-uport-identityHijack-A
   layer: L2
   sut: erc-1056-uport
   op: identityHijack
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("DIDRegistry: unauthorized")'
@@ -557,11 +557,11 @@ tests:
   steps: 21
   location: sandbox/options/erc-1056-uport/demos/revocation.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-1056-uport-signatureReplay-S
+- id: TC-erc-1056-uport-signatureReplay-A
   layer: L2
   sut: erc-1056-uport
   op: signatureReplay
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("DIDRegistry: invalid signature")'
@@ -577,41 +577,41 @@ tests:
   steps: 13
   location: sandbox/options/erc-1056-uport/demos/signed-execution.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-1056-uport-unauthorizedAttributeWrite-S
+- id: TC-erc-1056-uport-unauthorizedAttributeWrite-A
   layer: L2
   sut: erc-1056-uport
   op: unauthorizedAttributeWrite
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("DIDRegistry: unauthorized")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-1056-uport-unauthorizedDelegateOrClaim-S
+- id: TC-erc-1056-uport-unauthorizedDelegateOrClaim-A
   layer: L2
   sut: erc-1056-uport
   op: unauthorizedDelegateOrClaim
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("DIDRegistry: unauthorized")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-1056-uport-unauthorizedIssuance-S
+- id: TC-erc-1056-uport-unauthorizedIssuance-A
   layer: L2
   sut: erc-1056-uport
   op: unauthorizedIssuance
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-1056-uport-unauthorizedRevocation-S
+- id: TC-erc-1056-uport-unauthorizedRevocation-A
   layer: L2
   sut: erc-1056-uport
   op: unauthorizedRevocation
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("DIDRegistry: unauthorized")'
@@ -1057,11 +1057,11 @@ tests:
   steps: 20
   location: sandbox/options/erc-1155/demos/creation.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-1155-identityHijack-S
+- id: TC-erc-1155-identityHijack-A
   layer: L2
   sut: erc-1155
   op: identityHijack
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("CVIN1155: credentials are soulbound (issuer-mediated transfer only)")'
@@ -1087,11 +1087,11 @@ tests:
   steps: 18
   location: sandbox/options/erc-1155/demos/revocation.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-1155-signatureReplay-S
+- id: TC-erc-1155-signatureReplay-A
   layer: L2
   sut: erc-1155
   op: signatureReplay
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
@@ -1107,41 +1107,41 @@ tests:
   steps: 13
   location: sandbox/options/erc-1155/demos/token-economics.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-1155-unauthorizedAttributeWrite-S
+- id: TC-erc-1155-unauthorizedAttributeWrite-A
   layer: L2
   sut: erc-1155
   op: unauthorizedAttributeWrite
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-1155-unauthorizedDelegateOrClaim-S
+- id: TC-erc-1155-unauthorizedDelegateOrClaim-A
   layer: L2
   sut: erc-1155
   op: unauthorizedDelegateOrClaim
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-1155-unauthorizedIssuance-S
+- id: TC-erc-1155-unauthorizedIssuance-A
   layer: L2
   sut: erc-1155
   op: unauthorizedIssuance
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-1155-unauthorizedRevocation-S
+- id: TC-erc-1155-unauthorizedRevocation-A
   layer: L2
   sut: erc-1155
   op: unauthorizedRevocation
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x114e74f6ea3bd819998f78687bfcb11b140da08e9b7d222fa9c1f1ba1f2aa122)
@@ -1337,11 +1337,11 @@ tests:
   steps: 14
   location: sandbox/options/erc-4337/demos/creation.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-4337-identityHijack-S
+- id: TC-erc-4337-identityHijack-A
   layer: L2
   sut: erc-4337
   op: identityHijack
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'transferOwnership: Error("CVINVehicleAccount: not owner or entryPoint"); recoverOwner(non-guardian): Error("CVINVehicleAccount: not guardian")'
@@ -1367,11 +1367,11 @@ tests:
   steps: 15
   location: sandbox/options/erc-4337/demos/lifecycle-history.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-4337-signatureReplay-S
+- id: TC-erc-4337-signatureReplay-A
   layer: L2
   sut: erc-4337
   op: signatureReplay
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("CVINEntryPoint: invalid nonce")'
@@ -1387,41 +1387,41 @@ tests:
   steps: 25
   location: sandbox/options/erc-4337/demos/signed-execution.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-4337-unauthorizedAttributeWrite-S
+- id: TC-erc-4337-unauthorizedAttributeWrite-A
   layer: L2
   sut: erc-4337
   op: unauthorizedAttributeWrite
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("CVINVehicleAccount: not owner or entryPoint")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-4337-unauthorizedDelegateOrClaim-S
+- id: TC-erc-4337-unauthorizedDelegateOrClaim-A
   layer: L2
   sut: erc-4337
   op: unauthorizedDelegateOrClaim
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("CVINVehicleAccount: not owner or entryPoint")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-4337-unauthorizedIssuance-S
+- id: TC-erc-4337-unauthorizedIssuance-A
   layer: L2
   sut: erc-4337
   op: unauthorizedIssuance
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-4337-unauthorizedRevocation-S
+- id: TC-erc-4337-unauthorizedRevocation-A
   layer: L2
   sut: erc-4337
   op: unauthorizedRevocation
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("CVINVehicleAccount: not owner or entryPoint")'
@@ -1617,11 +1617,11 @@ tests:
   steps: 8
   location: sandbox/options/erc-721/demos/did-resolution.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-721-identityHijack-S
+- id: TC-erc-721-identityHijack-A
   layer: L2
   sut: erc-721
   op: identityHijack
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: ERC721InsufficientApproval(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 1)
@@ -1647,11 +1647,11 @@ tests:
   steps: 16
   location: sandbox/options/erc-721/demos/revocation.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-721-signatureReplay-S
+- id: TC-erc-721-signatureReplay-A
   layer: L2
   sut: erc-721
   op: signatureReplay
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
@@ -1667,41 +1667,41 @@ tests:
   steps: 44
   location: sandbox/options/erc-721/demos/token-economics.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-721-unauthorizedAttributeWrite-S
+- id: TC-erc-721-unauthorizedAttributeWrite-A
   layer: L2
   sut: erc-721
   op: unauthorizedAttributeWrite
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0xe00629f427c6136ae9b856b472ff74184d9d0bee21b9336d8fbb33b66079065a)
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-721-unauthorizedDelegateOrClaim-S
+- id: TC-erc-721-unauthorizedDelegateOrClaim-A
   layer: L2
   sut: erc-721
   op: unauthorizedDelegateOrClaim
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: ERC721InvalidApprover(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-721-unauthorizedIssuance-S
+- id: TC-erc-721-unauthorizedIssuance-A
   layer: L2
   sut: erc-721
   op: unauthorizedIssuance
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0xeefb95e842a3287179d933b4460be539a1d5af11aa8b325bb45c5c8dc92de4ed)
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-721-unauthorizedRevocation-S
+- id: TC-erc-721-unauthorizedRevocation-A
   layer: L2
   sut: erc-721
   op: unauthorizedRevocation
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: AccessControlUnauthorizedAccount(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x0000000000000000000000000000000000000000000000000000000000000000)
@@ -1877,11 +1877,11 @@ tests:
   steps: 9
   location: sandbox/options/erc-725/demos/creation.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-725-identityHijack-S
+- id: TC-erc-725-identityHijack-A
   layer: L2
   sut: erc-725
   op: identityHijack
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: Error("Only owner can transfer ownership")
@@ -1907,11 +1907,11 @@ tests:
   steps: 19
   location: sandbox/options/erc-725/demos/revocation.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-725-signatureReplay-S
+- id: TC-erc-725-signatureReplay-A
   layer: L2
   sut: erc-725
   op: signatureReplay
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
@@ -1927,41 +1927,41 @@ tests:
   steps: 13
   location: sandbox/options/erc-725/demos/signed-execution.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-725-unauthorizedAttributeWrite-S
+- id: TC-erc-725-unauthorizedAttributeWrite-A
   layer: L2
   sut: erc-725
   op: unauthorizedAttributeWrite
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: Error("Only owner can add keys")
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-725-unauthorizedDelegateOrClaim-S
+- id: TC-erc-725-unauthorizedDelegateOrClaim-A
   layer: L2
   sut: erc-725
   op: unauthorizedDelegateOrClaim
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: Error("Only owner can add keys")
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-725-unauthorizedIssuance-S
+- id: TC-erc-725-unauthorizedIssuance-A
   layer: L2
   sut: erc-725
   op: unauthorizedIssuance
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-725-unauthorizedRevocation-S
+- id: TC-erc-725-unauthorizedRevocation-A
   layer: L2
   sut: erc-725
   op: unauthorizedRevocation
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: Error("Only owner can remove keys")
@@ -2347,11 +2347,11 @@ tests:
   steps: 12
   location: sandbox/options/erc-735/demos/creation.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-735-identityHijack-S
+- id: TC-erc-735-identityHijack-A
   layer: L2
   sut: erc-735
   op: identityHijack
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("ERC735: caller is not the owner")'
@@ -2377,51 +2377,51 @@ tests:
   steps: 23
   location: sandbox/options/erc-735/demos/revocation.js
   source: sandbox/grand/report/demos.json
-- id: TC-erc-735-signatureReplay-S
+- id: TC-erc-735-signatureReplay-A
   layer: L2
   sut: erc-735
   op: signatureReplay
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("ERC735: invalid issuer signature")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-735-unauthorizedAttributeWrite-S
+- id: TC-erc-735-unauthorizedAttributeWrite-A
   layer: L2
   sut: erc-735
   op: unauthorizedAttributeWrite
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("ERC735: caller is not the owner")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-735-unauthorizedDelegateOrClaim-S
+- id: TC-erc-735-unauthorizedDelegateOrClaim-A
   layer: L2
   sut: erc-735
   op: unauthorizedDelegateOrClaim
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("ERC735: invalid issuer signature")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-735-unauthorizedIssuance-S
+- id: TC-erc-735-unauthorizedIssuance-A
   layer: L2
   sut: erc-735
   op: unauthorizedIssuance
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-erc-735-unauthorizedRevocation-S
+- id: TC-erc-735-unauthorizedRevocation-A
   layer: L2
   sut: erc-735
   op: unauthorizedRevocation
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("ERC735: caller is not owner nor issuer")'
@@ -2628,11 +2628,11 @@ tests:
   steps: 26
   location: sandbox/options/lsp8/demos/creation.js
   source: sandbox/grand/report/demos.json
-- id: TC-lsp8-identityHijack-S
+- id: TC-lsp8-identityHijack-A
   layer: L2
   sut: lsp8
   op: identityHijack
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("LSP8: caller is not the token owner")'
@@ -2658,11 +2658,11 @@ tests:
   steps: 21
   location: sandbox/options/lsp8/demos/revocation.js
   source: sandbox/grand/report/demos.json
-- id: TC-lsp8-signatureReplay-S
+- id: TC-lsp8-signatureReplay-A
   layer: L2
   sut: lsp8
   op: signatureReplay
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
@@ -2678,41 +2678,41 @@ tests:
   steps: 14
   location: sandbox/options/lsp8/demos/token-economics.js
   source: sandbox/grand/report/demos.json
-- id: TC-lsp8-unauthorizedAttributeWrite-S
+- id: TC-lsp8-unauthorizedAttributeWrite-A
   layer: L2
   sut: lsp8
   op: unauthorizedAttributeWrite
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("LSP8: caller is not the contract owner")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-lsp8-unauthorizedDelegateOrClaim-S
+- id: TC-lsp8-unauthorizedDelegateOrClaim-A
   layer: L2
   sut: lsp8
   op: unauthorizedDelegateOrClaim
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-lsp8-unauthorizedIssuance-S
+- id: TC-lsp8-unauthorizedIssuance-A
   layer: L2
   sut: lsp8
   op: unauthorizedIssuance
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("LSP8: caller is not the contract owner")'
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-lsp8-unauthorizedRevocation-S
+- id: TC-lsp8-unauthorizedRevocation-A
   layer: L2
   sut: lsp8
   op: unauthorizedRevocation
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: 'Error("LSP8: caller is not authority nor token owner")'
@@ -2949,11 +2949,11 @@ tests:
   steps: 10
   location: sandbox/options/mobi-vid/demos/did-resolution.js
   source: sandbox/grand/report/demos.json
-- id: TC-mobi-vid-identityHijack-S
+- id: TC-mobi-vid-identityHijack-A
   layer: L2
   sut: mobi-vid
   op: identityHijack
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: Error("Only owner can perform this action")
@@ -2999,51 +2999,51 @@ tests:
   steps: 33
   location: sandbox/options/mobi-vid/demos/revocation.js
   source: sandbox/grand/report/demos.json
-- id: TC-mobi-vid-signatureReplay-S
+- id: TC-mobi-vid-signatureReplay-A
   layer: L2
   sut: mobi-vid
   op: signatureReplay
-  class: S
+  class: A
   evidence: E3
   verdict: N/A
   expected: null
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-mobi-vid-unauthorizedAttributeWrite-S
+- id: TC-mobi-vid-unauthorizedAttributeWrite-A
   layer: L2
   sut: mobi-vid
   op: unauthorizedAttributeWrite
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: Error("Not authorized to issue this event type")
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-mobi-vid-unauthorizedDelegateOrClaim-S
+- id: TC-mobi-vid-unauthorizedDelegateOrClaim-A
   layer: L2
   sut: mobi-vid
   op: unauthorizedDelegateOrClaim
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: Error("Not authorized to attest")
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-mobi-vid-unauthorizedIssuance-S
+- id: TC-mobi-vid-unauthorizedIssuance-A
   layer: L2
   sut: mobi-vid
   op: unauthorizedIssuance
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: Error("Only authorized manufacturers can register vehicles")
   location: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js
   source: 4_comparison-framework/security-analysis/results/attack_results.json
-- id: TC-mobi-vid-unauthorizedRevocation-S
+- id: TC-mobi-vid-unauthorizedRevocation-A
   layer: L2
   sut: mobi-vid
   op: unauthorizedRevocation
-  class: S
+  class: A
   evidence: E3
   verdict: DEFENDED
   expected: Error("Only owner can perform this action")
