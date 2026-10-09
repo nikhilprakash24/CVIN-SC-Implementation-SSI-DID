@@ -15,7 +15,7 @@ research benefit, so the mapping is documented instead:
 | SUMO configs (50 vehicles) | `cv2x-testbed/sumo/` | 🔄 hand-authored net.xml — regenerate with `netconvert` before real-SUMO runs |
 | CV2X protocol stack (PHY/MAC, BSM/DENM) | `cv2x-testbed/protocols/cv2x_stack.py` | ✅ simulation-grade |
 | Identity providers (PKI, centralized, ERC-1056, MOBI VID) | `cv2x-testbed/identity/` | ✅ imports clean under web3 v7 |
-| W3C compliance checker (executable) | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ measured 93.2% |
+| W3C compliance checker (executable) | `cv2x-testbed/scripts/w3c_compliance_checker.py` | ✅ measured 94.3 % (register #4) |
 
 Canonical SSI layers consumed by the testbed:
 

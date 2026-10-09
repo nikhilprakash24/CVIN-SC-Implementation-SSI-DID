@@ -367,7 +367,7 @@ Per suite (jest-CLI run, `reports/rerun-2026-10-03/jest-cvin/cvin-cli-<suite>.js
 | 6.3.2 Consumption (`did-consumption`) | 3 | 3 | 0 | 3/3 |
 | 7.1 DID Resolution (`did-resolution`) | 194 | 193 | 1 | 186/299 |
 | 7.2 DID URL Dereferencing | - | - | - | not run (no dereferencer, unchanged) |
-| **Total** | **336** | **335** | **1** | **328/441** |
+| **Total** | **336** | **335** | **1** | **328/441** | <!-- history: earlier-run column -->
 
 Per implementation, DID Resolution suite:
 

@@ -273,5 +273,5 @@ layer green (28/28), DID resolution functional and standards-valid, 89.6%
 internal compliance, 9-standard contract set, 10 use cases, SUMO harness,
 and CI scaffolding — now **durably on GitHub**. To reach "thesis-grade on
 its own," the priority is closing §6.1–6.3 (re-run gas + latency on this
-trunk, external compliance check) and then merging Direction B. The Fable
-pass will take it from grounded base to examiner-grade argument and prose.
+trunk, external compliance check) and then merging Direction B. A later
+writing pass will take it from grounded base to examiner-grade argument and prose.

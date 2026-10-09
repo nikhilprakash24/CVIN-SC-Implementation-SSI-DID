@@ -11,6 +11,28 @@
       "E": 7
     }
   },
+  "constants": {
+    "v2v_budget_ms": {
+      "value": 100,
+      "source": "docs/LATENCY_BUDGET.md",
+      "text": "100 ms"
+    },
+    "lifetime_years": {
+      "value": 15,
+      "source": "docs/SCALING_EXPERIMENTS.md",
+      "text": "15-year"
+    },
+    "lifetime_band_pct": {
+      "value": 50,
+      "source": "4_comparison-framework/results/scaling_lifetime.json",
+      "text": "+/-50% event frequency on the recurring (append + transfer) load; birth fixed at 1."
+    },
+    "pseudonym_gas_band_pct": {
+      "value": 10,
+      "source": "4_comparison-framework/results/pseudonym_pool.json",
+      "text": "config.band"
+    }
+  },
   "hypotheses": {
     "H1": "minimal-state identity standards are cheaper to create than heavyweight account standards",
     "H2": "a blockchain identity layer can reach ≥90 % W3C compliance",
@@ -1166,6 +1188,7 @@
         "cv2x-testbed/results/freshness_k_probe.json"
       ],
       "gaps": [
+        "The RSU analogue (#46) counts messages from a revoked RSU under an in-process registry; it bounds the re-check cadence, not the latency cost, so it is not counted as C4 evidence.",
         "Choose the k the thesis defends (review-2 decisions 10 and 14)."
       ],
       "examiner": "Is k-1 messages of revocation staleness at 10 Hz acceptable for a safety system?",
@@ -1184,11 +1207,6 @@
           "row": 40,
           "status": "S",
           "claim": "(sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=…"
-        },
-        {
-          "row": 46,
-          "status": "V",
-          "claim": "(pre-registered I3; verdict PASS) A vehicle that has cached a revoked RSU keeps accepting its SPaT for at most k − 1 further messages: `rsu_1`'s credential revoked at t = 10 s, verifiers re-check revocation every k-th me…"
         }
       ],
       "state": "partial"

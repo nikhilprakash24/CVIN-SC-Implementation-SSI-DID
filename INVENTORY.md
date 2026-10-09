@@ -154,7 +154,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | MOBI VID / VIN encryption test scripts | `scripts/test_mobi_vid.py`, `scripts/test_vin_encryption.py` | ✅ Passing |
 | On-chain contracts + Hardhat project | `contracts/`, `hardhat.config.js` | ✅ ERC-1056, MOBI VID V1/V2 |
 
-**Measured V2V result** (N=30 seeded runs): SSI warm verify **0.165 ms** [0.162, 0.168]; cold 0.400 ms; PKI warm 0.102 ms. 1,650,318 messages verified, 90 failures = exactly the 3 injected attacks × 30 runs (zero false positives/negatives). ~600× margin to the 100 ms V2V budget (H3 supported).
+**Measured V2V result** (N=30 seeded runs; register #27): SSI warm verify **0.153 ms** [0.151, 0.154]; cold 0.399 ms; PKI warm 0.094 ms. 1,650,318 messages verified, 150 failures = exactly the 5 injected attacks × 30 runs (zero false positives/negatives). The verification step is far inside the 100 ms V2V budget (H3 supported, verification-step scope).
 
 **Honest caveats**: V2V latency excludes radio/MAC/network-stack; mobility is simulated (no SUMO binary in the measurement environment).
 
@@ -174,7 +174,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `results/gas_comparison.csv`, `gas_comparison.tex` | ✅ Complete | Camera-ready gas comparison table |
 | `results/sepolia_validation.json` | ✅ Complete (scaffold) | Sepolia validation output slot (real run pending) |
 
-**Gas finding (RQ1/H1)**: ~33× spread across standards; CVIN-Combined 52,178 gas (cheapest) → ERC-725xy 1,704,992 (heaviest full-account deploy); ERC-1056 ~10× cheaper than ERC-721/725 (H1 supported); ERC-4337 EntryPoint indirection = +46,862 gas/op.
+**Gas finding (RQ1/H1)** (register #25, #6): 33.7× create-identity spread across standards, from CVIN-Combined 52,216 gas (cheapest) to ERC-735 1,757,881 (heaviest; ERC-725xy 1,680,816 second); bare ERC-1056 ~10× cheaper than the VIN-bound ERC-721 mint (H1 supported); ERC-4337 EntryPoint indirection = +46,830 gas/op.
 
 ### Security analysis ✅ — two complementary lenses
 
@@ -270,7 +270,7 @@ Additional living docs at repo root: `README.md`, `CHANGELOG.md`, `CAPABILITIES.
 - VC tests: `python3 -m pytest 2_w3c-ssi-layer/verifiable-credentials/tests/` → 28
 - MOBI VID tests: `cd 2_w3c-ssi-layer/mobi-vid && python3 -m pytest tests/` → 32
 - Use cases: `python3 cv2x-testbed/scripts/test_use_cases.py` → 12/12
-- W3C compliance: `python3 cv2x-testbed/scripts/w3c_compliance_checker.py` → 93.2%
+- W3C compliance: `python3 cv2x-testbed/scripts/w3c_compliance_checker.py` → 94.3 % (register #4)
 - Gas benchmark: `cd 1_blockchain-identity && npx hardhat run scripts/benchmark_gas.js`; tables via `4_comparison-framework/performance-metrics/generate_tables.py`
 - V2V sim: `python3 cv2x-testbed/sumo/sumo_identity_integration.py --simulate`; N=30 stats via `cv2x-testbed/sumo/run_v2v_stats.py`
 

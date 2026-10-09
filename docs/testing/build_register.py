@@ -92,7 +92,9 @@ def build():
         manifests[p.parent.name] = m
     fam_order = list(FAMILY_SLUG)
     demo_ok = {(o, f["family"]): f["ok"] for o, fams in demos.items() for f in fams}
+    demo_flagged = {(o, f["family"]): f.get("flagged", 0) for o, fams in demos.items() for f in fams}
     rows = {}
+    mismatches = []
     for opt, m in manifests.items():
         cells = {}
         for fam in m["families"]:
@@ -100,18 +102,22 @@ def build():
             slug = FAMILY_SLUG.get(name)
             if fam["stance"] == "not-applicable":
                 c = "N"
+                if demo_ok.get((opt, slug)):
+                    mismatches.append(f"{opt} / {name}: manifest says not applicable, but a passing demo exists")
             elif (opt, slug) in demo_ok:
                 c = "T" if demo_ok[(opt, slug)] else "F"
+                if c == "T" and demo_flagged.get((opt, slug)):
+                    c = "T*"   # passing demo with steps it flags as DEFECT or OBSERVATION (after-action report 11, C9)
             else:
                 c = "G"
             if fam["stance"] == "measured-in-comparison" and c != "N":
                 c += "+M"
             cells[name] = c
         rows[opt] = cells
-    return tcs, rows, fam_order
+    return tcs, rows, fam_order, mismatches
 
 
-def render(tcs, rows, fam_order):
+def render(tcs, rows, fam_order, mismatches=()):
     counts = {}
     for t in tcs:
         k = f'{t["layer"]}:{t["class"]}:{t["verdict"]}'
@@ -123,7 +129,8 @@ def render(tcs, rows, fam_order):
     lines = ["# Coverage Matrix — option × capability family", "",
              "**Generated** by `docs/testing/build_register.py` from `sandbox/options/*/manifest.yaml` and "
              "`sandbox/grand/report/demos.json`. Do not edit; regenerate.", "",
-             "T = exercised by a passing demo · F = demo failing · G = implemented, no demo · N = not applicable "
+             "T = exercised by a passing demo · T* = passing demo that flags steps (DEFECT or OBSERVATION; see "
+             "`sandbox/grand/report/demos.md`) · F = demo failing · G = implemented, no demo · N = not applicable "
              "(reason in the manifest) · +M = measured in the comparison.", "",
              "| Option | " + " | ".join(short[n] for n in fam_order) + " |",
              "|---|" + "---|" * len(fam_order)]
@@ -131,12 +138,14 @@ def render(tcs, rows, fam_order):
     for opt in sorted(rows):
         cells = [rows[opt].get(n, "·") for n in fam_order]
         for c in cells:
-            tally[c.split("+")[0]] = tally.get(c.split("+")[0], 0) + 1
+            tally[c.split("+")[0]] = tally.get(c.split("+")[0], 0) + 1   # T and T* are counted apart
         lines.append(f"| {opt} | " + " | ".join(cells) + " |")
     lines += ["", "Totals: " + ", ".join(f"{k} {v}" for k, v in sorted(tally.items())) + ".",
               "The two baselines (centralized registry, IEEE 1609.2-style PKI) are Python providers with no feature demos by "
               "design; their G cells are exercised by the Python suites and the experiments, not by demos.", "",
               f"Test register: {len(tcs)} TC entries in `docs/testing/test_register.yaml`."]
+    if mismatches:
+        lines += ["", "**Manifest / demo mismatches** (shown as N above):"] + [f"- {m}" for m in mismatches]
     return reg_text, "\n".join(lines) + "\n"
 
 

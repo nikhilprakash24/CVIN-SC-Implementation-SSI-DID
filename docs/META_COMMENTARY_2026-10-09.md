@@ -73,15 +73,19 @@ tells us whether the infrastructure experiment is in or out.
 
 ## 7. After pass 10 (the infrastructure experiment)
 - **The red tile is amber now, and it says something.** An RSU is a DID with a road-authority
-  credential. Its SPaT costs exactly what a vehicle's BSM costs (ratio 0.996). Every forged
-  infrastructure message is rejected. A revoked RSU is honoured for at most k − 1 messages by vehicles
-  that already trusted it. None of this is surprising, and that is the point: the identity layer needed
-  no new mechanism for infrastructure, only a different issuer and a permitted-message list. For the
-  thesis, "the same layer secures V2I and I2I" is now a measured sentence and no longer a promise.
-- **The bound is reached, not just respected.** At k = 25 a vehicle accepted 24 messages from a
-  revoked RSU, which at 10 Hz is 2.4 s of accepting signal timing from a compromised roadside unit. I3 turns the
-  freshness-k choice from an abstract latency trade-off into a safety-relevant number. It should be
-  chosen once for vehicles and RSUs alike (N-17).
+  credential. *(Corrected after the adversarial review, after-action report 11.)* Its warm SPaT
+  verification cost about what a warm BSM did (ratio 0.996 in the first run; 1.096 after the verifier
+  was hardened). The seven injected attacks were rejected. A cached verifier honoured a revoked RSU for
+  at most k − 1 messages. The layer reuses the signing and credential machinery, adding a
+  permitted-message check, a re-check counter and, after the review, message binding and replay
+  rejection. What is measured is the cost of the warm path and the rejection of the registered
+  attacks, not that the layer "secures" V2I and I2I; the review showed two holes (cross-intersection
+  SPaT, replay) that the first seven attacks did not cover.
+- **The bound is reached, not just respected** (in the maximum over runs). At k = 25 one vehicle
+  accepted 24 messages from a revoked RSU. That is a count, not a time: at full 10 Hz reception it
+  would be 2.4 s, but the cache does not expire, so a vehicle that left and returned would still
+  accept up to k − 1 more *(corrected, after-action report 11)*. It makes the freshness-k choice a
+  safety-relevant number, to be chosen once for vehicles and RSUs alike (N-17).
 - **The same slip, twice.** Pass 9 fixed a run stamp that counted results files as dirty code. Pass 10
   found the same fault in the Python environment header, because the earlier fix had been made in one
   place and not as a rule. Rule 1.1.6 caught it by hand. N-14 makes the fix structural.

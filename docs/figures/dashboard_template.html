@@ -105,9 +105,9 @@ a { color: var(--bar); }
     </section>
 
     <section class="panel" aria-labelledby="h-life">
-      <h2 id="h-life">Lifetime cost over a 15-year vehicle</h2>
+      <h2 id="h-life">Lifetime cost over a <span id="c-years"></span>-year vehicle</h2>
       <div class="bars" id="life-bars"></div>
-      <div class="caveat">A model over an assumed event profile (birth, maintenance, inspections, recall, transfers). The band varies event frequency by ±50 %.</div>
+      <div class="caveat">A model over an assumed event profile (birth, maintenance, inspections, recall, transfers). The band varies event frequency by ±<span id="c-band"></span> %.</div>
       <div class="src" id="life-src"></div>
     </section>
 
@@ -115,7 +115,7 @@ a { color: var(--bar); }
       <h2 id="h-v2v">V2V message verification</h2>
       <div class="kpis" id="v2v-kpis"></div>
       <div class="scroll"><table id="v2v-table"></table></div>
-      <div class="caveat">Cryptographic verification only: simulated mobility, no radio channel, no MAC. Against a 100 ms V2V safety budget.</div>
+      <div class="caveat">Cryptographic verification only: simulated mobility, no radio channel, no MAC. Against a <span id="c-budget"></span> ms V2V safety budget.</div>
       <div class="src" id="v2v-src"></div>
     </section>
 
@@ -142,7 +142,7 @@ a { color: var(--bar); }
     </section>
 
     <section class="panel" aria-labelledby="h-mobi">
-      <h2 id="h-mobi">MOBI VID across five backends</h2>
+      <h2 id="h-mobi">MOBI VID across <span id="c-backends"></span> backends</h2>
       <div class="scroll"><table id="mobi-table"></table></div>
       <div class="caveat">A MOBI-VID-inspired profile, checked against the public texts. A dagger marks an approximation where the concept is not native.</div>
       <div class="src" id="mobi-src"></div>
@@ -227,6 +227,12 @@ a { color: var(--bar); }
 (function () {
   const S = JSON.parse(document.getElementById("snapshot").textContent);
   const $ = (id) => document.getElementById(id);
+  // non-result constants, each with its source in the snapshot (S.constants)
+  const K = S.constants;
+  $("c-years").textContent = K.lifetime_years.value;
+  $("c-band").textContent = K.lifetime_band_pct.value;
+  $("c-budget").textContent = K.v2v_budget_ms.value;
+  $("c-backends").textContent = Object.keys(S.mobi_sweep.backends).length;
   const fmt = (n) => (n === null || n === undefined) ? "—" : Number(n).toLocaleString("en-US");
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const src = (o) => o ? (o.path + (o.key ? " → " + o.key : "")) : "";
@@ -274,7 +280,7 @@ a { color: var(--bar); }
   // v2v
   const V = S.v2v, ssi = V.per_population.ssi, pki = V.per_population.pki;
   $("v2v-kpis").innerHTML = kpi(ssi.warm.median.toFixed(3) + " ms", "SSI warm verify, median of " + V.n_runs + " runs") +
-    kpi(Math.round(100 / ssi.warm.median) + "×", "margin inside a 100 ms budget") +
+    kpi(Math.round(K.v2v_budget_ms.value / ssi.warm.median) + "×", "margin inside a " + K.v2v_budget_ms.value + " ms budget") +
     kpi(fmt(V.totals.verification_failures), "rejections, all injected attacks");
   const ci = (m) => `${m.median.toFixed(3)} <span style="color:var(--muted)">[${m.ci95[0].toFixed(3)}, ${m.ci95[1].toFixed(3)}]</span>`;
   $("v2v-table").innerHTML = table(["Path", "Sign ms", "Cold verify ms", "Warm verify ms"],
@@ -313,9 +319,10 @@ a { color: var(--bar); }
 
   // experiments
   const vcls = (v) => v === "PASS" ? "s-good" : (v === "FAIL" ? "s-crit" : "s-na");
-  const ex = S.lifecycle_parity.verdicts.filter((v) => v.verdict === "PASS" || v.verdict === "FAIL")
+  // every verdict is shown, including "(outside band)" (after-action report 11, C6)
+  const ex = S.lifecycle_parity.verdicts
     .map((v) => ["M4 lifecycle parity: " + esc(v.operation), esc(v.claim), chip(v.verdict, vcls(v.verdict))]);
-  ex.push(["M5 pseudonym pool: gas", "≈ pre-registered gas per epoch (±10 %)", chip(S.pseudonyms.gas_verdict, vcls(S.pseudonyms.gas_verdict))]);
+  ex.push(["M5 pseudonym pool: gas", "≈ pre-registered gas per epoch (±" + K.pseudonym_gas_band_pct.value + " %)", chip(S.pseudonyms.gas_verdict, vcls(S.pseudonyms.gas_verdict))]);
   ex.push(["M5 pseudonym pool: linkability", "delegate pool fully linkable from chain data", chip(S.pseudonyms.linkability_verdict, vcls(S.pseudonyms.linkability_verdict))]);
   $("exp-table").innerHTML = table(["Experiment", "Pre-registered claim", "Verdict"], ex);
   $("exp-src").textContent = src(S.lifecycle_parity.source) + " (#33) · " + src(S.pseudonyms.source) + " (#38). Failed verdicts are reported as they fell.";

@@ -128,3 +128,8 @@ adversarial review (N-10) is stronger after this pass than before it.
 
 
 **Post-close correction (after-action report 11).** the I4 stamp's `dirty` false and the traces' `code_dirty` false came from flags that could not fire. The runs are clean on other evidence (producing code unchanged since `1e690c3`, producers modified before the runs); see `docs/AFTER_ACTION_REPORT_11.md` R3.
+
+**Post-close corrections from the adversarial review (after-action report 11).** F-A said "the cost
+of re-checking is visible in I3"; it is not: I3 counts messages and times nothing (finding A1;
+amendment A1). "24 messages, 2.4 s" reads a count as a time; the cache does not expire (A4). "The
+bound is reached" holds for the maximum over runs, not in every run (A5).

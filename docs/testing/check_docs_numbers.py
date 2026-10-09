@@ -2,42 +2,66 @@
 """Fail if a citing document quotes a superseded figure as current (plan 2026-10-09 P3.4; TSR R7).
 
 Superseded values, their current replacements and register rows are listed in
-docs/testing/stale_numbers.yaml. A line may keep a superseded value only when it marks it as
-history (a `history_markers` entry on the same line).
+docs/testing/stale_numbers.yaml.
+
+Scope: every tracked Markdown file except the `history` globs (dated records, plans, reviews and
+generated run reports, which keep the values of their time on purpose). Before matching, a line is
+normalised so formatting cannot hide a value: thousands separators (`1,404,108`, `1 404 108`,
+thin/no-break spaces) are removed between digit groups, and `ms` / `%` are separated from the number
+(`0.165ms` -> `0.165 ms`, `93.2%` -> `93.2 %`). Patterns are written against the normalised form.
+
+A line may keep a superseded value only when it marks it as history: a whole-word marker
+(`history_markers`, matched as regular expressions with word boundaries), or an arrow (`->`, `→`)
+*after* the value (old -> new). An arrow before the value does not excuse it (`x → 93.2 %` cites
+93.2 % as the new value). Hardened after after-action report 11 (findings C3, C4).
 
     python3 docs/testing/check_docs_numbers.py          # report; exit 1 on any hit
 """
-import glob
+import fnmatch
 import pathlib
 import re
+import subprocess
 import sys
 
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 CFG = yaml.safe_load((ROOT / "docs/testing/stale_numbers.yaml").read_text())
-EXCLUDE = {"docs/thesis/CRUX_REGISTER.md"}  # generated from the register, which keeps history in its cells
+MARKERS = re.compile(r"(?<!\w)(?:" + "|".join(CFG["history_markers"]) + r")(?!\w)", re.IGNORECASE)
+ARROW = re.compile(r"->|→")
+GROUP_SEP = re.compile(r"(?<=\d)[,    ](?=\d{3}(?!\d))")
+
+
+def normalise(line: str) -> str:
+    prev = None
+    while prev != line:                     # repeat: 1,404,108 needs two passes for overlapping groups
+        prev, line = line, GROUP_SEP.sub("", line)
+    line = re.sub(r"(?<=\d)(ms|%)", r" \1", line)
+    return line
 
 
 def files():
-    out = []
-    for pat in CFG["scope"]:
-        out += [pathlib.Path(p) for p in glob.glob(str(ROOT / pat), recursive=True)]
-    return sorted({p for p in out if p.is_file() and str(p.relative_to(ROOT)) not in EXCLUDE})
+    tracked = subprocess.run(["git", "ls-files", "*.md"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.split()
+    return [ROOT / p for p in tracked if not any(fnmatch.fnmatch(p, g) for g in CFG["history"])]
 
 
 def main():
     hits = []
     for f in files():
-        for n, line in enumerate(f.read_text().splitlines(), 1):
-            if any(m in line for m in CFG["history_markers"]):
+        for n, raw in enumerate(f.read_text(errors="replace").splitlines(), 1):
+            line = normalise(raw)
+            if MARKERS.search(line):
                 continue
+            arrows = [m.start() for m in ARROW.finditer(line)]
             for e in CFG["entries"]:
-                if re.search(e["pattern"], line):
-                    hits.append((str(f.relative_to(ROOT)), n, e, line.strip()))
+                for m in re.finditer(e["pattern"], line):
+                    if arrows and m.start() < arrows[-1]:
+                        continue                # old -> new: the value is the old side
+                    hits.append((str(f.relative_to(ROOT)), n, e, raw.strip()))
+                    break
     for path, n, e, line in hits:
         print(f"{path}:{n}: '{e['pattern']}' superseded -> {e['current']} (register #{e['row']}): {line[:140]}")
-    print(f"{len(hits)} stale figure(s) in {len({h[0] for h in hits})} file(s)")
+    print(f"{len(hits)} stale figure(s) in {len({h[0] for h in hits})} file(s); {len(files())} files scanned")
     sys.exit(1 if hits else 0)
 
 

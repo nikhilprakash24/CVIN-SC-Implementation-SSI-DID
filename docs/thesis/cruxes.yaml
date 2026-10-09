@@ -50,10 +50,11 @@ cruxes:
     hypotheses: [H3]
     thrusts: [3, 5]
     claim: A cached verifier honours a revoked key for at most k-1 further messages; the k that meets the neighbour-saturation target depends on the host and on the refresh mode.
-    evidence_rows: [32, 37, 40, 46]
+    evidence_rows: [32, 37, 40]
     defects: [D21]
     artefacts: [cv2x-testbed/results/freshness_k.json, cv2x-testbed/results/freshness_k_probe.json]
     gaps:
+      - The RSU analogue (#46) counts messages from a revoked RSU under an in-process registry; it bounds the re-check cadence, not the latency cost, so it is not counted as C4 evidence.
       - Choose the k the thesis defends (review-2 decisions 10 and 14).
     examiner: Is k-1 messages of revocation staleness at 10 Hz acceptable for a safety system?
   - id: C5

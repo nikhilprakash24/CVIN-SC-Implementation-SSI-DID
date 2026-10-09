@@ -2,14 +2,14 @@
 
 **Generated** by `docs/figures/make_dashboard_data.py` from `docs/thesis/cruxes.yaml` and the claim register (`docs/MEASUREMENT_CONDITIONS.md`). Do not edit by hand; edit the YAML and regenerate.
 
-A crux is a question the thesis must answer for an examiner. State: **evidenced** = every evidence row is status V and no gap is open; **partial** = some evidence, or an open gap; **gap** = no evidence row.
+A crux is a question the thesis must answer for an examiner. State: **evidenced** = every evidence row is status V and no gap is open; **partial** = at least one V row, and an open gap or a non-V row; **gap** = no evidence row of status V. Only V rows count as evidence; a listed row missing from the register fails the build.
 
 | Crux | State | Hypotheses | Evidence rows (status) | Open gaps |
 |---|---|---|---|---|
 | C1 CAV identity substrate | **partial** | H1, H5 | #25 (V), #26 (V), #34 (V), #35 (V), #36 (V), #42 (V), #43 (V) | 2 |
 | C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (V) | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **partial** | — | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V) | 3 |
-| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S), #46 (V) | 1 |
+| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S) | 2 |
 | C5 W3C conformance | **partial** | H2 | #4 (V), #24 (V) | 2 |
 | C6 MOBI VID lifecycle | **partial** | H4 | #30 (V), #33 (V), #41 (S) | 1 |
 | C7 Privacy and linkability | **partial** | — | #38 (V) | 1 |
@@ -103,9 +103,9 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_… |
 | #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu… |
 | #40 | S | (sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=… |
-| #46 | V | (pre-registered I3; verdict PASS) A vehicle that has cached a revoked RSU keeps accepting its SPaT for at most k − 1 further messages: `rsu_1`'s credential revoked at t = 10 s, verifiers re-check revocation every k-th me… |
 
 **Open gaps:**
+- The RSU analogue (#46) counts messages from a revoked RSU under an in-process registry; it bounds the re-check cadence, not the latency cost, so it is not counted as C4 evidence.
 - Choose the k the thesis defends (review-2 decisions 10 and 14).
 
 **The examiner will ask:** Is k-1 messages of revocation staleness at 10 Hz acceptable for a safety system?
