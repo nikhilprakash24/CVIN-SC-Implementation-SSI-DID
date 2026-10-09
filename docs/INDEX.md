@@ -40,6 +40,9 @@ provenance and must not be cited in chapters.
 | How are the tests and results organised as one suite (subject × identity function × property × evidence), and what is the plan to get there? | `docs/planning/TESTING_SUITE_RESULTS_PLAN.md` (TSR Plan v1.0) + `docs/planning/TESTING_SUITE_SECOND_PASS_SHEET.md` (author's second pass) | as-found survey in `docs/planning/testing_suite/INVENTORY_AS_FOUND_2026-10-04.md`; `docs/testing/` is created by the plan's Phase 1 |
 | What does the TSR plan map onto in the sandbox already built here, and what is adopted from it? | `docs/reconciliation/RECON_TSR.md` (40-row mapping, 13 naming conflicts, what to adopt) | reconciliation of 2026-10-06; the merge plan's step S10 |
 | Where is any test, and how do the TSR plan and the grand sandbox fit together? | `docs/testing/README.md` | the entry point for the organised suite after the merge: three clicks to any test, the TSR→sandbox mapping, what the plan still asks for |
+| What is the current plan, awaiting audit? | `docs/PLAN_2026-10-09.md` | close the merge; generated results dashboard; SUMO visualisation; structured tests and the onboarding lineage; thesis cruxes; eight questions with defaults |
+| What rules bind every session (rigour and style)? | `docs/STYLE_AND_RIGOUR_GUIDE.md` | consolidated 2026-10-09 from the direction record, the register's rules and the handbacks |
+| How is the work organised as an agentic team, and what did that structure learn? | `docs/TEAM_STRUCTURE.md` | roles, ownership, acceptance gates, lessons of 2026-10-03 to 2026-10-06 |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 
