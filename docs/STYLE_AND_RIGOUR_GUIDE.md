@@ -22,8 +22,9 @@
    the code they no longer describe (decision D-E).
 5. Two measurements of one quantity that disagree are resolved by re-execution on one tree and
    one host. A number is never chosen.
-6. A run of record comes from a clean tree. A run with `dirty: true` is discarded, and the
-   discard is written down.
+6. A run of record comes from a clean tree: the code that produced it (contracts, scripts,
+   configuration, lockfile) equals the commit it names. A run with `dirty: true` is discarded,
+   and the discard is written down. Results files do not count toward the flag.
 7. Latency is compared only within a run. Host, library versions and toolchain are recorded
    with every latency figure.
 8. Gas is exact `receipt.gasUsed`. Its N is a determinism check, not a confidence interval.

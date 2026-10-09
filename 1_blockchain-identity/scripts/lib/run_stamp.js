@@ -12,11 +12,20 @@ function git(args) {
   }
 }
 
+// The code that produces a number: if any of these paths differs from the commit, the run is not
+// a run of record. Results files are excluded on purpose, so a producer's own output (or an
+// earlier producer's in the same session) does not mark the next run dirty. Same rule as the
+// metrics harness's `dirtyMeasured` (1_blockchain-identity/benchmarks/run.js).
+const MEASURED = ["1_blockchain-identity/contracts", "1_blockchain-identity/scripts", "1_blockchain-identity/hardhat.config.js",
+  "1_blockchain-identity/package-lock.json", "cv2x-testbed/contracts"];
+
 function runStamp() {
-  const status = git("status --porcelain");
+  const status = git("status --porcelain -- " + MEASURED.join(" "));
+  const whole = git("status --porcelain");
   return {
     commit: git("rev-parse --short HEAD"),
     dirty: status === null ? null : status.length > 0,
+    dirtyAnyFile: whole === null ? null : whole.length > 0,
     node: process.version,
     hardhat: (() => { try { return require("hardhat/package.json").version; } catch (e) { return null; } })(),
   };
