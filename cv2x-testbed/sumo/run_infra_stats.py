@@ -51,6 +51,7 @@ def agg(values, rng):
 
 
 def main_i1(args):
+    env = environment_header()  # captured before the runs, so later edits elsewhere cannot mark this run unclean
     rows = []
     t0 = time.time()
     for seed in range(1, args.runs + 1):
@@ -81,7 +82,7 @@ def main_i1(args):
     attacks = sorted({k for r in rows for k in r["attacks"]})
     i2_ok = all(r["attacks"].get(k) is True for r in rows for k in attacks) and len(attacks) == 7
     out = {
-        "environment": environment_header(), "prereg": "docs/design/INFRASTRUCTURE_PREREG.md",
+        "environment": env, "prereg": "docs/design/INFRASTRUCTURE_PREREG.md",
         "config": {"runs": args.runs, "duration_s": args.duration, "vehicles": 50, "rsus": 4,
                    "refresh_k": "inf (I1 compares warm paths without a revocation re-check, as the BSM warm path has none)",
                    "condition": "M0, mock mobility, real cryptography, no radio channel"},
@@ -106,6 +107,7 @@ def main_i1(args):
 
 
 def main_i3(args):
+    env = environment_header()
     t0 = time.time()
     per_k = {}
     for k in ("1", "5", "25", "inf"):
@@ -123,7 +125,7 @@ def main_i3(args):
                     "verdict": verdict, "per_run": rows}
         print(f"k={k}: max accepted after revocation {mx} (bound {bound}) -> {verdict}", flush=True)
     finite = [v["verdict"] for k, v in per_k.items() if k != "inf"]
-    out = {"environment": environment_header(), "prereg": "docs/design/INFRASTRUCTURE_PREREG.md",
+    out = {"environment": env, "prereg": "docs/design/INFRASTRUCTURE_PREREG.md",
            "config": {"runs": args.runs, "duration_s": args.duration, "revoke_rsu_1_at_s": args.revoke_at,
                       "condition": "M0, mock mobility, real cryptography"},
            "I3": {"claim": "for every finite k, max SPaT accepted from the revoked RSU per receiver <= k - 1",
