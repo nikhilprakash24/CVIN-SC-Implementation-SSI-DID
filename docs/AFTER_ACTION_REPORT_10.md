@@ -83,7 +83,7 @@ trace of record per figure. Deferred decisions: `docs/MILESTONE_NEXT.md`.
 - **F-C** (after the run). The I3 run is accepted as a run of record although its whole-tree
   `tree_clean` is false: rule 1.1.6 is about the producing code, which was checked by hand and found
   equal to `1e690c3`. Re-running for 28 min to flip a flag that measures the wrong thing was judged
-  worse than disclosing it; the flag's fix is N-14.
+  worse than disclosing it; the flag's fix is N-14. **Accepted by the author, 2026-10-09.**
 - **F-D.** Under S-c the revocation trace owns only its revocation figure; its spacetime, latency and
   replay outputs (same seed, same mobility as the first trace) were deleted, not committed.
 
