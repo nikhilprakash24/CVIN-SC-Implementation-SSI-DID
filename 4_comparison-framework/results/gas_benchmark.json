@@ -326,6 +326,11 @@
   },
   "metadata": {
     "solcVersion": "0.8.24",
+    "commit": "d0cc19c",
+    "dirty": false,
+    "dirtyAnyFile": false,
+    "node": "v22.22.2",
+    "hardhat": "2.28.6",
     "solcSettings": {
       "optimizer": {
         "enabled": true,
@@ -334,7 +339,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-06T04:24:20.646Z",
+    "date": "2026-10-09T02:27:39.007Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [

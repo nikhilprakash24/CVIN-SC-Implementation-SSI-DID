@@ -26,7 +26,7 @@
     "source": {
       "path": "4_comparison-framework/results/gas_benchmark.json"
     },
-    "measured": "2026-10-06T04:24:20.646Z",
+    "measured": "2026-10-09T02:27:39.007Z",
     "condition": "M1",
     "operations": [
       "deployRegistry",

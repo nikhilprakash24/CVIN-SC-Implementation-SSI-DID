@@ -2,10 +2,15 @@
   "metadata": {
     "layer": "on-chain",
     "solcVersion": "0.8.24",
+    "commit": "d0cc19c",
+    "dirty": false,
+    "dirtyAnyFile": true,
+    "node": "v22.22.2",
+    "hardhat": "2.28.6",
     "ozVersion": "5.0.2",
     "network": "hardhat-local",
     "chainId": 31337,
-    "date": "2026-10-06T04:26:37.368Z",
+    "date": "2026-10-09T02:27:46.849Z",
     "categories": [
       "impersonation",
       "replay",

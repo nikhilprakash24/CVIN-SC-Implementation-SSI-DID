@@ -149,6 +149,11 @@
   "metadata": {
     "title": "MOBI VID cross-backend realization (H4)",
     "solcVersion": "0.8.24",
+    "commit": "d0cc19c",
+    "dirty": false,
+    "dirtyAnyFile": true,
+    "node": "v22.22.2",
+    "hardhat": "2.28.6",
     "solcSettings": {
       "optimizer": {
         "enabled": true,
@@ -157,7 +162,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-06T04:25:51.180Z",
+    "date": "2026-10-09T02:27:44.231Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [

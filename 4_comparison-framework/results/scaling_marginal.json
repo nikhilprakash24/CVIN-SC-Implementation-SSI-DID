@@ -3,6 +3,11 @@
     "experiment": "A -- marginal-cost stationarity (RQ-S1)",
     "design": "docs/SCALING_EXPERIMENTS.md",
     "solcVersion": "0.8.24",
+    "commit": "d0cc19c",
+    "dirty": false,
+    "dirtyAnyFile": true,
+    "node": "v22.22.2",
+    "hardhat": "2.28.6",
     "solcSettings": {
       "optimizer": {
         "enabled": true,
@@ -12,7 +17,7 @@
     },
     "ozVersion": "5.0.2",
     "K": 50,
-    "date": "2026-10-06T04:25:47.918Z",
+    "date": "2026-10-09T02:27:41.933Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "note": "gasUsed is the exact receipt.gasUsed of each sequential append op on a fresh in-process Hardhat chain per standard. Slope/R^2 are exact least-squares fits of gasUsed vs op index (deterministic, not statistical estimates). A one-off higher first op that is flat thereafter is O(1) (a cold-slot first write), not degradation. For ERC-735/CVIN-Combined the issuer varies to create distinct claims that grow the topic array; payload sizes are held fixed, so only a few gas of per-op calldata jitter results."
