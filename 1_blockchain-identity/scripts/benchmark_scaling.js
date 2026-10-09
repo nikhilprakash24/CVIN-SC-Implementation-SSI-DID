@@ -36,6 +36,7 @@
  * Run:  npx hardhat run scripts/benchmark_scaling.js
  */
 
+const { runStamp } = require("./lib/run_stamp");
 const fs = require("fs");
 const path = require("path");
 const { ethers } = require("hardhat");
@@ -478,6 +479,7 @@ async function main() {
     experiment: "A -- marginal-cost stationarity (RQ-S1)",
     design: "docs/SCALING_EXPERIMENTS.md",
     solcVersion: "0.8.24",
+    ...runStamp(),
     solcSettings: { optimizer: { enabled: true, runs: 200 }, viaIR: true },
     ozVersion: "5.0.2",
     K,
@@ -512,6 +514,7 @@ async function main() {
       disclaimer:
         "This is a MODEL over an ASSUMED event profile, not a measurement. Totals integrate measured per-op gas (Experiment A steady-state append marginals + gas_benchmark.json birth/transfer costs) across the canonical profile. Gas is relative on-chain work, not fiat (RESEARCH_AUDIT.md §4.1). The profile is an assumption; the +/-50% band varies recurring event frequency.",
       solcVersion: "0.8.24",
+    ...runStamp(),
       ozVersion: "5.0.2",
       date: new Date().toISOString(),
       network: "hardhat-local",

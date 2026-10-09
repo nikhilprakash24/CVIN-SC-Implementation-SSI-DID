@@ -44,6 +44,7 @@
  * Run:  npx hardhat run scripts/mobi_vid_backend_sweep.js
  */
 
+const { runStamp } = require("./lib/run_stamp");
 const fs = require("fs");
 const path = require("path");
 const { ethers } = require("hardhat");
@@ -469,6 +470,7 @@ async function main() {
     metadata: {
       title: "MOBI VID cross-backend realization (H4)",
       solcVersion: "0.8.24",
+    ...runStamp(),
       solcSettings: { optimizer: { enabled: true, runs: 200 }, viaIR: true },
       ozVersion: "5.0.2",
       date: new Date().toISOString(),

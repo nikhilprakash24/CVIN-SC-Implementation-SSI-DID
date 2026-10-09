@@ -1,0 +1,31 @@
+# Superseded figures that must not be cited as current (plan 2026-10-09 P3.4; TSR R7).
+# Read by docs/testing/check_docs_numbers.py. Each entry: the superseded text (regex), the current
+# value and its register row. A line is allowed to keep a superseded value only if it marks it as
+# history (one of `history_markers` appears on the same line).
+scope:
+  - README.md
+  - CAPABILITIES.md
+  - COMPOSITION.md
+  - SIDE_PAPERS.md
+  - QUICKSTART.md
+  - INVENTORY.md
+  - docs/thesis/**/*.md
+history_markers: ["superseded", "was ", "were ", "July", "at the merge", "bundle", "before", "old ", "(S)", " S ", "earlier", "previous", "pre-", "→", "->", "moved from", "instead of"]
+entries:
+  - {pattern: '93\.2 ?%', current: '94.3 %', row: 4}
+  - {pattern: '0\.165 ms', current: '0.153 ms [0.151, 0.154]', row: 27}
+  - {pattern: '\[0\.162, ?0\.168\]', current: '[0.151, 0.154]', row: 27}
+  - {pattern: '0\.400 ms', current: '0.399 ms', row: 27}
+  - {pattern: '1,704,992', current: 'ERC-725xy create 1,680,816; heaviest create ERC-735 1,757,881', row: 25}
+  - {pattern: '52,178', current: '52,216 (CVIN-Combined create)', row: 25}
+  - {pattern: '52,170\b', current: '52,216 (CVIN-Combined create)', row: 25}
+  - {pattern: '46,862', current: '46,830', row: 25}
+  - {pattern: '542,429|542,378', current: '545,101 (ERC-721 create)', row: 25}
+  - {pattern: '1,598,928|1,404,108|1,535,776', current: '1,757,881 (ERC-735 create)', row: 25}
+  - {pattern: '~33×|~32×|32\.2×', current: '~34× (52,216 → 1,757,881)', row: 25}
+  - {pattern: '1,450,824', current: '1,450,146', row: 26}
+  - {pattern: 'P\\?\* ?≈ ?772|≈ ?772 neighbou', current: 'P* ≈ 609 (extrapolated)', row: 26}
+  - {pattern: '0\.130 ms/neighbou', current: '0.164 ms/neighbour', row: 26}
+  - {pattern: '328/441|336/441', current: '335/336', row: 24}
+  - {pattern: '\b217 Hardhat|\b219 Hardhat|\b369 Hardhat|\b386 Hardhat', current: 'see sandbox/grand/report/GRAND_REPORT.md', row: 5}
+  - {pattern: '\b90 failures|3 injected attacks', current: '150 failures = 5 injected attacks × 30', row: 27}

@@ -29,6 +29,7 @@
  * Run:  cd 1_blockchain-identity && npx hardhat run scripts/security_scenarios.js
  */
 
+const { runStamp } = require("./lib/run_stamp");
 const fs = require("fs");
 const path = require("path");
 const { ethers } = require("hardhat");
@@ -936,6 +937,7 @@ async function main() {
     metadata: {
       layer: "on-chain",
       solcVersion: "0.8.24",
+    ...runStamp(),
       ozVersion: "5.0.2",
       network: "hardhat-local",
       chainId: Number(net.chainId),

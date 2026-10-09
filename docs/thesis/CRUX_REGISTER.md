@@ -26,7 +26,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | Row | Status | Claim (from the register) |
 |---|---|---|
 | #25 | V | Nine-standard gas table (deploy / create / update / delegate-or-claim / revoke / transfer per standard; MOBI-VID-V2 as application profile; ERC-4337 EntryPoint indirection +46,830 gas/op; create-identity spread 52,216 (C… |
-| #26 | V | Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,824 gas); verify O(1) in claim count; V2V saturation P*≈772 at 0.130 ms/neighbour (R²=0.9999) |
+| #26 | V | Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,146 gas on the merged contracts); verify O(1) in claim count; V2V warm verification linear at 0.164 ms/neighbour (… |
 | #34 | V | Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,808 / 145,662 / 399,844 / 656,480 / 1,535,776 (ERC-735) / 103,913 (ERC-1155) / 1,730,753 (ERC-725xy) / 132,515 (LS… |
 | #35 | V | Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,787 (wrapper 1,025,381) · ERC-1155 1,150,981 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,505,258 (excl. 3 n/a) · ERC-4337 2,221… |
 | #36 | V | H5 dominance analysis over six declared criteria (lifetime gas ↓, zero→nonzero SSTOREs ↓, R3 RPC at h=50 ↓, R3 median ms after lifecycle ↓, core ops supported ↑, O(1) on-chain credential check ↑ [design property, assigne… |

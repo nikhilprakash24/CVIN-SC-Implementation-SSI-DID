@@ -937,7 +937,7 @@
         {
           "row": 26,
           "status": "V",
-          "claim": "Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,824 gas); verify O(1) in claim count; V2V saturation P*≈772 at 0.130 ms/neighbour (R²=0.9999)"
+          "claim": "Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,146 gas on the merged contracts); verify O(1) in claim count; V2V warm verification linear at 0.164 ms/neighbour (…"
         },
         {
           "row": 34,
@@ -1391,7 +1391,7 @@
     "26": {
       "row": 26,
       "status": "V",
-      "claim": "Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,824 gas); verify O(1) in claim count; V2V saturation P*≈772 at 0.130 ms/neighbour (R²=0.9999)",
+      "claim": "Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,146 gas on the merged contracts); verify O(1) in claim count; V2V warm verification linear at 0.164 ms/neighbour (…",
       "tag": "M1 / M0"
     },
     "27": {
