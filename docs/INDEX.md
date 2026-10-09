@@ -15,7 +15,7 @@ provenance and must not be cited in chapters.
 | Question | Canonical file | Notes |
 |---|---|---|
 | What is the argument of the thesis, and how should it be written? | `COMPOSITION.md` | master through-line + writing discipline; unchanged by the merge |
-| What is measured, under what conditions, and is each number verified? | `docs/MEASUREMENT_CONDITIONS.md` | condition tags M0/M1/M2 and the claim register (#1–#43; #29–#31 and §5 are the metrics harness, tag M1-H); **the only place a chapter should look up a number's status** |
+| What is measured, under what conditions, and is each number verified? | `docs/MEASUREMENT_CONDITIONS.md` | condition tags M0/M1/M2 and the claim register (#1–#48; #44–#48 infrastructure messaging; #29–#31 and §5 are the metrics harness, tag M1-H); **the only place a chapter should look up a number's status** |
 | What are the results of record? | `4_comparison-framework/results/` (nine-standard gas, scaling, MOBI backends, V2V latency), `1_blockchain-identity/results/metrics/latest/` (operation-catalogue / lifecycle / scale / read-path harness, run-stamped `meta.json`), `cv2x-testbed/results/` (PKI vs ERC-1056), `docs/figures/results_snapshot.json` (trunk verification snapshot), `docs/conformance/` (external W3C DID test suite) | files, not prose |
 | Where do the measured results appear as thesis text? | `docs/thesis/chapter5-results/` | the measured anchor for chapter 5 |
 | What exists in the repository and does it run? | `docs/PROJECT_SUMMARY.md` | inventory + verification table; supersedes `MASTER_UPDATE.md` §2 and `INVENTORY.md` for status |

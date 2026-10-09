@@ -80,5 +80,48 @@ trace of record per figure. Deferred decisions: `docs/MILESTONE_NEXT.md`.
   k = ∞ (no revocation re-check on the warm path), because the BSM warm path it is compared with
   has none. The cost of re-checking is visible in I3, which runs k = 1, 5, 25, ∞.
 - **F-B.** I3 runs the same 30 seeds as I1, revoking `rsu_1` at t = 10 s.
+- **F-C** (after the run). The I3 run is accepted as a run of record although its whole-tree
+  `tree_clean` is false: rule 1.1.6 is about the producing code, which was checked by hand and found
+  equal to `1e690c3`. Re-running for 28 min to flip a flag that measures the wrong thing was judged
+  worse than disclosing it; the flag's fix is N-14.
+- **F-D.** Under S-c the revocation trace owns only its revocation figure; its spacetime, latency and
+  replay outputs (same seed, same mobility as the first trace) were deleted, not committed.
 
-## 4. Closing — *(written last)*
+## 4. Closing
+**Plan vs done.** B0–B6 all closed. Commits: `cfbdcbc` (pre-registration, deferral list), `47c3314`
+(layer, flags, driver, tests), `1e690c3` (header at start), `9006d4c` (results of record, register,
+chapter section, figures, dashboard), `94c2b7c` (grand run, reports). CI: all 8 jobs green on `9006d4c`
+and `94c2b7c`. Dashboard republished (version 4, same URL).
+
+**Verdicts, all pre-registered.** I1 PASS, I2 PASS, I3 PASS (bound reached at every finite k), I4 and
+I5 reported. Crux C3 moves from gap to partial; no crux is a gap any more. No contract changed; no
+existing register row changed.
+
+**What went wrong.** (1) The Python environment header counted a results file as a dirty tree,
+the same class of fault fixed in pass 9 in the JavaScript run stamp. The fix was not generalised then.
+(2) The pre-registration named an operation that ERC-1056 does not have. Both were caught and
+disclosed, neither changed a verdict. (3) Two of the revocation trace's figures were redundant and
+were produced before anyone asked which trace owns which figure; S-c should have been applied at
+render time, not after.
+
+**What the author should look at.** Register #44–#48 and §5.4.1 of chapter 5; F-C (accepting the I3
+run with a false whole-tree flag); N-17 (the k the thesis defends now has a safety reading: 24
+messages, 2.4 s, at k = 25).
+
+### 4.1 How the team structure performed
+| Role in this pass | Work | Outcome | Acceptance gate the orchestrator re-ran |
+|---|---|---|---|
+| Orchestrator (architect) | pre-registration, layer, harness flags, drivers, renderer, register rows, chapter section, dashboard, reports | all steps closed | no-change gate on seed 7; L3 16/16; grand run; CI; headless render |
+| Security engineer (role, same configuration) | attack set (a)–(g) and the untrusted-issuer cases | all 7 rejected in 30/30 runs | L3 tests per attack; the I2 count in every run |
+| Measurement methodologist (role) | verdict rules before code; F-A before the runs; run-identity check after | I3 run-identity fault found and disclosed | rule 1.1.6 checked by diff and mtimes |
+| Visualisation engineer (role) | trace schema, renderer, dashboard replay | redundant outputs removed (F-D); layout fault found headless and fixed | figures regenerate from the trace; md5 comparison |
+| Thesis methodologist (role) | chapter 5 §5.4.1, crux C3/C4, meta commentary | the first-contact claim in §5.4.1 was attributed to the L3 test, not the sweep | every number traced to a V row |
+| Adversarial reviewer | — | reserved (Q7, N-10) | — |
+
+No sub-agents were spawned this pass: the work was one connected chain (layer → harness → runs →
+register → chapter), and splitting it by file would have put two writers on the harness. The roles
+were therefore lenses applied by one worker, which is weaker than pass 9's split. The independence
+the structure promises was again only procedural. What it still bought was that each role's
+question was asked at its step (the methodologist's "which code produced this run?" is what found
+the I3 flag), not that anyone disagreed with the orchestrator. The case for the different-configuration
+adversarial review (N-10) is stronger after this pass than before it.
