@@ -22,3 +22,8 @@ or the next author checkpoint, whichever comes first.
 | N-11 | Push tags v0.7.0/v0.8.0; Sepolia secrets; SC-05/SC-06; notebook index; chapter 2 citations | open | `docs/HANDBACK_2026-09-30.md` |
 | N-12 | Default branch of the repository | unchanged | plan 2026-10-09 Q6 |
 | N-13 | `3_cv2x-testbed/README.md` July counts (outside the stale-figure checker's scope) | add to the checker at the milestone | handback X-7 |
+| N-14 | Scope `environment_header()`'s `tree_clean` (`cv2x-testbed/sumo/run_v2v_stats.py`) to producing code paths, as `scripts/lib/run_stamp.js` already is; the I3 run of record shows the whole-tree flag false only because I1's results file existed (register #46) | rule 1.1.6 checked by hand per run | after-action report 10 |
+| N-15 | Extend the TSR test register beyond L1, the security harness and the demos to the Python layers (L3/L4, incl. the 16 infrastructure tests) | Python layers counted in the grand report only | same |
+| N-16 | RSU-to-RSU messaging (C3 gap): not modelled; I2I covers controller → RSU and TMC → controller | stated as a gap in crux C3 | same |
+| N-17 | Choose the k the thesis defends for RSUs (same decision as N-9's freshness k; I3 shows the bound k − 1 is reached) | k open | register #46 |
+| N-18 | Seed the random inputs (claim ids, keys) of the L1 mechanism tests so the L1 gas table reproduces to the unit; 3 of 99 cells moved by < 30 gas between grand runs | not cited by any register row | after-action report 10 |

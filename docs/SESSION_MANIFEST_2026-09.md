@@ -132,3 +132,16 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/planning/TESTING_SUITE_SECOND_PASS_SHEET.md` v1.1 | pre-filled from the trunk; author decisions marked | P3.6 |
 | 12 citing documents (README, CAPABILITIES, COMPOSITION, SIDE_PAPERS, QUICKSTART, INVENTORY, thesis README and chapters 1, 4–7) | 82 superseded figures replaced | P3.4 |
 
+
+## Pass 10 — Building the approved designs: infrastructure messaging and the SUMO trace (2026-10-09)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/design/INFRASTRUCTURE_PREREG.md` | I1–I5 claims, conditions and verdict rules, locked before any code (`cfbdcbc`) | I-a approved |
+| `docs/MILESTONE_NEXT.md` | deferred decisions N-1…N-17 (Infura rotation first) | the author's brief |
+| `cv2x-testbed/sumo/infrastructure_layer.py`, `sandbox/py-suites/L3-ssi/test_infrastructure_layer.py` | road authority, RSU, controller and TMC identities; signed SPaT and I2I; 16 L3 tests | B1 |
+| `cv2x-testbed/sumo/sumo_identity_integration.py` (`--rsu`, `--refresh-k`, `--revoke-rsu-at`, `--trace`) | harness flags, off by default; counts unchanged with them off | B2, V1 |
+| `cv2x-testbed/sumo/run_infra_stats.py`, `1_blockchain-identity/scripts/infrastructure_gas.js` | I1/I2/I3/I5 driver over 30 seeds; I4 gas | B3 |
+| `cv2x-testbed/sumo/results/infrastructure_{stats,revocation}.json`, `4_comparison-framework/results/infrastructure_gas.json` | results of record at `1e690c3`; register #44–#48 | B3, B4 |
+| `cv2x-testbed/sumo/render_trace.py`, `results/traces/*.jsonl.gz`, `results/figures/*` | two traces of record, figures, GIF, dashboard replay | B5, V2, V3, V5 |
+| `docs/thesis/chapter5-results/README.md` §5.4.1 | chapter section for I1–I5 | I-d |
+| `docs/AFTER_ACTION_REPORT_10.md` | log, decisions F-A/F-B, closing | standing rule |

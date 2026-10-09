@@ -33,6 +33,47 @@ trace of record per figure. Deferred decisions: `docs/MILESTONE_NEXT.md`.
 - **Trial run, disclosed.** Before the registered runs one trial (seed 3, 20 s) on uncommitted code
   checked the wiring: all seven I2 attacks rejected; per-k revocation counts within k − 1. It is not a
   result and is not reported as one.
+- **B3, registered runs** at `1e690c3`. Verdicts reported as they fell:
+  - **I1 PASS** — median SPaT/BSM warm-verify ratio 0.996, 95 % CI [0.995, 1.001], N=30 (band
+    [0.80, 1.20]). Header `tree_clean` true. 6 min.
+  - **I2 PASS** — all 7 attacks rejected in 30/30 runs; 0 of 138,895 legitimate SPaT rejected.
+  - **I5** (reported) — controller → RSU → vehicle 0.840 ms [0.832, 0.845]; TMC hop 0.433 ms.
+  - **I4** (reported) — RSU key anchor 52,594 gas (the same write as the ERC-1056 create cell of #6);
+    hand control to the authority 51,754; rotate 35,498; revoke old key 35,050; creation 0. Run
+    stamp `dirty` false.
+  - **I3 PASS** — max SPaT accepted after revocation 0 / 4 / 24 for k = 1 / 5 / 25 (bounds 0 / 4 / 24,
+    each reached); k = ∞ 100. 28 min. The trial's k = 25 count was 21; the registered one is 24 —
+    which seed reaches the bound depends on where each vehicle sits in its refresh cycle at
+    revocation.
+- **Finding, run identity (I3).** The header's `tree_clean` is false: `environment_header()` runs a
+  whole-tree `git status`, and when I3 started, I1's results file had just been written and the
+  renderer was untracked. Checked by hand against rule 1.1.6: the producing code had an empty diff
+  against `1e690c3` and no producer's mtime is after the start. Accepted as a run of record and
+  disclosed in register #46; the fix (scope the flag, as `run_stamp.js` already is) is N-14. Same
+  failure class as the run-stamp fault of pass 9 — this second instance was in a Python header the
+  pass-9 fix did not reach.
+- **Finding, I4 wording.** The pre-registration named "revocation of the RSU identity"; ERC-1056 has
+  none. The nearest operation (key revocation) was measured and the deviation disclosed in #47.
+- **B4.** Register rows #44–#48 (V); crux C3 gap → partial (evidence #44–#48; remaining gaps: mock
+  mobility, no radio, in-process back-haul, RSU-to-RSU not modelled); C4 gains #46. Chapter 5 §5.4.1
+  drafted (default I-d). Snapshot, crux register, test register, stale check (0) current; stamp
+  inventory 19/28.
+- **B5.** `render_trace.py` renders spacetime, latency, revocation, a GIF and the dashboard replay
+  from the two traces of record (seed 1; `code_dirty` false). The revocation trace's spacetime,
+  latency and replay outputs were byte-identical to or redundant with the first trace's (same seed,
+  same mobility) and were removed under S-c; `results/figures/README.md` maps each figure to its
+  trace. The dashboard gained the infrastructure panel and the replay; a headless check found an
+  empty band above the replay controls (grid stretch), fixed. No horizontal scroll at 390 px.
+  Committed `9006d4c`.
+- **Not added, recorded instead.** The TSR test register is built from L1, the security harness and
+  the demos; the 16 L3 infrastructure tests are counted by the grand runner only (N-15).
+- **B6, grand run** on `9006d4c`: ALL OK — smoke 11/11, L1 99, Hardhat 536 passing, Python layers
+  276 (260 + the 16 infrastructure tests), 92 demos / 1,752 steps.
+- **Finding, L1 gas is input-dependent.** Against the previous grand report, 3 of 99 L1 gas cells moved
+  with no contract change: CVIN-Combined claim −26, revoke +9, ERC-725Y/X signed-op −12. Those tests
+  use random claim ids and keys; the mechanism was not isolated. No register row cites the L1 table (it
+  is the feature-asymmetry view; gas of record is the benchmark, #25). Seeding those inputs would make
+  the table reproducible to the unit (N-18).
 
 ## 3. Decisions
 - **F-A** (taken before the registered runs; the pre-registration was silent on it). I1 runs with

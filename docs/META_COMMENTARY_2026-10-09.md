@@ -70,3 +70,25 @@ tells us whether the infrastructure experiment is in or out.
   veracity to the claim holder (an issuer registry, VIN binding, sticky revocation), and its create cost
   rose by a quarter since July (1,404,108 → 1,757,881 gas, register #25). Chapter 6 can say plainly that making a claim trustworthy on chain has a
   deployment price, and the asymmetry section now has its sharpest example.
+
+## 7. After pass 10 (the infrastructure experiment)
+- **The red tile is amber now, and it says something.** An RSU is a DID with a road-authority
+  credential. Its SPaT costs exactly what a vehicle's BSM costs (ratio 0.996). Every forged
+  infrastructure message is rejected. A revoked RSU is honoured for at most k − 1 messages by vehicles
+  that already trusted it. None of this is surprising, and that is the point: the identity layer needed
+  no new mechanism for infrastructure, only a different issuer and a permitted-message list. For the
+  thesis, "the same layer secures V2I and I2I" is now a measured sentence and no longer a promise.
+- **The bound is reached, not just respected.** At k = 25 a vehicle accepted 24 messages from a
+  revoked RSU, which at 10 Hz is 2.4 s of accepting signal timing from a compromised roadside unit. I3 turns the
+  freshness-k choice from an abstract latency trade-off into a safety-relevant number. It should be
+  chosen once for vehicles and RSUs alike (N-17).
+- **The same slip, twice.** Pass 9 fixed a run stamp that counted results files as dirty code. Pass 10
+  found the same fault in the Python environment header, because the earlier fix had been made in one
+  place and not as a rule. Rule 1.1.6 caught it by hand. N-14 makes the fix structural.
+- **Pre-registration earned its keep in a small way.** It named an ERC-1056 operation that does not
+  exist ("revoke the RSU identity"). Writing the claims before the code made that mismatch visible and
+  disclosable, instead of something quietly redefined after the fact.
+- **What is still thin.** The mobility is mock, there is no radio, the back-haul is a function call,
+  and RSU-to-RSU messaging is not modelled. These are the same limits as for V2V, stated in the same
+  words. An examiner who asks "where is the infrastructure?" now gets an answer with five register
+  rows behind it, and the scope that goes with it.
