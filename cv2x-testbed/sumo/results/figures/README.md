@@ -13,7 +13,9 @@ They illustrate seed 1; the evidence is the 30-run statistics (register #44–#4
 | `trace_revocation_k5_seed1_revocation.png` | `../traces/trace_revocation_k5_seed1.jsonl.gz` | SPaT from `rsu_1` accepted per receiver before and after its revocation at 10 s, k = 5 |
 
 Both traces: mock mobility (5 km three-lane highway), 50 vehicles, 4 RSUs, seed 1, 20 s,
-commit `1e690c3`, `code_dirty` false, `cryptography` 41.0.7. The revocation trace's
+commit `1e690c3`, `cryptography` 41.0.7. Their `code_dirty: false` is not evidence (the flag could
+not fire until after-action report 11); the producing code was checked by hand against `1e690c3`
+(no producer modified after 03:48, empty diff). The revocation trace's
 mobility is identical to the other trace's (same seed), so it owns only the revocation figure.
 
 Reproduce (from `cv2x-testbed/sumo/`):

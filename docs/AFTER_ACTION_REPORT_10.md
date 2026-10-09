@@ -125,3 +125,6 @@ the structure promises was again only procedural. What it still bought was that 
 question was asked at its step (the methodologist's "which code produced this run?" is what found
 the I3 flag), not that anyone disagreed with the orchestrator. The case for the different-configuration
 adversarial review (N-10) is stronger after this pass than before it.
+
+
+**Post-close correction (after-action report 11).** the I4 stamp's `dirty` false and the traces' `code_dirty` false came from flags that could not fire. The runs are clean on other evidence (producing code unchanged since `1e690c3`, producers modified before the runs); see `docs/AFTER_ACTION_REPORT_11.md` R3.

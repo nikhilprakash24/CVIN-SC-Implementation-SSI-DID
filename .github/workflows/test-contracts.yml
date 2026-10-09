@@ -35,6 +35,16 @@ jobs:
     - name: Compile contracts
       run: npx hardhat compile
 
+    - name: Probe that the run-identity flags fire (after-action report 11)
+      # The producing-code "dirty" flags of the JS run stamp and the Python headers were inert until
+      # 2026-10-09 (relative pathspecs from a subdirectory). This fails if either stops detecting an
+      # untracked file in a producing path, or starts counting a results file.
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: |
+        python3 -m pip install --quiet eth-account coincurve cryptography
+        bash docs/testing/probe_run_identity.sh
+
     - name: Check the MOBI contract copies are byte-identical (plan S0)
       working-directory: ${{ github.workspace }}
       shell: bash

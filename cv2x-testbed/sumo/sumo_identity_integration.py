@@ -463,6 +463,18 @@ class MockMobility:
         return list(self.states.keys())
 
 
+# The code that produces a V2V/V2I number, as root-anchored pathspecs (git runs with cwd
+# cv2x-testbed/sumo, so plain relative paths would match nothing; after-action report 11). Results
+# are excluded so that a run's own output, or an earlier run's, does not mark the next run dirty.
+PRODUCING_PATHSPECS = (":(top)cv2x-testbed/sumo", ":(top,exclude)cv2x-testbed/sumo/results",
+                       ":(top)cv2x-testbed/identity", ":(top)2_w3c-ssi-layer")
+
+
+def _code_dirty(git) -> Any:
+    status = git("status", "--porcelain", "--", *PRODUCING_PATHSPECS)
+    return None if status is None else bool(status)
+
+
 def _environment() -> Dict[str, Any]:
     import platform
     import subprocess
@@ -478,8 +490,7 @@ def _environment() -> Dict[str, Any]:
     except Exception:
         crypto_v = None
     return {"git_commit": _git("rev-parse", "--short", "HEAD"),
-            "code_dirty": bool(_git("status", "--porcelain", "--", "cv2x-testbed/sumo", "cv2x-testbed/identity",
-                                    "2_w3c-ssi-layer")),
+            "code_dirty": _code_dirty(_git),
             "python": platform.python_version(), "cryptography": crypto_v, "platform": platform.platform()}
 
 

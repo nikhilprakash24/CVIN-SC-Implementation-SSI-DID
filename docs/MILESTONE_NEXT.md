@@ -27,3 +27,5 @@ or the next author checkpoint, whichever comes first.
 | N-16 | RSU-to-RSU messaging (C3 gap): not modelled; I2I covers controller → RSU and TMC → controller | stated as a gap in crux C3 | same |
 | N-17 | Choose the k the thesis defends for RSUs (same decision as N-9's freshness k; I3 shows the bound k − 1 is reached) | k open | register #46 |
 | N-18 | Seed the random inputs (claim ids, keys) of the L1 mechanism tests so the L1 gas table reproduces to the unit; 3 of 99 cells moved by < 30 gas between grand runs | not cited by any register row | after-action report 10 |
+| N-19 | Root-anchor the pathspecs of `dirtyMeasured` in `1_blockchain-identity/benchmarks/run.js` (same inert-flag fault as the run stamp); do it with the next harness run of record, because the change alters the harness's measured-code hash (§5.F) | the run of record's whole-tree `dirty` is false, so it is unaffected | after-action report 11 |
+| N-20 | Stamp the five producers classified *stamp producer* in `docs/testing/STAMP_INVENTORY.md` and re-run them (TSR phase 5) | classified; not stamped | same |

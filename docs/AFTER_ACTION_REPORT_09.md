@@ -122,3 +122,6 @@ and a report format; every acceptance re-run by the orchestrator. What did not: 
 first stamping helper was wrong and was caught only because the gate (the stamped `dirty` flag) was read
 rather than assumed. The structure's independence remains procedural: the same assistant configuration
 played every role, which is why the adversarial review waits for a different one.
+
+
+**Post-close correction (after-action report 11).** the four producers' `dirty: false` (E-series stamping step) came from a flag that could not fire (relative pathspecs from a subdirectory). The runs are clean on other evidence (whole tree clean at 02:27:39, outputs-only commit `d54178e`); see `docs/AFTER_ACTION_REPORT_11.md` R3.

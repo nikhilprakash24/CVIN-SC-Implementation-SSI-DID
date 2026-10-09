@@ -19,8 +19,14 @@ function git(args) {
 const MEASURED = ["1_blockchain-identity/contracts", "1_blockchain-identity/scripts", "1_blockchain-identity/hardhat.config.js",
   "1_blockchain-identity/package-lock.json", "cv2x-testbed/contracts"];
 
+// Pathspecs are anchored at the repository root with :(top). git runs with cwd 1_blockchain-identity,
+// where a plain "1_blockchain-identity/contracts" would resolve to a path that does not exist and the
+// flag could never be true (the fault found in after-action report 11; stamps written before the fix
+// carry an inert `dirty` and are vouched for by `dirtyAnyFile` or by hand).
+const PATHSPECS = MEASURED.map((p) => `':(top)${p}'`).join(" ");
+
 function runStamp() {
-  const status = git("status --porcelain -- " + MEASURED.join(" "));
+  const status = git("status --porcelain -- " + PATHSPECS);
   const whole = git("status --porcelain");
   return {
     commit: git("rev-parse --short HEAD"),
@@ -31,4 +37,4 @@ function runStamp() {
   };
 }
 
-module.exports = { runStamp };
+module.exports = { runStamp, MEASURED };

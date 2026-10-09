@@ -115,10 +115,15 @@ def environment_header():
         except Exception:  # noqa: BLE001
             libs[p] = None
     status = _vcs("status", "--porcelain")
+    # tree_clean is whole-tree (any file, results included); code_clean covers the producing code
+    # only, which is what a run of record requires (guide rule 1.1.6; after-action report 11, N-14)
+    from sumo_identity_integration import PRODUCING_PATHSPECS
+    code_status = _vcs("status", "--porcelain", "--", *PRODUCING_PATHSPECS)
     return {
         "date_utc": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
         "commit": _vcs("rev-parse", "HEAD"),
         "tree_clean": (status == "") if status is not None else None,
+        "code_clean": (code_status == "") if code_status is not None else None,
         "cpu": cpu,
         "logical_cpus": _os.cpu_count(),
         "platform": _pf.platform(),
