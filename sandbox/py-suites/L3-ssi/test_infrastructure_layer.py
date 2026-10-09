@@ -23,8 +23,8 @@ class Clock:
         return self.t
 
 
-def spat(rsu, t, phase="GREEN"):
-    return {"msg_type": "SPaT", "rsu": rsu, "intersection": "int_1", "phase": phase,
+def spat(rsu, t, phase="GREEN", intersection="int_1"):
+    return {"msg_type": "SPaT", "rsu": rsu, "intersection": intersection, "phase": phase,
             "time_to_change_s": 12.0, "timestamp": t}
 
 
@@ -176,7 +176,7 @@ def test_i3_k_infinity_never_stops_for_cached_receiver_but_new_receiver_rejects(
     p, _ = lay.sign("rsu_1", spat("rsu_1", 0.0))
     assert lay.verify("veh_001", p)[0]
     lay.revoke("rsu_1")
-    assert all(lay.verify("veh_001", lay.sign("rsu_1", spat("rsu_1", 0.0))[0])[0] for _ in range(50))
+    assert all(lay.verify("veh_001", lay.sign("rsu_1", dict(spat("rsu_1", 0.0), seq=i))[0])[0] for i in range(50))
     ok, _, cold, reason = lay.verify("veh_new", lay.sign("rsu_1", spat("rsu_1", 0.0))[0])
     assert not ok and cold and reason == "credential_invalid"
 
@@ -185,3 +185,128 @@ def test_malformed_package_is_a_rejection_not_a_crash(layer):
     lay, _ = layer
     ok, _, _, reason = lay.verify("veh_001", {"sender_did": "x"})
     assert not ok and reason.startswith("error:")
+
+
+# ---- added after the adversarial review (after-action report 11, findings B-F1, B-F2, B-F4, B-F5) ----
+
+@pytest.fixture
+def bound():
+    clock = Clock()
+    lay = InfrastructureLayer(clock=clock, refresh_every=None)
+    lay.enroll("rsu_1", "rsu", ["SPaT", "MAP"], extra={"intersectionId": "int_1"})
+    lay.enroll("rsu_2", "rsu", ["SPaT", "MAP"], extra={"intersectionId": "int_2"})
+    lay.enroll("ctrl_1", "controller", ["SignalStateUpdate"], extra={"intersectionId": "int_1"})
+    return lay, clock
+
+
+@pytest.mark.parametrize("warm", [False, True])
+def test_i2h_cross_intersection_spat_rejected(bound, warm):
+    lay, clock = bound
+    if warm:
+        assert lay.verify("veh", lay.sign("rsu_2", spat("rsu_2", 0.0, intersection="int_2"))[0])[0]
+    p, _ = lay.sign("rsu_2", spat("rsu_2", 0.0, phase="RED", intersection="int_1"))
+    ok, _, cold, reason = lay.verify("veh", p)
+    assert not ok and reason == "binding" and cold is (not warm)
+
+
+def test_rsu_field_must_name_the_signing_station(bound):
+    lay, _ = bound
+    p, _ = lay.sign("rsu_2", spat("rsu_1", 0.0, intersection="int_2"))
+    assert lay.verify("veh", p)[3] == "binding"
+
+
+def test_controller_update_bound_to_its_intersection(bound):
+    lay, _ = bound
+    p, _ = lay.sign("ctrl_1", {"msg_type": "SignalStateUpdate", "intersection": "int_2", "phase": "GREEN", "timestamp": 0.0})
+    assert lay.verify("rsu_2", p)[3] == "binding"
+    p, _ = lay.sign("ctrl_1", {"msg_type": "SignalStateUpdate", "intersection": "int_1", "phase": "GREEN", "timestamp": 0.0})
+    assert lay.verify("rsu_1", p)[0]
+
+
+def test_i2i_replay_to_same_receiver_rejected_but_broadcast_accepted(bound):
+    lay, clock = bound
+    p, _ = lay.sign("rsu_1", spat("rsu_1", 0.0))
+    assert lay.verify("veh_a", p)[0]
+    assert lay.verify("veh_b", p)[0]          # the same broadcast at a second receiver is not a replay
+    clock.t = 0.9
+    ok, _, cold, reason = lay.verify("veh_a", p)
+    assert not ok and not cold and reason == "replay"
+
+
+def test_replay_of_a_rejected_message_is_not_recorded(bound):
+    lay, _ = bound
+    p, _ = lay.sign("rsu_1", spat("rsu_1", 0.0))
+    good_sig = p["signature"]
+    p["signature"] = Account.sign_message(signable(p["message"]), Account.create().key).signature.hex()
+    assert lay.verify("veh", p)[3] == "wrong_key"
+    p["signature"] = good_sig                 # a forgery must not pre-poison the replay cache
+    assert lay.verify("veh", p)[0]
+
+
+def test_i2j_future_timestamp_rejected(bound):
+    lay, _ = bound
+    p, _ = lay.sign("rsu_1", spat("rsu_1", 0.5))
+    assert lay.verify("veh", p)[3] == "future"
+    p, _ = lay.sign("rsu_1", spat("rsu_1", 0.09))   # inside the 0.1 s skew allowance
+    assert lay.verify("veh", p)[0]
+
+
+def test_warm_not_permitted_rejected(bound):
+    lay, _ = bound
+    assert lay.verify("veh", lay.sign("rsu_1", dict(spat("rsu_1", 0.0), msg_type="MAP"))[0])[0]
+    p, _ = lay.sign("rsu_1", {"msg_type": "TimingPlan", "intersection": "int_1", "timestamp": 0.0})
+    ok, _, cold, reason = lay.verify("veh", p)
+    assert not ok and not cold and reason == "not_permitted"
+
+
+def test_warm_stale_rejected(bound):
+    lay, clock = bound
+    assert lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 0.0))[0])[0]
+    clock.t = 10.0
+    ok, _, cold, reason = lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 5.0))[0])
+    assert not ok and not cold and reason == "stale"
+
+
+def test_subject_mismatch_rejected(bound):
+    lay, _ = bound
+    p, _ = lay.sign("rsu_1", spat("rsu_1", 0.0))
+    p["sender_did"] = lay.stations["rsu_2"]["did"]   # rsu_1's credential presented under rsu_2's DID
+    assert lay.verify("veh", p)[3] == "subject_mismatch"
+
+
+def test_missing_credential_rejected(bound):
+    lay, _ = bound
+    p, _ = lay.sign("rsu_1", spat("rsu_1", 0.0))
+    del p["credential"]
+    assert lay.verify("veh", p)[3] == "no_credential"
+
+
+def test_warm_path_rechecks_expiry(bound, monkeypatch):
+    lay, _ = bound
+    assert lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 0.0))[0])[0]
+    import infrastructure_layer as il
+    monkeypatch.setattr(il.time, "time", lambda: 4.0e9)   # year 2096, after the 365-day validity
+    ok, _, cold, reason = lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 0.0, phase="RED"))[0])
+    assert not ok and not cold and reason == "expired"
+
+
+def test_unhashable_sender_did_is_a_rejection_not_a_crash(bound):
+    lay, _ = bound
+    p, _ = lay.sign("rsu_1", spat("rsu_1", 0.0))
+    p["sender_did"] = ["a"]
+    ok, _, _, reason = lay.verify("veh", p)
+    assert not ok and reason.startswith("error:")
+
+
+@pytest.mark.parametrize("k", [5, 25])
+def test_i3_recheck_happens_on_the_kth_message_not_earlier(k):
+    """Lower bound to go with the k-1 upper bound: a revoked signer is still accepted until its
+    k-th message after caching, so a verifier that re-checks too often (or never) fails here."""
+    clock = Clock()
+    lay = InfrastructureLayer(clock=clock, refresh_every=k)
+    lay.enroll("rsu_1", "rsu", ["SPaT"])
+    assert lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 0.0))[0])[0]   # cold: caches, seen = 0
+    lay.revoke("rsu_1")
+    results = [lay.verify("veh", lay.sign("rsu_1", dict(spat("rsu_1", 0.0), seq=i))[0]) for i in range(k)]
+    assert all(r[0] for r in results[:k - 1])
+    assert results[k - 1][3] == "revoked"

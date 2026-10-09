@@ -91,7 +91,7 @@ def spacetime(h, steps, out):
         ax.plot(seg_t, seg_x, color=SSI if pop[vid] == "ssi" else PKI, lw=0.6, alpha=0.8)
     for r in h.get("rsus") or []:
         ax.axhline(r["x"], color=RSU, lw=0.8, ls="--")
-        ax.text(ts[-1] if steps else 0, r["x"], f" {r['id']}", color=RSU, fontsize=7, va="center")
+        ax.text(steps[-1]["t"] if steps else 0, r["x"], f" {r['id']}", color=RSU, fontsize=7, va="center")
     ax.set_xlabel("simulated time (s)")
     ax.set_ylabel("position along the highway (m)")
     ax.set_title("Vehicle trajectories by identity population", loc="left", fontsize=10)
@@ -204,7 +204,7 @@ def animate(h, steps, tx, rx, out, frames_every=2):
             pa = rsu_pos.get(a) or (pos[a][:2] if a in pos else None)
             pb = pos[b][:2] if b in pos else None
             if pa and pb and lo <= pa[0] <= hi and lo <= pb[0] <= hi:
-                ax.plot([pa[0], pb[0]], [pa[1], pb[1]], color=(OK if ok else BAD) if kind == "SPaT" else GRID,
+                ax.plot([pa[0], pb[0]], [pa[1], pb[1]], color=(OK if ok else BAD) if kind == "SPaT" else (GRID if ok else BAD),
                         lw=0.8 if kind == "SPaT" else 0.4, alpha=0.9 if kind == "SPaT" else 0.6, zorder=1)
         for vid, (x, y, p) in pos.items():
             if lo <= x <= hi:
@@ -218,7 +218,7 @@ def animate(h, steps, tx, rx, out, frames_every=2):
         ax.set_yticks([])
         ax.set_xlabel("position along the highway (m)")
         ax.set_title(f"t = {s['t']:.1f} s · dots: SSI (blue) / PKI (amber) vehicles · triangles: RSUs · "
-                     f"lines: SPaT verified (green) / rejected (red), BSM (grey)", loc="left", fontsize=7)
+                     f"lines: SPaT verified (green) / rejected (red), BSM verified (grey) / rejected (red)", loc="left", fontsize=7)
         ax.text(lo, 496, caption(h), fontsize=5.5, color=INK2)
 
     anim = animation.FuncAnimation(fig, draw, frames=len(sel), interval=200)

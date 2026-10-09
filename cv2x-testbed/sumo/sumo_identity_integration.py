@@ -564,6 +564,8 @@ class SUMOIdentityIntegration:
             self.infra.enroll("rsu_maponly", "rsu", ["MAP"])
             self.infra.enroll("rsu_rogue", "rsu", ["SPaT", "MAP"], issuer=self.infra.rogue_authority)
 
+        self.attack_reasons: Dict[str, Dict[str, Any]] = {}
+        self._cached_at_revocation: Optional[int] = None
         self.trace: Optional[TraceWriter] = None
         self._trace_path = trace_path
 
@@ -798,6 +800,9 @@ class SUMOIdentityIntegration:
         if self.revoke_rsu_at is not None and self._revoked_at_step is None and sim_time >= self.revoke_rsu_at:
             self.infra.revoke("rsu_1")
             self._revoked_at_step = step
+            did = self.infra.stations["rsu_1"]["did"]
+            # receivers that trusted rsu_1 from cache at the moment of revocation (the I3 population)
+            self._cached_at_revocation = sum(1 for rx, c in self.infra._cache.items() if did in c and not rx.startswith("probe_"))
             if self.trace:
                 self.trace.write({"type": "revoke", "t": round(sim_time, 3), "station": "rsu_1"})
         t = round(sim_time, 3)
@@ -815,42 +820,69 @@ class SUMOIdentityIntegration:
                              "intersection": f"int_{i}", "phase": phase, "time_to_change_s": round(ttc, 1),
                              "timestamp": t}, self.metrics.spat)
 
+    # Pre-registered I2 checks (INFRASTRUCTURE_PREREG.md §2 and amendment A4): name -> expected reason.
+    I2_EXPECTED = {
+        "i2a_unsigned_spat": "unsigned", "i2b_wrong_key_spat": "wrong_key", "i2c_map_only_rsu_spat": "not_permitted",
+        "i2d_vehicle_signed_spat": "credential_invalid", "i2e_untrusted_authority_rsu": "credential_invalid",
+        "i2f_stale_spat": "stale", "i2g_forged_controller_update": "wrong_key", "i2h_cross_intersection_spat": "binding",
+        "i2i_replayed_spat": "replay", "i2j_future_spat": "future", "i2b_w_wrong_key_spat_warm": "wrong_key",
+        "i2c_w_not_permitted_warm": "not_permitted", "i2f_w_stale_spat_warm": "stale",
+    }
+
     def run_infrastructure_attacks(self, sim_time: float):
-        """Pre-registered I2 attacks (a)-(g); each must be rejected."""
+        """Pre-registered I2 checks (a)-(j) against first-contact receivers and (b, c, f) against a receiver
+        that has already cached the signer; each must be rejected with its expected reason (amendment A4)."""
+        from infrastructure_layer import signable
         t = round(sim_time, 3)
-        rx = "attack_probe_rx"
         msg = {"msg_type": "SPaT", "rsu": "rsu_2", "intersection": "int_2", "phase": "GREEN",
                "time_to_change_s": 20.0, "timestamp": t}
-        results = {}
+        got = {}
+
+        def forge(package, message):
+            package["signature"] = Account.sign_message(signable(message), Account.create().key).signature.hex()
+            return package
+
         p, _ = self.infra.sign("rsu_2", msg); p["signature"] = ""
-        results["i2a_unsigned_spat_rejected"] = not self.infra.verify(rx, p)[0]
-        p, _ = self.infra.sign("rsu_2", msg)
-        imp = Account.create()
-        from infrastructure_layer import signable
-        p["signature"] = Account.sign_message(signable(msg), imp.key).signature.hex()
-        results["i2b_wrong_key_spat_rejected"] = not self.infra.verify(rx + "_b", p)[0]
-        p, _ = self.infra.sign("rsu_maponly", dict(msg, rsu="rsu_maponly"))
-        results["i2c_map_only_rsu_spat_rejected"] = not self.infra.verify(rx, p)[0]
+        got["i2a_unsigned_spat"] = self.infra.verify("probe_a", p)
+        got["i2b_wrong_key_spat"] = self.infra.verify("probe_b", forge(self.infra.sign("rsu_2", msg)[0], msg))
+        got["i2c_map_only_rsu_spat"] = self.infra.verify("probe_c", self.infra.sign("rsu_maponly", dict(msg, rsu="rsu_maponly"))[0])
         ssi_vehicles = [v for v in self.vehicles.values() if v.identity_type == "MOBI_VID"]
         if ssi_vehicles:
             w = self.ssi.wallets[ssi_vehicles[0].vehicle_id]
             vm = dict(msg, rsu=ssi_vehicles[0].vehicle_id)
             p = {"message": vm, "sender_did": w["did"], "credential": w["credential"],
                  "signature": Account.sign_message(signable(vm), w["account"].key).signature.hex()}
-            results["i2d_vehicle_signed_spat_rejected"] = not self.infra.verify(rx, p)[0]
-        p, _ = self.infra.sign("rsu_rogue", dict(msg, rsu="rsu_rogue"))
-        results["i2e_untrusted_authority_rsu_rejected"] = not self.infra.verify(rx, p)[0]
-        p, _ = self.infra.sign("rsu_2", dict(msg, timestamp=round(sim_time - 5.0, 3)))
-        results["i2f_stale_spat_rejected"] = not self.infra.verify(rx + "_f", p)[0]
-        cm = {"msg_type": "SignalStateUpdate", "intersection": "int_2", "phase": "GREEN",
-              "time_to_change_s": 60.0, "timestamp": t}
-        p, _ = self.infra.sign("ctrl_2", cm)
-        p["signature"] = Account.sign_message(signable(cm), Account.create().key).signature.hex()
-        results["i2g_forged_controller_update_rejected"] = not self.infra.verify("rsu_2_probe", p)[0]
-        for k, v in results.items():
-            print(f"  {k:45s}: {v}")
+            got["i2d_vehicle_signed_spat"] = self.infra.verify("probe_d", p)
+        got["i2e_untrusted_authority_rsu"] = self.infra.verify("probe_e", self.infra.sign("rsu_rogue", dict(msg, rsu="rsu_rogue"))[0])
+        got["i2f_stale_spat"] = self.infra.verify("probe_f", self.infra.sign("rsu_2", dict(msg, timestamp=round(sim_time - 5.0, 3)))[0])
+        cm = {"msg_type": "SignalStateUpdate", "intersection": "int_2", "phase": "GREEN", "time_to_change_s": 60.0, "timestamp": t}
+        got["i2g_forged_controller_update"] = self.infra.verify("probe_g", forge(self.infra.sign("ctrl_2", cm)[0], cm))
+        got["i2h_cross_intersection_spat"] = self.infra.verify("probe_h", self.infra.sign("rsu_2", dict(msg, intersection="int_3", phase="RED"))[0])
+        legit, _ = self.infra.sign("rsu_2", dict(msg, seq="replay-probe"))
+        if self.infra.verify("probe_i", legit)[0]:                       # captured after a genuine reception
+            got["i2i_replayed_spat"] = self.infra.verify("probe_i", legit)
+        got["i2j_future_spat"] = self.infra.verify("probe_j", self.infra.sign("rsu_2", dict(msg, timestamp=round(sim_time + 0.5, 3)))[0])
+        # warm receiver: first a genuine SPaT and a genuine MAP from rsu_2, so rsu_2 is cached
+        self.infra.verify("probe_w", self.infra.sign("rsu_2", dict(msg, seq="warm-1"))[0])
+        self.infra.verify("probe_w", self.infra.sign("rsu_2", dict(msg, msg_type="MAP", seq="warm-2"))[0])
+        wm = dict(msg, seq="warm-b")
+        got["i2b_w_wrong_key_spat_warm"] = self.infra.verify("probe_w", forge(self.infra.sign("rsu_2", wm)[0], wm))
+        got["i2c_w_not_permitted_warm"] = self.infra.verify("probe_w", self.infra.sign("rsu_2", dict(msg, msg_type="TimingPlan", seq="warm-c"))[0])
+        got["i2f_w_stale_spat_warm"] = self.infra.verify("probe_w", self.infra.sign("rsu_2", dict(msg, timestamp=round(sim_time - 5.0, 3), seq="warm-f"))[0])
+
+        results = {}
+        for name, expected in self.I2_EXPECTED.items():
+            if name not in got:
+                self.attack_reasons[name] = {"expected": expected, "reason": "not run", "cold": None}
+                continue
+            ok, _ms, cold, reason = got[name]
+            passed = (not ok) and reason == expected
+            results[name] = passed
+            self.attack_reasons[name] = {"expected": expected, "reason": reason, "cold": cold}
+            print(f"  {name:32s}: {'rejected' if not ok else 'ACCEPTED'} ({reason}; expected {expected}) -> {passed}")
             if self.trace:
-                self.trace.write({"type": "attack", "t": t, "id": k, "rejected": v})
+                self.trace.write({"type": "attack", "t": t, "id": name, "rejected": not ok, "reason": reason,
+                                  "expected": expected, "cold": cold})
         self.attack_results.update(results)
 
     # ------------------------------------------------------------------
@@ -1163,12 +1195,14 @@ class SUMOIdentityIntegration:
                     "rejected": pop.failed}
 
         out = {"rsus": len(self.rsu_ids), "refresh_k": self.refresh_k, "spat": block(m.spat),
-               "i2i_controller_to_rsu": block(m.i2i_ctrl), "i2i_tmc_to_controller": block(m.i2i_tmc)}
+               "i2i_controller_to_rsu": block(m.i2i_ctrl), "i2i_tmc_to_controller": block(m.i2i_tmc),
+               "i2_reasons": self.attack_reasons}
         if self.revoke_rsu_at is not None:
             counts = [self.after_revocation.get(r, 0) for r in sorted(self.revocation_receivers)]
             out["revocation"] = {"revoked_station": "rsu_1", "revoke_at_s": self.revoke_rsu_at,
                                  "revoked_at_step": self._revoked_at_step,
                                  "receivers_after_revocation": len(self.revocation_receivers),
+                                 "cached_at_revocation": self._cached_at_revocation,
                                  "max_accepted_after_revocation": max(counts) if counts else 0,
                                  "total_accepted_after_revocation": sum(counts)}
         return out
@@ -1279,7 +1313,12 @@ def main():
     parser.add_argument("--trace", type=Path, default=None,
                         help="Write a JSON Lines trace (.gz to compress); off by default")
     args = parser.parse_args()
-    refresh_k = None if str(args.refresh_k).lower() in ("inf", "none", "0") else int(args.refresh_k)
+    if str(args.refresh_k).lower() in ("inf", "none"):
+        refresh_k = None
+    else:
+        refresh_k = int(args.refresh_k)
+        if refresh_k < 1:
+            parser.error("--refresh-k must be >= 1, or inf (0 used to mean inf silently; review finding B-F7)")
 
     integration = SUMOIdentityIntegration(
         simulation_mode=args.simulate,

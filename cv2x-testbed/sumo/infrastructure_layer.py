@@ -10,16 +10,26 @@ sumo_identity_integration.py (EIP-191 over sha256 of canonical JSON, with a sign
 the comparison with V2V is like for like.
 
 Verification at a receiver:
-  every message : freshness window on the signed timestamp (review-2 T-9 policy) and signature
-                  recovery;
+  every message : freshness window on the signed timestamp (review-2 T-9 policy: `stale` if older
+                  than 1 s, `future` if more than 0.1 s ahead), a per-receiver replay check inside
+                  the window (`replay`; a broadcast reaching many receivers is not a replay), and
+                  signature recovery;
   cold (first contact with a signer DID): the credential is verified by the canonical VC layer
                   (trusted issuer = the road authority only, validity window, revocation), the
                   credential subject must be the sender DID, the recovered address must be the DID's
-                  address, and the message type must be in the credential's permittedMessages;
-  warm          : recovered address equals the cached one and the message type is permitted;
+                  address, the message type must be in the credential's permittedMessages, and the
+                  message's `intersection` / `rsu` fields, when the credential names an
+                  intersectionId / stationId, must equal them (`binding`);
+  warm          : recovered address equals the cached one, the message type is permitted, the field
+                  binding holds and the credential has not expired;
                   every k-th message from a cached signer re-checks the authority's revocation
                   registry (k = refresh_every; None = never, i.e. k = infinity). A revoked signer is
-                  dropped from the cache and the message rejected.
+                  dropped from the cache and the message rejected. The counter counts messages
+                  presented under the cached DID (forged ones included), so a forgery can only make
+                  the re-check come sooner.
+
+Hardened after the adversarial review of after-action report 11 (binding, replay, warm expiry,
+distinct reasons); pre-registration amendment A4.
 
 What is real: all key generation, signing, signature recovery and credential verification
 (time.perf_counter). What is not: the radio (in-process delivery, as for V2V) and the back-haul
@@ -28,6 +38,7 @@ network (in-process; real back-haul is wired, often TLS or a private network).
 import hashlib
 import json
 import time
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
 from eth_account import Account
@@ -55,6 +66,26 @@ def _doc(credential: Any) -> Dict[str, Any]:
     return credential.to_dict() if hasattr(credential, "to_dict") else credential
 
 
+def _expiry(doc: Dict[str, Any]) -> Optional[float]:
+    exp = doc.get("validUntil") or doc.get("expirationDate")   # VC 2.0, then VC 1.1
+    if not exp:
+        return None
+    dt = datetime.fromisoformat(str(exp).replace("Z", "+00:00"))
+    return (dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)).timestamp()
+
+
+def _binding_ok(message: Dict[str, Any], binding: Dict[str, Any]) -> bool:
+    """Message fields that name an intersection or station must match the credential."""
+    if binding.get("intersectionId") is not None and message.get("intersection") != binding["intersectionId"]:
+        return False
+    if binding.get("stationId") is not None and "rsu" in message and message["rsu"] != binding["stationId"]:
+        return False
+    return True
+
+
+_FRESHNESS_REASON = {"stale": "stale", "timestamp in the future": "future", "replay": "replay"}
+
+
 class InfrastructureLayer:
     """Road authority + infrastructure stations + verifier caches."""
 
@@ -62,7 +93,9 @@ class InfrastructureLayer:
         if refresh_every is not None and refresh_every < 1:
             raise ValueError("refresh_every must be >= 1 or None (infinity)")
         self.refresh_every = refresh_every
-        self.freshness = FreshnessPolicy(replay_cache=False, clock=clock)
+        # Replay keys are (receiver, sender): one SPaT broadcast to eight vehicles is eight first
+        # receptions, not seven replays.
+        self.freshness = FreshnessPolicy(replay_cache=True, clock=clock)
         authority = Account.create()
         self.authority_did = f"did:ethr:0x1:{authority.address}"
         self.authority = CredentialIssuer(self.authority_did, authority.key.hex(), "CVIN Road Authority")
@@ -112,17 +145,22 @@ class InfrastructureLayer:
                now: Optional[float] = None) -> Tuple[bool, float, bool, Optional[str]]:
         """Returns (ok, latency_ms, cold, reason). `reason` names why a message was rejected."""
         t0 = time.perf_counter()
-        cache = self._cache.setdefault(receiver_id, {})
-        sender_did = package.get("sender_did", "")
-        cold = sender_did not in cache
         reason = None
         ok = False
+        cold = True
         try:
+            cache = self._cache.setdefault(receiver_id, {})
+            sender_did = package["sender_did"]
+            if not isinstance(sender_did, str):
+                raise TypeError("sender_did must be a string")
+            cold = sender_did not in cache
             message = package["message"]
             msg_type = message.get("msg_type")
-            stale = self.freshness.check(message.get("timestamp"), sender_did, b"", now=now)
-            if stale is not None:
-                reason = "stale"
+            replay_key = f"{receiver_id}|{sender_did}"
+            payload = canonical(message)
+            fresh = self.freshness.check(message.get("timestamp"), replay_key, payload, now=now)
+            if fresh is not None:
+                reason = next((v for k, v in _FRESHNESS_REASON.items() if fresh.startswith(k)), "bad_timestamp")
             elif not package.get("signature"):
                 reason = "unsigned"
             else:
@@ -137,8 +175,13 @@ class InfrastructureLayer:
                     if reason is None:
                         if recovered.lower() != entry["address"].lower():
                             reason = "wrong_key"
+                        elif entry["expires"] is not None and time.time() > entry["expires"]:
+                            del cache[sender_did]
+                            reason = "expired"
                         elif msg_type not in entry["permitted"]:
                             reason = "not_permitted"
+                        elif not _binding_ok(message, entry["binding"]):
+                            reason = "binding"
                         else:
                             ok = True
                 else:
@@ -150,6 +193,8 @@ class InfrastructureLayer:
                         doc = _doc(credential)
                         subject = doc.get("credentialSubject", {})
                         permitted = subject.get("permittedMessages", [])
+                        binding = {"intersectionId": subject.get("intersectionId"),
+                                   "stationId": subject.get("stationId")}
                         if not valid:
                             reason = "credential_invalid"   # untrusted issuer, expired or revoked
                         elif subject.get("id") != sender_did:
@@ -158,10 +203,15 @@ class InfrastructureLayer:
                             reason = "wrong_key"
                         elif msg_type not in permitted:
                             reason = "not_permitted"
+                        elif not _binding_ok(message, binding):
+                            reason = "binding"
                         else:
                             cache[sender_did] = {"address": recovered, "permitted": list(permitted),
-                                                 "credential_id": doc["id"], "seen": 0}
+                                                 "credential_id": doc["id"], "seen": 0,
+                                                 "binding": binding, "expires": _expiry(doc)}
                             ok = True
+            if ok:
+                self.freshness.accept(replay_key, payload, message.get("timestamp"), now=now)
         except Exception as e:  # malformed input is a rejection, never a crash
             reason = reason or f"error:{type(e).__name__}"
             ok = False
