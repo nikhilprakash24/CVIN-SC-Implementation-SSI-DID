@@ -62,6 +62,7 @@ jobs:
       run: |
         python3 -m pip install --quiet pyyaml
         python3 docs/figures/make_dashboard_data.py --check
+        python3 docs/testing/build_register.py --check
 
     - name: Run tests
       run: npx hardhat test
