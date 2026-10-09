@@ -1,0 +1,105 @@
+# Crux register: the source of docs/thesis/CRUX_REGISTER.md and the dashboard's crux panel.
+# Author: Nikhil Prakash (MASc, UBC ECE). Written 2026-10-09 (plan P4.1).
+# Evidence points at claim-register rows (docs/MEASUREMENT_CONDITIONS.md); their status is read
+# from the register by docs/figures/make_dashboard_data.py, never typed here. A crux whose claim
+# has no V row is a gap by construction. Edit this file, then regenerate.
+cruxes:
+  - id: C1
+    title: CAV identity substrate
+    question: On which blockchain identity standard should a connected or autonomous vehicle's DID be anchored?
+    hypotheses: [H1, H5]
+    thrusts: [1, 5]
+    claim: Minimal-state standards are an order of magnitude cheaper to create an identity on; the hybrid sits on the cost/capability frontier at creation and over a vehicle's lifetime.
+    evidence_rows: [25, 26, 34, 35, 36, 42, 43]
+    defects: [D7, D13, D25]
+    artefacts: [4_comparison-framework/results/gas_benchmark.json, 4_comparison-framework/results/scaling_lifetime.json, docs/FEATURE_ASYMMETRY_MATRIX.md, sandbox/grand/report/L1-asymmetry.md]
+    gaps:
+      - After the 2026-10 fixes ERC-735 is the heaviest create (veracity has a deployment price); chapters 5 and 6 need the sentence.
+      - The harness analysis (#36) finds CVIN-Combined dominated by ERC-4337 on six criteria; H5's wording must reconcile with it.
+    examiner: Is "cheaper" robust to the operation definition, and does the frontier survive the harness's six criteria?
+  - id: C2
+    title: Secure V2V messaging
+    question: Does blockchain-rooted identity verification fit the V2V safety-message budget?
+    hypotheses: [H3]
+    thrusts: [3]
+    claim: Off-chain verification of pre-issued credentials adds well under a millisecond per message; uncached on-chain resolution does not fit and needs a freshness policy.
+    evidence_rows: [21, 27, 32, 37, 39]
+    defects: [D11, D11b]
+    artefacts: [cv2x-testbed/sumo/results/v2v_latency_stats.json, cv2x-testbed/results/pki_vs_erc1056.json, cv2x-testbed/results/freshness_k.json]
+    gaps:
+      - Mobility is simulated (no SUMO run); radio, MAC and channel are out of scope.
+      - The freshness knee is host-dependent (#37).
+    examiner: What part of the 100 ms budget did you measure, and on which host?
+  - id: C3
+    title: Infrastructure messaging (V2I and infrastructure-to-infrastructure)
+    question: Does the same identity layer secure roadside-unit and infrastructure messages (SPaT/MAP, RSU-to-RSU, RSU-to-traffic-management)?
+    hypotheses: []
+    thrusts: [3]
+    claim: An RSU is a DID with a road-authority issuer; signed SPaT reuses the BSM path; revocation of a compromised RSU key is observed within a bounded number of messages.
+    evidence_rows: []
+    defects: []
+    artefacts: [cv2x-testbed/V2_DESIGN.md, docs/design/INFRASTRUCTURE_MESSAGING.md]
+    gaps:
+      - No implementation and no measurement exist; design note written 2026-10-09, code waits for audit.
+    examiner: Your title says connected vehicles; where is the infrastructure?
+  - id: C4
+    title: Revocation freshness
+    question: How quickly does a verifier stop trusting a revoked vehicle key, and at what latency cost?
+    hypotheses: [H3]
+    thrusts: [3, 5]
+    claim: A cached verifier honours a revoked key for at most k-1 further messages; the k that meets the neighbour-saturation target depends on the host and on the refresh mode.
+    evidence_rows: [32, 37, 40]
+    defects: [D21]
+    artefacts: [cv2x-testbed/results/freshness_k.json, cv2x-testbed/results/freshness_k_probe.json]
+    gaps:
+      - Choose the k the thesis defends (review-2 decisions 10 and 14).
+    examiner: Is k-1 messages of revocation staleness at 10 Hz acceptable for a safety system?
+  - id: C5
+    title: W3C conformance
+    question: Can blockchain identities be lifted to W3C DID and VC conformance?
+    hypotheses: [H2]
+    thrusts: [2]
+    claim: The executable checker clears the 90 % target and the external W3C DID test suite passes all but one generated test, also on a registry-minted did:ethr.
+    evidence_rows: [4, 24]
+    defects: [D10, D27]
+    artefacts: [4_comparison-framework/results/w3c_compliance.json, docs/conformance/W3C_DID_TEST_SUITE.md]
+    gaps:
+      - The DID Core checks test a synthesised document; label them structural (review-2 decision 2).
+      - The resolver builds did:ethr documents from the identifier, not from chain state.
+    examiner: Does conformance of the document shape say anything about the chain state behind it?
+  - id: C6
+    title: MOBI VID lifecycle
+    question: Is the MOBI VID birth certificate and lifecycle realisable across substrates?
+    hypotheses: [H4]
+    thrusts: [4]
+    claim: Birth and lifecycle are native on all five backends; multi-party attestation on three; the profile is MOBI-VID-inspired, checked against the public texts.
+    evidence_rows: [30, 33, 41]
+    defects: [D16]
+    artefacts: [4_comparison-framework/results/mobi_vid_backends.json, docs/MOBI_VID_CHECKLIST.md]
+    gaps:
+      - Few of the VID I MUSTs are met and the birth certificate lacks mandatory fields (checklist §1; SC-17, SC-18 pending).
+    examiner: Why call it MOBI if most normative requirements are unmet?
+  - id: C7
+    title: Privacy and linkability
+    question: What does pseudonymity cost on a public identity registry, and is it effective?
+    hypotheses: []
+    thrusts: [5]
+    claim: A delegate pool is fully linkable by one log query; per-pseudonym DIDs are unlinkable only while attribute-free or relayed.
+    evidence_rows: [38]
+    defects: []
+    artefacts: [4_comparison-framework/results/pseudonym_pool.json]
+    gaps:
+      - Radio, timing and position linkability are future work (SC-02).
+    examiner: Is a public chain compatible with V2X pseudonymity at all?
+  - id: C8
+    title: Veracity versus automation asymmetry
+    question: What does implemented-but-uncompared surface cost in correctness and security?
+    hypotheses: [H5]
+    thrusts: [5]
+    claim: Exercising every public function found latent defects the comparison never priced; fixing them moved the gas table.
+    evidence_rows: [28, 42, 43]
+    defects: [D7, D11b, D13, D21, D22, D25]
+    artefacts: [docs/DEFECT_LOG.md, sandbox/grand/report/demos.md, docs/thesis/chapter6-discussion/section-feature-asymmetry.md]
+    gaps:
+      - The chapter-6 section is a draft.
+    examiner: Would a different implementation of the same standard have different defects, and does that undermine the comparison?

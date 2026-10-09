@@ -54,5 +54,14 @@ jobs:
           || { echo "::error::docs/FEATURE_ASYMMETRY_MATRIX.md is stale: run the generator and commit"; exit 1; }
         echo "feature matrix up to date"
 
+    - name: Check the dashboard snapshot and crux register are up to date (plan 2026-10-09 P1.2)
+      # Both are generated from committed result files, the claim register and
+      # docs/thesis/cruxes.yaml; a result or register change without regeneration fails here.
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: |
+        python3 -m pip install --quiet pyyaml
+        python3 docs/figures/make_dashboard_data.py --check
+
     - name: Run tests
       run: npx hardhat test
