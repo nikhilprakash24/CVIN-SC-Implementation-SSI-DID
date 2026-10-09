@@ -34,7 +34,7 @@ tests:
   class: G
   evidence: E3
   verdict: measured
-  value: 70883
+  value: 70864
   location: 1_blockchain-identity/test/L1-identity-mechanisms
   source: sandbox/grand/report/L1-asymmetry.json
 - id: TC-cvin-combined-R3-F
@@ -184,7 +184,7 @@ tests:
   class: F
   evidence: E2
   verdict: pass
-  steps: 14
+  steps: 21
   location: sandbox/options/cvin-combined/demos/controller.js
   source: sandbox/grand/report/demos.json
 - id: TC-cvin-combined-did-resolution-F
@@ -224,7 +224,7 @@ tests:
   class: F
   evidence: E2
   verdict: pass
-  steps: 14
+  steps: 15
   location: sandbox/options/cvin-combined/demos/lifecycle-history.js
   source: sandbox/grand/report/demos.json
 - id: TC-cvin-combined-offchain-creation-F
@@ -464,7 +464,7 @@ tests:
   class: F
   evidence: E2
   verdict: pass
-  steps: 31
+  steps: 35
   location: sandbox/options/erc-1056-uport/demos/attributes.js
   source: sandbox/grand/report/demos.json
 - id: TC-erc-1056-uport-authorisation-roles-F
@@ -2645,7 +2645,7 @@ tests:
   class: F
   evidence: E2
   verdict: pass
-  steps: 16
+  steps: 17
   location: sandbox/options/lsp8/demos/lifecycle-history.js
   source: sandbox/grand/report/demos.json
 - id: TC-lsp8-revocation-F
@@ -2655,7 +2655,7 @@ tests:
   class: F
   evidence: E2
   verdict: pass
-  steps: 16
+  steps: 21
   location: sandbox/options/lsp8/demos/revocation.js
   source: sandbox/grand/report/demos.json
 - id: TC-lsp8-signatureReplay-S
@@ -2916,7 +2916,7 @@ tests:
   class: F
   evidence: E2
   verdict: pass
-  steps: 48
+  steps: 50
   location: sandbox/options/mobi-vid/demos/claims.js
   source: sandbox/grand/report/demos.json
 - id: TC-mobi-vid-controller-F
@@ -2926,7 +2926,7 @@ tests:
   class: F
   evidence: E2
   verdict: pass
-  steps: 25
+  steps: 28
   location: sandbox/options/mobi-vid/demos/controller.js
   source: sandbox/grand/report/demos.json
 - id: TC-mobi-vid-creation-F
@@ -2936,7 +2936,7 @@ tests:
   class: F
   evidence: E2
   verdict: pass
-  steps: 28
+  steps: 30
   location: sandbox/options/mobi-vid/demos/creation.js
   source: sandbox/grand/report/demos.json
 - id: TC-mobi-vid-did-resolution-F
@@ -2996,7 +2996,7 @@ tests:
   class: F
   evidence: E2
   verdict: pass
-  steps: 28
+  steps: 33
   location: sandbox/options/mobi-vid/demos/revocation.js
   source: sandbox/grand/report/demos.json
 - id: TC-mobi-vid-signatureReplay-S

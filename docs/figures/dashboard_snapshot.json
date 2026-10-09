@@ -644,8 +644,8 @@
     "source": {
       "path": "sandbox/grand/report/GRAND_REPORT.md"
     },
-    "generated": "2026-10-04T22:31:10Z",
-    "commit": "7404e94",
+    "generated": "2026-10-09T02:26:19Z",
+    "commit": "5a83bc2",
     "stages": {
       "smoke": {
         "ok": true,
@@ -657,15 +657,15 @@
       },
       "L1+L2": {
         "ok": true,
-        "result": "{'passing': 386, 'failing': 0}"
+        "result": "{'passing': 536, 'failing': 0}"
       },
       "L3+L4": {
         "ok": true,
-        "result": "{'passed': 94}"
+        "result": "{'passed': 260}"
       },
       "demos": {
         "ok": true,
-        "result": "{'demos': 92, 'steps': 1722, 'flagged': 62, 'failures': []}"
+        "result": "{'demos': 92, 'steps': 1752, 'flagged': 62, 'failures': []}"
       }
     }
   },
@@ -677,13 +677,13 @@
       "cvin-combined": {
         "demos": 10,
         "ok": 10,
-        "steps": 144,
+        "steps": 152,
         "flagged": 5
       },
       "erc-1056-uport": {
         "demos": 11,
         "ok": 11,
-        "steps": 200,
+        "steps": 204,
         "flagged": 6
       },
       "erc-1056-vehicle": {
@@ -731,13 +731,13 @@
       "lsp8": {
         "demos": 8,
         "ok": 8,
-        "steps": 137,
+        "steps": 143,
         "flagged": 5
       },
       "mobi-vid": {
         "demos": 11,
         "ok": 11,
-        "steps": 264,
+        "steps": 276,
         "flagged": 17
       }
     }
