@@ -2,8 +2,10 @@
 /**
  * erc-1056-uport / attributes — event-only attributes (setAttribute / setAttributeSigned /
  * revokeAttribute / revokeAttributeSigned), the wrapper's vehicle attribute bundle
- * (setVehicleAttributes, 8 events — reachable since the D18 fix bounded its validity to
- * PERMANENT_ATTRIBUTE_VALIDITY) and service endpoints (setServiceEndpoint), plus the
+ * (setVehicleAttributes(did, …), 8 events — reachable since the D18 / K-1 fix bounded its
+ * validity to VEHICLE_ATTRIBUTE_VALIDITY (= PERMANENT_ATTRIBUTE_VALIDITY, 100 y) and, since the
+ * merge (K-1, 2026-10-06), takes the DID as its first argument guarded by onlyVehicleOwner(did)
+ * and a registry-controls-DID check) and service endpoints (setServiceEndpoint), plus the
  * well-known attribute-name constants.
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/erc-1056-uport/demos/attributes.js
  */
@@ -88,28 +90,39 @@ async function main() {
   await tx('setAttribute-short-validity', 'EthereumDIDRegistry.setAttribute', registry.connect(W).setAttribute(W.address, h('did/svc/MessagingService'), b('mqtts://v2x.example:8883'), 60),
     'validity 60 s: expiry is encoded in the event (validTo) and enforced only by the resolver — no on-chain check exists for attributes (contrast validDelegate)');
 
-  // ---- wrapper bundle: 8 attributes in one transaction, needs ERC-1056 control ----
-  await reverts('setVehicleAttributes-unregistered', 'CVINVehicleDIDRegistry.setVehicleAttributes', wrapper.connect(stranger).setVehicleAttributes(...CAR), 'DID not registered', 'msg.sender must be a VIN-registered DID');
-  await reverts('setVehicleAttributes-before-handoff', 'CVINVehicleDIDRegistry.setVehicleAttributes', wrapper.connect(W).setVehicleAttributes(...CAR), 'DIDRegistry: unauthorized', 'the wrapper must be the ERC-1056 owner to write attributes on the DID\'s behalf');
+  // ---- wrapper bundle: 8 attributes in one transaction, needs ERC-1056 control (K-1: setVehicleAttributes(did, …)) ----
+  const wrapperAddr = await wrapper.getAddress();
+  await reverts('setVehicleAttributes-by-stranger', 'CVINVehicleDIDRegistry.setVehicleAttributes', wrapper.connect(stranger).setVehicleAttributes(W.address, ...CAR), 'CVINRegistry: not vehicle owner',
+    'FIXED (K-1): the DID is now an explicit first argument and the caller must be vehicleOwnerOf(did) — a stranger naming the vehicle\'s DID is refused first (formerly the function used msg.sender as the DID and could never succeed)');
+  await reverts('setVehicleAttributes-before-handoff', 'CVINVehicleDIDRegistry.setVehicleAttributes', wrapper.connect(W).setVehicleAttributes(W.address, ...CAR), 'CVINRegistry: registry does not control DID',
+    'FIXED (K-1): the owner itself is refused with the wrapper\'s own reason while the wrapper is not the ERC-1056 owner of the DID (formerly the inner EthereumDIDRegistry reverted "DIDRegistry: unauthorized")');
+  await tx('stranger-hands-control-to-wrapper', 'EthereumDIDRegistry.changeOwner', registry.connect(stranger).changeOwner(stranger.address, wrapperAddr), 'a DID that is NOT VIN-registered hands ERC-1056 control to the wrapper (to reach the third guard)');
+  await reverts('setVehicleAttributes-unregistered', 'CVINVehicleDIDRegistry.setVehicleAttributes', wrapper.connect(stranger).setVehicleAttributes(stranger.address, ...CAR), 'CVINRegistry: DID not registered',
+    'the third guard: owner check and control check pass (vehicleOwners[did] defaults to the DID itself), but the DID has no VIN mapping — the bundle is only for createVehicleDID identities');
   // the vehicle vocabulary CAN also be published directly with a finite validity (while the owner still controls the DID)
   const rvDirect = await tx('setAttribute-DID_VIN-direct', 'EthereumDIDRegistry.setAttribute', registry.connect(W).setAttribute(W.address, K.DID_VIN, b(VIN), ONE_YEAR * 30),
     'the wrapper\'s DID_VIN name used directly with a finite 30-year validity: the owner can publish single birth attributes without the wrapper (the bundle below does all eight at once)');
   assert(ethers.toUtf8String(eventsOf(rvDirect, registry, 'DIDAttributeChanged')[0].args.value) === VIN, 'DID_VIN value');
-  await tx('hand-control-to-wrapper', 'EthereumDIDRegistry.changeOwner', registry.connect(W).changeOwner(W.address, await wrapper.getAddress()), 'vehicle owner makes the wrapper the ERC-1056 owner');
+  await tx('hand-control-to-wrapper', 'EthereumDIDRegistry.changeOwner', registry.connect(W).changeOwner(W.address, wrapperAddr), 'vehicle owner makes the wrapper the ERC-1056 owner');
+  await reverts('setVehicleAttributes-by-stranger-after-handoff', 'CVINVehicleDIDRegistry.setVehicleAttributes', wrapper.connect(stranger).setVehicleAttributes(W.address, ...CAR), 'CVINRegistry: not vehicle owner',
+    'after the hand-off the wrapper is the ERC-1056 owner, so vehicleOwnerOf(did) is the recorded vehicle owner (defaults to the DID): still W, still not the stranger');
   const PERM = await view('const-PERMANENT_ATTRIBUTE_VALIDITY', 'CVINVehicleDIDRegistry.PERMANENT_ATTRIBUTE_VALIDITY', wrapper.PERMANENT_ATTRIBUTE_VALIDITY(),
-    (v) => `PERMANENT_ATTRIBUTE_VALIDITY = ${v} s (100 years): the bounded "permanent" validity the bundle uses since the D18 fix (same constant as MOBIVIDRegistry)`);
+    (v) => `PERMANENT_ATTRIBUTE_VALIDITY = ${v} s (100 years): our D18 constant, kept by the merge (same constant as MOBIVIDRegistry)`);
   assert(PERM === BigInt(100 * 365 * 86400), 'PERMANENT_ATTRIBUTE_VALIDITY');
-  const rb = await tx('setVehicleAttributes-bundle', 'CVINVehicleDIDRegistry.setVehicleAttributes', wrapper.connect(W).setVehicleAttributes(...CAR),
-    'FIXED (D18): the bundle now passes validity = PERMANENT_ATTRIBUTE_VALIDITY (100 y) instead of type(uint256).max, so EthereumDIDRegistry.setAttribute\'s block.timestamp + validity no longer overflows (formerly panic 0x11 on every call and the 8-attribute birth record was unreachable through the wrapper); 8 DIDAttributeChanged events in one transaction — gasUsed recorded on this line');
+  const VAV = await view('const-VEHICLE_ATTRIBUTE_VALIDITY', 'CVINVehicleDIDRegistry.VEHICLE_ATTRIBUTE_VALIDITY', wrapper.VEHICLE_ATTRIBUTE_VALIDITY(),
+    (v) => `VEHICLE_ATTRIBUTE_VALIDITY = ${v} s: the K-1 constant the bundle actually passes to EthereumDIDRegistry.setAttribute — identical to PERMANENT_ATTRIBUTE_VALIDITY (D18 ≡ K-1, same panic-0x11 root cause fixed on both lineages)`);
+  assert(VAV === PERM, 'VEHICLE_ATTRIBUTE_VALIDITY == PERMANENT_ATTRIBUTE_VALIDITY');
+  const rb = await tx('setVehicleAttributes-bundle', 'CVINVehicleDIDRegistry.setVehicleAttributes', wrapper.connect(W).setVehicleAttributes(W.address, ...CAR),
+    'FIXED (D18 / K-1): setVehicleAttributes(did, make, model, year, color, engine, mfgDate, autonomy) by the vehicle owner with the wrapper in control passes validity = VEHICLE_ATTRIBUTE_VALIDITY (100 y) instead of type(uint256).max, so EthereumDIDRegistry.setAttribute\'s block.timestamp + validity no longer overflows (formerly panic 0x11 on every call and the 8-attribute birth record was unreachable through the wrapper); 8 DIDAttributeChanged events in one transaction — gasUsed recorded on this line');
   const bundle = eventsOf(rb, registry, 'DIDAttributeChanged');
   const blkB = await ethers.provider.getBlock(rb.blockNumber);
   const expectNames = ['DID_VIN', 'DID_MAKE', 'DID_MODEL', 'DID_YEAR', 'DID_COLOR', 'DID_ENGINE', 'DID_MANUFACTURING_DATE', 'DID_AUTONOMY_LEVEL'].map((n) => K[n]);
-  assert(bundle.length === 8 && bundle.every((e, i) => e.args.name === expectNames[i] && e.args.validTo === BigInt(blkB.timestamp) + PERM), '8 birth attributes, validTo = now + 100 y');
+  assert(bundle.length === 8 && bundle.every((e, i) => e.args.name === expectNames[i] && e.args.validTo === BigInt(blkB.timestamp) + VAV), '8 birth attributes, validTo = now + 100 y');
   assert(ethers.toUtf8String(bundle[0].args.value) === VIN && ethers.toUtf8String(bundle[1].args.value) === CAR[0] && ethers.toUtf8String(bundle[7].args.value) === CAR[6], 'bundle values');
-  out('bundle-events', 'EthereumDIDRegistry.DIDAttributeChanged', true, 0, `the bundle emitted ${bundle.length} DIDAttributeChanged events (DID_VIN … DID_AUTONOMY_LEVEL), each validTo = ${blkB.timestamp} + ${PERM}; year and manufacturingDate are abi.encodePacked integers, the rest UTF-8 strings`);
+  out('bundle-events', 'EthereumDIDRegistry.DIDAttributeChanged', true, 0, `the bundle emitted ${bundle.length} DIDAttributeChanged events (DID_VIN … DID_AUTONOMY_LEVEL), each validTo = ${blkB.timestamp} + ${VAV}; year and manufacturingDate are abi.encodePacked integers, the rest UTF-8 strings`);
   const Adapter = require('../adapter');
   const ad = new Adapter({ ethers, signers: { deployer } });
-  await ad.attach({ registry: regAddr, wrapper: await wrapper.getAddress() });
+  await ad.attach({ registry: regAddr, wrapper: wrapperAddr });
   const doc = (await ad.resolve(W.address)).value;
   const resolved = doc.vehicle.attributes;
   const names8 = ['did/vehicle/vin', 'did/vehicle/make', 'did/vehicle/model', 'did/vehicle/year', 'did/vehicle/color', 'did/vehicle/engineNumber', 'did/vehicle/manufacturingDate', 'did/vehicle/autonomyLevel'];

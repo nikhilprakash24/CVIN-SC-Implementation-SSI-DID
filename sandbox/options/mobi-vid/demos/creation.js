@@ -5,7 +5,8 @@
  * anchors (vinHash, encryptedVIN, birthCertHash, firstOwner) to a vehicle identity ADDRESS (the
  * vehicle's own key) in an ERC-1056 registry. The chain never sees the VIN: hashing (SHA-256 +
  * salt, as the Python provider does) and encryption (AES-256-GCM) happen off-chain. Exercises
- * both creation paths, all getters and every guard, including the fixed birthAttributes path.
+ * both creation paths, all getters and every guard, including the fixed birthAttributes path and
+ * the K-4 pristine-identity guard (merge, 2026-10-06: a birth needs changed[identity] == 0).
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/mobi-vid/demos/creation.js
  */
 const crypto = require('node:crypto');
@@ -86,5 +87,8 @@ d.run(async () => {
   assert.equal(eventArgs(reg, r3, 'DIDAttributeChanged').name, ethers.id('did/pub/secp256k1/veriKey/base64'));
   await d.reverts('register-vehicle-for-other', 'MOBIVIDRegistryV2.registerVehicle', () => reg.connect(stranger).registerVehicle(firstOwner.address, pubkey), 'Only owner can perform this action', 'msg.sender must be the identity (its default owner): self-sovereign by construction');
   await d.tx('register-vehicle-again', 'MOBIVIDRegistryV2.registerVehicle', reg.connect(stranger).registerVehicle(stranger.address, pubkey), 'OBSERVATION: "Identity already registered" never triggers while the identity still owns itself (registerVehicle only sets an attribute), so it can be repeated');
-  await d.view('erc1056-identity-no-birth', 'MOBIVIDRegistryV2.vehicleExists', reg.vehicleExists(stranger.address), 'a registerVehicle identity has no VID I birth certificate: the two creation paths are disjoint', (v) => assert.equal(v, false));
+  await d.view('erc1056-identity-no-birth', 'MOBIVIDRegistryV2.vehicleExists+changed', Promise.all([reg.vehicleExists(stranger.address), reg.changed(stranger.address)]), 'a registerVehicle identity has no VID I birth certificate (but it now has DID history: changed != 0): the two creation paths are disjoint', (v) => { assert.equal(v[0], false); assert.notEqual(v[1], 0n); });
+  await d.reverts('register-birth-on-used-identity', 'MOBIVIDRegistryV2.registerVehicleBirth', () => reg.connect(authority).registerVehicleBirth(stranger.address, ethers.id('late-birth'), 'e', ethers.id('c'), firstOwner.address, '0x'), 'MOBIVID: identity already has DID history',
+    'FIXED (K-4): only a pristine identity can be born — changed[identity] must be 0, so an authorised manufacturer can no longer take over a did:ethr already in use (self-registered, owner-changed or revoked) by issuing it a birth certificate; the paths are disjoint in BOTH directions now');
+  await d.view('pristine-check-is-changed', 'MOBIVIDRegistryV2.changed', reg.changed(ethers.Wallet.createRandom().address), 'the K-4 guard is one SLOAD of changed[identity]: a never-touched address reads 0 and is eligible', (v) => assert.equal(v, 0n));
 });

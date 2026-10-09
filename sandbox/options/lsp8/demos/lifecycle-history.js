@@ -5,7 +5,9 @@
  * owner; history exists only in logs: TokenIdDataChanged / DataChanged (data), Transfer
  * (mint, moves, burn), VehicleMinted / VehicleRevoked, OwnershipTransferred (authority). This
  * demo lives a vehicle, replays the logs into a timeline and shows the adapter's resolve()
- * doing the same for data keys.
+ * doing the same for data keys. Since the merge (K-8, 2026-10-06) revokeVehicle bumps the token's
+ * data generation, so after the burn every getDataForTokenId read is empty and the odometer
+ * rollback survives only in the logs — the chain's answer to the stale-data half of D12.
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/lsp8/demos/lifecycle-history.js
  */
 const { ethers } = global; // injected by `hardhat run` (the demos live outside the Hardhat project)
@@ -33,9 +35,11 @@ d.run(async () => {
   await d.tx('odometer-3', 'CVINVehicleLSP8.setDataForTokenId', c.setDataForTokenId(t, K_ODO, ethers.toBeHex(40000, 32)), 'life: odometer ROLLBACK to 40000 (accepted — latest value wins)');
   await d.tx('re-registration', 'CVINVehicleLSP8.setDataBatchForTokenIds', c.setDataBatchForTokenIds([t, t], [K_REG, K_INSP], [ethers.toUtf8Bytes('DE:M-XY 777'), ethers.toUtf8Bytes('PASS 2026-10-04')]), 'life: re-registered and re-inspected in one batch');
   await d.tx('authority-handover', 'CVINVehicleLSP8.transferOwnership', c.transferOwnership(delegate.address), 'life: the issuing authority changes');
-  await d.tx('end-of-life', 'CVINVehicleLSP8.revokeVehicle', c.connect(newOwner).revokeVehicle(t, ethers.toUtf8Bytes('scrapped')), 'life: owner burns the identity');
 
-  await d.view('state-after', 'CVINVehicleLSP8.exists+getDataForTokenId', Promise.all([c.exists(t), c.getDataForTokenId(t, K_ODO).then((v) => Number(BigInt(v)))]), 'state: token gone, odometer slot still says 40000 (the rollback)', (v) => assert.deepEqual(v, [false, 40000]));
+  await d.view('state-before-burn', 'CVINVehicleLSP8.getDataForTokenId', c.getDataForTokenId(t, K_ODO).then((v) => Number(BigInt(v))), 'state just before the burn: the odometer slot says 40000 (the rollback — latest value wins)', (v) => assert.equal(v, 40000));
+  await d.tx('end-of-life', 'CVINVehicleLSP8.revokeVehicle', c.connect(newOwner).revokeVehicle(t, ethers.toUtf8Bytes('scrapped')), 'life: owner burns the identity; K-8: the token record\'s data generation is bumped');
+  await d.view('state-after', 'CVINVehicleLSP8.exists+getDataForTokenId+getDataBatchForTokenIds', Promise.all([c.exists(t), c.getDataForTokenId(t, K_ODO), c.getDataBatchForTokenIds([t, t], [K_REG, K_INSP])]),
+    'FIXED (K-8 / D12 second half): token gone AND every data read is empty — the generation bump retires the whole store (odometer, registration, inspection) in one SSTORE; the rollback value 40000 now exists only in TokenIdDataChanged logs', (v) => { assert.equal(v[0], false); assert.equal(v[1], '0x'); assert.deepEqual([...v[2]], ['0x', '0x']); });
   const [data, generic, transfers, minted, revoked, authority] = await Promise.all([
     c.queryFilter(c.filters.TokenIdDataChanged(t), 0, 'latest'), c.queryFilter(c.filters.DataChanged(), 0, 'latest'), c.queryFilter(c.filters.Transfer(null, null, null, t), 0, 'latest'),
     c.queryFilter(c.filters.VehicleMinted(t), 0, 'latest'), c.queryFilter(c.filters.VehicleRevoked(t), 0, 'latest'), c.queryFilter(c.filters.OwnershipTransferred(), 0, 'latest'),
@@ -43,7 +47,7 @@ d.run(async () => {
   assert.equal(data.length, 8); assert.equal(generic.length, 8); assert.equal(transfers.length, 3); assert.equal(minted.length, 1); assert.equal(revoked.length, 1); assert.equal(authority.length, 2);
   const odo = data.filter((l) => l.args.dataKey === K_ODO).map((l) => Number(BigInt(l.args.dataValue)));
   assert.deepEqual(odo, [15000, 62000, 40000]);
-  d.offchain('replay-data', 'CVINVehicleLSP8.TokenIdDataChanged+DataChanged', `${data.length} TokenIdDataChanged for this token (incl. the VIN at mint) mirrored by ${generic.length} DataChanged (not token-indexed: useless for per-vehicle queries); odometer series ${odo.join(' -> ')} exposes the rollback`);
+  d.offchain('replay-data', 'CVINVehicleLSP8.TokenIdDataChanged+DataChanged', `${data.length} TokenIdDataChanged for this token (incl. the VIN at mint) mirrored by ${generic.length} DataChanged (not token-indexed: useless for per-vehicle queries); odometer series ${odo.join(' -> ')} exposes the rollback — and since K-8 the logs are the ONLY place the burned vehicle's history survives (no generation is encoded in the events: a replayer must split the series at the Transfer-to-zero log)`);
   d.offchain('replay-transfers', 'CVINVehicleLSP8.Transfer+VehicleMinted+VehicleRevoked', `${transfers.length} Transfer logs for the token = mint (from 0), sale, burn (to 0) with force/data payloads; app-level VehicleMinted ${minted.length}, VehicleRevoked ${revoked.length}`);
   d.offchain('replay-authority', 'CVINVehicleLSP8.OwnershipTransferred', `${authority.length} authority events (constructor + handover): who could write data at each point in time is itself a log question`);
   const K_VIN = await c.DATA_KEY_VIN();
@@ -55,5 +59,6 @@ d.run(async () => {
   const res = await adapter.resolve(t);
   assert.equal(res.value.status.exists, false);
   assert.equal(res.value.data.length, 4);
-  d.offchain('resolve-via-adapter', 'adapter.resolve (exists, tokenOwnerOf, TokenIdDataChanged logs + getDataForTokenId, owner, name, symbol)', `DID document after burn: exists=false, ${res.value.data.length} data keys still enumerated from logs and re-read (VIN, registration, inspection, odometer)`);
+  assert.ok(res.value.data.every((x) => x.value === '0x'), 'all re-read values empty after the generation bump');
+  d.offchain('resolve-via-adapter', 'adapter.resolve (exists, tokenOwnerOf, TokenIdDataChanged logs + getDataForTokenId, owner, name, symbol)', `DID document after burn: exists=false, ${res.value.data.length} data keys still enumerated from logs (VIN, registration, inspection, odometer) but every re-read value is empty (K-8): the resolver sees the key set the vehicle once had and must take the values from the logs`);
 });

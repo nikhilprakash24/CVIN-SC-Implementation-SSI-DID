@@ -139,7 +139,7 @@ options:
       Revocation / status: measured-in-comparison
       Delegated / signed (off-chain-authorised) execution: not-applicable
       Lifecycle events / history: implemented
-      Authorisation / roles: implemented
+      Authorisation / roles: measured-in-comparison
       Token economics (approvals, royalties, payments): implemented
       VIN linkage: implemented
       DID / resolution helpers: not-applicable

@@ -7,7 +7,10 @@
  * binds to (registry, chainId, vehicle, eventId) — the on-chain signature check added as a fix.
  * This demo authorises all 8 roles, records all 11 EventTypes each by a correct role, checks the
  * role matrix and the verified flag, exercises attestEvent positive/negative (foreign signer,
- * raw digest, unauthorised, nonexistent) and issuer revocation.
+ * raw digest, unauthorised, nonexistent) and issuer revocation. Since the merge (K-15,
+ * 2026-10-06) an OWNER-role issuer may record events only on a vehicle it currently owns
+ * (identityOwner), so the OWNER issuer here IS the vehicle's owner and a non-owner OWNER-role
+ * issuer is shown being rejected.
  * Run: cd 1_blockchain-identity && npx hardhat run ../sandbox/options/mobi-vid/demos/claims.js
  */
 const { ethers } = global; // injected by `hardhat run` (the demos live outside the Hardhat project)
@@ -37,7 +40,9 @@ d.run(async () => {
   const vehicle = ethers.Wallet.createRandom().address;
   await reg.registerVehicleBirth(vehicle, ethers.sha256(ethers.toUtf8Bytes(VINS.hyundai)), 'enc:placeholder', ethers.id('cert'), owner.address, '0x');
   const bySigner = { MANUFACTURER: oem, DEALER: dealer, SERVICE_CENTER: serviceCenter, INSURANCE_COMPANY: insurer, GOVERNMENT_DMV: dmv, POLICE: police, INSPECTION_STATION: station, OWNER: owner };
-  d.offchain('setup', 'MOBIVIDRegistryV2.registerVehicleBirth', `vehicle ${vehicle.slice(0, 10)}… born; 8 issuer accounts prepared`);
+  const other = ethers.Wallet.createRandom().address; // a second vehicle, born to the dealer, that `owner` does NOT own
+  await reg.registerVehicleBirth(other, ethers.sha256(ethers.toUtf8Bytes(VINS.volvo)), 'enc', ethers.id('c2'), dealer.address, '0x');
+  d.offchain('setup', 'MOBIVIDRegistryV2.registerVehicleBirth', `vehicle ${vehicle.slice(0, 10)}… born to \`owner\` (the OWNER-role issuer below); second vehicle ${other.slice(0, 10)}… born to the dealer; 8 issuer accounts prepared`);
 
   // ---- issuer authorisation (all 8 roles) ----
   await d.reverts('authorise-none', 'MOBIVIDRegistryV2.authorizeIssuer', () => reg.connect(authority).authorizeIssuer(dealer.address, ROLE.NONE), 'Invalid role', 'NONE cannot be granted');
@@ -55,7 +60,7 @@ d.run(async () => {
   }
   d.offchain('allowed-issuers-matrix', 'MOBIVIDRegistryV2.allowedIssuers', `11 EventTypes x 8 roles read (88 views); ${matrix.length} allowed pairs match the constructor table, e.g. RECALL only MANUFACTURER, RECOVERY only POLICE, REGISTRATION only GOVERNMENT_DMV`);
   await d.view('is-authorized-issuer', 'MOBIVIDRegistryV2.isAuthorizedIssuer', Promise.all([reg.isAuthorizedIssuer(police.address, EVENT.THEFT_REPORT), reg.isAuthorizedIssuer(police.address, EVENT.RECALL), reg.isAuthorizedIssuer(signers[12].address, EVENT.MAINTENANCE)]),
-    'role x event-type check used by the recordLifecycleEvent modifier (police: theft yes, recall no; unknown address: no)', (v) => assert.deepEqual(v, [true, false, false]));
+    'role x event-type check used by the recordLifecycleEvent modifier (police: theft yes, recall no; unknown address: no) — a ROLE check only: the K-15 ownership condition on OWNER-role issuers is enforced inside recordLifecycleEvent, not here', (v) => assert.deepEqual(v, [true, false, false]));
 
   // ---- one event of every type by a correct role ----
   const plan = [
@@ -69,7 +74,7 @@ d.run(async () => {
     const dataHash = ethers.sha256(ethers.toUtf8Bytes(JSON.stringify(data)));
     const credentialHash = ethers.sha256(ethers.toUtf8Bytes(JSON.stringify({ '@context': 'https://www.w3.org/2018/credentials/v1', type: ['VerifiableCredential', `${ev}Credential`], credentialSubject: data })));
     const r = await d.tx(`record-${ev.toLowerCase()}`, 'MOBIVIDRegistryV2.recordLifecycleEvent', reg.connect(bySigner[role]).recordLifecycleEvent(vehicle, EVENT[ev], odo, dataHash, credentialHash, juris),
-      `${ev} by ${role}${ev === 'MAINTENANCE' ? ' — MEASURED (updateAttribute)' : ''}: struct stored (issuer, odometer, SHA-256 data hash, SHA-256 VC hash, jurisdiction, verified=${VERIFIED_ROLES.includes(role)}) -> LifecycleEventRecorded`);
+      `${ev} by ${role}${ev === 'MAINTENANCE' ? ' — MEASURED (updateAttribute)' : ''}${role === 'OWNER' ? ' (K-15: accepted because `owner` == identityOwner(vehicle))' : ''}: struct stored (issuer, odometer, SHA-256 data hash, SHA-256 VC hash, jurisdiction, verified=${VERIFIED_ROLES.includes(role)}) -> LifecycleEventRecorded`);
     const e = eventArgs(reg, r, 'LifecycleEventRecorded');
     eventIds[ev] = e.eventId;
     // NB: `reg.getEvent` would resolve to ethers' BaseContract.getEvent(key); address the contract function by signature.
@@ -81,11 +86,12 @@ d.run(async () => {
   await d.reverts('record-wrong-role', 'MOBIVIDRegistryV2.recordLifecycleEvent', () => reg.connect(serviceCenter).recordLifecycleEvent(vehicle, EVENT.RECALL, 1, ethers.id('x'), ethers.id('y'), 'DE'), 'Not authorized to issue this event type', 'a service centre cannot issue a RECALL (role matrix enforced on-chain)');
   await d.reverts('record-no-role', 'MOBIVIDRegistryV2.recordLifecycleEvent', () => reg.connect(signers[12]).recordLifecycleEvent(vehicle, EVENT.MAINTENANCE, 1, ethers.id('x'), ethers.id('y'), 'DE'), 'Not authorized to issue this event type', 'unknown address');
   await d.reverts('record-unregistered-vehicle', 'MOBIVIDRegistryV2.recordLifecycleEvent', () => reg.connect(dealer).recordLifecycleEvent(signers[13].address, EVENT.REPAIR, 1, ethers.id('x'), ethers.id('y'), 'DE'), 'Vehicle not registered', 'events need a birth certificate');
-  await d.tx('owner-role-on-any-vehicle', 'MOBIVIDRegistryV2.recordLifecycleEvent', (async () => {
-    const other = ethers.Wallet.createRandom().address;
-    await (await reg.registerVehicleBirth(other, ethers.sha256(ethers.toUtf8Bytes(VINS.volvo)), 'enc', ethers.id('c2'), dealer.address, '0x')).wait();
-    return reg.connect(owner).recordLifecycleEvent(other, EVENT.MAINTENANCE, 1, ethers.id('x'), ethers.id('y'), 'DE');
-  })(), 'OBSERVATION: the OWNER role is a registry-wide role, not checked against identityOwner(vehicle): an "owner" issuer can record owner events on a vehicle it does not own');
+  await d.view('owner-role-view-is-role-only', 'MOBIVIDRegistryV2.isAuthorizedIssuer+identityOwner', Promise.all([reg.isAuthorizedIssuer(owner.address, EVENT.MAINTENANCE), reg.identityOwner(other)]),
+    'the role view says yes for `owner` on MAINTENANCE, but the second vehicle is owned by the dealer — the view alone does not predict acceptance for OWNER-role issuers', (v) => assert.deepEqual(v, [true, dealer.address]));
+  await d.reverts('owner-role-not-current-owner', 'MOBIVIDRegistryV2.recordLifecycleEvent', () => reg.connect(owner).recordLifecycleEvent(other, EVENT.MAINTENANCE, 1, ethers.id('x'), ethers.id('y'), 'DE'), 'OWNER role: not the current owner of this vehicle',
+    'FIXED (K-15): the OWNER role is still granted registry-wide, but recordLifecycleEvent now requires an OWNER-role issuer to be identityOwner(vehicle) — an "owner" issuer can no longer file MAINTENANCE / ACCIDENT / MODIFICATION / THEFT_REPORT / INSURANCE_CLAIM events against a vehicle it does not own (formerly accepted: OBSERVATION in the pre-merge run)');
+  await d.tx('organisational-role-unchanged', 'MOBIVIDRegistryV2.recordLifecycleEvent', reg.connect(serviceCenter).recordLifecycleEvent(other, EVENT.MAINTENANCE, 1, ethers.id('x'), ethers.id('y'), 'DE'),
+    'the organisational roles keep their registry-wide scope by design: the service centre records on the dealer\'s vehicle without owning it');
 
   // ---- attestEvent: multi-party, on-chain signature verification ----
   const accident = eventIds.ACCIDENT;
