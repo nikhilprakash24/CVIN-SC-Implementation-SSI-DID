@@ -34,6 +34,40 @@ draft, and another document on what to expand in the next iteration."
 
 ## 3. Execution log
 - 2026-10-10 — report opened with defaults D-1…D-5.
+- **W1.** `docs/milestones/README.md`: work milestones (commit ranges, audited, closed by seven conditions)
+  inside overall milestones (version tags). WM-1 = passes 8–11, `db6c381..291bbca`, 27 commits.
+- **W2, plan review.** The plan of 2026-10-09 has 25 items: 18 done, 2 changed, 3 partial, 1 deferred,
+  **1 not done and never reported as not done (P3.2 `claims.yaml`)**. Status table appended to the plan
+  (§5); the plan itself not edited. `docs/PLAN_WM-2.md` written (workstreams A–G, author defaults W2-a…d).
+- **W2, backward fixes** (`44dc926`): defect log §F (D28–D36: the review's
+  defects of the system under test had been recorded only in report 11); style guide amended (rules
+  1.1.6, 1.1.9, 1.1.10, 1.2.7–1.2.9, 1.3.11–1.3.13, checklist); team structure (review protocol §4a,
+  lessons §4b); SC-21 (infrastructure scope) and SC-22 (SUMO deferral), both decided in passes 9–10
+  without an entry; CHANGELOG "Unreleased" (nothing after 0.8.0 had been entered); infrastructure
+  results added to README, thesis README and chapter 5 §5.7, which omitted them; the design's "as built"
+  section (its I2 list had "replayed", which the pre-registration dropped silently — the root of D29);
+  the visualisation plan's status (V2's byte-stability gate had never been checked: checked, 5 of 5
+  identical); N-14 closed (it was still listed open).
+- **W2, a hole in pass 11's own fix.** The stale-figure checker excused any value before an arrow,
+  but arrows also write ranges: the thesis README's "52,170 → 1,680,816" (and "~33×") passed. The rule
+  now excuses a value only if the entry's current value follows the arrow. Eight live stale lines then
+  surfaced and were fixed (test counts 217/369 in README, INVENTORY, QUICKSTART; the thesis README's RQ1
+  answer; one conformance history line marked).
+- **W3.** `docs/milestones/WM-1_REPORT.md` drafted before the audit (`d61a284`). The orchestrator's
+  own read-through corrected three of its claims before the audit started: "each guard shown to fail on
+  a mutated input" (true for three of seven), the pass-8 agent count, and a defect-log row count.
+- **W4, briefs.** A brief-writer agent on a different model wrote five briefs (19–22 checks each) and
+  an index of what it left out, from the milestone report, plans and reports; the orchestrator did not
+  edit them (archived under `docs/milestones/audit_WM-1/briefs/`, scratch paths normalised). Five
+  auditors on a different model run them on a frozen checkout of `d61a284`.
+- **W5.** `docs/presentation/make_presentation.py` generates `REPORT_DRAFT_1.md` (10 sections, ~25
+  tables, 8 generated figures plus the trace figure and an architecture diagram) and the published page
+  from the snapshot, the infrastructure per-run files and a process-metrics file whose every value names
+  its source. Figures follow the data-viz method (validated palette; one axis; dots for independent
+  runs); one headless look fixed tick rounding, a clipped label, a legend over a value and double TOC
+  numbering. `--check` added to CI and shown to fail on a tampered number. Every number the draft
+  prints was cross-checked against the register text. Published: https://claude.ai/artifact/EKvpiR7SxXgr4T3UWCdbAH.
+  `EXPANSION_PLAN_DRAFT2.md` ranks twelve expansions.
 
 ## 4. Findings register (audit of WM-1)
 *(filled in W4)*
