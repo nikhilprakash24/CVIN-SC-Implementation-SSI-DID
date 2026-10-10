@@ -728,7 +728,7 @@ failure message appears in any suite.
 | "A re-run may also *add* failures" (guarded tests firing on error results carrying `contentType` and the 8-key metadata) | **Did not happen.** Because of R1, the suite already treated *every* execution, including the old `did:mobi:` "success", as unsuccessful (`hasOwnProperty('error')` is true for `error: null`), so the error-guarded tests were already firing on all 10 executions in the old run. There was nothing left to newly trigger. |
 | "The 142/142 on identifiers and documents is not expected to change" | **Held.** 142/142. The CAIP-10 decimal chain-id change is not examined by any suite test (`blockchainAccountId` is not checked), so it moved no number. |
 
-Net: **328/441 → 336/441** (74.4 % → 76.2 %); DID Resolution **186/299 →
+<!-- history: an earlier run's arithmetic; current totals in register #24 --> Net: **328/441 → 336/441** (74.4 % → 76.2 %); DID Resolution **186/299 →
 194/299**; ethr 77 → 79/119, mobi 52 → 58/90, nft 57 → 57/90. 104 of the
 105 remaining failures come from R1-R4 in the metadata dataclasses
 (`DIDResolutionMetadata`, `DIDDocumentMetadata`) and the timestamp format;

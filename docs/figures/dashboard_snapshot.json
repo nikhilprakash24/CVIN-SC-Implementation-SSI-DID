@@ -1005,13 +1005,58 @@
         "id": "D27",
         "severity": "L",
         "status": "fixed"
+      },
+      {
+        "id": "D28",
+        "severity": "H",
+        "status": "fixed"
+      },
+      {
+        "id": "D29",
+        "severity": "H",
+        "status": "fixed"
+      },
+      {
+        "id": "D30",
+        "severity": "M",
+        "status": "fixed"
+      },
+      {
+        "id": "D31",
+        "severity": "L",
+        "status": "fixed"
+      },
+      {
+        "id": "D32",
+        "severity": "L",
+        "status": "fixed"
+      },
+      {
+        "id": "D33",
+        "severity": "M",
+        "status": "partly fixed"
+      },
+      {
+        "id": "D34",
+        "severity": "L",
+        "status": "fixed"
+      },
+      {
+        "id": "D35",
+        "severity": "M",
+        "status": "fixed"
+      },
+      {
+        "id": "D36",
+        "severity": "M",
+        "status": "fixed"
       }
     ],
     "counts": {
-      "H:fixed": 11,
-      "M:fixed": 4,
-      "L:fixed": 2,
-      "M:partly fixed": 2,
+      "H:fixed": 13,
+      "M:fixed": 7,
+      "L:fixed": 5,
+      "M:partly fixed": 3,
       "L:open": 2,
       "M:open": 6,
       "H:partly fixed": 1

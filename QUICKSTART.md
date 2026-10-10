@@ -95,7 +95,7 @@ pip3 install web3 eth-account cryptography pytest coincurve
 Run these from the repo root (paths are shown relative to it). All five pass
 against the current repo.
 
-### 1. Smart-contract test suite — 217 passing
+### 1. Smart-contract test suite (current count in `sandbox/grand/report/GRAND_REPORT.md`)
 
 ```bash
 cd 1_blockchain-identity
@@ -106,7 +106,7 @@ Expected tail:
 === Security matrix (attack outcomes) ===
 attack	ERC-1056	ERC-721	ERC-725	ERC-735	ERC-1155	ERC-4337	LSP8	MOBI-VID-V2	CVIN-Combined
 ...
-  217 passing (10s)
+  N passing (current N in sandbox/grand/report/GRAND_REPORT.md)
 ```
 
 ### 2. W3C Verifiable Credentials — 28 passing

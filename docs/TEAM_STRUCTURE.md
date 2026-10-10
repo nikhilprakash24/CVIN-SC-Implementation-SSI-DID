@@ -72,10 +72,36 @@ decision and the change cannot be separated.
 | Two sessions can fix the same defect identically without knowing it | D10 and K-15 produced byte-identical code | fetch all branches at the start of every pass |
 | Local and CI toolchains can differ silently | OpenZeppelin 5.4.0 in the testbed install vs 5.0.2 in CI changed one artifact | reproduce CI's exact install before regenerating tracked artifacts |
 
+## 4a. Review protocol (from pass 11; used to close work milestones)
+1. **Freeze.** A git worktree at the commit under review; reviewers read only that.
+2. **Separate.** Reviewers run on a different model from the orchestrator's, with fresh context,
+   read-only, with scratch space for proofs of concept outside the repository.
+3. **Briefs.** Each reviewer gets a scope and the instruction to find what is *wrong*, with evidence
+   (command and output, or a quoted line), a severity, and a list of what was checked and found sound.
+   From WM-1's close, the briefs are written by a separate brief-writer agent from the milestone
+   report and the plans, not by the orchestrator.
+4. **Dispose.** Every finding goes into a register with confirmed / accepted / rejected-with-reason /
+   deferred, and the commit that resolved it. The orchestrator reproduces each high-severity finding
+   before acting on it.
+5. **Re-verify.** A fix is re-checked with the reviewer's own reproduction, and where possible by a
+   mutation or probe that shows the new check fires.
+
+## 4b. What the structure learned (2026-10-09 and 2026-10-10, work milestone WM-1)
+| Lesson | Evidence | Rule it produced |
+|---|---|---|
+| Pre-registration fixes the questions; it cannot add the missing ones | seven registered attacks passed; a reviewer found two more the verifier accepted (cross-intersection SPaT, replay) | review the attack set adversarially before the run, not only after (guide 1.3.12) |
+| A guard can be inert for passes without anyone noticing | three producing-code "dirty" flags resolved paths from the wrong directory and could never fire | probe every guard in CI (guide 1.3.11) |
+| A fix made in one place is not a rule | the run-stamp fault fixed in pass 9 recurred in a Python header in pass 10 | fix the class, add the probe, write the rule |
+| Generators review better than readers | building outputs from sources found 82 stale figures and five self-contradicting register rows | generate, then check by regeneration in CI |
+| Reviewers on a different model with a "find what is wrong" brief produced 33 findings, none rejected | report 11 §4 | review protocol §4a |
+| A new test can catch the fixer's own error | the first expiry fix read a field the credential layer does not write | a fix ships with a test written to fail on the unfixed code |
+
 ## 5. Limits of the structure, stated plainly
 - The specialists are instances of the same assistant with different instructions. Their
   independence is procedural, not epistemic. The adversarial reviewer is most useful when run
-  by a different assistant configuration or by the author.
+  by a different assistant configuration or by the author. Since pass 11 reviewers run on a different
+  model, which gives different priors but still inside a session the orchestrator steers: the scope
+  and the dispositions remain the orchestrator's (narrowed from WM-1's close by a brief-writer agent).
 - Domain grounding (SAE, IEEE, ETSI, MOBI texts) is only as good as the sources the session can
   reach. Member-only texts stay unverified and are labelled so.
 - The orchestrator's acceptance gate catches regressions, not wrong research questions. That

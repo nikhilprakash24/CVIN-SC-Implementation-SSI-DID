@@ -11,9 +11,10 @@ thin/no-break spaces) are removed between digit groups, and `ms` / `%` are separ
 (`0.165ms` -> `0.165 ms`, `93.2%` -> `93.2 %`). Patterns are written against the normalised form.
 
 A line may keep a superseded value only when it marks it as history: a whole-word marker
-(`history_markers`, matched as regular expressions with word boundaries), or an arrow (`->`, `→`)
-*after* the value (old -> new). An arrow before the value does not excuse it (`x → 93.2 %` cites
-93.2 % as the new value). Hardened after after-action report 11 (findings C3, C4).
+(`history_markers`, matched as regular expressions with word boundaries), or "old -> new": an arrow
+(`->`, `→`) after the value **and the entry's current value after that arrow**. An arrow alone does
+not excuse a value, because arrows also write ranges (`52,170 → 1,680,816` cites 52,170 as current).
+Hardened after after-action reports 11 (findings C3, C4) and 12 (range arrows).
 
     python3 docs/testing/check_docs_numbers.py          # report; exit 1 on any hit
 """
@@ -54,9 +55,11 @@ def main():
                 continue
             arrows = [m.start() for m in ARROW.finditer(line)]
             for e in CFG["entries"]:
+                cur = re.search(r"\d[\d.]*", normalise(e["current"]))
                 for m in re.finditer(e["pattern"], line):
-                    if arrows and m.start() < arrows[-1]:
-                        continue                # old -> new: the value is the old side
+                    later = [a for a in arrows if a > m.start()]
+                    if later and cur and cur.group(0) in line[later[0]:]:
+                        continue                # old -> new, with the current value on the new side
                     hits.append((str(f.relative_to(ROOT)), n, e, raw.strip()))
                     break
     for path, n, e, line in hits:

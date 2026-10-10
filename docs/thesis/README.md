@@ -45,19 +45,21 @@ citation set). Chapters 3–7 are grounded in the measured artifacts.
 2. **W3C Compliant System** - 94.3% (after the 2026-10-03 resolver fixes; 93.2% at the merge) measured compliance (executable checker, CI-gated ≥90%)
 3. **Real-time V2V Integration** - blockchain identity verified in the V2V message path with real cryptography (SSI warm verify 0.153 ms)
 4. **MOBI VID** - VID I birth certificate + VID II (11 lifecycle event types), on-chain `attestEvent` signature verification, AES-256-GCM VIN encryption
+5. **Infrastructure identities (V2I/I2I)** - RSUs, signal controllers and a traffic-management centre as credentialed DIDs; signed SPaT and I2I messages with field binding, replay rejection and revocation re-check (`cv2x-testbed/sumo/infrastructure_layer.py`)
 
 ### Experimental Results (Chapter 5 — measured; see `chapter5-results/`)
 1. **Performance Comparison** - exact gas costs across all 9 standards (N=30, byte-identical, σ=0); ~34× create spread
 2. **Security Analysis** - two complementary lenses: 54-scenario revert suite (43/43 applicable cells defended) + threat matrix
 3. **Use-Case Validation** - 12/12 lifecycle use cases with real cryptographic verification (forged/replayed credentials fail)
 4. **V2V Latency** - N=30 seeded runs, 50 vehicles, 10 Hz BSM; 1.65 M verifications; mobility simulated (no SUMO binary)
+5. **Infrastructure messaging** - pre-registered I1–I5 (register #44–#48, §5.4.1): warm SPaT verification 1.096× a warm BSM's; 13 registered attacks rejected for the expected reason in 30/30 runs; a revoked RSU honoured for at most k − 1 messages by a cached verifier
 
 ## Research Questions Addressed
 
 ### RQ1: Performance
 **Question**: How do different blockchain identity standards compare in transaction cost, latency, and throughput?
 
-**Answer (measured, H1 supported)**: identity-creation gas spans ~33× across the nine standards (CVIN-Combined 52,170 → ERC-725xy 1,680,816), condition M1 (solc 0.8.24, optimizer 200 + viaIR, evm cancun, OpenZeppelin 5.0.2, Hardhat local, re-executed 2026-10-04 after the defect fixes). ERC-1056's bare `createIdentity` (52,594) is ~10× cheaper than ERC-721's VIN-bound `mintVehicle` (545,101) and ERC-725 (519,384); with the VIN bound on both sides (`createVehicleDID`, 78,068) the ratio is ≈7×. A bare ERC-721 `mint` on the lighter `CVIN_NFT_DID_ERC721` contract costs 102,804 and is *not* the create-identity operation (no VIN binding) — the two figures are reconciled in `docs/MEASUREMENT_CONDITIONS.md` #6/#25. ERC-4337 EntryPoint indirection adds 46,830 gas/op. Gas is deterministic (repeated runs byte-identical; N is a reproducibility check, not a confidence interval).
+**Answer (measured, H1 supported)**: identity-creation gas spans 33.7× across the nine standards (CVIN-Combined 52,216 to ERC-735 1,757,881; ERC-725xy 1,680,816 second; register #25), condition M1 (solc 0.8.24, optimizer 200 + viaIR, evm cancun, OpenZeppelin 5.0.2, Hardhat local, re-executed 2026-10-04 after the defect fixes). ERC-1056's bare `createIdentity` (52,594) is ~10× cheaper than ERC-721's VIN-bound `mintVehicle` (545,101) and ERC-725 (519,384); with the VIN bound on both sides (`createVehicleDID`, 78,068) the ratio is ≈7×. A bare ERC-721 `mint` on the lighter `CVIN_NFT_DID_ERC721` contract costs 102,804 and is *not* the create-identity operation (no VIN binding) — the two figures are reconciled in `docs/MEASUREMENT_CONDITIONS.md` #6/#25. ERC-4337 EntryPoint indirection adds 46,830 gas/op. Gas is deterministic (repeated runs byte-identical; N is a reproducibility check, not a confidence interval).
 
 ### RQ2: Security
 **Question**: Which architecture provides strongest security guarantees for V2X communication?

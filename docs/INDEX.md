@@ -26,7 +26,7 @@ provenance and must not be cited in chapters.
 | What is the adversary model? | `docs/THREAT_MODEL.md` | Dolev–Yao adversary, A1–A4, goals G1–G8 |
 | What are the scaling experiments and their pre-registration? | `docs/SCALING_EXPERIMENTS.md` | design; results in `4_comparison-framework/results/scaling_*` |
 | Where did each idea, decision and source come from? | `PROVENANCE.md`, `SOURCES.md`, `docs/DEVELOPMENT_HISTORY.md`, `docs/artifacts/` (provenance dossiers, `docs/ARTIFACTS_MANIFEST.md`) | attribution: hypotheses, thrusts and design decisions are the author's |
-| What is the plan and what is needed from the author? | `docs/AFTER_ACTION_REPORT.md` (integration) + `META_COMMENTARY.md` (living handoff) | `MASTER_UPDATE.md` §5–§7 were the pre-merge version of the same lists |
+| What is pending for the author, and what is deferred? | `docs/MILESTONE_NEXT.md` (deferred items N-1…N-22, split into author decisions and executable work) + the handback | `docs/AFTER_ACTION_REPORT.md` and `META_COMMENTARY.md` held the pre-merge version of these lists (historical) |
 | What was this research originally asked to be, and how is it to be done? | `docs/ORIGINAL_PROMPT_AND_DIRECTION.md` | verbatim original direction (A), the author's working directives (B), and where each stands (C) |
 | How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-10-09.md` | the single entry point; supersedes `HANDBACK_2026-09-30.md` (sandbox lineage) and `HANDBACK_2026-10-04.md` (review-2 lineage), which stay as history |
 | What can each identity option actually do, from code? | `docs/FEATURE_ASYMMETRY_MATRIX.md` | generated from the compiled ABIs by `4_comparison-framework/feature-matrix/make_feature_matrix.py`; interpretation in Review 02 §4 |
@@ -40,9 +40,12 @@ provenance and must not be cited in chapters.
 | How are the tests and results organised as one suite (subject × identity function × property × evidence), and what is the plan to get there? | `docs/planning/TESTING_SUITE_RESULTS_PLAN.md` (TSR Plan v1.0) + `docs/planning/TESTING_SUITE_SECOND_PASS_SHEET.md` (author's second pass) | as-found survey in `docs/planning/testing_suite/INVENTORY_AS_FOUND_2026-10-04.md`; `docs/testing/` is created by the plan's Phase 1 |
 | What does the TSR plan map onto in the sandbox already built here, and what is adopted from it? | `docs/reconciliation/RECON_TSR.md` (40-row mapping, 13 naming conflicts, what to adopt) | reconciliation of 2026-10-06; the merge plan's step S10 |
 | Where is any test, and how do the TSR plan and the grand sandbox fit together? | `docs/testing/README.md` | the entry point for the organised suite after the merge: three clicks to any test, the TSR→sandbox mapping, what the plan still asks for |
-| What is the current plan, awaiting audit? | `docs/PLAN_2026-10-09.md` | close the merge; generated results dashboard; SUMO visualisation; structured tests and the onboarding lineage; thesis cruxes; eight questions with defaults |
-| What rules bind every session (rigour and style)? | `docs/STYLE_AND_RIGOUR_GUIDE.md` | consolidated 2026-10-09 from the direction record, the register's rules and the handbacks |
-| How is the work organised as an agentic team, and what did that structure learn? | `docs/TEAM_STRUCTURE.md` | roles, ownership, acceptance gates, lessons of 2026-10-03 to 2026-10-06 |
+| What is the current plan? | `docs/PLAN_WM-2.md` | the plan for work milestone WM-2 (results pipeline of record, determinism, carried review-2 fixes, thesis readiness); `docs/PLAN_2026-10-09.md` is WM-1's executed plan with its status table (§5) |
+| What rules bind every session (rigour and style)? | `docs/STYLE_AND_RIGOUR_GUIDE.md` | consolidated 2026-10-09, amended 2026-10-10 at WM-1's close (guards probed, amendments, counts vs times, review on close) |
+| How is the work organised as an agentic team, and what did that structure learn? | `docs/TEAM_STRUCTURE.md` | roles, ownership, acceptance gates, the review protocol (§4a), lessons of 2026-10-03 to 2026-10-10 |
+| How is the work cut into milestones, and what did each one do? | `docs/milestones/README.md`, `docs/milestones/WM-1_REPORT.md` | work milestones (WM-n, commit ranges, audited) inside overall milestones (version tags) |
+| What defects were found, and what is their status? | `docs/DEFECT_LOG.md` | D1–D36; §C open items with the decision each needs; §F the WM-1 review's findings |
+| What was designed and pre-registered for infrastructure messaging, and what was built? | `docs/design/INFRASTRUCTURE_MESSAGING.md` (§7 as built), `docs/design/INFRASTRUCTURE_PREREG.md` (amendments A1–A4) | register #44–#48 |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 

@@ -65,6 +65,7 @@ remaining open items are listed in §C with the author decisions they need.
 | D24 (unrestricted DELEGATECALL) | M | author: document as the spec's executor hazard | VIN immutability after creation |
 | D25c (signature scheme) | design | author decision — recommendation EIP-191 | one scheme across claim contracts |
 | D26 (`changeOwner(0)`) | M | author: lock or reject | — |
+| D33 rest (`benchmarks/run.js` `dirtyMeasured` inert) | M | the next metrics-harness run of record (the fix changes the harness's measured-code hash) | root-anchored pathspecs, as in `run_stamp.js`; N-19 |
 | D8 rest (flat issuer role: any issuer may revoke another's credential) | M | author: per-issuance issuer records would change the credential model | documented in the contract and the ERC-1155 README |
 | D12 rest (`DATA_KEY_VIN` overwritable; no LSP1 probing) | M | author: should the VIN data key be immutable after mint? | immutable VIN key; document the LSP1 gap |
 | D16 rest (`revokeAttribute` value, silent `transferRegistryAuthority`, dead `nonce`) | L | — | document |
@@ -100,3 +101,21 @@ The parallel review-2 lineage (`docs/REVIEW_02_CODEBASE.md`, 64 findings K/H/S/T
 | S-10 decimal CAIP-10 chain id | D27 | fixes D27 |
 | K-2 sticky issuer revocation, K-11, K-4, T-1, T-2, T-9, S-1…S-9, Pass-3 replay cache | — | no counterpart here; merged as-is |
 | D13 VIN normalisation, D25a/b issuer registry + VIN binding, D9, D11b | — | no counterpart there; kept |
+
+## F. Found by the adversarial review of 2026-10-09 (after-action report 11) — work milestone WM-1
+
+Logged at the close of WM-1 (after-action report 12): report 11's plan said review findings that are
+defects of the system under test go here, and they had been recorded only in report 11 §4. Review
+finding ids in brackets.
+
+| # | Where | Defect | Sev | Status |
+|---|---|---|---|---|
+| D28 | `cv2x-testbed/sumo/infrastructure_layer.py` | message fields not bound to the credential: a valid RSU could sign SPaT naming another intersection (and a controller an update for another intersection), accepted on cold and warm paths [B1] | H | fixed `f1f9e37` (binding to `intersectionId`/`stationId`; I2 check (h); register #45) |
+| D29 | same | replay inside the 1 s freshness window accepted, to the same and to other receivers, though the design promised a replay check [B2] | H | fixed `f1f9e37` (per-receiver replay cache; I2 check (i)). Residual, by design: a fresh message relayed to a receiver that never heard it is not detectable by a replay cache |
+| D30 | same | warm path never re-checked credential expiry; the first fix read `expirationDate` while the VC layer writes `validUntil` and was inert until its test failed [B4] | M | fixed `f1f9e37` |
+| D31 | same | an unhashable `sender_did` raised outside the guarded block (crash instead of rejection) [B6] | L | fixed `f1f9e37` |
+| D32 | `sumo_identity_integration.py` CLI | `--refresh-k 0` silently meant "never re-check" (k = ∞) [B7] | L | fixed `f1f9e37` (rejected) |
+| D33 | `1_blockchain-identity/scripts/lib/run_stamp.js`, `sumo_identity_integration.py` `_environment()`, `1_blockchain-identity/benchmarks/run.js` | producing-code "dirty" flags used repository-relative pathspecs from a subdirectory and could never be true [C1; found by the orchestrator in report 11 R0] | M (rigour: runs of record were vouched for by an inert flag) | partly fixed: `b1d3f72` for the run stamp and the harness header, with a CI probe; **open** for `benchmarks/run.js` (N-19, with the next harness run of record). Every affected run was shown clean on other evidence |
+| D34 | `docs/testing/check_stamps.py` | `tree_clean` shown under "dirty" without negation: the inventory read inverted for every Python header [C2] | L | fixed `b1d3f72` |
+| D35 | `docs/testing/check_docs_numbers.py`, `stale_numbers.yaml` | scanned 7 files; substring history markers ("old " in "cold ") and number formatting let live superseded figures pass; one listed "stale" value was current (#34) [C3, C4] | M | fixed `36e0309` (87 files, normalisation, whole-word markers) |
+| D36 | `docs/figures/make_dashboard_data.py` | `--check` did not cover the published page; status parser not anchored; crux evidence counted non-V and missing rows [C5, C7, C8] | M | fixed `36e0309` |

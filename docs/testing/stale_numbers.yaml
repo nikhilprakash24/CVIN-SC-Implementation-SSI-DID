@@ -109,3 +109,6 @@ entries:
 - pattern: \b90 failures|3 injected attacks
   current: 150 failures = 5 injected attacks × 30
   row: 27
+- pattern: \b(217|219|369|386) passing
+  current: see sandbox/grand/report/GRAND_REPORT.md
+  row: 5

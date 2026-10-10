@@ -148,7 +148,21 @@ All numbers below are measured from the repository; each has a row in `docs/MEAS
 | SSI, cold (full VC verify) | 0.399 [0.381, 0.411] |
 | PKI baseline, warm | 0.094 [0.093, 0.095] |
 
-1.65M verifications; 150 failures = exactly the 5 injected attacks × 30 runs. **H3 supported** — roughly a 600× margin to the 100 ms V2V budget. *Caveat: excludes radio/MAC/network-stack latency; mobility is simulated (no SUMO binary required).*
+1.65M verifications; 150 failures = exactly the 5 injected attacks × 30 runs. **H3 supported** (verification-step scope): about 650 times inside the 100 ms V2V budget. *Caveat: excludes radio/MAC/network-stack latency; mobility is simulated (no SUMO binary required).*
+
+### Infrastructure messaging (thrust 3, crux C3) — pre-registered I1–I5, N=30
+
+Roadside units (RSUs), signal controllers and a traffic-management centre are `did:ethr` identities with road-authority credentials; RSUs sign SPaT, controllers and the TMC sign infrastructure-to-infrastructure messages (`docs/design/`, register #44–#48, chapter 5 §5.4.1).
+
+| Experiment | Result | Verdict |
+|---|---|---|
+| I1 warm SPaT vs warm BSM verify (ratio) | 1.096 [1.091, 1.101] | PASS (band 0.80–1.20) |
+| I2 registered attacks rejected for the expected reason | 13 of 13, in 30/30 runs | PASS |
+| I3 SPaT accepted from a revoked RSU by a cached verifier | ≤ k − 1 messages (0 / 4 / 24 for k = 1 / 5 / 25) | PASS |
+| I4 RSU identity gas (key anchor; hand to authority) | 52,594–52,606; 51,742–51,754 | reported |
+| I5 operation costs on the controller → RSU → vehicle path | 0.886 ms (a sum of operation costs, not a path latency) | reported |
+
+*An adversarial review found two holes in the first verifier (SPaT for another intersection; replay inside the window); both were fixed and every experiment re-run (`docs/AFTER_ACTION_REPORT_11.md`). Mock mobility, no radio, in-process back-haul and revocation registry.*
 
 ### Security (RQ2 / H5) — two complementary lenses
 
@@ -190,7 +204,7 @@ ERC-1056, ERC-721, ERC-725, **ERC-725xy** (full ERC-725X+Y account; added in v0.
 - Python packages: `web3`, `eth-account`, `cryptography`, `pytest`, `coincurve`
 - SUMO binary is **not** required — the V2V study runs in `--simulate` mode (real SUMO is optional/future)
 
-### Smart-contract tests (369 passing)
+### Smart-contract tests (current count: `sandbox/grand/report/GRAND_REPORT.md`)
 
 ```bash
 cd 1_blockchain-identity

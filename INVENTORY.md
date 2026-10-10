@@ -69,7 +69,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `test/security/securityScenarios.test.js` | 54 | ✅ | Adversarial revert suite — 43/43 applicable cells DEFENDED |
 | `test/security/attackHarness.js` | (helper) | ✅ | Shared attack-scenario harness |
 
-> The 217 passing total exceeds the raw `it()` count above because several suites generate parameterized cases per standard/operation at runtime.
+> The passing total (current figure: `sandbox/grand/report/GRAND_REPORT.md`) exceeds the raw `it()` count above because several suites generate parameterized cases per standard/operation at runtime.
 
 ### Scripts
 
@@ -266,7 +266,7 @@ Additional living docs at repo root: `README.md`, `CHANGELOG.md`, `CAPABILITIES.
 
 ## 🚀 Getting Started (verified commands)
 
-- Contracts: `cd 1_blockchain-identity && npm ci && npx hardhat test` → 217 passing
+- Contracts: `cd 1_blockchain-identity && npm ci && npx hardhat test` → all passing (current count: `sandbox/grand/report/GRAND_REPORT.md`)
 - VC tests: `python3 -m pytest 2_w3c-ssi-layer/verifiable-credentials/tests/` → 28
 - MOBI VID tests: `cd 2_w3c-ssi-layer/mobi-vid && python3 -m pytest tests/` → 32
 - Use cases: `python3 cv2x-testbed/scripts/test_use_cases.py` → 12/12

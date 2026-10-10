@@ -8,6 +8,39 @@ The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Unreleased] — toward 0.9.0
+
+Recorded 2026-10-10 at the close of work milestone WM-1 (after-action report 12): nothing after
+0.8.0 had been entered here. Each line points to the record that carries the detail; every number is
+in `docs/MEASUREMENT_CONDITIONS.md` with its status. Version tags remain an author decision (N-11).
+
+### Work milestone WM-1 — 2026-10-09/10 (passes 8–11; `docs/milestones/WM-1_REPORT.md`)
+- **Added:** infrastructure messaging (V2I and I2I): RSUs, signal controllers and a traffic-management
+  centre as credentialed DIDs; signed SPaT and I2I messages; pre-registered experiments I1–I5 (register
+  #44–#48; chapter 5 §5.4.1; SC-21).
+- **Added:** generated results dashboard (published), crux register C1–C8, TSR test register (305
+  TC) and coverage matrix, stamp inventory, stale-figure checker, run-identity probe — all regenerated
+  and compared in CI.
+- **Added:** SUMO trace schema and renderers (mock mobility; SC-22); traces and figures of record.
+- **Fixed:** two holes in the first infrastructure verifier found by adversarial review (D28 field
+  binding, D29 replay) and three lesser ones (D30–D32); three inert producing-code clean flags (D33)
+  and four tooling faults (D34–D36).
+- **Changed:** the style guide, team structure and milestone scheme (`docs/milestones/`).
+
+### 2026-10-03 to 2026-10-06 (passes 5–7, the review-2 lineage and the merge)
+- **Added:** grand sandbox, per-option sandboxes, layered L1–L4 suites, 92 feature demos; feature
+  asymmetry matrix generated from the ABIs; defect log (D1–D27).
+- **Fixed:** every high-severity defect of the demos pass (D7, D10, D11, D11b, D13, D18, D21, D22,
+  D25a/b) with regression tests; results of record re-executed (register #25, #31, #32).
+- **Merged:** the review-2 lineage (`bd90004`; decisions M-A…M-L) and the TSR plan; external W3C DID
+  suite 335/336 (#24); internal checker 94.3 % (#4).
+
+### 2026-09-24/25 (passes 1–4)
+- **Fixed:** the trunk compiles (cancun), provider key resolution works (D4/D5), CI green for the first
+  time; claim register and condition tags introduced; the analysis lineage merged (`781dc0b`).
+
+---
+
 ## [0.8.0] — 2026-07-15 — "Rigor & Ground-Truth Hardening"
 
 Executes Stage 0.8 of `docs/planning/NEXT_STAGES_PLAN.md`: closes the

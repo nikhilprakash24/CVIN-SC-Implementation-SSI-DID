@@ -529,6 +529,14 @@ in traffic density with an extrapolated saturation point (P\* ≈ 609 neighbours
 586–627; a linear extrapolation beyond the tested range) far beyond any
 realistic V2V regime.
 
+**Infrastructure addendum (§5.4.1, thrust 3, crux C3; not a hypothesis H1–H5):**
+pre-registered I1–I3 PASS, I4–I5 reported (register #44–#48). Warm SPaT
+verification costs 1.096× a warm BSM's (95 % CI [1.091, 1.101]); thirteen
+registered attacks are rejected for their expected reason in every run; a
+cached verifier honours a revoked RSU for at most k − 1 messages, a count
+and not a time. The figures follow a hardening of the verifier after an
+adversarial review found two attacks the first version accepted.
+
 ---
 
 ## 5.8 Threats to Validity

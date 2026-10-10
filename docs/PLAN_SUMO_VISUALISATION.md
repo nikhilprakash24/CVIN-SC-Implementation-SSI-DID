@@ -65,3 +65,13 @@ dashboard's palette.
 | S-a | Approve the trace schema and the renderers as specified | — (blocks V1) |
 | S-b | Install SUMO (V4) | no (Q2) |
 | S-c | Commit traces of record (gzipped, a few MB each), or regenerate on demand from seed and commit | commit one trace per figure; others on demand |
+
+## 7. Status at the close of work milestone WM-1 (2026-10-10)
+| Step | Status | Evidence |
+|---|---|---|
+| V1 `--trace` | done for the mock mobility; the TraCI path is written but untested (no SUMO, S-b) | `47c3314`; no-change gate on seed 7 |
+| V2 renderers | done; gate re-checked 2026-10-10: all five outputs regenerate byte-identically from the committed traces | `cv2x-testbed/sumo/results/figures/README.md` |
+| V3 dashboard panel | done (message-path replay) | dashboard v3–v5 |
+| V4 SUMO install and S1–S3 | deferred (S-b; SC-22; N-4) | — |
+| V5 RSU layer | done; I3 revocation figure | `f1f9e37` traces |
+| Not built from §4 | the network drawing from `highway_intersection.net.xml` and the per-vehicle inspector (both need real mobility to mean anything) | WM-2 plan |

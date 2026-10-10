@@ -2,6 +2,8 @@
 
 **Author:** Nikhil Prakash (MASc, UBC ECE)
 **Written:** 2026-10-09, consolidating rules given across the sessions of 2025-11 to 2026-10.
+**Amended:** 2026-10-10 at the close of work milestone WM-1 (rules 1.1.6, 1.1.9, 1.1.10, 1.2.7–1.2.9,
+1.3.11–1.3.13; checklist), from what after-action reports 10 and 11 found.
 **Binds:** every session, every assistant configuration, every agent working in this repository.
 **Sources:** `docs/ORIGINAL_PROMPT_AND_DIRECTION.md` §B (the author's working directives),
 `docs/MEASUREMENT_CONDITIONS.md` §2 (reporting rules), `HANDBACK_2026-09-30.md` §7 and
@@ -24,10 +26,16 @@
    one host. A number is never chosen.
 6. A run of record comes from a clean tree: the code that produced it (contracts, scripts,
    configuration, lockfile) equals the commit it names. A run with `dirty: true` is discarded,
-   and the discard is written down. Results files do not count toward the flag.
+   and the discard is written down. Results files do not count toward the flag. The flag is the
+   producing-code one (`code_clean`, run-stamp `dirty`); the whole-tree flag (`tree_clean`,
+   `dirtyAnyFile`) is recorded beside it and is evidence only when it is clean.
 7. Latency is compared only within a run. Host, library versions and toolchain are recorded
    with every latency figure.
 8. Gas is exact `receipt.gasUsed`. Its N is a determinism check, not a confidence interval.
+9. A count is reported as a count. A bound on messages is not a bound on time unless the time was
+   measured; say which (I3: "k − 1 messages", not "(k − 1) × 0.1 s").
+10. Gas that depends on random inputs (keys, ids, signatures) is reported as a range over the runs
+    made, with the cause stated as found or as not isolated; it is never presented as exact.
 
 ### 1.2 Claims
 1. Hypotheses can fail and are reported as they fell. A pre-registered verdict that failed is
@@ -40,6 +48,12 @@
 5. A fix lands only with a regression test in the layer that owns the path, the affected demos
    green, the grand runner green, and every moved result regenerated or annotated.
 6. No test is skipped or weakened. A skip fails the job.
+7. A pre-registration is never edited. Every departure is a dated amendment in its §Amendments,
+   marked **post hoc** if made after the run it concerns; an after-action report alone is not enough.
+8. An expectation written into a pre-registration that does not hold is reported as failed, like a
+   verdict (I4's "byte-identical runs").
+9. Trial runs check wiring and are disclosed as such; they are never reported as results. Code that
+   produces a pre-registered measure is not tuned after a trial number has been seen.
 
 ### 1.3 Process
 1. Commits are authored by the author, with no AI co-author trailers (academic integrity).
@@ -60,6 +74,13 @@
 9. The project is open source; the session's limits are the only access limits. Credentials
    found in history are still reported for rotation.
 10. Figures are generated from committed data by committed scripts.
+11. Every guard (a clean-tree flag, a stale-figure checker, a `--check`) is shown to fire: a probe or
+    test that fails on the broken version runs in CI. A guard never seen to trip is not evidence.
+12. A work milestone (`docs/milestones/README.md`) closes with an audit by reviewers that do not
+    share the orchestrator's context, on a frozen checkout; every finding gets a written disposition
+    and none is dropped.
+13. Verbs are claims. "Secures", "exactly", "compliant", "end to end" need evidence of that strength;
+    otherwise say what was measured ("the 13 registered attacks were rejected").
 
 ## 2. Style
 
@@ -91,3 +112,6 @@
 - [ ] The after-action report is closed, the handback has an addendum, the session manifest lists
       the outputs.
 - [ ] Open decisions are listed with their defaults.
+- [ ] Every new guard has a probe that fails on the broken version.
+- [ ] Defects of the system under test found in the pass are in `docs/DEFECT_LOG.md`.
+- [ ] Pre-registration departures are dated amendments.

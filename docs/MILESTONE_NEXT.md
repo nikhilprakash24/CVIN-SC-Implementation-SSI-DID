@@ -7,6 +7,11 @@ milestone. This file is the list. Nothing here blocks the current work; each ite
 **Milestone:** v0.9.0 (cut on the merge with a Sepolia witness, per `ORIGINAL_PROMPT_AND_DIRECTION.md` §B.2),
 or the next author checkpoint, whichever comes first.
 
+**Status at the close of work milestone WM-1 (2026-10-10).** Closed: N-13, N-14. **The author's
+decisions** (nothing executes until decided; the default stands): N-1, N-4 (go-ahead), N-5, N-6, N-7, N-8,
+N-9, N-10, N-11, N-12, N-17. **Executable without a decision**, scheduled in `docs/PLAN_WM-2.md`: N-2, N-3,
+N-15, N-16 (design first), N-18, N-19, N-20, N-21, N-22.
+
 | # | Item | Default until decided | Source |
 |---|---|---|---|
 | N-1 | Rotate the Infura credential exposed on the onboarding lineage's branches (H1) | not rotated; not on the trunk | `docs/prior-survey/README.md` |
@@ -22,7 +27,7 @@ or the next author checkpoint, whichever comes first.
 | N-11 | Push tags v0.7.0/v0.8.0; Sepolia secrets; SC-05/SC-06; notebook index; chapter 2 citations | open | `docs/HANDBACK_2026-09-30.md` |
 | N-12 | Default branch of the repository | unchanged | plan 2026-10-09 Q6 |
 | N-13 | ~~`3_cv2x-testbed/README.md` July counts~~ **closed in pass 11**: the stale-figure checker now scans it | — | handback X-7 |
-| N-14 | Scope `environment_header()`'s `tree_clean` (`cv2x-testbed/sumo/run_v2v_stats.py`) to producing code paths, as `scripts/lib/run_stamp.js` already is; the I3 run of record shows the whole-tree flag false only because I1's results file existed (register #46) | rule 1.1.6 checked by hand per run | after-action report 10 |
+| N-14 | ~~Scope the Python header's `tree_clean`~~ **closed in pass 11**: `code_clean` added beside it, CI probe (`b1d3f72`; D33) | — | after-action report 10 |
 | N-15 | Extend the TSR test register beyond L1, the security harness and the demos to the Python layers (L3/L4, incl. the 16 infrastructure tests) | Python layers counted in the grand report only | same |
 | N-16 | RSU-to-RSU messaging (C3 gap): not modelled; I2I covers controller → RSU and TMC → controller | stated as a gap in crux C3 | same |
 | N-17 | Choose the k the thesis defends for RSUs (same decision as N-9's freshness k). I3 bounds a message count (k − 1), not a time: the cache does not expire, so a time bound also needs a cache lifetime | k open; no cache expiry | register #46 |
