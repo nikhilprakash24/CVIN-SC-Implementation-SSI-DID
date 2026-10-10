@@ -29,7 +29,7 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 ### A. Results pipeline of record (TSR phase 5). *Owner: reproducibility engineer; measurement methodologist.*
 | Step | Work | Gate |
 |---|---|---|
-| A1 | N-21: `check_stamps.py` globs widened (metrics-rpc, scaling repeats, conformance reports, grand report JSON) | inventory lists every result directory; each new row classified |
+| A1 | **done (pass 13, report 13):** N-21: `check_stamps.py` accounts for every tracked result file (161; 0 uncovered); `--check-coverage` in CI | inventory lists every result directory; each new row classified |
 | A2 | One stamp helper for JS and Python with **per-producer scope** (each producer names the code it imports: the security harness, `cv2x-testbed/scripts`, post-processing scripts; D49); the CI probe extended to it | probe fails on a broken helper and on an edit to an imported file |
 | A3 | N-20: the five *stamp producer* files: stamp the producer, re-run on a clean tree; any moved number re-registered with the old value as history. **Runs after C1 and C2**, which move W3C, gas and security results (audit P-F20) | each re-run stamped `dirty: false` with a live flag; moved cells listed |
 | A3b | Re-run the seven V rows whose producing code changed since their stamp (#21, #26 verify part, #27, #32, #33, #37, #38; D50); old values kept as history | stamp inventory column "code changed since" reads `no` for every V row |

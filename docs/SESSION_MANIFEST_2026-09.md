@@ -170,3 +170,9 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | backward fixes: `DEFECT_LOG.md` §F–§G (D28–D57), style guide, team structure, SC-21/22, CHANGELOG, chapters 1/4/5/6/7, README, register rows #4, #27, #29–#36, #39, #44–#48 | the review findings and the audit's | requested |
 | tests and tooling: `mutation/mutate_infrastructure_layer.py`, `test_proof_options_signed.py`, `test_aggregator_checks.py`, `balanceCountsTokens.regression.test.js`, `check_test_counts.py`, CI skip gate and PR triggers, stamp inventory column | guards the audit showed missing | audit |
 | `4_comparison-framework/results/infrastructure_gas_runs/` | I4 over 30 runs | A-F3, B-F9 |
+
+## Pass 13 — Work milestone WM-2, step A1 (2026-10-10)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_13.md` | plan, log, closing | standing rule |
+| `docs/testing/check_stamps.py` (`--check-coverage`), `STAMP_INVENTORY.md`, CI step | every tracked result file accounted for; CI fails on an unaccounted one | WM-2 A1, N-21 |

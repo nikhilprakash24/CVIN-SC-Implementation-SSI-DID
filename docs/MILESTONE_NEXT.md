@@ -7,10 +7,10 @@ milestone. This file is the list. Nothing here blocks the current work; each ite
 **Milestone:** v0.9.0 (cut on the merge with a Sepolia witness, per `ORIGINAL_PROMPT_AND_DIRECTION.md` §B.2),
 or the next author checkpoint, whichever comes first.
 
-**Status at the close of work milestone WM-1 (2026-10-10).** Closed: N-6, N-13, N-14. **The author's
+**Status at the close of work milestone WM-1 (2026-10-10).** Closed: N-6, N-13, N-14, N-21. **The author's
 decisions** (nothing executes until decided; the default stands): N-1, N-4 (go-ahead), N-5, N-7, N-8,
 N-9, N-10, N-11, N-12, N-17, **N-23 (AI-use disclosure, raised by the WM-1 audit)**. **Executable without a decision**, scheduled in `docs/PLAN_WM-2.md`: N-2, N-3,
-N-15, N-16 (design first), N-18, N-19, N-20, N-21, N-22.
+N-15, N-16 (design first), N-18, N-19, N-20, N-22.
 
 | # | Item | Default until decided | Source |
 |---|---|---|---|
@@ -34,6 +34,6 @@ N-15, N-16 (design first), N-18, N-19, N-20, N-21, N-22.
 | N-18 | Seed the random inputs (claim ids, keys, addresses) of the L1 mechanism tests, the demos and `infrastructure_gas.js`, or report ranges by rule. Observed: 1–3 of 99 L1 cells move by < 30 gas between runs; 45 of 1,752 demo-step gas values differed between two grand runs (audit T-F13); I4 varies over 30 runs (#47) | not cited by any register row except #47, which reports ranges | after-action reports 10, 12 |
 | N-19 | Root-anchor the pathspecs of `dirtyMeasured` in `1_blockchain-identity/benchmarks/run.js` (same inert-flag fault as the run stamp); do it with the next harness run of record, because the change alters the harness's measured-code hash (§5.F) | the run of record's whole-tree `dirty` is false, so it is unaffected | after-action report 11 |
 | N-20 | Stamp the five producers classified *stamp producer* in `docs/testing/STAMP_INVENTORY.md` and re-run them (TSR phase 5) | classified; not stamped | same |
-| N-21 | Widen `check_stamps.py` globs to `results/metrics-rpc/`, `scaling_verify_repeats/`, `docs/conformance/**`, `sandbox/grand/report/*.json` (review finding C2) | report covers the main result directories | after-action report 11 |
+| N-21 | ~~Widen `check_stamps.py` globs~~ **closed in pass 13** (WM-2 A1): 161 tracked result files accounted for, 0 uncovered; `--check-coverage` in CI | — | after-action report 13 |
 | N-22 | Brief a session-level adversarial review whose briefs are written outside this session: Python suites outside L3, the contracts, chapters 1–4 and 6–7 were not in pass 11's scope | pass 11 covered passes 9–10 only | same |
 | N-23 | **AI-use disclosure.** The repository has no AI-use statement in the README, the thesis front matter or the author-bylined reports, although `PROVENANCE.md` states "AI tooling, under researcher direction" and several reports are written in the assistant's first person under the author's byline (WM-1 audit, finding P-F14). Decide: an AI-use statement in the README and thesis front matter (the university's policy governs the wording), and whether reports keep the first person | no statement added; nothing changed until decided | after-action report 12 §4 |

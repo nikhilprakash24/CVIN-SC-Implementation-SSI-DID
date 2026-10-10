@@ -14,16 +14,18 @@ A code flag is marked "inert" when the flag's own source at the stamp's commit u
 could not match (fault found in after-action report 11): such a stamp is vouched for by `any` or by
 the hand check recorded in the claim register.
 
-    python3 docs/testing/check_stamps.py
+    python3 docs/testing/check_stamps.py                    # writes STAMP_INVENTORY.md
+    python3 docs/testing/check_stamps.py --check-coverage   # CI: exit 1 if a tracked result file is uncovered
 """
 import glob
 import json
 import pathlib
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 GLOBS = ["4_comparison-framework/results/*.json", "4_comparison-framework/security-analysis/results/*.json",
          "cv2x-testbed/results/*.json", "cv2x-testbed/sumo/results/*.json",
-         "1_blockchain-identity/results/metrics/latest/meta.json"]
+         "1_blockchain-identity/results/metrics/latest/meta.json", "1_blockchain-identity/results/metrics-rpc/latest/meta.json"]
 KEYS = {
     "date": ["date", "date_utc", "generated_at", "generatedAt", "timestamp", "generated"],
     "commit": ["commit", "git_commit", "gitCommit", "baseline_commit"],
@@ -143,36 +145,96 @@ def flatten(d, depth=0):
     return out
 
 
+def stamp_of(p):
+    """The stamp fields of one result file, or None if it is not a JSON object."""
+    try:
+        d = json.load(open(p))
+    except Exception:
+        return None
+    flat = flatten(d) if isinstance(d, dict) else {}
+    have = {k: next((flat[a] for a in alts if flat.get(a) is not None), None) for k, alts in KEYS.items()}
+    if flat.get("dirtyMeasured") is not None:  # metrics harness: `dirty` is its whole-tree flag
+        code, kind, anyd = bool(flat["dirtyMeasured"]), "harness", flat.get("dirty")
+    else:
+        code, kind = _first(flat, CODE_DIRTY)
+        anyd = _first(flat, ANY_DIRTY)[0]
+    live = code is not None and _flag_live(kind, have["commit"])
+    have["any"] = anyd
+    if live:
+        have["code"] = code
+    elif anyd is False:
+        have["code"] = "False (from any)"
+    else:
+        have["code"] = None if code is None else f"{code} (inert)"
+    if not live and anyd is not False and path_of(p) in HAND_CHECKED:
+        have["code"] = "False (hand check)"
+    have["changed"] = changed_since(have["commit"], path_of(p))
+    return have
+
+
+# Multi-file run directories: one aggregated row each (WM-2 step A1, N-21).
+AGGREGATES = {
+    "4_comparison-framework/results/infrastructure_gas_runs/run_*.json": "I4 repeated 30 times (#47)",
+    "4_comparison-framework/results/scaling_verify_repeats/*.json": "scaling-verify repeats (#26)",
+}
+# Tracked result JSON that is not stamped on its own, by class (pattern -> class, reason).
+COVERED = [
+    ("1_blockchain-identity/results/metrics/latest/*.json", "covered by meta.json", "harness run of record; its meta.json carries the stamp"),
+    ("1_blockchain-identity/results/metrics-rpc/latest/*.json", "covered by meta.json", "HTTP-RPC run; its meta.json carries the stamp"),
+    ("4_comparison-framework/results/infrastructure_gas_runs/summary.json", "derived", "summary of the 30 stamped runs"),
+    ("cv2x-testbed/sumo/results/figures/*.json", "derived", "down-sampled trace for the dashboard"),
+    ("cv2x-testbed/results/archive-2026-10-03/*.json", "history", "archived pre-merge results"),
+    ("docs/conformance/reports/**/*.json", "external tool output", "jest reports of the W3C DID test suite, dated by directory (#24)"),
+    ("docs/conformance/reports/*.json", "external tool output", "W3C DID test-suite run summaries, dated by file name (#24)"),
+]
+SCOPE = ["*/results/*.json", "*/results/**/*.json", "**/results/**/*.json", "docs/conformance/reports/**/*.json"]
+SCOPE_EXCLUDE = ("docs/prior-survey/", "docs/review02/", "_research-copies/", "sandbox/options/", "docs/figures/")
+
+
+def tracked_results():
+    import subprocess
+    out = subprocess.run(["git", "ls-files", "*.json"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.split()
+    return sorted(f for f in out if ("/results/" in f or f.startswith("docs/conformance/reports/"))
+                  and not any(x in f for x in SCOPE_EXCLUDE))
+
+
 def main():
+    import fnmatch
     rows = []
     for g in GLOBS:
         for p in sorted(glob.glob(str(ROOT / g))):
-            try:
-                d = json.load(open(p))
-            except Exception:
-                continue
-            flat = flatten(d) if isinstance(d, dict) else {}
-            have = {k: next((flat[a] for a in alts if flat.get(a) is not None), None) for k, alts in KEYS.items()}
-            if flat.get("dirtyMeasured") is not None:  # metrics harness: `dirty` is its whole-tree flag
-                code, kind, anyd = bool(flat["dirtyMeasured"]), "harness", flat.get("dirty")
-            else:
-                code, kind = _first(flat, CODE_DIRTY)
-                anyd = _first(flat, ANY_DIRTY)[0]
-            live = code is not None and _flag_live(kind, have["commit"])
-            have["any"] = anyd
-            if live:
-                have["code"] = code
-            elif anyd is False:
-                have["code"] = "False (from any)"
-            else:
-                have["code"] = None if code is None else f"{code} (inert)"
-            if not live and anyd is not False and path_of(p) in HAND_CHECKED:
-                have["code"] = f"False (hand check)"
-            have["changed"] = changed_since(have["commit"], path_of(p))
-            rows.append((path_of(p), have))
+            have = stamp_of(p)
+            if have is not None:
+                rows.append((path_of(p), have))
+    aggs = []
+    for pat, label in AGGREGATES.items():
+        files = sorted(glob.glob(str(ROOT / pat)))
+        stamps = [stamp_of(f) for f in files]
+        stamps = [s for s in stamps if s is not None]
+        full = [s for s in stamps if all(s[k] is not None for k in ("date", "commit", "toolchain")) and s["code"] is not None]
+        aggs.append((pat, label, len(files), len(full), sorted({str(s["commit"])[:12] for s in stamps if s["commit"]}),
+                     sorted({str(s["code"]) for s in stamps}), sorted({str(s["any"]) for s in stamps}),
+                     sorted({str(s["changed"]) for s in stamps})))
+
     def complete(h):
         return all(h[k] is not None for k in ("date", "commit", "toolchain")) and h["code"] is not None
     full = sum(1 for _, h in rows if complete(h))
+    # coverage account: every tracked result JSON is a row, inside an aggregate, or in a named class
+    listed = {path for path, _ in rows}
+    in_agg = {path_of(f) for pat in AGGREGATES for f in glob.glob(str(ROOT / pat))}
+    account, uncovered = {}, []
+    for f in tracked_results():
+        if f in listed:
+            account["own row"] = account.get("own row", 0) + 1
+        elif f in in_agg:
+            account["aggregated run directory"] = account.get("aggregated run directory", 0) + 1
+        else:
+            cls = next((c for pat, c, _ in COVERED if fnmatch.fnmatch(f, pat)), None)
+            if cls:
+                account[cls] = account.get(cls, 0) + 1
+            else:
+                uncovered.append(f)
+    total = sum(account.values()) + len(uncovered)
     lines = ["# Stamp Inventory — results of record", "",
              "**Generated** by `docs/testing/check_stamps.py`. A stamp = date, commit, producing-code cleanliness, "
              "toolchain. Columns *code* and *any* are both \"dirty\" (True = not clean): *code* covers the producing "
@@ -183,15 +245,36 @@ def main():
              "*history* (a diff of two runs, exempt), *single run* (not a result of record). *code changed since*: whether the "
              "producing code of the result's family differs between the stamped commit and HEAD (yes = the result describes "
              "code the trunk no longer has; re-run or disclose).", "",
-             f"{full} of {len(rows)} result files carry a complete stamp.", "",
+             f"**Scope** (WM-2 step A1, N-21): {total} tracked result JSON files outside the lineage copies "
+             f"({', '.join(SCOPE_EXCLUDE)}). " + "; ".join(f"{k}: {v}" for k, v in sorted(account.items()))
+             + (f"; **uncovered: {len(uncovered)}**" if uncovered else "; uncovered: 0") + ".", "",
+             f"{full} of {len(rows)} individually listed result files carry a complete stamp.", "",
              "| File | date | commit | dirty (code) | dirty (any) | code changed since | toolchain | class |", "|---|---|---|---|---|---|---|---|"]
     for path, h in rows:
         cell = lambda v: "MISSING" if v is None else str(v)[:24]
         cls = (f"hand check: {HAND_CHECKED[path]}" if path in HAND_CHECKED else "") if complete(h) else ("**unclassified**" if path not in CLASSES else f"{CLASSES[path][0]}: {CLASSES[path][1]}")
         lines.append(f"| `{path}` | {cell(h['date'])} | {cell(h['commit'])} | {cell(h['code'])} | {cell(h['any'])} | "
                      f"{cell(h['changed'])} | {cell(h['toolchain'])} | {cls} |")
+    lines += ["", "## Run directories (one row each)", "",
+              "| Files | What | runs | complete stamps | commits | dirty (code) | dirty (any) | code changed since |",
+              "|---|---|---|---|---|---|---|---|"]
+    for pat, label, n, nfull, commits, codes, anys, changed in aggs:
+        lines.append(f"| `{pat}` | {label} | {n} | {nfull} | {', '.join(commits) or 'MISSING'} | {', '.join(codes)} | {', '.join(anys)} | {', '.join(changed)} |")
+    lines += ["", "## Covered without an own stamp", "", "| Files | Class | Why |", "|---|---|---|"]
+    lines += [f"| `{pat}` | {c} | {why} |" for pat, c, why in COVERED]
+    if uncovered:
+        lines += ["", "## Uncovered (add a row, an aggregate or a class)", ""] + [f"- `{f}`" for f in uncovered]
+    if "--check-coverage" in sys.argv:
+        # CI guard (WM-2 A1): a new result file must carry a complete stamp, sit in an aggregate, or have a class
+        unclassified = [path for path, h in rows if not complete(h) and path not in CLASSES]
+        bad = uncovered + unclassified
+        if bad:
+            print("result files without a complete stamp, an aggregate or a class: " + ", ".join(bad))
+            sys.exit(1)
+        print(f"stamp coverage: {total} tracked result files, 0 uncovered")
+        return
     (ROOT / "docs/testing/STAMP_INVENTORY.md").write_text("\n".join(lines) + "\n")
-    print(f"{full}/{len(rows)} fully stamped; wrote docs/testing/STAMP_INVENTORY.md")
+    print(f"{full}/{len(rows)} fully stamped; {len(aggs)} run directories; {total} files in scope, {len(uncovered)} uncovered; wrote docs/testing/STAMP_INVENTORY.md")
 
 
 if __name__ == "__main__":

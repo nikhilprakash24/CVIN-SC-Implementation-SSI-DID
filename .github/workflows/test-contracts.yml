@@ -76,6 +76,7 @@ jobs:
         python3 docs/testing/build_register.py --check
         python3 docs/testing/check_docs_numbers.py
         python3 docs/presentation/make_presentation.py --check
+        python3 docs/testing/check_stamps.py --check-coverage
 
     - name: Run tests
       shell: bash

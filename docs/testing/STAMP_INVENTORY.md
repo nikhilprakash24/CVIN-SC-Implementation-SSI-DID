@@ -2,7 +2,9 @@
 
 **Generated** by `docs/testing/check_stamps.py`. A stamp = date, commit, producing-code cleanliness, toolchain. Columns *code* and *any* are both "dirty" (True = not clean): *code* covers the producing code only (what a run of record requires, guide rule 1.1.6); *any* covers every file, so False there implies clean code and True says nothing. *inert*: the code flag's source at that commit could not detect a change (after-action report 11); such a stamp is vouched for by *any* or by the hand check in the claim register. Rows without a complete stamp carry a class: *stamp producer* (the work list), *history* (a diff of two runs, exempt), *single run* (not a result of record). *code changed since*: whether the producing code of the result's family differs between the stamped commit and HEAD (yes = the result describes code the trunk no longer has; re-run or disclose).
 
-20 of 29 result files carry a complete stamp.
+**Scope** (WM-2 step A1, N-21): 161 tracked result JSON files outside the lineage copies (docs/prior-survey/, docs/review02/, _research-copies/, sandbox/options/, docs/figures/). aggregated run directory: 46; covered by meta.json: 13; derived: 2; external tool output: 68; history: 2; own row: 30; uncovered: 0.
+
+21 of 30 individually listed result files carry a complete stamp.
 
 | File | date | commit | dirty (code) | dirty (any) | code changed since | toolchain | class |
 |---|---|---|---|---|---|---|---|
@@ -35,3 +37,23 @@
 | `cv2x-testbed/sumo/results/v2v_latency.json` | 2026-10-04T09:19:33.3911 | MISSING | MISSING | MISSING | MISSING | MISSING | single run: default output of one harness run; the results of record are v2v_latency_stats.json |
 | `cv2x-testbed/sumo/results/v2v_latency_stats.json` | 2026-10-04T09:13:58+00:0 | 58a65132bf38c37e0f0467b3 | False (from any) | False | yes | 3.11.15 |  |
 | `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-09T02:09:37.654Z | 7a9a996edb246661f32a5565 | False (from any) | False | no | 0.8.24 |  |
+| `1_blockchain-identity/results/metrics-rpc/latest/meta.json` | 2026-10-04T22:09:24.835Z | c3b7cb16c18e4cca0908f27f | False (inert) | True | yes | 0.8.24 |  |
+
+## Run directories (one row each)
+
+| Files | What | runs | complete stamps | commits | dirty (code) | dirty (any) | code changed since |
+|---|---|---|---|---|---|---|---|
+| `4_comparison-framework/results/infrastructure_gas_runs/run_*.json` | I4 repeated 30 times (#47) | 30 | 30 | d877a4f | False | False, True | no |
+| `4_comparison-framework/results/scaling_verify_repeats/*.json` | scaling-verify repeats (#26) | 16 | 8 | 38909df33fe1, d78e344a7970, f1c2399057f3, fd25d0529c6e | False (from any), None | False, None, True | None, yes |
+
+## Covered without an own stamp
+
+| Files | Class | Why |
+|---|---|---|
+| `1_blockchain-identity/results/metrics/latest/*.json` | covered by meta.json | harness run of record; its meta.json carries the stamp |
+| `1_blockchain-identity/results/metrics-rpc/latest/*.json` | covered by meta.json | HTTP-RPC run; its meta.json carries the stamp |
+| `4_comparison-framework/results/infrastructure_gas_runs/summary.json` | derived | summary of the 30 stamped runs |
+| `cv2x-testbed/sumo/results/figures/*.json` | derived | down-sampled trace for the dashboard |
+| `cv2x-testbed/results/archive-2026-10-03/*.json` | history | archived pre-merge results |
+| `docs/conformance/reports/**/*.json` | external tool output | jest reports of the W3C DID test suite, dated by directory (#24) |
+| `docs/conformance/reports/*.json` | external tool output | W3C DID test-suite run summaries, dated by file name (#24) |
