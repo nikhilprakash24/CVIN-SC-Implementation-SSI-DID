@@ -202,8 +202,8 @@ and the caveat is a scoping statement, not a weakness concealed.
 The 94.3% aggregate compliance figure (§5.5) is best read not as a grade but as
 a *structural* claim about interoperability: blockchain-rooted identities can be
 lifted into W3C DID Core v1.0 and VC Data Model v2.0 conformance through a
-resolution/issuance layer, and the residual gap is confined to two specific,
-documented places rather than diffused across the model.
+resolution/issuance layer, and the residual gap is confined to three documented items (two deliberate
+deviations and one PARTIAL check) rather than diffused across the model.
 
 **What 94.3% means.** The score decomposes into DID Core 14/15 checks passing
 with one PARTIAL, and VC Data Model 93.1% (27/29 checks) (register #4). Critically,
@@ -216,8 +216,9 @@ than URDNA2015 RDF canonicalization, and (2) the cryptosuite
 offline-verifiable — rather than a W3C-registered suite. Everything else in the
 executable checklist passes, except the one PARTIAL. The interpretation is that there is **no structural
 incompatibility** between blockchain identity and the W3C SSI data model; the
-gap is entirely in *canonicalization and cryptosuite registration*, both of
-which are additive, non-breaking changes.
+two failures are entirely in *canonicalization and cryptosuite registration*, both of
+which are additive, non-breaking changes; the PARTIAL is the `did:mobi`
+placeholder key (register #4).
 
 **What it means for real-world interoperability.** The two deviations are of a
 specific, benign kind. Adopting URDNA2015 and registering (or swapping to) a

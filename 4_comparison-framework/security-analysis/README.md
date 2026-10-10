@@ -122,7 +122,7 @@ issuer signature reverts `invalid issuer signature`. Replay is **partial**: the
 signature binds `address(this)+topic+data` (blocking cross-identity replay) but
 has no nonce/expiry/chainid, so a same-identity re-anchor is accepted
 (idempotent). Plaintext VIN in `string public vin` + `VehicleIdentityCreated`
-event. Most expensive to spam (~1.54M gas/identity). No recovery.
+event. Most expensive to spam (~1.76M gas/identity; register #25). No recovery.
 
 **ERC-1155 (soulbound credentials).** Registration/issuance gated by
 `ISSUER_ROLE`. **Soulbound**: a holder-initiated `safeTransferFrom` of the birth

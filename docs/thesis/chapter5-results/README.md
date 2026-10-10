@@ -338,7 +338,7 @@ valid RSU signed for *another* intersection, and replays inside the
 freshness window — two attacks the seven registered ones did not cover. The
 verifier was hardened (message fields bound to the credential, a
 per-receiver replay check, expiry re-checked on the warm path), the attack
-set extended to 13 checks with expected rejection reasons (amendment A4),
+set extended to 13 checks (10 attacks and 3 warm variants) with expected rejection reasons (amendments A4, A5),
 and every experiment re-run. The figures below are the second run; the
 first run's values are kept in the register as history.
 
@@ -380,12 +380,13 @@ same open decision as for vehicles (crux C4), and a time bound would also need
 a cache lifetime.
 
 **I4 — On-chain cost of an RSU identity (reported).** Creation is free
-(did:ethr is implicit). Over two runs: the RSU anchoring its key costs
-52,594–52,606 gas; handing control to the road authority 51,742–51,754; an
-authority key rotation 35,486–35,498; revocation of the old key
-35,050–35,062. The ±12 gas differences are consistent with calldata
-zero-byte variation under a fresh random key; the pre-registered expectation
-of identical runs did not hold. ERC-1056 has no identity-level revocation, so
+(did:ethr is implicit). Over 30 runs, each with a fresh random RSU key and
+address: the RSU anchoring its key costs 52,558–52,606 gas; handing control to
+the road authority 51,742–51,754; an authority key rotation 35,486–35,510;
+revocation of the old key 35,014–35,062. Every difference is a multiple of 12
+gas, consistent with zero vs non-zero calldata bytes; the pre-registered
+expectation of identical runs did not hold, and gas here is reported as a
+range (register #47). ERC-1056 has no identity-level revocation, so
 message-level RSU revocation runs through the credential registry (I3).
 
 **I5 — Cost of the operations on the I2I path (reported).** The sum of four
@@ -541,7 +542,7 @@ adversarial review found two attacks the first version accepted.
 
 ## 5.8 Threats to Validity
 
-- **Local vs. public chain**: gas is deterministic and identical on any
+- **Local vs. public chain**: for fixed inputs and compiler settings, gas is deterministic and identical on any
   EVM chain (it is a function of opcodes executed), so the *comparison*
   is valid; absolute fiat cost depends on gas price and is not claimed
   here. A Sepolia validation run is planned (risk R3).
@@ -702,8 +703,8 @@ choices. **SN-1 (compiler optimizer):** re-measuring at solc optimizer runs
 message-call operation within **0.4%**. The only large swing is ERC-725xy's
 `createIdentity` (+14.2% at runs=10000) — expected, because that operation is a
 contract *deployment* and higher optimizer runs trade deploy-size for runtime
-efficiency; it does not change ERC-725xy's standing as by far the most expensive to
-instantiate. **SN-2 (calldata composition):** an identical `setAttribute` differing
+efficiency; it does not change ERC-725xy's standing as the second most expensive to
+instantiate, after ERC-735 (register #25). **SN-2 (calldata composition):** an identical `setAttribute` differing
 only in a 128-byte value (all-zero vs all-non-zero) costs exactly **12 gas/byte** more
 for non-zero bytes (the EVM's 16 − 4 rule), accounting mechanistically for the small
 ±12-gas calldata artifacts seen when address/signature byte patterns shift (e.g. the

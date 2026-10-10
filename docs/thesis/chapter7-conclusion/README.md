@@ -119,7 +119,7 @@ All five hypotheses are **supported**, with H4 carrying a documented nuance.
 | **H2** | ≥90% W3C compliance is achievable via a translation layer | **Supported** | 94.3% measured; the two FAILs are canonicalization/cryptosuite only, plus one PARTIAL (register #4) (§5.5). |
 | **H3** | Off-chain credential verification meets the V2V real-time budget | **Supported** | SSI warm 0.153 ms ≪ 100 ms (~650× margin), N=30 (§5.4). |
 | **H4** | MOBI VID's semantics are realizable across backends | **Supported (fidelity gradient)** | Birth + lifecycle native on all 5 backends; multi-party attestation native on 3/5 (ERC-735, CVIN-Combined, MOBI-VID-V2 = 5/5), only partial on ERC-1056/ERC-1155 (3/5) (§5.3.1). |
-| **H5** | A hybrid design can sit on the cost/capability frontier | **Supported** | CVIN-Combined pays ERC-1056 identity cost yet adds on-chain claims; Pareto-optimal among 5/5 backends (§5.3, §5.3.1, §5.6). |
+| **H5** | A hybrid design can sit on the cost/capability frontier | **Supported on the fidelity-per-gas plane** | CVIN-Combined pays ERC-1056 identity cost yet adds on-chain claims; on the fidelity-per-gas frontier among the 5 MOBI backends (§5.3, §5.3.1, §5.6). Not on the frontier of the six-criterion harness analysis: dominated by ERC-4337 on all six (register #36). |
 
 The H4 nuance is substantive and worth stating plainly: MOBI VID's semantics
 *port*, but not uniformly. Birth (VID I) and lifecycle (VID II) writes are
@@ -145,16 +145,17 @@ backends. H4 is therefore supported *with a fidelity gradient*, not as a flat
   offline VC pipeline and four-method DID resolver.
 - **A real-cryptography CV2X testbed** demonstrating that blockchain identity
   verification fits the V2V safety budget with ~650× margin (SSI warm
-  0.153 ms), with attacks caught at zero false-negative/positive over 1.65 M
-  verifications.
+  0.153 ms): all 5 injected attack types rejected in every run (150 of 150), and no
+  benign message rejected among 1.65 M verifications.
 - **A dual-lens security analysis** (54-scenario executable revert suite +
   threat matrix) establishing that no standard dominates and mapping the
   trade-off frontier — including surfacing and fixing a real `attestEvent`
   forgery/replay gap.
-- **The CVIN-Combined hybrid**, an ERC-1056 + ERC-735 design shown to be
-  Pareto-optimal: ERC-1056-level identity cost with on-chain verifiable
-  claims when needed.
-- **A reproducible open framework** (~295 green tests + regenerable tables)
+- **The CVIN-Combined hybrid**, an ERC-1056 + ERC-735 design on the
+  fidelity-per-gas frontier among the five MOBI backends: ERC-1056-level identity
+  cost with on-chain verifiable claims when needed. Under the six-criterion
+  harness analysis it is dominated by ERC-4337 (register #36).
+- **A reproducible open framework** (green test suites counted in `sandbox/grand/report/GRAND_REPORT.md`, regenerable tables)
   that lets the entire comparison be independently re-run and audited.
 
 ---

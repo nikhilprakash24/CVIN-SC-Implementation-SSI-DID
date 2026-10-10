@@ -29,7 +29,7 @@ use cases**; current totals in `sandbox/grand/report/GRAND_REPORT.md`).
 - ✅ Real-time V2V safety messaging (SUMO sim, measured latency)
 - ✅ Performance, security, and W3C-compliance comparison framework
 
-**Honesty caveats (kept throughout):** gas is Hardhat-local and deterministic —
+**Honesty caveats (kept throughout):** gas is Hardhat-local and deterministic for fixed inputs —
 a Sepolia validation harness exists but the public-testnet run is not yet
 executed; V2V latency is identity-verification CPU time only (no radio/MAC/
 network stack; simulated mobility); the ERC-4337 EntryPoint and LSP8 are

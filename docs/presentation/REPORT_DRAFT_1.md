@@ -14,7 +14,7 @@
 | Do the identities meet W3C DID / VC? | internal checker 94.3 % (41 pass, 1 partial, 2 fail of 44); external DID suite 335/336 | #4, #24 |
 | Are the identity contracts attack-resistant? | 43 of 43 applicable attack cells defended (11 not applicable), strict harness | #28 |
 | Can infrastructure (RSUs, controllers) use the same identity layer? | I1 PASS (SPaT/BSM warm ratio 1.096), I2 PASS (13 attacks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
-| How large is the test and evidence base? | 536 Hardhat tests, 291 Python-layer tests, 92 feature demos (1,752 steps); 31 verified register rows | grand report |
+| How large is the test and evidence base? | 536 Hardhat tests, 291 Python-layer tests, 92 feature demos (1,752 steps); 30 verified register rows | grand report |
 
 ## 2. Research questions and hypotheses
 
@@ -30,7 +30,7 @@
 | Crux | State | V evidence rows | Open gaps |
 |---|---|---|---|
 | C1 CAV identity substrate | partial | 7 | 2 |
-| C2 Secure V2V messaging | partial | 5 | 2 |
+| C2 Secure V2V messaging | partial | 4 | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | partial | 5 | 5 |
 | C4 Revocation freshness | partial | 2 | 2 |
 | C5 W3C conformance | partial | 2 | 2 |
@@ -174,7 +174,7 @@ Roadside units (RSUs), signal controllers and a traffic-management centre (TMC) 
 | I1 | Does a warm SPaT verify cost what a warm BSM verify does? | ratio 1.096 [1.091, 1.101]; SPaT 0.182 ms vs BSM 0.166 ms | PASS |
 | I2 | Are registered attacks rejected for the right reason? | 13 checks, 30/30 runs | PASS |
 | I3 | How long is a revoked RSU trusted by a cached verifier? | k=1: 0 (≤ 0) · k=5: 4 (≤ 4) · k=25: 24 (≤ 24) · k=inf: 100 messages | PASS |
-| I4 | What does an RSU identity cost on chain? | key anchor 52,594–52,606 gas; hand to authority 51,742–51,754 | reported |
+| I4 | What does an RSU identity cost on chain? | key anchor 52,558–52,606 gas; hand to authority 51,742–51,754 | reported |
 | I5 | What do the I2I operations add? | 0.886 ms, a sum of operation costs (not a path latency) | reported |
 
 | I2 check | Expected rejection reason |
@@ -243,7 +243,7 @@ flowchart LR
 | Layer | What it contains | How it is tested |
 |---|---|---|
 | Contracts | ERC-1056, ERC-721, ERC-725, ERC-725xy, ERC-735, ERC-1155, ERC-4337, LSP8, CVIN-Combined; MOBI VID V2 profile | 536 Hardhat tests (L1 mechanisms, L2 system, security harness) |
-| W3C SSI layer | VC issuance and verification, DID resolution, MOBI VID I/II | Python layers (291 tests in L3 + L4); external DID suite 335/336 |
+| W3C SSI layer | VC issuance and verification, DID resolution, MOBI VID I/II | Python layers (291 tests: L3, L4 and the SSI-layer suites); external DID suite 335/336 |
 | V2X testbed | identity providers, message-path harness, infrastructure layer, trace and renderers | seeded 30-run statistics; no-change gates; 31 infrastructure tests |
 | Comparison and sandbox | producers of the results of record; per-option sandboxes with adapters and demos | grand runner; 92 demos, 1,752 steps |
 | Documents | claim register, defect log, crux register, test register, dashboard, stale-figure check | regenerated and compared in CI |
@@ -271,9 +271,9 @@ flowchart LR
 
 | Severity | Fixed | Partly fixed | Open |
 |---|---|---|---|
-| High | 13 | 1 | 0 |
-| Medium | 7 | 3 | 6 |
-| Low | 5 | 0 | 2 |
+| High | 15 | 1 | 0 |
+| Medium | 10 | 4 | 11 |
+| Low | 5 | 0 | 5 |
 *Defect log D1–D36 by severity and status (`docs/DEFECT_LOG.md`). Open items wait for author decisions (§C).*
 
 ## 6. Rigour: how the numbers are kept honest

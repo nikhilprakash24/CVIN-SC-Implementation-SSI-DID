@@ -243,12 +243,20 @@ def infrastructure():
                      "runs": d["config"]["runs"]}
         out["source_revocation"] = src(base + "infrastructure_revocation.json")
     if (ROOT / "4_comparison-framework/results/infrastructure_gas.json").exists():
-        # I4 is run twice (amendment A4); gas varies by multiples of 12 with the random RSU key, so a range is shown
-        runs = [load(f) for f in ("4_comparison-framework/results/infrastructure_gas.json",
-                                  "4_comparison-framework/results/infrastructure_gas_run1.json") if (ROOT / f).exists()]
-        out["I4"] = {k: [min(r["operations"][k]["gasUsed"] for r in runs), max(r["operations"][k]["gasUsed"] for r in runs)]
-                     for k in runs[0]["operations"]}
-        out["I4_runs"] = len(runs)
+        # I4: gas varies by multiples of 12 with the random RSU key and address; the range is taken over the
+        # 30 repeated runs (after-action report 12, audit A-3) when present, else over the runs of record
+        summ = ROOT / "4_comparison-framework/results/infrastructure_gas_runs/summary.json"
+        if summ.exists():
+            sd = json.loads(summ.read_text())
+            out["I4"] = {k: [v["min"], v["max"]] for k, v in sd["operations"].items()}
+            out["I4_runs"] = sd["runs"]
+            out["source_gas_runs"] = src("4_comparison-framework/results/infrastructure_gas_runs/summary.json")
+        else:
+            runs = [load(f) for f in ("4_comparison-framework/results/infrastructure_gas.json",
+                                      "4_comparison-framework/results/infrastructure_gas_run1.json") if (ROOT / f).exists()]
+            out["I4"] = {k: [min(r["operations"][k]["gasUsed"] for r in runs), max(r["operations"][k]["gasUsed"] for r in runs)]
+                         for k in runs[0]["operations"]}
+            out["I4_runs"] = len(runs)
         out["source_gas"] = src("4_comparison-framework/results/infrastructure_gas.json")
     out["register"] = [44, 45, 46, 47, 48]
     return out

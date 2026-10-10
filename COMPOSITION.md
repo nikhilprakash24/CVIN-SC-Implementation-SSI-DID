@@ -124,7 +124,7 @@ Every chapter draft is measured against this list before it is called done.
 ## Part IV — Composition State (living log)
 
 - **Done:** implementation over-complete (all 9 standards, W3C SSI + MOBI VID layers,
-  CV2X testbed, ~295 tests, all measured results); 6/7 chapters drafted; provenance
+  CV2X testbed, tests counted in `sandbox/grand/report/GRAND_REPORT.md`, all measured results); 6/7 chapters drafted; provenance
   spine (`DEVELOPMENT_HISTORY`, `SOURCES`, `PROVENANCE`, `SIDE_PAPERS`, scaffold).
 - **The real remaining discipline:** writing the thesis *as a thesis* — turning the
   grounded chapter drafts into examiner-grade academic prose under Part II, and Ch. 2's

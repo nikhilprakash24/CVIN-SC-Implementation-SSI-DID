@@ -28,7 +28,7 @@ mis-stated for two passes.
 | Claim-register rows (V / S / E / B) | 43 (27 / 8 / 7 / 1) | 48 (31 / 10 / 7 / 0) | register |
 | Cruxes with no V evidence | 1 of 8 (C3) | 0 of 8 | `docs/thesis/CRUX_REGISTER.md` |
 | Hardhat tests (passing / pending) | 536 / 23 | 536 / 23 | grand report |
-| Python layers L3 + L4 (sandbox) | 260 | 291 | grand report |
+| Python layers: L3, L4 and the SSI-layer suites (grand runner stage `L3+L4`) | 260 | 291 (L3 46, L4 19, SSI layer 226) | grand report |
 | Feature demos / steps | 92 / 1,752 (9 repaired in pass 8) | 92 / 1,752 | grand report |
 | Infrastructure L3 tests / layer mutants killed | — | 31 / 26 of 26 | report 11 |
 | Defect log entries | D1–D27 | D1–D36 | `docs/DEFECT_LOG.md` |

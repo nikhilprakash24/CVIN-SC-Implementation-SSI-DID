@@ -35,7 +35,7 @@ cruxes:
     question: Does the same identity layer secure roadside-unit and infrastructure messages (SPaT/MAP, RSU-to-RSU, RSU-to-traffic-management)?
     hypotheses: []
     thrusts: [3]
-    claim: An RSU is a DID with a road-authority issuer; warm verification of its signed SPaT costs about what a warm BSM does (about 10 % more after the binding, replay and expiry checks); 13 registered attacks are rejected for their expected reasons; a cached verifier honours a revoked RSU for at most k-1 further messages.
+    claim: "An RSU is a DID with a road-authority issuer; warm verification of its signed SPaT costs about what a warm BSM does (about 10 % more after the binding, replay and expiry checks); 13 registered checks (10 attacks, 3 warm variants) are rejected for their expected reasons; a cached verifier honours a revoked RSU for at most k-1 further messages (by construction of the re-check cadence: I3 checks the implementation, not a revocation latency)."
     evidence_rows: [44, 45, 46, 47, 48]
     defects: []
     artefacts: [docs/design/INFRASTRUCTURE_MESSAGING.md, docs/design/INFRASTRUCTURE_PREREG.md, cv2x-testbed/sumo/results/infrastructure_stats.json, cv2x-testbed/sumo/results/infrastructure_revocation.json, 4_comparison-framework/results/infrastructure_gas.json]

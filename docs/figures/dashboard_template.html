@@ -330,7 +330,7 @@ a { color: var(--bar); }
   // tests
   const T = S.tests.stages;
   const trow = (k, label) => T[k] ? [esc(label), chip(T[k].ok ? "pass" : "fail", T[k].ok ? "s-good" : "s-crit"), esc(T[k].result.replace(/[{}']/g, ""))] : null;
-  $("tests-table").innerHTML = table(["Stage", "State", "Result"], [trow("smoke", "Adapter smoke"), trow("L1", "L1 uniform mechanisms"), trow("L1+L2", "L1 + L2 Hardhat"), trow("L3+L4", "L3 + L4 Python"), trow("demos", "Feature demos")].filter(Boolean));
+  $("tests-table").innerHTML = table(["Stage", "State", "Result"], [trow("smoke", "Adapter smoke"), trow("L1", "L1 uniform mechanisms"), trow("L1+L2", "L1 + L2 Hardhat"), trow("L3+L4", "Python layers (L3, L4 and the SSI-layer suites)"), trow("demos", "Feature demos")].filter(Boolean));
   $("tests-src").textContent = src(S.tests.source) + " · generated " + (S.tests.generated || "?") + " at " + (S.tests.commit || "?");
 
   // defects
@@ -350,12 +350,12 @@ a { color: var(--bar); }
   const I = S.infrastructure || {};
   const vchip = (v) => v ? chip(v, v === "PASS" ? "s-good" : (v === "FAIL" ? "s-crit" : "s-warn")) : chip("not run", "s-na");
   const irows = [];
-  if (I.I1) irows.push(["I1 SPaT fits the BSM budget", `warm SPaT ${I.I1.spat_warm_ms.toFixed(3)} ms vs BSM ${I.I1.bsm_warm_ms.toFixed(3)} ms; ratio ${I.I1.ratio_median.toFixed(3)} [${I.I1.ratio_ci95[0].toFixed(3)}, ${I.I1.ratio_ci95[1].toFixed(3)}], ${I.I1.runs} runs`, vchip(I.I1.verdict)]);
-  else irows.push(["I1 SPaT fits the BSM budget", "—", vchip(null)]);
-  if (I.I2) irows.push(["I2 forged infrastructure messages rejected", `${I.I2.checks} checks, each rejected for its expected reason in ${I.I2.runs_all_as_expected} of ${I.I2.runs} runs`, vchip(I.I2.verdict)]);
-  if (I.I3) irows.push(["I3 revoked RSU trusted ≤ k − 1 messages", Object.entries(I.I3.per_k).map(([k, v]) => `k=${k === "inf" ? "∞" : k}: ${v.max}${v.bound === null ? "" : " (≤ " + v.bound + "; reached in " + v.runs_reaching_bound + "/" + I.I3.runs + " runs)"}`).join(" · ") + " — message counts, not time", vchip(I.I3.verdict)]);
+  if (I.I1) irows.push(["I1 warm SPaT vs warm BSM verify (no revocation re-check)", `warm SPaT ${I.I1.spat_warm_ms.toFixed(3)} ms vs BSM ${I.I1.bsm_warm_ms.toFixed(3)} ms in the same runs; ratio ${I.I1.ratio_median.toFixed(3)} [${I.I1.ratio_ci95[0].toFixed(3)}, ${I.I1.ratio_ci95[1].toFixed(3)}], ${I.I1.runs} runs. Measured on another host than the V2V panel, so the BSM values differ; the ratio is the claim (#44)`, vchip(I.I1.verdict)]);
+  else irows.push(["I1 warm SPaT vs warm BSM verify (no revocation re-check)", "—", vchip(null)]);
+  if (I.I2) irows.push(["I2 forged infrastructure messages rejected", `${I.I2.checks} checks (10 attacks, 3 warm variants), each rejected for its expected reason in ${I.I2.runs_all_as_expected} of ${I.I2.runs} runs`, vchip(I.I2.verdict)]);
+  if (I.I3) irows.push(["I3 revoked RSU trusted ≤ k − 1 messages", Object.entries(I.I3.per_k).map(([k, v]) => `k=${k === "inf" ? "∞" : k}: ${v.max}${v.bound === null ? "" : " (≤ " + v.bound + "; reached in " + v.runs_reaching_bound + "/" + I.I3.runs + " runs)"}`).join(" · ") + ". Messages, not time; the bound follows from the re-check cadence, so this checks the implementation. k = ∞: every message in the 10 s after revocation", vchip(I.I3.verdict)]);
   const rg = (r) => r[0] === r[1] ? fmt(r[0]) : fmt(r[0]) + "–" + fmt(r[1]);
-  if (I.I4) irows.push(["I4 RSU identity on chain (gas)", `key anchor ${rg(I.I4.anchor_key_by_rsu)} · hand to authority ${rg(I.I4.hand_control_to_authority)} · rotate ${rg(I.I4.rotate_key_by_authority)} · revoke old key ${rg(I.I4.revoke_old_key)} (${I.I4_runs} runs)`, chip("reported", "s-na")]);
+  if (I.I4) irows.push(["I4 RSU identity on chain (gas)", `key anchor ${rg(I.I4.anchor_key_by_rsu)} · hand to authority ${rg(I.I4.hand_control_to_authority)} · rotate ${rg(I.I4.rotate_key_by_authority)} · revoke old key ${rg(I.I4.revoke_old_key)}; range over ${I.I4_runs} runs with random keys (the pre-registered identical-run expectation did not hold)`, chip("reported", "s-na")]);
   if (I.I5) irows.push(["I5 controller → RSU → vehicle", `${I.I5.controller_to_vehicle_ms.toFixed(3)} ms, a sum of four operation costs (not a path latency); TMC hop ${I.I5.tmc_to_controller_ms.toFixed(3)} ms`, chip("reported", "s-na")]);
   $("infra-table").innerHTML = table(["Experiment", "Measured", "Verdict"], irows);
   $("infra-src").textContent = [I.source_stats, I.source_revocation, I.source_gas].filter(Boolean).map(src).join(" · ") + " · register #" + (I.register || []).join(", #");

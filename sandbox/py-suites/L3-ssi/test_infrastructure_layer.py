@@ -310,3 +310,49 @@ def test_i3_recheck_happens_on_the_kth_message_not_earlier(k):
     results = [lay.verify("veh", lay.sign("rsu_1", dict(spat("rsu_1", 0.0), seq=i))[0]) for i in range(k)]
     assert all(r[0] for r in results[:k - 1])
     assert results[k - 1][3] == "revoked"
+
+
+# ---- added at the close of WM-1 (after-action report 12, audit brief 2 finding F1): tests the
+# ---- pass-11 mutation set did not demand. Each kills a mutant that survived the 31 tests above.
+
+def test_warm_replay_rejected(bound):
+    """Replay of a message accepted on the WARM path (mutant: replay cache filled on cold path only)."""
+    lay, clock = bound
+    assert lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 0.0))[0])[0]           # cold
+    p, _ = lay.sign("rsu_1", spat("rsu_1", 0.0, phase="RED"))
+    ok, _, cold, _ = lay.verify("veh", p)
+    assert ok and not cold                                                          # warm accept
+    ok, _, cold, reason = lay.verify("veh", p)
+    assert not ok and not cold and reason == "replay"
+
+
+@pytest.mark.parametrize("age, ok_expected", [(1.0, True), (1.001, False)])
+def test_freshness_age_boundary(bound, age, ok_expected):
+    """Exactly max_age (1.0 s) is fresh; just past it is stale (mutant: > becomes >=)."""
+    lay, clock = bound
+    clock.t = 10.0
+    ok, _, _, reason = lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 10.0 - age))[0])
+    assert ok is ok_expected and (ok or reason == "stale")
+
+
+@pytest.mark.parametrize("ahead, ok_expected", [(0.1, True), (0.101, False)])
+def test_freshness_future_boundary(bound, ahead, ok_expected):
+    """Exactly max_future (0.1 s) ahead is accepted; just past it is 'future' (mutant: > becomes >=)."""
+    lay, clock = bound
+    clock.t = 0.0
+    ok, _, _, reason = lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", ahead))[0])
+    assert ok is ok_expected and (ok or reason == "future")
+
+
+def test_expired_signer_dropped_from_cache(bound, monkeypatch):
+    """After an 'expired' rejection the signer is no longer cached: the next message is cold
+    (mutant: the expiry branch keeps the cache entry)."""
+    lay, _ = bound
+    assert lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 0.0))[0])[0]
+    import infrastructure_layer as il
+    real = il.time.time
+    monkeypatch.setattr(il.time, "time", lambda: 4.0e9)
+    assert lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 0.0, phase="RED"))[0])[3] == "expired"
+    monkeypatch.setattr(il.time, "time", real)
+    ok, _, cold, _ = lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 0.0, phase="YELLOW"))[0])
+    assert ok and cold

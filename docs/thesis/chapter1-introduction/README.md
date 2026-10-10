@@ -193,7 +193,10 @@ nine base standards.
 
 - **H1 (Performance).** Minimal-state standards (e.g. ERC-1056) are at least
   **10× cheaper** than rich-state standards (e.g. ERC-725/735) on gas for
-  identity creation and update, trading away on-chain expressiveness.
+  identity creation and update, trading away on-chain expressiveness. *As tested
+  (Chapter 5), the ≥10× holds for creation only; on update the ratio is 3.4× over
+  ERC-721 and 3.9× over ERC-725 (register #25), so the update half of H1 is not
+  supported.*
 - **H2 (Compliance).** At least **90%** aggregate W3C compliance is achievable
   through a resolution/translation layer, with residual gaps confined to
   specific properties requiring off-chain augmentation.

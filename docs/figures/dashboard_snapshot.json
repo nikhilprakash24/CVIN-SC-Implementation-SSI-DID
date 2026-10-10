@@ -6,9 +6,10 @@
     },
     "rows": 48,
     "by_status": {
-      "V": 31,
+      "V": 30,
       "S": 10,
-      "E": 7
+      "E": 7,
+      "U": 1
     }
   },
   "constants": {
@@ -727,7 +728,7 @@
         0
       ],
       "anchor_key_by_rsu": [
-        52594,
+        52558,
         52606
       ],
       "anchor_service_endpoint": [
@@ -740,14 +741,17 @@
       ],
       "rotate_key_by_authority": [
         35486,
-        35498
+        35510
       ],
       "revoke_old_key": [
-        35050,
+        35014,
         35062
       ]
     },
-    "I4_runs": 2,
+    "I4_runs": 30,
+    "source_gas_runs": {
+      "path": "4_comparison-framework/results/infrastructure_gas_runs/summary.json"
+    },
     "source_gas": {
       "path": "4_comparison-framework/results/infrastructure_gas.json"
     },
@@ -1050,15 +1054,85 @@
         "id": "D36",
         "severity": "M",
         "status": "fixed"
+      },
+      {
+        "id": "D37",
+        "severity": "M",
+        "status": "open"
+      },
+      {
+        "id": "D38",
+        "severity": "M",
+        "status": "open"
+      },
+      {
+        "id": "D39",
+        "severity": "M",
+        "status": "open"
+      },
+      {
+        "id": "D40",
+        "severity": "L",
+        "status": "open"
+      },
+      {
+        "id": "D41",
+        "severity": "L",
+        "status": "open"
+      },
+      {
+        "id": "D42",
+        "severity": "L",
+        "status": "open"
+      },
+      {
+        "id": "D43",
+        "severity": "H",
+        "status": "fixed"
+      },
+      {
+        "id": "D44",
+        "severity": "M",
+        "status": "fixed"
+      },
+      {
+        "id": "D45",
+        "severity": "M",
+        "status": "fixed"
+      },
+      {
+        "id": "D46",
+        "severity": "H",
+        "status": "fixed"
+      },
+      {
+        "id": "D47",
+        "severity": "M",
+        "status": "partly fixed"
+      },
+      {
+        "id": "D48",
+        "severity": "M",
+        "status": "fixed"
+      },
+      {
+        "id": "D49",
+        "severity": "M",
+        "status": "open"
+      },
+      {
+        "id": "D50",
+        "severity": "M",
+        "status": "open"
       }
     ],
     "counts": {
-      "H:fixed": 13,
-      "M:fixed": 7,
+      "H:fixed": 15,
+      "M:fixed": 10,
       "L:fixed": 5,
-      "M:partly fixed": 3,
-      "L:open": 2,
-      "M:open": 6,
+      "M:partly fixed": 4,
+      "L:open": 5,
+      "M:open": 11,
       "H:partly fixed": 1
     }
   },
@@ -1106,12 +1180,12 @@
         {
           "row": 34,
           "status": "V",
-          "claim": "Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,808 / 145,662 / 399,844 / 656,480 / 1,535,776 (ERC-735) / 103,913 (ERC-1155) / 1,730,753 (ERC-725xy) / 132,515 (LS…"
+          "claim": "Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,881 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS…"
         },
         {
           "row": 35,
           "status": "V",
-          "claim": "Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,787 (wrapper 1,025,381) · ERC-1155 1,150,981 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,505,258 (excl. 3 n/a) · ERC-4337 2,221…"
+          "claim": "Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,809 (wrapper 1,025,469) · ERC-1155 1,261,575 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,508,413 (excl. 3 n/a) · ERC-4337 2,221…"
         },
         {
           "row": 36,
@@ -1179,8 +1253,8 @@
         },
         {
           "row": 39,
-          "status": "V",
-          "claim": "HTTP-RPC condition, all ten columns (N=30): every gas table byte-identical to #34/#35; latency ≈2–2.5× the in-process figures (U3 tx median 8.0 → 18.1 ms ERC-1056; R1 0.9 → 2.0 ms). R3 resolve at history h=50, median / p…"
+          "status": "U",
+          "claim": "HTTP-RPC condition, all ten columns (N=30), on the pre-merge contracts: every gas table byte-identical to the in-process run of the same contracts (`0eef6af`, now S); latency ≈2–2.5× the in-process figures (U3 tx median …"
         }
       ],
       "state": "partial"
@@ -1189,7 +1263,7 @@
       "id": "C3",
       "title": "Infrastructure messaging (V2I and infrastructure-to-infrastructure)",
       "question": "Does the same identity layer secure roadside-unit and infrastructure messages (SPaT/MAP, RSU-to-RSU, RSU-to-traffic-management)?",
-      "claim": "An RSU is a DID with a road-authority issuer; warm verification of its signed SPaT costs about what a warm BSM does (about 10 % more after the binding, replay and expiry checks); 13 registered attacks are rejected for their expected reasons; a cached verifier honours a revoked RSU for at most k-1 further messages.",
+      "claim": "An RSU is a DID with a road-authority issuer; warm verification of its signed SPaT costs about what a warm BSM does (about 10 % more after the binding, replay and expiry checks); 13 registered checks (10 attacks, 3 warm variants) are rejected for their expected reasons; a cached verifier honours a revoked RSU for at most k-1 further messages (by construction of the re-check cadence: I3 checks the implementation, not a revocation latency).",
       "hypotheses": [],
       "thrusts": [
         3
@@ -1219,7 +1293,7 @@
         {
           "row": 45,
           "status": "V",
-          "claim": "(pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks rejected for its expected reason in 30/30 runs (a deterministic check repeated per run). First contact: (a) unsigned → unsigned; (b) wrong key …"
+          "claim": "(pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks (10 attacks and 3 warm variants, 9 distinct rejection branches; amendment A5) rejected for its expected reason in 30/30 runs (a deterministic c…"
         },
         {
           "row": 46,
@@ -1229,7 +1303,7 @@
         {
           "row": 47,
           "status": "V",
-          "claim": "(pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`, two runs at `f1f9e37`): identity creation 0 (did:ethr is implicit); RSU anchors …"
+          "claim": "(pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`), range over 30 runs (random RSU key and address each run): identity creation 0 (…"
         },
         {
           "row": 48,
@@ -1346,7 +1420,7 @@
         {
           "row": 30,
           "status": "V",
-          "claim": "Harness L2 MOBI-VID lifecycle (17 events, including the delegate add that the rotation retires): 1,050,787 / 2,701,239 / 3,155,103 gas, ERC-1056 cheapest by 2.57× / 3.00×; zero→nonzero SSTOREs 8 / 92 / 83 (writes, not ne…"
+          "claim": "Harness L2 MOBI-VID lifecycle (17 events, including the delegate add that the rotation retires): 1,050,809 / 2,706,685 / 3,155,103 gas (ERC-1056 / 721 / 725), ERC-1056 cheapest by 2.58× / 3.00×; zero→nonzero SSTOREs 8 / …"
         },
         {
           "row": 33,
@@ -1607,13 +1681,13 @@
     "29": {
       "row": 29,
       "status": "V",
-      "claim": "Harness L1 per-op gas, three substrates (ERC-1056 / 721 / 725), e.g. C1 create 76,808 / 399,844 / 656,480; U3 set attribute 35,024 / 120,061 / 119,996; V5 revoke credential 33,470 / 125,821 / 43,388",
+      "claim": "Harness L1 per-op gas, three substrates (ERC-1056 / 721 / 725), e.g. C1 create 76,830 / 402,567 / 656,480; U3 set attribute 35,024 / 120,061 / 119,996; V5 revoke credential 33,470 / 125,821 / 43,388",
       "tag": "M1-H"
     },
     "30": {
       "row": 30,
       "status": "V",
-      "claim": "Harness L2 MOBI-VID lifecycle (17 events, including the delegate add that the rotation retires): 1,050,787 / 2,701,239 / 3,155,103 gas, ERC-1056 cheapest by 2.57× / 3.00×; zero→nonzero SSTOREs 8 / 92 / 83 (writes, not ne…",
+      "claim": "Harness L2 MOBI-VID lifecycle (17 events, including the delegate add that the rotation retires): 1,050,809 / 2,706,685 / 3,155,103 gas (ERC-1056 / 721 / 725), ERC-1056 cheapest by 2.58× / 3.00×; zero→nonzero SSTOREs 8 / …",
       "tag": "M1-H"
     },
     "31": {
@@ -1637,13 +1711,13 @@
     "34": {
       "row": 34,
       "status": "V",
-      "claim": "Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,808 / 145,662 / 399,844 / 656,480 / 1,535,776 (ERC-735) / 103,913 (ERC-1155) / 1,730,753 (ERC-725xy) / 132,515 (LS…",
+      "claim": "Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,881 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS…",
       "tag": "M1-H"
     },
     "35": {
       "row": 35,
       "status": "V",
-      "claim": "Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,787 (wrapper 1,025,381) · ERC-1155 1,150,981 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,505,258 (excl. 3 n/a) · ERC-4337 2,221…",
+      "claim": "Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,809 (wrapper 1,025,469) · ERC-1155 1,261,575 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,508,413 (excl. 3 n/a) · ERC-4337 2,221…",
       "tag": "M1-H"
     },
     "36": {
@@ -1666,8 +1740,8 @@
     },
     "39": {
       "row": 39,
-      "status": "V",
-      "claim": "HTTP-RPC condition, all ten columns (N=30): every gas table byte-identical to #34/#35; latency ≈2–2.5× the in-process figures (U3 tx median 8.0 → 18.1 ms ERC-1056; R1 0.9 → 2.0 ms). R3 resolve at history h=50, median / p…",
+      "status": "U",
+      "claim": "HTTP-RPC condition, all ten columns (N=30), on the pre-merge contracts: every gas table byte-identical to the in-process run of the same contracts (`0eef6af`, now S); latency ≈2–2.5× the in-process figures (U3 tx median …",
       "tag": "M1-H/HTTP"
     },
     "40": {
@@ -1703,7 +1777,7 @@
     "45": {
       "row": 45,
       "status": "V",
-      "claim": "(pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks rejected for its expected reason in 30/30 runs (a deterministic check repeated per run). First contact: (a) unsigned → unsigned; (b) wrong key …",
+      "claim": "(pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks (10 attacks and 3 warm variants, 9 distinct rejection branches; amendment A5) rejected for its expected reason in 30/30 runs (a deterministic c…",
       "tag": "M0"
     },
     "46": {
@@ -1715,7 +1789,7 @@
     "47": {
       "row": 47,
       "status": "V",
-      "claim": "(pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`, two runs at `f1f9e37`): identity creation 0 (did:ethr is implicit); RSU anchors …",
+      "claim": "(pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`), range over 30 runs (random RSU key and address each run): identity creation 0 (…",
       "tag": "M1"
     },
     "48": {

@@ -16,7 +16,8 @@ on:
   push:
     branches: [ main, claude/** ]
   pull_request:
-    branches: [ main ]
+    # any base branch: the repository's default branch is not `main` (after-action report 12, audit T-11)
+    branches: [ '**' ]
   workflow_dispatch:
 
 env:

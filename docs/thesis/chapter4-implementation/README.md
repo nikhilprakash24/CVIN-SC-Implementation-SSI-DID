@@ -61,7 +61,7 @@ records the chapter-to-code mapping without moving files.
   Contracts **5.0.2**, ethers v6, hardhat-toolbox; Node 18. Contract tests
   and the gas benchmark run on the in-process Hardhat network
   (`chainId 31337`).
-- **Python 3.11** (`2_w3c-ssi-layer/requirements.txt`): `web3` (v7),
+- **Python 3.11** (`2_w3c-ssi-layer/requirements.txt`): `web3` (6.11.0, pinned in `requirements.txt`),
   `eth-account`, `cryptography`, `coincurve`-backed secp256k1, `pytest`.
   This runtime hosts the SSI layer, the testbed, and the comparison
   scripts.
@@ -191,8 +191,8 @@ and verifier:
   VC carries only `claimDigests`, and the holder discloses chosen
   claim+salt pairs at presentation time).
 - **Verifier** (`vc_verifier.py`) — a **6-stage offline verification
-  pipeline**: structure → schema → temporal → revocation → signature →
-  disclosure. Signature verification is secp256k1 public-key recovery, so
+  pipeline**: structure → schema → temporal → revocation → proof metadata and
+  signature → disclosure. Signature verification is secp256k1 public-key recovery, so
   **no blockchain round-trip is needed at verification time** — the
   property the V2V latency budget requires.
 
@@ -476,8 +476,8 @@ identity providers, 12 real-crypto lifecycle use cases, and a SUMO V2V
 simulation that runs real signature/credential verification in the message
 path; and (4) a measurement-only comparison framework producing the gas,
 security, compliance, and validation artifacts Chapter 5 reports. The
-build is reproducible — a committed lockfile, deterministic outputs, three
-CI gates, and ~295 green tests — and its honesty caveats (minimal ERC-4337/
+build is reproducible — a committed lockfile, outputs deterministic for fixed
+inputs, CI gates, and green test suites (counted in the grand report) — and its honesty caveats (minimal ERC-4337/
 LSP8, unexecuted Sepolia run, simulated mobility and radio, out-of-scope
 VIN key custody) are stated where they arise rather than deferred.
 

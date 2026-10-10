@@ -119,3 +119,33 @@ finding ids in brackets.
 | D34 | `docs/testing/check_stamps.py` | `tree_clean` shown under "dirty" without negation: the inventory read inverted for every Python header [C2] | L | fixed `b1d3f72` |
 | D35 | `docs/testing/check_docs_numbers.py`, `stale_numbers.yaml` | scanned 7 files; substring history markers ("old " in "cold ") and number formatting let live superseded figures pass; one listed "stale" value was current (#34) [C3, C4] | M | fixed `36e0309` (87 files, normalisation, whole-word markers) |
 | D36 | `docs/figures/make_dashboard_data.py` | `--check` did not cover the published page; status parser not anchored; crux evidence counted non-V and missing rows [C5, C7, C8] | M | fixed `36e0309` |
+
+Severity note (audit finding P-10, recorded 2026-10-10): the reviewers rated C1–C5 high on their scale (a
+guard that can pass while a document is wrong). This log rates by effect on a thesis claim or a security
+property; no number in a chapter changed because of D33–D36, so they are M or L here. Reviewer reports:
+`docs/milestones/review_pass11/`. D35's first fix (`36e0309`) itself opened a hole (range arrows) that pass 12
+closed (`44dc926`), and the WM-1 audit found two more gaps (§G, D48).
+
+## G. Found by the audit that closed work milestone WM-1 (after-action report 12) — 2026-10-10
+
+Five auditors on a different model ran briefs written by a separate brief-writer agent, on a frozen checkout
+of `d61a284`. Reports: `docs/milestones/audit_WM-1/findings/`. Finding ids: A = claims (brief 1), B = code
+and security (brief 2), T = tooling and CI (brief 3), P = process and documents (brief 4), U = unaudited code
+(brief 5).
+
+| # | Where | Defect | Sev | Status |
+|---|---|---|---|---|
+| D37 | `infrastructure_layer.py` `canonical()` | a deeply nested message (depth ~100,000) crashes the Python process (segfault in the JSON encoder) instead of being rejected [B-F2] | M | open: verifier v3 in WM-2 (bound size and depth before canonicalising), with a re-run of I1–I3 |
+| D38 | `infrastructure_layer.py` `_binding_ok` | field binding fails open: no check when the credential lacks `intersectionId`/`stationId`, and the station check only when the message carries `rsu`; a TMC credential listing SPaT could sign any intersection [B-F3, A-routing, P-F27] | M | open: verifier v3 (claims mandatory for rsu/controller kinds; `rsu` required in SPaT). The registered harness credentials all carry the claims, so the I2(h) result stands |
+| D39 | `InfrastructureLayer.__init__`, harness CLI | `refresh_every` accepts nan, inf, 1.5, True (nan silently disables the re-check); the CLI crashes on `--refresh-k abc` [B-F4] | M | open: verifier v3 (integer only; CLI parser error) |
+| D40 | credential validity on both paths | checked against the wall clock, not the injected clock or `now` [B-F5, A-routing] | L | open: verifier v3, or documented as wall-clock-only |
+| D41 | cold path DID check | only the last `:` segment of the DID is compared with the recovered address; method and chain are not validated [B-F8] | L | open: verifier v3 (needs an authority-issued credential to exploit) |
+| D42 | I2 gate (harness) | the three warm variants are not asserted warm (`cold` ignored by the pass rule); the committed data show cold False in 30/30 runs [B-F6] | L | open: with the WM-2 re-run |
+| D43 | `docs/MEASUREMENT_CONDITIONS.md` #29, #30, #34, #35, #36, #39 | **register V rows kept pre-merge harness values after the harness was re-run on 2026-10-09** (ERC-735 create 1,535,776 vs 1,757,881; ERC-1155 lifetime +9.6 %; margins over ERC-1155 1.10× vs 1.20× and over ERC-735 5.1× vs 5.52×); #39's HTTP run measured the pre-merge contracts; WM-1's report said "no number moved" [A-F1] | H | fixed 2026-10-10: rows re-stated from run `7a9a996` with history; #39 to U pending a re-run (WM-2 A6); no conclusion changed (frontier and dominance sets identical) |
+| D44 | `docs/testing/stale_numbers.yaml` | 1,535,776 removed from the stale list in pass 11 on the strength of the stale #34 [A-F2] | M | fixed 2026-10-10 (restored, with rounded forms) |
+| D45 | gas-determinism statements and rule | "deterministic, byte-identical" stated without "for fixed inputs"; I4's two-run range understated the spread [A-F3, B-F9, T-F13] | M | fixed 2026-10-10 (rule and statements qualified; I4 re-reported over 30 runs) |
+| D46 | chapter 7 | H5 called "Pareto-optimal" without the scope register #36 requires [A-F4] | H | fixed 2026-10-10 |
+| D47 | CI | no guard noticed a deleted test or demo (registers built from recorded runs); PRs into the default branch ran no CI [T-F2, T-F11] | M | partly fixed 2026-10-10: the Hardhat count (`check_test_counts.py`) and the PR triggers; demo count open (WM-2) |
+| D48 | stale-figure checker, round 3 | test-count phrasings ("217 tests", "369-test") not matched; ordinary words excused whole lines; arrow rule matched substrings [T-F1, T-F17, B-F7] | M | fixed 2026-10-10 |
+| D49 | `run_stamp.js` and the Python header scope | producing code outside the scoped paths (the security harness, `cv2x-testbed/scripts`, post-processing scripts) does not mark a run dirty [T-F10] | M | open: WM-2 A2 (one stamp helper with per-producer scope) |
+| D50 | seven V rows (#21, #26 part, #27, #32, #33, #37, #38) | the producing code changed after the stamped commit (merge, MOBI provider, harness flags); the register did not say so [T-F5] | M | disclosed 2026-10-10 (register note; stamp inventory column); re-runs WM-2 A3b |

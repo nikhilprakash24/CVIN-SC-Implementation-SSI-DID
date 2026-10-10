@@ -52,7 +52,7 @@ citation set). Chapters 3–7 are grounded in the measured artifacts.
 2. **Security Analysis** - two complementary lenses: 54-scenario revert suite (43/43 applicable cells defended) + threat matrix
 3. **Use-Case Validation** - 12/12 lifecycle use cases with real cryptographic verification (forged/replayed credentials fail)
 4. **V2V Latency** - N=30 seeded runs, 50 vehicles, 10 Hz BSM; 1.65 M verifications; mobility simulated (no SUMO binary)
-5. **Infrastructure messaging** - pre-registered I1–I5 (register #44–#48, §5.4.1): warm SPaT verification 1.096× a warm BSM's; 13 registered attacks rejected for the expected reason in 30/30 runs; a revoked RSU honoured for at most k − 1 messages by a cached verifier
+5. **Infrastructure messaging** - pre-registered I1–I5 (register #44–#48, §5.4.1): warm SPaT verification 1.096× a warm BSM's; 13 registered checks (10 attacks, 3 warm variants) rejected for the expected reason in 30/30 runs; a revoked RSU honoured for at most k − 1 messages by a cached verifier (a conformance check of the re-check cadence, not a latency)
 
 ## Research Questions Addressed
 

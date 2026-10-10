@@ -50,7 +50,7 @@ CVIN-SC-Implementation-SSI-DID/
 ├── 1_blockchain-identity/              # Hardhat project — 9 standards + MOBI VID
 │   ├── contracts/                      # CVINCombined, ERC1056, ERC1155, ERC4337,
 │   │                                   #   ERC721, ERC725, ERC725xy, ERC735, LSP8, MOBI
-│   ├── test/                           # 369 contract tests (per-standard + security/ + harness conformance)
+│   ├── test/                           # contract tests (per-standard + security/ + harness conformance; count in the grand report)
 │   ├── scripts/                        # benchmark_gas.js, validate_sepolia.js, deploy, security
 │   └── SEPOLIA_VALIDATION.md           # public-testnet validation harness (not yet run)
 │
@@ -90,7 +90,7 @@ CVIN-SC-Implementation-SSI-DID/
 All 9 standards implemented as Hardhat contracts and benchmarked on-chain (hardhat-local).
 
 - ✅ Smart contracts for all 9 standards + MOBI VID
-- ✅ 369-test Hardhat suite (per-standard + `test/security/` + harness conformance)
+- ✅ Hardhat suite (current count: `sandbox/grand/report/GRAND_REPORT.md`) (per-standard + `test/security/` + harness conformance)
 - ✅ Gas benchmark (`scripts/benchmark_gas.js`), N=30 deterministic runs
 - ✅ Sepolia validation harness authored (`scripts/validate_sepolia.js`) — run pending
 
@@ -157,9 +157,9 @@ Roadside units (RSUs), signal controllers and a traffic-management centre are `d
 | Experiment | Result | Verdict |
 |---|---|---|
 | I1 warm SPaT vs warm BSM verify (ratio) | 1.096 [1.091, 1.101] | PASS (band 0.80–1.20) |
-| I2 registered attacks rejected for the expected reason | 13 of 13, in 30/30 runs | PASS |
-| I3 SPaT accepted from a revoked RSU by a cached verifier | ≤ k − 1 messages (0 / 4 / 24 for k = 1 / 5 / 25) | PASS |
-| I4 RSU identity gas (key anchor; hand to authority) | 52,594–52,606; 51,742–51,754 | reported |
+| I2 registered checks (10 attacks, 3 warm variants) rejected for the expected reason | 13 of 13, in 30/30 runs | PASS |
+| I3 SPaT accepted from a revoked RSU by a cached verifier | ≤ k − 1 messages (0 / 4 / 24 for k = 1 / 5 / 25); a conformance check of the re-check cadence, a count not a time | PASS |
+| I4 RSU identity gas, range over 30 runs (key anchor; hand to authority) | 52,558–52,606; 51,742–51,754 | reported |
 | I5 operation costs on the controller → RSU → vehicle path | 0.886 ms (a sum of operation costs, not a path latency) | reported |
 
 *An adversarial review found two holes in the first verifier (SPaT for another intersection; replay inside the window); both were fixed and every experiment re-run (`docs/AFTER_ACTION_REPORT_11.md`). Mock mobility, no radio, in-process back-haul and revocation registry.*
@@ -255,7 +255,7 @@ python3 cv2x-testbed/sumo/run_v2v_stats.py
 
 ## ⚠️ Scope & Honesty Caveats
 
-- **Gas is Hardhat-local and deterministic.** A public-testnet (Sepolia) validation harness exists (`1_blockchain-identity/scripts/validate_sepolia.js`, `1_blockchain-identity/SEPOLIA_VALIDATION.md`) but the real run requires an RPC URL and a funded test key and has **not yet been executed**.
+- **Gas is Hardhat-local and deterministic for fixed inputs** (random keys or addresses move it by multiples of 12 gas; register #47). A public-testnet (Sepolia) validation harness exists (`1_blockchain-identity/scripts/validate_sepolia.js`, `1_blockchain-identity/SEPOLIA_VALIDATION.md`) but the real run requires an RPC URL and a funded test key and has **not yet been executed**.
 - **V2V latency excludes the network stack** (radio/MAC/PHY); mobility is **simulated** — no SUMO binary is invoked.
 - **ERC-4337 EntryPoint and LSP8 are minimal representative implementations**; their gas figures are lower bounds.
 - **VIN-cipher key distribution / HSM custody** is out of scope for the testbed.

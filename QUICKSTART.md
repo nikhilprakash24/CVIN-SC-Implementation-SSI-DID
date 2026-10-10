@@ -75,7 +75,7 @@ npm ci        # reproducible install from the committed package-lock.json
 ```
 This installs Hardhat, OpenZeppelin Contracts 5.0.2, and the test tooling.
 The `package-lock.json` is committed, so `npm ci` gives a reproducible,
-pinned install (the same versions the 217-test suite passes against).
+pinned install (the same versions the Hardhat suite passes against).
 
 ### Step 3: Install Python dependencies
 

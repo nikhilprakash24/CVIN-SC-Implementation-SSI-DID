@@ -419,8 +419,8 @@ No other failures remain: R1-R5 produce zero failures.
 
 | Check | Before | After |
 |---|---|---|
-| `cv2x-testbed/scripts/w3c_compliance_checker.py` (executable score) | 93.2 % (40 PASS / 2 FAIL / 2 PARTIAL of 44) | **94.3 %** (41 PASS / 2 FAIL / 1 PARTIAL of 44); DID Core 14/15 (96.7 %). The 7.1.2 "unsupported method -> `methodNotSupported`" item moved from PARTIAL to PASS. Remaining PARTIAL: `did:mobi` placeholder key material; remaining FAILs: the two documented VC deviations (canonicalization, cryptosuite). Report: `reports/rerun-2026-10-03/internal/w3c_compliance_report.json`. |
-| `python -m pytest 2_w3c-ssi-layer -q` | 60 passed | 60 passed |
+| `cv2x-testbed/scripts/w3c_compliance_checker.py` (executable score) | 93.2 % (40 PASS / 2 FAIL / 2 PARTIAL of 44) | <!-- history: before/after table of 2026-10-03 --> **94.3 %** (41 PASS / 2 FAIL / 1 PARTIAL of 44); DID Core 14/15 (96.7 %). The 7.1.2 "unsupported method -> `methodNotSupported`" item moved from PARTIAL to PASS. Remaining PARTIAL: `did:mobi` placeholder key material; remaining FAILs: the two documented VC deviations (canonicalization, cryptosuite). Report: `reports/rerun-2026-10-03/internal/w3c_compliance_report.json`. |
+| `python -m pytest 2_w3c-ssi-layer -q` | 60 passed | 60 passed | <!-- history: before/after table of 2026-10-03 -->
 | `docs/conformance/generate_implementations.py` | - | regenerates the six `implementations/cvin-*.json` files from the fixed resolver (the registered inputs of section 7.3) |
 
 The internal checker's 7.1.2 metadata item still reads

@@ -62,7 +62,9 @@ def smoke():
     rc, out, dt = _run(["npx", "hardhat", "run", "../sandbox/grand/smoke.js"], _hh())
     ok = rc == 0 and "conform" in out and "FAILED" not in out
     print(f"smoke: {'ok' if ok else 'FAIL'} ({dt}s) — {[l for l in out.splitlines() if 'conform' in l or 'failed' in l][-1:]}")
-    return {"stage": "smoke", "ok": ok, "seconds": dt, "detail": [l for l in out.splitlines() if l.startswith('==')]}
+    m = re.search(r"all (\d+) adapter\(s\) conform", out)   # audit finding T-14: the count belongs in the report
+    return {"stage": "smoke", "ok": ok, "adapters_conforming": int(m.group(1)) if m else None, "seconds": dt,
+            "detail": [l for l in out.splitlines() if l.startswith('==')]}
 
 def l1():
     files = sorted(str(f) for f in (ROOT / "1_blockchain-identity/test/L1-identity-mechanisms").glob("*.test.js"))
@@ -81,7 +83,7 @@ def py():
     rc, out, dt = _run([str(ROOT / "sandbox/py-suites/run.sh")], str(ROOT))
     m = re.search(r"(\d+) passed", out); p = int(m.group(1)) if m else None
     ok = rc == 0 and p and not re.search(r"\d+ (failed|error)", out)
-    print(f"L3+L4 (Python): {'ok' if ok else 'FAIL'} {p} passed ({dt}s)")
+    print(f"Python layers (L3 + L4 + SSI-layer suites): {'ok' if ok else 'FAIL'} {p} passed ({dt}s)")
     return {"stage": "L3+L4", "ok": ok, "passed": p, "seconds": dt}
 
 def demos():
@@ -106,6 +108,10 @@ def demos():
         steps += [r for r in rows if not r.get("summary")]
     rep = ROOT / "sandbox/grand/report"; rep.mkdir(exist_ok=True)
     (rep / "demos.json").write_text(json.dumps({"options": per, "steps": steps}, indent=1))
+    # what a "step" is (audit finding T-14): a logged demonstration line, not an assertion. Split by what the
+    # record shows: a mined transaction (gas > 0), an on-chain call with no gas (a read or a revert), off-chain.
+    txs = sum(1 for r in steps if r.get("onchain") and str(r.get("gasUsed", "0")) not in ("0", "", "None"))
+    onchain_nogas = sum(1 for r in steps if r.get("onchain")) - txs
     lines = ["# Demos — every implemented feature exercised, per option and family", "",
              "steps = contract calls demonstrated (gas is the sum of the on-chain ones) · flagged = steps whose note marks a potential defect or observation (see docs/DEFECT_LOG.md)", "",
              "| Option | Family | ok | steps | gas (sum) | flagged | s |", "|---|---|---|---:|---:|---:|---:|"]
@@ -116,7 +122,8 @@ def demos():
     lines += ["", f"Totals: {sum(len(v) for v in per.values())} demos · {tot} steps · {fl} flagged · failures: {len(failures)}"]
     (rep / "demos.md").write_text("\n".join(lines) + "\n")
     print(f"demos: {sum(len(v) for v in per.values())} run, {len(failures)} failed, {tot} steps, {fl} flagged")
-    return {"stage": "demos", "ok": not failures, "demos": sum(len(v) for v in per.values()), "steps": tot, "flagged": fl, "failures": failures}
+    return {"stage": "demos", "ok": not failures, "demos": sum(len(v) for v in per.values()), "steps": tot,
+            "transactions_mined": txs, "onchain_no_gas": onchain_nogas, "offchain": tot - txs - onchain_nogas, "flagged": fl, "failures": failures}
 
 def all_():
     results = [smoke(), l1(), l2(), py(), demos()]

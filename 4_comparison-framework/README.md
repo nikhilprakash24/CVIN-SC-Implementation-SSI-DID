@@ -102,7 +102,7 @@ Benchmarked contracts:
     `deactivateVehicle` flags the identity inactive rather than revoking a DID.
   - **ERC-725**: v1-style basic key manager, not a full LSP0/ERC-725Y account;
     per-identity deployment is counted as identity creation.
-  - **ERC-735**: per-vehicle claim-holder deployment (~1.40M gas) is the identity
+  - **ERC-735**: per-vehicle claim-holder deployment (~1.76M gas; register #25) is the identity
     creation cost; `addClaim` includes on-chain ecrecover signature verification
     plus full claim storage.
   - **ERC-1155**: credentials are soulbound by design, so "transfer ownership" is

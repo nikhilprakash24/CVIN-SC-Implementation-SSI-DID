@@ -8,7 +8,8 @@ on:
   push:
     branches: [ main, claude/** ]
   pull_request:
-    branches: [ main ]
+    # any base branch: the repository's default branch is not `main` (after-action report 12, audit T-11)
+    branches: [ '**' ]
   workflow_dispatch:
 
 jobs:
@@ -77,4 +78,12 @@ jobs:
         python3 docs/presentation/make_presentation.py --check
 
     - name: Run tests
-      run: npx hardhat test
+      shell: bash
+      run: |
+        set -o pipefail
+        npx hardhat test | tee /tmp/hardhat_test.txt
+
+    - name: Check the test count against the grand report (after-action report 12, audit T-2)
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: python3 docs/testing/check_test_counts.py /tmp/hardhat_test.txt

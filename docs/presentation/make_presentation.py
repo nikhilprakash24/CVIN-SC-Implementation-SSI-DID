@@ -401,7 +401,7 @@ def build():
   SBX --> DASH""", "Figure 8. How the layers depend on each other and where the results of record come from.")
     Table(["Layer", "What it contains", "How it is tested"], [
         ["Contracts", "ERC-1056, ERC-721, ERC-725, ERC-725xy, ERC-735, ERC-1155, ERC-4337, LSP8, CVIN-Combined; MOBI VID V2 profile", f"{hh} Hardhat tests (L1 mechanisms, L2 system, security harness)"],
-        ["W3C SSI layer", "VC issuance and verification, DID resolution, MOBI VID I/II", f"Python layers ({py} tests in L3 + L4); external DID suite {conf['passed']}/{conf['total']}"],
+        ["W3C SSI layer", "VC issuance and verification, DID resolution, MOBI VID I/II", f"Python layers ({py} tests: L3, L4 and the SSI-layer suites); external DID suite {conf['passed']}/{conf['total']}"],
         ["V2X testbed", "identity providers, message-path harness, infrastructure layer, trace and renderers", "seeded 30-run statistics; no-change gates; 31 infrastructure tests"],
         ["Comparison and sandbox", "producers of the results of record; per-option sandboxes with adapters and demos", f"grand runner; {dm['demos']} demos, {dm['steps']:,} steps"],
         ["Documents", "claim register, defect log, crux register, test register, dashboard, stale-figure check", "regenerated and compared in CI"],

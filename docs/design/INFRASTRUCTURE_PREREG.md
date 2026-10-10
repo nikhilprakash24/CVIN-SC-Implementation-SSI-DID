@@ -82,3 +82,19 @@ and the experiments are re-run at the new commit as the runs of record. The firs
   quantity's CI no longer depends on how many quantities were computed before it. The I1 ratio CI was
   the first computed and is unaffected by this change.
 
+
+### Amendment A5 — 2026-10-10, **post hoc** (recorded at the close of WM-1, from the milestone audit)
+- **(d) changed meaning in A4 without saying so** (audit finding A-9). As registered on 2026-10-09, (d) was
+  "SPaT from a vehicle (its credential permits BSM/DENM)", a test of the permitted-type check. In A4 and
+  in the harness, (d) signs with a vehicle credential from the V2V issuer, which the infrastructure
+  verifier does not trust, so it is rejected as `credential_invalid` — the same branch as (e). The
+  permitted-type check for a credential from the trusted authority is exercised by (c) and (c-w). I2's
+  13 checks are therefore **10 distinct attacks plus 3 warm variants**, and they exercise 9 distinct
+  rejection branches; A4 added 6 checks to the original 7, not 12 (the design's §7 said 12).
+- **A4's heading said "before any code change or run of pass 11"** (audit finding P-9). Commit
+  `b1d3f72` changed the harness header two minutes before A4 (`98e64e4`); it touched only the run-identity
+  metadata (`PRODUCING_PATHSPECS`, `code_clean`), no measured path. Read A4's heading as "before any
+  change to the verifier and before any registered re-run".
+- **Latency reporting** (audit finding A-5). The register's latency rule asks for median and p95 after
+  three discarded warm-ups; the I1 and I5 driver discards no warm-up and reports no p95. The p95 of the
+  run medians is computed from the committed per-run data and stated in rows #44 and #48 with this deviation.

@@ -82,6 +82,53 @@ def _first(flat, keys):
     return None, None
 
 
+# Producing code per result family, for the "code changed since the stamp" column (after-action report 12,
+# audit finding T-5: a stamp can be clean and still describe code the trunk no longer has).
+JS_SHARED = ["1_blockchain-identity/contracts", "1_blockchain-identity/hardhat.config.js",
+             "1_blockchain-identity/package-lock.json", "cv2x-testbed/contracts"]
+PY_SHARED = ["cv2x-testbed/identity", "2_w3c-ssi-layer", "cv2x-testbed/contracts"]
+SUMO = ["cv2x-testbed/sumo", ":(exclude)cv2x-testbed/sumo/results"]
+S = "1_blockchain-identity/scripts/"
+PRODUCER = {  # result file (prefix) -> its producer script(s); the shared code of its family is added
+    "4_comparison-framework/results/gas_benchmark": [S + "benchmark_gas.js"],
+    "4_comparison-framework/results/mobi_vid_backends": [S + "mobi_vid_backend_sweep.js"],
+    "4_comparison-framework/results/scaling_lifetime": [S + "benchmark_scaling.js"],
+    "4_comparison-framework/results/scaling_marginal": [S + "benchmark_scaling.js"],
+    "4_comparison-framework/results/pseudonym_pool": [S + "experiment_pseudonym_pool.js"],
+    "4_comparison-framework/results/infrastructure_gas": [S + "infrastructure_gas.js"],
+    "4_comparison-framework/security-analysis/results/onchain_security": [S + "security_scenarios.js", "1_blockchain-identity/test/L2-identity-system/security"],
+    "4_comparison-framework/results/scaling_verify": ["cv2x-testbed/sumo/run_verify_scaling.py"],
+    "cv2x-testbed/results/freshness_k": ["cv2x-testbed/scripts/experiment_freshness_k.py"],
+    "cv2x-testbed/results/lifecycle_parity": ["cv2x-testbed/scripts/experiment_lifecycle_parity.py"],
+    "cv2x-testbed/results/pki_vs_erc1056": ["cv2x-testbed/scripts/experiment_pki_vs_erc1056.py"],
+}
+HARNESS_CODE = ["1_blockchain-identity/benchmarks", "1_blockchain-identity/contracts", "1_blockchain-identity/hardhat.config.js",
+                "1_blockchain-identity/package-lock.json"]
+
+
+def code_paths(path):
+    if path.startswith("1_blockchain-identity/results/metrics"):
+        return HARNESS_CODE
+    if path.startswith("cv2x-testbed/sumo/"):
+        return SUMO + PY_SHARED
+    for prefix, scripts in PRODUCER.items():
+        if path.startswith(prefix):
+            return scripts + (PY_SHARED if scripts[0].endswith(".py") else JS_SHARED)
+    return (PY_SHARED + ["cv2x-testbed/scripts"]) if path.startswith("cv2x-testbed/") else (JS_SHARED + [S])
+
+
+def changed_since(commit, path):
+    """'no' if the producing code is identical at HEAD, 'yes' if it differs, None if unknown."""
+    import re
+    import subprocess
+    m = re.match(r"[0-9a-f]{7,40}", str(commit or ""))
+    if not m:
+        return None
+    r = subprocess.run(["git", "diff", "--quiet", m.group(0), "HEAD", "--", *code_paths(path)], cwd=ROOT,
+                       capture_output=True)
+    return {0: "no", 1: "yes"}.get(r.returncode)
+
+
 def path_of(p):
     return str(pathlib.Path(p).relative_to(ROOT))
 
@@ -121,6 +168,7 @@ def main():
                 have["code"] = None if code is None else f"{code} (inert)"
             if not live and anyd is not False and path_of(p) in HAND_CHECKED:
                 have["code"] = f"False (hand check)"
+            have["changed"] = changed_since(have["commit"], path_of(p))
             rows.append((path_of(p), have))
     def complete(h):
         return all(h[k] is not None for k in ("date", "commit", "toolchain")) and h["code"] is not None
@@ -132,14 +180,16 @@ def main():
              "implies clean code and True says nothing. *inert*: the code flag's source at that commit could not "
              "detect a change (after-action report 11); such a stamp is vouched for by *any* or by the hand check in "
              "the claim register. Rows without a complete stamp carry a class: *stamp producer* (the work list), "
-             "*history* (a diff of two runs, exempt), *single run* (not a result of record).", "",
+             "*history* (a diff of two runs, exempt), *single run* (not a result of record). *code changed since*: whether the "
+             "producing code of the result's family differs between the stamped commit and HEAD (yes = the result describes "
+             "code the trunk no longer has; re-run or disclose).", "",
              f"{full} of {len(rows)} result files carry a complete stamp.", "",
-             "| File | date | commit | dirty (code) | dirty (any) | toolchain | class |", "|---|---|---|---|---|---|---|"]
+             "| File | date | commit | dirty (code) | dirty (any) | code changed since | toolchain | class |", "|---|---|---|---|---|---|---|---|"]
     for path, h in rows:
         cell = lambda v: "MISSING" if v is None else str(v)[:24]
         cls = (f"hand check: {HAND_CHECKED[path]}" if path in HAND_CHECKED else "") if complete(h) else ("**unclassified**" if path not in CLASSES else f"{CLASSES[path][0]}: {CLASSES[path][1]}")
         lines.append(f"| `{path}` | {cell(h['date'])} | {cell(h['commit'])} | {cell(h['code'])} | {cell(h['any'])} | "
-                     f"{cell(h['toolchain'])} | {cls} |")
+                     f"{cell(h['changed'])} | {cell(h['toolchain'])} | {cls} |")
     (ROOT / "docs/testing/STAMP_INVENTORY.md").write_text("\n".join(lines) + "\n")
     print(f"{full}/{len(rows)} fully stamped; wrote docs/testing/STAMP_INVENTORY.md")
 

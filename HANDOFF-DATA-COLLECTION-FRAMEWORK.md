@@ -1,3 +1,7 @@
+> **Dated handoff (2026-10-04).** Its tables are from the pre-merge harness run `2026-10-04T09-50-29Z_0eef6af`, now
+> superseded. Current values: `docs/MEASUREMENT_CONDITIONS.md` #29–#36 (re-stated 2026-10-10 from run
+> `2026-10-09T02-09-36Z_7a9a996`) and `1_blockchain-identity/results/metrics/latest/tables/`.
+
 # HANDBACK — Data-Collection & Comparative-Analysis Framework ("CRUD and Beyond")
 
 **Author:** Nikhil Prakash (MASc, UBC ECE) — nikhil.prakash1995@gmail.com

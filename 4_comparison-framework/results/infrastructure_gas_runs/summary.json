@@ -1,0 +1,98 @@
+{
+  "about": "I4 repeated 30 times (after-action report 12, audit findings A-3, B2-F9): the RSU key and address are random per run, so gas varies by multiples of 12 (zero vs non-zero calldata bytes, EIP-2028). Producing code identical to f1f9e37 (git diff f1f9e37 d877a4f over the producing paths is empty).",
+  "runs": 30,
+  "commit": [
+    "d877a4f"
+  ],
+  "dirty": [
+    false
+  ],
+  "operations": {
+    "create_identity": {
+      "min": 0,
+      "max": 0,
+      "values": [
+        0
+      ],
+      "mode": 0,
+      "counts": {
+        "0": 30
+      }
+    },
+    "anchor_key_by_rsu": {
+      "min": 52558,
+      "max": 52606,
+      "values": [
+        52558,
+        52582,
+        52594,
+        52606
+      ],
+      "mode": 52606,
+      "counts": {
+        "52558": 1,
+        "52582": 1,
+        "52594": 5,
+        "52606": 23
+      }
+    },
+    "anchor_service_endpoint": {
+      "min": 34038,
+      "max": 34050,
+      "values": [
+        34038,
+        34050
+      ],
+      "mode": 34050,
+      "counts": {
+        "34038": 2,
+        "34050": 28
+      }
+    },
+    "hand_control_to_authority": {
+      "min": 51742,
+      "max": 51754,
+      "values": [
+        51742,
+        51754
+      ],
+      "mode": 51754,
+      "counts": {
+        "51742": 2,
+        "51754": 28
+      }
+    },
+    "rotate_key_by_authority": {
+      "min": 35486,
+      "max": 35510,
+      "values": [
+        35486,
+        35498,
+        35510
+      ],
+      "mode": 35510,
+      "counts": {
+        "35486": 1,
+        "35498": 10,
+        "35510": 19
+      }
+    },
+    "revoke_old_key": {
+      "min": 35014,
+      "max": 35062,
+      "values": [
+        35014,
+        35038,
+        35050,
+        35062
+      ],
+      "mode": 35062,
+      "counts": {
+        "35014": 1,
+        "35038": 1,
+        "35050": 5,
+        "35062": 23
+      }
+    }
+  }
+}

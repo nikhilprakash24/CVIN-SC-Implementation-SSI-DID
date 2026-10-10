@@ -78,7 +78,7 @@ qualitative method-level cells for the substrates not in §1:
 | 3.4.8 Authentication model | key-based; issuer signatures (EIP-191) verified on-chain at add time | role-based issuance; holder is the address | key-based (owner); executor for on-chain action | ownership-based; authority-written data | key-based; UserOperation signature validated by the account (EIP-191 over userOpHash) | key/delegate-based; raw-digest issuer signatures verified at add time |
 | 3.6.7 Provenance | per-identity contract address (VIN in constructor) | registry address + vehicle address | account address | collection address + keccak(VIN) token id | account address + EntryPoint address | registry address + identity address + chain id in the claim digest |
 | 3.7.1 Per-DID visibility | all claims public incl. signatures and data | balances public (credential types visible; one type per credential hash) | key/value store public | per-token data public | attributes public | events + claims public |
-| 3.7.2 Incentive for multicontext DIDs | expensive (1.54 M deploy per identity) | cheap-ish (104 k register, but issuer-gated) | expensive (1.73 M per identity) | moderate (133 k mint, authority-gated) | expensive (0.81 M per identity) | cheap (267 k VIN claim; identity itself free) |
+| 3.7.2 Incentive for multicontext DIDs | expensive (1.76 M deploy per identity; #25) | cheap-ish (108 k register, but issuer-gated; #25) | expensive (1.73 M per identity) | moderate (133 k mint, authority-gated) | expensive (0.81 M per identity) | cheap (267 k VIN claim; identity itself free) |
 
 Where the rubric asks for a method *rule* (3.2.1, 3.3.3) the answer for ERC-1155 and LSP8 is
 "permissioned", which is a different trust model from the open substrates and must be weighed

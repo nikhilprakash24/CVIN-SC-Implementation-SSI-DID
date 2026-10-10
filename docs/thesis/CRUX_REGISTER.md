@@ -7,7 +7,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | Crux | State | Hypotheses | Evidence rows (status) | Open gaps |
 |---|---|---|---|---|
 | C1 CAV identity substrate | **partial** | H1, H5 | #25 (V), #26 (V), #34 (V), #35 (V), #36 (V), #42 (V), #43 (V) | 2 |
-| C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (V) | 2 |
+| C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (U) | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **partial** | — | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V) | 5 |
 | C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S) | 2 |
 | C5 W3C conformance | **partial** | H2 | #4 (V), #24 (V) | 2 |
@@ -27,8 +27,8 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 |---|---|---|
 | #25 | V | Nine-standard gas table (deploy / create / update / delegate-or-claim / revoke / transfer per standard; MOBI-VID-V2 as application profile; ERC-4337 EntryPoint indirection +46,830 gas/op; create-identity spread 52,216 (C… |
 | #26 | V | Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,146 gas on the merged contracts); verify O(1) in claim count; V2V warm verification linear at 0.164 ms/neighbour (… |
-| #34 | V | Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,808 / 145,662 / 399,844 / 656,480 / 1,535,776 (ERC-735) / 103,913 (ERC-1155) / 1,730,753 (ERC-725xy) / 132,515 (LS… |
-| #35 | V | Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,787 (wrapper 1,025,381) · ERC-1155 1,150,981 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,505,258 (excl. 3 n/a) · ERC-4337 2,221… |
+| #34 | V | Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,881 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS… |
+| #35 | V | Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,809 (wrapper 1,025,469) · ERC-1155 1,261,575 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,508,413 (excl. 3 n/a) · ERC-4337 2,221… |
 | #36 | V | H5 dominance analysis over six declared criteria (lifetime gas ↓, zero→nonzero SSTOREs ↓, R3 RPC at h=50 ↓, R3 median ms after lifecycle ↓, core ops supported ↑, O(1) on-chain credential check ↑ [design property, assigne… |
 | #42 | V | (sandbox lineage, was #31; history row for the pre-merge contracts) Gas moved by the 2026-10-04 defect fixes (D13 VIN normalisation on three mint paths; D21 `revoked` check and `previousChange` on the vehicle-profile reg… |
 | #43 | V | (sandbox lineage, was #32; history row for the pre-merge contracts) Gas moved by the 2026-10-04 pass-06 fixes (D7/D8 ERC-1155: standard transfers closed, held-type bitmap, `issuerTransferIdentity`; D11b MOBI `anchorVehic… |
@@ -55,7 +55,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | #27 | V | V2V SSI verify warm 0.153 ms [0.151, 0.154] (median of 30 seeded-run medians, 95 % bootstrap CI; p95 of run medians 0.158), cold 0.399 [0.381, 0.411]; PKI warm 0.094 [0.093, 0.095], cold 0.220 [0.218, 0.223]; 1,650,318 v… |
 | #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_… |
 | #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu… |
-| #39 | V | HTTP-RPC condition, all ten columns (N=30): every gas table byte-identical to #34/#35; latency ≈2–2.5× the in-process figures (U3 tx median 8.0 → 18.1 ms ERC-1056; R1 0.9 → 2.0 ms). R3 resolve at history h=50, median / p… |
+| #39 | U | HTTP-RPC condition, all ten columns (N=30), on the pre-merge contracts: every gas table byte-identical to the in-process run of the same contracts (`0eef6af`, now S); latency ≈2–2.5× the in-process figures (U3 tx median … |
 
 **Open gaps:**
 - Mobility is simulated (no SUMO run); radio, MAC and channel are out of scope.
@@ -69,16 +69,16 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 **Question.** Does the same identity layer secure roadside-unit and infrastructure messages (SPaT/MAP, RSU-to-RSU, RSU-to-traffic-management)?
 
-**Claim.** An RSU is a DID with a road-authority issuer; warm verification of its signed SPaT costs about what a warm BSM does (about 10 % more after the binding, replay and expiry checks); 13 registered attacks are rejected for their expected reasons; a cached verifier honours a revoked RSU for at most k-1 further messages.
+**Claim.** An RSU is a DID with a road-authority issuer; warm verification of its signed SPaT costs about what a warm BSM does (about 10 % more after the binding, replay and expiry checks); 13 registered checks (10 attacks, 3 warm variants) are rejected for their expected reasons; a cached verifier honours a revoked RSU for at most k-1 further messages (by construction of the re-check cadence: I3 checks the implementation, not a revocation latency).
 
 **Thrusts:** 3 · **Hypotheses:** none yet · **Defects bearing on it:** none
 
 | Row | Status | Claim (from the register) |
 |---|---|---|
 | #44 | V | (pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1 and A4; verdict PASS) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same run: median of 30 per-run rat… |
-| #45 | V | (pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks rejected for its expected reason in 30/30 runs (a deterministic check repeated per run). First contact: (a) unsigned → unsigned; (b) wrong key … |
+| #45 | V | (pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks (10 attacks and 3 warm variants, 9 distinct rejection branches; amendment A5) rejected for its expected reason in 30/30 runs (a deterministic c… |
 | #46 | V | (pre-registered I3; verdict PASS) A verifier that has cached a revoked RSU accepts at most k − 1 further SPaT from it: `rsu_1`'s credential revoked at t = 10 s, re-check of the authority's (in-process) registry every k-t… |
-| #47 | V | (pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`, two runs at `f1f9e37`): identity creation 0 (did:ethr is implicit); RSU anchors … |
+| #47 | V | (pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`), range over 30 runs (random RSU key and address each run): identity creation 0 (… |
 | #48 | V | (pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path: per run the sum of four per-run medians (controller sign + RSU warm verify + RSU SPaT s… |
 
 **Open gaps:**
@@ -145,7 +145,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 | Row | Status | Claim (from the register) |
 |---|---|---|
-| #30 | V | Harness L2 MOBI-VID lifecycle (17 events, including the delegate add that the rotation retires): 1,050,787 / 2,701,239 / 3,155,103 gas, ERC-1056 cheapest by 2.57× / 3.00×; zero→nonzero SSTOREs 8 / 92 / 83 (writes, not ne… |
+| #30 | V | Harness L2 MOBI-VID lifecycle (17 events, including the delegate add that the rotation retires): 1,050,809 / 2,706,685 / 3,155,103 gas (ERC-1056 / 721 / 725), ERC-1056 cheapest by 2.58× / 3.00×; zero→nonzero SSTOREs 8 / … |
 | #33 | V | M4 lifecycle parity (pre-registered, `PLAN_MOBI_SUMO.md` §A.2), n=50, median / p95 ms, centralized vs MOBI-VID-V2: birth 0.0028 / 0.0076 vs 14.13 / 20.77 (398,298 gas); lifecycle event 0.0064 / 0.0109 vs 11.86 / 14.88 (2… |
 | #41 | S | (sandbox lineage, was #30; S by instrument — superseded by #33; its `attest_event` row, which #33 lacks, is kept here) Lifecycle parity, centralized registry vs MOBI VID V2 (n=50, median / p95 ms): register_birth 0.004 /… |
 

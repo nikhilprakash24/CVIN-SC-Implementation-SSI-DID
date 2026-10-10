@@ -95,5 +95,5 @@ per experiment; status V only from a clean tree.
 | Freshness window **and replay check** (§3.2) | freshness built in the first version; **replay check missing until the review** (D29), built at `f1f9e37` as a per-receiver cache | `docs/DEFECT_LOG.md` §F |
 | Binding of message fields to the credential | **not in this design**; added after the review (D28: SPaT for another intersection was accepted) | `f1f9e37` |
 | Revocation re-check every k messages (§3.2) | built; registry in-process; warm-path expiry added after the review (D30) | register #46 |
-| I2 attack list (§4): "unsigned, wrong key, no SPaT permission, **replayed**, stale" | the pre-registration of 2026-10-09 dropped "replayed" without an amendment; amendment A4 restored it with 12 further checks | `INFRASTRUCTURE_PREREG.md` §4 |
+| I2 attack list (§4): "unsigned, wrong key, no SPaT permission, **replayed**, stale" | the pre-registration of 2026-10-09 dropped "replayed" without an amendment; amendment A4 restored it and added further checks (7 → 13 checks: 10 attacks and 3 warm variants; amendment A5) | `INFRASTRUCTURE_PREREG.md` §4 |
 | Experiments I1–I5 (§4) | run twice (`1e690c3`, `f1f9e37`); results of record at `f1f9e37` | register #44–#48, chapter 5 §5.4.1 |

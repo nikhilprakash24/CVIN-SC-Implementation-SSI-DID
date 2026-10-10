@@ -58,7 +58,9 @@ def main():
                 cur = re.search(r"\d[\d.]*", normalise(e["current"]))
                 for m in re.finditer(e["pattern"], line):
                     later = [a for a in arrows if a > m.start()]
-                    if later and cur and cur.group(0) in line[later[0]:]:
+                    # the current value must appear as a whole number after the arrow (audit finding B2-F7:
+                    # a substring test let "150" match inside "1500")
+                    if later and cur and re.search(r"(?<![\d.])" + re.escape(cur.group(0)) + r"(?![\d])", line[later[0]:]):
                         continue                # old -> new, with the current value on the new side
                     hits.append((str(f.relative_to(ROOT)), n, e, raw.strip()))
                     break

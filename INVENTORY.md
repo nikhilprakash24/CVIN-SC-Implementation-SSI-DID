@@ -17,7 +17,7 @@
 | Comparison Framework | ✅ Complete | 9/9 standards gas-benchmarked (N=30, σ=0); security matrices + Sepolia harness generated |
 | Documentation | 🔄 ~80% | honest-claims cleanup done; Chapter 5 results draft assembled from measured artifacts |
 | CI/CD | ✅ Complete | 3 workflows (contracts, benchmark, W3C compliance gate ≥90%) |
-| **OVERALL** | **~70%+** | **~295 automated tests green** |
+| **OVERALL** | **~70%+** | **all automated tests green** (current counts: `sandbox/grand/report/GRAND_REPORT.md`) |
 
 Automated test suites (all green): **Hardhat contract tests + W3C VC + MOBI VID (Python) + 12/12 lifecycle use cases** (current totals in `sandbox/grand/report/GRAND_REPORT.md`). W3C compliance: **94.3% measured** (executable checker, CI-gated ≥90%).
 
@@ -25,7 +25,7 @@ Automated test suites (all green): **Hardhat contract tests + W3C VC + MOBI VID 
 
 ## 1️⃣ Blockchain Identity Layer (`1_blockchain-identity/`)
 
-Hardhat project implementing all 9 blockchain identity standards plus the MOBI VID application profile. **217 tests passing.** solc 0.8.24, optimizer (200 runs) + viaIR, OpenZeppelin 5.0.2.
+Hardhat project implementing all 9 blockchain identity standards plus the MOBI VID application profile. **All tests passing** (current count: `sandbox/grand/report/GRAND_REPORT.md`). solc 0.8.24, optimizer (200 runs) + viaIR, OpenZeppelin 5.0.2.
 
 ### The 9 standards + MOBI VID (Solidity contracts)
 
@@ -50,7 +50,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 
 **Total contract Solidity**: ~4,656 lines across 16 files.
 
-### Test Files (217 tests total)
+### Test Files (current total in the grand report)
 
 | File | `it()` scenarios | Status | Purpose |
 |------|------------------|--------|---------|
@@ -87,7 +87,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `hardhat.config.js`, `package.json` | ✅ Complete | Hardhat / NPM config |
 | `SEPOLIA_VALIDATION.md` | ✅ Complete | Sepolia validation procedure (run pending) |
 
-**Status**: ✅ **COMPLETE** — all 9 standards + MOBI VID implemented, tested (217), and gas-benchmarked.
+**Status**: ✅ **COMPLETE** — all 9 standards + MOBI VID implemented, tested (current count in the grand report), and gas-benchmarked.
 
 ---
 
@@ -230,7 +230,7 @@ Additional living docs at repo root: `README.md`, `CHANGELOG.md`, `CAPABILITIES.
 
 | Phase | Completion | Status |
 |-------|------------|--------|
-| Smart Contracts (9 standards + MOBI VID) | 100% (217 tests) | ✅ |
+| Smart Contracts (9 standards + MOBI VID) | 100% (count in the grand report) | ✅ |
 | W3C DID Layer | 100% (4 methods) | ✅ |
 | W3C VC Layer | 100% (28 tests) | ✅ |
 | MOBI VID (Python + on-chain) | 100% (32 tests; AES-256-GCM VIN) | ✅ |

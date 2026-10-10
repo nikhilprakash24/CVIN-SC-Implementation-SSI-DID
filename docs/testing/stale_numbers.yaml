@@ -33,29 +33,20 @@ history:
 - docs/RESEARCH_AUDIT.md
 - docs/DEVELOPMENT_HISTORY.md
 - docs/ORIGINAL_PROMPT_AND_DIRECTION.md
+- HANDOFF-DATA-COLLECTION-FRAMEWORK.md
 history_markers:
 - superseded
+- history
+- historical
+- <!-- history
+- \(S\)
+- goes from
 - was
 - were
 - July
 - at the merge
-- bundle
-- before
-- old
-- earlier
-- previous
 - pre-merge
-- pre-review
-- pre-fix
-- moved from
-- instead of
-- history
-- historical
-- replaced
 - withdrawn
-- \(S\)
-- goes from
-- <!-- history
 entries:
 - pattern: 93\.2 ?%
   current: 94.3 %
@@ -84,10 +75,10 @@ entries:
 - pattern: 542429|542378
   current: 545,101 (ERC-721 create)
   row: 25
-- pattern: 1598928|1404108
+- pattern: 1598928|1404108|1535776
   current: 1,757,881 (ERC-735 create)
   row: 25
-  note: '1,535,776 removed (after-action report 11): it is the current harness C1 create for ERC-735 (#34); only its benchmark-context use was superseded'
+  note: '1,535,776 restored 2026-10-10 (audit finding A-2): its removal in pass 11 rested on register #34, which itself still carried the pre-merge harness value'
 - pattern: ~33×|~32×|32\.2×
   current: ~34× (52,216 → 1,757,881)
   row: 25
@@ -112,3 +103,86 @@ entries:
 - pattern: \b(217|219|369|386) passing
   current: see sandbox/grand/report/GRAND_REPORT.md
   row: 5
+- pattern: \b1050787\b
+  current: '1,050,809 (#30, #35)'
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b2701239\b
+  current: '2,706,685 (#30, #35)'
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b1150981\b
+  current: 1,261,575 (#35)
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b5369010\b
+  current: 5,797,549 (#35)
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b2533978\b
+  current: 2,559,537 (#35)
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b1505258\b
+  current: 1,508,413 (#35)
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b266995\b
+  current: 271,402 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b103913\b
+  current: 107,729 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b399844\b
+  current: '402,567 (#29, #34)'
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b76808\b
+  current: '76,830 (#29, #34)'
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b145662\b
+  current: 145,684 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b132515\b
+  current: 135,544 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b317814\b
+  current: 318,054 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b57147\b
+  current: 80,131 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b289788\b
+  current: 294,157 (#35)
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b(217|219|369|386)[ -](tests?|test suite|Hardhat tests?)\b|\b219 passing|\b60 passed
+  current: see sandbox/grand/report/GRAND_REPORT.md
+  row: 5
+  note: 'audit finding A-7: phrasings the first test-count pattern missed'
+- pattern: ~295 (automated |green )?tests
+  current: see sandbox/grand/report/GRAND_REPORT.md
+  row: 5
+- pattern: ~?1\.(40|54) ?M\b
+  current: '~1.76 M (ERC-735 create, #25)'
+  row: 25
+  note: rounded forms of superseded ERC-735 creates; audit finding A-2
+- pattern: \b(217|219|369|386)\b[^|]{0,25}\b(tests?|passing|contract tests)\b|\btested \((217|219|369)\)
+  current: see sandbox/grand/report/GRAND_REPORT.md
+  row: 5
+  note: 'audit finding T-1: count near the word, any phrasing'
+- pattern: ~?(33|32\.2) ?[×x]\b
+  current: '33.7× (52,216 to 1,757,881; #25)'
+  row: 25
+  note: 'audit finding T-17: ASCII x and no tilde'
+- pattern: \b93,2 ?%|\b93\.2 percent
+  current: 94.3 %
+  row: 4
+  note: 'audit finding T-17: decimal comma and spelled percent'
