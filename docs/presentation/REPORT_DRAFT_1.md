@@ -254,7 +254,7 @@ flowchart LR
 |---|---|---|
 | Passes / commits | 8–11 / 27 (`db6c381..291bbca`) | git log db6c381..291bbca |
 | Files changed | 175 | git diff --shortstat db6c381 291bbca |
-| Plan items: done / changed / partial / deferred / not done | 18 / 2 / 3 / 1 / 1 | docs/PLAN_2026-10-09.md §5 |
+| Plan items: done / changed / partial / deferred / not done | 15 / 3 / 4 / 1 / 2 | docs/PLAN_2026-10-09.md §5 |
 | Python-layer tests, start → end | 260 → 291 | docs/milestones/WM-1_REPORT.md §0; sandbox/grand/report/GRAND_REPORT.md |
 | Infrastructure tests; layer mutants killed | 16 → 31; 13/17 → 26/26 | docs/AFTER_ACTION_REPORT_11.md §3, §4 |
 | Result files fully stamped | 11/25 → 20/29 | docs/AFTER_ACTION_REPORT_09.md; docs/testing/STAMP_INVENTORY.md |

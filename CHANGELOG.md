@@ -19,12 +19,16 @@ in `docs/MEASUREMENT_CONDITIONS.md` with its status. Version tags remain an auth
   centre as credentialed DIDs; signed SPaT and I2I messages; pre-registered experiments I1–I5 (register
   #44–#48; chapter 5 §5.4.1; SC-21).
 - **Added:** generated results dashboard (published), crux register C1–C8, TSR test register (305
-  TC) and coverage matrix, stamp inventory, stale-figure checker, run-identity probe — all regenerated
-  and compared in CI.
+  TC) and coverage matrix and stale-figure checker (regenerated and compared in CI), the run-identity
+  probe and a Hardhat test-count gate (CI), and the stamp inventory (report only).
 - **Added:** SUMO trace schema and renderers (mock mobility; SC-22); traces and figures of record.
 - **Fixed:** two holes in the first infrastructure verifier found by adversarial review (D28 field
-  binding, D29 replay) and three lesser ones (D30–D32); three inert producing-code clean flags (D33)
-  and four tooling faults (D34–D36).
+  binding, D29 replay) and three lesser ones (D30–D32); two of three inert producing-code clean flags
+  (D33; the metrics harness's waits for N-19) and three tooling faults (D34–D36).
+- **Fixed by the milestone audit (pass 12):** register rows #29–#36 re-stated from the 2026-10-09 harness run
+  (they kept pre-merge values, D43), #39 to U; chapter 7's H5 claim scoped (D46); gas determinism qualified
+  and I4 re-reported over 30 runs (D45); stale-figure checker round 3 (D44, D48); CI test-count gate and PR
+  triggers (D47). Open for WM-2: verifier robustness (D37–D42), stamp scope (D49), seven re-runs (D50).
 - **Changed:** the style guide, team structure and milestone scheme (`docs/milestones/`).
 
 ### 2026-10-03 to 2026-10-06 (passes 5–7, the review-2 lineage and the merge)

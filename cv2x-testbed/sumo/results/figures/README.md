@@ -31,3 +31,7 @@ Reproduce (from `cv2x-testbed/sumo/`):
 `--results` keeps the run from overwriting the committed `results/v2v_latency.json`.
 Timing values in a trace are one run on one host; mobility and message counts are
 deterministic for a seed.
+
+Byte-identity holds for the environment recorded here (matplotlib 3.11.2, Pillow 12.3.0, checked twice: pass 12
+and audit brief 3). Neither is pinned (`cv2x-testbed/requirements.txt` says `matplotlib>=3.4.0`; Pillow is in no
+requirements file), so another version may render different bytes from the same trace (audit finding T-15).

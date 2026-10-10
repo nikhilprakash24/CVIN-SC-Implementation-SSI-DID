@@ -9,7 +9,7 @@ wm1:
   passes: {value: "8–11", source: "docs/milestones/README.md"}
   plan_status:
     source: "docs/PLAN_2026-10-09.md §5"
-    counts: {done: 18, changed: 2, partial: 3, deferred: 1, not_done: 1}
+    counts: {done: 15, changed: 3, partial: 4, deferred: 1, not_done: 2}   # corrected after the WM-1 audit (P-6, P-7)
   register_start: {value: {V: 27, S: 8, E: 7, B: 1}, source: "register at db6c381, parsed by make_dashboard_data.py's rule"}
   test_counts:
     source: "docs/milestones/WM-1_REPORT.md §0; sandbox/grand/report/GRAND_REPORT.md"

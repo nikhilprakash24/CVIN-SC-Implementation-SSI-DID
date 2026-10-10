@@ -9,7 +9,7 @@ or the next author checkpoint, whichever comes first.
 
 **Status at the close of work milestone WM-1 (2026-10-10).** Closed: N-13, N-14. **The author's
 decisions** (nothing executes until decided; the default stands): N-1, N-4 (go-ahead), N-5, N-6, N-7, N-8,
-N-9, N-10, N-11, N-12, N-17. **Executable without a decision**, scheduled in `docs/PLAN_WM-2.md`: N-2, N-3,
+N-9, N-10, N-11, N-12, N-17, **N-23 (AI-use disclosure, raised by the WM-1 audit)**. **Executable without a decision**, scheduled in `docs/PLAN_WM-2.md`: N-2, N-3,
 N-15, N-16 (design first), N-18, N-19, N-20, N-21, N-22.
 
 | # | Item | Default until decided | Source |
@@ -36,3 +36,4 @@ N-15, N-16 (design first), N-18, N-19, N-20, N-21, N-22.
 | N-20 | Stamp the five producers classified *stamp producer* in `docs/testing/STAMP_INVENTORY.md` and re-run them (TSR phase 5) | classified; not stamped | same |
 | N-21 | Widen `check_stamps.py` globs to `results/metrics-rpc/`, `scaling_verify_repeats/`, `docs/conformance/**`, `sandbox/grand/report/*.json` (review finding C2) | report covers the main result directories | after-action report 11 |
 | N-22 | Brief a session-level adversarial review whose briefs are written outside this session: Python suites outside L3, the contracts, chapters 1–4 and 6–7 were not in pass 11's scope | pass 11 covered passes 9–10 only | same |
+| N-23 | **AI-use disclosure.** The repository has no AI-use statement in the README, the thesis front matter or the author-bylined reports, although `PROVENANCE.md` states "AI tooling, under researcher direction" and several reports are written in the assistant's first person under the author's byline (WM-1 audit, finding P-F14). Decide: an AI-use statement in the README and thesis front matter (the university's policy governs the wording), and whether reports keep the first person | no statement added; nothing changed until decided | after-action report 12 §4 |

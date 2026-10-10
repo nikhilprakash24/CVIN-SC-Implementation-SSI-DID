@@ -79,14 +79,14 @@ pinned install (the same versions the Hardhat suite passes against).
 
 ### Step 3: Install Python dependencies
 
-The W3C layer ships a pinned `requirements.txt`, or you can install the core
-set directly:
+Install the set the results of record were produced with (and that CI installs):
 ```bash
 # From the repo root:
-pip3 install -r 2_w3c-ssi-layer/requirements.txt
-# — or the minimal core set —
-pip3 install web3 eth-account cryptography pytest coincurve
+pip3 install eth-account coincurve cryptography web3 pytest numpy pyyaml matplotlib pillow
 ```
+`2_w3c-ssi-layer/requirements.txt` is **not installable as written**: it pins `did-jwt==0.1.0`, which does
+not exist on PyPI, and omits `coincurve`, `pyyaml` and `pillow` (audit finding T-7, 2026-10-10; fixing the
+file is WM-2 step G). Library versions behind each result are recorded in its environment header.
 
 ---
 

@@ -163,3 +163,15 @@ briefs is a blind spot in the review (nothing was asked about the Python suites 
 contracts, or chapters other than 5). And the orchestrator decided the dispositions; that none was
 rejected is a fact about these findings, not a guarantee of neutrality. A session-level review by a
 different configuration, with briefs written by someone else, remains the stronger test (N-10).
+
+**Post-close corrections from the WM-1 audit (after-action report 12).** (1) "I1 alone on the host" overstates
+what the record shows: no other experiment, test or generator ran during I1, but file editing continued;
+the run log is now committed (`cv2x-testbed/sumo/results/run_logs/2026-10-09_f1f9e37/`) [T-8]. (2) The
+findings register above uses ids A1–A11 for the claims reviewer, which collide with the pre-registration's
+amendments A1–A5; read the register's ids as A-F1…A-F11 (claims), B-F1…B-F11, C-F1…C-F11 [P-24]. (3)
+Dispositions marked "docs" or "R2 tooling" were committed in `36e0309` (wording, tooling) and `601e1de`
+(register rows) [P-24]. (4) B10 is recorded as confirmed with no code change. (5) The reviewers' reports are
+committed verbatim under `docs/milestones/review_pass11/`; the severities in the WM-1 report (7 / 15 / 11)
+recompute from them [P-10]. (6) "26/26 mutants killed" referred to an uncommitted set; the committed set
+(`sandbox/py-suites/L3-ssi/mutation/`) has 30 mutants, all killed after six tests were added in pass 12
+[B-F1, P-12].

@@ -125,3 +125,9 @@ played every role, which is why the adversarial review waits for a different one
 
 
 **Post-close correction (after-action report 11).** the four producers' `dirty: false` (E-series stamping step) came from a flag that could not fire (relative pathspecs from a subdirectory). The runs are clean on other evidence (whole tree clean at 02:27:39, outputs-only commit `d54178e`); see `docs/AFTER_ACTION_REPORT_11.md` R3.
+
+**Post-close correction (WM-1 audit, after-action report 12, finding P-F1).** §4.1 says "every acceptance re-run
+by the orchestrator". Two were not: P3.5 (onboarding import) was accepted by reading, a credential scan and a
+spot-check of the agent's byte comparison; P3.6 (TSR sheet) by reading its citations. Guide rule 1.3.7 required
+a re-run gate; neither had a gate that could be re-run. The P0.4 status check (register stamping) also has no
+entry here; the audit found the rows it would have caught (D43).

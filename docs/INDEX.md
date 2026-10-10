@@ -51,6 +51,10 @@ provenance and must not be cited in chapters.
 
 ## Historical (keep, do not cite)
 
+- `docs/artifacts/*.html` — July 2026 provenance dossiers; their key numbers are superseded (see `docs/ARTIFACTS_MANIFEST.md`).
+- `HANDOFF-DATA-COLLECTION-FRAMEWORK.md` — the 2026-10-04 harness handoff; its tables are the pre-merge run (current: register #29–#36).
+- `docs/HANDBACK_2026-10-09.md` and earlier handbacks — superseded by `docs/HANDBACK_2026-10-10.md`.
+
 - `MASTER_UPDATE.md` — the single-source status as of the bundle (v0.9.0-dev,
   before push was possible). Its numbers predate the merge and the trunk
   verification; superseded by `PROJECT_SUMMARY.md` + `MEASUREMENT_CONDITIONS.md`.

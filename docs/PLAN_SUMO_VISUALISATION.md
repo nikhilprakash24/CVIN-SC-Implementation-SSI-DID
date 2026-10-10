@@ -75,3 +75,12 @@ dashboard's palette.
 | V4 SUMO install and S1–S3 | deferred (S-b; SC-22; N-4) | — |
 | V5 RSU layer | done; I3 revocation figure | `f1f9e37` traces |
 | Not built from §4 | the network drawing from `highway_intersection.net.xml` and the per-vehicle inspector (both need real mobility to mean anything) | WM-2 plan |
+
+### 7.1 Trace schema as built (recorded 2026-10-10, audit finding B-F10)
+The traces of record differ from §3 as follows. Header: `environment` {`git_commit`, `code_dirty`, `python`,
+`cryptography`, `platform`} instead of `commit`/`dirty`/`host`; `net` is `"mock 5 km 3-lane highway"` (no SUMO
+network); added `rsu`, `rsus` (id, x, y), `refresh_k`, `revoke_rsu_at`, `caveat`. Events: `tx` carries `kind`
+(BSM, SPaT, SignalStateUpdate, TimingPlan) and `sign_ms`; `rx` `reason` is the verifier's reason for
+infrastructure messages (`stale`, `future`, `replay`, `binding`, `wrong_key`, …) and the single value `rejected`
+for V2V BSMs; added event types `attack` (`id`, `rejected`, `reason`, `expected`, `cold`) and `revoke`
+(`station`). The traces contain no key material, signatures or credentials (audit brief 2, C15).

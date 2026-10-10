@@ -263,3 +263,11 @@ For issues or questions:
 ## License
 
 MIT License - See LICENSE file for details
+
+
+## Build note: which OpenZeppelin the tracked artifacts use (added 2026-10-10, audit finding T-6)
+The tracked `cv2x-testbed/artifacts/` are compiled with the **root** `1_blockchain-identity/node_modules`
+(OpenZeppelin 5.0.2), exactly as CI does: CI links that install into `cv2x-testbed` before
+`scripts/check_artifacts_fresh.js`. This directory's own `package-lock.json` pins OpenZeppelin 5.4.0; an install
+from it produces a different `MOBIVIDRegistryV2` bytecode and the freshness check reports STALE. Until the two
+pins agree (WM-2 step G), build with the root install.

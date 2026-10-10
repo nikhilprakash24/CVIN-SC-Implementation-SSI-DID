@@ -16,7 +16,7 @@ did with each item). **Binds:** `docs/STYLE_AND_RIGOUR_GUIDE.md` (amended 2026-1
 | Deferred list (`docs/MILESTONE_NEXT.md`) | N-2, N-3, N-15, N-16 (design), N-18, N-19, N-20, N-21, N-22 | N-1, N-4, N-5…N-12, N-17 |
 | Review-2 executable list (handback 2026-10-09 §4 item 4) | resolver reads the chain in `_resolve_ethr`; restrict `attestEvent` to owner and delegates; re-run #32 and #37 back to back on one host | — |
 | Defect log | D33 rest (harness flag, = N-19) | §C policy calls (N-8) |
-| Presentation | draft 2 per `docs/presentation/EXPANSION_PLAN_DRAFT2.md` | which audience first (supervisor, committee) |
+| Presentation | draft 2 per `docs/presentation/EXPANSION_PLAN_DRAFT2.md` (written in pass 12) | which audience first (supervisor, committee) |
 
 ## 2. Goal
 At WM-2's close, every result of record is produced by a stamped producer through one entry point,
@@ -30,11 +30,13 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 | Step | Work | Gate |
 |---|---|---|
 | A1 | N-21: `check_stamps.py` globs widened (metrics-rpc, scaling repeats, conformance reports, grand report JSON) | inventory lists every result directory; each new row classified |
-| A2 | A Python stamp helper (`docs/testing/stamp.py` or `cv2x-testbed/lib/run_stamp.py`) with the same fields and pathspec rule as `run_stamp.js`; the CI probe extended to it | probe fails on a broken helper |
-| A3 | N-20: the five *stamp producer* files: stamp the producer, re-run on a clean tree; any moved number re-registered with the old value as history | each re-run stamped `dirty: false` with a live flag; moved cells listed |
+| A2 | One stamp helper for JS and Python with **per-producer scope** (each producer names the code it imports: the security harness, `cv2x-testbed/scripts`, post-processing scripts; D49); the CI probe extended to it | probe fails on a broken helper and on an edit to an imported file |
+| A3 | N-20: the five *stamp producer* files: stamp the producer, re-run on a clean tree; any moved number re-registered with the old value as history. **Runs after C1 and C2**, which move W3C, gas and security results (audit P-F20) | each re-run stamped `dirty: false` with a live flag; moved cells listed |
+| A3b | Re-run the seven V rows whose producing code changed since their stamp (#21, #26 verify part, #27, #32, #33, #37, #38; D50); old values kept as history | stamp inventory column "code changed since" reads `no` for every V row |
 | A4 | Promote step, piloted on one producer: write to `runs/<id>/`, promote copies to the result path only if the stamp is clean | a dirty run refuses to promote (test) |
-| A5 | P3.2 `claims.yaml`: stable string ids for every register row, generated from or checked against the register; every V row names an existing source file | CI fails on a V row without a source or a source without a row |
-| A6 | N-19 with the next harness run of record: root-anchor `dirtyMeasured`, re-run the harness on a clean tree, re-stamp #34–#36 | measured-code hashes recorded; cells moved listed |
+| A5 | P3.2 `claims.yaml`: stable string ids for every register row, generated from or checked against the register; every V row names an existing source file; **the numbers quoted in each V row are checked against their result file** (audit T-F3: an edited #44 passed every guard) | CI fails on a V row without a source, a source without a row, or a quoted number that differs from the file |
+| A6 | N-19 with the next harness run of record: root-anchor `dirtyMeasured`, re-run the harness on a clean tree, re-stamp #29, #30, #34–#36; **re-run the HTTP-RPC condition on the merged contracts (#39, now U)** | measured-code hashes recorded; cells moved listed; #39 back to V or rewritten |
+| A7 | N-15: the Python suites (L3, L4, SSI layer) in the TSR test register (audit P-F8) | every Python test has a TC entry |
 
 ### B. Determinism and statistics (TSR P4-3, phase 6). *Owner: measurement methodologist.*
 | Step | Work | Gate |
@@ -43,9 +45,10 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 | B2 | Charter for class G (gas): exact vs range, the 14 non-deterministic harness cells root-caused (calldata zero bytes, address-dependent storage) | every gas row says exact or range |
 | B3 | Charter for class L (latency): within-run comparison, host and library record, N ≥ 30 or "descriptive only" | every latency row conforms or is relabelled |
 
-### C. Carried fixes from review-2. *Owner: SSI/W3C specialist; contracts engineer; V2X specialist.*
+### C. Carried fixes from review-2, and the infrastructure verifier. *Owner: SSI/W3C specialist; contracts engineer; V2X specialist; security specialist.*
 | Step | Work | Gate |
 |---|---|---|
+| C0 | **Verifier v3** (WM-1 audit, D37–D42): bound message size and depth before canonicalising; binding claims mandatory for RSU and controller credentials and `rsu` required in SPaT; integer-only `refresh_every` and a CLI parser error; credential validity against the injected clock; DID method and chain validated; the I2 gate asserts the warm variants are warm. A dated pre-registration amendment first; then re-run I1–I3 as runs of record | each fix has a test that fails on the old code; the committed mutation script extended; I1–I3 re-run on a clean tree |
 | C1 | `_resolve_ethr` reads the chain (owner, attributes, `changed`) instead of the static document | external DID suite re-run (#24); checker (#4); moved numbers re-registered |
 | C2 | `attestEvent` restricted to the vehicle's owner and delegates (review-2 K-4 follow-up) | regression test fails on the old code; gas re-run of record for the moved cells |
 | C3 | #32 and #37 re-run back to back on one host | the host-dependence note in C4 replaced by a measured comparison |
@@ -68,12 +71,19 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 | F1 | Draft 2 of the presentation report per its expansion plan | numbers checked against the register by script |
 | F2 | A slide deck derived from draft 2, if the author wants one | — |
 
-### G. Hygiene.
-N-2 (`npm ci` without SSH) and N-3 (unused `goerli` entries), each with its CI evidence.
+### G. Hygiene and reproducibility (WM-1 audit).
+N-2 (`npm ci` without SSH) and N-3 (unused `goerli` entries), each with its CI evidence. Also: make
+`2_w3c-ssi-layer/requirements.txt` installable and complete (T-F7); pin OpenZeppelin identically in both Node
+projects (T-F6); pin matplotlib and Pillow for the figures (T-F15); a demo-count gate in CI (rest of D47); compare
+steps for the run-only CI jobs or label them run-only (T-F12); scan non-Markdown tracked text for superseded
+figures (T-F16); record load average in environment headers (T-F8).
 
 ## 4. Order and dependencies
-A1 → A2 → A3 → A5 → B1 → B2 → C3 → C1 → C2 → A6 (the harness re-run comes after C2, which moves gas)
-→ B3 → D1 → D2 → F1 → E1/E2. A4 can run beside A3. G any time.
+A1 → A2 → A4 → C0 → B1 → B2 → C3 → C1 → C2 → A3 → A3b → A6 → A5 → A7 → B3 → D1 → D2 → G → F1 → E1/E2.
+Revised after the WM-1 audit (P-F20): the promote step (A4) comes before the re-runs it gates; the stamped
+re-runs (A3, A3b) and the harness run of record (A6) come after the fixes that would move them (C0, C1, C2);
+the claim cross-check (A5) comes after the numbers settle. P2b.1/P2b.2 (TraCI path, network drawing,
+inspector) are **out of WM-2**: they need real mobility (N-4).
 
 ## 5. Author decisions (defaults taken; overturn any)
 | # | Decision | Default |
@@ -88,4 +98,5 @@ No SUMO install (N-4), no Sepolia run (N-11), no new pre-registered experiment, 
 nine-standard contract set beyond C2, no chapter prose beyond the sentences D1 finds missing.
 
 ## 7. Revisions
-- 2026-10-10 (initial) — written before the WM-1 audit; to be revised with the audit's carried items.
+- 2026-10-10 (initial) — written before the WM-1 audit.
+- 2026-10-10 (after the WM-1 audit) — added C0 (verifier v3), A3b (seven re-runs), A7 (N-15), A5's number cross-check, A6's HTTP re-run, G's reproducibility items; reordered §4; P2b items marked out of WM-2. Source: after-action report 12 §4.
