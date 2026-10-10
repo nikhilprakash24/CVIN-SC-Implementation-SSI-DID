@@ -24,7 +24,7 @@ Two kinds of milestone, nested.
 
 | WM | Passes | Commit range | Dates | Theme | Report | Audit |
 |---|---|---|---|---|---|---|
-| **WM-1** | 8–11 (closed by pass 12) | `db6c381..291bbca` (27 commits); closing pass 12 `3e19e72..` the close commit (handback §1) | 2026-10-09 → 2026-10-10 | close the merge; generated dashboard and registers; crux register; infrastructure messaging (V2I/I2I) designed, pre-registered, built, measured, reviewed and hardened; run-identity and stale-figure tooling | `WM-1_REPORT.md` | `docs/AFTER_ACTION_REPORT_12.md` §4 (88 findings; briefs and reports in `audit_WM-1/`), and the pass-11 review (`review_pass11/`) |
+| **WM-1** | 8–11 (closed by pass 12) | `db6c381..291bbca` (27 commits); closing pass 12 `3e19e72..8c9fe6b` | 2026-10-09 → 2026-10-10 | close the merge; generated dashboard and registers; crux register; infrastructure messaging (V2I/I2I) designed, pre-registered, built, measured, reviewed and hardened; run-identity and stale-figure tooling | `WM-1_REPORT.md` | `docs/AFTER_ACTION_REPORT_12.md` §4 (88 findings; briefs and reports in `audit_WM-1/`), and the pass-11 review (`review_pass11/`) |
 | WM-2 | from pass 12's close | — | — | `docs/PLAN_WM-2.md` | — | — |
 
 Before WM-1 the work was organised by passes and lineages (sandbox, review-2, onboarding), recorded in

@@ -213,7 +213,7 @@ contradicted; it was corrected before commit.
 | 2 | a detailed report, drafted before the audit | yes | `WM-1_REPORT.md` (`d61a284` pre-audit; revised) |
 | 3 | an audit by reviewers outside the orchestrator's context, every finding with a disposition | yes | §4: 88 findings, 88 dispositions |
 | 4 | confirmed findings fixed and re-verified, or deferred with an owner | yes | §4; deferred items in `PLAN_WM-2.md` (C0, A2, A3b, A5, G, D1) and `MILESTONE_NEXT.md` |
-| 5 | grand run ALL OK, CI green on the closing commit | see the handback §1 | grand run of the close; CI read on the close commit |
+| 5 | grand run ALL OK, CI green on the closing commit | yes | grand run ALL OK (Hardhat 537, Python layers 305, 92 demos); CI 8 of 8 green on `8c9fe6b` |
 | 6 | a reformulated plan for the next work milestone | yes | `PLAN_WM-2.md` (initial + post-audit revision) |
 | 7 | a consolidated handback | yes | `HANDBACK_2026-10-10.md` |
 
@@ -236,3 +236,6 @@ found 33 issues in passes 9–10; the WM-1 auditors had someone else's scope and
 area, four of them high in code the orchestrator had not asked anyone to read. What remains orchestrator-
 controlled: the brief-writer's own instructions (what to read, how many briefs), the dispositions, and the
 decision of what to fix now and what to defer. N-22 (briefs written outside the session) stays open.
+
+**Close recorded.** WM-1 closed at `8c9fe6b`: CI 8 of 8 green; dashboard version 6 and the presentation page
+version 2 published from it.
