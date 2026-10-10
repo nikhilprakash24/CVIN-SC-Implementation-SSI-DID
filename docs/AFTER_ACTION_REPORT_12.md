@@ -60,6 +60,17 @@ draft, and another document on what to expand in the next iteration."
   an index of what it left out, from the milestone report, plans and reports; the orchestrator did not
   edit them (archived under `docs/milestones/audit_WM-1/briefs/`, scratch paths normalised). Five
   auditors on a different model run them on a frozen checkout of `d61a284`.
+- **W4, the audit.** Five auditors (different model, frozen `d61a284`) returned 88 findings in about 16–41
+  minutes each; the brief-writer took about 10. The orchestrator reproduced the high findings (register
+  rows against `metrics/latest`; the verifier mutant via the committed script; the ERC-1056 validity clock
+  by reading it; the W3C partial check in `w3c_compliance.json`; the D2 mutant in a copy) before acting.
+  Fixes landed in `8d5d25c`, `a1c9cb8`, `0fe7d29`, `885f642`, `017acfc`; I4 was re-run 30 times (producing code
+  identical to `f1f9e37`); the 30-mutant script kills 30 of 30; four new tests each fail on their mutant; the
+  grand run after the fixes is ALL OK (Hardhat 537, Python layers 305, 92 demos / 1,752 steps).
+- **A second slip, caught by CI.** For the new test-count gate the orchestrator ran `npx hardhat test` after
+  regenerating the registers; the run rewrote the tracked L1 report with input-dependent gas (D56, N-18), the
+  commit picked it up, and CI's documents step failed on `885f642`. Regenerated in `017acfc`. The close runs
+  the grand runner last and regenerates after it.
 - **Recorded checks (audit P-F26).** V2 byte-identity: `python3 render_trace.py results/traces/trace_rsu_seed1.jsonl.gz --out $SCRATCH/rerender && python3 render_trace.py results/traces/trace_revocation_k5_seed1.jsonl.gz --out $SCRATCH/rerender --revocation --no-animation`, then `cmp` of each committed output against its re-render: 5 of 5 identical (matplotlib 3.11.2, Pillow 12.3.0); brief 3 reproduced the same sha256 values. No-change gate (passes 10–11): `python3 sumo_identity_integration.py --simulate --seed 7 --duration 10 --results $SCRATCH/x.json` with flags off, and again with `--trace`; every integer field of the two results files (19 at the time; the audit compared 25) equal to the pre-change baseline.
 - **A slip in this pass.** Commit `a1c9cb8` was made while the stale-figure checker failed (43 hits in the newly committed verbatim reports); the failure was hidden because the check was piped into `tail`, which returns its own exit code. Fixed a minute later (`0fe7d29`: the verbatim reports are records, on the history list). CI on `a1c9cb8` is expected to fail its documents step; checks are now run unpiped before each commit.
 - **W5.** `docs/presentation/make_presentation.py` generates `REPORT_DRAFT_1.md` (10 sections, ~25
@@ -178,5 +189,50 @@ decision (P-F14, N-23). None rejected. A first draft of this sentence gave typed
 contradicted; it was corrected before commit.
 
 ## 5. Decisions
+- **H-A.** Defaults D-1…D-5 taken (§1); they are orchestrator defaults the author has not seen (audit P-F13).
+- **H-B.** Code that produced a result of record is not changed at a milestone close: the verifier's
+  robustness gaps (D37–D42) and the ERC-1056 validity-clock defect (D51, high) go to WM-2 with the re-runs
+  they force, and the dependent claims are narrowed now (rule 1.2.4). Tests, tooling, CI and documents are
+  fixed now.
+- **H-C.** I4 re-run 30 times on unchanged producing code to replace a two-run range: more evidence for a
+  reported (no-verdict) quantity, not a change of method.
+- **H-D.** The AI-use disclosure (P-F14) is the author's (N-23); the orchestrator changed no byline.
+- **H-E.** Verbatim reviewer and auditor reports are committed with model names redacted and placed on the
+  stale-figure checker's history list: they are records of their date.
 
-## 6. Closing — *(written last)*
+## 6. Closing
+**Plan vs done.** W0–W6 closed; W7 (WM-2's first step) follows this close. Commits of the pass:
+`3e19e72` (opened), `44dc926` (W2), `d61a284` (W3), `c363358` (W5), `d877a4f` (briefs, handback draft),
+`8d5d25c`, `a1c9cb8`, `0fe7d29`, `885f642`, `017acfc` (audit fixes), and the close.
+
+**Closing conditions of `docs/milestones/README.md`, checked:**
+
+| # | Condition | Held? | Evidence |
+|---|---|---|---|
+| 1 | every plan item has a status | yes | plan of 2026-10-09 §5 (25 rows, corrected after the audit) |
+| 2 | a detailed report, drafted before the audit | yes | `WM-1_REPORT.md` (`d61a284` pre-audit; revised) |
+| 3 | an audit by reviewers outside the orchestrator's context, every finding with a disposition | yes | §4: 88 findings, 88 dispositions |
+| 4 | confirmed findings fixed and re-verified, or deferred with an owner | yes | §4; deferred items in `PLAN_WM-2.md` (C0, A2, A3b, A5, G, D1) and `MILESTONE_NEXT.md` |
+| 5 | grand run ALL OK, CI green on the closing commit | see the handback §1 | grand run of the close; CI read on the close commit |
+| 6 | a reformulated plan for the next work milestone | yes | `PLAN_WM-2.md` (initial + post-audit revision) |
+| 7 | a consolidated handback | yes | `HANDBACK_2026-10-10.md` |
+
+**What the pass found about its own method.** Reviews that the orchestrator steers find what the
+orchestrator thinks to ask; the brief-writer's scope (including code nobody had reviewed) found a
+revocation defect in the ERC-1056 provider and a W3C claim worded beyond its instrument, neither of which
+was on the orchestrator's list. Two slips in the pass itself (a piped check, a tracked file rewritten by a
+test run) were caught by the guards this milestone built — the first by the orchestrator a minute later,
+the second by CI.
+
+### 6.1 How the team structure performed
+| Role | Work | Outcome | Gate re-run by the orchestrator |
+|---|---|---|---|
+| Orchestrator | milestone scheme, plan review, backward fixes, report, presentation, dispositions, fixes | W0–W6 closed | every check unpiped; grand run; CI; mutation of each new test |
+| Brief-writer (agent, different model) | five briefs and an exclusions list from the report and plans | the audit's scope was not the orchestrator's | briefs read; archived unedited |
+| Auditors 1–5 (agents, different model) | claims; code; tooling; process; unaudited code | 88 findings, 12 high | every high finding reproduced before acting |
+
+The brief-writer made the difference this time. The pass-11 reviewers had the orchestrator's scope and
+found 33 issues in passes 9–10; the WM-1 auditors had someone else's scope and found 88 across a wider
+area, four of them high in code the orchestrator had not asked anyone to read. What remains orchestrator-
+controlled: the brief-writer's own instructions (what to read, how many briefs), the dispositions, and the
+decision of what to fix now and what to defer. N-22 (briefs written outside the session) stays open.

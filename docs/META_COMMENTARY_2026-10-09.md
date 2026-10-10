@@ -118,3 +118,32 @@ tells us whether the infrastructure experiment is in or out.
 - **What I would watch for next.** The reviewers' scope was set by me. The Python suites outside L3,
   the contracts, and chapters 1–4 and 6–7 were not reviewed this pass (N-22). The most valuable next
   review is one whose briefs I do not write.
+
+## 9. Closing work milestone WM-1 (2026-10-10)
+- **The second audit found what the first could not have.** Pass 11's reviewers looked where I pointed
+  them and found 33 things. This time a separate agent wrote the briefs and chose to include code nobody
+  had read. The auditors found 88 things, including a revocation defect in the ERC-1056 provider that
+  nobody had asked about: a verifier whose clock runs fifteen minutes slow accepts a revoked key. That is
+  the strongest argument yet for N-22. Whoever sets the scope sets the blind spots.
+- **The results held; the bookkeeping did not.** Every infrastructure number recomputed. What failed was
+  everything around the numbers:
+  - register rows that kept old values after their run was repeated;
+  - a stale-figure checker that let the register itself go stale;
+  - two delegated results accepted by reading;
+  - a plan item that silently vanished;
+  - a W3C self-score described as compliance;
+  - decisions attributed to the author that the author had never seen.
+
+  None of these changes a conclusion. Each would have embarrassed the thesis in front of an examiner.
+- **Guards caught me twice in one afternoon.** I committed once with a failing check hidden by a pipe,
+  and once with a tracked file rewritten by a test run. The second was caught by CI, through the
+  documents step built in this milestone. That is what the guards are for. It is also a reminder that
+  the habit matters as much as the tool: run checks unpiped, and run the grand runner last.
+- **What the thesis should say about method.** Pre-registration protects the questions. Adversarial
+  review checks whether they were the right questions. Generated documents keep the numbers honest. A
+  scope set by someone else catches what the author would not think to look at. Each layer caught
+  something the one before it missed.
+- **A decision that is not mine to make.** The repository says in one file that AI tooling did the
+  implementation, while most reports speak in an assistant's first person under the author's name.
+  Whether and how to disclose AI use is the author's decision, under the university's policy (N-23). I
+  have changed nothing about it.

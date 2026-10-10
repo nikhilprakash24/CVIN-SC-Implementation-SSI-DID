@@ -48,6 +48,9 @@ are fixed, narrowed or deferred with an owner (§14).
 | CI jobs green on the closing commit | 8 of 8 | 8 of 8 | check runs |
 | Contracts changed | — | **none** | `git diff db6c381 291bbca -- 1_blockchain-identity/contracts` |
 
+After the audit (pass 12) the register reads 48 rows: 30 V, 10 S, 7 E, 1 U (#39 moved to U); Hardhat 537 and
+Python layers 305 with the audit's new tests; defect log D1–D57.
+
 ---
 
 ## 1. What the milestone was asked to do

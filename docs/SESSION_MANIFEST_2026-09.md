@@ -157,3 +157,16 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `cv2x-testbed/sumo/results/infrastructure_{stats,revocation}.json`, traces, figures, `4_comparison-framework/results/infrastructure_gas{,_run1}.json` | results of record at `f1f9e37`; register #44–#48 rewritten with history | A4 re-run |
 | `docs/testing/{check_docs_numbers.py,stale_numbers.yaml}`, `docs/figures/make_dashboard_{data,page}.py`, `dashboard_template.html`, `docs/testing/build_register.py` | hardened generated-document checks | C3–C9 |
 | chapter 5 §5.4.1, `docs/thesis/cruxes.yaml` C3/C4, meta commentary §7–§8, INVENTORY, SOURCES, MASTER_UPDATE banner, `3_cv2x-testbed/README.md` | claims reworded to what was measured; stale figures fixed | A1–A7, C4, C10, C11 |
+
+## Pass 12 — Closing work milestone WM-1: plan review, backward fixes, report, audit, presentation (2026-10-10)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_12.md` | plan W0–W7, defaults D-1…D-5, log, findings register (88), decisions H-A…H-E, closing conditions, team assessment | standing rule |
+| `docs/milestones/README.md`, `WM-1_REPORT.md` | milestone scheme; the detailed WM-1 report (pre-audit at `d61a284`, revised after) | requested |
+| `docs/milestones/audit_WM-1/` (briefs, findings), `docs/milestones/review_pass11/` | audit briefs by a separate brief-writer; five auditors' and three pass-11 reviewers' reports, verbatim | requested; P-F10 |
+| `docs/PLAN_WM-2.md`; `docs/PLAN_2026-10-09.md` §5 | the reformulated plan; status of every item of the executed plan | requested |
+| `docs/HANDBACK_2026-10-10.md` | consolidated handback, supersedes 2026-10-09 | closing condition 7 |
+| `docs/presentation/` (`make_presentation.py`, `REPORT_DRAFT_1.md`, `report_page.html`, figures, `EXPANSION_PLAN_DRAFT2.md`) | presentation report draft 1, generated from committed data, and what draft 2 expands | requested |
+| backward fixes: `DEFECT_LOG.md` §F–§G (D28–D57), style guide, team structure, SC-21/22, CHANGELOG, chapters 1/4/5/6/7, README, register rows #4, #27, #29–#36, #39, #44–#48 | the review findings and the audit's | requested |
+| tests and tooling: `mutation/mutate_infrastructure_layer.py`, `test_proof_options_signed.py`, `test_aggregator_checks.py`, `balanceCountsTokens.regression.test.js`, `check_test_counts.py`, CI skip gate and PR triggers, stamp inventory column | guards the audit showed missing | audit |
+| `4_comparison-framework/results/infrastructure_gas_runs/` | I4 over 30 runs | A-F3, B-F9 |

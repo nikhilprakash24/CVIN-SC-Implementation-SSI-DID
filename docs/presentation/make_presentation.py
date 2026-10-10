@@ -198,9 +198,9 @@ def figures():
     # F7 register status, start vs end of WM-1 (stacked horizontal, 2px gaps)
     start = P["register_start"]["value"]
     end = S["register"]["by_status"]
-    cats = [("V", BLUE), ("S", ORANGE), ("E", AQUA), ("B", MUTED)]
+    cats = [("V", BLUE), ("S", ORANGE), ("E", AQUA), ("U", CRIT), ("B", MUTED)]
     fig, ax = plt.subplots(figsize=(7.0, 1.8))
-    for y, (lab, d) in enumerate((("end of WM-1", end), ("start of WM-1", start))):
+    for y, (lab, d) in enumerate((("after the WM-1 audit", end), ("start of WM-1", start))):
         x = 0
         for c, col in cats:
             v = d.get(c, 0)
@@ -210,9 +210,9 @@ def figures():
                     ax.text(x + v / 2, y, f"{c} {v}", ha="center", va="center", fontsize=8, color="white")
                 x += v
         ax.text(x, y, f"  {x} rows", va="center", fontsize=8, color=INK2)
-    ax.set_yticks([0, 1], ["end of WM-1", "start of WM-1"], color=INK)
+    ax.set_yticks([0, 1], ["after the WM-1 audit", "start of WM-1"], color=INK)
     ax.set_xlim(0, 56)
-    ax.set_xlabel("claim-register rows by status (V verified, S superseded, E estimate, B awaiting re-run)")
+    ax.set_xlabel("rows by status: V verified · S superseded · E estimate · U unsupported · B awaiting re-run (grey)", fontsize=8)
     ax.set_title("Claim register through work milestone WM-1", loc="left", fontsize=10, color=INK)
     save(fig, "f7_register.png")
 
@@ -419,7 +419,7 @@ def build():
         ["Superseded figures found by the generators", f"{P['generator_findings_pass9']['value']['stale_figures']} in {P['generator_findings_pass9']['value']['stale_documents']} documents; {P['generator_findings_pass9']['value']['register_rows']} self-contradicting register rows", P["generator_findings_pass9"]["source"]],
         ["Review findings: confirmed / accepted / rejected", f"{P['review_pass11']['dispositions']['confirmed']} / {P['review_pass11']['dispositions']['accepted']} / {P['review_pass11']['dispositions']['rejected']}", P["review_pass11"]["source"]],
     ])
-    Figure("figures/f7_register.png", "Figure 9. The claim register over WM-1: five new verified rows (infrastructure), one row re-run from B to V, two rows superseded.", "Two stacked bars of register rows by status")
+    Figure("figures/f7_register.png", "Figure 9. The claim register over WM-1 and its audit: five new verified rows (infrastructure), one row re-run from B to V, two rows superseded, and one row (#39, a pre-merge HTTP run) moved to U by the audit.", "Two stacked bars of register rows by status")
     Figure("figures/f8_review.png", "Figure 10. What the adversarial review found, by reviewer and severity. Two high findings were security holes in the first infrastructure verifier; five were guards that could pass while wrong.", "Grouped columns by reviewer and severity")
     dc = S["defects"]["counts"]
     Table(["Severity", "Fixed", "Partly fixed", "Open"],

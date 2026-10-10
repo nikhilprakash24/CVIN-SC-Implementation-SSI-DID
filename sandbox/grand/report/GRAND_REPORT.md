@@ -1,15 +1,15 @@
 # Grand sandbox report
 
-Generated 2026-10-10T03:31:23Z at commit `9a04eb7` by `python3 sandbox/grand/run.py all`.
+Generated 2026-10-10T03:53:43Z at commit `017acfc` by `python3 sandbox/grand/run.py all`.
 
 ## Stages
 
 | Stage | ok | result | s |
 |---|---|---|---:|
-| smoke | ✓ | {'adapters_conforming': 11} | 3.7 |
-| L1 | ✓ | {'passing': 99, 'failing': 0} | 4.5 |
-| L1+L2 | ✓ | {'passing': 537, 'failing': 0} | 21.4 |
-| L3+L4 | ✓ | {'passed': 305} | 8.7 |
+| smoke | ✓ | {'adapters_conforming': 11} | 4.0 |
+| L1 | ✓ | {'passing': 99, 'failing': 0} | 4.9 |
+| L1+L2 | ✓ | {'passing': 537, 'failing': 0} | 22.9 |
+| L3+L4 | ✓ | {'passed': 305} | 8.5 |
 | demos | ✓ | {'demos': 92, 'steps': 1752, 'transactions_mined': 594, 'onchain_no_gas': 458, 'offchain': 700, 'flagged': 62, 'failures': []} |  |
 
 ## Reports produced
@@ -65,7 +65,7 @@ Per option — M / I / — counts:
 
 # L1 identity mechanisms — cross-option asymmetry (from tests)
 
-Generated 2026-10-10T03:27:49.342Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
+Generated 2026-10-10T03:50:07.043Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
 
 ✓ gas = the adapter ran the mechanism (exact gasUsed of the measured transaction; 0 = no transaction, e.g. implicit creation or a view) · — = NotApplicable (reason below) · ✗ = adapter error or failed assertion · · = not run
 
@@ -75,7 +75,7 @@ Generated 2026-10-10T03:27:49.342Z by `cd 1_blockchain-identity && npx hardhat t
 | controller-change | ✓ 68835 | ✓ 68842 | ✓ 53882 | ✓ 89793 | ✓ 28527 | ✓ 179562 | ✓ 28378 | ✓ 28822 | ✓ 28800 | ✓ 80568 | ✓ 180105 |
 | key-or-delegate | ✓ 72284 | ✓ 72219 | ✓ 35044 | — | ✓ 47569 | — | ✓ 137096 | — | — | — | ✓ 35309 |
 | attribute | ✓ 51622 | ✓ 52016 | ✓ 37180 | ✓ 96478 | ✓ 94471 | ✓ 120137 | — | ✓ 95166 | — | ✓ 100346 | ✓ 37485 |
-| claim | ✓ 316451 | — | — | ✓ 80131 | — | — | — | — | ✓ 322950 | ✓ 148879 | ✓ 287310 |
+| claim | ✓ 316477 | — | — | ✓ 80131 | — | — | — | — | ✓ 322950 | ✓ 148879 | ✓ 287310 |
 | revoke | ✓ 70883 | ✓ 32868 | ✓ 75370 | ✓ 72614 | — | ✓ 27677 | ✓ 41399 | ✓ 33870 | ✓ 78143 | ✓ 42116 | ✓ 75382 |
 | transfer | — | — | — | ✓ 89793 | ✓ 28527 | ✓ 179562 | — | — | — | ✓ 80568 | ✓ 180105 |
 | signed-op | — | ✓ 96065 | — | — | ✓ 69393 | — | ✓ 28358 | ✓ 76352 | — | — | — |
@@ -134,59 +134,59 @@ steps = contract calls demonstrated (gas is the sum of the on-chain ones) · fla
 
 | Option | Family | ok | steps | gas (sum) | flagged | s |
 |---|---|---|---:|---:|---:|---:|
-| cvin-combined | attributes | ✓ | 13 | 2,057,557 | 1 | 2.4 |
-| cvin-combined | authorisation-roles | ✓ | 13 | 2,249,655 | 2 | 2.0 |
-| cvin-combined | claims | ✓ | 29 | 2,855,620 | 1 | 3.1 |
-| cvin-combined | controller | ✓ | 21 | 2,382,351 | 0 | 2.2 |
-| cvin-combined | did-resolution | ✓ | 12 | 2,301,270 | 0 | 2.1 |
-| cvin-combined | keys-delegates | ✓ | 13 | 1,789,965 | 1 | 2.0 |
+| cvin-combined | attributes | ✓ | 13 | 2,057,531 | 1 | 2.2 |
+| cvin-combined | authorisation-roles | ✓ | 13 | 2,249,667 | 2 | 2.1 |
+| cvin-combined | claims | ✓ | 29 | 2,852,820 | 1 | 2.2 |
+| cvin-combined | controller | ✓ | 21 | 2,382,361 | 0 | 2.0 |
+| cvin-combined | did-resolution | ✓ | 12 | 2,301,270 | 0 | 2.0 |
+| cvin-combined | keys-delegates | ✓ | 13 | 1,789,965 | 1 | 2.7 |
 | cvin-combined | lifecycle-history | ✓ | 15 | 2,032,038 | 0 | 2.1 |
-| cvin-combined | offchain-creation | ✓ | 11 | 1,854,281 | 0 | 2.1 |
-| cvin-combined | revocation | ✓ | 15 | 2,483,489 | 0 | 2.1 |
-| cvin-combined | vin-linkage | ✓ | 10 | 2,165,931 | 0 | 2.0 |
-| erc-1056-uport | attributes | ✓ | 35 | 3,306,157 | 0 | 3.1 |
-| erc-1056-uport | authorisation-roles | ✓ | 13 | 2,863,943 | 1 | 2.0 |
-| erc-1056-uport | controller | ✓ | 30 | 3,221,209 | 1 | 2.0 |
+| cvin-combined | offchain-creation | ✓ | 11 | 1,854,295 | 0 | 2.1 |
+| cvin-combined | revocation | ✓ | 15 | 2,483,439 | 0 | 2.2 |
+| cvin-combined | vin-linkage | ✓ | 10 | 2,165,905 | 0 | 2.0 |
+| erc-1056-uport | attributes | ✓ | 35 | 3,306,169 | 0 | 3.1 |
+| erc-1056-uport | authorisation-roles | ✓ | 13 | 2,863,943 | 1 | 2.1 |
+| erc-1056-uport | controller | ✓ | 30 | 3,221,209 | 1 | 2.2 |
 | erc-1056-uport | creation | ✓ | 15 | 2,919,927 | 0 | 2.0 |
-| erc-1056-uport | did-resolution | ✓ | 14 | 2,931,754 | 0 | 2.7 |
-| erc-1056-uport | keys-delegates | ✓ | 22 | 3,179,729 | 0 | 2.3 |
-| erc-1056-uport | lifecycle-history | ✓ | 13 | 3,016,684 | 0 | 2.6 |
-| erc-1056-uport | offchain-creation | ✓ | 13 | 2,897,102 | 0 | 2.1 |
-| erc-1056-uport | revocation | ✓ | 21 | 3,418,106 | 2 | 2.4 |
-| erc-1056-uport | signed-execution | ✓ | 13 | 1,253,949 | 0 | 2.1 |
-| erc-1056-uport | vin-linkage | ✓ | 15 | 2,902,321 | 2 | 1.9 |
-| erc-1056-vehicle | attributes | ✓ | 10 | 949,706 | 0 | 2.7 |
-| erc-1056-vehicle | claims | ✓ | 10 | 764,425 | 0 | 2.3 |
-| erc-1056-vehicle | controller | ✓ | 13 | 850,065 | 1 | 1.9 |
+| erc-1056-uport | did-resolution | ✓ | 14 | 2,931,754 | 0 | 3.3 |
+| erc-1056-uport | keys-delegates | ✓ | 22 | 3,179,741 | 0 | 2.2 |
+| erc-1056-uport | lifecycle-history | ✓ | 13 | 3,016,684 | 0 | 2.1 |
+| erc-1056-uport | offchain-creation | ✓ | 13 | 2,897,102 | 0 | 2.2 |
+| erc-1056-uport | revocation | ✓ | 21 | 3,418,094 | 2 | 2.2 |
+| erc-1056-uport | signed-execution | ✓ | 13 | 1,253,949 | 0 | 2.2 |
+| erc-1056-uport | vin-linkage | ✓ | 15 | 2,902,321 | 2 | 2.0 |
+| erc-1056-vehicle | attributes | ✓ | 10 | 949,706 | 0 | 2.4 |
+| erc-1056-vehicle | claims | ✓ | 10 | 764,425 | 0 | 2.0 |
+| erc-1056-vehicle | controller | ✓ | 13 | 850,065 | 1 | 2.9 |
 | erc-1056-vehicle | creation | ✓ | 13 | 985,891 | 1 | 2.5 |
-| erc-1056-vehicle | did-resolution | ✓ | 11 | 836,433 | 0 | 2.5 |
-| erc-1056-vehicle | keys-delegates | ✓ | 11 | 909,286 | 1 | 1.8 |
-| erc-1056-vehicle | lifecycle-history | ✓ | 13 | 965,015 | 0 | 2.3 |
-| erc-1056-vehicle | offchain-messaging | ✓ | 10 | 839,795 | 1 | 2.2 |
-| erc-1056-vehicle | revocation | ✓ | 24 | 981,757 | 0 | 2.0 |
-| erc-1155 | attributes | ✓ | 13 | 221,810 | 1 | 2.0 |
-| erc-1155 | authorisation-roles | ✓ | 19 | 637,364 | 2 | 2.8 |
+| erc-1056-vehicle | did-resolution | ✓ | 11 | 836,433 | 0 | 2.0 |
+| erc-1056-vehicle | keys-delegates | ✓ | 11 | 909,286 | 1 | 2.0 |
+| erc-1056-vehicle | lifecycle-history | ✓ | 13 | 965,015 | 0 | 2.8 |
+| erc-1056-vehicle | offchain-messaging | ✓ | 10 | 839,795 | 1 | 1.9 |
+| erc-1056-vehicle | revocation | ✓ | 24 | 981,757 | 0 | 2.7 |
+| erc-1155 | attributes | ✓ | 13 | 221,810 | 1 | 1.9 |
+| erc-1155 | authorisation-roles | ✓ | 19 | 637,364 | 2 | 2.5 |
 | erc-1155 | claims | ✓ | 28 | 627,064 | 3 | 2.1 |
-| erc-1155 | controller | ✓ | 46 | 819,716 | 1 | 2.1 |
-| erc-1155 | creation | ✓ | 20 | 215,458 | 0 | 2.1 |
-| erc-1155 | lifecycle-history | ✓ | 14 | 596,226 | 0 | 1.9 |
-| erc-1155 | revocation | ✓ | 18 | 378,104 | 2 | 2.6 |
-| erc-1155 | token-economics | ✓ | 13 | 117,555 | 2 | 2.0 |
-| erc-1155 | vin-linkage | ✓ | 14 | 233,583 | 0 | 2.2 |
-| erc-4337 | attributes | ✓ | 15 | 302,272 | 0 | 2.2 |
-| erc-4337 | controller | ✓ | 21 | 257,650 | 0 | 2.2 |
-| erc-4337 | creation | ✓ | 14 | 21,062 | 0 | 2.0 |
+| erc-1155 | controller | ✓ | 46 | 819,716 | 1 | 2.2 |
+| erc-1155 | creation | ✓ | 20 | 215,458 | 0 | 2.0 |
+| erc-1155 | lifecycle-history | ✓ | 14 | 596,226 | 0 | 2.5 |
+| erc-1155 | revocation | ✓ | 18 | 378,104 | 2 | 2.0 |
+| erc-1155 | token-economics | ✓ | 13 | 117,555 | 2 | 2.3 |
+| erc-1155 | vin-linkage | ✓ | 14 | 233,583 | 0 | 2.1 |
+| erc-4337 | attributes | ✓ | 15 | 302,272 | 0 | 2.0 |
+| erc-4337 | controller | ✓ | 21 | 257,662 | 0 | 2.3 |
+| erc-4337 | creation | ✓ | 14 | 21,062 | 0 | 2.1 |
 | erc-4337 | keys-delegates | ✓ | 19 | 205,742 | 1 | 2.0 |
-| erc-4337 | lifecycle-history | ✓ | 15 | 295,592 | 0 | 2.5 |
-| erc-4337 | signed-execution | ✓ | 25 | 258,512 | 0 | 2.0 |
-| erc-721 | attributes | ✓ | 24 | 451,966 | 0 | 2.2 |
-| erc-721 | authorisation-roles | ✓ | 22 | 859,358 | 2 | 2.1 |
-| erc-721 | controller | ✓ | 37 | 1,103,280 | 0 | 2.3 |
-| erc-721 | creation | ✓ | 38 | 1,284,083 | 0 | 2.3 |
+| erc-4337 | lifecycle-history | ✓ | 15 | 295,592 | 0 | 3.1 |
+| erc-4337 | signed-execution | ✓ | 25 | 258,512 | 0 | 2.1 |
+| erc-721 | attributes | ✓ | 24 | 451,966 | 0 | 2.0 |
+| erc-721 | authorisation-roles | ✓ | 22 | 859,358 | 2 | 2.5 |
+| erc-721 | controller | ✓ | 37 | 1,103,280 | 0 | 2.1 |
+| erc-721 | creation | ✓ | 38 | 1,284,083 | 0 | 2.2 |
 | erc-721 | did-resolution | ✓ | 8 | 0 | 0 | 2.1 |
-| erc-721 | lifecycle-history | ✓ | 18 | 568,094 | 0 | 1.9 |
-| erc-721 | revocation | ✓ | 16 | 338,694 | 2 | 2.4 |
-| erc-721 | token-economics | ✓ | 44 | 943,147 | 0 | 2.1 |
-| erc-721 | vin-linkage | ✓ | 15 | 500,311 | 0 | 1.9 |
+| erc-721 | lifecycle-history | ✓ | 18 | 568,094 | 0 | 2.0 |
+| erc-721 | revocation | ✓ | 16 | 338,694 | 2 | 2.9 |
+| erc-721 | token-economics | ✓ | 44 | 943,147 | 0 | 2.2 |
+| erc-721 | vin-linkage | ✓ | 15 | 500,311 | 0 | 2.1 |
 
 *(truncated; see `report/demos.md`)*
