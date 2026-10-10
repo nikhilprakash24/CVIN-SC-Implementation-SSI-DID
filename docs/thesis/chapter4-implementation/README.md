@@ -35,7 +35,7 @@ internals.
 each standard realizes a vehicle identity on the EVM and exposes the
 primitives (registries, tokens, accounts, claims) that everything above
 depends on. Layer 2 lifts those on-chain identities to W3C conformance —
-the DID resolver turns an on-chain address or token into a DID Document,
+the DID resolver turns an on-chain address or token into a DID Document (it synthesises the document from the identifier and reads no chain state, so rotation, deactivation and revocation are not visible to it; WM-1 audit U-F5, to be changed in WM-2 step C1),
 and the Verifiable Credentials stack issues and verifies credentials whose
 signing keys are the *same* keys that control the Layer-1 identities, so
 that off-chain verification needs no chain round-trip. Layer 3 embeds
@@ -106,7 +106,7 @@ a lower bound, not a full-featured figure.
 | **ERC-725xy** | `ERC725xy/CVINVehicleERC725XY.sol` (+ `CVINExecuteTarget.sol`) | The **full ERC-725X generic executor + ERC-725Y data store** account — a self-sovereign smart account that can act on-chain and carries VIN/make/model/year as `bytes32`-keyed data. Added in v0.8.0, closing the one previously-missing standard. | Maximum on-chain capability; the **heaviest** to deploy (a complete account per identity). |
 | **ERC-735** | `ERC735/CVINVehicleClaimHolder.sol` | On-chain claim holder: manufacturer/regulator attestations stored as claims with issuer signatures verified at add-time. | O(1) on-chain claim verification; carries a full claim state machine, so very heavy to deploy. |
 | **ERC-1155** | `ERC1155/CVINVehicleCredential1155.sol` | One contract issues many credential types; the birth credential is configured **soulbound** via an `_update` override. | Uniquely resists identity theft (non-transferable); no key recovery. |
-| **ERC-4337** | `ERC4337/CVINVehicleAccount.sol` + `ERC4337/CVINMinimalEntryPoint.sol` | Account-abstraction identity with UserOperation flow and **guardian-based social recovery** — the only standard here with genuine on-chain key recovery. | Real key recovery; account-abstraction indirection tax per operation. |
+| **ERC-4337** | `ERC4337/CVINVehicleAccount.sol` + `ERC4337/CVINMinimalEntryPoint.sol` | Account-abstraction identity with UserOperation flow and **guardian-based social recovery** — the only standard here with genuine on-chain key recovery (the guardian keeps permanent control after a recovery: defect D15, open). | Real key recovery; account-abstraction indirection tax per operation. |
 | **LSP8** | `LSP8/CVINVehicleLSP8.sol` | A LUKSO LSP8 Identifiable-Digital-Asset vehicle: each vehicle is a `bytes32` tokenId (`keccak256(VIN)`) with a per-token key/value metadata store. | Cross-ecosystem reference point; a transfer moves the identity. |
 | **CVIN-Combined** | `CVINCombined/CVINCombinedIdentity.sol` | **The thesis's own hybrid**: an ERC-1056 event-based identity fused with ERC-735-style on-chain claims in a single contract, sharing one ownership model. | Cheap event-log common path *plus* O(1) on-chain claims only where safety-critical — the H5 design. |
 | **MOBI VID (profile)** | `MOBI/MOBIVIDRegistryV2.sol` (extends `MOBIVIDRegistry.sol`; uses `ERC1056Registry.sol`) | The MOBI **VID II** application profile: a purpose-built registry for birth records and typed lifecycle events with role-gated, signature-verified attestations. Measured *alongside* the nine as an application profile, not one of the nine base standards. | Maximal on-chain semantic fidelity (typed events, odometer, jurisdiction, hashed VIN); pays for that structure in gas. |
@@ -372,7 +372,7 @@ Layers 1–3 and never modifies them. Five instruments make up the framework.
 
 2. **Two-lens security analysis** (`security-analysis/`).
    *Lens 1 — executable attack suite*: the Mocha scenarios in
-   `1_blockchain-identity/test/security/securityScenarios.test.js` (with
+   `1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js` (with
    the `attackHarness.js` helper) fire adversarial transactions against the
    deployed contracts and assert reverts, with a differential control that
    the authorized operation succeeds; results are tabulated to
@@ -431,7 +431,7 @@ runtimes (current totals in `sandbox/grand/report/GRAND_REPORT.md`, register #5)
 
 The Hardhat total exceeds the raw `it()` count because several suites
 generate parameterized cases per standard/operation at runtime. The
-security suite (`test/security/securityScenarios.test.js`, 54 scenarios,
+security suite (`test/L2-identity-system/security/securityScenarios.test.js`, 54 scenarios,
 43/43 applicable cells defended) stays green *because* the contracts
 defend, so a regression would surface as a real CI failure.
 

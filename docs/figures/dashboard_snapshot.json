@@ -767,12 +767,12 @@
     "source": {
       "path": "sandbox/grand/report/GRAND_REPORT.md"
     },
-    "generated": "2026-10-09T06:16:38Z",
-    "commit": "601e1de",
+    "generated": "2026-10-10T03:31:23Z",
+    "commit": "9a04eb7",
     "stages": {
       "smoke": {
         "ok": true,
-        "result": "{}"
+        "result": "{'adapters_conforming': 11}"
       },
       "L1": {
         "ok": true,
@@ -780,15 +780,15 @@
       },
       "L1+L2": {
         "ok": true,
-        "result": "{'passing': 536, 'failing': 0}"
+        "result": "{'passing': 537, 'failing': 0}"
       },
       "L3+L4": {
         "ok": true,
-        "result": "{'passed': 291}"
+        "result": "{'passed': 305}"
       },
       "demos": {
         "ok": true,
-        "result": "{'demos': 92, 'steps': 1752, 'flagged': 62, 'failures': []}"
+        "result": "{'demos': 92, 'steps': 1752, 'transactions_mined': 594, 'onchain_no_gas': 458, 'offchain': 700, 'flagged': 62, 'failures': []}"
       }
     }
   },
@@ -1124,16 +1124,52 @@
         "id": "D50",
         "severity": "M",
         "status": "open"
+      },
+      {
+        "id": "D51",
+        "severity": "H",
+        "status": "open"
+      },
+      {
+        "id": "D52",
+        "severity": "M",
+        "status": "open"
+      },
+      {
+        "id": "D53",
+        "severity": "L",
+        "status": "open"
+      },
+      {
+        "id": "D54",
+        "severity": "M",
+        "status": "open"
+      },
+      {
+        "id": "D55",
+        "severity": "M",
+        "status": "fixed"
+      },
+      {
+        "id": "D56",
+        "severity": "L",
+        "status": "open"
+      },
+      {
+        "id": "D57",
+        "severity": "L",
+        "status": "open"
       }
     ],
     "counts": {
       "H:fixed": 15,
-      "M:fixed": 10,
+      "M:fixed": 11,
       "L:fixed": 5,
       "M:partly fixed": 4,
-      "L:open": 5,
-      "M:open": 11,
-      "H:partly fixed": 1
+      "L:open": 8,
+      "M:open": 13,
+      "H:partly fixed": 1,
+      "H:open": 1
     }
   },
   "cruxes": [
@@ -1333,6 +1369,7 @@
         "cv2x-testbed/results/freshness_k_probe.json"
       ],
       "gaps": [
+        "Open high defect D51: the ERC-1056 provider accepts a revoked key when the verifier's clock is more than 900 s behind the chain; #32 and #37 hold under that clock assumption until fixed (WM-2).",
         "The RSU analogue (#46) counts messages from a revoked RSU under an in-process registry; it bounds the re-check cadence, not the latency cost, so it is not counted as C4 evidence.",
         "Choose the k the thesis defends (review-2 decisions 10 and 14)."
       ],

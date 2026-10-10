@@ -351,7 +351,7 @@ re-run the gas benchmark against public Sepolia to confirm the local numbers.
 ## 8️⃣ Security Capabilities ✅ (two complementary lenses)
 
 ### Lens 1 — executable attack suite
-`1_blockchain-identity/test/security/securityScenarios.test.js` runs Mocha
+`1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js` runs Mocha
 attack scenarios against the deployed contracts. The security matrix has **54
 cells; 43/43 applicable cells DEFENDED** (11 are structurally N/A per standard),
 CI-gated. Forged issuance, unauthorized state writes, unauthorized
@@ -362,7 +362,7 @@ expected reasons (`4_comparison-framework/security-analysis/`).
 Adds properties the test suite cannot execute: Sybil economics, recovery
 availability, and on-chain PII leakage. **Findings (H5):** no standard dominates
 — security and performance trade off along a frontier; only **ERC-4337** has
-genuine on-chain key recovery; **ERC-1155** (soulbound) uniquely resists
+genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open); **ERC-1155** (soulbound) uniquely resists
 identity theft; the **MOBI VID** family is the only one that both hashes and
 encrypts the VIN.
 

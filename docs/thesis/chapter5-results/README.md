@@ -426,12 +426,17 @@ as failures rather than hidden:
 2. The cryptosuite (`eip191-secp256k1-recovery-2024`) is thesis-defined
    (Ethereum-native, offline-verifiable), not a W3C-registered suite.
 
-**Finding (RQ3 / H2):** the ≥90% compliance target is met (94.3%
-measured, not asserted; 93.2% at the merge, before the 2026-10-03 resolver fixes), demonstrating that blockchain-rooted identities
-can be lifted to W3C DID/VC conformance through a resolution/issuance
-layer, with the residual gap being canonicalization/cryptosuite
-registration rather than any structural incompatibility — consistent
-with H2.
+**Finding (RQ3 / H2):** the ≥90% target on the internal executable checker is met (94.3%
+measured, not asserted; 93.2% at the merge, before the 2026-10-03 resolver fixes). *What the score is
+(WM-1 audit, finding U-F4; register #4):* a **structural self-score** — most checks inspect documents the
+code itself emits, and security-relevant changes to the verifier can leave it unchanged; it shows that
+blockchain-rooted identities can be **expressed in** W3C DID and VC data structures through a
+resolution/issuance layer, not that they are conformant. The external DID suite (335/336, register #24)
+checks 336 generated tests on three recorded resolver outputs; the resolver synthesises the DID document
+from the identifier without reading the chain (WM-2 step C1), so the registry-minted run adds no
+evidence about resolution. Besides the two failing checks, a third deviation is undisclosed by the score:
+`credentialStatus` uses a thesis-defined, in-memory status list (`CvinRevocationRegistry2024`), not a
+registered status method. Consistent with H2 in this narrower sense.
 
 ---
 
@@ -440,7 +445,7 @@ with H2.
 **Provenance**: two complementary executable suites (see
 `4_comparison-framework/security-analysis/README.md` for how they relate):
 1. **Authorization/replay test suite** —
-   `1_blockchain-identity/test/security/securityScenarios.test.js`,
+   `1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js`,
    54 Mocha scenarios run under `npx hardhat test`. Each fires an
    adversarial transaction against the real contract and asserts it
    reverts (with a differential control that the authorized operation
@@ -478,7 +483,7 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
    distinct points on the frontier rather than one being universally best.
 
 2. **Recovery is the sharpest differentiator.** Only **ERC-4337** offers
-   genuine on-chain key recovery (guardian `recoverOwner`, executed and
+   genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open) (guardian `recoverOwner`, executed and
    verified — the identity address survives an owner-key compromise).
    ERC-1155 and LSP8 offer issuer-mediated re-binding; the remaining six
    have no recovery — a compromised key is permanent identity loss.

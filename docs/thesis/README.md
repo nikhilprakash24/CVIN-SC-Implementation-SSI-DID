@@ -64,12 +64,12 @@ citation set). Chapters 3–7 are grounded in the measured artifacts.
 ### RQ2: Security
 **Question**: Which architecture provides strongest security guarantees for V2X communication?
 
-**Answer (measured, H5 supported)**: no single standard dominates — standards occupy distinct points on the security/performance frontier. Only ERC-4337 offers genuine on-chain key recovery; ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that hashes + encrypts the VIN. The 54-scenario revert suite defends 43/43 applicable attack cells.
+**Answer (measured, H5 supported)**: no single standard dominates — standards occupy distinct points on the security/performance frontier. Only ERC-4337 offers genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open); ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that hashes + encrypts the VIN. The 54-scenario revert suite defends 43/43 applicable attack cells.
 
 ### RQ3: W3C Compliance
 **Question**: Can blockchain identity achieve W3C SSI compliance while meeting automotive requirements?
 
-**Answer (measured, H2 supported)**: Yes — **94.3% (after the 2026-10-03 resolver fixes; 93.2% at the merge)** measured (executable checker): DID Core v1.0 93.3% (13/15), VC Data Model v2.0 93.1% (27/29). The two deviations are documented and deliberate (canonical JSON vs URDNA2015; thesis-defined cryptosuite).
+**Answer (measured, H2 supported)**: Yes — **94.3% (after the 2026-10-03 resolver fixes; 93.2% at the merge)** measured (executable checker): DID Core v1.0 96.7% (14/15), VC Data Model v2.0 93.1% (27/29) — a structural self-score on the internal checker, not conformance (register #4; WM-1 audit U-F4). The two deviations are documented and deliberate (canonical JSON vs URDNA2015; thesis-defined cryptosuite).
 
 ### RQ4: Real-Time Feasibility
 **Question**: Are blockchain identities viable for real-time safety-critical V2V?

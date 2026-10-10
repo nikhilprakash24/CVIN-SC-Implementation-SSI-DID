@@ -187,7 +187,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `security-analysis/results/onchain_security.json`, `security_comparison.tex` | ✅ Complete | On-chain security findings + comparison table |
 | `security-analysis/EXECUTABLE_ATTACK_SCENARIOS.md`, `README.md`, `INDEX.md` | ✅ Complete | Documentation of both lenses |
 
-**Security finding (RQ2/H5)**: no standard dominates (security/performance frontier); only ERC-4337 has genuine on-chain key recovery; ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that hashes + encrypts the VIN. MOBI `attestEvent` signature-verification gap was found AND fixed (121k → 193k gas).
+**Security finding (RQ2/H5)**: no standard dominates (security/performance frontier); only ERC-4337 has genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open); ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that hashes + encrypts the VIN. MOBI `attestEvent` signature-verification gap was found AND fixed (121k → 193k gas).
 
 **Status**: ✅ **COMPLETE** — gas benchmark, security matrices, and Sepolia harness all generated.
 

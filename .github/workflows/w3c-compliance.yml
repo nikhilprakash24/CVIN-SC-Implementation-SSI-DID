@@ -188,15 +188,32 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Setup Node.js
+      # The MOBI VID suites start their own Hardhat node and skip without one; a skip must not read as
+      # green (after-action report 12, audit finding U-F7: this job reported 264 passed / 27 skipped as success).
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: 1_blockchain-identity/package-lock.json
+
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    - name: Install Python dependencies
-      # Same packages as the VC job; the L4 use cases and the V2V harness smoke are
-      # in-process (no chain). Unpinned: see the header note.
-      run: pip install eth-account coincurve cryptography web3 pytest
+    - name: Install dependencies
+      # Unpinned: see the header note.
+      run: |
+        (cd 1_blockchain-identity && npm ci && npx hardhat compile)
+        pip install eth-account coincurve cryptography web3 pytest numpy
 
-    - name: Run the Python layers (L3 SSI, L4 exemplar interactions, SSI-layer suites)
-      run: sandbox/py-suites/run.sh
+    - name: Run the Python layers (L3 SSI, L4 exemplar interactions, SSI-layer suites); fail on any skip
+      shell: bash
+      run: |
+        set -o pipefail
+        sandbox/py-suites/run.sh -rs | tee pylayers.log
+        if grep -qE '[0-9]+ skipped' pylayers.log; then
+          echo "::error::Python layer tests were skipped; see the SKIPPED lines above"
+          exit 1
+        fi

@@ -144,7 +144,7 @@ tests:
   class: G
   evidence: E3
   verdict: measured
-  value: 316477
+  value: 316451
   location: 1_blockchain-identity/test/L1-identity-mechanisms
   source: sandbox/grand/report/L1-asymmetry.json
 - id: TC-cvin-combined-attributes-F

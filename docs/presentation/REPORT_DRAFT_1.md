@@ -1,6 +1,6 @@
 # Self-Sovereign Identity for Connected Vehicles — Results, Work and Implementation
 
-**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `601e1de` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
+**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `9a04eb7` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
 
 > Scope of every number: smart-contract gas is exact `receipt.gasUsed` on a local Hardhat chain (condition M1); latency is in-process cryptography with simulated mobility and no radio (condition M0). Nothing here was measured on a public network or a real road.
 
@@ -14,7 +14,7 @@
 | Do the identities meet W3C DID / VC? | internal checker 94.3 % (41 pass, 1 partial, 2 fail of 44); external DID suite 335/336 | #4, #24 |
 | Are the identity contracts attack-resistant? | 43 of 43 applicable attack cells defended (11 not applicable), strict harness | #28 |
 | Can infrastructure (RSUs, controllers) use the same identity layer? | I1 PASS (SPaT/BSM warm ratio 1.096), I2 PASS (13 attacks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
-| How large is the test and evidence base? | 536 Hardhat tests, 291 Python-layer tests, 92 feature demos (1,752 steps); 30 verified register rows | grand report |
+| How large is the test and evidence base? | 537 Hardhat tests, 305 Python-layer tests, 92 feature demos (1,752 steps); 30 verified register rows | grand report |
 
 ## 2. Research questions and hypotheses
 
@@ -32,7 +32,7 @@
 | C1 CAV identity substrate | partial | 7 | 2 |
 | C2 Secure V2V messaging | partial | 4 | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | partial | 5 | 5 |
-| C4 Revocation freshness | partial | 2 | 2 |
+| C4 Revocation freshness | partial | 2 | 3 |
 | C5 W3C conformance | partial | 2 | 2 |
 | C6 MOBI VID lifecycle | partial | 2 | 1 |
 | C7 Privacy and linkability | partial | 1 | 1 |
@@ -242,8 +242,8 @@ flowchart LR
 
 | Layer | What it contains | How it is tested |
 |---|---|---|
-| Contracts | ERC-1056, ERC-721, ERC-725, ERC-725xy, ERC-735, ERC-1155, ERC-4337, LSP8, CVIN-Combined; MOBI VID V2 profile | 536 Hardhat tests (L1 mechanisms, L2 system, security harness) |
-| W3C SSI layer | VC issuance and verification, DID resolution, MOBI VID I/II | Python layers (291 tests: L3, L4 and the SSI-layer suites); external DID suite 335/336 |
+| Contracts | ERC-1056, ERC-721, ERC-725, ERC-725xy, ERC-735, ERC-1155, ERC-4337, LSP8, CVIN-Combined; MOBI VID V2 profile | 537 Hardhat tests (L1 mechanisms, L2 system, security harness) |
+| W3C SSI layer | VC issuance and verification, DID resolution, MOBI VID I/II | Python layers (305 tests: L3, L4 and the SSI-layer suites); external DID suite 335/336 |
 | V2X testbed | identity providers, message-path harness, infrastructure layer, trace and renderers | seeded 30-run statistics; no-change gates; 31 infrastructure tests |
 | Comparison and sandbox | producers of the results of record; per-option sandboxes with adapters and demos | grand runner; 92 demos, 1,752 steps |
 | Documents | claim register, defect log, crux register, test register, dashboard, stale-figure check | regenerated and compared in CI |
@@ -271,9 +271,9 @@ flowchart LR
 
 | Severity | Fixed | Partly fixed | Open |
 |---|---|---|---|
-| High | 15 | 1 | 0 |
-| Medium | 10 | 4 | 11 |
-| Low | 5 | 0 | 5 |
+| High | 15 | 1 | 1 |
+| Medium | 11 | 4 | 13 |
+| Low | 5 | 0 | 8 |
 *Defect log D1–D36 by severity and status (`docs/DEFECT_LOG.md`). Open items wait for author decisions (§C).*
 
 ## 6. Rigour: how the numbers are kept honest

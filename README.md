@@ -5,7 +5,7 @@
 [![UBC](https://img.shields.io/badge/Institution-UBC-blue.svg)](https://www.ubc.ca/)
 [![Thesis](https://img.shields.io/badge/Type-MASc%20Thesis-green.svg)](https://www.ubc.ca/)
 
-> **Status:** v0.8.0 ("Rigor & Ground-Truth Hardening"), working toward 0.9.0. **All automated suites green** (the Hardhat suite incl. 43 strictly-asserted attack scenarios and nine-adapter harness conformance, the Python suites across the VC layer, DID resolver, MOBI VID and the cv2x testbed, and 12/12 lifecycle use cases; current totals in `sandbox/grand/report/GRAND_REPORT.md`), all run in CI with no skips. **W3C compliance 94.3%** (executable checker, internal and self-scored; CI floor 93.0%). Review 02 (2026-10-03/04, `docs/REVIEW_02_CODEBASE.md`) fixed all 3 Critical and 15 of 16 High findings (including three found by its own re-reviews) (the remaining one, restating H1, is the author's decision); numbers below follow its re-runs. All implementation phases built and tested; remaining work is public-testnet (Sepolia) validation, optional real-SUMO, and thesis writing.
+> **Status:** v0.8.0 ("Rigor & Ground-Truth Hardening"), working toward 0.9.0. **All automated suites green** (the Hardhat suite incl. 43 strictly-asserted attack scenarios and nine-adapter harness conformance, the Python suites across the VC layer, DID resolver, MOBI VID and the cv2x testbed, and 12/12 lifecycle use cases; current totals in `sandbox/grand/report/GRAND_REPORT.md`), all run in CI with no skips. **W3C compliance 94.3%** (executable checker, internal and self-scored; CI floor 94.0%). Review 02 (2026-10-03/04, `docs/REVIEW_02_CODEBASE.md`) fixed all 3 Critical and 15 of 16 High findings (including three found by its own re-reviews) (the remaining one, restating H1, is the author's decision); numbers below follow its re-runs. All implementation phases built and tested; remaining work is public-testnet (Sepolia) validation, optional real-SUMO, and thesis writing.
 
 ---
 
@@ -33,7 +33,7 @@
 ### Hypotheses
 
 - **H1** — Minimal identity standards (e.g. ERC-1056) are substantially cheaper to create than heavyweight account standards. **SUPPORTED** — the ratio depends on the operation definition: ~10× against ERC-721/725 when ERC-1056 creation is the bare `createIdentity` (52,594 gas, evm cancun) and ERC-721 creation is VIN-bound `mintVehicle` (545,101); **≈7×** when both sides bind the VIN (`createVehicleDID` 78,068). See `docs/MEASUREMENT_CONDITIONS.md` #6/#25. **Over a full MOBI VID lifecycle** (metrics harness, register #30) ERC-1056 is cheapest by **2.6× (ERC-721) and 3.0× (ERC-725)**, not 10×; restating H1 accordingly is pending the author's framing decision.
-- **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (94.3% measured, internal checker; external W3C DID test suite 335/336, register #24).**
+- **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (94.3% measured, internal checker; external W3C DID test suite 335/336 — 336 generated tests on three recorded resolver outputs; DID-URL dereferencing not run; register #24).**
 - **H3** — Off-chain credential verification meets the real-time V2V latency budget (100 ms). **SUPPORTED (0.153 ms warm, cached/off-chain verify; register #27. Uncached ERC-1056 verify is 9.7 ms; see the freshness-k frontier, #32).**
 - **H4** — MOBI VID generalizes across identity backends. **SUPPORTED** (5-backend realization sweep; birth + lifecycle native on all, multi-party attestation native on claim-capable backends — a documented fidelity gradient).
 - **H5** — A hybrid design can sit on the security/performance frontier. **SUPPORTED (CVIN-Combined).**
@@ -90,7 +90,7 @@ CVIN-SC-Implementation-SSI-DID/
 All 9 standards implemented as Hardhat contracts and benchmarked on-chain (hardhat-local).
 
 - ✅ Smart contracts for all 9 standards + MOBI VID
-- ✅ Hardhat suite (current count: `sandbox/grand/report/GRAND_REPORT.md`) (per-standard + `test/security/` + harness conformance)
+- ✅ Hardhat suite (current count: `sandbox/grand/report/GRAND_REPORT.md`) (per-standard + `test/L2-identity-system/security/` + harness conformance)
 - ✅ Gas benchmark (`scripts/benchmark_gas.js`), N=30 deterministic runs
 - ✅ Sepolia validation harness authored (`scripts/validate_sepolia.js`) — run pending
 
@@ -98,7 +98,7 @@ All 9 standards implemented as Hardhat contracts and benchmarked on-chain (hardh
 - ✅ W3C DID resolver — 4 methods (`did:ethr`, `did:nft`, `did:key`, `did:mobi`)
 - ✅ Verifiable Credentials — issuer, holder wallet, verifier (6-stage offline pipeline), 10 automotive schemas, selective disclosure (SD-JWT-style salted digests), revocation registry, EIP-191 secp256k1 Data Integrity proofs (28 tests)
 - ✅ MOBI VID I (birth certificate: W3C VC + on-chain content-hash anchoring) and VID II (11 lifecycle event types with on-chain `attestEvent` ecrecover verification and AES-256-GCM VIN encryption) — 32 tests
-- ✅ Compliance checker (executable) — **94.3% measured**, CI floor 93.0%
+- ✅ Compliance checker (executable) — **94.3% measured** (internal structural self-score), CI floor 94.0%
 
 ### Phase 3 — CV2X Testbed Integration (✅ Complete)
 - ✅ 12 end-to-end lifecycle use cases with REAL cryptographic verification (forged/replayed credentials fail; pass/fail is computed, not hardcoded) — 12/12
@@ -166,10 +166,10 @@ Roadside units (RSUs), signal controllers and a traffic-management centre are `d
 
 ### Security (RQ2 / H5) — two complementary lenses
 
-- **Lens 1 (test suite, `1_blockchain-identity/test/security/`)**: 54 Mocha attack scenarios; **43/43 applicable cells DEFENDED**; CI-gated.
+- **Lens 1 (test suite, `1_blockchain-identity/test/L2-identity-system/security/`)**: 54 attack cells (43 executed, 11 not applicable); **43/43 applicable cells DEFENDED**, each with the documented revert reason asserted (the strict harness; the on-chain script `scripts/security_scenarios.js` accepts any revert); CI-gated.
 - **Lens 2 (analysis)**: threat matrix adding Sybil economics, recovery availability, and on-chain PII leakage.
 
-Findings: no standard dominates (a security/performance frontier — **H5**); only ERC-4337 offers genuine on-chain key recovery; ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that both hashes and encrypts the VIN. A MOBI `attestEvent` signature-verification gap was found **and fixed** (121k → 193k gas; forged/replayed attestations now revert).
+Findings: no standard dominates (a security/performance frontier — **H5**); only ERC-4337 offers genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open); ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that both hashes and encrypts the VIN. A MOBI `attestEvent` signature-verification gap was found **and fixed** (121k → 193k gas; forged/replayed attestations now revert).
 
 ### W3C compliance (RQ3 / H2)
 
@@ -180,7 +180,7 @@ Findings: no standard dominates (a security/performance frontier — **H5**); on
 | Hypothesis | Status |
 |---|---|
 | H1 — minimal standards substantially cheaper to create (~10× bare, ≈7× VIN-bound) | ✅ Supported |
-| H2 — ≥90% W3C compliance | ✅ Supported (94.3% internal; 335/336 external DID suite) |
+| H2 — ≥90% W3C compliance | ✅ Supported in a narrow sense (94.3% internal structural self-score; 335/336 external DID suite on three recorded documents) |
 | H3 — off-chain verify meets V2V budget | ✅ Supported (0.153 ms warm, cached; uncached on-chain verify needs freshness-k caching, #32) |
 | H4 — MOBI VID across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
 | H5 — hybrid on the frontier | ✅ Supported (CVIN-Combined) |

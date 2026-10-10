@@ -80,7 +80,7 @@ sampling artifact (§5.2).
 standard dominates**; the standards occupy distinct points on a
 security/performance trade-off frontier rather than one being universally
 best. The cheapest identities (ERC-1056, CVIN-Combined) are the most
-Sybil-vulnerable; only **ERC-4337** offers genuine on-chain key recovery
+Sybil-vulnerable; only **ERC-4337** offers genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open)
 (guardian `recoverOwner`); **ERC-1155** uniquely resists identity theft via a
 soulbound transfer override; and MOBI VID is the only family that hashes and
 encrypts the VIN rather than exposing it on-chain. The executable revert suite
@@ -88,8 +88,8 @@ defends **43/43 applicable attack cells**, and the analysis surfaced and then
 fixed a real `attestEvent` signature-verification gap (§5.6).
 
 **RQ3 — W3C compliance.** *Can blockchain-rooted identity meet W3C SSI
-standards while serving automotive needs?* Yes — **94.3% aggregate compliance
-is achievable and measured** by an executable checker (DID Core v1.0 14/15
+standards while serving automotive needs?* Yes, in a narrow sense — **94.3% on the internal
+executable checker**, a structural self-score rather than conformance (register #4; WM-1 audit U-F4) (DID Core v1.0 14/15
 passing with one PARTIAL; VC Data Model v2.0 93.1%, 27/29; register #4), above the
 ≥90% CI gate. Apart from the one PARTIAL, the residual ~6% is two documented,
 deliberate deviations (deterministic sorted-key JSON
@@ -140,8 +140,8 @@ backends. H4 is therefore supported *with a fidelity gradient*, not as a flat
 - **Exact, deterministic performance data** (gas across all nine standards,
   N=30, byte-identical, σ=0), quantifying a ~34× cost spread and the ~10×
   minimal-vs-NFT gap, plus an isolated 46,830-gas ERC-4337 indirection tax.
-- **A W3C-compliant SSI layer for blockchain vehicle identity** achieving 94.3%
-  executable, CI-gated compliance (DID Core + VC Data Model) with a full
+- **An SSI layer for blockchain vehicle identity expressed in W3C DID and VC
+  structures**, scoring 94.3% on the internal, CI-gated structural checker (DID Core + VC Data Model) with a full
   offline VC pipeline and four-method DID resolver.
 - **A real-cryptography CV2X testbed** demonstrating that blockchain identity
   verification fits the V2V safety budget with ~650× margin (SSI warm
@@ -227,10 +227,15 @@ Ordered from smallest lift (confirmation) to largest (new research):
 The thesis converts a design debate that has largely been conducted on paper
 into an empirical, reproducible comparison. The headline result is not that
 one standard wins, but that **the choice is a measurable trade-off**: minimal
-event-log designs are an order of magnitude cheaper, no standard dominates on
-security, W3C compliance is reachable (94.3%), and blockchain identity clears
-the real-time V2V bar by a wide margin. The CVIN-Combined hybrid shows that a
-purpose-built design can occupy the favorable corner of that frontier. With
+event-log designs are an order of magnitude cheaper to create an identity in
+(where "create" means one registry entry for registry standards but a full
+per-vehicle contract deployment for ERC-725, ERC-725xy and ERC-735, with
+registry deployment excluded; a clone-based deployment was not measured), no
+standard dominates on security, the internal W3C checker scores 94.3% (a
+structural self-score), and blockchain identity verification clears the
+real-time V2V bar by a wide margin for the cryptographic step. The CVIN-Combined
+hybrid sits on the fidelity-per-gas frontier among the MOBI backends, though not
+on the six-criterion harness frontier (register #36). With
 the Sepolia run and real network-stack modeling as the next concrete steps,
 the framework is positioned to move from a rigorous local comparison to a
 fully field-validated one.

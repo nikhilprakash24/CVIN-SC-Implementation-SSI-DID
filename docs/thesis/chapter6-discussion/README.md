@@ -48,7 +48,7 @@ security axis is not a single scalar that gas can be traded against, but several
 independent capabilities, each concentrated in a different standard:
 
 - **Recovery is the sharpest single differentiator (§5.6).** Only ERC-4337
-  offers genuine on-chain key recovery: a guardian can rotate the owner key and
+  offers genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open): a guardian can rotate the owner key and
   the identity address survives a key compromise. For every other standard, a
   compromised owner key is *permanent identity loss* (ERC-1155 and LSP8 offer a
   weaker issuer-mediated re-binding). For a vehicle expected to live 15–20 years

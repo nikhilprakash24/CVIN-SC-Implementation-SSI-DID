@@ -56,6 +56,7 @@ cruxes:
     defects: [D21]
     artefacts: [cv2x-testbed/results/freshness_k.json, cv2x-testbed/results/freshness_k_probe.json]
     gaps:
+      - "Open high defect D51: the ERC-1056 provider accepts a revoked key when the verifier's clock is more than 900 s behind the chain; #32 and #37 hold under that clock assumption until fixed (WM-2)."
       - The RSU analogue (#46) counts messages from a revoked RSU under an in-process registry; it bounds the re-check cadence, not the latency cost, so it is not counted as C4 evidence.
       - Choose the k the thesis defends (review-2 decisions 10 and 14).
     examiner: Is k-1 messages of revocation staleness at 10 Hz acceptable for a safety system?

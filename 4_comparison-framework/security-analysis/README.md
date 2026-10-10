@@ -203,7 +203,7 @@ not key recovery).
    CVIN-Combined bind the claim to context but lack a nonce (idempotent
    re-anchor). The pure token standards have no in-contract signature to replay.
 4. **Recovery is the sharpest differentiator.** ERC-4337 is the only standard
-   with genuine on-chain key recovery (guardian). ERC-1155/LSP8 offer
+   with genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open) (guardian). ERC-1155/LSP8 offer
    issuer/authority-mediated re-binding. Everything else: a compromised owner key
    is permanent loss.
 5. **Sybil resistance tracks issuer-gating, not just gas.** The cheapest

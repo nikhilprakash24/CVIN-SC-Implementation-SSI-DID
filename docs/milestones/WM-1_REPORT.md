@@ -28,8 +28,11 @@ The milestone audit found more than the pass-11 review did, and some of it was s
 rows still quoted the pre-merge harness run although the run had been repeated on 2026-10-09 (the
 gas figures moved; the conclusions did not) [A-F1]; chapter 7 claimed H5 more strongly than the
 register allows [A-F4]; two delegated results had been accepted by reading, not by a re-run gate
-[P-F1]; seven V rows describe code the trunk has since changed [T-F5]; and the verifier still has five
-robustness gaps for WM-2 [B-F2…F5, F8]. All are fixed or disclosed with an owner (§14).
+[P-F1]; seven V rows describe code the trunk has since changed [T-F5]; the ERC-1056 provider accepts
+a revoked key when the verifier's clock lags the chain by more than 15 minutes [U-F2, open high defect
+D51]; the 94.3 % W3C figure is a structural self-score that the chapters had called compliance [U-F4];
+and the infrastructure verifier still has five robustness gaps for WM-2 [B-F2…F5, F8]. All 88 findings
+are fixed, narrowed or deferred with an owner (§14).
 
 | Measure | Start of WM-1 (`db6c381`) | End of WM-1 (`291bbca`) | Source |
 |---|---|---|---|
@@ -357,4 +360,48 @@ After-action reports 08–12 · plan of 2026-10-09 (§5 status) · `docs/PLAN_WM
 ---
 
 ## 14. Audit of WM-1
-*(Filled after the audit in after-action report 12, step W4.)*
+**How it was run.** A brief-writer agent (a different model from the orchestrator's, fresh context) read
+this report, the plans and the reports and wrote five briefs (`docs/milestones/audit_WM-1/briefs/`,
+19–22 checks each, plus what it deliberately left out). Five auditor agents on a different model ran the
+briefs read-only on a frozen checkout of `d61a284` (this report before revision). Their reports are
+committed verbatim (`docs/milestones/audit_WM-1/findings/`). The orchestrator reproduced each high finding
+before acting on it, wrote the dispositions (after-action report 12 §4), fixed what could be fixed without
+changing code that produced a result of record, and deferred the rest to WM-2 with an owner.
+
+**What it found** (counts computed from the register):
+
+| Brief | Scope | Findings | High | Medium | Low |
+|---|---|---|---|---|---|
+| 1 | claims, numbers, chapters | 17 | 4 | 10 | 3 |
+| 2 | code and security of what WM-1 built | 10 | 1 | 4 | 5 |
+| 3 | tooling, CI, reproducibility | 18 | 2 | 12 | 4 |
+| 4 | process and documents (this report included) | 27 | 1 | 19 | 7 |
+| 5 | code nobody had audited (Python suites, contracts, their tests) | 16 | 4 | 8 | 4 |
+| **total** | | **88** | **12** | **53** | **23** |
+
+**The twelve high findings and what happened:**
+
+| Finding | What | Outcome |
+|---|---|---|
+| A-F1 / U-F1 | register rows #29–#36 kept pre-merge harness values; #39 measured pre-merge contracts | re-stated with history; #39 → U (D43) |
+| A-F2 | the superseded 1,535,776 dropped from the stale list on a stale premise | restored (D44) |
+| A-F3 | gas called deterministic without "for fixed inputs"; I4 range from two runs | rule qualified; I4 over 30 runs (D45) |
+| A-F4 | chapter 7 called the hybrid Pareto-optimal | scoped (D46) |
+| B-F1 | replay cached on the cold path only would pass every test; mutant set not committed | 6 tests; committed 30-mutant script, 30/30 |
+| T-F1 | live stale test counts | fixed; checker round 3 (D48) |
+| T-F2 | deleting a test passed every guard | Hardhat count gate in CI (D47; demo count to WM-2) |
+| P-F1 | two delegated results accepted by reading | report corrected; report 09 corrected |
+| U-F2 | revoked ERC-1056 key accepted under clock skew | **open high defect D51**, deferred to WM-2 with the re-runs; dependent rows narrowed |
+| U-F3 | four mutants survived the suites | four tests, each shown to fail on its mutant (D55) |
+| U-F4 | W3C self-score presented as compliance | chapters and README narrowed |
+
+**Dispositions.** 84 confirmed (12 deferred with an owner, 3 resolved by timing), 3 confirmed in part with
+a reason, 1 accepted as the author's decision (N-23, AI-use disclosure). None rejected.
+
+**What the audit says about WM-1.** The infrastructure results stand: every number in #44–#48 recomputed
+from the committed data, and the verdicts hold. What did not stand was the paper trail around the
+results: register rows lagging their runs, checks that could not fail, plan items silently dropped,
+claims worded beyond the evidence, and decisions attributed to the author that the author had not seen.
+The pass-11 review had caught the first layer; this audit, with briefs the orchestrator did not write and
+a scope that included code nobody had reviewed, caught a second layer. The closing conditions of
+`docs/milestones/README.md` are checked in after-action report 12 §6.

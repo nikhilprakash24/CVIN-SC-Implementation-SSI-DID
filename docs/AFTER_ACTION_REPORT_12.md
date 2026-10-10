@@ -152,8 +152,30 @@ auditor's. The orchestrator reproduced each high finding before acting on it.
 | P-F25 | L | guards without a mutation probe | **Resolved by the audit itself:** brief 3 (C2) mutation-tested the snapshot, crux register, page, test register and coverage matrix checks; all failed as they should. The test-count gate is new and shown to fail | — |
 | P-F26 | L | no-change gate and V2 check commands unrecorded | **Confirmed.** Recorded in §3 of this report | `a1c9cb8` |
 | P-F27 | L | binding conditional; expiry uses wall clock | **Confirmed** (same as B-F3, B-F5); deferred to C0 | — |
+| U-F1 | H | register #34 kept pre-merge values | **Confirmed** (same as A-F1) | `8d5d25c` |
+| U-F2 | H | ERC-1056 provider accepts a revoked key when the verifier's clock is >900 s behind the chain; test not idempotent | **Confirmed** (orchestrator read the code; the auditor's reproduction is in its report). **Deferred** to WM-2 (D51, H): the fix changes resolution cost that #21/#32/#37 measure; those rows and crux C4 now state the clock assumption (guide rule 1.2.4) | this pass |
+| U-F3 | H | four mutants survive: VC proof options unsigned, rollback never flagged, forged attestation valid, D2 reverted | **Confirmed.** Tests added for all four; each shown to fail on its mutant (D55) | this pass |
+| U-F4 | H | 94.3 % called compliance/conformance; it is a structural self-score; a third deviation undisclosed; thesis README 13/15 | **Confirmed.** Chapters 5.5, 6.4, 7, thesis README and README narrowed to "structural self-score"; status-method deviation stated; 14/15 corrected; register #4 carries the audit's classification | this pass |
+| U-F5 | M | resolver synthesises documents (no chain read); its latency figure is stale | **Confirmed.** Chapter 4 states it; the register's resolution-latency figure marked superseded pending WM-2 C1 | this pass |
+| U-F6 | M | external-suite limits not carried to README/H2 | **Confirmed.** README and chapter 5 state 336 generated tests on three recorded outputs, dereferencing not run, registry-minted run adds no resolver evidence | this pass |
+| U-F7 | M | CI `python-layers` reports 27 skips as success | **Confirmed.** Node, compile and a skip gate added to the job | this pass |
+| U-F8 | M | threat model counts and paths wrong; ERC-1056 signed digest lacks the chain id | **Confirmed.** Counts and paths fixed; G3 narrowed; D52 (upstream behaviour, author decision via N-9) | this pass |
+| U-F9 | M | D15, D23, D26 confirmed by PoC; new zero-identity defect; D22 open parts missing from §C; recovery claims uncaveated | **Confirmed.** D53 logged; D22 rest added to §C; D15 caveat at every "genuine on-chain key recovery" claim | this pass |
+| U-F10 | M | `attestEvent` lets any role-holder attest any vehicle; duplicates | **Confirmed.** D54; threat model G4 narrowed; WM-2 C2 | this pass |
+| U-F11 | M | gas varies with random keys; `hardhat test` rewrites tracked files | **Confirmed.** Determinism rule already amended (A-F3); file rewriting is D56 → WM-2 G | this pass |
+| U-F12 | M | the on-chain security script accepts any revert | **Confirmed.** "43/43" now stated as the strict harness's result in README and threat model | this pass |
+| U-F13 | L | duplicate `_registered_key_for` (dead code) | **Confirmed; deferred** (D57, WM-2 G) | — |
+| U-F14 | L | README and #4 state CI floor 93.0 (it is 94.0) | **Confirmed.** Fixed | this pass |
+| U-F15 | L | demo steps are not assertions | **Confirmed** (same as T-F14) | `8d5d25c` |
+| U-F16 | L | create-cost definition differs by standard; chapter 7 silent | **Confirmed.** Chapter 7 states the definition and that a clone variant was not measured | this pass |
 
-*(Brief 5 rows follow when its report arrives.)*
+**Totals** (computed from the table above by script, not typed). 88 findings: 12 high, 53 medium, 23 low
+(brief 1: 17, brief 2: 10, brief 3: 18, brief 4: 27, brief 5: 16). Dispositions: 84 confirmed — of which 12
+deferred to WM-2 with an owner and 3 resolved by timing (the item was written later in this pass) — 3
+confirmed in part with a stated reason (A-F10: "6-stage" matches the code; T-F17: some number forms remain;
+P-F19: the pass-9 entries were documentation faults, not code defects), and 1 accepted as the author's
+decision (P-F14, N-23). None rejected. A first draft of this sentence gave typed totals that the recount
+contradicted; it was corrected before commit.
 
 ## 5. Decisions
 

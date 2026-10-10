@@ -9,7 +9,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | C1 CAV identity substrate | **partial** | H1, H5 | #25 (V), #26 (V), #34 (V), #35 (V), #36 (V), #42 (V), #43 (V) | 2 |
 | C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (U) | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **partial** | — | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V) | 5 |
-| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S) | 2 |
+| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S) | 3 |
 | C5 W3C conformance | **partial** | H2 | #4 (V), #24 (V) | 2 |
 | C6 MOBI VID lifecycle | **partial** | H4 | #30 (V), #33 (V), #41 (S) | 1 |
 | C7 Privacy and linkability | **partial** | — | #38 (V) | 1 |
@@ -107,6 +107,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | #40 | S | (sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=… |
 
 **Open gaps:**
+- Open high defect D51: the ERC-1056 provider accepts a revoked key when the verifier's clock is more than 900 s behind the chain; #32 and #37 hold under that clock assumption until fixed (WM-2).
 - The RSU analogue (#46) counts messages from a revoked RSU under an in-process registry; it bounds the re-check cadence, not the latency cost, so it is not counted as C4 evidence.
 - Choose the k the thesis defends (review-2 decisions 10 and 14).
 
