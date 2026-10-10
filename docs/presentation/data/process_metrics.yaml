@@ -1,0 +1,29 @@
+# Process metrics for the presentation report. These are counts of work, not research results, so
+# they have no claim-register row; each value names the record it is copied from. Results of record
+# are NOT entered here: the generator reads them from docs/figures/dashboard_snapshot.json and the
+# committed result files.
+wm1:
+  commit_range: {value: "db6c381..291bbca", source: "docs/milestones/WM-1_REPORT.md §2"}
+  commits: {value: 27, source: "git log db6c381..291bbca"}
+  files_changed: {value: 175, source: "git diff --shortstat db6c381 291bbca"}
+  passes: {value: "8–11", source: "docs/milestones/README.md"}
+  plan_status:
+    source: "docs/PLAN_2026-10-09.md §5"
+    counts: {done: 18, changed: 2, partial: 3, deferred: 1, not_done: 1}
+  register_start: {value: {V: 27, S: 8, E: 7, B: 1}, source: "register at db6c381, parsed by make_dashboard_data.py's rule"}
+  test_counts:
+    source: "docs/milestones/WM-1_REPORT.md §0; sandbox/grand/report/GRAND_REPORT.md"
+    start: {hardhat: 536, python_layers: 260, demos: 92, demo_steps: 1752}
+    end: {hardhat: 536, python_layers: 291, demos: 92, demo_steps: 1752}
+  infra_tests: {value: {tests_before: 16, tests_after: 31, mutants_killed_before: 13, mutants_before: 17, mutants_killed_after: 26, mutants_after: 26}, source: "docs/AFTER_ACTION_REPORT_11.md §3, §4"}
+  review_pass11:
+    source: "docs/AFTER_ACTION_REPORT_11.md §4; docs/milestones/WM-1_REPORT.md §5.2"
+    by_reviewer:
+      "Claims and measurement": {high: 0, medium: 7, low: 4}
+      "Code and security": {high: 2, medium: 3, low: 6}
+      "Tooling and process": {high: 5, medium: 5, low: 1}
+    dispositions: {confirmed: 32, accepted: 1, rejected: 0}
+  generator_findings_pass9: {value: {register_rows: 5, stale_figures: 82, stale_documents: 12}, source: "docs/AFTER_ACTION_REPORT_09.md §2"}
+  stamps: {value: {start_complete: 11, start_total: 25, end_complete: 20, end_total: 29}, source: "docs/AFTER_ACTION_REPORT_09.md; docs/testing/STAMP_INVENTORY.md"}
+  stale_scan_files: {value: 87, source: "python3 docs/testing/check_docs_numbers.py"}
+  dashboard_versions: {value: 3, source: "after-action reports 09–11 (versions 3, 4, 5)"}

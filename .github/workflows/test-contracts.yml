@@ -74,6 +74,7 @@ jobs:
         python3 docs/figures/make_dashboard_data.py --check
         python3 docs/testing/build_register.py --check
         python3 docs/testing/check_docs_numbers.py
+        python3 docs/presentation/make_presentation.py --check
 
     - name: Run tests
       run: npx hardhat test
