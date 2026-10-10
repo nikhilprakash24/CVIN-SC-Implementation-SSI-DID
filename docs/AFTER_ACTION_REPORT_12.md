@@ -60,6 +60,8 @@ draft, and another document on what to expand in the next iteration."
   an index of what it left out, from the milestone report, plans and reports; the orchestrator did not
   edit them (archived under `docs/milestones/audit_WM-1/briefs/`, scratch paths normalised). Five
   auditors on a different model run them on a frozen checkout of `d61a284`.
+- **Recorded checks (audit P-F26).** V2 byte-identity: `python3 render_trace.py results/traces/trace_rsu_seed1.jsonl.gz --out $SCRATCH/rerender && python3 render_trace.py results/traces/trace_revocation_k5_seed1.jsonl.gz --out $SCRATCH/rerender --revocation --no-animation`, then `cmp` of each committed output against its re-render: 5 of 5 identical (matplotlib 3.11.2, Pillow 12.3.0); brief 3 reproduced the same sha256 values. No-change gate (passes 10–11): `python3 sumo_identity_integration.py --simulate --seed 7 --duration 10 --results $SCRATCH/x.json` with flags off, and again with `--trace`; every integer field of the two results files (19 at the time; the audit compared 25) equal to the pre-change baseline.
+- **A slip in this pass.** Commit `a1c9cb8` was made while the stale-figure checker failed (43 hits in the newly committed verbatim reports); the failure was hidden because the check was piped into `tail`, which returns its own exit code. Fixed a minute later (`0fe7d29`: the verbatim reports are records, on the history list). CI on `a1c9cb8` is expected to fail its documents step; checks are now run unpiped before each commit.
 - **W5.** `docs/presentation/make_presentation.py` generates `REPORT_DRAFT_1.md` (10 sections, ~25
   tables, 8 generated figures plus the trace figure and an architecture diagram) and the published page
   from the snapshot, the infrastructure per-run files and a process-metrics file whose every value names
@@ -70,7 +72,88 @@ draft, and another document on what to expand in the next iteration."
   `EXPANSION_PLAN_DRAFT2.md` ranks twelve expansions.
 
 ## 4. Findings register (audit of WM-1)
-*(filled in W4)*
+Five auditors on a different model ran the briefs a separate brief-writer agent wrote (`docs/milestones/
+audit_WM-1/briefs/`), on a frozen checkout of `d61a284`. Their reports are committed verbatim
+(`docs/milestones/audit_WM-1/findings/`, model names redacted). Ids: A = claims (brief 1), B = code and
+security (2), T = tooling and CI (3), P = process and documents (4), U = unaudited code (5). Severity is the
+auditor's. The orchestrator reproduced each high finding before acting on it.
+
+| # | Sev | Finding | Disposition | Commit |
+|---|---|---|---|---|
+| A-F1 | H | register #29/#30/#34–#36 kept pre-merge harness values; #39 on pre-merge contracts; report said no number moved | **Confirmed.** Rows re-stated from run `7a9a996` with history; #39 → U; report §4.2 rewritten (D43) | `8d5d25c` |
+| A-F2 | H | 1,535,776 removed from the stale list on a stale premise | **Confirmed.** Restored with rounded forms; live citations fixed (D44) | `8d5d25c` |
+| A-F3 | H | "gas is deterministic" unqualified; I4 spread wider than two runs | **Confirmed.** Rule and statements qualified; I4 re-run 30 times and re-reported as ranges (D45) | `8d5d25c` |
+| A-F4 | H | chapter 7: H5 "Pareto-optimal" against #36 | **Confirmed.** Scoped to the fidelity-per-gas plane; dominance by ERC-4337 stated (D46) | `8d5d25c` |
+| A-F5 | M | latency rows lack p95; no warm-up discard | **Confirmed.** p95 of run medians added; deviation in rows and amendment A5 | `8d5d25c` |
+| A-F6 | M | I3 PASS shown without its conformance-check caveat | **Confirmed.** Caveat in README, crux C3, dashboard, thesis README, report | `8d5d25c`, `a1c9cb8` |
+| A-F7 | M | live stale test counts; markers excused whole lines | **Confirmed.** Lines fixed; patterns widened; markers explicit only (D48) | `8d5d25c` |
+| A-F8 | M | "Python layers L3 + L4: 291" includes 226 SSI-layer tests | **Confirmed** (orchestrator recount 46 / 19 / 226). Labels fixed in runner, dashboard, report, presentation | `8d5d25c` |
+| A-F9 | M | (d) changed meaning in A4; 13 checks are 10 attacks + 3 warm; "12" should be 6 | **Confirmed.** Amendment A5; wording fixed in register, design, chapters, dashboard | `8d5d25c` |
+| A-F10 | M | chapter 4 web3 v7, "6-stage", chapter 5 "most expensive" | **Confirmed in part.** web3 and ERC-725xy wording fixed; "6-stage" matches the code (proof metadata sits inside the signature stage) and was made explicit | `8d5d25c` |
+| A-F11 | M | chapter 1 H1 includes update; tested for creation only | **Confirmed.** Note in chapter 1 that the update half is not supported (3.4× / 3.9×) | `8d5d25c` |
+| A-F12 | M | chapter 6 §6.4 "confined to two places" (N-6) | **Confirmed.** Reworded (two failures and one PARTIAL, verified in the result file); N-6 closed | `8d5d25c` |
+| A-F13 | M | dashboard shows two BSM warm values without a note; I1 label overclaims | **Confirmed.** Host note and k = ∞ label in the infrastructure panel | `8d5d25c` |
+| A-F14 | M | design §7 omits I4 and I5 changes | **Confirmed.** Rows added (and I4's unmeasured issuance cost stated) | `a1c9cb8` |
+| A-F15 | L | "50 files are documents" | **Confirmed.** 55 Markdown files outside the harness run | `a1c9cb8` |
+| A-F16 | L | chapter 7: attacks "over 1.65 M verifications" | **Confirmed.** 5 attack types, 150 of 150 rejected; no benign message rejected | `8d5d25c` |
+| A-F17 | L | chapters 1, 4, 6, 7 silent on infrastructure | **Confirmed; deferred** to WM-2 D1 (disclosed in SC-21) | — |
+| B-F1 | H | replay cached on the cold path only survives the 31 tests; 26-mutant set not committed | **Confirmed** (orchestrator reproduced via the committed script). 6 tests added; 30-mutant script committed, 30/30 killed | `8d5d25c` |
+| B-F2 | M | deeply nested message crashes the process | **Confirmed; deferred** (D37, WM-2 C0 with re-run) | — |
+| B-F3 | M | field binding fails open | **Confirmed; deferred** (D38, C0). The harness credentials carry the claims, so I2(h) stands | — |
+| B-F4 | M | refresh_every accepts nan/inf/floats; CLI crash | **Confirmed; deferred** (D39, C0) | — |
+| B-F5 | M | credential validity ignores the injected clock | **Confirmed; deferred** (D40, C0) | — |
+| B-F6 | L | warm I2 variants not asserted warm | **Confirmed; deferred** (D42, C0); data show cold False in 30/30 | — |
+| B-F7 | L | arrow rule matches substrings | **Confirmed.** Whole-number match; the auditor's counter-example now flagged | `8d5d25c` |
+| B-F8 | L | DID method and chain not validated | **Confirmed; deferred** (D41, C0) | — |
+| B-F9 | L | I4 range from two samples | **Confirmed.** 30 runs committed; #47 re-reported | `8d5d25c` |
+| B-F10 | L | trace schema doc differs from the traces | **Confirmed.** As-built schema in the visualisation plan §7.1 | `a1c9cb8` |
+| T-F1 | H | live stale test counts missed by patterns and markers | **Confirmed** (same as A-F7) | `8d5d25c` |
+| T-F2 | H | no guard notices a deleted test or demo | **Confirmed; partly fixed.** CI Hardhat count gate against the grand report, shown to fail on 535; demo count → WM-2 G (D47) | `8d5d25c` |
+| T-F3 | M | no check ties register numbers to result files | **Confirmed; deferred** to WM-2 A5 (claim cross-check) | — |
+| T-F4 | M | §5.F names the inert `dirtyMeasured` as the criterion | **Confirmed.** Correction in §5.F; N-19 unchanged | `8d5d25c` |
+| T-F5 | M | #27 "merged trunk" wrong; seven V rows' code changed since their stamp | **Confirmed.** #27 reworded; register note; inventory column "code changed since" (per-producer paths); re-runs WM-2 A3b (D50) | `8d5d25c` |
+| T-F6 | M | testbed lock pins OpenZeppelin 5.4.0; artifacts reproduce only with the root install | **Confirmed.** Documented in `cv2x-testbed/QUICKSTART.md`; pin → WM-2 G | `a1c9cb8` |
+| T-F7 | M | requirements.txt not installable; deps missing | **Confirmed.** QUICKSTART gives the working install; the file → WM-2 G | `a1c9cb8` |
+| T-F8 | M | "run alone on the host" not evidenced | **Confirmed.** Reworded to what the record shows; run log committed | `a1c9cb8` |
+| T-F9 | M | stamp inventory scope 29 of 63 not stated | **Confirmed.** Scope stated in the report; widening is N-21 | `a1c9cb8` |
+| T-F10 | M | run-stamp scope misses imported producer code | **Confirmed; deferred** (D49, WM-2 A2) | — |
+| T-F11 | M | CI not triggered by PRs into the default branch | **Confirmed.** PR triggers on any base branch in all three workflows | `8d5d25c` |
+| T-F12 | M | three CI jobs are run-only | **Confirmed.** Stated in the report; compare steps → WM-2 G | `a1c9cb8` |
+| T-F13 | M | L1 and demo gas vary between runs; N-18 understated | **Confirmed.** Rule amended; N-18 widened with the audit's counts | this pass |
+| T-F14 | M | smoke count only on the console; steps are logged lines, not assertions | **Confirmed.** Runner records the adapter count and step kinds; report wording fixed | `8d5d25c`, `a1c9cb8` |
+| T-F15 | L | figure byte-identity depends on unpinned matplotlib/Pillow | **Confirmed.** Stated in the figures README; pins → WM-2 G | `a1c9cb8` |
+| T-F16 | L | HTML dossiers state superseded figures; non-Markdown not scanned | **Confirmed.** Dossiers marked dated (manifest, INDEX); non-Markdown scan → WM-2 G | `a1c9cb8` |
+| T-F17 | L | checker misses some number forms | **Confirmed in part.** ASCII x, no tilde, decimal comma, "percent" added; split-line and other forms remain (stated) | `8d5d25c` |
+| T-F18 | L | `d0cc19c` has no CI run | **Confirmed.** Recorded in the report | `a1c9cb8` |
+| P-F1 | H | "0 delegated results accepted without a re-run gate" is false (P3.5, P3.6) | **Confirmed.** Report §8 corrected; post-close correction in report 09 | `a1c9cb8` |
+| P-F2 | M | milestone called closed before its conditions held | **Confirmed (timing).** Conditions checked at the close commit (§6) | close |
+| P-F3 | M | consolidated handback missing; old handback §1 stale | **Confirmed (timing).** `HANDBACK_2026-10-10.md` written (`d877a4f`); the old one marked historical | `d877a4f`, `a1c9cb8` |
+| P-F4 | M | P3.2 carried to "B4" (no such step) | **Confirmed.** A5 | `a1c9cb8` |
+| P-F5 | M | PLAN_WM-2 cites a presentation file not yet written | **Confirmed (timing).** Written in W5 (`c363358`) | `c363358` |
+| P-F6 | M | plan rows vs items mixed in the count | **Confirmed.** 25 rows / 26 items stated; recount 15 / 3 / 4 / 1 / 2 | `a1c9cb8` |
+| P-F7 | M | P0.4 unrecorded; P1.3 partial; P3.1 changed | **Confirmed.** Status table and report corrected | `a1c9cb8` |
+| P-F8 | M | N-15 and P2b items had no WM-2 step | **Confirmed.** A7 added; P2b items marked out of WM-2 (need N-4) | `a1c9cb8` |
+| P-F9 | M | A4 "before any code change" literally false | **Confirmed.** Amendment A5 states it; report wording fixed | `8d5d25c`, `a1c9cb8` |
+| P-F10 | M | pass-11 severities and independence unrecomputable from the repository | **Confirmed.** Reviewer reports committed verbatim (model names redacted); severities recompute to 7 / 15 / 11; scale note in the defect log; independence stated as unverifiable | `8d5d25c` |
+| P-F11 | M | CHANGELOG overstates (stamp inventory in CI; D33 fixed; four faults) | **Confirmed.** Corrected | `a1c9cb8` |
+| P-F12 | M | 26/26 mutants unrecorded | **Confirmed** (same as B-F1) | `8d5d25c` |
+| P-F13 | M | orchestrator defaults presented as the author's | **Confirmed.** Decision table distinguishes author-explicit, author-defaults and orchestrator-default | `a1c9cb8` |
+| P-F14 | M | no AI-use statement; first-person assistant voice under the author's byline | **Accepted as the author's decision** (N-23); the orchestrator changes no byline or disclosure on its own | `a1c9cb8` |
+| P-F15 | M | "what went wrong" was selective | **Confirmed.** Eight items added | `a1c9cb8` |
+| P-F16 | M | dashboard v5 unrecorded | **Confirmed.** Recorded (from `291bbca` at pass 11's close); v6 at this close | `a1c9cb8` |
+| P-F17 | M | "12 further checks" (6) | **Confirmed.** Fixed | `8d5d25c` |
+| P-F18 | M | SC-21/22 missing columns; chapters silent on SC-21 | **Confirmed.** Columns added; chapters → WM-2 D1 | `a1c9cb8` |
+| P-F19 | M | D35 reopening and D33 severity unexplained; pass-9 generator findings not logged | **Confirmed in part.** D35 and severity notes added; the pass-9 findings were documentation faults, recorded in the report §5.1, not logged as code defects (reason stated) | `8d5d25c` |
+| P-F20 | M | WM-2 order makes A3's re-runs stale | **Confirmed.** Order revised | `a1c9cb8` |
+| P-F21 | L | counts (55 files; 89 vs 87 scanned; 5 outputs) | **Confirmed.** Corrected with the commit each count belongs to | `a1c9cb8` |
+| P-F22 | L | dashboard lacks the failed-expectation note; A4 predicted direction only | **Confirmed.** Both fixed | `8d5d25c`, `a1c9cb8` |
+| P-F23 | L | plan header still "awaiting audit" | **Confirmed.** Header note added | `a1c9cb8` |
+| P-F24 | L | id collisions (A1 finding vs A1 amendment); dispositions without hashes | **Confirmed.** Note in report 11; this register uses A-F/B-F/T-F/P-F/U-F ids and hashes | `a1c9cb8` |
+| P-F25 | L | guards without a mutation probe | **Resolved by the audit itself:** brief 3 (C2) mutation-tested the snapshot, crux register, page, test register and coverage matrix checks; all failed as they should. The test-count gate is new and shown to fail | — |
+| P-F26 | L | no-change gate and V2 check commands unrecorded | **Confirmed.** Recorded in §3 of this report | `a1c9cb8` |
+| P-F27 | L | binding conditional; expiry uses wall clock | **Confirmed** (same as B-F3, B-F5); deferred to C0 | — |
+
+*(Brief 5 rows follow when its report arrives.)*
 
 ## 5. Decisions
 
