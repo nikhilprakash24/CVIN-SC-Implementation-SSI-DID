@@ -94,7 +94,7 @@ HELPERS = {"tools/run_identity/stamp.py", "1_blockchain-identity/scripts/lib/run
 # Commits that changed producing code only to call the stamp helper (no measured behaviour changed).
 # A result whose producing code differs from its stamp only by these commits reads "no (stamp-only)".
 # --check-coverage verifies each listed commit: within producing code, every changed line is stamp code.
-STAMP_ONLY_COMMITS = {}
+STAMP_ONLY_COMMITS = {"188efec540cfb1db0064e5c5322adc26508a368b": "WM-2 A2: producers call the shared stamp helper (D49)"}
 STAMP_LINE = (r"runStamp|run_stamp|_stamp\b|\bst\[|st = _stamp|\bstamp\b|scope|code_clean|code_dirty|dirtyMeasured|"
               r"PRODUCING_PATHSPECS|_code_dirty|run_identity|_sys\b|^\s*(#|//)|^\s*$|producer|environment_header\(|"
               r"H\.environment\(|def environment\(|git_dirty|\bcode_status\b|^\s*\"\"\"|`producer`|"

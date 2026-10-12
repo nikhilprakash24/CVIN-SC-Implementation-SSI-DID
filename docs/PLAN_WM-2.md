@@ -30,12 +30,12 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 | Step | Work | Gate |
 |---|---|---|
 | A1 | **done (pass 13, report 13):** N-21: `check_stamps.py` accounts for every tracked result file (161; 0 uncovered); `--check-coverage` in CI | inventory lists every result directory; each new row classified |
-| A2 | One stamp helper for JS and Python with **per-producer scope** (each producer names the code it imports: the security harness, `cv2x-testbed/scripts`, post-processing scripts; D49); the CI probe extended to it | probe fails on a broken helper and on an edit to an imported file |
-| A3 | N-20: the five *stamp producer* files: stamp the producer, re-run on a clean tree; any moved number re-registered with the old value as history. **Runs after C1 and C2**, which move W3C, gas and security results (audit P-F20) | each re-run stamped `dirty: false` with a live flag; moved cells listed |
+| A2 | **done (pass 14, report 14):** one scope table read by both helpers, each producer's import closure resolved (`tools/run_identity/`); 14 of 20 producers converted (the harness at A6; four stamp producers at A3; `render_trace.py` writes derived figures); D49 fixed; `stamp.py --check` and the extended probe in CI. One stamp helper for JS and Python with **per-producer scope** (each producer names the code it imports: the security harness, `cv2x-testbed/scripts`, post-processing scripts; D49); the CI probe extended to it | probe fails on a broken helper and on an edit to an imported file |
+| A3 | N-20: the five *stamp producer* files (scopes registered in A2; the stamp call is added here, with the promote step, because `attackHarness.js` writes a tracked file on every `npx hardhat test`, D56): stamp the producer, re-run on a clean tree; any moved number re-registered with the old value as history. **Runs after C1 and C2**, which move W3C, gas and security results (audit P-F20) | each re-run stamped `dirty: false` with a live flag; moved cells listed |
 | A3b | Re-run the seven V rows whose producing code changed since their stamp (#21, #26 verify part, #27, #32, #33, #37, #38; D50); old values kept as history | stamp inventory column "code changed since" reads `no` for every V row |
 | A4 | Promote step, piloted on one producer: write to `runs/<id>/`, promote copies to the result path only if the stamp is clean | a dirty run refuses to promote (test) |
 | A5 | P3.2 `claims.yaml`: stable string ids for every register row, generated from or checked against the register; every V row names an existing source file; **the numbers quoted in each V row are checked against their result file** (audit T-F3: an edited #44 passed every guard) | CI fails on a V row without a source, a source without a row, or a quoted number that differs from the file |
-| A6 | N-19 with the next harness run of record: root-anchor `dirtyMeasured`, re-run the harness on a clean tree, re-stamp #29, #30, #34–#36; **re-run the HTTP-RPC condition on the merged contracts (#39, now U)** | measured-code hashes recorded; cells moved listed; #39 back to V or rewritten |
+| A6 | N-19 with the next harness run of record: switch `dirtyMeasured` to the shared helper (one line; scope already registered in A2), re-run the harness on a clean tree, re-stamp #29, #30, #34–#36; **re-run the HTTP-RPC condition on the merged contracts (#39, now U)** | measured-code hashes recorded; cells moved listed; #39 back to V or rewritten |
 | A7 | N-15: the Python suites (L3, L4, SSI layer) in the TSR test register (audit P-F8) | every Python test has a TC entry |
 
 ### B. Determinism and statistics (TSR P4-3, phase 6). *Owner: measurement methodologist.*
@@ -99,4 +99,5 @@ nine-standard contract set beyond C2, no chapter prose beyond the sentences D1 f
 
 ## 7. Revisions
 - 2026-10-10 (initial) — written before the WM-1 audit.
+- 2026-10-12 (pass 14) — A2 done; A3 and A6 notes updated (A3 adds the stamp calls the five producers still lack; A6's harness switch is one line). Source: after-action report 14.
 - 2026-10-10 (after the WM-1 audit) — added C0 (verifier v3), A3b (seven re-runs), A7 (N-15), A5's number cross-check, A6's HTTP re-run, G's reproducibility items; reordered §4; P2b items marked out of WM-2. Source: after-action report 12 §4.

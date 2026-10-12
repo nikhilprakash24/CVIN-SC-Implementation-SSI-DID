@@ -1118,7 +1118,7 @@
       {
         "id": "D49",
         "severity": "M",
-        "status": "open"
+        "status": "fixed"
       },
       {
         "id": "D50",
@@ -1163,11 +1163,11 @@
     ],
     "counts": {
       "H:fixed": 15,
-      "M:fixed": 11,
+      "M:fixed": 12,
       "L:fixed": 5,
       "M:partly fixed": 4,
       "L:open": 8,
-      "M:open": 13,
+      "M:open": 12,
       "H:partly fixed": 1,
       "H:open": 1
     }

@@ -176,3 +176,13 @@ discovered one commit at a time. Ordered by the pass that produced them.
 |---|---|---|
 | `docs/AFTER_ACTION_REPORT_13.md` | plan, log, closing | standing rule |
 | `docs/testing/check_stamps.py` (`--check-coverage`), `STAMP_INVENTORY.md`, CI step | every tracked result file accounted for; CI fails on an unaccounted one | WM-2 A1, N-21 |
+
+## Pass 14 — Work milestone WM-2, step A2 (2026-10-12)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_14.md` | plan, log, closing | standing rule |
+| `tools/run_identity/producers.json`, `scopes.json`, `stamp.py` | 20 producers of record, each with its resolved import closure and declared inputs; the Python stamp helper; `--check` in CI | WM-2 A2, D49 |
+| `1_blockchain-identity/scripts/lib/run_stamp.js` | the JS helper, reading the same scopes | same |
+| 14 producers (6 JS scripts, 4 SUMO drivers, 3 testbed experiments, the richness driver) | call the helper with their own file; stamp field names kept | same |
+| `tools/run_identity/probe.py`, `docs/testing/probe_run_identity.sh`, CI step | both helpers, every producer: edit to imported code, new input file, new results file; shown to fail on four broken helpers | same |
+| `docs/testing/check_stamps.py`, `STAMP_INVENTORY.md` | "code changed since" from the scopes; stamp-only commits verified line by line | same |
