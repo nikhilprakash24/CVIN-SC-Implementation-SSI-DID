@@ -22,6 +22,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0   # check_stamps.py verifies the stamp-only commits from history (WM-2 A2)
 
     - name: Setup Node.js
       uses: actions/setup-node@v4

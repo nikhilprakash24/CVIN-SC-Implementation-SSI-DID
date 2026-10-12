@@ -36,7 +36,7 @@
 | `cv2x-testbed/sumo/results/infrastructure_stats.json` | 2026-10-09T05:30:59+00:0 | f1f9e37cc516b318892dd124 | False | False | no (stamp-only) | 3.11.15 |  |
 | `cv2x-testbed/sumo/results/v2v_latency.json` | 2026-10-04T09:19:33.3911 | MISSING | MISSING | MISSING | MISSING | MISSING | single run: default output of one harness run; the results of record are v2v_latency_stats.json |
 | `cv2x-testbed/sumo/results/v2v_latency_stats.json` | 2026-10-04T09:13:58+00:0 | 58a65132bf38c37e0f0467b3 | False (from any) | False | yes | 3.11.15 |  |
-| `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-09T02:09:37.654Z | 7a9a996edb246661f32a5565 | False (from any) | False | no (stamp-only) | 0.8.24 |  |
+| `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-09T02:09:37.654Z | 7a9a996edb246661f32a5565 | False (from any) | False | no | 0.8.24 |  |
 | `1_blockchain-identity/results/metrics-rpc/latest/meta.json` | 2026-10-04T22:09:24.835Z | c3b7cb16c18e4cca0908f27f | False (inert) | True | yes | 0.8.24 |  |
 
 ## Run directories (one row each)

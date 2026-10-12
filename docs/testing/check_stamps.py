@@ -141,8 +141,12 @@ def verify_stamp_only():
     code = sorted({q for sc in scopes.values() for q in sc["paths"]} - HELPERS)
     pat, problems = re.compile(STAMP_LINE), []
     for sha in STAMP_ONLY_COMMITS:
-        diff = subprocess.run(["git", "show", "--format=", "-U0", sha, "--", *code], cwd=ROOT,
-                              capture_output=True, text=True, check=True).stdout
+        r = subprocess.run(["git", "show", "--format=", "-U0", sha, "--", *code], cwd=ROOT,
+                           capture_output=True, text=True)
+        if r.returncode != 0:
+            problems.append(f"{sha}: not in this clone's history (a shallow checkout? CI needs fetch-depth: 0)")
+            continue
+        diff = r.stdout
         for line in diff.splitlines():
             if line[:1] in "+-" and not line.startswith(("+++", "---")) and not pat.search(line[1:]):
                 problems.append(f"{sha}: not a stamp line: {line[:120]}")
@@ -286,11 +290,12 @@ def main():
         # CI guard (WM-2 A1): a new result file must carry a complete stamp, sit in an aggregate, or have a class
         unclassified = [path for path, h in rows if not complete(h) and path not in CLASSES]
         bad = uncovered + unclassified
-        for problem in verify_stamp_only():
+        stamp_only = verify_stamp_only()
+        for problem in stamp_only:
             print("STAMP_ONLY_COMMITS:", problem)
-            bad.append(problem)
         if bad:
             print("result files without a complete stamp, an aggregate or a class: " + ", ".join(bad))
+        if bad or stamp_only:
             sys.exit(1)
         print(f"stamp coverage: {total} tracked result files, 0 uncovered")
         return

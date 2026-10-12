@@ -73,16 +73,29 @@ only here, and A6 still owns the harness re-run of record.
   MISSING, like the other history rows. No row went from no to yes.
 - **Stamp-only commits.** The producer edits of `188efec` would turn every "no" into "yes" while changing no
   measured behaviour. `STAMP_ONLY_COMMITS` in `check_stamps.py` lists such commits. A result whose code
-  differs from its stamp only by listed commits reads "no (stamp-only)", which 11 rows do now. `--check-coverage`
+  differs from its stamp only by listed commits reads "no (stamp-only)", which 10 rows do now (the harness run of record reads plain "no": `run.js` is back to its stamped content). `--check-coverage`
   verifies each listed commit line by line: within producing code, every changed line must be stamp code.
   A control, listing `f1f9e37` (the verifier hardening), gives 204 problems.
+
+- **CI red on `4e99cf1`, then fixed.** 7 of 8 jobs passed. "Compile and test contracts" failed in its document-check
+  step: CI checks out one commit (depth 1), so `git show 188efec` in the stamp-only verification had no
+  history and raised a traceback. Reproduced in a local `--depth 1` clone. Fix: the job checks out full history
+  (`fetch-depth: 0`, about 7 MB). A shallow clone now fails with a message naming the cause. This is a fault of
+  this pass: every local check ran on a full clone, so none of them could see it. CI on the fixed commit:
+  see §3.
+- **Grand run (last).** ALL OK: smoke 11 adapters, L1 99, Hardhat 537, Python layers 305, 92 demos /
+  1,752 steps (594 mined transactions). These are the WM-1 close counts unchanged, as expected for a step that
+  changed no measured code. One L1 cell moved: CVIN-Combined `claim` 316,477 → 316,439 gas. This is the
+  random-input variation the WM-1 audit recorded (316,465 and 316,451 on two clean clones; audit briefs 3 and
+  5, finding U-F11), scheduled for B1 (N-18). No chapter or register row quotes it. The snapshot and test register
+  were regenerated from the run.
 
 ## 3. Closing
 A2 done: D49 fixed. One scope table drives both helpers; 14 of 20 producers use it, and the other six are
 assigned (A3, A6, derived). The probe shows, for every producer and both languages, that an edit to imported
 code marks the run dirty. It fails on four broken helpers, one of them the pre-A2 list that is D49 itself.
 No result was re-run and no register row changed. The inventory corrected two false "code changed since"
-flags.
+flags. One CI failure, caused by a shallow clone and found only by CI, was fixed in the same pass.
 
 One departure, recorded above: the harness edit was made against N-19's recorded reason and reverted in the
 same pass. HEAD's `benchmarksTree` equals the run of record's again.
