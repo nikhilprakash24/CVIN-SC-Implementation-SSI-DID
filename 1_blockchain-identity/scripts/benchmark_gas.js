@@ -862,7 +862,7 @@ async function main() {
     ...results,
     metadata: {
       solcVersion: "0.8.24",
-    ...runStamp(),
+    ...runStamp(__filename),
       solcSettings: { optimizer: { enabled: true, runs: 200 }, viaIR: true },
       ozVersion: "5.0.2",
       date: new Date().toISOString(),

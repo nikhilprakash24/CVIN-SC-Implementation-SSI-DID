@@ -130,10 +130,16 @@ def environment_header():
         except Exception:  # noqa: BLE001
             libs[p] = None
     status = _vcs("status", "--porcelain")
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools" / "run_identity"))
+    from stamp import stamp as _stamp  # one run stamp, per-producer scope (WM-2 A2, D49)
+    st = _stamp(__file__)
     return {
         "date_utc": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
         "commit": _vcs("rev-parse", "HEAD"),
         "tree_clean": (status == "") if status is not None else None,
+        "code_clean": (not st["code_dirty"]) if st["code_dirty"] is not None else None,
+        "scope": st["scope"], "scope_sha": st["scope_sha"],
         "cpu": cpu,
         "logical_cpus": _os.cpu_count(),
         "platform": _pf.platform(),

@@ -14,6 +14,7 @@ const { makeDataset, PAYLOADS } = require("./lib/dataset");
 const { ADAPTERS } = require("./adapters");
 const { writeJSON } = require("./lib/exporters");
 const { buildReport } = require("./report");
+const { runStamp } = require("../scripts/lib/run_stamp");
 
 const SCENARIOS = {
   crud: require("./scenarios/crud"),
@@ -58,6 +59,7 @@ async function main() {
   // (2.2x defaults to a later fork than the compile target); the block gas
   // limit is read from the node, not from the config default.
   const latestBlock = await hre.ethers.provider.getBlock("latest");
+  const stamp = runStamp(__filename);
   const meta = {
     runId, commit: git("rev-parse HEAD"), commitShort: sha, branch: git("rev-parse --abbrev-ref HEAD"),
     // Identity of the MEASURED code, independent of the commit hash (which a rebase
@@ -70,7 +72,10 @@ async function main() {
       lockfileBlob: git("rev-parse HEAD:1_blockchain-identity/package-lock.json"),
     },
     dirty: (git("status --porcelain") || "").length > 0,
-    dirtyMeasured: (git("status --porcelain -- 1_blockchain-identity/benchmarks 1_blockchain-identity/contracts 1_blockchain-identity/hardhat.config.js 1_blockchain-identity/package-lock.json") || "").length > 0,
+    // The measured code's own scope (tools/run_identity/scopes.json: this file's require closure, the
+    // contracts, Hardhat config and lockfile), root-anchored (N-19; WM-2 A2, defect D49). The earlier
+    // pathspecs were relative to cwd 1_blockchain-identity and could not match.
+    dirtyMeasured: stamp.dirty, scope: stamp.scope, scopeSha: stamp.scopeSha,
     date: new Date().toISOString(),
     node: process.version, hardhat: require("hardhat/package.json").version, ethers: hre.ethers.version,
     solc: solc.version, evmVersion: solc.settings.evmVersion || "default", optimizerRuns: solc.settings.optimizer.runs, viaIR: !!solc.settings.viaIR,

@@ -48,7 +48,7 @@ async function main() {
     metadata: {
       experiment: "I4 infrastructure identity gas", prereg: "docs/design/INFRASTRUCTURE_PREREG.md",
       contract: "contracts/ERC1056/EthereumDIDRegistry.sol:EthereumDIDRegistry", network: "hardhat-local",
-      chainId: Number(net.chainId), solcVersion: "0.8.24", date: new Date().toISOString(), condition: "M1", ...runStamp(),
+      chainId: Number(net.chainId), solcVersion: "0.8.24", date: new Date().toISOString(), condition: "M1", ...runStamp(__filename),
     },
     operations: out,
   };

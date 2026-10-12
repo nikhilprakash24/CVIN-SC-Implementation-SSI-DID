@@ -937,7 +937,7 @@ async function main() {
     metadata: {
       layer: "on-chain",
       solcVersion: "0.8.24",
-    ...runStamp(),
+    ...runStamp(__filename),
       ozVersion: "5.0.2",
       network: "hardhat-local",
       chainId: Number(net.chainId),

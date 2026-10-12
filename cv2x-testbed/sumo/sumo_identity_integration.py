@@ -463,18 +463,6 @@ class MockMobility:
         return list(self.states.keys())
 
 
-# The code that produces a V2V/V2I number, as root-anchored pathspecs (git runs with cwd
-# cv2x-testbed/sumo, so plain relative paths would match nothing; after-action report 11). Results
-# are excluded so that a run's own output, or an earlier run's, does not mark the next run dirty.
-PRODUCING_PATHSPECS = (":(top)cv2x-testbed/sumo", ":(top,exclude)cv2x-testbed/sumo/results",
-                       ":(top)cv2x-testbed/identity", ":(top)2_w3c-ssi-layer")
-
-
-def _code_dirty(git) -> Any:
-    status = git("status", "--porcelain", "--", *PRODUCING_PATHSPECS)
-    return None if status is None else bool(status)
-
-
 def _environment() -> Dict[str, Any]:
     import platform
     import subprocess
@@ -489,8 +477,12 @@ def _environment() -> Dict[str, Any]:
         crypto_v = cryptography.__version__
     except Exception:
         crypto_v = None
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools" / "run_identity"))
+    from stamp import stamp as _stamp  # one run stamp, per-producer scope (WM-2 A2, D49)
+    st = _stamp(__file__)
     return {"git_commit": _git("rev-parse", "--short", "HEAD"),
-            "code_dirty": _code_dirty(_git),
+            "code_dirty": st["code_dirty"], "scope": st["scope"], "scope_sha": st["scope_sha"],
             "python": platform.python_version(), "cryptography": crypto_v, "platform": platform.platform()}
 
 

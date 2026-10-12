@@ -489,12 +489,17 @@ def solc_version() -> Optional[str]:
     return None
 
 
-def environment(chain_info: Optional[Dict[str, Any]], n: int, warmup: int) -> Dict[str, Any]:
+def environment(chain_info: Optional[Dict[str, Any]], n: int, warmup: int, producer: str = __file__) -> Dict[str, Any]:
     import cryptography
+    import sys as _sys
+    _sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "tools", "run_identity"))
+    from stamp import stamp as _stamp  # one run stamp, per-producer scope (WM-2 A2, D49)
+    st = _stamp(producer)  # git_dirty stays whole-tree; code_dirty covers the producer's scope
     env = {
         'date_utc': datetime.now(timezone.utc).isoformat(timespec='seconds'),
         'git_commit': _sh(['git', 'rev-parse', '--short', 'HEAD']),
         'git_dirty': bool(_sh(['git', 'status', '--porcelain'])),
+        'code_dirty': st['code_dirty'], 'scope': st['scope'], 'scope_sha': st['scope_sha'],
         'python_version': platform.python_version(),
         'node_version': _sh(['node', '--version']),
         'hardhat_version': _pkg_version('hardhat'),

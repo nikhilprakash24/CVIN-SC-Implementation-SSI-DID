@@ -84,39 +84,35 @@ def _first(flat, keys):
     return None, None
 
 
-# Producing code per result family, for the "code changed since the stamp" column (after-action report 12,
-# audit finding T-5: a stamp can be clean and still describe code the trunk no longer has).
-JS_SHARED = ["1_blockchain-identity/contracts", "1_blockchain-identity/hardhat.config.js",
-             "1_blockchain-identity/package-lock.json", "cv2x-testbed/contracts"]
-PY_SHARED = ["cv2x-testbed/identity", "2_w3c-ssi-layer", "cv2x-testbed/contracts"]
-SUMO = ["cv2x-testbed/sumo", ":(exclude)cv2x-testbed/sumo/results"]
-S = "1_blockchain-identity/scripts/"
-PRODUCER = {  # result file (prefix) -> its producer script(s); the shared code of its family is added
-    "4_comparison-framework/results/gas_benchmark": [S + "benchmark_gas.js"],
-    "4_comparison-framework/results/mobi_vid_backends": [S + "mobi_vid_backend_sweep.js"],
-    "4_comparison-framework/results/scaling_lifetime": [S + "benchmark_scaling.js"],
-    "4_comparison-framework/results/scaling_marginal": [S + "benchmark_scaling.js"],
-    "4_comparison-framework/results/pseudonym_pool": [S + "experiment_pseudonym_pool.js"],
-    "4_comparison-framework/results/infrastructure_gas": [S + "infrastructure_gas.js"],
-    "4_comparison-framework/security-analysis/results/onchain_security": [S + "security_scenarios.js", "1_blockchain-identity/test/L2-identity-system/security"],
-    "4_comparison-framework/results/scaling_verify": ["cv2x-testbed/sumo/run_verify_scaling.py"],
-    "cv2x-testbed/results/freshness_k": ["cv2x-testbed/scripts/experiment_freshness_k.py"],
-    "cv2x-testbed/results/lifecycle_parity": ["cv2x-testbed/scripts/experiment_lifecycle_parity.py"],
-    "cv2x-testbed/results/pki_vs_erc1056": ["cv2x-testbed/scripts/experiment_pki_vs_erc1056.py"],
-}
-HARNESS_CODE = ["1_blockchain-identity/benchmarks", "1_blockchain-identity/contracts", "1_blockchain-identity/hardhat.config.js",
-                "1_blockchain-identity/package-lock.json"]
+# Producing code per result, for the "code changed since the stamp" column (after-action report 12,
+# audit finding T-5: a stamp can be clean and still describe code the trunk no longer has). Since WM-2
+# step A2 (D49) this is the scope of every producer whose results include the file, from
+# tools/run_identity/scopes.json: the producer, its import closure and its declared inputs. The stamp
+# helpers themselves are left out: they decide what a stamp says, not what a result is.
+SCOPES = ROOT / "tools/run_identity/scopes.json"
+HELPERS = {"tools/run_identity/stamp.py", "1_blockchain-identity/scripts/lib/run_stamp.js"}
+# Commits that changed producing code only to call the stamp helper (no measured behaviour changed).
+# A result whose producing code differs from its stamp only by these commits reads "no (stamp-only)".
+# --check-coverage verifies each listed commit: within producing code, every changed line is stamp code.
+STAMP_ONLY_COMMITS = {}
+STAMP_LINE = (r"runStamp|run_stamp|_stamp\b|\bst\[|st = _stamp|\bstamp\b|scope|code_clean|code_dirty|dirtyMeasured|"
+              r"PRODUCING_PATHSPECS|_code_dirty|run_identity|_sys\b|^\s*(#|//)|^\s*$|producer|environment_header\(|"
+              r"H\.environment\(|def environment\(|git_dirty|\bcode_status\b|^\s*\"\"\"|`producer`|"
+              r":\(top\)|return None if status is None else bool\(status\)|CPU, Python, libraries, date, commit")
 
 
 def code_paths(path):
-    if path.startswith("1_blockchain-identity/results/metrics"):
-        return HARNESS_CODE
-    if path.startswith("cv2x-testbed/sumo/"):
-        return SUMO + PY_SHARED
-    for prefix, scripts in PRODUCER.items():
-        if path.startswith(prefix):
-            return scripts + (PY_SHARED if scripts[0].endswith(".py") else JS_SHARED)
-    return (PY_SHARED + ["cv2x-testbed/scripts"]) if path.startswith("cv2x-testbed/") else (JS_SHARED + [S])
+    scopes = json.loads(SCOPES.read_text())["scopes"]
+    paths = sorted({q for sc in scopes.values() if any(path.startswith(r) for r in sc["results"])
+                    for q in sc["paths"]} - HELPERS)
+    return paths or None
+
+
+def _commits_between(commit, paths):
+    import subprocess
+    out = subprocess.run(["git", "rev-list", f"{commit}..HEAD", "--", *paths], cwd=ROOT, capture_output=True,
+                         text=True)
+    return out.stdout.split() if out.returncode == 0 else None
 
 
 def changed_since(commit, path):
@@ -124,11 +120,33 @@ def changed_since(commit, path):
     import re
     import subprocess
     m = re.match(r"[0-9a-f]{7,40}", str(commit or ""))
-    if not m:
+    paths = code_paths(path)
+    if not m or paths is None:
         return None
-    r = subprocess.run(["git", "diff", "--quiet", m.group(0), "HEAD", "--", *code_paths(path)], cwd=ROOT,
+    r = subprocess.run(["git", "diff", "--quiet", m.group(0), "HEAD", "--", *paths], cwd=ROOT,
                        capture_output=True)
-    return {0: "no", 1: "yes"}.get(r.returncode)
+    state = {0: "no", 1: "yes"}.get(r.returncode)
+    if state == "yes":
+        commits = _commits_between(m.group(0), paths)
+        if commits and all(any(c.startswith(s) for s in STAMP_ONLY_COMMITS) for c in commits):
+            return "no (stamp-only)"
+    return state
+
+
+def verify_stamp_only():
+    """Each STAMP_ONLY commit changes, within producing code, only stamp lines. Returns problems."""
+    import re
+    import subprocess
+    scopes = json.loads(SCOPES.read_text())["scopes"]
+    code = sorted({q for sc in scopes.values() for q in sc["paths"]} - HELPERS)
+    pat, problems = re.compile(STAMP_LINE), []
+    for sha in STAMP_ONLY_COMMITS:
+        diff = subprocess.run(["git", "show", "--format=", "-U0", sha, "--", *code], cwd=ROOT,
+                              capture_output=True, text=True, check=True).stdout
+        for line in diff.splitlines():
+            if line[:1] in "+-" and not line.startswith(("+++", "---")) and not pat.search(line[1:]):
+                problems.append(f"{sha}: not a stamp line: {line[:120]}")
+    return problems
 
 
 def path_of(p):
@@ -268,6 +286,9 @@ def main():
         # CI guard (WM-2 A1): a new result file must carry a complete stamp, sit in an aggregate, or have a class
         unclassified = [path for path, h in rows if not complete(h) and path not in CLASSES]
         bad = uncovered + unclassified
+        for problem in verify_stamp_only():
+            print("STAMP_ONLY_COMMITS:", problem)
+            bad.append(problem)
         if bad:
             print("result files without a complete stamp, an aggregate or a class: " + ", ".join(bad))
             sys.exit(1)

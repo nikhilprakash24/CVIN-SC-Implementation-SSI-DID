@@ -11,7 +11,7 @@
 | `4_comparison-framework/results/gas_benchmark.json` | 2026-10-09T02:27:39.007Z | d0cc19c | False (from any) | False | no | 0.8.24 |  |
 | `4_comparison-framework/results/gas_benchmark_stats.json` | 2026-10-06T04:53:48.231Z | MISSING | MISSING | MISSING | MISSING | 0.8.24 | stamp producer: 4_comparison-framework/performance-metrics/run_gas_stats.py |
 | `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json` | MISSING | MISSING | MISSING | MISSING | MISSING | MISSING | history: a diff between two runs of record, each stamped or registered; not a measurement |
-| `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json` | 2026-10-04 | a764387 (results of reco | MISSING | MISSING | yes | M1: solc 0.8.24, optimiz | history: same |
+| `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json` | 2026-10-04 | a764387 (results of reco | MISSING | MISSING | MISSING | M1: solc 0.8.24, optimiz | history: same |
 | `4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json` | 2026-10-06 | MISSING | MISSING | MISSING | MISSING | M1: solc 0.8.24, optimiz | history: same |
 | `4_comparison-framework/results/infrastructure_gas.json` | 2026-10-09T06:08:44.765Z | f1f9e37 | False | True | no | 0.8.24 |  |
 | `4_comparison-framework/results/infrastructure_gas_run1.json` | 2026-10-09T06:08:42.697Z | f1f9e37 | False | True | no | 0.8.24 |  |
@@ -32,8 +32,8 @@
 | `cv2x-testbed/results/freshness_k_probe_r2.json` | 2026-10-04T22:18:19+00:0 | 439b118 | False (from any) | False | yes | 3.11.15 |  |
 | `cv2x-testbed/results/lifecycle_parity.json` | 2026-10-04T22:17:02+00:0 | 4f09875 | False (from any) | False | yes | 3.11.15 |  |
 | `cv2x-testbed/results/pki_vs_erc1056.json` | 2026-10-04T05:26:56+00:0 | 1c1b8e1 | False (from any) | False | yes | 2.28.6 |  |
-| `cv2x-testbed/sumo/results/infrastructure_revocation.json` | 2026-10-09T05:38:02+00:0 | f1f9e37cc516b318892dd124 | False | True | yes | 3.11.15 |  |
-| `cv2x-testbed/sumo/results/infrastructure_stats.json` | 2026-10-09T05:30:59+00:0 | f1f9e37cc516b318892dd124 | False | False | yes | 3.11.15 |  |
+| `cv2x-testbed/sumo/results/infrastructure_revocation.json` | 2026-10-09T05:38:02+00:0 | f1f9e37cc516b318892dd124 | False | True | no | 3.11.15 |  |
+| `cv2x-testbed/sumo/results/infrastructure_stats.json` | 2026-10-09T05:30:59+00:0 | f1f9e37cc516b318892dd124 | False | False | no | 3.11.15 |  |
 | `cv2x-testbed/sumo/results/v2v_latency.json` | 2026-10-04T09:19:33.3911 | MISSING | MISSING | MISSING | MISSING | MISSING | single run: default output of one harness run; the results of record are v2v_latency_stats.json |
 | `cv2x-testbed/sumo/results/v2v_latency_stats.json` | 2026-10-04T09:13:58+00:0 | 58a65132bf38c37e0f0467b3 | False (from any) | False | yes | 3.11.15 |  |
 | `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-09T02:09:37.654Z | 7a9a996edb246661f32a5565 | False (from any) | False | no | 0.8.24 |  |

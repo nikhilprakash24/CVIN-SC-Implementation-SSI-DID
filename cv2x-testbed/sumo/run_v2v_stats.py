@@ -83,9 +83,10 @@ def percentile_linear(sorted_vals, p):
     return sorted_vals[lo_i] * (1.0 - frac) + sorted_vals[hi_i] * frac
 
 
-def environment_header():
+def environment_header(producer=__file__):
     """Environment header required for latency figures
-    (docs/MEASUREMENT_CONDITIONS.md §1): CPU, Python, libraries, date, commit."""
+    (docs/MEASUREMENT_CONDITIONS.md §1): CPU, Python, libraries, date, commit.
+    `producer` is the calling producer's file: code_clean covers that producer's scope."""
     import datetime as _dt
     import importlib.metadata as _md
     import os as _os
@@ -117,13 +118,16 @@ def environment_header():
     status = _vcs("status", "--porcelain")
     # tree_clean is whole-tree (any file, results included); code_clean covers the producing code
     # only, which is what a run of record requires (guide rule 1.1.6; after-action report 11, N-14)
-    from sumo_identity_integration import PRODUCING_PATHSPECS
-    code_status = _vcs("status", "--porcelain", "--", *PRODUCING_PATHSPECS)
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools" / "run_identity"))
+    from stamp import stamp as _stamp  # one run stamp, per-producer scope (WM-2 A2, D49)
+    st = _stamp(producer)
     return {
         "date_utc": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
         "commit": _vcs("rev-parse", "HEAD"),
         "tree_clean": (status == "") if status is not None else None,
-        "code_clean": (code_status == "") if code_status is not None else None,
+        "code_clean": (not st["code_dirty"]) if st["code_dirty"] is not None else None,
+        "scope": st["scope"], "scope_sha": st["scope_sha"],
         "cpu": cpu,
         "logical_cpus": _os.cpu_count(),
         "platform": _pf.platform(),

@@ -58,7 +58,7 @@ def agg(values):
 
 
 def main_i1(args):
-    env = environment_header()  # captured before the runs, so later edits elsewhere cannot mark this run unclean
+    env = environment_header(__file__)  # captured before the runs, so later edits elsewhere cannot mark this run unclean
     rows = []
     t0 = time.time()
     for seed in range(1, args.runs + 1):
@@ -118,7 +118,7 @@ def main_i1(args):
 
 
 def main_i3(args):
-    env = environment_header()
+    env = environment_header(__file__)
     t0 = time.time()
     per_k = {}
     for k in ("1", "5", "25", "inf"):
