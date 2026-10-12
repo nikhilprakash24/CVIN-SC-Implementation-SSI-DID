@@ -95,7 +95,8 @@ A2 done: D49 fixed. One scope table drives both helpers; 14 of 20 producers use 
 assigned (A3, A6, derived). The probe shows, for every producer and both languages, that an edit to imported
 code marks the run dirty. It fails on four broken helpers, one of them the pre-A2 list that is D49 itself.
 No result was re-run and no register row changed. The inventory corrected two false "code changed since"
-flags. One CI failure, caused by a shallow clone and found only by CI, was fixed in the same pass.
+flags. One CI failure, caused by a shallow clone and found only by CI, was fixed in the same pass. **CI 8 of 8 green on `1f3cd8f`**, the
+extended probe and `stamp.py --check` included.
 
 One departure, recorded above: the harness edit was made against N-19's recorded reason and reverted in the
 same pass. HEAD's `benchmarksTree` equals the run of record's again.
