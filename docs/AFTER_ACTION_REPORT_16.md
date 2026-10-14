@@ -42,7 +42,7 @@ methods of communication with the chain for reads and writes.
   Row #51 came from the review (AR-15).
 - **C0.** WM-2 step C0:
   - **Amendment A6** was committed (`c7e333f`) before any verifier change.
-  - **Verifier v3** fixes D37, D38, D39 and D41, documents D40, and adds the D42 gate (`7d08dce`). Each of its 25 tests
+  - **Verifier v3** fixes D37, D38, D39 and D41, documents D40, and adds the D42 gate (`7d08dce`). Each of its 26 tests
     failed on v2; the 100,000-deep message segfaulted the v2 process (D37 reproduced). The mutation script now covers
     both test files and kills 39 of 39 mutants.
   - **D51 fixed.** Validity is decided in chain time, at one more `eth_getBlockByNumber` per full resolution. Two
@@ -87,6 +87,10 @@ methods of communication with the chain for reads and writes.
 
     The F2 and F3 rewrites were delegated to an agent and checked by targeted searches; one cell, the validium row,
     turned out to be already present.
+- **Grand run (last).** ALL OK: smoke 11 adapters, L1 99, Hardhat 537, Python layers **331**, 92 demos / 1,752 steps
+  (594 mined transactions). Python layers rose from 305 by the 26 verifier-v3 tests; the commit message of `7d08dce`
+  and parts of the first records said 25, which was a miscount, corrected in the register (#45), the plan and this
+  report. Generated documents were regenerated after the run, including the F3 mode classification.
 - **A container restart and a usage-limit pause** interrupted the pass. The working tree survived both. The C0 run logs
   were preserved as `.txt` because `*.log` is ignored. Part 1 of the review fixes was committed at `d881f02`.
 

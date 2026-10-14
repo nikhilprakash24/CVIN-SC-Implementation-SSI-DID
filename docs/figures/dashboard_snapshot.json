@@ -767,8 +767,8 @@
     "source": {
       "path": "sandbox/grand/report/GRAND_REPORT.md"
     },
-    "generated": "2026-10-14T05:13:32Z",
-    "commit": "b02ea17",
+    "generated": "2026-10-14T10:40:23Z",
+    "commit": "e3087de",
     "stages": {
       "smoke": {
         "ok": true,
@@ -784,7 +784,7 @@
       },
       "L3+L4": {
         "ok": true,
-        "result": "{'passed': 305}"
+        "result": "{'passed': 331}"
       },
       "demos": {
         "ok": true,
