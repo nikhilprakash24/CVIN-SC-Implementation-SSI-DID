@@ -22,7 +22,7 @@
 | `4_comparison-framework/results/scaling_verify.json` | 2026-10-04T09:22:18+00:0 | d78e344a79705286bf7572a0 | False (from any) | False | yes | 3.11.15 |  |
 | `4_comparison-framework/results/sensitivity.json` | 2026-07-24T03:18:28.250Z | MISSING | MISSING | MISSING | MISSING | 0.8.24 | stamp producer: 1_blockchain-identity/scripts/benchmark_scaling.js (July run; re-run due) |
 | `4_comparison-framework/results/w3c_compliance.json` | 2026-10-04T22:26:35.2592 | MISSING | MISSING | MISSING | MISSING | MISSING | stamp producer: cv2x-testbed/scripts/w3c_compliance_checker.py |
-| `4_comparison-framework/security-analysis/results/attack_results.json` | 2026-07-19T21:10:16.411Z | MISSING | MISSING | MISSING | MISSING | 0.8.24 | stamp producer: 1_blockchain-identity/test/L2-identity-system/security/attackHarness.js |
+| `4_comparison-framework/security-analysis/results/attack_results.json` | 2026-07-19T21:10:16.411Z | MISSING | MISSING | MISSING | MISSING | 0.8.24 | stamp producer: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js (writes to runs/ since WM-2 A4; stamped on its next promoted run) |
 | `4_comparison-framework/security-analysis/results/onchain_security.json` | 2026-10-09T02:27:46.849Z | d0cc19c | False (hand check) | True | no (stamp-only) | 0.8.24 | hand check: same |
 | `4_comparison-framework/security-analysis/results/security_matrix.json` | 2026-10-06T04:26:37Z | MISSING | MISSING | MISSING | MISSING | MISSING | stamp producer: 4_comparison-framework/security-analysis/attack_scenarios.py |
 | `cv2x-testbed/results/freshness_k.json` | 2026-10-04T09:24:10+00:0 | 8216507 | False (from any) | False | yes | 2.28.6 |  |

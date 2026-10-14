@@ -140,14 +140,16 @@
     "4_comparison-framework/security-analysis/results/onchain_security"
    ]
   },
-  "1_blockchain-identity/test/L2-identity-system/security/attackHarness.js": {
-   "imports": 1,
+  "1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js": {
+   "imports": 3,
    "paths": [
     "1_blockchain-identity/contracts",
     "1_blockchain-identity/hardhat.config.js",
     "1_blockchain-identity/package-lock.json",
     "1_blockchain-identity/package.json",
+    "1_blockchain-identity/scripts/lib/run_stamp.js",
     "1_blockchain-identity/test/L2-identity-system/security/attackHarness.js",
+    "1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js",
     "cv2x-testbed/contracts"
    ],
    "results": [

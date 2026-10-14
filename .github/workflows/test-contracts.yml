@@ -47,8 +47,10 @@ jobs:
       working-directory: ${{ github.workspace }}
       shell: bash
       run: |
-        python3 -m pip install --quiet eth-account coincurve cryptography
+        python3 -m pip install --quiet eth-account coincurve cryptography pytest
         bash docs/testing/probe_run_identity.sh
+        # WM-2 A4: the promote step refuses every run that is not a run of record
+        python3 -m pytest -q tools/run_identity/test_promote.py
 
     - name: Check the MOBI contract copies are byte-identical (plan S0)
       working-directory: ${{ github.workspace }}

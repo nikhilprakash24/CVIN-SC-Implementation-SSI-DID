@@ -41,7 +41,7 @@ CLASSES = {
     "4_comparison-framework/results/gas_benchmark_stats.json": ("stamp producer", "4_comparison-framework/performance-metrics/run_gas_stats.py"),
     "4_comparison-framework/results/sensitivity.json": ("stamp producer", "1_blockchain-identity/scripts/benchmark_scaling.js (July run; re-run due)"),
     "4_comparison-framework/results/w3c_compliance.json": ("stamp producer", "cv2x-testbed/scripts/w3c_compliance_checker.py"),
-    "4_comparison-framework/security-analysis/results/attack_results.json": ("stamp producer", "1_blockchain-identity/test/L2-identity-system/security/attackHarness.js"),
+    "4_comparison-framework/security-analysis/results/attack_results.json": ("stamp producer", "1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js (writes to runs/ since WM-2 A4; stamped on its next promoted run)"),
     "4_comparison-framework/security-analysis/results/security_matrix.json": ("stamp producer", "4_comparison-framework/security-analysis/attack_scenarios.py"),
     "cv2x-testbed/sumo/results/v2v_latency.json": ("single run", "default output of one harness run; the results of record are v2v_latency_stats.json"),
 }

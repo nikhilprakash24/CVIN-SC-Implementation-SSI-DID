@@ -15,6 +15,7 @@
     "test:cvin-combined": "hardhat test test/L2-identity-system/per-option/CVINCombined/*.js",
     "test:mobivid": "hardhat test test/L2-identity-system/per-option/MOBIVID/*.js",
     "test:security": "hardhat test test/L2-identity-system/security/*.test.js",
+    "security:promote": "python3 ../tools/run_identity/promote.py --latest security-matrix",
     "compile": "hardhat compile",
     "clean": "hardhat clean",
     "node": "hardhat node",

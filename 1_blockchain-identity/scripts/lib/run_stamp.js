@@ -44,6 +44,7 @@ function runStamp(producer) {
   const whole = git(["status", "--porcelain"]);
   return {
     commit: git(["rev-parse", "--short", "HEAD"]),
+    commitFull: git(["rev-parse", "HEAD"]),
     dirty: status === null ? null : status.length > 0,
     dirtyAnyFile: whole === null ? null : whole.length > 0,
     scope: key,
@@ -54,4 +55,29 @@ function runStamp(producer) {
   };
 }
 
-module.exports = { runStamp, scopeOf };
+// Runs and the promote step (WM-2 step A4; D56): a producer writes into an untracked
+// runs/<name>/<run-id>/ with a manifest; tools/run_identity/promote.py copies the outputs to their tracked
+// result paths only if the stamp is clean, the commit is HEAD and the scope is unchanged and clean.
+function newRun(name) {
+  const short = git(["rev-parse", "--short", "HEAD"]) || "nocommit";
+  const runId = new Date().toISOString().replace(/[:.]/g, "-") + "_" + short;
+  const dir = path.join(ROOT, "runs", name, runId);
+  fs.mkdirSync(dir, { recursive: true });
+  return dir;
+}
+
+// outputs: { "<file in the run dir>": "<tracked result path, relative to the repository root>" }
+function writeManifest(dir, producer, stamp, outputs) {
+  const sha = (f) => require("crypto").createHash("sha256").update(fs.readFileSync(path.join(dir, f))).digest("hex");
+  const doc = {
+    format: "run-manifest/1",
+    producer: scopeOf(producer).key,
+    run_id: path.basename(dir),
+    stamp,
+    outputs: Object.entries(outputs).map(([file, dest]) => ({ file, dest, sha256: sha(file) })),
+  };
+  fs.writeFileSync(path.join(dir, "manifest.json"), JSON.stringify(doc, null, 1) + "\n");
+  return doc;
+}
+
+module.exports = { runStamp, scopeOf, newRun, writeManifest };

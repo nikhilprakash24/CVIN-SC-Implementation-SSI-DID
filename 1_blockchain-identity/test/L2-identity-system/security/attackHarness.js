@@ -28,9 +28,9 @@
  * revert is due to authorization/verification and not an unrelated malformed
  * call. Where relevant we also assert the protected state was not mutated.
  *
- * The accumulated matrix is written to
+ * The accumulated matrix is written to runs/security-matrix/<run-id>/attack_results.json by the
+ * after() hook in securityScenarios.test.js; `npm run security:promote` copies a clean run to
  *   <repo>/4_comparison-framework/security-analysis/results/attack_results.json
- * by the after() hook in securityScenarios.test.js.
  */
 
 const fs = require("fs");
@@ -268,29 +268,21 @@ function naCell(standard, attack, threat, note) {
   });
 }
 
-/** Serialize the accumulated matrix to the comparison-framework results dir. */
-function writeMatrix(metadata) {
-  const output = { ...RESULTS, metadata: { ...metadata, attacks: ATTACKS } };
-  const outDir = path.resolve(
-    __dirname,
-    // test/L2-identity-system/security -> repository root is four levels up (S4 layering)
-    "../../../../4_comparison-framework/security-analysis/results"
-  );
-  fs.mkdirSync(outDir, { recursive: true });
-  const outFile = path.join(outDir, "attack_results.json");
-  // Preserve the previously committed `date` so an unchanged security
-  // outcome re-run produces a byte-identical file (no wall-clock churn
-  // dirtying the tree on every `npx hardhat test`). The provenance of a
-  // real regeneration lives in git history.
-  try {
-    const prior = JSON.parse(fs.readFileSync(outFile, "utf8"));
-    if (prior && prior.metadata && prior.metadata.date) {
-      output.metadata.date = prior.metadata.date;
-    }
-  } catch (_) {
-    /* first run: keep the fresh date */
-  }
+/**
+ * Serialize the accumulated matrix into a run directory (WM-2 step A4; D56). `npx hardhat test` no longer
+ * rewrites the tracked attack_results.json: the matrix goes to runs/security-matrix/<run-id>/ with a manifest,
+ * and `npm run security:promote` (tools/run_identity/promote.py) copies it to the tracked path only if the
+ * run's stamp is clean, the commit is HEAD and the producer's scope is unchanged.
+ * `producer` is the test file that ran the scenarios; `stamp` was taken when it loaded.
+ */
+function writeMatrix(metadata, producer, stamp) {
+  const { newRun, writeManifest } = require("../../../scripts/lib/run_stamp");
+  const output = { ...RESULTS, metadata: { ...metadata, ...stamp, attacks: ATTACKS } };
+  const dir = newRun("security-matrix");
+  const outFile = path.join(dir, "attack_results.json");
   fs.writeFileSync(outFile, JSON.stringify(output, null, 2));
+  writeManifest(dir, producer, stamp,
+    { "attack_results.json": "4_comparison-framework/security-analysis/results/attack_results.json" });
   return outFile;
 }
 

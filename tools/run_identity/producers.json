@@ -26,7 +26,7 @@
     "1_blockchain-identity/scripts/infrastructure_gas.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/results/infrastructure_gas"]},
     "1_blockchain-identity/scripts/mobi_vid_backend_sweep.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/results/mobi_vid_backends"]},
     "1_blockchain-identity/scripts/security_scenarios.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/security-analysis/results/onchain_security"]},
-    "1_blockchain-identity/test/L2-identity-system/security/attackHarness.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/security-analysis/results/attack_results"]},
+    "1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/security-analysis/results/attack_results"]},
     "1_blockchain-identity/benchmarks/run.js": {"inputs": ["@hardhat"], "results": ["1_blockchain-identity/results/metrics/", "1_blockchain-identity/results/metrics-rpc/"]},
     "cv2x-testbed/sumo/sumo_identity_integration.py": {"inputs": ["@testbed-chain"], "results": ["cv2x-testbed/sumo/results/v2v_latency.json"]},
     "cv2x-testbed/sumo/run_v2v_stats.py": {"inputs": ["@testbed-chain", "cv2x-testbed/sumo/sumo_identity_integration.py"], "results": ["cv2x-testbed/sumo/results/v2v_latency_stats"]},

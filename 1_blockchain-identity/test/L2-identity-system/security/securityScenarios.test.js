@@ -22,6 +22,9 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const H = require("./attackHarness");
+// Stamp taken when the scenarios load, before any runs (WM-2 A2/A4): the matrix is a run of record only
+// if this file, the harness and the contracts were clean at that moment.
+const STAMP = require("../../../scripts/lib/run_stamp").runStamp(__filename);
 
 // STRIDE-flavoured threat class per attack (for the thesis matrix notes).
 const THREAT = {
@@ -1467,7 +1470,7 @@ after(function () {
     notes:
       "Each cell is the REAL observed outcome of executing a concrete attack transaction on a fresh Hardhat network: DEFENDED = the malicious tx reverted with the expected revert reason / custom error of the named defense (expectedRevert; revertReason is decoded from the raw revert data); UNEXPECTED-REVERT = it reverted for another reason; FAILED-TO-RUN = the attack threw a non-revert error (TypeError, ABI error) and never executed; VULNERABLE = it was mined; N/A = the attack does not apply to the standard's identity model. Most cells also carry a differential 'control' (the same operation by the authorized party) that must PASS, proving the revert is due to access control / signature verification, not an unrelated failure. Attacks parallel the gas benchmark's lifecycle operation set (create/update/delegate-or-claim/revoke/transfer) plus a cross-cutting signatureReplay attack.",
   };
-  const outFile = H.writeMatrix(metadata);
+  const outFile = H.writeMatrix(metadata, __filename, STAMP);
 
   // Console summary (standards x attacks).
   const symbol = { DEFENDED: "DEF", VULNERABLE: "VULN", "N/A": "n/a" };
