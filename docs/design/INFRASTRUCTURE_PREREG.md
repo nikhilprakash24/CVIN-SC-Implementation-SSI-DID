@@ -98,3 +98,36 @@ and the experiments are re-run at the new commit as the runs of record. The firs
 - **Latency reporting** (audit finding A-5). The register's latency rule asks for median and p95 after
   three discarded warm-ups; the I1 and I5 driver discards no warm-up and reports no p95. The p95 of the
   run medians is computed from the committed per-run data and stated in rows #44 and #48 with this deviation.
+
+### Amendment A6 — 2026-10-14, **before any change to the verifier for WM-2 C0 and before any registered re-run**
+The WM-1 audit found six robustness faults in the verifier (`docs/DEFECT_LOG.md` D37–D42). WM-2 step C0
+fixes them in a **verifier v3**, and I1, I2, I3 and I5 are re-run at the new commit as the runs of record;
+the runs at `f1f9e37` stay in the register as history. I4 (gas) is not re-run: no contract changes.
+- **D37, size and depth.** Before canonicalisation, the message and the credential are walked without
+  recursion. A message deeper than 32 levels, or with more than 5,000 values, is rejected as `malformed`.
+- **D38, field binding no longer fails open.** For `rsu` and `controller` credentials, `stationId` and
+  `intersectionId` are mandatory. A SPaT or MAP must carry `rsu` and `intersection`; a SignalStateUpdate
+  must carry `intersection`. A missing claim or field is rejected as `binding`. The check runs at the same
+  point as the existing binding check, after the permitted-type check, so the expected reasons of the 13
+  registered checks are unchanged.
+- **D39, `refresh_every`.** It must be an integer of at least 1, or None (infinity). Booleans, floats, NaN
+  and infinity raise an error. The harness's `--refresh-k` takes a positive integer or `inf`; anything else
+  is a parser error, not a crash.
+- **D40, credential validity clock.** No change to behaviour. A credential's validity window is calendar
+  time, while the harness's injected clock is simulation seconds, so the two cannot be compared. Both
+  paths check credential validity against the wall clock (the canonical VC verifier on the cold path,
+  `time.time()` on the warm path). This is now documented in the verifier.
+- **D41, DID method and network.** On the cold path the sender DID must be `did:ethr:<network>:<address>`,
+  with the authority's network and the recovered address. Otherwise it is rejected as `wrong_key`.
+- **D42, the I2 gate.** The three warm variants must have been verified warm (`cold` false). A warm
+  variant that ran cold fails I2.
+- **I2 (extended), 15 checks.** Two checks join the 13 of A4:
+  - **(k)** a valid RSU signs a SPaT without its `rsu` field, expected `binding`. On verifier v2 this was
+    accepted (D38).
+  - **(l)** a valid RSU signs a SPaT whose payload is nested 200 levels deep, expected `malformed`. On
+    verifier v2 this was accepted (D37).
+
+  **PASS** iff all 15 are rejected with their expected reason in every run and the three warm variants
+  ran warm. **FAIL** otherwise.
+- **I1, I3, I5.** Rules unchanged. The warm SPaT path gains the walk of D37 and the mandatory-field
+  checks of D38. Any bias this adds is against SPaT. I1 is run with no other job on the host.
