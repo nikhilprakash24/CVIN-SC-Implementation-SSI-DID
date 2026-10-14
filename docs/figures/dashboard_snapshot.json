@@ -767,8 +767,8 @@
     "source": {
       "path": "sandbox/grand/report/GRAND_REPORT.md"
     },
-    "generated": "2026-10-12T03:52:53Z",
-    "commit": "4e99cf1",
+    "generated": "2026-10-14T05:13:32Z",
+    "commit": "b02ea17",
     "stages": {
       "smoke": {
         "ok": true,
@@ -1153,7 +1153,7 @@
       {
         "id": "D56",
         "severity": "L",
-        "status": "open"
+        "status": "partly fixed"
       },
       {
         "id": "D57",
@@ -1166,10 +1166,11 @@
       "M:fixed": 12,
       "L:fixed": 5,
       "M:partly fixed": 4,
-      "L:open": 8,
+      "L:open": 7,
       "M:open": 12,
       "H:partly fixed": 1,
-      "H:open": 1
+      "H:open": 1,
+      "L:partly fixed": 1
     }
   },
   "cruxes": [

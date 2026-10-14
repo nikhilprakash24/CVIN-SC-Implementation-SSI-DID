@@ -186,3 +186,14 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | 14 producers (6 JS scripts, 4 SUMO drivers, 3 testbed experiments, the richness driver) | call the helper with their own file; stamp field names kept | same |
 | `tools/run_identity/probe.py`, `docs/testing/probe_run_identity.sh`, CI step | both helpers, every producer: edit to imported code, new input file, new results file; shown to fail on four broken helpers | same |
 | `docs/testing/check_stamps.py`, `STAMP_INVENTORY.md` | "code changed since" from the scopes; stamp-only commits verified line by line | same |
+
+## Pass 15 — WM-2 step A4; Phase 2 opened; handback for the next session (2026-10-14)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_15.md` | plan, log, closing | standing rule |
+| `tools/run_identity/promote.py`, `test_promote.py` | runs and the promote step; 13 refusal tests (in CI) | WM-2 A4 |
+| `1_blockchain-identity/scripts/lib/run_stamp.js` (`newRun`, `writeManifest`, `commitFull`), `attackHarness.js`, `securityScenarios.test.js`, `package.json` (`security:promote`), `.gitignore` (`/runs/`) | the security matrix written to `runs/` and promoted explicitly | WM-2 A4, D56 in part |
+| `tools/run_identity/producers.json`, `scopes.json` | the security-matrix producer corrected to `securityScenarios.test.js` | A2 gap found in A4 |
+| `docs/phase2/` (README, EVIDENCE_BASE, ideas.yaml, IDEA_REGISTER, build_phase2.py, ARCHITECTURE, ROADMAP, BRAINSTORM_01, DECISIONS, sessions/SESSION_LOG) | Phase 2 charter and P2.0 ideation; register checked in CI | the author's request of 2026-10-14 |
+| `docs/HANDBACK_2026-10-14.md` | consolidated handback, including what a new assistant model must know | standing rule; change of assistant |
+

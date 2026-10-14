@@ -28,7 +28,8 @@ provenance and must not be cited in chapters.
 | Where did each idea, decision and source come from? | `PROVENANCE.md`, `SOURCES.md`, `docs/DEVELOPMENT_HISTORY.md`, `docs/artifacts/` (provenance dossiers, `docs/ARTIFACTS_MANIFEST.md`) | attribution: hypotheses, thrusts and design decisions are the author's |
 | What is pending for the author, and what is deferred? | `docs/MILESTONE_NEXT.md` (deferred items N-1…N-22, split into author decisions and executable work) + the handback | `docs/AFTER_ACTION_REPORT.md` and `META_COMMENTARY.md` held the pre-merge version of these lists (historical) |
 | What was this research originally asked to be, and how is it to be done? | `docs/ORIGINAL_PROMPT_AND_DIRECTION.md` | verbatim original direction (A), the author's working directives (B), and where each stands (C) |
-| How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-10-10.md` | the single entry point at the close of work milestone WM-1; supersedes `HANDBACK_2026-10-09.md` and its predecessors (history) |
+| How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-10-14.md` | the single entry point (WM-2 after A1, A2, A4; Phase 2 opened; a section for a session on a different assistant model); supersedes `HANDBACK_2026-10-10.md` and its predecessors (history) |
+| What is Phase 2, and where does the next Phase 2 session start? | `docs/phase2/README.md`, then `docs/phase2/sessions/SESSION_LOG.md` | charter, session protocol, idea register (generated, anchor-checked) |
 | What can each identity option actually do, from code? | `docs/FEATURE_ASYMMETRY_MATRIX.md` | generated from the compiled ABIs by `4_comparison-framework/feature-matrix/make_feature_matrix.py`; interpretation in Review 02 §4 |
 | What is the state of all the work as one picture (three contract generations, the ERC-1056 fork, coverage by layer)? | `docs/REVIEW_02_STATE_AND_PARALLEL_WORK.md` | the clean review of 2026-10-03 |
 | How do the grand sandbox, per-option sandboxes and the L1–L4 suites get built? | `docs/PLAN_SANDBOX_AND_SUITES.md` | steps S0–S10 with acceptance checks |
@@ -54,7 +55,7 @@ provenance and must not be cited in chapters.
 
 - `docs/artifacts/*.html` — July 2026 provenance dossiers; their key numbers are superseded (see `docs/ARTIFACTS_MANIFEST.md`).
 - `HANDOFF-DATA-COLLECTION-FRAMEWORK.md` — the 2026-10-04 harness handoff; its tables are the pre-merge run (current: register #29–#36).
-- `docs/HANDBACK_2026-10-09.md` and earlier handbacks — superseded by `docs/HANDBACK_2026-10-10.md`.
+- `docs/HANDBACK_2026-10-10.md`, `docs/HANDBACK_2026-10-09.md` and earlier handbacks — superseded by `docs/HANDBACK_2026-10-14.md`.
 
 - `MASTER_UPDATE.md` — the single-source status as of the bundle (v0.9.0-dev,
   before push was possible). Its numbers predate the merge and the trunk
