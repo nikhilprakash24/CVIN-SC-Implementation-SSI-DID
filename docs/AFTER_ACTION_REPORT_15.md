@@ -91,7 +91,7 @@ registers in CI.
 **The handback for the next session**, which runs on a different assistant model, is
 `docs/HANDBACK_2026-10-14.md`.
 
-No register row changed. Disclosed: `onchain_security.json` now reads "code changed since: yes", because the
+**CI 8 of 8 green on `4b2b30c`**, with the promote tests, the per-producer probe and the Phase 2 register check included. No register row changed. Disclosed: `onchain_security.json` now reads "code changed since: yes", because the
 harness file in its scope changed; its C2 re-run resolves it.
 
 **Next.**
