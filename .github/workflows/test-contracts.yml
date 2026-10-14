@@ -83,6 +83,7 @@ jobs:
         python3 docs/testing/check_docs_numbers.py
         python3 docs/presentation/make_presentation.py --check
         python3 docs/testing/check_stamps.py --check-coverage
+        python3 docs/phase2/build_phase2.py --check
 
     - name: Run tests
       shell: bash
