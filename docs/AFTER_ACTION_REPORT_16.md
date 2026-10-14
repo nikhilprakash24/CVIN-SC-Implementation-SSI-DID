@@ -95,7 +95,7 @@ methods of communication with the chain for reads and writes.
   were preserved as `.txt` because `*.log` is ignored. Part 1 of the review fixes was committed at `d881f02`.
 
 ## 3. Closing
-The pass delivered every step of §1.
+The pass delivered every step of §1. **CI 8 of 8 green on `6cb502f`**, including the new steps (IDTx tests and gate mutants, the database backend, the Phase 2 checks).
 
 **C0 is done.** I1 is reported as it fell (outside the band, not falsified), and I2 and I3 pass on verifier v3. D51 is
 fixed in code; rows #21, #32 and #37 keep their assumption until A3b.
