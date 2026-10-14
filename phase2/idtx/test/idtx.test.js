@@ -35,9 +35,16 @@ describe("IDTx prototype (F1)", function () {
   const dep = (kind, fields) => ({ kind, identity: vehicle, key: ZERO32, expected: ZERO32, party: ethers.ZeroAddress, ...fields });
 
   describe("same-transaction IDTx", function () {
-    it("Owner: executes for the current owner, reverts otherwise", async function () {
+    it("Owner: executes only when the named party is the identity's current owner", async function () {
       await expect(exec.execute(dep(OWNER, { party: owner.address }), ethers.id("unlock"))).to.emit(exec, "Executed");
       await expect(exec.execute(dep(OWNER, { party: buyer.address }), ethers.id("unlock")))
+        .to.be.revertedWith("identity dependency not met");
+    });
+
+    it("the caller is not part of the predicate: a third party (a keeper, an insurer) may submit the IDTx (AR-4)", async function () {
+      await expect(exec.connect(other).execute(dep(OWNER, { party: owner.address }), ethers.id("insure")))
+        .to.emit(exec, "Executed").withArgs(ethers.id("insure"), vehicle, OWNER, other.address);
+      await expect(exec.connect(other).execute(dep(OWNER, { party: other.address }), ethers.id("insure")))
         .to.be.revertedWith("identity dependency not met");
     });
 
@@ -53,7 +60,7 @@ describe("IDTx prototype (F1)", function () {
       await expect(exec.execute(d, ethers.id("service"))).to.be.revertedWith("identity dependency not met");
     });
 
-    it("Commitment over a plaintext: the VIN never appears on chain; equality of commitments gates the action", async function () {
+    it("registered-commitment validity over a plaintext: the VIN is not on chain; the registered commitment gates the action (AR-5: no proof of knowledge)", async function () {
       const salt = ethers.hexlify(ethers.randomBytes(32));
       const c = ethers.keccak256(ethers.solidityPacked(["bytes32", "string"], [salt, "1HGBH41JXMN109186"]));
       const until = (await ethers.provider.getBlock("latest")).timestamp + 3600;
@@ -64,13 +71,23 @@ describe("IDTx prototype (F1)", function () {
         .to.be.revertedWith("identity dependency not met");
     });
 
-    it("Commitment over a ciphertext: an encrypted value can gate an action by commitment, never by content", async function () {
+    it("registered-commitment validity over a ciphertext: an encrypted value gates an action by its registered digest, never by content", async function () {
       const ciphertext = ethers.randomBytes(48);                 // stands for AES-GCM output held off chain
       const c = ethers.keccak256(ciphertext);
       const until = (await ethers.provider.getBlock("latest")).timestamp + 60;
       await commitments.setCommitment(vehicle, KEY, c, until);
       await expect(exec.execute(dep(COMMITMENT, { key: KEY, expected: c }), ethers.id("a"))).to.emit(exec, "Executed");
       await increase(61);                                        // the commitment's own validity is chain time
+      await expect(exec.execute(dep(COMMITMENT, { key: KEY, expected: c }), ethers.id("a")))
+        .to.be.revertedWith("identity dependency not met");
+    });
+
+    it("a commitment stops counting when its setter no longer owns the identity (AR-6)", async function () {
+      const until = (await ethers.provider.getBlock("latest")).timestamp + 3600;
+      const c = ethers.id("set-by-first-owner");
+      await commitments.setCommitment(vehicle, KEY, c, until);
+      await expect(exec.execute(dep(COMMITMENT, { key: KEY, expected: c }), ethers.id("a"))).to.emit(exec, "Executed");
+      await registry.changeOwner(vehicle, buyer.address);
       await expect(exec.execute(dep(COMMITMENT, { key: KEY, expected: c }), ethers.id("a")))
         .to.be.revertedWith("identity dependency not met");
     });
@@ -118,7 +135,7 @@ describe("IDTx prototype (F1)", function () {
   });
 
   describe("what the storage choice allows (the F1 link)", function () {
-    it("ERC-1056 exposes no function that returns an attribute value: attributes live in events, so no IDTx can depend on them in-contract", async function () {
+    it("ERC-1056 exposes no function that returns an attribute value: a contract cannot read its attributes directly (only through a proof the transaction carries, AR-1)", async function () {
       const readers = registry.interface.fragments.filter((f) => f.type === "function" && /attribute/i.test(f.name) &&
         f.stateMutability === "view" && f.outputs.length > 0);
       expect(readers.map((f) => f.name)).to.deep.equal([]);

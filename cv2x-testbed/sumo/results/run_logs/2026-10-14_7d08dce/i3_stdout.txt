@@ -1,0 +1,6 @@
+k=1: max accepted after revocation 0 (bound 0) -> PASS
+k=5: max accepted after revocation 4 (bound 4) -> PASS
+k=25: max accepted after revocation 24 (bound 24) -> PASS
+k=inf: max accepted after revocation 100 (bound None) -> reported (expected never to stop)
+I3 -> PASS
+i3 rc=0

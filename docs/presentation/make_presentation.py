@@ -274,7 +274,7 @@ def build():
         ["Does identity verification fit a V2V message budget?", f"SSI warm verify {ssi_w['median']:.3f} ms [{ssi_w['ci95'][0]:.3f}, {ssi_w['ci95'][1]:.3f}], N = {V['n_runs']} runs; budget {S['constants']['v2v_budget_ms']['value']} ms", "#27"],
         ["Do the identities meet W3C DID / VC?", f"internal checker {comp['score']} % ({comp['pass']} pass, {comp['partial']} partial, {comp['fail']} fail of {comp['executed']}); external DID suite {conf['passed']}/{conf['total']}", "#4, #24"],
         ["Are the identity contracts attack-resistant?", f"{sec['DEFENDED']} of {sec['DEFENDED']} applicable attack cells defended ({sec['N/A']} not applicable), strict harness", "#28"],
-        ["Can infrastructure (RSUs, controllers) use the same identity layer?", f"I1 {I1['verdict']} (SPaT/BSM warm ratio {I1['ratio']['median']:.3f}), I2 {I2['verdict']} ({len(I2['expected_reasons'])} attacks), I3 {I3['verdict']} (revocation within k − 1 messages)", "#44–#46"],
+        ["Can infrastructure (RSUs, controllers) use the same identity layer?", f"I1 {I1['verdict']} (SPaT/BSM warm ratio {I1['ratio']['median']:.3f}), I2 {I2['verdict']} ({len(I2['expected_reasons'])} registered checks), I3 {I3['verdict']} (revocation within k − 1 messages)", "#44–#46"],
         ["How large is the test and evidence base?", f"{hh} Hardhat tests, {py} Python-layer tests, {dm['demos']} feature demos ({dm['steps']:,} steps); {reg.get('V', 0)} verified register rows", "grand report"],
     ])
 

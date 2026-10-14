@@ -41,6 +41,9 @@ jobs:
     - name: Phase 2 F1 IDTx prototype (behaviour tests against the unmodified ERC-1056 registry)
       run: npx hardhat --config hardhat.phase2.config.js test
 
+    - name: Phase 2 F1 IDTx gate mutants (each must be caught; academic review AR-14)
+      run: bash ../phase2/idtx/mutate_idtx.sh
+
     - name: Probe that the run-identity flags fire (after-action report 11; WM-2 A2, D49)
       # The producing-code "dirty" flags were inert until 2026-10-09 (relative pathspecs from a
       # subdirectory), and until WM-2 A2 they missed code a producer imports from outside its fixed path

@@ -15,7 +15,11 @@ date and the replacement.
 | P2-D3 | Accept the session-1 scores and ideas as the starting register (Q-P2-5) | yes, as orchestrator estimates | P2.1a | open (default in force) |
 | P2-D4 | SUMO install (N-4) and Sepolia (N-11) for Phase 2 (Q-P2-3) | Phase 1 defaults unchanged (no) | before I-01 / I-03 build | open |
 | P2-D5 | C8 framing and whether Phase 2 gives it a hypothesis (Q-P2-4) | unchanged | P2.1 | open |
-| P2-D6 | Where Phase 2 code lives (ADR-0001) | option B, a plug-in layer (`ARCHITECTURE.md` §3) | G2 | proposed |
+| P2-D6 | Where Phase 2 code lives (ADR-0001) | option B, a plug-in layer (`ARCHITECTURE.md` §3); the F1 prototype and the F2 backend already live in `phase2/` under it (reversible) | G2 | proposed |
+| P2-D7 | The three modes of chain interaction (F3) | two options, mapped onto each other: the academic adviser's for the thesis (write: direct, relayed, account-abstracted; read: on demand, cached, offline; all six cells measured), and the orchestrator's single axis as Phase 2's analytic frame (A direct, B-submit / B-serve, C detached) | before chapter 6's F3 section | open (both defaults stated) |
+| P2-D8 | One name for the identity-dependent transaction | IDTx; IDDTx and IDBTx retired (academic adviser's D-6) | before any writing that names it | open (default in force) |
+| P2-D9 | Install a permissioned EVM client for F2's substrate study | no, until after the defence | E-F2-1 | open |
+| P2-D10 | Adopt the scope reconciliation's Scope v3 and its decisions D-1 to D-15 (`SCOPE_RECONCILIATION.md` §6) | as recommended there | WM-2 D1 (chapters) | open |
 
 ## 2. Architecture decision records
 | ADR | Title | Status | Context and decision |

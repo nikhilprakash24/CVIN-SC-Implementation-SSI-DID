@@ -4,9 +4,9 @@
     "source": {
       "path": "docs/MEASUREMENT_CONDITIONS.md"
     },
-    "rows": 50,
+    "rows": 51,
     "by_status": {
-      "V": 32,
+      "V": 33,
       "S": 10,
       "E": 7,
       "U": 1
@@ -665,26 +665,26 @@
   },
   "infrastructure": {
     "I1": {
-      "verdict": "PASS",
-      "ratio_median": 1.096422,
+      "verdict": "outside band, not falsified",
+      "ratio_median": 1.226384,
       "ratio_ci95": [
-        1.091188,
-        1.100856
+        1.21933,
+        1.23822
       ],
-      "spat_warm_ms": 0.18225,
-      "bsm_warm_ms": 0.166,
-      "spat_cold_ms": 0.4772,
+      "spat_warm_ms": 0.18405,
+      "bsm_warm_ms": 0.149,
+      "spat_cold_ms": 0.4731,
       "runs": 30
     },
     "I2": {
       "verdict": "PASS",
-      "checks": 13,
+      "checks": 15,
       "runs_all_as_expected": 30,
       "runs": 30
     },
     "I5": {
-      "controller_to_vehicle_ms": 0.88555,
-      "tmc_to_controller_ms": 0.4637
+      "controller_to_vehicle_ms": 0.9003,
+      "tmc_to_controller_ms": 0.47975
     },
     "source_stats": {
       "path": "cv2x-testbed/sumo/results/infrastructure_stats.json"
@@ -1058,17 +1058,17 @@
       {
         "id": "D37",
         "severity": "M",
-        "status": "open"
+        "status": "fixed"
       },
       {
         "id": "D38",
         "severity": "M",
-        "status": "open"
+        "status": "fixed"
       },
       {
         "id": "D39",
         "severity": "M",
-        "status": "open"
+        "status": "fixed"
       },
       {
         "id": "D40",
@@ -1078,12 +1078,12 @@
       {
         "id": "D41",
         "severity": "L",
-        "status": "open"
+        "status": "fixed"
       },
       {
         "id": "D42",
         "severity": "L",
-        "status": "open"
+        "status": "fixed"
       },
       {
         "id": "D43",
@@ -1194,15 +1194,20 @@
         "id": "D64",
         "severity": "M",
         "status": "open"
+      },
+      {
+        "id": "D65",
+        "severity": "L",
+        "status": "open"
       }
     ],
     "counts": {
       "H:fixed": 16,
-      "M:fixed": 13,
-      "L:fixed": 7,
+      "M:fixed": 16,
+      "L:fixed": 9,
       "M:partly fixed": 4,
-      "L:open": 10,
-      "M:open": 13,
+      "L:open": 9,
+      "M:open": 10,
       "H:partly fixed": 1,
       "L:partly fixed": 1
     }
@@ -1359,12 +1364,12 @@
         {
           "row": 44,
           "status": "V",
-          "claim": "(pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1 and A4; verdict PASS) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same run: median of 30 per-run rat…"
+          "claim": "(pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1, A4 and A6; verdict outside band, not falsified) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same ru…"
         },
         {
           "row": 45,
           "status": "V",
-          "claim": "(pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks (10 attacks and 3 warm variants, 9 distinct rejection branches; amendment A5) rejected for its expected reason in 30/30 runs (a deterministic c…"
+          "claim": "(pre-registered I2, amendments A4, A5 and A6; verdict PASS) Each of 15 registered checks (12 attacks and 3 warm variants) rejected for its expected reason in 30/30 runs, and the three warm variants verified warm in every…"
         },
         {
           "row": 46,
@@ -1379,7 +1384,7 @@
         {
           "row": 48,
           "status": "V",
-          "claim": "(pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path: per run the sum of four per-run medians (controller sign + RSU warm verify + RSU SPaT s…"
+          "claim": "(pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path on verifier v3: per run the sum of four per-run medians (controller sign + RSU warm veri…"
         }
       ],
       "state": "partial"
@@ -1843,13 +1848,13 @@
     "44": {
       "row": 44,
       "status": "V",
-      "claim": "(pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1 and A4; verdict PASS) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same run: median of 30 per-run rat…",
+      "claim": "(pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1, A4 and A6; verdict outside band, not falsified) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same ru…",
       "tag": "M0"
     },
     "45": {
       "row": 45,
       "status": "V",
-      "claim": "(pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks (10 attacks and 3 warm variants, 9 distinct rejection branches; amendment A5) rejected for its expected reason in 30/30 runs (a deterministic c…",
+      "claim": "(pre-registered I2, amendments A4, A5 and A6; verdict PASS) Each of 15 registered checks (12 attacks and 3 warm variants) rejected for its expected reason in 30/30 runs, and the three warm variants verified warm in every…",
       "tag": "M0"
     },
     "46": {
@@ -1867,7 +1872,7 @@
     "48": {
       "row": 48,
       "status": "V",
-      "claim": "(pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path: per run the sum of four per-run medians (controller sign + RSU warm verify + RSU SPaT s…",
+      "claim": "(pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path on verifier v3: per run the sum of four per-run medians (controller sign + RSU warm veri…",
       "tag": "M0"
     },
     "49": {
@@ -1880,6 +1885,12 @@
       "row": 50,
       "status": "V",
       "claim": "Relayed writes (Phase 2 focus F3; added 2026-10-14 from the existing run of record, no new run): ERC-1056 signed `setAttribute` submitted by a relayer (U5) 62,646 gas against the owner's direct U3 35,024 (+27,622); ERC-4…",
+      "tag": "M1-H"
+    },
+    "51": {
+      "row": 51,
+      "status": "V",
+      "claim": "Harness L3 read cost of document resolution (R3) against history, all ten columns (Phase 2 focus F1; added 2026-10-14 from the existing run of record, no new run; academic review AR-15). RPC calls / bytes at h = 1 · 10 ·…",
       "tag": "M1-H"
     }
   }

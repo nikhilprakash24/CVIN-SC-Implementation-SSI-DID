@@ -43,6 +43,33 @@ def test_the_vin_is_not_stored():
     assert VIN not in dump
 
 
+def test_the_vin_hash_is_keyed_so_a_candidate_vin_cannot_be_tested_without_the_key():
+    import hashlib
+    b = SQLiteLifecycleBackend()
+    drive(b)
+    stored = b.db.execute("SELECT vin_hash FROM vehicles").fetchone()[0]
+    assert stored != hashlib.sha256(VIN.encode()).hexdigest()
+    assert stored != hashlib.sha256(b"phase2-f2" + VIN.encode()).hexdigest()   # the old fixed public salt
+
+
+def test_owner_is_derived_from_the_journal_not_the_mutable_table():
+    b = SQLiteLifecycleBackend()
+    h, hist = drive(b)
+    b.db.execute("UPDATE vehicles SET owner = 'MALLORY' WHERE handle = ?", (h,))
+    assert b.current_owner(h) == hist["current_owner"] != "MALLORY"
+
+
+def test_tail_truncation_is_not_detected_by_the_journal_alone():
+    """The second limit AR-22 names: deleting the newest rows leaves a valid chain; only an anchored head shows it."""
+    b = SQLiteLifecycleBackend()
+    drive(b)
+    anchored_head = b.head()
+    b.db.execute("DROP TRIGGER journal_no_delete")
+    b.db.execute("DELETE FROM journal WHERE seq = (SELECT MAX(seq) FROM journal)")
+    assert b.verify_journal() == []
+    assert b.head() != anchored_head
+
+
 def test_odometer_rollback_refused():
     b = SQLiteLifecycleBackend()
     h = b.birth(VIN)

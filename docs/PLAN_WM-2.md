@@ -48,7 +48,7 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 ### C. Carried fixes from review-2, and the infrastructure verifier. *Owner: SSI/W3C specialist; contracts engineer; V2X specialist; security specialist.*
 | Step | Work | Gate |
 |---|---|---|
-| C0 | **Verifier v3** (WM-1 audit, D37–D42): bound message size and depth before canonicalising; binding claims mandatory for RSU and controller credentials and `rsu` required in SPaT; integer-only `refresh_every` and a CLI parser error; credential validity against the injected clock; DID method and chain validated; the I2 gate asserts the warm variants are warm. A dated pre-registration amendment first; then re-run I1–I3 as runs of record | each fix has a test that fails on the old code; the committed mutation script extended; I1–I3 re-run on a clean tree |
+| C0 | **done (pass 16, report 16):** amendment A6 first; verifier v3 (D37–D41 fixed or documented, D42 gate) and the D51 provider fix, each with tests failing on the old code (25 v3 tests; 2 D51 tests); mutation script 39/39; I1–I3, I5 re-run at `7d08dce` in a clean worktree: I1 1.226, **outside band, not falsified** (as it fell); I2 PASS (15 checks); I3 PASS; register #44–#46, #48 re-stated with history. **Verifier v3** (WM-1 audit, D37–D42): bound message size and depth before canonicalising; binding claims mandatory for RSU and controller credentials and `rsu` required in SPaT; integer-only `refresh_every` and a CLI parser error; credential validity against the injected clock; DID method and chain validated; the I2 gate asserts the warm variants are warm. A dated pre-registration amendment first; then re-run I1–I3 as runs of record | each fix has a test that fails on the old code; the committed mutation script extended; I1–I3 re-run on a clean tree |
 | C1 | `_resolve_ethr` reads the chain (owner, attributes, `changed`) instead of the static document | external DID suite re-run (#24); checker (#4); moved numbers re-registered |
 | C2 | `attestEvent` restricted to the vehicle's owner and delegates (review-2 K-4 follow-up) | regression test fails on the old code; gas re-run of record for the moved cells |
 | C3 | #32 and #37 re-run back to back on one host | the host-dependence note in C4 replaced by a measured comparison |
@@ -99,6 +99,7 @@ nine-standard contract set beyond C2, no chapter prose beyond the sentences D1 f
 
 ## 7. Revisions
 - 2026-10-10 (initial) — written before the WM-1 audit.
+- 2026-10-14 (pass 16) — C0 done (report 16). Phase 2 focus work alongside (`docs/phase2/PHASE2_PROGRAMME.md`). Next: B1.
 - 2026-10-14 (pass 15) — A4 done. The security-matrix producer is `securityScenarios.test.js` (A2 had registered `attackHarness.js`, which left the scenario file out of scope; corrected). Phase 2 opened beside WM-2 (`docs/phase2/`). Source: after-action report 15.
 - 2026-10-12 (pass 14) — A2 done; A3 and A6 notes updated (A3 adds the stamp calls the five producers still lack; A6's harness switch is one line). Source: after-action report 14.
 - 2026-10-10 (after the WM-1 audit) — added C0 (verifier v3), A3b (seven re-runs), A7 (N-15), A5's number cross-check, A6's HTTP re-run, G's reproducibility items; reordered §4; P2b items marked out of WM-2. Source: after-action report 12 §4.

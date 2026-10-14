@@ -18,17 +18,40 @@ yet committed when this was written, so the placements rest on Phase 1 evidence,
 ## 0. Executive summary
 
 The thesis has a defensible core, and it is narrower than its own chapters say.
-It is a measured, same-testbed comparison of nine Ethereum identity standards on one vehicle lifecycle (C1).
-It adds a credential layer expressed in W3C structures, scored structurally and against the external DID suite (C5).
-It shows that the verification step of V2V and V2I messages fits the computational share of the safety budget when the chain is kept off the hot path (C2, C3), and it prices revocation freshness (C4).
+A crux is a question an examiner is expected to ask, logged in `docs/thesis/CRUX_REGISTER.md`.
+
+**The core.**
+
+| What the core contains | Crux |
+|---|---|
+| A measured, same-testbed comparison of nine Ethereum identity standards on one vehicle lifecycle | C1 |
+| A credential layer expressed in W3C structures, scored structurally and against the external DID suite | C5 |
+| Evidence that the verification step of V2V and V2I messages fits the computational share of the safety budget when the chain is kept off the hot path | C2, C3 |
+| A price for revocation freshness | C4 |
+
 All eight cruxes are partial; none is empty; none is fully evidenced.
-The scope was stated twice before: as questions and hypotheses in June and July 2026, then by subtraction through the audit, the scope-change log and the crux register in September and October.
-The second attempt narrowed every claim but never rewrote the questions, so chapters 1 and 7 still carry first-attempt words ("first", "throughput", "conformance", "all five supported").
-I recommend a third statement, Scope v3 (§2): four restated questions, split verdicts for H1 and H5, and a freeze at WM-2's close plus, at most, the Sepolia witness.
-F1 enters the thesis as a storage-locus lens and as a definition and taxonomy of the identity-dependent transaction (IDTx), with no new number.
-F2 enters only as the centralised and PKI baselines already measured; F3 enters as a classification of the read and write paths already measured.
-Each focus then gets its own paper after the defence (§4).
-The largest risk to the defence is not scope at all: it is the unwritten literature review (chapter 2), which IDTx makes more urgent, not less.
+
+**How the scope got here.** It was stated twice before.
+The first statement was questions and hypotheses, in June and July 2026.
+The second was by subtraction, through the audit, the scope-change log and the crux register, in September and October.
+The second attempt narrowed every claim but never rewrote the questions.
+So chapters 1 and 7 still carry first-attempt words ("first", "throughput", "conformance", "all five supported").
+
+**Recommendation.** I recommend a third statement, Scope v3 (§2):
+- four restated questions;
+- split verdicts for H1 and H5;
+- a freeze at the close of work milestone WM-2 plus, at most, the Sepolia witness, a public-testnet run.
+
+The Phase 2 focuses enter the thesis as follows, and each then gets its own paper after the defence (§4).
+
+| Focus | Enters the thesis as |
+|---|---|
+| F1 | a storage-locus lens, and a definition and taxonomy of the identity-dependent transaction (IDTx), with no new number |
+| F2 | only the centralised and PKI baselines already measured |
+| F3 | a classification of the read and write paths already measured |
+
+**The largest risk** to the defence is not scope at all.
+It is the unwritten literature review (chapter 2), which IDTx makes more urgent, not less.
 
 ---
 
@@ -120,7 +143,7 @@ A possible title, for the author's decision (D-14): *Measured Trade-offs of Ethe
 | H3 | Off-chain verification of pre-issued credentials fits the budget; chain reads at message time do not | supported for the verification step: SSI warm 0.153 ms [0.151, 0.154]; uncached ERC-1056 verify 9.654 ms median | #21, #27 |
 | H4 | The MOBI-VID-inspired lifecycle is realisable across backends with a fidelity gradient | supported with the gradient stated | #30; `mobi_vid_backends.json` (re-executed per #43) |
 | H5 | No standard dominates; the hybrid's position depends on the criteria | **split.** No dominance: supported. Hybrid: on the fidelity-per-gas plane among the MOBI backends, yet dominated by ERC-4337 on all six harness criteria | #36 |
-| I1 to I5 | pre-registered infrastructure questions, no hypothesis | as registered: I1 PASS (ratio 1.096), I2 PASS (13 checks, 30/30 runs), I3 PASS (at most k − 1 messages), I4 and I5 reported | #44 to #48 |
+| I1 to I5 | pre-registered infrastructure questions, no hypothesis | as registered: I1 outside band, not falsified (ratio 1.226 on verifier v3; it was 1.096, PASS, on v2; corrected 2026-10-14 after the WM-2 C0 re-run), I2 PASS (15 checks, 30/30 runs), I3 PASS (at most k − 1 messages), I4 and I5 reported | #44 to #48 |
 | M4, M5 | pre-registered parity and pseudonymity questions | M4 writes PASS, "equal once cached" FAIL; M5 gas FAIL, linkability PASS (60/60 pseudonyms by one query) | #33, #38 |
 
 Reporting the two failed halves and the two FAIL verdicts plainly is a strength at a defence.

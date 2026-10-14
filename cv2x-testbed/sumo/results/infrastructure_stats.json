@@ -1,12 +1,14 @@
 {
   "environment": {
-    "date_utc": "2026-10-09T05:30:59+00:00",
-    "commit": "f1f9e37cc516b318892dd1246b42d4cb6e49bf32",
+    "date_utc": "2026-10-14T06:06:25+00:00",
+    "commit": "7d08dce152da9b6dab754ae69ac238bbf665aa44",
     "tree_clean": true,
     "code_clean": true,
+    "scope": "cv2x-testbed/sumo/run_infra_stats.py",
+    "scope_sha": "61d1d8e60d86",
     "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
     "logical_cpus": 4,
-    "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39",
+    "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
     "python": "3.11.15",
     "libraries": {
       "coincurve": "21.0.0",
@@ -30,218 +32,218 @@
     "claim": "median warm SPaT verify / median warm SSI BSM verify in [0.8, 1.2]; falsified if > 2.0",
     "ratio": {
       "run_medians": [
-        1.095505617977528,
-        1.1001243781094527,
-        1.0846432889963724,
-        1.0893512851897185,
-        1.0963636363636364,
-        1.0910724985020972,
-        1.0850684116597265,
-        1.1025943396226414,
-        1.1019677996422184,
-        1.1008557457212715,
-        1.1003363228699552,
-        1.1016548463356974,
-        1.0906906906906908,
-        1.1031231585150265,
-        1.0964805825242718,
-        1.0994475138121549,
-        1.0821027761370348,
-        1.1194663432383263,
-        1.1027190332326282,
-        1.0880733944954128,
-        1.0925816023738872,
-        1.1051733939738486,
-        1.0913043478260869,
-        1.0897814530419374,
-        1.088939566704675,
-        1.0899696048632217,
-        1.099758162031439,
-        1.1126436781609197,
-        1.103305785123967,
-        1.0953827460510328
+        1.2140864714086472,
+        1.2442748091603053,
+        1.2280334728033473,
+        1.2187715665976535,
+        1.223181257706535,
+        1.222300635144672,
+        1.2158931082981717,
+        1.213025780189959,
+        1.256281407035176,
+        1.2438524590163935,
+        1.250523377529658,
+        1.2175838077166352,
+        1.2198879551820727,
+        1.2167519181585678,
+        1.2456418383518226,
+        1.2335054503729201,
+        1.1976456009913259,
+        1.2540983606557379,
+        1.231253938248267,
+        1.2372654155495977,
+        1.218241042345277,
+        1.2485361093038385,
+        1.2391752577319588,
+        1.2247340425531914,
+        1.2183462532299743,
+        1.212794612794613,
+        1.235215053763441,
+        1.2400539447066758,
+        1.223326706428098,
+        1.2511462047885888
       ],
       "n": 30,
       "missing": 0,
-      "median": 1.096422,
-      "mean": 1.096683,
+      "median": 1.226384,
+      "mean": 1.229848,
       "ci95": [
-        1.091188,
-        1.100856
+        1.21933,
+        1.23822
       ]
     },
-    "verdict": "PASS",
+    "verdict": "outside band, not falsified",
     "spat_warm_ms": {
       "run_medians": [
-        0.1755,
-        0.1769,
-        0.1794,
-        0.178,
-        0.1809,
-        0.1821,
-        0.1824,
-        0.187,
-        0.1848,
-        0.1801,
-        0.1963,
-        0.1864,
-        0.1816,
-        0.1872,
-        0.1807,
-        0.1791,
-        0.1832,
-        0.1846,
-        0.1825,
-        0.1779,
-        0.1841,
-        0.1944,
-        0.1757,
-        0.1845,
-        0.191,
+        0.1741,
         0.1793,
-        0.1819,
-        0.1936,
-        0.1869,
-        0.1803
+        0.1761,
+        0.1766,
+        0.1984,
+        0.1732,
+        0.1729,
+        0.1788,
+        0.2,
+        0.1821,
+        0.1792,
+        0.1925,
+        0.1742,
+        0.1903,
+        0.2358,
+        0.215,
+        0.1933,
+        0.1836,
+        0.1954,
+        0.1846,
+        0.187,
+        0.1919,
+        0.1803,
+        0.1842,
+        0.1886,
+        0.1801,
+        0.1838,
+        0.1839,
+        0.1846,
+        0.2456
       ],
       "n": 30,
       "missing": 0,
-      "median": 0.18225,
-      "mean": 0.183277,
+      "median": 0.18405,
+      "mean": 0.188847,
       "ci95": [
-        0.1805,
-        0.18455
+        0.1802,
+        0.18945
       ]
     },
     "bsm_ssi_warm_ms": {
       "run_medians": [
-        0.1602,
-        0.1608,
-        0.1654,
-        0.1634,
-        0.165,
-        0.1669,
-        0.1681,
-        0.1696,
-        0.1677,
-        0.1636,
-        0.1784,
-        0.1692,
-        0.1665,
-        0.1697,
-        0.1648,
-        0.1629,
-        0.1693,
-        0.1649,
-        0.1655,
-        0.1635,
-        0.1685,
-        0.1759,
-        0.161,
-        0.1693,
-        0.1754,
-        0.1645,
-        0.1654,
-        0.174,
-        0.1694,
-        0.1646
+        0.1434,
+        0.1441,
+        0.1434,
+        0.1449,
+        0.1622,
+        0.1417,
+        0.1422,
+        0.1474,
+        0.1592,
+        0.1464,
+        0.1433,
+        0.1581,
+        0.1428,
+        0.1564,
+        0.1893,
+        0.1743,
+        0.1614,
+        0.1464,
+        0.1587,
+        0.1492,
+        0.1535,
+        0.1537,
+        0.1455,
+        0.1504,
+        0.1548,
+        0.1485,
+        0.1488,
+        0.1483,
+        0.1509,
+        0.1963
       ],
       "n": 30,
       "missing": 0,
-      "median": 0.166,
-      "mean": 0.167113,
+      "median": 0.149,
+      "mean": 0.153517,
       "ci95": [
-        0.1648,
-        0.16885
+        0.1464,
+        0.15425
       ]
     },
     "spat_cold_ms": {
       "run_medians": [
-        0.4768,
-        0.4656,
-        0.4444,
-        0.4681,
-        0.4996,
-        0.4858,
-        0.4524,
-        0.4254,
-        0.4756,
-        0.5044,
-        0.6226,
-        0.4776,
-        0.4919,
-        0.5043,
-        0.4621,
-        0.4788,
-        0.4798,
-        0.5073,
-        0.4498,
-        0.4405,
-        0.4727,
-        0.5047,
-        0.4758,
-        0.504,
-        0.4292,
-        0.4676,
-        0.4821,
-        0.5056,
-        0.4683,
-        0.5069
+        0.4916,
+        0.5939,
+        0.4622,
+        0.4357,
+        0.6631,
+        0.4482,
+        0.4071,
+        0.4211,
+        0.5287,
+        0.4545,
+        0.453,
+        0.456,
+        0.484,
+        0.6729,
+        0.5309,
+        0.4528,
+        0.5169,
+        0.4273,
+        0.4334,
+        0.5372,
+        0.5505,
+        0.5435,
+        0.4568,
+        0.5873,
+        0.4121,
+        0.5119,
+        0.4274,
+        0.4252,
+        0.6464,
+        0.5049
       ],
       "n": 30,
       "missing": 0,
-      "median": 0.4772,
-      "mean": 0.48099,
+      "median": 0.4731,
+      "mean": 0.497883,
       "ci95": [
-        0.4682,
-        0.49085
+        0.4529,
+        0.5228
       ]
     },
     "spat_sign_ms": {
       "run_medians": [
-        0.2422,
-        0.2448,
-        0.2532,
-        0.2517,
-        0.2524,
-        0.2508,
-        0.256,
-        0.2665,
-        0.2583,
-        0.2493,
-        0.2687,
-        0.2612,
-        0.2545,
-        0.2668,
-        0.2486,
-        0.2498,
-        0.2605,
+        0.2412,
+        0.2355,
+        0.2332,
+        0.2389,
+        0.273,
+        0.2263,
+        0.2293,
+        0.2385,
+        0.288,
+        0.2502,
+        0.2317,
+        0.2703,
+        0.2294,
+        0.2675,
+        0.3137,
+        0.289,
+        0.2707,
+        0.2483,
+        0.2711,
+        0.2574,
+        0.2608,
+        0.2635,
+        0.2489,
         0.2603,
-        0.2531,
-        0.25,
-        0.2594,
-        0.2753,
-        0.2473,
-        0.2596,
-        0.2696,
-        0.2528,
-        0.2565,
-        0.2713,
-        0.2662,
-        0.2534
+        0.2644,
+        0.2483,
+        0.2587,
+        0.251,
+        0.2532,
+        0.318
       ],
       "n": 30,
       "missing": 0,
-      "median": 0.25525,
-      "mean": 0.257003,
+      "median": 0.2553,
+      "mean": 0.257677,
       "ci95": [
-        0.2526,
-        0.25995
+        0.2483,
+        0.26395
       ]
     }
   },
   "I2": {
-    "claim": "each of the 13 registered checks rejected with its expected reason in every run (amendment A4)",
+    "claim": "each of the 15 registered checks rejected with its expected reason in every run, the 3 warm variants verified warm (amendment A6)",
     "expected_reasons": {
       "i2a_unsigned_spat": "unsigned",
       "i2b_wrong_key_spat": "wrong_key",
@@ -255,7 +257,9 @@
       "i2j_future_spat": "future",
       "i2b_w_wrong_key_spat_warm": "wrong_key",
       "i2c_w_not_permitted_warm": "not_permitted",
-      "i2f_w_stale_spat_warm": "stale"
+      "i2f_w_stale_spat_warm": "stale",
+      "i2k_spat_without_rsu_field": "binding",
+      "i2l_deeply_nested_spat": "malformed"
     },
     "runs": 30,
     "runs_all_as_expected": 30,
@@ -266,86 +270,86 @@
     "claim": "reported, no verdict; a sum of operation costs, not a path latency (amendment A3)",
     "controller_to_vehicle_ms": {
       "run_medians": [
-        0.8487,
-        0.863,
-        0.8707,
-        0.8818999999999999,
-        0.8842000000000001,
-        0.8802000000000001,
-        0.9249999999999999,
-        0.9572,
-        0.8934,
-        0.877,
-        0.9508,
-        0.9162,
-        0.8869,
-        0.9436,
-        0.8656,
-        0.8763000000000001,
-        0.9342000000000001,
-        0.9087999999999999,
-        0.8711,
-        0.861,
-        0.9042,
-        0.965,
-        0.8662,
-        0.8977,
-        0.9225000000000001,
-        0.8664000000000001,
-        0.8812,
-        0.9703,
-        0.9423000000000001,
-        0.88
+        0.8864,
+        0.8575999999999999,
+        0.8234,
+        0.9195,
+        0.9641000000000001,
+        0.8076000000000001,
+        0.8005,
+        0.9011999999999999,
+        1.0295,
+        0.8994,
+        0.8768,
+        0.9214,
+        0.8301999999999999,
+        0.8990000000000001,
+        1.0873,
+        1.0516,
+        0.9790000000000001,
+        0.8781,
+        0.9406,
+        0.8937,
+        0.9547000000000001,
+        0.9300999999999999,
+        0.853,
+        0.9413,
+        0.9716999999999999,
+        0.9113,
+        0.8671,
+        0.8919999999999999,
+        0.8968999999999999,
+        1.1720000000000002
       ],
       "n": 30,
       "missing": 0,
-      "median": 0.88555,
-      "mean": 0.89972,
+      "median": 0.9003,
+      "mean": 0.921233,
       "ci95": [
-        0.8785,
-        0.9125
+        0.8892,
+        0.93535
       ]
     },
     "tmc_to_controller_ms": {
       "run_medians": [
-        0.4557,
-        0.4587,
-        0.4202,
-        0.4404,
-        0.6698,
-        0.4954,
-        0.5933999999999999,
-        0.6134,
-        0.43,
-        0.4487,
-        0.5016,
-        0.49639999999999995,
-        0.45699999999999996,
-        0.4812,
-        0.46809999999999996,
-        0.4818,
-        0.5083,
-        0.45599999999999996,
-        0.44430000000000003,
-        0.46499999999999997,
-        0.4558,
-        0.46540000000000004,
-        0.42410000000000003,
-        0.5085999999999999,
-        0.4624,
-        0.42210000000000003,
-        0.4857,
-        0.49940000000000007,
-        0.4507,
-        0.4444
+        0.5486,
+        0.44820000000000004,
+        0.40349999999999997,
+        0.45640000000000003,
+        0.5748,
+        0.3867,
+        0.38029999999999997,
+        0.4576,
+        0.4924,
+        0.5065999999999999,
+        0.4157,
+        0.4338,
+        0.4327,
+        0.5319,
+        0.6078,
+        0.4384,
+        0.4823,
+        0.39749999999999996,
+        0.5444,
+        0.4978,
+        0.38239999999999996,
+        0.5556,
+        0.4425,
+        0.5021,
+        0.4809,
+        0.48219999999999996,
+        0.6205,
+        0.4786,
+        0.4717,
+        0.6376999999999999
       ],
       "n": 30,
       "missing": 0,
-      "median": 0.4637,
-      "mean": 0.480133,
+      "median": 0.47975,
+      "mean": 0.483053,
       "ci95": [
-        0.45575,
-        0.48375
+        0.44535,
+        0.49995
       ]
     },
     "definition": "per run, the sum of four per-run medians: controller sign + RSU warm verify + RSU SPaT sign + vehicle warm SPaT verify; across runs, the median of that sum. TMC hop = TMC sign + controller warm verify. No update period, queuing, network or tail is included; in the harness the SPaT does not consume the controller update."
@@ -358,15 +362,15 @@
   "per_run": [
     {
       "seed": 1,
-      "spat_warm": 0.1755,
-      "spat_cold": 0.4768,
-      "spat_sign": 0.2422,
-      "bsm_ssi_warm": 0.1602,
-      "bsm_ssi_cold": 0.4128,
-      "ctrl_sign": 0.2403,
-      "ctrl_verify_warm": 0.1907,
-      "tmc_sign": 0.2407,
-      "tmc_verify_warm": 0.215,
+      "spat_warm": 0.1741,
+      "spat_cold": 0.4916,
+      "spat_sign": 0.2412,
+      "bsm_ssi_warm": 0.1434,
+      "bsm_ssi_cold": 0.3883,
+      "ctrl_sign": 0.2556,
+      "ctrl_verify_warm": 0.2155,
+      "tmc_sign": 0.2812,
+      "tmc_verify_warm": 0.2674,
       "spat_sent": 800,
       "spat_verified": 4544,
       "spat_rejected": 0,
@@ -383,7 +387,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -450,23 +456,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.095505617977528,
-      "i5_backhaul_ms": 0.8487,
-      "i5_tmc_hop_ms": 0.4557
+      "ratio_spat_to_bsm_warm": 1.2140864714086472,
+      "i5_backhaul_ms": 0.8864,
+      "i5_tmc_hop_ms": 0.5486
     },
     {
       "seed": 2,
-      "spat_warm": 0.1769,
-      "spat_cold": 0.4656,
-      "spat_sign": 0.2448,
-      "bsm_ssi_warm": 0.1608,
-      "bsm_ssi_cold": 0.414,
-      "ctrl_sign": 0.2411,
-      "ctrl_verify_warm": 0.2002,
-      "tmc_sign": 0.2548,
-      "tmc_verify_warm": 0.2039,
+      "spat_warm": 0.1793,
+      "spat_cold": 0.5939,
+      "spat_sign": 0.2355,
+      "bsm_ssi_warm": 0.1441,
+      "bsm_ssi_cold": 0.3517,
+      "ctrl_sign": 0.2387,
+      "ctrl_verify_warm": 0.2041,
+      "tmc_sign": 0.2462,
+      "tmc_verify_warm": 0.202,
       "spat_sent": 800,
       "spat_verified": 3962,
       "spat_rejected": 0,
@@ -483,7 +499,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -550,23 +568,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1001243781094527,
-      "i5_backhaul_ms": 0.863,
-      "i5_tmc_hop_ms": 0.4587
+      "ratio_spat_to_bsm_warm": 1.2442748091603053,
+      "i5_backhaul_ms": 0.8575999999999999,
+      "i5_tmc_hop_ms": 0.44820000000000004
     },
     {
       "seed": 3,
-      "spat_warm": 0.1794,
-      "spat_cold": 0.4444,
-      "spat_sign": 0.2532,
-      "bsm_ssi_warm": 0.1654,
-      "bsm_ssi_cold": 0.4217,
-      "ctrl_sign": 0.2502,
-      "ctrl_verify_warm": 0.1879,
-      "tmc_sign": 0.2371,
-      "tmc_verify_warm": 0.1831,
+      "spat_warm": 0.1761,
+      "spat_cold": 0.4622,
+      "spat_sign": 0.2332,
+      "bsm_ssi_warm": 0.1434,
+      "bsm_ssi_cold": 0.4117,
+      "ctrl_sign": 0.2212,
+      "ctrl_verify_warm": 0.1929,
+      "tmc_sign": 0.216,
+      "tmc_verify_warm": 0.1875,
       "spat_sent": 800,
       "spat_verified": 4791,
       "spat_rejected": 0,
@@ -583,7 +611,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -650,23 +680,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0846432889963724,
-      "i5_backhaul_ms": 0.8707,
-      "i5_tmc_hop_ms": 0.4202
+      "ratio_spat_to_bsm_warm": 1.2280334728033473,
+      "i5_backhaul_ms": 0.8234,
+      "i5_tmc_hop_ms": 0.40349999999999997
     },
     {
       "seed": 4,
-      "spat_warm": 0.178,
-      "spat_cold": 0.4681,
-      "spat_sign": 0.2517,
-      "bsm_ssi_warm": 0.1634,
-      "bsm_ssi_cold": 0.4095,
-      "ctrl_sign": 0.2486,
-      "ctrl_verify_warm": 0.2036,
-      "tmc_sign": 0.2399,
-      "tmc_verify_warm": 0.2005,
+      "spat_warm": 0.1766,
+      "spat_cold": 0.4357,
+      "spat_sign": 0.2389,
+      "bsm_ssi_warm": 0.1449,
+      "bsm_ssi_cold": 0.4601,
+      "ctrl_sign": 0.2606,
+      "ctrl_verify_warm": 0.2434,
+      "tmc_sign": 0.2274,
+      "tmc_verify_warm": 0.229,
       "spat_sent": 800,
       "spat_verified": 4908,
       "spat_rejected": 0,
@@ -683,7 +723,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -750,23 +792,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0893512851897185,
-      "i5_backhaul_ms": 0.8818999999999999,
-      "i5_tmc_hop_ms": 0.4404
+      "ratio_spat_to_bsm_warm": 1.2187715665976535,
+      "i5_backhaul_ms": 0.9195,
+      "i5_tmc_hop_ms": 0.45640000000000003
     },
     {
       "seed": 5,
-      "spat_warm": 0.1809,
-      "spat_cold": 0.4996,
-      "spat_sign": 0.2524,
-      "bsm_ssi_warm": 0.165,
-      "bsm_ssi_cold": 0.4624,
-      "ctrl_sign": 0.2548,
-      "ctrl_verify_warm": 0.1961,
-      "tmc_sign": 0.3314,
-      "tmc_verify_warm": 0.3384,
+      "spat_warm": 0.1984,
+      "spat_cold": 0.6631,
+      "spat_sign": 0.273,
+      "bsm_ssi_warm": 0.1622,
+      "bsm_ssi_cold": 0.3762,
+      "ctrl_sign": 0.273,
+      "ctrl_verify_warm": 0.2197,
+      "tmc_sign": 0.3091,
+      "tmc_verify_warm": 0.2657,
       "spat_sent": 800,
       "spat_verified": 4986,
       "spat_rejected": 0,
@@ -783,7 +835,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -850,23 +904,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0963636363636364,
-      "i5_backhaul_ms": 0.8842000000000001,
-      "i5_tmc_hop_ms": 0.6698
+      "ratio_spat_to_bsm_warm": 1.223181257706535,
+      "i5_backhaul_ms": 0.9641000000000001,
+      "i5_tmc_hop_ms": 0.5748
     },
     {
       "seed": 6,
-      "spat_warm": 0.1821,
-      "spat_cold": 0.4858,
-      "spat_sign": 0.2508,
-      "bsm_ssi_warm": 0.1669,
-      "bsm_ssi_cold": 0.4363,
-      "ctrl_sign": 0.2465,
-      "ctrl_verify_warm": 0.2008,
-      "tmc_sign": 0.2737,
-      "tmc_verify_warm": 0.2217,
+      "spat_warm": 0.1732,
+      "spat_cold": 0.4482,
+      "spat_sign": 0.2263,
+      "bsm_ssi_warm": 0.1417,
+      "bsm_ssi_cold": 0.3899,
+      "ctrl_sign": 0.2175,
+      "ctrl_verify_warm": 0.1906,
+      "tmc_sign": 0.2133,
+      "tmc_verify_warm": 0.1734,
       "spat_sent": 800,
       "spat_verified": 4771,
       "spat_rejected": 0,
@@ -883,7 +947,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -950,23 +1016,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0910724985020972,
-      "i5_backhaul_ms": 0.8802000000000001,
-      "i5_tmc_hop_ms": 0.4954
+      "ratio_spat_to_bsm_warm": 1.222300635144672,
+      "i5_backhaul_ms": 0.8076000000000001,
+      "i5_tmc_hop_ms": 0.3867
     },
     {
       "seed": 7,
-      "spat_warm": 0.1824,
-      "spat_cold": 0.4524,
-      "spat_sign": 0.256,
-      "bsm_ssi_warm": 0.1681,
-      "bsm_ssi_cold": 0.4174,
-      "ctrl_sign": 0.2769,
-      "ctrl_verify_warm": 0.2097,
-      "tmc_sign": 0.2964,
-      "tmc_verify_warm": 0.297,
+      "spat_warm": 0.1729,
+      "spat_cold": 0.4071,
+      "spat_sign": 0.2293,
+      "bsm_ssi_warm": 0.1422,
+      "bsm_ssi_cold": 0.355,
+      "ctrl_sign": 0.2139,
+      "ctrl_verify_warm": 0.1844,
+      "tmc_sign": 0.2064,
+      "tmc_verify_warm": 0.1739,
       "spat_sent": 800,
       "spat_verified": 5200,
       "spat_rejected": 0,
@@ -983,7 +1059,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -1050,23 +1128,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0850684116597265,
-      "i5_backhaul_ms": 0.9249999999999999,
-      "i5_tmc_hop_ms": 0.5933999999999999
+      "ratio_spat_to_bsm_warm": 1.2158931082981717,
+      "i5_backhaul_ms": 0.8005,
+      "i5_tmc_hop_ms": 0.38029999999999997
     },
     {
       "seed": 8,
-      "spat_warm": 0.187,
-      "spat_cold": 0.4254,
-      "spat_sign": 0.2665,
-      "bsm_ssi_warm": 0.1696,
-      "bsm_ssi_cold": 0.4064,
-      "ctrl_sign": 0.271,
-      "ctrl_verify_warm": 0.2327,
-      "tmc_sign": 0.3133,
-      "tmc_verify_warm": 0.3001,
+      "spat_warm": 0.1788,
+      "spat_cold": 0.4211,
+      "spat_sign": 0.2385,
+      "bsm_ssi_warm": 0.1474,
+      "bsm_ssi_cold": 0.346,
+      "ctrl_sign": 0.2558,
+      "ctrl_verify_warm": 0.2281,
+      "tmc_sign": 0.2399,
+      "tmc_verify_warm": 0.2177,
       "spat_sent": 800,
       "spat_verified": 4412,
       "spat_rejected": 0,
@@ -1083,7 +1171,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -1150,23 +1240,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1025943396226414,
-      "i5_backhaul_ms": 0.9572,
-      "i5_tmc_hop_ms": 0.6134
+      "ratio_spat_to_bsm_warm": 1.213025780189959,
+      "i5_backhaul_ms": 0.9011999999999999,
+      "i5_tmc_hop_ms": 0.4576
     },
     {
       "seed": 9,
-      "spat_warm": 0.1848,
-      "spat_cold": 0.4756,
-      "spat_sign": 0.2583,
-      "bsm_ssi_warm": 0.1677,
-      "bsm_ssi_cold": 0.4173,
-      "ctrl_sign": 0.252,
-      "ctrl_verify_warm": 0.1983,
-      "tmc_sign": 0.2447,
-      "tmc_verify_warm": 0.1853,
+      "spat_warm": 0.2,
+      "spat_cold": 0.5287,
+      "spat_sign": 0.288,
+      "bsm_ssi_warm": 0.1592,
+      "bsm_ssi_cold": 0.5367,
+      "ctrl_sign": 0.2936,
+      "ctrl_verify_warm": 0.2479,
+      "tmc_sign": 0.2676,
+      "tmc_verify_warm": 0.2248,
       "spat_sent": 800,
       "spat_verified": 4523,
       "spat_rejected": 0,
@@ -1183,7 +1283,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -1250,23 +1352,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1019677996422184,
-      "i5_backhaul_ms": 0.8934,
-      "i5_tmc_hop_ms": 0.43
+      "ratio_spat_to_bsm_warm": 1.256281407035176,
+      "i5_backhaul_ms": 1.0295,
+      "i5_tmc_hop_ms": 0.4924
     },
     {
       "seed": 10,
-      "spat_warm": 0.1801,
-      "spat_cold": 0.5044,
-      "spat_sign": 0.2493,
-      "bsm_ssi_warm": 0.1636,
-      "bsm_ssi_cold": 0.4396,
-      "ctrl_sign": 0.2476,
-      "ctrl_verify_warm": 0.2,
-      "tmc_sign": 0.2491,
-      "tmc_verify_warm": 0.1996,
+      "spat_warm": 0.1821,
+      "spat_cold": 0.4545,
+      "spat_sign": 0.2502,
+      "bsm_ssi_warm": 0.1464,
+      "bsm_ssi_cold": 0.371,
+      "ctrl_sign": 0.2437,
+      "ctrl_verify_warm": 0.2234,
+      "tmc_sign": 0.2534,
+      "tmc_verify_warm": 0.2532,
       "spat_sent": 800,
       "spat_verified": 4437,
       "spat_rejected": 0,
@@ -1283,7 +1395,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -1350,23 +1464,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1008557457212715,
-      "i5_backhaul_ms": 0.877,
-      "i5_tmc_hop_ms": 0.4487
+      "ratio_spat_to_bsm_warm": 1.2438524590163935,
+      "i5_backhaul_ms": 0.8994,
+      "i5_tmc_hop_ms": 0.5065999999999999
     },
     {
       "seed": 11,
-      "spat_warm": 0.1963,
-      "spat_cold": 0.6226,
-      "spat_sign": 0.2687,
-      "bsm_ssi_warm": 0.1784,
-      "bsm_ssi_cold": 0.4809,
-      "ctrl_sign": 0.2684,
-      "ctrl_verify_warm": 0.2174,
-      "tmc_sign": 0.302,
-      "tmc_verify_warm": 0.1996,
+      "spat_warm": 0.1792,
+      "spat_cold": 0.453,
+      "spat_sign": 0.2317,
+      "bsm_ssi_warm": 0.1433,
+      "bsm_ssi_cold": 0.3723,
+      "ctrl_sign": 0.245,
+      "ctrl_verify_warm": 0.2209,
+      "tmc_sign": 0.2323,
+      "tmc_verify_warm": 0.1834,
       "spat_sent": 800,
       "spat_verified": 4168,
       "spat_rejected": 0,
@@ -1383,7 +1507,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -1450,23 +1576,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1003363228699552,
-      "i5_backhaul_ms": 0.9508,
-      "i5_tmc_hop_ms": 0.5016
+      "ratio_spat_to_bsm_warm": 1.250523377529658,
+      "i5_backhaul_ms": 0.8768,
+      "i5_tmc_hop_ms": 0.4157
     },
     {
       "seed": 12,
-      "spat_warm": 0.1864,
-      "spat_cold": 0.4776,
-      "spat_sign": 0.2612,
-      "bsm_ssi_warm": 0.1692,
-      "bsm_ssi_cold": 0.4764,
-      "ctrl_sign": 0.2554,
-      "ctrl_verify_warm": 0.2132,
-      "tmc_sign": 0.283,
-      "tmc_verify_warm": 0.2134,
+      "spat_warm": 0.1925,
+      "spat_cold": 0.456,
+      "spat_sign": 0.2703,
+      "bsm_ssi_warm": 0.1581,
+      "bsm_ssi_cold": 0.3747,
+      "ctrl_sign": 0.2376,
+      "ctrl_verify_warm": 0.221,
+      "tmc_sign": 0.2247,
+      "tmc_verify_warm": 0.2091,
       "spat_sent": 800,
       "spat_verified": 4239,
       "spat_rejected": 0,
@@ -1483,7 +1619,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -1550,23 +1688,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1016548463356974,
-      "i5_backhaul_ms": 0.9162,
-      "i5_tmc_hop_ms": 0.49639999999999995
+      "ratio_spat_to_bsm_warm": 1.2175838077166352,
+      "i5_backhaul_ms": 0.9214,
+      "i5_tmc_hop_ms": 0.4338
     },
     {
       "seed": 13,
-      "spat_warm": 0.1816,
-      "spat_cold": 0.4919,
-      "spat_sign": 0.2545,
-      "bsm_ssi_warm": 0.1665,
-      "bsm_ssi_cold": 0.4222,
-      "ctrl_sign": 0.2477,
-      "ctrl_verify_warm": 0.2031,
-      "tmc_sign": 0.2541,
-      "tmc_verify_warm": 0.2029,
+      "spat_warm": 0.1742,
+      "spat_cold": 0.484,
+      "spat_sign": 0.2294,
+      "bsm_ssi_warm": 0.1428,
+      "bsm_ssi_cold": 0.3708,
+      "ctrl_sign": 0.229,
+      "ctrl_verify_warm": 0.1976,
+      "tmc_sign": 0.2418,
+      "tmc_verify_warm": 0.1909,
       "spat_sent": 800,
       "spat_verified": 5096,
       "spat_rejected": 0,
@@ -1583,7 +1731,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -1650,23 +1800,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0906906906906908,
-      "i5_backhaul_ms": 0.8869,
-      "i5_tmc_hop_ms": 0.45699999999999996
+      "ratio_spat_to_bsm_warm": 1.2198879551820727,
+      "i5_backhaul_ms": 0.8301999999999999,
+      "i5_tmc_hop_ms": 0.4327
     },
     {
       "seed": 14,
-      "spat_warm": 0.1872,
-      "spat_cold": 0.5043,
-      "spat_sign": 0.2668,
-      "bsm_ssi_warm": 0.1697,
-      "bsm_ssi_cold": 0.4663,
-      "ctrl_sign": 0.258,
-      "ctrl_verify_warm": 0.2316,
-      "tmc_sign": 0.2671,
-      "tmc_verify_warm": 0.2141,
+      "spat_warm": 0.1903,
+      "spat_cold": 0.6729,
+      "spat_sign": 0.2675,
+      "bsm_ssi_warm": 0.1564,
+      "bsm_ssi_cold": 0.5811,
+      "ctrl_sign": 0.2272,
+      "ctrl_verify_warm": 0.214,
+      "tmc_sign": 0.3084,
+      "tmc_verify_warm": 0.2235,
       "spat_sent": 800,
       "spat_verified": 4788,
       "spat_rejected": 0,
@@ -1683,7 +1843,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -1750,23 +1912,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1031231585150265,
-      "i5_backhaul_ms": 0.9436,
-      "i5_tmc_hop_ms": 0.4812
+      "ratio_spat_to_bsm_warm": 1.2167519181585678,
+      "i5_backhaul_ms": 0.8990000000000001,
+      "i5_tmc_hop_ms": 0.5319
     },
     {
       "seed": 15,
-      "spat_warm": 0.1807,
-      "spat_cold": 0.4621,
-      "spat_sign": 0.2486,
-      "bsm_ssi_warm": 0.1648,
-      "bsm_ssi_cold": 0.5484,
-      "ctrl_sign": 0.2426,
-      "ctrl_verify_warm": 0.1937,
-      "tmc_sign": 0.2566,
-      "tmc_verify_warm": 0.2115,
+      "spat_warm": 0.2358,
+      "spat_cold": 0.5309,
+      "spat_sign": 0.3137,
+      "bsm_ssi_warm": 0.1893,
+      "bsm_ssi_cold": 0.3827,
+      "ctrl_sign": 0.2839,
+      "ctrl_verify_warm": 0.2539,
+      "tmc_sign": 0.3273,
+      "tmc_verify_warm": 0.2805,
       "spat_sent": 800,
       "spat_verified": 4256,
       "spat_rejected": 0,
@@ -1783,7 +1955,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -1850,23 +2024,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0964805825242718,
-      "i5_backhaul_ms": 0.8656,
-      "i5_tmc_hop_ms": 0.46809999999999996
+      "ratio_spat_to_bsm_warm": 1.2456418383518226,
+      "i5_backhaul_ms": 1.0873,
+      "i5_tmc_hop_ms": 0.6078
     },
     {
       "seed": 16,
-      "spat_warm": 0.1791,
-      "spat_cold": 0.4788,
-      "spat_sign": 0.2498,
-      "bsm_ssi_warm": 0.1629,
-      "bsm_ssi_cold": 0.4446,
-      "ctrl_sign": 0.2535,
-      "ctrl_verify_warm": 0.1939,
-      "tmc_sign": 0.2526,
-      "tmc_verify_warm": 0.2292,
+      "spat_warm": 0.215,
+      "spat_cold": 0.4528,
+      "spat_sign": 0.289,
+      "bsm_ssi_warm": 0.1743,
+      "bsm_ssi_cold": 0.4015,
+      "ctrl_sign": 0.2824,
+      "ctrl_verify_warm": 0.2652,
+      "tmc_sign": 0.2275,
+      "tmc_verify_warm": 0.2109,
       "spat_sent": 800,
       "spat_verified": 4564,
       "spat_rejected": 0,
@@ -1883,7 +2067,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -1950,23 +2136,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0994475138121549,
-      "i5_backhaul_ms": 0.8763000000000001,
-      "i5_tmc_hop_ms": 0.4818
+      "ratio_spat_to_bsm_warm": 1.2335054503729201,
+      "i5_backhaul_ms": 1.0516,
+      "i5_tmc_hop_ms": 0.4384
     },
     {
       "seed": 17,
-      "spat_warm": 0.1832,
-      "spat_cold": 0.4798,
-      "spat_sign": 0.2605,
-      "bsm_ssi_warm": 0.1693,
-      "bsm_ssi_cold": 0.4183,
-      "ctrl_sign": 0.2696,
-      "ctrl_verify_warm": 0.2209,
-      "tmc_sign": 0.2757,
-      "tmc_verify_warm": 0.2326,
+      "spat_warm": 0.1933,
+      "spat_cold": 0.5169,
+      "spat_sign": 0.2707,
+      "bsm_ssi_warm": 0.1614,
+      "bsm_ssi_cold": 0.6122,
+      "ctrl_sign": 0.2817,
+      "ctrl_verify_warm": 0.2333,
+      "tmc_sign": 0.2534,
+      "tmc_verify_warm": 0.2289,
       "spat_sent": 800,
       "spat_verified": 5361,
       "spat_rejected": 0,
@@ -1983,7 +2179,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -2050,23 +2248,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0821027761370348,
-      "i5_backhaul_ms": 0.9342000000000001,
-      "i5_tmc_hop_ms": 0.5083
+      "ratio_spat_to_bsm_warm": 1.1976456009913259,
+      "i5_backhaul_ms": 0.9790000000000001,
+      "i5_tmc_hop_ms": 0.4823
     },
     {
       "seed": 18,
-      "spat_warm": 0.1846,
-      "spat_cold": 0.5073,
-      "spat_sign": 0.2603,
-      "bsm_ssi_warm": 0.1649,
-      "bsm_ssi_cold": 0.4292,
-      "ctrl_sign": 0.2568,
-      "ctrl_verify_warm": 0.2071,
-      "tmc_sign": 0.2613,
-      "tmc_verify_warm": 0.1947,
+      "spat_warm": 0.1836,
+      "spat_cold": 0.4273,
+      "spat_sign": 0.2483,
+      "bsm_ssi_warm": 0.1464,
+      "bsm_ssi_cold": 0.3761,
+      "ctrl_sign": 0.2363,
+      "ctrl_verify_warm": 0.2099,
+      "tmc_sign": 0.2133,
+      "tmc_verify_warm": 0.1842,
       "spat_sent": 800,
       "spat_verified": 4494,
       "spat_rejected": 0,
@@ -2083,7 +2291,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -2150,23 +2360,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1194663432383263,
-      "i5_backhaul_ms": 0.9087999999999999,
-      "i5_tmc_hop_ms": 0.45599999999999996
+      "ratio_spat_to_bsm_warm": 1.2540983606557379,
+      "i5_backhaul_ms": 0.8781,
+      "i5_tmc_hop_ms": 0.39749999999999996
     },
     {
       "seed": 19,
-      "spat_warm": 0.1825,
-      "spat_cold": 0.4498,
-      "spat_sign": 0.2531,
-      "bsm_ssi_warm": 0.1655,
-      "bsm_ssi_cold": 0.4074,
-      "ctrl_sign": 0.2321,
-      "ctrl_verify_warm": 0.2034,
-      "tmc_sign": 0.2318,
-      "tmc_verify_warm": 0.2125,
+      "spat_warm": 0.1954,
+      "spat_cold": 0.4334,
+      "spat_sign": 0.2711,
+      "bsm_ssi_warm": 0.1587,
+      "bsm_ssi_cold": 0.5497,
+      "ctrl_sign": 0.2572,
+      "ctrl_verify_warm": 0.2169,
+      "tmc_sign": 0.2881,
+      "tmc_verify_warm": 0.2563,
       "spat_sent": 800,
       "spat_verified": 4392,
       "spat_rejected": 0,
@@ -2183,7 +2403,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -2250,23 +2472,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1027190332326282,
-      "i5_backhaul_ms": 0.8711,
-      "i5_tmc_hop_ms": 0.44430000000000003
+      "ratio_spat_to_bsm_warm": 1.231253938248267,
+      "i5_backhaul_ms": 0.9406,
+      "i5_tmc_hop_ms": 0.5444
     },
     {
       "seed": 20,
-      "spat_warm": 0.1779,
-      "spat_cold": 0.4405,
-      "spat_sign": 0.25,
-      "bsm_ssi_warm": 0.1635,
-      "bsm_ssi_cold": 0.5576,
-      "ctrl_sign": 0.2415,
-      "ctrl_verify_warm": 0.1916,
-      "tmc_sign": 0.2581,
-      "tmc_verify_warm": 0.2069,
+      "spat_warm": 0.1846,
+      "spat_cold": 0.5372,
+      "spat_sign": 0.2574,
+      "bsm_ssi_warm": 0.1492,
+      "bsm_ssi_cold": 0.4787,
+      "ctrl_sign": 0.2553,
+      "ctrl_verify_warm": 0.1964,
+      "tmc_sign": 0.2913,
+      "tmc_verify_warm": 0.2065,
       "spat_sent": 800,
       "spat_verified": 4714,
       "spat_rejected": 0,
@@ -2283,7 +2515,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -2350,23 +2584,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0880733944954128,
-      "i5_backhaul_ms": 0.861,
-      "i5_tmc_hop_ms": 0.46499999999999997
+      "ratio_spat_to_bsm_warm": 1.2372654155495977,
+      "i5_backhaul_ms": 0.8937,
+      "i5_tmc_hop_ms": 0.4978
     },
     {
       "seed": 21,
-      "spat_warm": 0.1841,
-      "spat_cold": 0.4727,
-      "spat_sign": 0.2594,
-      "bsm_ssi_warm": 0.1685,
-      "bsm_ssi_cold": 0.4131,
-      "ctrl_sign": 0.2576,
-      "ctrl_verify_warm": 0.2031,
-      "tmc_sign": 0.2449,
-      "tmc_verify_warm": 0.2109,
+      "spat_warm": 0.187,
+      "spat_cold": 0.5505,
+      "spat_sign": 0.2608,
+      "bsm_ssi_warm": 0.1535,
+      "bsm_ssi_cold": 0.3625,
+      "ctrl_sign": 0.2722,
+      "ctrl_verify_warm": 0.2347,
+      "tmc_sign": 0.2027,
+      "tmc_verify_warm": 0.1797,
       "spat_sent": 800,
       "spat_verified": 4653,
       "spat_rejected": 0,
@@ -2383,7 +2627,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -2450,23 +2696,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0925816023738872,
-      "i5_backhaul_ms": 0.9042,
-      "i5_tmc_hop_ms": 0.4558
+      "ratio_spat_to_bsm_warm": 1.218241042345277,
+      "i5_backhaul_ms": 0.9547000000000001,
+      "i5_tmc_hop_ms": 0.38239999999999996
     },
     {
       "seed": 22,
-      "spat_warm": 0.1944,
-      "spat_cold": 0.5047,
-      "spat_sign": 0.2753,
-      "bsm_ssi_warm": 0.1759,
-      "bsm_ssi_cold": 0.4727,
-      "ctrl_sign": 0.277,
-      "ctrl_verify_warm": 0.2183,
-      "tmc_sign": 0.2684,
-      "tmc_verify_warm": 0.197,
+      "spat_warm": 0.1919,
+      "spat_cold": 0.5435,
+      "spat_sign": 0.2635,
+      "bsm_ssi_warm": 0.1537,
+      "bsm_ssi_cold": 0.4846,
+      "ctrl_sign": 0.2467,
+      "ctrl_verify_warm": 0.228,
+      "tmc_sign": 0.3149,
+      "tmc_verify_warm": 0.2407,
       "spat_sent": 800,
       "spat_verified": 4195,
       "spat_rejected": 0,
@@ -2483,7 +2739,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -2550,23 +2808,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1051733939738486,
-      "i5_backhaul_ms": 0.965,
-      "i5_tmc_hop_ms": 0.46540000000000004
+      "ratio_spat_to_bsm_warm": 1.2485361093038385,
+      "i5_backhaul_ms": 0.9300999999999999,
+      "i5_tmc_hop_ms": 0.5556
     },
     {
       "seed": 23,
-      "spat_warm": 0.1757,
-      "spat_cold": 0.4758,
-      "spat_sign": 0.2473,
-      "bsm_ssi_warm": 0.161,
-      "bsm_ssi_cold": 0.4144,
-      "ctrl_sign": 0.2437,
-      "ctrl_verify_warm": 0.1995,
-      "tmc_sign": 0.2299,
-      "tmc_verify_warm": 0.1942,
+      "spat_warm": 0.1803,
+      "spat_cold": 0.4568,
+      "spat_sign": 0.2489,
+      "bsm_ssi_warm": 0.1455,
+      "bsm_ssi_cold": 0.4401,
+      "ctrl_sign": 0.2244,
+      "ctrl_verify_warm": 0.1994,
+      "tmc_sign": 0.2352,
+      "tmc_verify_warm": 0.2073,
       "spat_sent": 800,
       "spat_verified": 4841,
       "spat_rejected": 0,
@@ -2583,7 +2851,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -2650,23 +2920,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0913043478260869,
-      "i5_backhaul_ms": 0.8662,
-      "i5_tmc_hop_ms": 0.42410000000000003
+      "ratio_spat_to_bsm_warm": 1.2391752577319588,
+      "i5_backhaul_ms": 0.853,
+      "i5_tmc_hop_ms": 0.4425
     },
     {
       "seed": 24,
-      "spat_warm": 0.1845,
-      "spat_cold": 0.504,
-      "spat_sign": 0.2596,
-      "bsm_ssi_warm": 0.1693,
-      "bsm_ssi_cold": 0.441,
-      "ctrl_sign": 0.2523,
-      "ctrl_verify_warm": 0.2013,
-      "tmc_sign": 0.2753,
-      "tmc_verify_warm": 0.2333,
+      "spat_warm": 0.1842,
+      "spat_cold": 0.5873,
+      "spat_sign": 0.2603,
+      "bsm_ssi_warm": 0.1504,
+      "bsm_ssi_cold": 0.5503,
+      "ctrl_sign": 0.2669,
+      "ctrl_verify_warm": 0.2299,
+      "tmc_sign": 0.2735,
+      "tmc_verify_warm": 0.2286,
       "spat_sent": 800,
       "spat_verified": 4638,
       "spat_rejected": 0,
@@ -2683,7 +2963,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -2750,23 +3032,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0897814530419374,
-      "i5_backhaul_ms": 0.8977,
-      "i5_tmc_hop_ms": 0.5085999999999999
+      "ratio_spat_to_bsm_warm": 1.2247340425531914,
+      "i5_backhaul_ms": 0.9413,
+      "i5_tmc_hop_ms": 0.5021
     },
     {
       "seed": 25,
-      "spat_warm": 0.191,
-      "spat_cold": 0.4292,
-      "spat_sign": 0.2696,
-      "bsm_ssi_warm": 0.1754,
-      "bsm_ssi_cold": 0.4231,
-      "ctrl_sign": 0.2504,
-      "ctrl_verify_warm": 0.2115,
-      "tmc_sign": 0.2502,
-      "tmc_verify_warm": 0.2122,
+      "spat_warm": 0.1886,
+      "spat_cold": 0.4121,
+      "spat_sign": 0.2644,
+      "bsm_ssi_warm": 0.1548,
+      "bsm_ssi_cold": 0.3719,
+      "ctrl_sign": 0.2711,
+      "ctrl_verify_warm": 0.2476,
+      "tmc_sign": 0.2483,
+      "tmc_verify_warm": 0.2326,
       "spat_sent": 800,
       "spat_verified": 5003,
       "spat_rejected": 0,
@@ -2783,7 +3075,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -2850,23 +3144,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.088939566704675,
-      "i5_backhaul_ms": 0.9225000000000001,
-      "i5_tmc_hop_ms": 0.4624
+      "ratio_spat_to_bsm_warm": 1.2183462532299743,
+      "i5_backhaul_ms": 0.9716999999999999,
+      "i5_tmc_hop_ms": 0.4809
     },
     {
       "seed": 26,
-      "spat_warm": 0.1793,
-      "spat_cold": 0.4676,
-      "spat_sign": 0.2528,
-      "bsm_ssi_warm": 0.1645,
-      "bsm_ssi_cold": 0.439,
-      "ctrl_sign": 0.2376,
-      "ctrl_verify_warm": 0.1967,
-      "tmc_sign": 0.241,
-      "tmc_verify_warm": 0.1811,
+      "spat_warm": 0.1801,
+      "spat_cold": 0.5119,
+      "spat_sign": 0.2483,
+      "bsm_ssi_warm": 0.1485,
+      "bsm_ssi_cold": 0.3859,
+      "ctrl_sign": 0.2633,
+      "ctrl_verify_warm": 0.2196,
+      "tmc_sign": 0.2689,
+      "tmc_verify_warm": 0.2133,
       "spat_sent": 800,
       "spat_verified": 4847,
       "spat_rejected": 0,
@@ -2883,7 +3187,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -2950,23 +3256,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0899696048632217,
-      "i5_backhaul_ms": 0.8664000000000001,
-      "i5_tmc_hop_ms": 0.42210000000000003
+      "ratio_spat_to_bsm_warm": 1.212794612794613,
+      "i5_backhaul_ms": 0.9113,
+      "i5_tmc_hop_ms": 0.48219999999999996
     },
     {
       "seed": 27,
-      "spat_warm": 0.1819,
-      "spat_cold": 0.4821,
-      "spat_sign": 0.2565,
-      "bsm_ssi_warm": 0.1654,
-      "bsm_ssi_cold": 0.4261,
-      "ctrl_sign": 0.2484,
-      "ctrl_verify_warm": 0.1944,
-      "tmc_sign": 0.2439,
-      "tmc_verify_warm": 0.2418,
+      "spat_warm": 0.1838,
+      "spat_cold": 0.4274,
+      "spat_sign": 0.2587,
+      "bsm_ssi_warm": 0.1488,
+      "bsm_ssi_cold": 0.3833,
+      "ctrl_sign": 0.2222,
+      "ctrl_verify_warm": 0.2024,
+      "tmc_sign": 0.3021,
+      "tmc_verify_warm": 0.3184,
       "spat_sent": 800,
       "spat_verified": 5133,
       "spat_rejected": 0,
@@ -2983,7 +3299,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -3050,23 +3368,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.099758162031439,
-      "i5_backhaul_ms": 0.8812,
-      "i5_tmc_hop_ms": 0.4857
+      "ratio_spat_to_bsm_warm": 1.235215053763441,
+      "i5_backhaul_ms": 0.8671,
+      "i5_tmc_hop_ms": 0.6205
     },
     {
       "seed": 28,
-      "spat_warm": 0.1936,
-      "spat_cold": 0.5056,
-      "spat_sign": 0.2713,
-      "bsm_ssi_warm": 0.174,
-      "bsm_ssi_cold": 0.466,
-      "ctrl_sign": 0.278,
-      "ctrl_verify_warm": 0.2274,
-      "tmc_sign": 0.2684,
-      "tmc_verify_warm": 0.231,
+      "spat_warm": 0.1839,
+      "spat_cold": 0.4252,
+      "spat_sign": 0.251,
+      "bsm_ssi_warm": 0.1483,
+      "bsm_ssi_cold": 0.3652,
+      "ctrl_sign": 0.2367,
+      "ctrl_verify_warm": 0.2204,
+      "tmc_sign": 0.254,
+      "tmc_verify_warm": 0.2246,
       "spat_sent": 800,
       "spat_verified": 4186,
       "spat_rejected": 0,
@@ -3083,7 +3411,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -3150,23 +3480,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.1126436781609197,
-      "i5_backhaul_ms": 0.9703,
-      "i5_tmc_hop_ms": 0.49940000000000007
+      "ratio_spat_to_bsm_warm": 1.2400539447066758,
+      "i5_backhaul_ms": 0.8919999999999999,
+      "i5_tmc_hop_ms": 0.4786
     },
     {
       "seed": 29,
-      "spat_warm": 0.1869,
-      "spat_cold": 0.4683,
-      "spat_sign": 0.2662,
-      "bsm_ssi_warm": 0.1694,
-      "bsm_ssi_cold": 0.4094,
-      "ctrl_sign": 0.2725,
-      "ctrl_verify_warm": 0.2167,
-      "tmc_sign": 0.2378,
-      "tmc_verify_warm": 0.2129,
+      "spat_warm": 0.1846,
+      "spat_cold": 0.6464,
+      "spat_sign": 0.2532,
+      "bsm_ssi_warm": 0.1509,
+      "bsm_ssi_cold": 0.6273,
+      "ctrl_sign": 0.251,
+      "ctrl_verify_warm": 0.2081,
+      "tmc_sign": 0.2739,
+      "tmc_verify_warm": 0.1978,
       "spat_sent": 800,
       "spat_verified": 4332,
       "spat_rejected": 0,
@@ -3183,7 +3523,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -3250,23 +3592,33 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.103305785123967,
-      "i5_backhaul_ms": 0.9423000000000001,
-      "i5_tmc_hop_ms": 0.4507
+      "ratio_spat_to_bsm_warm": 1.223326706428098,
+      "i5_backhaul_ms": 0.8968999999999999,
+      "i5_tmc_hop_ms": 0.4717
     },
     {
       "seed": 30,
-      "spat_warm": 0.1803,
-      "spat_cold": 0.5069,
-      "spat_sign": 0.2534,
-      "bsm_ssi_warm": 0.1646,
-      "bsm_ssi_cold": 0.4174,
-      "ctrl_sign": 0.2468,
-      "ctrl_verify_warm": 0.1995,
-      "tmc_sign": 0.2528,
-      "tmc_verify_warm": 0.1916,
+      "spat_warm": 0.2456,
+      "spat_cold": 0.5049,
+      "spat_sign": 0.318,
+      "bsm_ssi_warm": 0.1963,
+      "bsm_ssi_cold": 0.345,
+      "ctrl_sign": 0.3113,
+      "ctrl_verify_warm": 0.2971,
+      "tmc_sign": 0.3056,
+      "tmc_verify_warm": 0.3321,
       "spat_sent": 800,
       "spat_verified": 4461,
       "spat_rejected": 0,
@@ -3283,7 +3635,9 @@
         "i2j_future_spat": true,
         "i2b_w_wrong_key_spat_warm": true,
         "i2c_w_not_permitted_warm": true,
-        "i2f_w_stale_spat_warm": true
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
       },
       "attack_reasons": {
         "i2a_unsigned_spat": {
@@ -3350,12 +3704,22 @@
           "expected": "stale",
           "reason": "stale",
           "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
         }
       },
-      "ratio_spat_to_bsm_warm": 1.0953827460510328,
-      "i5_backhaul_ms": 0.88,
-      "i5_tmc_hop_ms": 0.4444
+      "ratio_spat_to_bsm_warm": 1.2511462047885888,
+      "i5_backhaul_ms": 1.1720000000000002,
+      "i5_tmc_hop_ms": 0.6376999999999999
     }
   ],
-  "wall_clock_s": 422.8
+  "wall_clock_s": 404.2
 }

@@ -28,6 +28,8 @@ history:
 - PROVENANCE.md
 - docs/AFTER_ACTION_REPORT.md
 - docs/AUDIT_*.md
+- docs/milestones/*
+- docs/phase2/focus/*/CAPTURE.md
 - docs/HANDOFF_*.md
 - docs/REVIEW_*.md
 - docs/RESEARCH_AUDIT.md
@@ -50,6 +52,12 @@ history_markers:
 - pre-merge
 - withdrawn
 entries:
+- pattern: 1\.096
+  current: 1.226 [1.219, 1.238], outside band, not falsified (verifier v3, WM-2 C0)
+  row: 44
+- pattern: 0\.886 ms
+  current: 0.900 ms [0.889, 0.935] (verifier v3)
+  row: 48
 - pattern: 65[–-]71 ms
   current: 103.177 ms median at h = 50 (D58)
   row: 31

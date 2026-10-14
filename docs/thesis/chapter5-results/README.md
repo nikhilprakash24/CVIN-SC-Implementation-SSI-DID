@@ -342,11 +342,13 @@ set extended to 13 checks (10 attacks and 3 warm variants) with expected rejecti
 and every experiment re-run. The figures below are the second run; the
 first run's values are kept in the register as history.
 
-**I1 — Warm SPaT verification costs about what a warm BSM does (PASS).**
-Median of per-run ratios of warm SPaT to warm SSI BSM verification:
-**1.096** (95 % CI [1.091, 1.101], N=30; pass band [0.80, 1.20]); 0.996
-before the hardening. The roughly 10 % premium is the extra checks the SPaT
-path now makes (binding, replay, expiry) and the BSM path does not; message
+**I1 — Warm SPaT verification costs somewhat more than a warm BSM (outside the band, not falsified).**
+Median of per-run ratios of warm SPaT to warm SSI BSM verification on verifier v3 (WM-2 C0, amendment A6):
+**1.226** (95 % CI [1.219, 1.238], N=30; pass band [0.80, 1.20], falsified above 2.0), so the verdict is
+"outside band, not falsified", reported as it fell. On verifier v2 the ratio was 1.096 (PASS), and 0.996 before
+the first hardening. Between v2 and v3, SPaT warm moved 0.182 → 0.184 ms and BSM warm, which v3 does not touch,
+0.166 → 0.149 ms, on a different host build; the cause of the move is not isolated (register #44). The SPaT path
+makes checks the BSM path does not (binding, replay, expiry, and since v3 a size and depth bound); message
 sizes also differ. Both paths are compared without a revocation re-check
 (k = ∞): in this harness a re-check is an in-process lookup, whereas a chain
 read costs milliseconds (#37, #40), so I1 is the cheapest case. Absolute
@@ -390,8 +392,8 @@ range (register #47). ERC-1056 has no identity-level revocation, so
 message-level RSU revocation runs through the credential registry (I3).
 
 **I5 — Cost of the operations on the I2I path (reported).** The sum of four
-median operation costs on the controller → RSU → vehicle path is 0.886 ms
-(95 % CI [0.879, 0.913]); the TMC → controller hop 0.464 ms. This is not a
+median operation costs on the controller → RSU → vehicle path is 0.900 ms
+(95 % CI [0.889, 0.935], verifier v3); the TMC → controller hop 0.480 ms. This is not a
 path latency: the harness does not chain the SPaT to the controller's
 update, and the update period, queuing and network are excluded.
 
@@ -536,9 +538,9 @@ in traffic density with an extrapolated saturation point (P\* ≈ 609 neighbours
 realistic V2V regime.
 
 **Infrastructure addendum (§5.4.1, thrust 3, crux C3; not a hypothesis H1–H5):**
-pre-registered I1–I3 PASS, I4–I5 reported (register #44–#48). Warm SPaT
-verification costs 1.096× a warm BSM's (95 % CI [1.091, 1.101]); thirteen
-registered attacks are rejected for their expected reason in every run; a
+pre-registered I2–I3 PASS, I1 outside its band and not falsified, I4–I5 reported (register #44–#48). Warm SPaT
+verification costs 1.226× a warm BSM's on verifier v3 (95 % CI [1.219, 1.238]); fifteen
+registered checks are rejected for their expected reason in every run; a
 cached verifier honours a revoked RSU for at most k − 1 messages, a count
 and not a time. The figures follow a hardening of the verifier after an
 adversarial review found two attacks the first version accepted.

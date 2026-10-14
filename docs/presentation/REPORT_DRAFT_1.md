@@ -13,8 +13,8 @@
 | Does identity verification fit a V2V message budget? | SSI warm verify 0.153 ms [0.151, 0.154], N = 30 runs; budget 100 ms | #27 |
 | Do the identities meet W3C DID / VC? | internal checker 94.3 % (41 pass, 1 partial, 2 fail of 44); external DID suite 335/336 | #4, #24 |
 | Are the identity contracts attack-resistant? | 43 of 43 applicable attack cells defended (11 not applicable), strict harness | #28 |
-| Can infrastructure (RSUs, controllers) use the same identity layer? | I1 PASS (SPaT/BSM warm ratio 1.096), I2 PASS (13 attacks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
-| How large is the test and evidence base? | 537 Hardhat tests, 305 Python-layer tests, 92 feature demos (1,752 steps); 32 verified register rows | grand report |
+| Can infrastructure (RSUs, controllers) use the same identity layer? | I1 outside band, not falsified (SPaT/BSM warm ratio 1.226), I2 PASS (15 registered checks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
+| How large is the test and evidence base? | 537 Hardhat tests, 305 Python-layer tests, 92 feature demos (1,752 steps); 33 verified register rows | grand report |
 
 ## 2. Research questions and hypotheses
 
@@ -171,11 +171,11 @@ Roadside units (RSUs), signal controllers and a traffic-management centre (TMC) 
 
 | Exp. | Question | Result | Verdict |
 |---|---|---|---|
-| I1 | Does a warm SPaT verify cost what a warm BSM verify does? | ratio 1.096 [1.091, 1.101]; SPaT 0.182 ms vs BSM 0.166 ms | PASS |
-| I2 | Are registered attacks rejected for the right reason? | 13 checks, 30/30 runs | PASS |
+| I1 | Does a warm SPaT verify cost what a warm BSM verify does? | ratio 1.226 [1.219, 1.238]; SPaT 0.184 ms vs BSM 0.149 ms | outside band, not falsified |
+| I2 | Are registered attacks rejected for the right reason? | 15 checks, 30/30 runs | PASS |
 | I3 | How long is a revoked RSU trusted by a cached verifier? | k=1: 0 (≤ 0) · k=5: 4 (≤ 4) · k=25: 24 (≤ 24) · k=inf: 100 messages | PASS |
 | I4 | What does an RSU identity cost on chain? | key anchor 52,558–52,606 gas; hand to authority 51,742–51,754 | reported |
-| I5 | What do the I2I operations add? | 0.886 ms, a sum of operation costs (not a path latency) | reported |
+| I5 | What do the I2I operations add? | 0.900 ms, a sum of operation costs (not a path latency) | reported |
 
 | I2 check | Expected rejection reason |
 |---|---|
@@ -192,6 +192,8 @@ Roadside units (RSUs), signal controllers and a traffic-management centre (TMC) 
 | i2b_w_wrong_key_spat_warm | wrong_key |
 | i2c_w_not_permitted_warm | not_permitted |
 | i2f_w_stale_spat_warm | stale |
+| i2k_spat_without_rsu_field | binding |
+| i2l_deeply_nested_spat | malformed |
 
 ![Two lines over 30 runs](figures/f5_i1_per_run.png)
 
@@ -272,8 +274,8 @@ flowchart LR
 | Severity | Fixed | Partly fixed | Open |
 |---|---|---|---|
 | High | 16 | 1 | 0 |
-| Medium | 13 | 4 | 13 |
-| Low | 7 | 1 | 10 |
+| Medium | 16 | 4 | 10 |
+| Low | 9 | 1 | 9 |
 *Defect log D1–D36 by severity and status (`docs/DEFECT_LOG.md`). Open items wait for author decisions (§C).*
 
 ## 6. Rigour: how the numbers are kept honest

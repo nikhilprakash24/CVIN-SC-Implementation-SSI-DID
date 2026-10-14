@@ -156,11 +156,11 @@ Roadside units (RSUs), signal controllers and a traffic-management centre are `d
 
 | Experiment | Result | Verdict |
 |---|---|---|
-| I1 warm SPaT vs warm BSM verify (ratio) | 1.096 [1.091, 1.101] | PASS (band 0.80–1.20) |
-| I2 registered checks (10 attacks, 3 warm variants) rejected for the expected reason | 13 of 13, in 30/30 runs | PASS |
+| I1 warm SPaT vs warm BSM verify (ratio), verifier v3 | 1.226 [1.219, 1.238] (was 1.096 on verifier v2; host differs, cause not isolated) | outside band (0.80–1.20), not falsified (> 2.0) |
+| I2 registered checks (12 attacks, 3 warm variants) rejected for the expected reason | 15 of 15, in 30/30 runs, warm variants verified warm | PASS |
 | I3 SPaT accepted from a revoked RSU by a cached verifier | ≤ k − 1 messages (0 / 4 / 24 for k = 1 / 5 / 25); a conformance check of the re-check cadence, a count not a time | PASS |
 | I4 RSU identity gas, range over 30 runs (key anchor; hand to authority) | 52,558–52,606; 51,742–51,754 | reported |
-| I5 operation costs on the controller → RSU → vehicle path | 0.886 ms (a sum of operation costs, not a path latency) | reported |
+| I5 operation costs on the controller → RSU → vehicle path | 0.900 ms (a sum of operation costs, not a path latency) | reported |
 
 *An adversarial review found two holes in the first verifier (SPaT for another intersection; replay inside the window); both were fixed and every experiment re-run (`docs/AFTER_ACTION_REPORT_11.md`). Mock mobility, no radio, in-process back-haul and revocation registry.*
 

@@ -78,3 +78,9 @@ the same code paths as an open Phase 1 step waits for that step (`ROADMAP.md` §
 | `BRAINSTORM_01.md` | session 1: method, divergent list, parked ideas, cross-cutting questions, questions for the author | P2.0 |
 | `DECISIONS.md` | author decisions P2-D1… with defaults; ADR log | P2.0 |
 | `sessions/SESSION_LOG.md` | one entry per Phase 2 session; the last entry is the next session's brief | P2.0 |
+| `PHASE2_PROGRAMME.md` | **the consolidated document**: Phase 2 in one reading, with the three focuses and the scope | session 2 |
+| `SCOPE_RECONCILIATION.md` | the thesis scope across its revisions; Scope v3; where Phase 2 belongs; paper map; examiner questions; 15 decisions | session 2 (academic adviser) |
+| `focus/F1_onchain_storage_idtx/`, `focus/F2_chains_and_databases/`, `focus/F3_interaction_modes/` | the three author-designated focuses: README (executive summary), CAPTURE, ANALYSIS, PLAN, EXECUTION | session 2 |
+| `focus/FIGURES.md`, `focus/figures/`, `focus/make_focus_figures.py` | five generated figures with their table views (CI-checked) | session 2 |
+| `reviews/` | the review team's reviews of Phase 2 documents | session 2 |
+| `CHAT_WORKSPACE_BRIEF.md`, `inbox/` | the hand-off for literature, standards and drafting work in a chat workspace with tools, and where its results return | session 2 |

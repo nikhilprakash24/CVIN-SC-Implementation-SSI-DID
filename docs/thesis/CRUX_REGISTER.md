@@ -75,11 +75,11 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 | Row | Status | Claim (from the register) |
 |---|---|---|
-| #44 | V | (pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1 and A4; verdict PASS) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same run: median of 30 per-run rat… |
-| #45 | V | (pre-registered I2, amendment A4; verdict PASS) Each of 13 registered checks (10 attacks and 3 warm variants, 9 distinct rejection branches; amendment A5) rejected for its expected reason in 30/30 runs (a deterministic c… |
+| #44 | V | (pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1, A4 and A6; verdict outside band, not falsified) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same ru… |
+| #45 | V | (pre-registered I2, amendments A4, A5 and A6; verdict PASS) Each of 15 registered checks (12 attacks and 3 warm variants) rejected for its expected reason in 30/30 runs, and the three warm variants verified warm in every… |
 | #46 | V | (pre-registered I3; verdict PASS) A verifier that has cached a revoked RSU accepts at most k − 1 further SPaT from it: `rsu_1`'s credential revoked at t = 10 s, re-check of the authority's (in-process) registry every k-t… |
 | #47 | V | (pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`), range over 30 runs (random RSU key and address each run): identity creation 0 (… |
-| #48 | V | (pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path: per run the sum of four per-run medians (controller sign + RSU warm verify + RSU SPaT s… |
+| #48 | V | (pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path on verifier v3: per run the sum of four per-run medians (controller sign + RSU warm veri… |
 
 **Open gaps:**
 - Mobility is the mock model (no SUMO run); no radio channel; the I2I back-haul and the revocation registry are in-process (no propagation delay, no lookup cost).

@@ -48,7 +48,7 @@ def table(name):
 
 def classify_step(s):
     """Rule-based class of one demo step: write-A (mined), read-A (view call), revert-A (expected revert),
-    detached-C (off-chain work), unclassified."""
+    local computation (no chain contact), unclassified."""
     gas = str(s.get("gasUsed", "0"))
     fn, note = str(s.get("fn", "")), str(s.get("note", ""))
     if s.get("onchain") and gas not in ("0", "", "None"):
@@ -58,7 +58,7 @@ def classify_step(s):
     if VIEW.search(fn.split(".")[-1]) and not OFFCHAIN.search(fn):
         return "read (A, view call)"
     if OFFCHAIN.search(fn) or OFFCHAIN.search(note):
-        return "off-chain (C)"
+        return "local computation (no chain contact)"
     return "unclassified"
 
 
@@ -88,7 +88,12 @@ def build():
         by_option[s["option"]][classify_step(s)] += 1
         mined = s.get("onchain") and str(s.get("gasUsed", "0")) not in ("0", "", "None")
         flag[s["option"]]["mined" if mined else ("on-chain, no gas" if s.get("onchain") else "flag: off-chain")] += 1
-    classes = ["write (A, mined)", "read (A, view call)", "expected revert (A)", "off-chain (C)", "unclassified"]
+    classes = ["write (A, mined)", "read (A, view call)", "expected revert (A)", "local computation (no chain contact)", "unclassified"]
+    cross = collections.defaultdict(collections.Counter)   # flag class -> rule class (AR-34)
+    for s in demos:
+        mined = s.get("onchain") and str(s.get("gasUsed", "0")) not in ("0", "", "None")
+        fl = "mined" if mined else ("on-chain, no gas" if s.get("onchain") else "flag: off-chain")
+        cross[fl][classify_step(s)] += 1
 
     L = ["# F3 Mode Classification of Phase 1's Chain Interactions", "",
          "**Generated** by `docs/phase2/focus/F3_interaction_modes/classify_modes.py`; do not edit. "
@@ -109,7 +114,7 @@ def build():
           "## 3. Demo steps, classified by rule (grand runner log)", "",
           f"Source: `sandbox/grand/report/demos.json` ({len(demos)} steps). Rules: a step with gas is a mined write; a note or "
           "step naming a revert is an expected revert; a view-style function name is a read; a signing, credential, hashing "
-          "or proof function is off-chain work. Rule-based and approximate: `unclassified` is reported, not hidden.", "",
+          "or proof function is local computation (no chain contact). Rule-based and approximate: `unclassified` is reported, not hidden.", "",
           "| Option | " + " | ".join(classes) + " | flag-based off-chain (D61) |", "|---|" + "---:|" * (len(classes) + 1)]
     tot = collections.Counter()
     for opt in sorted(by_option):
@@ -118,8 +123,13 @@ def build():
         L.append(f"| {opt} | " + " | ".join(str(c[k]) for k in classes) + f" | {flag[opt]['flag: off-chain']} |")
     L.append("| **all** | " + " | ".join(f"**{tot[k]}**" for k in classes) +
              f" | **{sum(f['flag: off-chain'] for f in flag.values())}** |")
-    L += ["", "The flag-based column is what the grand report's \"off-chain\" count adds up from. The rule-based columns show "
-          "how much of it is reads and expected reverts logged under the flag (D61)."]
+    L += ["", "### Cross-tabulation: the grand report's flag against the rule class (academic review AR-34)", "",
+          "| Flag in the grand report | " + " | ".join(classes) + " | total |", "|---|" + "---:|" * (len(classes) + 1)]
+    for fl in ("mined", "on-chain, no gas", "flag: off-chain"):
+        c = cross[fl]
+        L.append(f"| {fl} | " + " | ".join(str(c[k]) for k in classes) + f" | {sum(c.values())} |")
+    L += ["", "A signing step that serves a relayed write is classed here as local computation; it belongs to the write it "
+          "serves, which the rules cannot see (a limit of rule-based classification; F3 plan step F3-S3 retires it)."]
     return "\n".join(L) + "\n"
 
 

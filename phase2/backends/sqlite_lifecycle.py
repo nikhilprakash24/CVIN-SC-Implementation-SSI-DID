@@ -10,8 +10,13 @@ added, so that F2 can separate what a chain contributes from what a careful data
   * an **append-only journal**: every write is one row; UPDATE and DELETE on the journal are refused by
     triggers;
   * **hash chaining**: each journal row stores sha256(previous hash || canonical JSON of the entry), so
-    `verify_journal()` detects any edit, deletion or reordering made by someone who bypassed the
-    triggers (for example the database's own administrator editing the file);
+    `verify_journal()` detects an edit, deletion or reordering **inside** the journal made by someone who
+    bypassed the triggers. It does **not** detect deleting rows at the tail, nor an operator who re-derives
+    every later hash: both need a head hash kept outside (an anchor). Tests show both limits;
+  * the current owner is **derived from the journal** (the latest transfer), not read from a mutable table,
+    so it is covered by the hash chain (academic review AR-22);
+  * the VIN is stored only as a **keyed hash** (HMAC-SHA-256 with a per-instance secret key), so it cannot be
+    enumerated from the database alone (the D64 pattern; AR-22);
   * the same interface as the Phase 1 backends: birth, lifecycle_event, transfer, history,
     current_owner, with `name` and `is_chain`.
 
@@ -53,10 +58,11 @@ class SQLiteLifecycleBackend:
     name = "sqlite_journal"
     is_chain = False
 
-    def __init__(self, path: str = ":memory:", salt: bytes = b"phase2-f2"):
+    def __init__(self, path: str = ":memory:", vin_key: Optional[bytes] = None):
+        import os
         self.db = sqlite3.connect(path)
         self.db.executescript(SCHEMA)
-        self.salt = salt
+        self.vin_key = vin_key if vin_key is not None else os.urandom(32)   # the operator's secret
         self.owners = ["OWNER-A", "OWNER-B"]
         self.last_receipt = None
         self._n = 0
@@ -74,7 +80,8 @@ class SQLiteLifecycleBackend:
     def birth(self, vin: str, first_owner_index: int = 0) -> str:
         self._n += 1
         handle = f"vehicle_sql_{self._n}"
-        vin_hash = hashlib.sha256(self.salt + vin.encode()).hexdigest()   # the VIN itself is not stored
+        import hmac
+        vin_hash = hmac.new(self.vin_key, vin.encode(), hashlib.sha256).hexdigest()   # keyed: not enumerable without the key
         owner = self.owners[first_owner_index]
         birth = {"vin_hash": vin_hash, "first_owner": owner}
         with self.db:
@@ -103,10 +110,14 @@ class SQLiteLifecycleBackend:
         return json.loads(rows[0][0])["odometer"] if rows else None
 
     def current_owner(self, handle: str) -> str:
-        row = self.db.execute("SELECT owner FROM vehicles WHERE handle = ?", (handle,)).fetchone()
-        if row is None:
+        """Derived from the journal (the hash-chained record), not from the mutable vehicles table (AR-22)."""
+        rows = self.db.execute("SELECT kind, body FROM journal WHERE handle = ? AND kind IN ('birth', 'transfer') "
+                               "ORDER BY seq DESC LIMIT 1", (handle,)).fetchall()
+        if not rows:
             raise KeyError(handle)
-        return row[0]
+        kind, body = rows[0]
+        b = json.loads(body)
+        return b["first_owner"] if kind == "birth" else b["to"]
 
     def history(self, handle: str) -> Dict[str, Any]:
         rows = self.db.execute("SELECT kind, body FROM journal WHERE handle = ? ORDER BY seq", (handle,)).fetchall()
