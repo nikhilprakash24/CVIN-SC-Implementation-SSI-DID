@@ -1,0 +1,153 @@
+{
+ "source_run": "harness run 2026-10-09T02-09-36Z_7a9a996 (M1-H)",
+ "f1_state_vs_gas": {
+  "rows": "#35 (lifecycle gas), #49 (zero→nonzero SSTOREs, log bytes)",
+  "standards": {
+   "ERC-1056": {
+    "lifetime_gas": 1050809,
+    "note": "",
+    "new_slots": 8,
+    "log_bytes": 6464
+   },
+   "ERC-1056 (wrapper)": {
+    "lifetime_gas": 1025469,
+    "note": "",
+    "new_slots": 9,
+    "log_bytes": 6592
+   },
+   "ERC-721": {
+    "lifetime_gas": 2706685,
+    "note": "",
+    "new_slots": 92,
+    "log_bytes": 4288
+   },
+   "ERC-725": {
+    "lifetime_gas": 3155103,
+    "note": "",
+    "new_slots": 83,
+    "log_bytes": 3072
+   },
+   "ERC-735": {
+    "lifetime_gas": 5797549,
+    "note": "(excl. 3 n/a)",
+    "new_slots": 149,
+    "log_bytes": 12960
+   },
+   "ERC-1155": {
+    "lifetime_gas": 1261575,
+    "note": "(excl. 2 n/a)",
+    "new_slots": 21,
+    "log_bytes": 6944
+   },
+   "ERC-725xy": {
+    "lifetime_gas": 2956507,
+    "note": "(excl. 2 n/a)",
+    "new_slots": 38,
+    "log_bytes": 3744
+   },
+   "LSP8": {
+    "lifetime_gas": 1508413,
+    "note": "(excl. 3 n/a)",
+    "new_slots": 42,
+    "log_bytes": 8288
+   },
+   "ERC-4337": {
+    "lifetime_gas": 2221290,
+    "note": "",
+    "new_slots": 37,
+    "log_bytes": 3968
+   },
+   "CVIN-Combined": {
+    "lifetime_gas": 2559537,
+    "note": "",
+    "new_slots": 81,
+    "log_bytes": 7648
+   }
+  }
+ },
+ "f1_read_cost_vs_history": {
+  "rows": "#31",
+  "series": {
+   "ERC-1056": {
+    "h=1": {
+     "rpc": 14,
+     "bytes": 10005
+    },
+    "h=10": {
+     "rpc": 32,
+     "bytes": 24153
+    },
+    "h=50": {
+     "rpc": 112,
+     "bytes": 87033
+    }
+   },
+   "ERC-735": {
+    "h=1": {
+     "rpc": 3,
+     "bytes": 13774
+    },
+    "h=10": {
+     "rpc": 3,
+     "bytes": 44398
+    },
+    "h=50": {
+     "rpc": 3,
+     "bytes": 180558
+    }
+   },
+   "ERC-1155": {
+    "h=1": {
+     "rpc": 3,
+     "bytes": 908
+    },
+    "h=10": {
+     "rpc": 3,
+     "bytes": 908
+    },
+    "h=50": {
+     "rpc": 3,
+     "bytes": 908
+    }
+   }
+  }
+ },
+ "f2_lifecycle_parity_ms": {
+  "rows": "#33 (committed second run; D60)",
+  "operations": {
+   "birth": {
+    "centralized_registry": 0.0036,
+    "mobi_vid_v2": 17.689
+   },
+   "lifecycle_event": {
+    "centralized_registry": 0.0089,
+    "mobi_vid_v2": 14.6285
+   },
+   "ownership_transfer": {
+    "centralized_registry": 0.0023,
+    "mobi_vid_v2": 13.9471
+   },
+   "history_query": {
+    "centralized_registry": 0.2627,
+    "mobi_vid_v2": 114.2216
+   }
+  }
+ },
+ "f3_write_paths_gas": {
+  "rows": "#50, #34",
+  "ERC-1056": {
+   "direct (U3)": 35024,
+   "relayed signed (U5)": 62646
+  },
+  "ERC-4337": {
+   "direct (U3)": 94651,
+   "UserOperation via EntryPoint (U5)": 141767
+  }
+ },
+ "f3_read_modes_ms": {
+  "rows": "#27 (offline), #37 (probe), #21 (full resolution); #21 and #37 predate the D51 fix and its added RPC (re-run due, A3b)",
+  "offline: cached credential, no chain contact (V2V warm, M0)": 0.1528,
+  "probe: one eth_call to check the identity is unchanged": 2.758,
+  "full resolution: key replayed from event logs, uncached": 9.654
+ }
+}

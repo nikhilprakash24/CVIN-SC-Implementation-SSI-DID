@@ -4,9 +4,9 @@
     "source": {
       "path": "docs/MEASUREMENT_CONDITIONS.md"
     },
-    "rows": 48,
+    "rows": 50,
     "by_status": {
-      "V": 30,
+      "V": 32,
       "S": 10,
       "E": 7,
       "U": 1
@@ -1128,7 +1128,7 @@
       {
         "id": "D51",
         "severity": "H",
-        "status": "open"
+        "status": "fixed"
       },
       {
         "id": "D52",
@@ -1159,17 +1159,51 @@
         "id": "D57",
         "severity": "L",
         "status": "open"
+      },
+      {
+        "id": "D58",
+        "severity": "M",
+        "status": "fixed"
+      },
+      {
+        "id": "D59",
+        "severity": "L",
+        "status": "fixed"
+      },
+      {
+        "id": "D60",
+        "severity": "L",
+        "status": "open"
+      },
+      {
+        "id": "D61",
+        "severity": "L",
+        "status": "open"
+      },
+      {
+        "id": "D62",
+        "severity": "L",
+        "status": "fixed"
+      },
+      {
+        "id": "D63",
+        "severity": "L",
+        "status": "open"
+      },
+      {
+        "id": "D64",
+        "severity": "M",
+        "status": "open"
       }
     ],
     "counts": {
-      "H:fixed": 15,
-      "M:fixed": 12,
-      "L:fixed": 5,
+      "H:fixed": 16,
+      "M:fixed": 13,
+      "L:fixed": 7,
       "M:partly fixed": 4,
-      "L:open": 7,
-      "M:open": 12,
+      "L:open": 10,
+      "M:open": 13,
       "H:partly fixed": 1,
-      "H:open": 1,
       "L:partly fixed": 1
     }
   },
@@ -1731,7 +1765,7 @@
     "31": {
       "row": 31,
       "status": "V",
-      "claim": "Harness L3/L6: per-op gas flat in population N ≤ 1 000 (≤ 12 gas from tokenId width); ERC-1056 resolution grows linearly in history: 14 → 32 → 112 RPC calls / 87 KB at h = 50, median ≈65–71 ms in-process; after the lifec…",
+      "claim": "Harness L3/L6: per-op gas flat in population N ≤ 1 000 (≤ 12 gas from tokenId width); ERC-1056 resolution grows linearly in history: 14 → 32 → 112 RPC calls / 87 KB at h = 50, median 103.177 ms (p95 134.283) in-process (…",
       "tag": "M1-H"
     },
     "32": {
@@ -1835,6 +1869,18 @@
       "status": "V",
       "claim": "(pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path: per run the sum of four per-run medians (controller sign + RSU warm verify + RSU SPaT s…",
       "tag": "M0"
+    },
+    "49": {
+      "row": 49,
+      "status": "V",
+      "claim": "Harness L1/L2 on-chain footprint per standard (Phase 2 focus F1; added 2026-10-14 from the existing run of record, no new run). U3 set attribute, SSTORE opcodes executed / zero→nonzero, and event-log bytes: ERC-1056 1 / …",
+      "tag": "M1-H"
+    },
+    "50": {
+      "row": 50,
+      "status": "V",
+      "claim": "Relayed writes (Phase 2 focus F3; added 2026-10-14 from the existing run of record, no new run): ERC-1056 signed `setAttribute` submitted by a relayer (U5) 62,646 gas against the owner's direct U3 35,024 (+27,622); ERC-4…",
+      "tag": "M1-H"
     }
   }
 }

@@ -274,8 +274,46 @@ ideas:
     depends: [I-01, I-02]
     scores: {value: 3, novelty: 3, feasibility: 1, reuse: 2, risk: 5}
 
+  - id: I-24
+    track: T
+    title: "Identity-dependent transactions (IDTx): definition, taxonomy, measured cost and staleness (author focus F1)"
+    question: "What does conditioning a transaction on ledger-held identity state cost and risk, by dependency kind, storage locus, encoding, evaluation and continuation?"
+    why: "The author's coined concept; Phase 1 holds 25 implicit instances and measures the storage trade-off (#49, #35, #31) but never what a storage choice forbids."
+    anchors: [C1, C8, D51, D54, D64, "#49", "#31"]
+    builds_on: [docs/phase2/focus/F1_onchain_storage_idtx/ANALYSIS.md, phase2/idtx/contracts/IdtxExecutor.sol]
+    first_step: "Done: the prototype with 10 behaviour tests. Next: lock the F1 plan as a pre-registration and run E-F1-1 and E-F1-2."
+    kill: "If the measured overhead and the TOCTOU result add nothing beyond access control, keep IDTx as a taxonomy in chapter 6 and drop the paper."
+    depends: []
+    scores: {value: 5, novelty: 4, feasibility: 4, reuse: 5, risk: 2}
+  - id: I-25
+    track: R
+    title: "Substrate study: database, anchored journal, permissioned chain and rollup for vehicle identity (author focus F2)"
+    question: "The same lifecycle on four substrates: what does each cost, and what verification does each give a party who does not trust the operator?"
+    why: "Phase 1 ran one local chain and an in-memory registry (#33); gas transfers across EVM chains but latency and trust do not."
+    anchors: [C1, N-11, "#33", "#21", D62]
+    builds_on: [docs/phase2/focus/F2_chains_and_databases/ANALYSIS.md, phase2/backends/sqlite_lifecycle.py, cv2x-testbed/identity/lifecycle_backends.py]
+    first_step: "Done: the database backend with a hash-chained journal and 6 tests. Next: anchoring the journal head on chain (F2-S3)."
+    kill: "If the author declines installing a permissioned client (P2-D9), run the three local substrates and state the gap."
+    depends: []
+    scores: {value: 4, novelty: 3, feasibility: 4, reuse: 4, risk: 2}
+  - id: I-26
+    track: R
+    title: "Modes of chain interaction (direct, mediated, detached) and mode selection per message class (author focus F3)"
+    question: "Which mode should each vehicle message class use, given latency, trust, privacy and staleness, and what does a verified mediated read cost?"
+    why: "Phase 1 measured direct and relayed writes (#50) and three read modes (#21, #37, #27) but never a provider-served read or a detached write."
+    anchors: [C2, C3, C4, "#50", "#27", "#37", D52, D61]
+    builds_on: [docs/phase2/focus/F3_interaction_modes/ANALYSIS.md, docs/phase2/focus/F3_interaction_modes/classify_modes.py]
+    first_step: "Done: the generated classification. Next: the author's choice of taxonomy (P2-D7), then the detached-write prototype (E-F3-3)."
+    kill: "None for the taxonomy; the provider arm waits for N-11."
+    depends: [I-25]
+    scores: {value: 4, novelty: 3, feasibility: 4, reuse: 5, risk: 2}
+
 # Candidate programmes: coherent bundles the author chooses between (decision P2-D1).
 programmes:
+  - id: PG-focus
+    title: "The author's three focuses (designated 2026-10-14, not chosen by score)"
+    ideas: [I-24, I-25, I-26]
+    thesis_effect: "F1 concept and F3 taxonomy enter chapter 6 with existing rows; measured studies follow the thesis (scope reconciliation)"
   - id: PG-alpha
     title: "Realistic deployment evidence"
     ideas: [I-01, I-02, I-03, I-11]

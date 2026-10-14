@@ -50,6 +50,12 @@ history_markers:
 - pre-merge
 - withdrawn
 entries:
+- pattern: 65[–-]71 ms
+  current: 103.177 ms median at h = 50 (D58)
+  row: 31
+- pattern: 90 injected attacks
+  current: 150 injected attacks (5 per run × 30 runs; D59)
+  row: 27
 - pattern: 93\.2 ?%
   current: 94.3 %
   row: 4

@@ -38,6 +38,9 @@ jobs:
     - name: Compile contracts
       run: npx hardhat compile
 
+    - name: Phase 2 F1 IDTx prototype (behaviour tests against the unmodified ERC-1056 registry)
+      run: npx hardhat --config hardhat.phase2.config.js test
+
     - name: Probe that the run-identity flags fire (after-action report 11; WM-2 A2, D49)
       # The producing-code "dirty" flags were inert until 2026-10-09 (relative pathspecs from a
       # subdirectory), and until WM-2 A2 they missed code a producer imports from outside its fixed path
@@ -51,6 +54,8 @@ jobs:
         bash docs/testing/probe_run_identity.sh
         # WM-2 A4: the promote step refuses every run that is not a run of record
         python3 -m pytest -q tools/run_identity/test_promote.py
+        # Phase 2 F2: the database lifecycle backend (parity, tamper evidence)
+        python3 -m pytest -q phase2/backends/test_sqlite_lifecycle.py
 
     - name: Check the MOBI contract copies are byte-identical (plan S0)
       working-directory: ${{ github.workspace }}
@@ -84,6 +89,8 @@ jobs:
         python3 docs/presentation/make_presentation.py --check
         python3 docs/testing/check_stamps.py --check-coverage
         python3 docs/phase2/build_phase2.py --check
+        python3 docs/phase2/focus/make_focus_figures.py --check
+        python3 docs/phase2/focus/F3_interaction_modes/classify_modes.py --check
 
     - name: Run tests
       shell: bash

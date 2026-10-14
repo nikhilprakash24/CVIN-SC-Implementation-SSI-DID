@@ -179,7 +179,7 @@ is 100 ms. The honest reading is that blockchain-rooted identity introduces *no
 latency obstacle* to V2V safety messaging, while offering the richer trust and
 revocation semantics of the SSI stack that the PKI baseline lacks. The integrity
 result reinforces this: across 1.65M verifications the only failures were
-exactly the 90 injected attacks (3 per run × 30 runs), caught with zero false
+exactly the 150 injected attacks (5 per run × 30 runs; register #27), caught with zero false
 positives and zero false negatives — the verification path is both fast and
 correct.
 

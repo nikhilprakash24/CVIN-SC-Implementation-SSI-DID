@@ -14,7 +14,7 @@
 | Do the identities meet W3C DID / VC? | internal checker 94.3 % (41 pass, 1 partial, 2 fail of 44); external DID suite 335/336 | #4, #24 |
 | Are the identity contracts attack-resistant? | 43 of 43 applicable attack cells defended (11 not applicable), strict harness | #28 |
 | Can infrastructure (RSUs, controllers) use the same identity layer? | I1 PASS (SPaT/BSM warm ratio 1.096), I2 PASS (13 attacks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
-| How large is the test and evidence base? | 537 Hardhat tests, 305 Python-layer tests, 92 feature demos (1,752 steps); 30 verified register rows | grand report |
+| How large is the test and evidence base? | 537 Hardhat tests, 305 Python-layer tests, 92 feature demos (1,752 steps); 32 verified register rows | grand report |
 
 ## 2. Research questions and hypotheses
 
@@ -271,9 +271,9 @@ flowchart LR
 
 | Severity | Fixed | Partly fixed | Open |
 |---|---|---|---|
-| High | 15 | 1 | 1 |
-| Medium | 12 | 4 | 12 |
-| Low | 5 | 1 | 7 |
+| High | 16 | 1 | 0 |
+| Medium | 13 | 4 | 13 |
+| Low | 7 | 1 | 10 |
 *Defect log D1–D36 by severity and status (`docs/DEFECT_LOG.md`). Open items wait for author decisions (§C).*
 
 ## 6. Rigour: how the numbers are kept honest

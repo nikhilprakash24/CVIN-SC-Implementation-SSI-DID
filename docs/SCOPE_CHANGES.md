@@ -48,6 +48,8 @@ it.
 > **Still deferred:** radio/timing/position linkability, group revocation for implicit pseudonyms, and a measured
 > SCMS baseline. These stay future work.
 
+| SC-13 correction | 2026-10-14 | SC-13 says "measured (register #30)"; the parity result is register **#33** (`cv2x-testbed/results/lifecycle_parity.*`). Its chapter-5 placement is still owed: chapters 5 and 6 do not yet cite #33 | **Correction** (defect D62; past entries are not edited) | — | after-action report 16 (scope reconciliation) | WM-2 D1 adds the #33 sentence to chapter 5 |
+
 SC-15…SC-20 were proposed by the review-2 lineage's MOBI checklist (§7, 2026-10-04, as P-1…P-6) and added here at the merge of 2026-10-06; the ones marked *Decision pending* are the author's.
 
 Add entries above the notes as decisions are made. Do not edit past entries;

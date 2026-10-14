@@ -90,7 +90,7 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 |---|---|---|
 | H1 "≥ 10× cheaper for create/update" | **Refuted as stated.** Lifetime 2.6× / 3.0×; C1 5.2× / 8.5×; U3 3.4×; ERC-1056 is *not* the minimum on U1/U4/D3 (ERC-725) or U2/D1 (ERC-721). | Restate H1 as "cheapest substrate on lifetime cost and on every CREATE/anchor op, with the fewest zero→nonzero storage writes (8 vs 83–92)"; drop the 10× figure — it holds for no op pair even in wrapper mode (§3.6: lifetime 2.6× / 3.1×, C2 2.4× / 6.4×). |
 | H1' flat in N | Supported. | keep |
-| H3 real-time | Read-side evidence now exists: on-chain resolution of an ERC-1056 identity with history costs ≈65–71 ms *in-process* — it will not fit 100 ms over a real RPC. Supports the second half of H3 (must pre-resolve). | cite `scale.md` h-axis and `resolve.md` |
+| H3 real-time | Read-side evidence now exists: on-chain resolution of an ERC-1056 identity with history (h = 50) costs 103.177 ms median, 134.283 ms p95 *in-process* (register #31, re-stated 2026-10-14, D58) — it will not fit 100 ms over a real RPC. Supports the second half of H3 (must pre-resolve). | cite `scale.md` h-axis and `resolve.md` |
 | H4 event-log cheapest for VID-II events | Supported on 12/17 events. The exceptions are the k1 add and the rotation (ERC-721), the two ownership transfers (ERC-725) and the deactivation (ERC-725). | keep, with exceptions listed |
 | H5 no single dominator | Supported already at n = 3: ERC-1056 dominates on write cost and footprint, ERC-721 dominates on read path, ERC-725 on rotation/transfer. | keep |
 
