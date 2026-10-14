@@ -59,7 +59,7 @@ the thing measured).
   run were regenerated, including the F3 mode classification.
 
 ## 3. Closing
-**B1 is done; N-18 is closed.**
+**B1 is done; N-18 is closed.** CI 8 of 8 green on `8855a4d`.
 - **Seeded:** incidental randomness in the L1 suite and the demos. The L1 suite is now identical in 99 of 99 cells
   across seeded runs, and the demos in 1,749 of 1,752 steps.
 - **Declared:** the three remaining steps, which depend on block time inside a Phase 1 contract.
