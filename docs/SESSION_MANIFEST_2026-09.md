@@ -214,3 +214,11 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/phase2/SCOPE_RECONCILIATION.md`, `reviews/` | the scope across its revisions; the academic review and its dispositions | writing team |
 | `docs/phase2/PHASE2_PROGRAMME.md`, `CHAT_WORKSPACE_BRIEF.md`, `inbox/` | the consolidated document; the hand-off to a chat workspace | the author's request |
 
+## Pass 17 — WM-2 B1: deterministic gas, or ranges by rule (2026-10-14)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_17.md` | plan, log, closing | standing rule |
+| `sandbox/lib/determinism.js`; `sandbox/grand/run.py` (seeded stages); `sandbox/options/erc-725xy/adapter.js`, `erc-735/adapter.js` (counters) | incidental randomness seeded | B1, N-18 |
+| `1_blockchain-identity/scripts/infrastructure_gas.js`; `4_comparison-framework/results/infrastructure_gas.json`, `infrastructure_gas_runs/` | I4 over declared seeds, inputs recorded; runs of record at `a950cdf` | B1 |
+| `docs/STYLE_AND_RIGOUR_GUIDE.md` 1.1.10; `docs/MEASUREMENT_CONDITIONS.md` §1, #47 | the rule; the re-stated row | B1 |
+

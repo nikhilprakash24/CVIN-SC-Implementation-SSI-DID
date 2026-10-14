@@ -6,13 +6,23 @@
     "network": "hardhat-local",
     "chainId": 31337,
     "solcVersion": "0.8.24",
-    "date": "2026-10-10T02:55:20.413Z",
+    "date": "2026-10-14T12:10:05.756Z",
     "condition": "M1",
-    "commit": "d877a4f",
+    "commit": "a950cdf",
+    "commitFull": "a950cdf68c9ea71f6ef0330c7c842a1ddeb8d455",
     "dirty": false,
     "dirtyAnyFile": true,
+    "scope": "1_blockchain-identity/scripts/infrastructure_gas.js",
+    "scopeFiles": 7,
+    "scopeSha": "f5822c451b79",
     "node": "v22.22.2",
-    "hardhat": "2.28.6"
+    "hardhat": "2.28.6",
+    "seed": 3,
+    "inputs": {
+      "rsu_address": "0xE0915882335ab268952d2Dc985874AD92eFF449C",
+      "rsu_public_key": "0x04954e2a5ca78b3820e4271e80a21638f48e6f6beaa784d1dcacddfeb9fce7c9b8ae5236417ed437998a84eea43c111388d7bf6edc174367148374c9c41f517195",
+      "rotated_public_key": "0x0465683148b341daad63b2b42b45e9d805a5ca4d6000ae7d798962c4ccce4ed8f496ed07a032a072bbb3dddf97b4a50875dd351dc11e56a3263a2f720ea7ad0059"
+    }
   },
   "operations": {
     "create_identity": {
@@ -20,7 +30,7 @@
       "note": "did:ethr is implicit: identityOwner(rsu) = rsu until changed"
     },
     "anchor_key_by_rsu": {
-      "gasUsed": 52594,
+      "gasUsed": 52606,
       "note": "RSU publishes its verification key (setAttribute, 1 year)"
     },
     "anchor_service_endpoint": {
@@ -32,11 +42,11 @@
       "note": "changeOwner: the road authority controls the RSU's identity from here on"
     },
     "rotate_key_by_authority": {
-      "gasUsed": 35510,
+      "gasUsed": 35486,
       "note": "authority rotates the RSU key (new attribute; the old one stays until it expires or is revoked)"
     },
     "revoke_old_key": {
-      "gasUsed": 35050,
+      "gasUsed": 35062,
       "note": "revokeAttribute of the old key (ERC-1056 has no identity-level revocation; the credential registry is the revocation path for messages)"
     }
   }

@@ -443,7 +443,7 @@ def build():
         ["Local Hardhat chain only", "gas is exact but no public-network witness", "N-11 (Sepolia)"],
         ["One host type for latency", "absolute values not portable; ratios within runs are", "guide rule 1.1.7"],
         ["In-process revocation registry", "I3 bounds messages, not time; no propagation delay", "#46"],
-        ["Gas of random inputs varies by ±12", "I4 reported as ranges", "#47, N-18"],
+        ["Gas of random inputs varied by multiples of 12", "incidental inputs seeded (L1, demos); I4 reported as a range over declared seeds 1–30 (WM-2 B1)", "#47, N-18"],
         ["Reviewers steered by the orchestrator", "independence is partial", "N-22"],
     ])
 

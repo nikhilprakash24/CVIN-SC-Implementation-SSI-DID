@@ -243,13 +243,13 @@ def infrastructure():
                      "runs": d["config"]["runs"]}
         out["source_revocation"] = src(base + "infrastructure_revocation.json")
     if (ROOT / "4_comparison-framework/results/infrastructure_gas.json").exists():
-        # I4: gas varies by multiples of 12 with the random RSU key and address; the range is taken over the
-        # 30 repeated runs (after-action report 12, audit A-3) when present, else over the runs of record
+        # I4: gas varies by multiples of 12 with the RSU key and address; since WM-2 B1 the range is taken over
+        # declared seeds 1-30 (keys recorded per run) when present, else over the runs of record
         summ = ROOT / "4_comparison-framework/results/infrastructure_gas_runs/summary.json"
         if summ.exists():
             sd = json.loads(summ.read_text())
             out["I4"] = {k: [v["min"], v["max"]] for k, v in sd["operations"].items()}
-            out["I4_runs"] = sd["runs"]
+            out["I4_runs"] = sd.get("runs", len(sd.get("seeds", [])))   # since WM-2 B1: declared seeds
             out["source_gas_runs"] = src("4_comparison-framework/results/infrastructure_gas_runs/summary.json")
         else:
             runs = [load(f) for f in ("4_comparison-framework/results/infrastructure_gas.json",

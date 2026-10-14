@@ -728,7 +728,7 @@
         0
       ],
       "anchor_key_by_rsu": [
-        52558,
+        52582,
         52606
       ],
       "anchor_service_endpoint": [
@@ -744,7 +744,7 @@
         35510
       ],
       "revoke_old_key": [
-        35014,
+        35038,
         35062
       ]
     },
@@ -767,8 +767,8 @@
     "source": {
       "path": "sandbox/grand/report/GRAND_REPORT.md"
     },
-    "generated": "2026-10-14T10:40:23Z",
-    "commit": "e3087de",
+    "generated": "2026-10-14T12:16:30Z",
+    "commit": "a950cdf",
     "stages": {
       "smoke": {
         "ok": true,
@@ -1379,7 +1379,7 @@
         {
           "row": 47,
           "status": "V",
-          "claim": "(pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`), range over 30 runs (random RSU key and address each run): identity creation 0 (…"
+          "claim": "(pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`), range over declared seeds 1–30 (WM-2 B1: the RSU keys are derived from each see…"
         },
         {
           "row": 48,
@@ -1866,7 +1866,7 @@
     "47": {
       "row": 47,
       "status": "V",
-      "claim": "(pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`), range over 30 runs (random RSU key and address each run): identity creation 0 (…",
+      "claim": "(pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`), range over declared seeds 1–30 (WM-2 B1: the RSU keys are derived from each see…",
       "tag": "M1"
     },
     "48": {

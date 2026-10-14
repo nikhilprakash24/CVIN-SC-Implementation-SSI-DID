@@ -6,13 +6,23 @@
     "network": "hardhat-local",
     "chainId": 31337,
     "solcVersion": "0.8.24",
-    "date": "2026-10-09T06:08:44.765Z",
+    "date": "2026-10-14T12:10:03.633Z",
     "condition": "M1",
-    "commit": "f1f9e37",
+    "commit": "a950cdf",
+    "commitFull": "a950cdf68c9ea71f6ef0330c7c842a1ddeb8d455",
     "dirty": false,
     "dirtyAnyFile": true,
+    "scope": "1_blockchain-identity/scripts/infrastructure_gas.js",
+    "scopeFiles": 7,
+    "scopeSha": "f5822c451b79",
     "node": "v22.22.2",
-    "hardhat": "2.28.6"
+    "hardhat": "2.28.6",
+    "seed": 1,
+    "inputs": {
+      "rsu_address": "0xc28F0cd75Ada439DDAcC6C97861acd7dAe87dee0",
+      "rsu_public_key": "0x049dc93c82a367b3d7bd7817afdb2d1b11a94d1878483dbe7c92c54ae8f00d0f7c121cd39f20cebd5239de99994740e58eb66cde8f42dc20e64747917cf041f27d",
+      "rotated_public_key": "0x047afd538cc716d5aa981219978c423d14840141b5101a73b357efdbe11a94375c28f4070e0c5f28ceb45c254e3af539c701b5eb6cf4fbea7f5fda689956f16547"
+    }
   },
   "operations": {
     "create_identity": {
@@ -20,23 +30,23 @@
       "note": "did:ethr is implicit: identityOwner(rsu) = rsu until changed"
     },
     "anchor_key_by_rsu": {
-      "gasUsed": 52594,
+      "gasUsed": 52606,
       "note": "RSU publishes its verification key (setAttribute, 1 year)"
     },
     "anchor_service_endpoint": {
-      "gasUsed": 34038,
+      "gasUsed": 34050,
       "note": "SPaT service endpoint attribute"
     },
     "hand_control_to_authority": {
-      "gasUsed": 51742,
+      "gasUsed": 51754,
       "note": "changeOwner: the road authority controls the RSU's identity from here on"
     },
     "rotate_key_by_authority": {
-      "gasUsed": 35486,
+      "gasUsed": 35510,
       "note": "authority rotates the RSU key (new attribute; the old one stays until it expires or is revoked)"
     },
     "revoke_old_key": {
-      "gasUsed": 35050,
+      "gasUsed": 35062,
       "note": "revokeAttribute of the old key (ERC-1056 has no identity-level revocation; the credential registry is the revocation path for messages)"
     }
   }

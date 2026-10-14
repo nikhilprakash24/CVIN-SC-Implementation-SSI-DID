@@ -1,6 +1,6 @@
 # Self-Sovereign Identity for Connected Vehicles — Results, Work and Implementation
 
-**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `e3087de` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
+**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `a950cdf` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
 
 > Scope of every number: smart-contract gas is exact `receipt.gasUsed` on a local Hardhat chain (condition M1); latency is in-process cryptography with simulated mobility and no radio (condition M0). Nothing here was measured on a public network or a real road.
 
@@ -174,7 +174,7 @@ Roadside units (RSUs), signal controllers and a traffic-management centre (TMC) 
 | I1 | Does a warm SPaT verify cost what a warm BSM verify does? | ratio 1.226 [1.219, 1.238]; SPaT 0.184 ms vs BSM 0.149 ms | outside band, not falsified |
 | I2 | Are registered attacks rejected for the right reason? | 15 checks, 30/30 runs | PASS |
 | I3 | How long is a revoked RSU trusted by a cached verifier? | k=1: 0 (≤ 0) · k=5: 4 (≤ 4) · k=25: 24 (≤ 24) · k=inf: 100 messages | PASS |
-| I4 | What does an RSU identity cost on chain? | key anchor 52,558–52,606 gas; hand to authority 51,742–51,754 | reported |
+| I4 | What does an RSU identity cost on chain? | key anchor 52,582–52,606 gas; hand to authority 51,742–51,754 | reported |
 | I5 | What do the I2I operations add? | 0.900 ms, a sum of operation costs (not a path latency) | reported |
 
 | I2 check | Expected rejection reason |
@@ -298,7 +298,7 @@ flowchart LR
 | Local Hardhat chain only | gas is exact but no public-network witness | N-11 (Sepolia) |
 | One host type for latency | absolute values not portable; ratios within runs are | guide rule 1.1.7 |
 | In-process revocation registry | I3 bounds messages, not time; no propagation delay | #46 |
-| Gas of random inputs varies by ±12 | I4 reported as ranges | #47, N-18 |
+| Gas of random inputs varied by multiples of 12 | incidental inputs seeded (L1, demos); I4 reported as a range over declared seeds 1–30 (WM-2 B1) | #47, N-18 |
 | Reviewers steered by the orchestrator | independence is partial | N-22 |
 
 ## 8. What comes next

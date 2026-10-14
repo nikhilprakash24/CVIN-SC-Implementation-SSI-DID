@@ -382,13 +382,14 @@ same open decision as for vehicles (crux C4), and a time bound would also need
 a cache lifetime.
 
 **I4 — On-chain cost of an RSU identity (reported).** Creation is free
-(did:ethr is implicit). Over 30 runs, each with a fresh random RSU key and
-address: the RSU anchoring its key costs 52,558–52,606 gas; handing control to
-the road authority 51,742–51,754; an authority key rotation 35,486–35,510;
-revocation of the old key 35,014–35,062. Every difference is a multiple of 12
-gas, consistent with zero vs non-zero calldata bytes; the pre-registered
-expectation of identical runs did not hold, and gas here is reported as a
-range (register #47). ERC-1056 has no identity-level revocation, so
+(did:ethr is implicit). Over 30 declared seeds, each deriving the RSU's keys
+and address (recorded per run, so the range is reproducible): the RSU anchoring
+its key costs 52,582–52,606 gas; handing control to the road authority
+51,742–51,754; an authority key rotation 35,486–35,510; revocation of the old
+key 35,038–35,062. Every difference is a multiple of 12 gas, consistent with
+zero vs non-zero calldata bytes in the keys; gas that depends on the key is
+reported as a range over declared seeds, and a single seed is exact (register
+#47, guide 1.1.10). ERC-1056 has no identity-level revocation, so
 message-level RSU revocation runs through the credential registry (I3).
 
 **I5 — Cost of the operations on the I2I path (reported).** The sum of four

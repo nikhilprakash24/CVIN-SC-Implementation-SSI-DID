@@ -13,7 +13,7 @@
 | `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json` | MISSING | MISSING | MISSING | MISSING | MISSING | MISSING | history: a diff between two runs of record, each stamped or registered; not a measurement |
 | `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json` | 2026-10-04 | a764387 (results of reco | MISSING | MISSING | MISSING | M1: solc 0.8.24, optimiz | history: same |
 | `4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json` | 2026-10-06 | MISSING | MISSING | MISSING | MISSING | M1: solc 0.8.24, optimiz | history: same |
-| `4_comparison-framework/results/infrastructure_gas.json` | 2026-10-09T06:08:44.765Z | f1f9e37 | False | True | yes | 0.8.24 |  |
+| `4_comparison-framework/results/infrastructure_gas.json` | 2026-10-14T12:10:03.633Z | a950cdf | False | True | no | 0.8.24 |  |
 | `4_comparison-framework/results/infrastructure_gas_run1.json` | 2026-10-09T06:08:42.697Z | f1f9e37 | False | True | yes | 0.8.24 |  |
 | `4_comparison-framework/results/mobi_vid_backends.json` | 2026-10-09T02:27:44.231Z | d0cc19c | False (hand check) | True | yes | 0.8.24 | hand check: AAR-11 R3: tree clean at 02:27:39 (gas_benchmark), outputs-only commit d54178e |
 | `4_comparison-framework/results/pseudonym_pool.json` | 2026-10-04T22:17:54.329Z | e49bcb4 | False (from any) | False | yes | 2.28.6 |  |
@@ -43,7 +43,7 @@
 
 | Files | What | runs | complete stamps | commits | dirty (code) | dirty (any) | code changed since |
 |---|---|---|---|---|---|---|---|
-| `4_comparison-framework/results/infrastructure_gas_runs/run_*.json` | I4 repeated 30 times (#47) | 30 | 30 | d877a4f | False | False, True | yes |
+| `4_comparison-framework/results/infrastructure_gas_runs/run_*.json` | I4 repeated 30 times (#47) | 30 | 30 | a950cdf | False | True | no |
 | `4_comparison-framework/results/scaling_verify_repeats/*.json` | scaling-verify repeats (#26) | 16 | 8 | 38909df33fe1, d78e344a7970, f1c2399057f3, fd25d0529c6e | False (from any), None | False, None, True | None, yes |
 
 ## Covered without an own stamp

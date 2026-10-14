@@ -6,13 +6,23 @@
     "network": "hardhat-local",
     "chainId": 31337,
     "solcVersion": "0.8.24",
-    "date": "2026-10-10T02:55:52.662Z",
+    "date": "2026-10-14T12:10:07.107Z",
     "condition": "M1",
-    "commit": "d877a4f",
+    "commit": "a950cdf",
+    "commitFull": "a950cdf68c9ea71f6ef0330c7c842a1ddeb8d455",
     "dirty": false,
     "dirtyAnyFile": true,
+    "scope": "1_blockchain-identity/scripts/infrastructure_gas.js",
+    "scopeFiles": 7,
+    "scopeSha": "f5822c451b79",
     "node": "v22.22.2",
-    "hardhat": "2.28.6"
+    "hardhat": "2.28.6",
+    "seed": 18,
+    "inputs": {
+      "rsu_address": "0x31939e8D5D19D25f2e264FE3Df83D53E1b3D4AC5",
+      "rsu_public_key": "0x04b650101c68aceb832d9110b041253a6c37be7ad4e35d1afda79dbf1e61836a19664a07a823798ddb370d9d27edc178f6b703cd547c95b9292cfa021dc12e2b5a",
+      "rotated_public_key": "0x04f49da06188e3eee59c065d9721c34d7632be650b6457bf0c474514f518cb62aede012adff2941f32531da06aefd206eb6ac8b8465afe8434e72ab5a45e65949e"
+    }
   },
   "operations": {
     "create_identity": {

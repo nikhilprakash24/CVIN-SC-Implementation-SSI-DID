@@ -1,8 +1,39 @@
 {
-  "about": "I4 repeated 30 times (after-action report 12, audit findings A-3, B2-F9): the RSU key and address are random per run, so gas varies by multiples of 12 (zero vs non-zero calldata bytes, EIP-2028). Producing code identical to f1f9e37 (git diff f1f9e37 d877a4f over the producing paths is empty).",
-  "runs": 30,
+  "about": "I4 over declared seeds (WM-2 B1): RSU keys derived from each seed and recorded per run; gas varies with the keys' calldata zero bytes (EIP-2028). A second run with the same seeds reproduces every value.",
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
   "commit": [
-    "d877a4f"
+    "a950cdf"
   ],
   "dirty": [
     false
@@ -20,20 +51,18 @@
       }
     },
     "anchor_key_by_rsu": {
-      "min": 52558,
+      "min": 52582,
       "max": 52606,
       "values": [
-        52558,
         52582,
         52594,
         52606
       ],
       "mode": 52606,
       "counts": {
-        "52558": 1,
         "52582": 1,
-        "52594": 5,
-        "52606": 23
+        "52594": 7,
+        "52606": 22
       }
     },
     "anchor_service_endpoint": {
@@ -45,8 +74,8 @@
       ],
       "mode": 34050,
       "counts": {
-        "34038": 2,
-        "34050": 28
+        "34038": 1,
+        "34050": 29
       }
     },
     "hand_control_to_authority": {
@@ -58,8 +87,8 @@
       ],
       "mode": 51754,
       "counts": {
-        "51742": 2,
-        "51754": 28
+        "51742": 1,
+        "51754": 29
       }
     },
     "rotate_key_by_authority": {
@@ -73,25 +102,23 @@
       "mode": 35510,
       "counts": {
         "35486": 1,
-        "35498": 10,
-        "35510": 19
+        "35498": 9,
+        "35510": 20
       }
     },
     "revoke_old_key": {
-      "min": 35014,
+      "min": 35038,
       "max": 35062,
       "values": [
-        35014,
         35038,
         35050,
         35062
       ],
       "mode": 35062,
       "counts": {
-        "35014": 1,
         "35038": 1,
-        "35050": 5,
-        "35062": 23
+        "35050": 7,
+        "35062": 22
       }
     }
   }

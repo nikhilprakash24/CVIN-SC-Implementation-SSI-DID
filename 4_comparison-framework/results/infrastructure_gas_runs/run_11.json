@@ -6,13 +6,23 @@
     "network": "hardhat-local",
     "chainId": 31337,
     "solcVersion": "0.8.24",
-    "date": "2026-10-10T02:55:37.746Z",
+    "date": "2026-10-14T12:10:06.453Z",
     "condition": "M1",
-    "commit": "d877a4f",
+    "commit": "a950cdf",
+    "commitFull": "a950cdf68c9ea71f6ef0330c7c842a1ddeb8d455",
     "dirty": false,
     "dirtyAnyFile": true,
+    "scope": "1_blockchain-identity/scripts/infrastructure_gas.js",
+    "scopeFiles": 7,
+    "scopeSha": "f5822c451b79",
     "node": "v22.22.2",
-    "hardhat": "2.28.6"
+    "hardhat": "2.28.6",
+    "seed": 11,
+    "inputs": {
+      "rsu_address": "0x9d92482129A88eF9E89b0e4D3Ae66Ebcae66ed9f",
+      "rsu_public_key": "0x042eecf730fa67a90095825a402fb059a90461e2a62467401998e243961a90b7b5961b27cc208a8075afea40498a105fec740ccf3a334f4114ef43a6a1120f0e83",
+      "rotated_public_key": "0x04004cc8e9bb2ac6ff0b5d7c9e880502f93c9642237c25d4302b446ed2efc2ceeca4a89ee27d2fdfe7f92a1b6ed1b168c22860e8c948680d7293ce398c8ccd68b2"
+    }
   },
   "operations": {
     "create_identity": {
@@ -32,7 +42,7 @@
       "note": "changeOwner: the road authority controls the RSU's identity from here on"
     },
     "rotate_key_by_authority": {
-      "gasUsed": 35510,
+      "gasUsed": 35498,
       "note": "authority rotates the RSU key (new attribute; the old one stays until it expires or is revoked)"
     },
     "revoke_old_key": {
