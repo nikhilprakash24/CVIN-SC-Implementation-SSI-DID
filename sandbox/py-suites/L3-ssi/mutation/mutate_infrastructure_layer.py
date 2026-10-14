@@ -18,7 +18,8 @@ import tempfile
 ROOT = pathlib.Path(__file__).resolve().parents[4]
 LAYER = ROOT / "cv2x-testbed/sumo/infrastructure_layer.py"
 FRESH = ROOT / "cv2x-testbed/identity/freshness.py"
-TESTS = ROOT / "sandbox/py-suites/L3-ssi/test_infrastructure_layer.py"
+TESTS = [ROOT / "sandbox/py-suites/L3-ssi/test_infrastructure_layer.py",
+         ROOT / "sandbox/py-suites/L3-ssi/test_infrastructure_v3.py"]   # v3 tests since WM-2 C0
 FP = "FreshnessPolicy(replay_cache=True, clock=clock)"
 
 # name -> (file, old, new)
@@ -34,7 +35,7 @@ MUTANTS = {
     "replay_cached_on_cold_only": (LAYER, "            if ok:\n                self.freshness.accept", "            if ok and cold:\n                self.freshness.accept"),
     "unsigned_check_removed": (LAYER, 'elif not package.get("signature"):', "elif False:"),
     "warm_key_check_removed": (LAYER, 'if recovered.lower() != entry["address"].lower():', "if False:"),
-    "cold_key_check_removed": (LAYER, 'elif recovered.lower() != sender_did.rsplit(":", 1)[-1].lower():', "elif False:"),
+    "cold_key_check_removed": (LAYER, "elif not _did_matches(sender_did, self.network, recovered):", "elif False:"),
     "subject_mismatch_removed": (LAYER, 'elif subject.get("id") != sender_did:', "elif False:"),
     "credential_invalid_ignored": (LAYER, "if not valid:", "if False:"),
     "warm_binding_removed": (LAYER, 'elif not _binding_ok(message, entry["binding"]):', "elif False:"),
@@ -51,6 +52,16 @@ MUTANTS = {
     "no_credential_accept": (LAYER, 'reason = "no_credential"', "ok = True"),
     "cache_poison": (LAYER, 'cache[sender_did] = {"address": recovered,', 'cache[sender_did] = {"address": "0x"+"0"*40,'),
     "exception_accepts": (LAYER, "            ok = False\n        return", "            ok = True\n        return"),
+    # verifier v3 (WM-2 C0, amendment A6)
+    "v3_depth_limit_removed": (LAYER, "if depth > MAX_DEPTH or seen > MAX_VALUES:", "if seen > MAX_VALUES:"),
+    "v3_value_limit_removed": (LAYER, "if depth > MAX_DEPTH or seen > MAX_VALUES:", "if depth > MAX_DEPTH:"),
+    "v3_limits_not_applied": (LAYER, 'if not isinstance(message, dict) or not _within_limits(message) or not _within_limits(_doc(package.get("credential"))):', "if False:"),
+    "v3_bound_kind_unchecked": (LAYER, 'if binding.get("kind") in BOUND_KINDS and', "if False and"),
+    "v3_required_fields_unchecked": (LAYER, "        if field not in message:", "        if False:"),
+    "v3_kind_not_recorded": (LAYER, '"stationId": subject.get("stationId"), "kind": subject.get("stationKind")}', '"stationId": subject.get("stationId")}'),
+    "v3_did_method_unchecked": (LAYER, 'parts[1] == "ethr" and parts[2] == network', "True"),
+    "v3_refresh_bool_allowed": (LAYER, "isinstance(refresh_every, bool) or ", ""),
+    "v3_refresh_float_allowed": (LAYER, "not isinstance(refresh_every, int)", "False"),
     "age_boundary_inclusive": (FRESH, "if now - t > self.max_age_s:", "if now - t >= self.max_age_s:"),
     "future_boundary_inclusive": (FRESH, "if t - now > self.max_future_s:", "if t - now >= self.max_future_s:"),
 }
@@ -60,7 +71,7 @@ EQUIVALENT = {}
 def run(tree):
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
     p = subprocess.run([sys.executable, "-m", "pytest", "-q", "-x", "-p", "no:cacheprovider",
-                        str(tree / TESTS.relative_to(ROOT))], cwd=tree, capture_output=True, text=True, env=env)
+                        *[str(tree / t.relative_to(ROOT)) for t in TESTS]], cwd=tree, capture_output=True, text=True, env=env)
     return p.returncode
 
 

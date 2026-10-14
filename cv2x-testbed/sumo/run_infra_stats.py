@@ -30,7 +30,22 @@ from sumo_identity_integration import SUMOIdentityIntegration
 SUMO_DIR = Path(__file__).resolve().parent
 SCRIPT = SUMO_DIR / "sumo_identity_integration.py"
 OUT = SUMO_DIR / "results"
-I2_EXPECTED = SUMOIdentityIntegration.I2_EXPECTED   # amendment A4: 13 checks, each with its expected reason
+I2_EXPECTED = SUMOIdentityIntegration.I2_EXPECTED   # amendment A6: 15 checks, each with its expected reason
+I2_WARM = SUMOIdentityIntegration.I2_WARM
+
+
+def i2_failures(rows, expected, warm=I2_WARM):
+    """I2 gate (amendment A6). A run fails a check if the check is missing, was accepted, or was rejected
+    for another reason; a warm variant also fails if it ran cold (D42: v2 ignored `cold`)."""
+    out = []
+    for r in rows:
+        for k in expected:
+            info = r["attack_reasons"].get(k) or {}
+            if r["attacks"].get(k) is not True:
+                out.append((r["seed"], k, info.get("reason")))
+            elif k in warm and info.get("cold") is not False:
+                out.append((r["seed"], k, "ran cold"))
+    return out
 BOOTSTRAP_SEED = 20260719
 I1_BAND = (0.80, 1.20)
 I1_FALSIFY = 2.0
@@ -87,9 +102,7 @@ def main_i1(args):
     m = ratio["median"]
     i1 = "PASS" if I1_BAND[0] <= m <= I1_BAND[1] else ("FAIL" if m > I1_FALSIFY else "outside band, not falsified")
     attacks = list(I2_EXPECTED)
-    # PASS iff every registered check is present and rejected with its expected reason in every run
-    i2_fail = [(r["seed"], k, (r["attack_reasons"].get(k) or {}).get("reason")) for r in rows for k in attacks
-               if r["attacks"].get(k) is not True]
+    i2_fail = i2_failures(rows, I2_EXPECTED)
     i2_ok = not i2_fail
     out = {
         "environment": env, "prereg": "docs/design/INFRASTRUCTURE_PREREG.md",
@@ -100,7 +113,7 @@ def main_i1(args):
                "ratio": ratio, "verdict": i1,
                "spat_warm_ms": agg([r["spat_warm"] for r in rows]), "bsm_ssi_warm_ms": agg([r["bsm_ssi_warm"] for r in rows]),
                "spat_cold_ms": agg([r["spat_cold"] for r in rows]), "spat_sign_ms": agg([r["spat_sign"] for r in rows])},
-        "I2": {"claim": "each of the 13 registered checks rejected with its expected reason in every run (amendment A4)",
+        "I2": {"claim": "each of the 15 registered checks rejected with its expected reason in every run, the 3 warm variants verified warm (amendment A6)",
                "expected_reasons": I2_EXPECTED, "runs": len(rows),
                "runs_all_as_expected": sum(1 for r in rows if all(r["attacks"].get(k) is True for k in attacks)),
                "failures": i2_fail, "verdict": "PASS" if i2_ok else "FAIL"},

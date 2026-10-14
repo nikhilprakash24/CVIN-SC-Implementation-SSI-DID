@@ -1,4 +1,4 @@
-"""L3 — infrastructure identity layer (design docs/design/INFRASTRUCTURE_MESSAGING.md;
+"""L3 — infrastructure identity layer (fixtures bound to an intersection since verifier v3, amendment A6, D38) (design docs/design/INFRASTRUCTURE_MESSAGING.md;
 pre-registration docs/design/INFRASTRUCTURE_PREREG.md). Chain-free: the layer's identities are
 did:ethr keys with credentials from the canonical VC layer.
 
@@ -32,8 +32,8 @@ def spat(rsu, t, phase="GREEN", intersection="int_1"):
 def layer():
     clock = Clock()
     lay = InfrastructureLayer(clock=clock, refresh_every=1)
-    lay.enroll("rsu_1", "rsu", ["SPaT", "MAP"], position=(625.0, 510.0))
-    lay.enroll("ctrl_1", "controller", ["SignalStateUpdate"])
+    lay.enroll("rsu_1", "rsu", ["SPaT", "MAP"], position=(625.0, 510.0), extra={"intersectionId": "int_1"})
+    lay.enroll("ctrl_1", "controller", ["SignalStateUpdate"], extra={"intersectionId": "int_1"})
     lay.enroll("tmc", "tmc", ["TimingPlan"])
     lay.enroll("rsu_maponly", "rsu", ["MAP"])
     return lay, clock
@@ -52,7 +52,7 @@ def test_legitimate_spat_cold_then_warm(layer):
 
 def test_i2i_controller_update_and_timing_plan(layer):
     lay, _ = layer
-    p, _ = lay.sign("ctrl_1", {"msg_type": "SignalStateUpdate", "phase": "RED", "timestamp": 0.0})
+    p, _ = lay.sign("ctrl_1", {"msg_type": "SignalStateUpdate", "intersection": "int_1", "phase": "RED", "timestamp": 0.0})
     assert lay.verify("rsu_1", p)[0]
     p, _ = lay.sign("tmc", {"msg_type": "TimingPlan", "cycle_s": 90, "timestamp": 0.0})
     assert lay.verify("ctrl_1", p)[0]
@@ -127,7 +127,7 @@ def test_i2f_stale_rejected(layer):
 
 def test_i2g_forged_controller_update_rejected(layer):
     lay, _ = layer
-    p, _ = lay.sign("ctrl_1", {"msg_type": "SignalStateUpdate", "phase": "GREEN", "timestamp": 0.0})
+    p, _ = lay.sign("ctrl_1", {"msg_type": "SignalStateUpdate", "intersection": "int_1", "phase": "GREEN", "timestamp": 0.0})
     rogue = Account.create()
     p["signature"] = Account.sign_message(signable(p["message"]), rogue.key).signature.hex()
     ok, _, _, reason = lay.verify("rsu_1", p)
@@ -145,7 +145,7 @@ def test_controller_cannot_sign_spat(layer):
 def test_i3_revocation_bound_k_minus_1(k):
     clock = Clock()
     lay = InfrastructureLayer(clock=clock, refresh_every=k)
-    lay.enroll("rsu_1", "rsu", ["SPaT"])
+    lay.enroll("rsu_1", "rsu", ["SPaT"], extra={"intersectionId": "int_1"})
     t = 0.0
     for _ in range(7):  # warm the cache to an arbitrary phase of the refresh cycle
         p, _ = lay.sign("rsu_1", spat("rsu_1", t))
@@ -172,7 +172,7 @@ def test_i3_revocation_bound_k_minus_1(k):
 def test_i3_k_infinity_never_stops_for_cached_receiver_but_new_receiver_rejects():
     clock = Clock()
     lay = InfrastructureLayer(clock=clock, refresh_every=None)
-    lay.enroll("rsu_1", "rsu", ["SPaT"])
+    lay.enroll("rsu_1", "rsu", ["SPaT"], extra={"intersectionId": "int_1"})
     p, _ = lay.sign("rsu_1", spat("rsu_1", 0.0))
     assert lay.verify("veh_001", p)[0]
     lay.revoke("rsu_1")
@@ -304,7 +304,7 @@ def test_i3_recheck_happens_on_the_kth_message_not_earlier(k):
     k-th message after caching, so a verifier that re-checks too often (or never) fails here."""
     clock = Clock()
     lay = InfrastructureLayer(clock=clock, refresh_every=k)
-    lay.enroll("rsu_1", "rsu", ["SPaT"])
+    lay.enroll("rsu_1", "rsu", ["SPaT"], extra={"intersectionId": "int_1"})
     assert lay.verify("veh", lay.sign("rsu_1", spat("rsu_1", 0.0))[0])[0]   # cold: caches, seen = 0
     lay.revoke("rsu_1")
     results = [lay.verify("veh", lay.sign("rsu_1", dict(spat("rsu_1", 0.0), seq=i))[0]) for i in range(k)]

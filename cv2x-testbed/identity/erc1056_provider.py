@@ -41,12 +41,14 @@ from identity.base import (
 _ABI_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                          'contracts', 'ERC1056Registry_abi.json')
 
-# Maximum assumed difference between this host's clock and the chain's block
-# timestamps. Attribute validity (`validTo`) is chain time; when a validTo lies
-# within this window of the wall clock, the chain's latest block timestamp is
-# fetched (one extra RPC) to decide. A local Hardhat node with automine runs a
-# few seconds ahead of the wall clock, so a revocation (validTo = block.timestamp)
-# can look "still valid" by the wall clock alone.
+# Attribute validity (`validTo`) is chain time. Since WM-2 C0 (defect D51) a full
+# resolution always decides it against the chain's latest block timestamp (one
+# eth_getBlockByNumber per resolution that meets a key). Before, the wall clock
+# decided whenever validTo lay more than CLOCK_SKEW_S from it, so a verifier whose
+# clock ran more than 15 minutes behind the chain accepted a revoked key
+# (a revocation sets validTo = block.timestamp, which looked "far in the future").
+# CLOCK_SKEW_S is now only the probe path's margin: a cached key re-resolves when its
+# validTo is within this margin of the chain time learned at the last resolution.
 CLOCK_SKEW_S = 900
 
 
@@ -232,8 +234,11 @@ class ERC1056Provider(IdentityProvider):
             self._sender_state.pop(signer_key, None)
         return identity_data
 
-    @staticmethod
-    def _probe_unchanged(cached: Dict, info: Tuple) -> bool:
+    def _chain_now_estimate(self) -> int:
+        """Chain time = wall clock + the chain-minus-wall offset seen at the last full resolution (D51)."""
+        return int(time.time()) + getattr(self, '_chain_offset_s', 0)
+
+    def _probe_unchanged(self, cached: Dict, info: Tuple) -> bool:
         """The probe's getIdentityInfo equals the cached state and the cached key is not near expiry."""
         owner, last_changed, is_revoked, _revoked_at = info
         if (int(last_changed) != int(cached.get('last_changed', -1))
@@ -241,8 +246,8 @@ class ERC1056Provider(IdentityProvider):
                 or str(owner).lower() != str(cached.get('owner', '')).lower()):
             return False
         valid_to = cached.get('public_key_valid_to')
-        if valid_to is not None and int(valid_to) <= int(time.time()) + CLOCK_SKEW_S:
-            return False   # time-based expiry does not move `changed`: re-resolve
+        if valid_to is not None and int(valid_to) <= self._chain_now_estimate() + CLOCK_SKEW_S:
+            return False   # time-based expiry does not move `changed`: re-resolve (chain time, D51)
         return True
 
     def _probe_identity_info(self, address: str):
@@ -957,6 +962,8 @@ class ERC1056Provider(IdentityProvider):
             if best is None or order > best[2]:
                 best = (value.hex(), valid_to, order)
 
+        if clock.chain_now is not None:
+            self._chain_offset_s = clock.chain_now - clock.wall
         if best is None:
             return None, None, hops
         return best[0], best[1], hops
@@ -964,9 +971,10 @@ class ERC1056Provider(IdentityProvider):
 
 class _ValidityClock:
     """
-    Decides `validTo > now` in chain time. Uses the wall clock when validTo is
-    more than CLOCK_SKEW_S away from it (no RPC), otherwise fetches the latest
-    block timestamp once (1 eth_getBlockByNumber) and compares against it.
+    Decides `validTo > now` in chain time: the latest block timestamp, fetched
+    once per resolution (1 eth_getBlockByNumber) on the first key it meets.
+    The wall clock is never consulted for the decision (D51); it is kept only to
+    learn the chain-minus-wall offset for the probe path.
     """
 
     def __init__(self, w3):
@@ -975,12 +983,8 @@ class _ValidityClock:
         self.chain_now = None
 
     def is_valid(self, valid_to: int) -> bool:
-        if valid_to > self.wall + CLOCK_SKEW_S:
-            return True
-        if valid_to <= self.wall - CLOCK_SKEW_S:
-            return False
         if self.chain_now is None:
-            self.chain_now = max(self.wall, int(self.w3.eth.get_block('latest')['timestamp']))
+            self.chain_now = int(self.w3.eth.get_block('latest')['timestamp'])
         return valid_to > self.chain_now
 
 

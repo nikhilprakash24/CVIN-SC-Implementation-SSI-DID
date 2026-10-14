@@ -819,7 +819,10 @@ class SUMOIdentityIntegration:
         "i2f_stale_spat": "stale", "i2g_forged_controller_update": "wrong_key", "i2h_cross_intersection_spat": "binding",
         "i2i_replayed_spat": "replay", "i2j_future_spat": "future", "i2b_w_wrong_key_spat_warm": "wrong_key",
         "i2c_w_not_permitted_warm": "not_permitted", "i2f_w_stale_spat_warm": "stale",
+        # amendment A6 (verifier v3): binding fails closed (D38); size and depth bounded (D37)
+        "i2k_spat_without_rsu_field": "binding", "i2l_deeply_nested_spat": "malformed",
     }
+    I2_WARM = ("i2b_w_wrong_key_spat_warm", "i2c_w_not_permitted_warm", "i2f_w_stale_spat_warm")
 
     def run_infrastructure_attacks(self, sim_time: float):
         """Pre-registered I2 checks (a)-(j) against first-contact receivers and (b, c, f) against a receiver
@@ -854,6 +857,12 @@ class SUMOIdentityIntegration:
         if self.infra.verify("probe_i", legit)[0]:                       # captured after a genuine reception
             got["i2i_replayed_spat"] = self.infra.verify("probe_i", legit)
         got["i2j_future_spat"] = self.infra.verify("probe_j", self.infra.sign("rsu_2", dict(msg, timestamp=round(sim_time + 0.5, 3)))[0])
+        no_rsu = {k: v for k, v in msg.items() if k != "rsu"}
+        got["i2k_spat_without_rsu_field"] = self.infra.verify("probe_k", self.infra.sign("rsu_2", no_rsu)[0])
+        deep = "leaf"
+        for _ in range(200):
+            deep = {"n": deep}
+        got["i2l_deeply_nested_spat"] = self.infra.verify("probe_l", self.infra.sign("rsu_2", dict(msg, payload=deep))[0])
         # warm receiver: first a genuine SPaT and a genuine MAP from rsu_2, so rsu_2 is cached
         self.infra.verify("probe_w", self.infra.sign("rsu_2", dict(msg, seq="warm-1"))[0])
         self.infra.verify("probe_w", self.infra.sign("rsu_2", dict(msg, msg_type="MAP", seq="warm-2"))[0])
@@ -1308,7 +1317,11 @@ def main():
     if str(args.refresh_k).lower() in ("inf", "none"):
         refresh_k = None
     else:
-        refresh_k = int(args.refresh_k)
+        # D39: a positive integer, or inf; anything else is a parser error, not a traceback
+        try:
+            refresh_k = int(args.refresh_k)
+        except ValueError:
+            parser.error(f"--refresh-k must be a positive integer or inf, not {args.refresh_k!r}")
         if refresh_k < 1:
             parser.error("--refresh-k must be >= 1, or inf (0 used to mean inf silently; review finding B-F7)")
 

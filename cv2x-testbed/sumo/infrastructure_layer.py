@@ -31,6 +31,17 @@ Verification at a receiver:
 Hardened after the adversarial review of after-action report 11 (binding, replay, warm expiry,
 distinct reasons); pre-registration amendment A4.
 
+Verifier v3 (WM-2 step C0; pre-registration amendment A6; defects D37-D42):
+  - size and depth are bounded before anything is canonicalised (`malformed`; D37);
+  - field binding fails closed: rsu and controller credentials must name stationId and
+    intersectionId, SPaT/MAP must carry `rsu` and `intersection`, a SignalStateUpdate `intersection`
+    (`binding`; D38);
+  - refresh_every is a positive integer or None (D39);
+  - the cold path checks the DID's method and network, not only its address segment (D41).
+  Credential validity (D40) is calendar time and is checked against the wall clock on both paths
+  (the canonical VC verifier on the cold path, time.time() on the warm path); the injected clock is
+  simulation seconds and drives the freshness window only.
+
 What is real: all key generation, signing, signature recovery and credential verification
 (time.perf_counter). What is not: the radio (in-process delivery, as for V2V) and the back-haul
 network (in-process; real back-haul is wired, often TLS or a private network).
@@ -74,13 +85,56 @@ def _expiry(doc: Dict[str, Any]) -> Optional[float]:
     return (dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)).timestamp()
 
 
+# D37: limits applied before canonicalisation. Legitimate messages are 2 levels deep with about ten
+# values; credentials about 5 levels with under 100 values.
+MAX_DEPTH = 32
+MAX_VALUES = 5000
+
+# D38: which message fields each message type must carry, and which credential kinds must be bound.
+REQUIRED_FIELDS = {"SPaT": ("rsu", "intersection"), "MAP": ("rsu", "intersection"),
+                   "SignalStateUpdate": ("intersection",)}
+BOUND_KINDS = ("rsu", "controller")
+
+
+def _within_limits(obj: Any) -> bool:
+    """Depth <= MAX_DEPTH and at most MAX_VALUES values, walked without recursion (D37)."""
+    stack, seen = [(obj, 1)], 0
+    while stack:
+        node, depth = stack.pop()
+        seen += 1
+        if depth > MAX_DEPTH or seen > MAX_VALUES:
+            return False
+        if isinstance(node, dict):
+            stack.extend((v, depth + 1) for v in node.values())
+        elif isinstance(node, (list, tuple)):
+            stack.extend((v, depth + 1) for v in node)
+    return True
+
+
 def _binding_ok(message: Dict[str, Any], binding: Dict[str, Any]) -> bool:
-    """Message fields that name an intersection or station must match the credential."""
+    """Fails closed (D38): a bound credential must name its station and intersection, the message must
+    carry the fields its type requires, and every such field must match the credential."""
+    if binding.get("kind") in BOUND_KINDS and (binding.get("stationId") is None or binding.get("intersectionId") is None):
+        return False
+    for field in REQUIRED_FIELDS.get(message.get("msg_type"), ()):
+        if field not in message:
+            return False
     if binding.get("intersectionId") is not None and message.get("intersection") != binding["intersectionId"]:
         return False
     if binding.get("stationId") is not None and "rsu" in message and message["rsu"] != binding["stationId"]:
         return False
     return True
+
+
+def _did_matches(did: str, network: str, address: str) -> bool:
+    """did:ethr:<network>:<address>, with this authority's network and the recovered address (D41)."""
+    parts = did.split(":")
+    return (len(parts) == 4 and parts[0] == "did" and parts[1] == "ethr" and parts[2] == network
+            and parts[3].lower() == address.lower())
+
+
+class _Malformed(Exception):
+    """Input beyond the size and depth limits (D37)."""
 
 
 _FRESHNESS_REASON = {"stale": "stale", "timestamp in the future": "future", "replay": "replay"}
@@ -90,14 +144,17 @@ class InfrastructureLayer:
     """Road authority + infrastructure stations + verifier caches."""
 
     def __init__(self, clock=None, refresh_every: Optional[int] = None):
-        if refresh_every is not None and refresh_every < 1:
-            raise ValueError("refresh_every must be >= 1 or None (infinity)")
+        # D39: an integer >= 1, or None (infinity). bool is an int subclass; float, NaN and inf are not ints.
+        if refresh_every is not None and (isinstance(refresh_every, bool) or not isinstance(refresh_every, int)
+                                          or refresh_every < 1):
+            raise ValueError(f"refresh_every must be an integer >= 1 or None (infinity), not {refresh_every!r}")
         self.refresh_every = refresh_every
+        self.network = "0x1"
         # Replay keys are (receiver, sender): one SPaT broadcast to eight vehicles is eight first
         # receptions, not seven replays.
         self.freshness = FreshnessPolicy(replay_cache=True, clock=clock)
         authority = Account.create()
-        self.authority_did = f"did:ethr:0x1:{authority.address}"
+        self.authority_did = f"did:ethr:{self.network}:{authority.address}"
         self.authority = CredentialIssuer(self.authority_did, authority.key.hex(), "CVIN Road Authority")
         # Only the road authority is trusted for infrastructure messages.
         self.verifier = CredentialVerifier(trusted_issuers=[self.authority])
@@ -155,6 +212,8 @@ class InfrastructureLayer:
                 raise TypeError("sender_did must be a string")
             cold = sender_did not in cache
             message = package["message"]
+            if not isinstance(message, dict) or not _within_limits(message) or not _within_limits(_doc(package.get("credential"))):
+                raise _Malformed()
             msg_type = message.get("msg_type")
             replay_key = f"{receiver_id}|{sender_did}"
             payload = canonical(message)
@@ -194,12 +253,12 @@ class InfrastructureLayer:
                         subject = doc.get("credentialSubject", {})
                         permitted = subject.get("permittedMessages", [])
                         binding = {"intersectionId": subject.get("intersectionId"),
-                                   "stationId": subject.get("stationId")}
+                                   "stationId": subject.get("stationId"), "kind": subject.get("stationKind")}
                         if not valid:
                             reason = "credential_invalid"   # untrusted issuer, expired or revoked
                         elif subject.get("id") != sender_did:
                             reason = "subject_mismatch"
-                        elif recovered.lower() != sender_did.rsplit(":", 1)[-1].lower():
+                        elif not _did_matches(sender_did, self.network, recovered):
                             reason = "wrong_key"
                         elif msg_type not in permitted:
                             reason = "not_permitted"
@@ -212,6 +271,8 @@ class InfrastructureLayer:
                             ok = True
             if ok:
                 self.freshness.accept(replay_key, payload, message.get("timestamp"), now=now)
+        except _Malformed:
+            reason, ok = "malformed", False
         except Exception as e:  # malformed input is a rejection, never a crash
             reason = reason or f"error:{type(e).__name__}"
             ok = False
