@@ -11,7 +11,7 @@ Subcommands:
   demos    run every option's demos, collect the JSON steps -> report/demos.{json,md}
   all      everything above, then assemble report/GRAND_REPORT.md
 Everything references the canonical code; nothing is copied."""
-import pathlib, sys, yaml, subprocess, json, time, re
+import os, pathlib, sys, yaml, subprocess, json, time, re
 HH = None
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SYM = {"measured-in-comparison": "M", "implemented": "I", "not-applicable": "—"}
@@ -50,9 +50,23 @@ def matrix(write=True):
 def _hh():
     return str(ROOT / "1_blockchain-identity")
 
-def _run(cmd, cwd, timeout=1800):
+# Seeded randomness for the stages whose gas is recorded (WM-2 B1, N-18): fixture keys and random bytes are
+# incidental, so they are seeded through a preload (sandbox/lib/determinism.js). CVIN_SEED= (empty) disables it.
+SEED = os.environ.get("CVIN_SEED", "1")
+
+
+def _seeded_env():
+    env = dict(os.environ)
+    if SEED:
+        env["CVIN_SEED"] = SEED
+        pre = f"--require {ROOT / 'sandbox/lib/determinism.js'}"
+        env["NODE_OPTIONS"] = (env.get("NODE_OPTIONS", "") + " " + pre).strip()
+    return env
+
+
+def _run(cmd, cwd, timeout=1800, seeded=False):
     t0 = time.time()
-    r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout)
+    r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout, env=_seeded_env() if seeded else None)
     return r.returncode, r.stdout + r.stderr, round(time.time() - t0, 1)
 
 def _summary_line(out, pat=r"(\d+) passing(?: \(.*?\))?(?:\s+(\d+) failing)?"):
@@ -68,13 +82,13 @@ def smoke():
 
 def l1():
     files = sorted(str(f) for f in (ROOT / "1_blockchain-identity/test/L1-identity-mechanisms").glob("*.test.js"))
-    rc, out, dt = _run(["npx", "hardhat", "test", *files], _hh())
+    rc, out, dt = _run(["npx", "hardhat", "test", *files], _hh(), seeded=True)
     p, f = _summary_line(out); ok = rc == 0 and p and not f
     print(f"L1: {'ok' if ok else 'FAIL'} {p} passing / {f} failing ({dt}s)")
     return {"stage": "L1", "ok": ok, "passing": p, "failing": f, "seconds": dt}
 
 def l2():
-    rc, out, dt = _run(["npx", "hardhat", "test"], _hh())
+    rc, out, dt = _run(["npx", "hardhat", "test"], _hh(), seeded=True)
     p, f = _summary_line(out); ok = rc == 0 and p and not f
     print(f"L1+L2 (whole Hardhat tree): {'ok' if ok else 'FAIL'} {p} passing / {f} failing ({dt}s)")
     return {"stage": "L1+L2", "ok": ok, "passing": p, "failing": f, "seconds": dt}
@@ -91,7 +105,7 @@ def demos():
     for d in sorted((ROOT / "sandbox/options").glob("*/demos/*.js")):
         if d.name.startswith("_"): continue
         slug, fam = d.parent.parent.name, d.stem
-        rc, out, dt = _run(["npx", "hardhat", "run", str(d)], _hh(), timeout=600)
+        rc, out, dt = _run(["npx", "hardhat", "run", str(d)], _hh(), timeout=600, seeded=True)
         rows = []
         for line in out.splitlines():
             line = line.strip()
@@ -130,7 +144,8 @@ def all_():
     matrix(write=True)
     rep = ROOT / "sandbox/grand/report"
     commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, text=True).strip()
-    lines = ["# Grand sandbox report", "", f"Generated {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} at commit `{commit}` by `python3 sandbox/grand/run.py all`.", "",
+    lines = ["# Grand sandbox report", "", f"Generated {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} at commit `{commit}` by `python3 sandbox/grand/run.py all`; "
+             f"randomness seed for the L1, Hardhat-tree and demo stages: {('CVIN_SEED=' + SEED) if SEED else 'none (unseeded)'} (WM-2 B1).", "",
              "## Stages", "", "| Stage | ok | result | s |", "|---|---|---|---:|"]
     for r in results:
         res = {k: v for k, v in r.items() if k not in ("stage", "ok", "seconds", "detail")}

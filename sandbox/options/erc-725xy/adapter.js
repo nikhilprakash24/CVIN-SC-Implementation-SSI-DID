@@ -181,7 +181,9 @@ class Erc725xyAdapter {
     } else {
       const name = typeof op === 'string' ? op : op.op;
       const t = await this._ensureTarget();
-      const n = BigInt(Date.now() % 1000000);
+      // a sequence number, not the clock: the value goes into calldata, so a clock value made gas vary (B1, N-18)
+      this._execSeq = (this._execSeq || 0) + 1;
+      const n = BigInt(100000 + this._execSeq);
       const data = t.interface.encodeFunctionData('setValue', [n]);
       receipt = await (await c.connect(signer).execute(OPERATION_CALL, await t.getAddress(), 0, data)).wait();
       const [caller, v] = await Promise.all([t.lastCaller(), t.value()]);

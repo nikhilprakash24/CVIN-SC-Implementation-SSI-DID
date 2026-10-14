@@ -36,6 +36,11 @@
    measured; say which (I3: "k − 1 messages", not "(k − 1) × 0.1 s").
 10. Gas that depends on random inputs (keys, ids, signatures) is reported as a range over the runs
     made, with the cause stated as found or as not isolated; it is never presented as exact.
+    *Amended 2026-10-14 (WM-2 B1, N-18):* random inputs are **declared**. An **incidental** input (a fixture key,
+    a nonce, a placeholder VIN) is **seeded**, and the seed recorded, so the gas is exact and reproducible
+    (`sandbox/lib/determinism.js`, `CVIN_SEED`). An input that is **the thing measured** (gas that depends on which
+    key a party holds) is reported as a **range over declared seeds**, with each run's seed and inputs recorded,
+    so that a second run reproduces the range (I4, #47).
 
 ### 1.2 Claims
 1. Hypotheses can fail and are reported as they fell. A pre-registered verdict that failed is

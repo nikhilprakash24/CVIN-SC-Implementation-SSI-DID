@@ -41,6 +41,7 @@
  *   capabilities      mirrors manifest.yaml
  */
 const { NotApplicable } = require('../../lib/identity_option');
+let _defaultVinSeq = 0; // placeholder VINs, deterministic (B1)
 
 const CONTRACT = 'CVINVehicleClaimHolder';
 const ECDSA_SCHEME = 1;
@@ -95,7 +96,8 @@ class Erc735Adapter {
 
   async create({ vin, owner } = {}) {
     const target = owner || this.signers.vehicleOwner.address;
-    const v = vin || `VIN-${Date.now()}`;
+    // a sequence number, not the clock: the VIN is stored and hashed, so a clock value made gas vary (B1, N-18)
+    const v = vin || `VIN-${String(++_defaultVinSeq).padStart(10, '0')}`;
     const ownerSigner = this._signerFor(target, false);
     const F = await this.ethers.getContractFactory(CONTRACT, ownerSigner || this.signers.deployer);
     const c = await F.deploy(v);

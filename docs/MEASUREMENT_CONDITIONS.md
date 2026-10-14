@@ -36,6 +36,11 @@ Rules that follow from the tags:
   EIP-2028) and possibly storage layout: report the range over the runs made and
   the number of runs (#47; the 14 harness cells of TSR P4-3). Added 2026-10-10
   (audit finding A-3).
+  *Since WM-2 B1 (2026-10-14):* incidental random inputs are seeded and the seed recorded
+  (the sandbox L1 suite and demos under `CVIN_SEED`, set by the grand runner), so their gas is exact; inputs that are
+  the thing measured are reported as a range over declared seeds with each run's inputs recorded (I4, #47). The
+  metrics harness keeps its own fixed dataset seed (42; §5) and is not changed by B1 (its tree identifies the run of
+  record; A6).
 - **Latency** (any tag) is not deterministic: report **N ≥ 30** warm
   repetitions after 3 discarded warm-ups, with **median and p95** (mean, min,
   max optional), and an environment header (CPU model, Python/Node versions,
