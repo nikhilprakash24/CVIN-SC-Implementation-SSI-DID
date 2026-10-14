@@ -4,7 +4,7 @@
 **Written:** 2026-10-14 (after-action report 16). **State:** Phase 2 at the end of P2.0 (ideation), with the three
 author-designated focuses captured, analysed, planned and started. **Binds:** `docs/phase2/README.md` (charter and
 session protocol), `docs/STYLE_AND_RIGOUR_GUIDE.md`. **Supersedes:** nothing; it gathers the Phase 2 documents into one
-reading. Every number is a register row (`#n` = `docs/MEASUREMENT_CONDITIONS.md`).
+reading. **Revised:** 2026-10-14 after the academic review (`reviews/ACADEMIC_REVIEW_F1-F3.md`; dispositions in `reviews/DISPOSITIONS_F1-F3.md`). Every number is a register row (`#n` = `docs/MEASUREMENT_CONDITIONS.md`).
 
 ## 1. Executive summary
 **What Phase 2 is.** Phase 1 is the thesis artefact. It compares nine Ethereum identity standards on one vehicle
@@ -19,21 +19,28 @@ ideation, then architecture, then planning, then build waves, with the author ch
   pre-registration draft, and a first executed step. F1 is on-chain storage and the identity-dependent transaction
   (IDTx); F2 is public and private chains and databases; F3 is the modes of communicating with the chain.
 
-**The three findings that matter most.**
-1. **Storage choice decides what can depend on identity, not only what it costs.** Writing identity state costs gas
-   in proportion to new storage slots: 8 to 149 over one lifecycle, and 1.05 to 5.80 million gas (#49, #35). Keeping
-   data in event logs is cheap to write, costly to read (112 RPC calls at history 50, #31), and invisible to every
-   contract. The IDTx definition makes the second point formal.
-2. **The chain's value is verification by parties who do not trust the operator, not speed.** A database is three to
-   four orders of magnitude faster on writes (#33). A careful database with a hash-chained journal still cannot reveal
-   a full rewrite by its own operator without an anchor kept outside, which the F2 prototype demonstrates.
-3. **Only the detached mode fits the safety budget.** Verifying one vehicle message costs:
-   - detached (cached credential, no chain contact): 0.153 ms (#27);
-   - a direct probe: 2.76 ms (#37);
-   - a direct full resolution: 9.654 ms (#21).
-
-   On the autonomous radio sidelink a vehicle has no network path, so the detached mode is forced. That is why the
-   cached, anchored design is the right one.
+**The three findings that matter most** (each stated as narrowly as the evidence allows, after the academic review).
+1. **Storage choice decides what can depend on identity, not only what it costs.**
+   - Over one lifecycle, zero→nonzero SSTOREs range from 8 to 149, and lifetime gas from 1.05 to 5.80 million
+     (#49, #35). This is an association, not a cause.
+   - Event-held data is cheap to write and costly to read: 112 RPC calls at history 50 (#31).
+   - A contract cannot read event-held data directly; it can depend on it only through a carried receipt proof,
+     which Phase 1 never built.
+   - Under one strict definition, only 4 of 26 Phase 1 gates are identity-dependent transactions. The rest are
+     administration, authentication or off-chain decisions.
+2. **The chain is slower, and a cache did not close the gap as pre-registered.**
+   - On-chain lifecycle writes were about 1,600 to 6,000 times slower than an in-process database (#33, 2026-10-04
+     re-run).
+   - The pre-registered "equal once cached" test **failed**.
+   - That a chain buys verification by parties who do not trust the operator is a **design argument**: Phase 1 ran
+     one operator. The F2 prototype shows the database half of the argument: a hash-chained journal cannot reveal a
+     full rewrite or a tail deletion without an anchor kept outside.
+3. **The safety budget is met per path, not per mode.**
+   - The SSI offline verification path fits: 0.153 ms per message (#27).
+   - The ERC-1056 cached verifier does not reach the budget's sender count on its host at any finite k (#37).
+   - Those rows come from different runs and hosts, so no ratio is formed across them (guide 1.1.7).
+   - Out of cellular coverage only offline verification is possible. That is an argument from the radio standard;
+     the testbed has no radio.
 
 **What the review team recommends** (the career ECE academic's scope reconciliation):
 - **Freeze the thesis on Scope v3.** It keeps the four research questions, restated so that each is answered by
@@ -76,9 +83,9 @@ The scope has had two attempts:
 
 | Focus | In the thesis (existing evidence) | Before the defence (only if a bounded WM-3 is opened) | After the thesis |
 |---|---|---|---|
-| F1 storage and IDTx | storage-locus table; IDTx definition and taxonomy; the C8 observation (event-held attributes cannot condition a contract) | none recommended | paper P5: measured IDTx study (prototype ready) |
-| F2 substrates | the transfer table; #33 and #21 as the two substrate comparisons | Sepolia witness (N-11) | paper P7: four-substrate study (database backend ready) |
-| F3 modes | the mode taxonomy; measured write paths (#50) and read modes (#21, #37, #27) | one B-serve point through Sepolia | paper P4: interaction modes; mode selection per message class |
+| F1 storage and IDTx | chapter 6: storage-locus table; IDTx definition, three-axis taxonomy and re-classified inventory (conceptual); threat rows with defects | none recommended | paper P5: measured IDTx study (prototype ready) |
+| F2 substrates | chapter 3: the transfer table with its conditions (threats to validity); chapters 5 and 6: #33 (with its FAIL) and #21 | Sepolia witness (N-11) | paper P7: four-substrate study (database backend ready) |
+| F3 modes | the six-cell table (write direct, relayed, account-abstracted; read on demand, cached, offline), every cell a V row | one provider-served read through Sepolia | paper P4: the A/B/C frame and mode selection per message class |
 
 ## 4. The three focus packages
 | | F1 storage and IDTx | F2 chains and databases | F3 interaction modes |
@@ -87,35 +94,37 @@ The scope has had two attempts:
 | Capture | 25 IDTx instances already in Phase 1; storage per standard and datum | one local chain; in-memory registry; no private chain, no public run | direct and relayed writes; three measured read modes; no provider-served read |
 | Analysis | six storage loci; IDTx definition; five-axis taxonomy; threats; cost model | transfer table; substrate taxonomy; hybrid placement by data class | A direct, B-submit, B-serve, C detached; costs, trust, privacy, staleness; radio coupling |
 | Plan (drafts) | E-F1-1 to E-F1-4 | E-F2-1 to E-F2-4 | E-F3-1 to E-F3-4 |
-| Executed | IDTx prototype, 10 tests, 3 mutants caught | database backend with hash-chained journal, 6 tests | classification of all operations and 1,752 demo steps, in CI |
-| Figures | F1-1 state vs gas; F1-2 read cost vs history | F2-1 lifecycle parity | F3-1 write paths; F3-2 read modes |
+| Executed | IDTx prototype, 12 tests, 5 gate mutants run in CI | database backend with a hash-chained journal, 9 tests (including the limits: rewrite and tail truncation) | classification of all operations and 1,752 demo steps, with a cross-tabulation, in CI |
+| Figures | F1-1 state vs gas; F1-2 read cost vs history | F2-1 lifecycle parity (dot plot, FAIL marked) | F3-1 write paths; read costs as a table (the figure was withdrawn) |
 | Folder | `focus/F1_onchain_storage_idtx/` | `focus/F2_chains_and_databases/` | `focus/F3_interaction_modes/` |
 
 ## 5. The identity-dependent transaction, in brief
-> An **identity-dependent transaction (IDTx)** is a state transition whose execution is conditioned on a predicate
-> over identity state held by a ledger, evaluated at execution time, either inside the transaction or by an agent
-> whose transaction re-evaluates it before acting.
+> An **identity-dependent transaction (IDTx)** is a transaction whose admissibility or effect is a function of the
+> state of an identity that the transaction names, evaluated during execution from ledger state or from an
+> attestation or proof the transaction carries. It excludes two cases: authentication of the sender, and
+> administration of the record the transaction itself modifies. The off-chain counterpart is an
+> **identity-dependent decision**.
 
-It differs from an ordinary access check in three ways:
-- the condition is about a third-party identity, not only the caller;
-- the state is held by a ledger;
-- a change between decision and execution changes the outcome.
+The definition is the academic review's, adopted as the default of P2-D8.
 
-**Five axes classify any instance:**
-- dependency (ownership, delegate, attribute, status, history);
-- locus (state, commitment, event, anchored credential);
-- encoding (plaintext, salted hash, ciphertext digest, proof);
-- evaluation (in-contract, agent then re-check, off-chain only);
-- continuation (same transaction, next transaction, message acceptance).
+**Phase 1, re-classified under it.** Only 4 of 26 gates are IDTx:
+- the MOBI birth's VIN-uniqueness check;
+- two issuer-dependent claim checks;
+- `payToll`.
 
-**The analysis shows the axes constrain each other.**
-- Event-held data rules out in-contract evaluation.
-- Encrypted data allows equality only.
-- Off-chain evaluation opens a time-of-check to time-of-use gap that only an on-chain re-check closes.
+**Three axes classify an IDTx:**
+- dependency kind;
+- locus with encoding (plaintext state, registered commitment, carried attestation, carried receipt proof);
+- evaluation point (in the transaction, at admission, off chain then re-checked).
 
-The prototype demonstrates each point in a test. The scope reconciliation names the prior art to position against,
-to be confirmed at source: ERC-3643 with ONCHAINID, account-abstraction validation, oracle-conditioned execution, and
-transaction-order dependence.
+**The axes constrain each other.**
+- Event-held data needs a carried proof.
+- A commitment gates by equality only, and proves no knowledge of what it commits to.
+- A re-check in the transaction closes the gap inside execution, but not the ordering race.
+
+**Positioning.** The mechanism is old, and the thesis says so. The contribution is the definition, the taxonomy and
+the freshness dimension. The position is against ERC-3643 with ONCHAINID, account-abstraction validation, oracle
+execution and the transaction-order-dependence literature (review §3.1, to be read at source).
 
 ## 6. Decisions open for the author
 | # | Decision | Default until decided |
@@ -129,7 +138,7 @@ transaction-order dependence.
 | N-23 | AI-use disclosure | open (Phase 1) |
 
 ## 7. What happens next
-**Phase 1, WM-2.** The next step is B1 (deterministic gas or ranges). Then B2, C3, C1, C2, the re-runs (A3, A3b, A6),
+**Phase 1, WM-2.** C0 is done (verifier v3; I1 1.226, outside band, not falsified; I2 and I3 PASS). The next step is B1 (deterministic gas or ranges). Then B2, C3, C1, C2, the re-runs (A3, A3b, A6),
 A5 and the chapter checks (D1).
 
 **Phase 2 session 2:**

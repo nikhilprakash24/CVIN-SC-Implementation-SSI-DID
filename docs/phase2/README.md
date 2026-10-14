@@ -82,5 +82,5 @@ the same code paths as an open Phase 1 step waits for that step (`ROADMAP.md` §
 | `SCOPE_RECONCILIATION.md` | the thesis scope across its revisions; Scope v3; where Phase 2 belongs; paper map; examiner questions; 15 decisions | session 2 (academic adviser) |
 | `focus/F1_onchain_storage_idtx/`, `focus/F2_chains_and_databases/`, `focus/F3_interaction_modes/` | the three author-designated focuses: README (executive summary), CAPTURE, ANALYSIS, PLAN, EXECUTION | session 2 |
 | `focus/FIGURES.md`, `focus/figures/`, `focus/make_focus_figures.py` | five generated figures with their table views (CI-checked) | session 2 |
-| `reviews/` | the review team's reviews of Phase 2 documents | session 2 |
+| `reviews/` | the academic review of F1–F3 (41 findings) and its dispositions (`DISPOSITIONS_F1-F3.md`: 40 fixed, 1 fixed in part) | session 2 |
 | `CHAT_WORKSPACE_BRIEF.md`, `inbox/` | the hand-off for literature, standards and drafting work in a chat workspace with tools, and where its results return | session 2 |

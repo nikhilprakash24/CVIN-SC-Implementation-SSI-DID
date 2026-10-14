@@ -393,6 +393,18 @@ Each default is mine and stands until you overturn it (guide 2.1.7).
 | D-14 | Thesis title | the title in §2.1, or keep the current one with "measured" added | the current title promises a comparison of SSI *systems*; the work compares substrates |
 | D-15 | Chapter 2 | write it next, before more Phase 2 design, with IDTx's positioning inside it | it is the largest examiner risk (question 1) |
 
+
+### Corrections (appended 2026-10-14; the text above is not edited)
+- **D-12 withdrawn** (academic review AR-29, Q6). The probe refresh at k = 1 is the cheapest **zero-staleness**
+  policy in #37, not a policy that fits the budget: on #37's host no finite k reaches P*(0.5) = 100. New default: the
+  thesis defends no k as "fitting". It reports the curve, and states that zero staleness and P*(0.5) ≥ 100 were not
+  achieved together on either host (#32, #37).
+- **§3.1 "no register row yet"** for the storage, log and calldata tables. Rows #49 (on-chain footprint), #50
+  (relayed writes) and #51 (read cost against history, all columns) were added on 2026-10-14 from the run of record
+  `7a9a996`. The calldata table still has no row.
+- **§2.3, I1.** The C0 re-run on verifier v3 gives 1.226, outside the band and not falsified (#44). The §2.3 table is
+  corrected in place with a history marker.
+
 ---
 
 A closing word, as your supervisor would say it.

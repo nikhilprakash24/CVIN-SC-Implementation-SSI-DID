@@ -3,7 +3,7 @@
 **Author:** Nikhil Prakash (MASc, UBC ECE)
 **Written:** 2026-10-14 (after-action report 16). **For:** a general-purpose assistant workspace with web search, document
 reading and file tools, used by the author to run literature, standards and drafting work that a code session cannot
-do well. **Returns to:** `docs/phase2/inbox/` in this repository, where the next code session verifies and weaves it in.
+do well. **Revised:** 2026-10-14 after the academic review (IDTx definition; reading list in `docs/phase2/reviews/ACADEMIC_REVIEW_F1-F3.md` §3.1). **Returns to:** `docs/phase2/inbox/` in this repository, where the next code session verifies and weaves it in.
 
 ## 0. How to use this brief
 1. Start a conversation in the chat workspace. Attach this file and `docs/phase2/PHASE2_PROGRAMME.md`. Attach the
@@ -25,9 +25,11 @@ It adds a W3C Verifiable Credentials layer, and a V2V and V2I message-verificati
 mobility. Every number has a row in a claim register with a status, and only "V" (verified) numbers may be quoted.
 
 **Phase 2** is the programme after the thesis core. It has three focuses the author designated:
-- **F1, on-chain storage versus not, and the identity-dependent transaction (IDTx).** The author's term. An IDTx is a
-  state transition whose execution is conditioned on identity state held by a ledger, evaluated at execution time,
-  either in-contract or by an agent whose transaction re-evaluates it.
+- **F1, on-chain storage versus not, and the identity-dependent transaction (IDTx).** The author's term, with this
+  working definition: a transaction whose admissibility or effect is a function of the state of an identity the
+  transaction names, evaluated during execution from ledger state or from a carried attestation or proof. It
+  excludes sender authentication and administration of the record being modified. The off-chain counterpart is an
+  identity-dependent decision.
 - **F2, public and private blockchains and other databases.**
 - **F3, the modes of communicating with the chain.** Two candidate taxonomies are on the table:
   - write: direct, relayed, account-abstracted; read: on demand, cached, offline;
@@ -41,7 +43,7 @@ mobility. Every number has a row in a claim register with a status, and only "V"
 | Lifecycle gas: ERC-1056 1,050,809 (cheapest); ERC-735 5,797,549 (excl. 3 n/a) | #35 |
 | New storage slots over the lifecycle: 8 (ERC-1056) to 149 (ERC-735) | #49 |
 | Relayed write over direct: ERC-1056 +27,622 gas; ERC-4337 +47,116 | #50, #34 |
-| V2V warm verification 0.153 ms [0.151, 0.154]; uncached chain-backed verification 9.654 ms | #27, #21 |
+| V2V warm verification 0.153 ms [0.151, 0.154] (M0); uncached chain-backed verification 9.654 ms (M1, a different run: never form a ratio across them) | #27, #21 |
 | A re-check every k messages accepts at most k − 1 messages after a revocation | #46 |
 | ERC-1056 document resolution at history 50: 112 RPC calls, 87 KB | #31 |
 | W3C structural self-score 94.3 %; external DID test suite 335/336 | #4, #24 |

@@ -197,3 +197,20 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/phase2/` (README, EVIDENCE_BASE, ideas.yaml, IDEA_REGISTER, build_phase2.py, ARCHITECTURE, ROADMAP, BRAINSTORM_01, DECISIONS, sessions/SESSION_LOG) | Phase 2 charter and P2.0 ideation; register checked in CI | the author's request of 2026-10-14 |
 | `docs/HANDBACK_2026-10-14.md` | consolidated handback, including what a new assistant model must know | standing rule; change of assistant |
 
+## Pass 16 — WM-2 C0; Phase 2 focuses F1–F3; scope reconciliation; academic review (2026-10-14)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_16.md` | plan, log, closing | standing rule |
+| `docs/design/INFRASTRUCTURE_PREREG.md` amendment A6 | verifier v3 and the extended I2, before any change | WM-2 C0 |
+| `cv2x-testbed/sumo/infrastructure_layer.py`, `run_infra_stats.py`, `sumo_identity_integration.py`; `cv2x-testbed/identity/erc1056_provider.py` | verifier v3 (D37–D42); the D51 fix | WM-2 C0 |
+| `sandbox/py-suites/L3-ssi/test_infrastructure_v3.py`, mutation script; `cv2x-testbed/tests/test_d51_chain_time.py` | regression tests failing on the old code; 39/39 mutants | WM-2 C0 |
+| `cv2x-testbed/sumo/results/infrastructure_{stats,revocation}.json`, `run_logs/2026-10-14_7d08dce/` | I1–I3, I5 runs of record at `7d08dce` | WM-2 C0 |
+| `docs/MEASUREMENT_CONDITIONS.md` | #44–#46, #48 re-stated; #49–#51 added; dated corrections (#49, M2 tag); D51 update | C0; F1–F3; review |
+| `docs/phase2/focus/F1_onchain_storage_idtx/`, `F2_chains_and_databases/`, `F3_interaction_modes/` | the three author-designated focuses | the author's request |
+| `phase2/idtx/` (contracts, tests, `mutate_idtx.sh`), `1_blockchain-identity/hardhat.phase2.config.js` | the IDTx prototype | F1 execution start |
+| `phase2/backends/` | the database lifecycle backend with a hash-chained journal | F2 execution start |
+| `docs/phase2/focus/F3_interaction_modes/classify_modes.py`, `MODE_CLASSIFICATION.md` | the generated mode classification | F3 execution start |
+| `docs/phase2/focus/make_focus_figures.py`, `FIGURES.md`, `figures/` | four generated figures and their tables | figures |
+| `docs/phase2/SCOPE_RECONCILIATION.md`, `reviews/` | the scope across its revisions; the academic review and its dispositions | writing team |
+| `docs/phase2/PHASE2_PROGRAMME.md`, `CHAT_WORKSPACE_BRIEF.md`, `inbox/` | the consolidated document; the hand-off to a chat workspace | the author's request |
+
