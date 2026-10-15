@@ -1,0 +1,69 @@
+{
+  "scenario": "X1 endorsed passage, paid write",
+  "corridor": "BC-HWY-99-NB",
+  "condition": "M1 Hardhat node over HTTP; read_ms includes VP verify + eth_call; host-dependent",
+  "ssi_lane": {
+    "vehicles": 6,
+    "admitted": 4,
+    "denied": {
+      "suspended-5": "vp_invalid",
+      "revoked-6": "onchain_code_7"
+    },
+    "read_ms_median": 21.225,
+    "revenue_cusd": 12.75,
+    "identifiers_exposed": {
+      "ev-1": [
+        "did_address(linkable, on-chain)",
+        "pseudonym_address",
+        "vehicleClass",
+        "jurisdiction"
+      ],
+      "car-2": [
+        "did_address(linkable, on-chain)",
+        "pseudonym_address",
+        "vehicleClass",
+        "jurisdiction"
+      ],
+      "truck-3": [
+        "did_address(linkable, on-chain)",
+        "pseudonym_address",
+        "vehicleClass",
+        "jurisdiction"
+      ],
+      "ambulance-4": [
+        "did_address(linkable, on-chain)",
+        "pseudonym_address",
+        "vehicleClass",
+        "jurisdiction"
+      ]
+    }
+  },
+  "legacy_lane": {
+    "vehicles": 2,
+    "admitted": 2,
+    "denied": {},
+    "read_ms_median": null,
+    "revenue_cusd": 11.5,
+    "identifiers_exposed": {
+      "legacy-7": [
+        "plate",
+        "image",
+        "vehicleClass(camera)",
+        "timestamp+location"
+      ],
+      "legacy-8": [
+        "plate",
+        "image",
+        "vehicleClass(camera)",
+        "timestamp+location"
+      ]
+    }
+  },
+  "reconciled_revenue_cusd": 24.25,
+  "gas": {
+    "settleBatch": 296839,
+    "settle_per_ticket": 74210,
+    "sponsor_addDelegateSigned_total": 596700,
+    "escrow_deposit_total": 402738
+  }
+}
