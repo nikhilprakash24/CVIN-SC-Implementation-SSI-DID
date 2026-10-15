@@ -7,7 +7,7 @@
     "steps": 13,
     "gas_total": 2057519,
     "flagged": 1,
-    "seconds": 1.6
+    "seconds": 1.9
    },
    {
     "family": "authorisation-roles",
@@ -15,7 +15,7 @@
     "steps": 13,
     "gas_total": 2249681,
     "flagged": 2,
-    "seconds": 2.6
+    "seconds": 1.7
    },
    {
     "family": "claims",
@@ -23,7 +23,7 @@
     "steps": 29,
     "gas_total": 2855606,
     "flagged": 1,
-    "seconds": 1.6
+    "seconds": 3.1
    },
    {
     "family": "controller",
@@ -31,7 +31,7 @@
     "steps": 21,
     "gas_total": 2382309,
     "flagged": 0,
-    "seconds": 2.9
+    "seconds": 1.8
    },
    {
     "family": "did-resolution",
@@ -39,7 +39,7 @@
     "steps": 12,
     "gas_total": 2301232,
     "flagged": 0,
-    "seconds": 1.7
+    "seconds": 2.9
    },
    {
     "family": "keys-delegates",
@@ -47,7 +47,7 @@
     "steps": 13,
     "gas_total": 1789965,
     "flagged": 1,
-    "seconds": 3.3
+    "seconds": 1.6
    },
    {
     "family": "lifecycle-history",
@@ -55,7 +55,7 @@
     "steps": 15,
     "gas_total": 2032026,
     "flagged": 0,
-    "seconds": 1.6
+    "seconds": 3.5
    },
    {
     "family": "offchain-creation",
@@ -63,7 +63,7 @@
     "steps": 11,
     "gas_total": 1854269,
     "flagged": 0,
-    "seconds": 2.9
+    "seconds": 1.6
    },
    {
     "family": "revocation",
@@ -71,7 +71,7 @@
     "steps": 15,
     "gas_total": 2483413,
     "flagged": 0,
-    "seconds": 1.6
+    "seconds": 4.2
    },
    {
     "family": "vin-linkage",
@@ -79,7 +79,7 @@
     "steps": 10,
     "gas_total": 2165917,
     "flagged": 0,
-    "seconds": 2.7
+    "seconds": 1.7
    }
   ],
   "erc-1056-uport": [
@@ -89,7 +89,7 @@
     "steps": 35,
     "gas_total": 3306145,
     "flagged": 0,
-    "seconds": 1.8
+    "seconds": 3.6
    },
    {
     "family": "authorisation-roles",
@@ -97,7 +97,7 @@
     "steps": 13,
     "gas_total": 2863943,
     "flagged": 1,
-    "seconds": 2.5
+    "seconds": 1.6
    },
    {
     "family": "controller",
@@ -105,7 +105,7 @@
     "steps": 30,
     "gas_total": 3221209,
     "flagged": 1,
-    "seconds": 1.5
+    "seconds": 3.0
    },
    {
     "family": "creation",
@@ -113,7 +113,7 @@
     "steps": 15,
     "gas_total": 2919927,
     "flagged": 0,
-    "seconds": 2.7
+    "seconds": 1.4
    },
    {
     "family": "did-resolution",
@@ -121,7 +121,7 @@
     "steps": 14,
     "gas_total": 2931754,
     "flagged": 0,
-    "seconds": 1.6
+    "seconds": 2.5
    },
    {
     "family": "keys-delegates",
@@ -129,7 +129,7 @@
     "steps": 22,
     "gas_total": 3179729,
     "flagged": 0,
-    "seconds": 2.8
+    "seconds": 1.7
    },
    {
     "family": "lifecycle-history",
@@ -137,7 +137,7 @@
     "steps": 13,
     "gas_total": 3016684,
     "flagged": 0,
-    "seconds": 1.5
+    "seconds": 2.5
    },
    {
     "family": "offchain-creation",
@@ -145,7 +145,7 @@
     "steps": 13,
     "gas_total": 2897090,
     "flagged": 0,
-    "seconds": 2.9
+    "seconds": 1.5
    },
    {
     "family": "revocation",
@@ -153,7 +153,7 @@
     "steps": 21,
     "gas_total": 3418058,
     "flagged": 2,
-    "seconds": 1.7
+    "seconds": 2.9
    },
    {
     "family": "signed-execution",
@@ -161,7 +161,7 @@
     "steps": 13,
     "gas_total": 1253937,
     "flagged": 0,
-    "seconds": 2.6
+    "seconds": 1.6
    },
    {
     "family": "vin-linkage",
@@ -169,7 +169,7 @@
     "steps": 15,
     "gas_total": 2902321,
     "flagged": 2,
-    "seconds": 1.5
+    "seconds": 2.6
    }
   ],
   "erc-1056-vehicle": [
@@ -179,7 +179,7 @@
     "steps": 10,
     "gas_total": 949706,
     "flagged": 0,
-    "seconds": 2.6
+    "seconds": 1.4
    },
    {
     "family": "claims",
@@ -187,7 +187,7 @@
     "steps": 10,
     "gas_total": 764425,
     "flagged": 0,
-    "seconds": 1.5
+    "seconds": 2.7
    },
    {
     "family": "controller",
@@ -195,7 +195,7 @@
     "steps": 13,
     "gas_total": 850065,
     "flagged": 1,
-    "seconds": 2.5
+    "seconds": 1.8
    },
    {
     "family": "creation",
@@ -203,7 +203,7 @@
     "steps": 13,
     "gas_total": 985891,
     "flagged": 1,
-    "seconds": 1.5
+    "seconds": 2.6
    },
    {
     "family": "did-resolution",
@@ -211,7 +211,7 @@
     "steps": 11,
     "gas_total": 836433,
     "flagged": 0,
-    "seconds": 2.5
+    "seconds": 2.0
    },
    {
     "family": "keys-delegates",
@@ -219,7 +219,7 @@
     "steps": 11,
     "gas_total": 909286,
     "flagged": 1,
-    "seconds": 1.4
+    "seconds": 3.2
    },
    {
     "family": "lifecycle-history",
@@ -227,7 +227,7 @@
     "steps": 13,
     "gas_total": 965015,
     "flagged": 0,
-    "seconds": 2.6
+    "seconds": 1.5
    },
    {
     "family": "offchain-messaging",
@@ -235,7 +235,7 @@
     "steps": 10,
     "gas_total": 839795,
     "flagged": 1,
-    "seconds": 1.4
+    "seconds": 4.9
    },
    {
     "family": "revocation",
@@ -243,7 +243,7 @@
     "steps": 24,
     "gas_total": 981757,
     "flagged": 0,
-    "seconds": 2.6
+    "seconds": 1.6
    }
   ],
   "erc-1155": [
@@ -253,7 +253,7 @@
     "steps": 13,
     "gas_total": 221810,
     "flagged": 1,
-    "seconds": 1.4
+    "seconds": 4.0
    },
    {
     "family": "authorisation-roles",
@@ -261,7 +261,7 @@
     "steps": 19,
     "gas_total": 637364,
     "flagged": 2,
-    "seconds": 3.5
+    "seconds": 1.5
    },
    {
     "family": "claims",
@@ -269,7 +269,7 @@
     "steps": 28,
     "gas_total": 627064,
     "flagged": 3,
-    "seconds": 1.5
+    "seconds": 2.8
    },
    {
     "family": "controller",
@@ -277,7 +277,7 @@
     "steps": 46,
     "gas_total": 819716,
     "flagged": 1,
-    "seconds": 3.1
+    "seconds": 2.0
    },
    {
     "family": "creation",
@@ -285,7 +285,7 @@
     "steps": 20,
     "gas_total": 215458,
     "flagged": 0,
-    "seconds": 1.5
+    "seconds": 3.5
    },
    {
     "family": "lifecycle-history",
@@ -293,7 +293,7 @@
     "steps": 14,
     "gas_total": 596226,
     "flagged": 0,
-    "seconds": 2.9
+    "seconds": 1.5
    },
    {
     "family": "revocation",
@@ -301,7 +301,7 @@
     "steps": 18,
     "gas_total": 378104,
     "flagged": 2,
-    "seconds": 1.7
+    "seconds": 3.0
    },
    {
     "family": "token-economics",
@@ -309,7 +309,7 @@
     "steps": 13,
     "gas_total": 117555,
     "flagged": 2,
-    "seconds": 2.7
+    "seconds": 1.5
    },
    {
     "family": "vin-linkage",
@@ -317,7 +317,7 @@
     "steps": 14,
     "gas_total": 233583,
     "flagged": 0,
-    "seconds": 1.5
+    "seconds": 2.6
    }
   ],
   "erc-4337": [
@@ -327,7 +327,7 @@
     "steps": 15,
     "gas_total": 302272,
     "flagged": 0,
-    "seconds": 2.5
+    "seconds": 1.6
    },
    {
     "family": "controller",
@@ -335,7 +335,7 @@
     "steps": 21,
     "gas_total": 257662,
     "flagged": 0,
-    "seconds": 1.6
+    "seconds": 2.6
    },
    {
     "family": "creation",
@@ -343,7 +343,7 @@
     "steps": 14,
     "gas_total": 21062,
     "flagged": 0,
-    "seconds": 3.6
+    "seconds": 1.6
    },
    {
     "family": "keys-delegates",
@@ -351,7 +351,7 @@
     "steps": 19,
     "gas_total": 205742,
     "flagged": 1,
-    "seconds": 1.5
+    "seconds": 4.1
    },
    {
     "family": "lifecycle-history",
@@ -359,7 +359,7 @@
     "steps": 15,
     "gas_total": 295592,
     "flagged": 0,
-    "seconds": 3.6
+    "seconds": 1.7
    },
    {
     "family": "signed-execution",
@@ -367,7 +367,7 @@
     "steps": 25,
     "gas_total": 258512,
     "flagged": 0,
-    "seconds": 1.7
+    "seconds": 2.6
    }
   ],
   "erc-721": [
@@ -377,7 +377,7 @@
     "steps": 24,
     "gas_total": 451966,
     "flagged": 0,
-    "seconds": 2.9
+    "seconds": 1.6
    },
    {
     "family": "authorisation-roles",
@@ -385,7 +385,7 @@
     "steps": 22,
     "gas_total": 859358,
     "flagged": 2,
-    "seconds": 1.7
+    "seconds": 2.9
    },
    {
     "family": "controller",
@@ -393,7 +393,7 @@
     "steps": 37,
     "gas_total": 1103280,
     "flagged": 0,
-    "seconds": 3.3
+    "seconds": 1.6
    },
    {
     "family": "creation",
@@ -401,7 +401,7 @@
     "steps": 38,
     "gas_total": 1284083,
     "flagged": 0,
-    "seconds": 1.6
+    "seconds": 3.2
    },
    {
     "family": "did-resolution",
@@ -409,7 +409,7 @@
     "steps": 8,
     "gas_total": 0,
     "flagged": 0,
-    "seconds": 2.8
+    "seconds": 1.7
    },
    {
     "family": "lifecycle-history",
@@ -417,7 +417,7 @@
     "steps": 18,
     "gas_total": 568094,
     "flagged": 0,
-    "seconds": 1.4
+    "seconds": 2.6
    },
    {
     "family": "revocation",
@@ -425,7 +425,7 @@
     "steps": 16,
     "gas_total": 338694,
     "flagged": 2,
-    "seconds": 2.8
+    "seconds": 1.4
    },
    {
     "family": "token-economics",
@@ -433,7 +433,7 @@
     "steps": 44,
     "gas_total": 943147,
     "flagged": 0,
-    "seconds": 1.7
+    "seconds": 3.4
    },
    {
     "family": "vin-linkage",
@@ -441,7 +441,7 @@
     "steps": 15,
     "gas_total": 500311,
     "flagged": 0,
-    "seconds": 2.7
+    "seconds": 1.5
    }
   ],
   "erc-725": [
@@ -451,7 +451,7 @@
     "steps": 14,
     "gas_total": 1250683,
     "flagged": 2,
-    "seconds": 1.5
+    "seconds": 2.6
    },
    {
     "family": "creation",
@@ -459,7 +459,7 @@
     "steps": 9,
     "gas_total": 1586542,
     "flagged": 0,
-    "seconds": 2.5
+    "seconds": 1.5
    },
    {
     "family": "keys-delegates",
@@ -467,7 +467,7 @@
     "steps": 19,
     "gas_total": 1335239,
     "flagged": 3,
-    "seconds": 1.4
+    "seconds": 2.6
    },
    {
     "family": "revocation",
@@ -475,7 +475,7 @@
     "steps": 19,
     "gas_total": 1506219,
     "flagged": 1,
-    "seconds": 2.4
+    "seconds": 1.7
    },
    {
     "family": "signed-execution",
@@ -483,7 +483,7 @@
     "steps": 13,
     "gas_total": 814929,
     "flagged": 1,
-    "seconds": 2.6
+    "seconds": 2.5
    }
   ],
   "erc-725xy": [
@@ -493,7 +493,7 @@
     "steps": 22,
     "gas_total": 2108814,
     "flagged": 0,
-    "seconds": 1.7
+    "seconds": 1.6
    },
    {
     "family": "controller",
@@ -501,7 +501,7 @@
     "steps": 13,
     "gas_total": 1782757,
     "flagged": 0,
-    "seconds": 2.7
+    "seconds": 2.8
    },
    {
     "family": "creation",
@@ -509,7 +509,7 @@
     "steps": 17,
     "gas_total": 3841206,
     "flagged": 0,
-    "seconds": 1.6
+    "seconds": 1.5
    },
    {
     "family": "lifecycle-history",
@@ -517,7 +517,7 @@
     "steps": 14,
     "gas_total": 2118489,
     "flagged": 0,
-    "seconds": 3.2
+    "seconds": 3.1
    },
    {
     "family": "revocation",
@@ -525,7 +525,7 @@
     "steps": 13,
     "gas_total": 1958402,
     "flagged": 0,
-    "seconds": 1.5
+    "seconds": 1.6
    },
    {
     "family": "signed-execution",
@@ -533,7 +533,7 @@
     "steps": 34,
     "gas_total": 3833449,
     "flagged": 1,
-    "seconds": 2.7
+    "seconds": 3.2
    },
    {
     "family": "vin-linkage",
@@ -541,7 +541,7 @@
     "steps": 12,
     "gas_total": 1879105,
     "flagged": 1,
-    "seconds": 1.5
+    "seconds": 1.6
    }
   ],
   "erc-735": [
@@ -551,7 +551,7 @@
     "steps": 27,
     "gas_total": 2727005,
     "flagged": 0,
-    "seconds": 2.6
+    "seconds": 2.9
    },
    {
     "family": "claims",
@@ -559,7 +559,7 @@
     "steps": 41,
     "gas_total": 4016526,
     "flagged": 0,
-    "seconds": 1.6
+    "seconds": 1.8
    },
    {
     "family": "controller",
@@ -567,7 +567,7 @@
     "steps": 16,
     "gas_total": 2228822,
     "flagged": 0,
-    "seconds": 2.9
+    "seconds": 3.9
    },
    {
     "family": "creation",
@@ -575,7 +575,7 @@
     "steps": 12,
     "gas_total": 5302455,
     "flagged": 0,
-    "seconds": 1.5
+    "seconds": 1.6
    },
    {
     "family": "lifecycle-history",
@@ -583,7 +583,7 @@
     "steps": 11,
     "gas_total": 2345755,
     "flagged": 0,
-    "seconds": 2.9
+    "seconds": 2.8
    },
    {
     "family": "revocation",
@@ -591,7 +591,7 @@
     "steps": 23,
     "gas_total": 2951406,
     "flagged": 0,
-    "seconds": 1.7
+    "seconds": 1.5
    },
    {
     "family": "vin-linkage",
@@ -599,7 +599,7 @@
     "steps": 17,
     "gas_total": 2392497,
     "flagged": 0,
-    "seconds": 3.0
+    "seconds": 2.8
    }
   ],
   "lsp8": [
@@ -609,7 +609,7 @@
     "steps": 18,
     "gas_total": 324566,
     "flagged": 0,
-    "seconds": 1.6
+    "seconds": 1.4
    },
    {
     "family": "claims",
@@ -617,7 +617,7 @@
     "steps": 14,
     "gas_total": 384731,
     "flagged": 1,
-    "seconds": 2.5
+    "seconds": 2.7
    },
    {
     "family": "controller",
@@ -625,7 +625,7 @@
     "steps": 21,
     "gas_total": 422847,
     "flagged": 1,
-    "seconds": 1.7
+    "seconds": 1.5
    },
    {
     "family": "creation",
@@ -633,7 +633,7 @@
     "steps": 26,
     "gas_total": 426508,
     "flagged": 0,
-    "seconds": 3.2
+    "seconds": 2.9
    },
    {
     "family": "lifecycle-history",
@@ -649,7 +649,7 @@
     "steps": 21,
     "gas_total": 313019,
     "flagged": 2,
-    "seconds": 2.5
+    "seconds": 2.7
    },
    {
     "family": "token-economics",
@@ -657,7 +657,7 @@
     "steps": 14,
     "gas_total": 425288,
     "flagged": 0,
-    "seconds": 1.5
+    "seconds": 2.0
    },
    {
     "family": "vin-linkage",
@@ -665,7 +665,7 @@
     "steps": 12,
     "gas_total": 190557,
     "flagged": 1,
-    "seconds": 2.6
+    "seconds": 1.6
    }
   ],
   "mobi-vid": [
@@ -675,7 +675,7 @@
     "steps": 17,
     "gas_total": 331443,
     "flagged": 1,
-    "seconds": 1.6
+    "seconds": 3.2
    },
    {
     "family": "authorisation-roles",
@@ -683,15 +683,15 @@
     "steps": 29,
     "gas_total": 533019,
     "flagged": 3,
-    "seconds": 2.3
+    "seconds": 1.5
    },
    {
     "family": "claims",
     "ok": true,
     "steps": 50,
-    "gas_total": 4441513,
+    "gas_total": 4441501,
     "flagged": 3,
-    "seconds": 1.6
+    "seconds": 2.6
    },
    {
     "family": "controller",
@@ -699,15 +699,15 @@
     "steps": 28,
     "gas_total": 752024,
     "flagged": 2,
-    "seconds": 2.4
+    "seconds": 1.5
    },
    {
     "family": "creation",
     "ok": true,
     "steps": 30,
-    "gas_total": 1067395,
+    "gas_total": 1067407,
     "flagged": 2,
-    "seconds": 1.5
+    "seconds": 2.7
    },
    {
     "family": "did-resolution",
@@ -715,7 +715,7 @@
     "steps": 10,
     "gas_total": 0,
     "flagged": 1,
-    "seconds": 3.3
+    "seconds": 1.5
    },
    {
     "family": "keys-delegates",
@@ -723,7 +723,7 @@
     "steps": 28,
     "gas_total": 402429,
     "flagged": 3,
-    "seconds": 1.9
+    "seconds": 2.6
    },
    {
     "family": "lifecycle-history",
@@ -731,7 +731,7 @@
     "steps": 28,
     "gas_total": 2107053,
     "flagged": 0,
-    "seconds": 2.6
+    "seconds": 1.6
    },
    {
     "family": "offchain-messaging",
@@ -739,7 +739,7 @@
     "steps": 13,
     "gas_total": 35297,
     "flagged": 0,
-    "seconds": 1.5
+    "seconds": 2.6
    },
    {
     "family": "revocation",
@@ -747,7 +747,7 @@
     "steps": 33,
     "gas_total": 584335,
     "flagged": 1,
-    "seconds": 2.7
+    "seconds": 1.8
    },
    {
     "family": "vin-linkage",
@@ -755,7 +755,7 @@
     "steps": 10,
     "gas_total": 643537,
     "flagged": 1,
-    "seconds": 1.6
+    "seconds": 3.1
    }
   ]
  },
@@ -1586,7 +1586,7 @@
    "fn": "CVINCombinedIdentity.delegates",
    "onchain": true,
    "gasUsed": "0",
-   "note": "delegates[id][sigAuth][delegate] == 1792038457 (== event validTo 1792038457): STORED, so an RSU contract can check it"
+   "note": "delegates[id][sigAuth][delegate] == 1792041740 (== event validTo 1792041740): STORED, so an RSU contract can check it"
   },
   {
    "option": "cvin-combined",
@@ -1631,7 +1631,7 @@
    "fn": "CVINCombinedIdentity.delegates",
    "onchain": true,
    "gasUsed": "0",
-   "note": "delegates[...] == 1792039359 == revocation timestamp: OBSERVATION \u2014 the slot is not cleared (no refund) and a resolver must treat validTo <= now as revoked rather than looking for 0"
+   "note": "delegates[...] == 1792042642 == revocation timestamp: OBSERVATION \u2014 the slot is not cleared (no refund) and a resolver must treat validTo <= now as revoked rather than looking for 0"
   },
   {
    "option": "cvin-combined",
@@ -2405,7 +2405,7 @@
    "fn": "EthereumDIDRegistry.DIDAttributeChanged",
    "onchain": true,
    "gasUsed": "0",
-   "note": "the bundle emitted 8 DIDAttributeChanged events (DID_VIN \u2026 DID_AUTONOMY_LEVEL), each validTo = 1792037582 + 3153600000; year and manufacturingDate are abi.encodePacked integers, the rest UTF-8 strings"
+   "note": "the bundle emitted 8 DIDAttributeChanged events (DID_VIN \u2026 DID_AUTONOMY_LEVEL), each validTo = 1792040866 + 3153600000; year and manufacturingDate are abi.encodePacked integers, the rest UTF-8 strings"
   },
   {
    "option": "erc-1056-uport",
@@ -3152,7 +3152,7 @@
    "fn": "EthereumDIDRegistry.delegates",
    "onchain": true,
    "gasUsed": "0",
-   "note": "delegates[did][veriKey][delegate] == 1792041181 == event validTo (1792041181); unlike attributes, delegates ARE stored so other contracts can check them"
+   "note": "delegates[did][veriKey][delegate] == 1792044466 == event validTo (1792044466); unlike attributes, delegates ARE stored so other contracts can check them"
   },
   {
    "option": "erc-1056-uport",
@@ -4142,7 +4142,7 @@
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
    "gasUsed": "0",
-   "note": "verifier replays 1 DIDAttributeChanged event(s) to obtain the vehicle key (validTo=1823573594); automation: the chain enforces nothing about the credential itself"
+   "note": "verifier replays 1 DIDAttributeChanged event(s) to obtain the vehicle key (validTo=1823576878); automation: the chain enforces nothing about the credential itself"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4304,7 +4304,7 @@
    "fn": "ERC1056Registry.registerVehicle",
    "onchain": true,
    "gasUsed": "0",
-   "note": "DIDAttributeChanged(name=keccak256(\"did/pub/secp256k1/veriKey/base64\"), value=65 bytes, validTo=1823573599, previousChange=0)"
+   "note": "DIDAttributeChanged(name=keccak256(\"did/pub/secp256k1/veriKey/base64\"), value=65 bytes, validTo=1823576883, previousChange=0)"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4538,7 +4538,7 @@
    "fn": "ERC1056Registry.revokeDelegate",
    "onchain": true,
    "gasUsed": "0",
-   "note": "revocation event validTo=1792037605 == block.timestamp 1792037605"
+   "note": "revocation event validTo=1792040890 == block.timestamp 1792040890"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4718,7 +4718,7 @@
    "fn": "offchain:cv2x-testbed/identity/erc1056_provider.py#sign_message",
    "onchain": false,
    "gasUsed": "0",
-   "note": "vehicle signs the BSM JSON with EIP-191 personal_sign (keccak256(\"\\x19Ethereum Signed Message:\\n\" + len + msg)), 65-byte secp256k1 signature, 0.34 ms in-process; mirrors sign_message (line 405)"
+   "note": "vehicle signs the BSM JSON with EIP-191 personal_sign (keccak256(\"\\x19Ethereum Signed Message:\\n\" + len + msg)), 65-byte secp256k1 signature, 0.55 ms in-process; mirrors sign_message (line 405)"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4727,7 +4727,7 @@
    "fn": "offchain:cv2x-testbed/identity/erc1056_provider.py#verify_message",
    "onchain": false,
    "gasUsed": "0",
-   "note": "receiver recovers signer 0x70997970\u2026 from the signature (19.71 ms, no chain access); mirrors verify_message (line 439) step 1"
+   "note": "receiver recovers signer 0x70997970\u2026 from the signature (20.73 ms, no chain access); mirrors verify_message (line 439) step 1"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4889,7 +4889,7 @@
    "fn": "ERC1056Registry.revokedAt",
    "onchain": true,
    "gasUsed": "0",
-   "note": "revokedAt == 1792037613 (block timestamp of decommissioning)"
+   "note": "revokedAt == 1792040903 (block timestamp of decommissioning)"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4898,7 +4898,7 @@
    "fn": "ERC1056Registry.getIdentityInfo",
    "onchain": true,
    "gasUsed": "0",
-   "note": "getIdentityInfo -> owner=0x70997970\u2026 lastChanged=8 isRevoked=true revokedAt=1792037613"
+   "note": "getIdentityInfo -> owner=0x70997970\u2026 lastChanged=8 isRevoked=true revokedAt=1792040903"
   },
   {
    "option": "erc-1056-vehicle",
@@ -4970,7 +4970,7 @@
    "fn": "ERC1056Registry.revokedAt",
    "onchain": true,
    "gasUsed": "0",
-   "note": "revokedAt == 1792037613: unchanged by the rejected second revocation (FIXED D21: the original decommissioning time is the only one)"
+   "note": "revokedAt == 1792040903: unchanged by the rejected second revocation (FIXED D21: the original decommissioning time is the only one)"
   },
   {
    "option": "erc-1056-vehicle",
@@ -14761,7 +14761,7 @@
    "step": "attest-event",
    "fn": "MOBIVIDRegistryV2.attestEvent",
    "onchain": true,
-   "gasUsed": "192749",
+   "gasUsed": "192737",
    "note": "MEASURED (attestEvent): ECDSA.recover(toEthSignedMessageHash(digest), sig) must equal msg.sender; attestation {attester, role, signature, timestamp} stored -> EventAttested"
   },
   {
@@ -14770,7 +14770,7 @@
    "step": "attest-by-owner",
    "fn": "MOBIVIDRegistryV2.attestEvent",
    "onchain": true,
-   "gasUsed": "175637",
+   "gasUsed": "175649",
    "note": "a second attester (OWNER role) on the same event: attestations accumulate"
   },
   {
@@ -14860,7 +14860,7 @@
    "step": "attest-same-party-twice",
    "fn": "MOBIVIDRegistryV2.attestEvent",
    "onchain": true,
-   "gasUsed": "175649",
+   "gasUsed": "175637",
    "note": "OBSERVATION: the same attester can attest the same event repeatedly with the same signature (no per-attester dedup; the signature has no nonce)"
   },
   {
@@ -15202,7 +15202,7 @@
    "step": "register-birth",
    "fn": "MOBIVIDRegistryV2.registerVehicleBirth",
    "onchain": true,
-   "gasUsed": "366964",
+   "gasUsed": "366976",
    "note": "MEASURED (createIdentity): manufacturer writes the VID I birth certificate struct, the vinHash index and owners[identity]=firstOwner -> VehicleBirthRegistered + DIDOwnerChanged"
   },
   {
@@ -16445,7 +16445,7 @@
    "fn": "off-chain SHA-256 vs keccak256",
    "onchain": false,
    "gasUsed": "0",
-   "note": "provider convention: SHA-256(VIN || salt || identity) = 0x756c9080f8\u2026; adapter convention: keccak256(VIN) = 0x9aa162729e\u2026; the contract accepts any non-zero bytes32"
+   "note": "provider convention: SHA-256(VIN || salt || identity) = 0xc4b7575ae4\u2026; adapter convention: keccak256(VIN) = 0x9aa162729e\u2026; the contract accepts any non-zero bytes32"
   },
   {
    "option": "mobi-vid",

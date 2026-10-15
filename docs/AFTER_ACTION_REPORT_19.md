@@ -72,3 +72,8 @@ work, without embellishment, showing the good work in the best honest light.
       "tests across nine standards", when they are 11 adapters × 9 mechanisms, including declared n/a cells.
     - A verdict chip overflowed at phone width.
   - The page depends on the git history, so it is regenerated at each pass's close rather than checked in CI.
+- **Records.** Handback §11 and the session manifest (`c4b35ce`). The result cards were republished with card #52.
+- **Grand run (last), at `c4b35ce`.** ALL OK: smoke 11 adapters, L1 99, Hardhat 537, Python layers 331, 92 demos /
+  1,752 steps (594 mined transactions). The only gas changes are the timestamp-dependent MOBI demo totals (±12 gas),
+  as in pass 18. The dashboard, presentation report, result cards and contribution record were regenerated
+  afterwards, and all ten document checks pass.
