@@ -78,3 +78,21 @@ be; perhaps later a handoff document and a summary of work for a check by the ot
   TDP-006, which is generated verbatim from it, to the same list in `docs/testing/stale_numbers.yaml`, with the
   reason. I also regenerated DWG-001 with report 20's own generator, because it reads the test counts this run
   updated. All thirteen document checks pass, report 20's three included.
+
+## 3. Closing
+The pass delivered every step of §1. **CI 8 of 8 green on `f61ed34`.** The branch had been red since `4699f21`,
+from the parallel pass, and is green again.
+
+**C1 is done.** Given a provider and the registry address, the resolver reads the ERC-1056 registry. Owner changes,
+delegates, attributes, expiry in chain time and deactivation now reach the document. 9 of the 11 new tests fail on
+the old code, 7 of them on behaviour. #4 and #24 do not move, because their inputs resolve without a provider. A suite
+run on chain-backed DIDs, and the chain-path latency, are deferred as N-24. MOBI VID-R1 (b) is met with a provider.
+
+**What went wrong and was caught.**
+- The tests caught two errors of mine: deactivation read from `identityOwner`, and the walk stopping at an
+  undecoded event.
+- An aborted script made my first regression proof test the new code twice. It was re-run with each version checked.
+
+**Next:**
+- WM-2 C2.
+- The author's decisions P2-D7 to P2-D10, D-1 to D-15, and N-23 remain open.
