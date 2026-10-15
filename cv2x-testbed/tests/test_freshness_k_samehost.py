@@ -112,6 +112,25 @@ def test_build_pools_and_flags_load(tmp_path):
     assert s['references'] == []
 
 
+def test_clean_subset_uses_foreign_cpu_and_exclusions(tmp_path):
+    quiet = {'foreign_cpu_mean': 0.2, 'load1_max_sampled': 1.0}
+    _write(tmp_path, 1, 'full', _run('full', 0.40, 10.0))                         # no foreign data
+    _write(tmp_path, 2, 'probe', _run('probe', 0.60, 2.0), {'foreign_cpu_mean': 1.4})
+    _write(tmp_path, 3, 'probe', _run('probe', 0.42, 2.0), quiet)
+    _write(tmp_path, 4, 'full', _run('full', 0.70, 12.0), quiet)                    # excluded by hand
+    _write(tmp_path, 5, 'full', _run('full', 0.44, 11.0), quiet)
+    d = _write(tmp_path, 6, 'probe', _run('probe', 0.44, 2.0), quiet)
+    s = S.build(str(d), str(tmp_path), {4: 'overlaps another session'})
+    clean = {r['replicate']: r['clean'] for r in s['replicates']}
+    assert clean == {1: False, 2: False, 3: True, 4: False, 5: True, 6: True}
+    assert 'overlaps another session' in s['replicates'][3]['not_clean_reasons']
+    assert s['modes_clean']['full']['replicates'] == [5]
+    assert s['modes_clean']['probe']['replicates'] == [3, 6]
+    assert s['modes_clean']['full']['pooled']['t_local_ms'] == pytest.approx(0.44)
+    assert s['modes']['full']['replicates'] == [1, 4, 5]
+    assert s['comparison_clean']['t_chain_full_over_probe'] == pytest.approx(11.0 / 2.0)
+
+
 def test_mode_mismatch_is_refused(tmp_path):
     d = _write(tmp_path, 1, 'probe', _run('full', 0.4, 10.0))
     with pytest.raises(RuntimeError, match='mode'):

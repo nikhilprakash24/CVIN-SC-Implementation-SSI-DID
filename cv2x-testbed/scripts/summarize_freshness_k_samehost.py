@@ -194,35 +194,57 @@ def references(results_dir: str) -> List[Dict[str, Any]]:
     return refs
 
 
-def build(runs_dir: str, results_dir: str) -> Dict[str, Any]:
+FOREIGN_LIMIT = 0.5                   # CPUs busy outside the replicate, mean over the run
+
+
+def _mode_block(mr: List[Dict[str, Any]], rs: List[Dict[str, Any]]) -> Dict[str, Any]:
+    return {
+        'replicates': [r['replicate'] for r in mr],
+        'pooled': pool(rs),
+        't_local_range_ms': [min(r['t_local_ms'] for r in mr), max(r['t_local_ms'] for r in mr)],
+        't_chain_range_ms': [min(r['t_chain_ms'] for r in mr), max(r['t_chain_ms'] for r in mr)],
+        'Pstar_range': {k: [min(r['per_k'][k]['P*(0.5)'] for r in mr),
+                            max(r['per_k'][k]['P*(0.5)'] for r in mr)] for k in KS},
+        'staleness_all_within_bound': all(r['staleness']['all_within_bound'] for r in mr),
+        'staleness_all_match_prediction': all(r['staleness']['all_match_prediction'] for r in mr),
+        'staleness_finite_trials': sum(r['staleness']['finite_trials'] for r in mr),
+    }
+
+
+def _ratio(pf: Dict[str, Any], pp: Dict[str, Any]) -> Dict[str, Any]:
+    return {'t_chain_full_over_probe': pf['t_chain_ms'] / pp['t_chain_ms'] if pp['t_chain_ms'] else None,
+            't_local_probe_minus_full_ms': pp['t_local_ms'] - pf['t_local_ms'],
+            'Pstar_probe_over_full': {k: (pp['per_k'][k]['P*(0.5)'] / pf['per_k'][k]['P*(0.5)']
+                                          if pf['per_k'][k]['P*(0.5)'] else None) for k in KS}}
+
+
+def build(runs_dir: str, results_dir: str, exclude: Optional[Dict[int, str]] = None) -> Dict[str, Any]:
+    """exclude: replicate -> reason, for replicates known to be contaminated (kept, but not 'clean')."""
+    exclude = exclude or {}
     loaded = load_runs(runs_dir)
     if not loaded:
         raise RuntimeError(f"no r<i>_<mode>.json in {runs_dir}")
     reps = [summarize_run(run, load, rep, mode) for rep, mode, run, load in loaded]
-    modes = {}
+    for r in reps:
+        reasons = []
+        if r['replicate'] in exclude:
+            reasons.append(exclude[r['replicate']])
+        if r['foreign_cpu_mean'] is None:
+            reasons.append('no foreign-CPU measurement')
+        elif r['foreign_cpu_mean'] > FOREIGN_LIMIT:
+            reasons.append(f"foreign CPU mean {r['foreign_cpu_mean']:.2f} > {FOREIGN_LIMIT}")
+        r['clean'] = not reasons
+        r['not_clean_reasons'] = reasons
+    modes, clean = {}, {}
     for mode in ('full', 'probe'):
-        rs = [run for rep, m, run, load in loaded if m == mode]
-        if rs:
-            mr = [r for r in reps if r['mode'] == mode]
-            modes[mode] = {
-                'replicates': [r['replicate'] for r in mr],
-                'pooled': pool(rs),
-                't_local_range_ms': [min(r['t_local_ms'] for r in mr), max(r['t_local_ms'] for r in mr)],
-                't_chain_range_ms': [min(r['t_chain_ms'] for r in mr), max(r['t_chain_ms'] for r in mr)],
-                'Pstar_range': {k: [min(r['per_k'][k]['P*(0.5)'] for r in mr),
-                                    max(r['per_k'][k]['P*(0.5)'] for r in mr)] for k in KS},
-                'staleness_all_within_bound': all(r['staleness']['all_within_bound'] for r in mr),
-                'staleness_all_match_prediction': all(r['staleness']['all_match_prediction'] for r in mr),
-                'staleness_finite_trials': sum(r['staleness']['finite_trials'] for r in mr),
-            }
-    if 'full' in modes and 'probe' in modes:
-        pf, pp = modes['full']['pooled'], modes['probe']['pooled']
-        ratio = {'t_chain_full_over_probe': pf['t_chain_ms'] / pp['t_chain_ms'] if pp['t_chain_ms'] else None,
-                 't_local_probe_minus_full_ms': pp['t_local_ms'] - pf['t_local_ms'],
-                 'Pstar_probe_over_full': {k: (pp['per_k'][k]['P*(0.5)'] / pf['per_k'][k]['P*(0.5)']
-                                               if pf['per_k'][k]['P*(0.5)'] else None) for k in KS}}
-    else:
-        ratio = None
+        sel = [(r, run) for r, (rep, m, run, load) in zip(reps, loaded) if m == mode]
+        if sel:
+            modes[mode] = _mode_block([r for r, _ in sel], [run for _, run in sel])
+        csel = [(r, run) for r, run in sel if r['clean']]
+        if csel:
+            clean[mode] = _mode_block([r for r, _ in csel], [run for _, run in csel])
+    ratio = _ratio(modes['full']['pooled'], modes['probe']['pooled']) if len(modes) == 2 else None
+    ratio_clean = _ratio(clean['full']['pooled'], clean['probe']['pooled']) if len(clean) == 2 else None
     shas = sorted({r['registry_bytecode_sha256'] for r in reps})
     return {
         'definitions': {
@@ -236,7 +258,10 @@ def build(runs_dir: str, results_dir: str) -> Dict[str, Any]:
         'order': [f"r{r['replicate']}:{r['mode']}" for r in reps],
         'registry_bytecode_sha256': shas,
         'all_git_clean': all(r['git_dirty'] is False for r in reps),
+        'clean_rule': f'foreign CPU mean <= {FOREIGN_LIMIT} and not in the exclusion list',
+        'excluded': {str(k): v for k, v in exclude.items()},
         'replicates': reps, 'modes': modes, 'comparison': ratio,
+        'modes_clean': clean, 'comparison_clean': ratio_clean,
         'references': references(results_dir),
     }
 
@@ -265,16 +290,47 @@ def write_csv(path: str, s: Dict[str, Any]):
                             'knee': f"{r['knee_k_analytic']:.1f}" if r['knee_reached'] else 'not reached',
                             'load1_max': r['load1_max'], 'staleness_max_revocation': rv.get('max'),
                             'staleness_max_rotation': ro.get('max'), 'bound_k_minus_1': rv.get('bound')})
-        for mode, m in s['modes'].items():
+        for scope, mode, m in ([('pooled_all', md, m) for md, m in s['modes'].items()]
+                               + [('pooled_clean', md, m) for md, m in (s.get('modes_clean') or {}).items()]):
             p = m['pooled']
             for k in KS:
                 pk = p['per_k'][k]
-                w.writerow({'scope': 'pooled', 'replicate': '+'.join(map(str, m['replicates'])), 'mode': mode,
+                w.writerow({'scope': scope, 'replicate': '+'.join(map(str, m['replicates'])), 'mode': mode,
                             'k': k, 'n': pk['n'], 'mean_ms': f"{pk['mean_ms']:.4f}",
                             'median_ms': f"{pk['median_ms']:.4f}", 'p95_ms': f"{pk['p95_ms']:.4f}",
                             'P*(0.5)': pk['P*(0.5)'], 't_local_ms': f"{p['t_local_ms']:.4f}",
                             't_chain_ms': f"{p['t_chain_ms']:.4f}",
                             'knee': f"{p['knee_k_analytic']:.1f}" if p['knee_reached'] else 'not reached'})
+
+
+def _md_pooled(a, title, modes, comparison, replicates):
+    a(f'\n## Pooled per mode, {title}\n')
+    a('| mode | reps | t_local | t_chain | k | mean | median | p95 | P*(0.5) |')
+    a('|---|---|---:|---:|---|---:|---:|---:|---:|')
+    for mode, m in modes.items():
+        p = m['pooled']
+        for k in KS:
+            pk = p['per_k'][k]
+            a(f"| {mode} | {'+'.join(map(str, m['replicates']))} | {p['t_local_ms']:.3f} | {p['t_chain_ms']:.3f} | "
+              f"{k} | {pk['mean_ms']:.3f} | {pk['median_ms']:.3f} | {pk['p95_ms']:.3f} | {pk['P*(0.5)']} |")
+    a(f'\n### Knee per mode, {title}\n')
+    a('| mode | pooled t_local | pooled t_chain | knee (pooled) | per-replicate knees | smallest tested k with '
+      'measured P*(0.5) ≥ 100 | P*(0.5) range k=1 / 5 / 25 / ∞ |')
+    a('|---|---:|---:|---|---|---|---|')
+    for mode, m in modes.items():
+        p = m['pooled']
+        reps = [r for r in replicates if r['replicate'] in m['replicates']]
+        kn = '; '.join(f"r{r['replicate']}: " + (f"{r['knee_k_analytic']:.0f} (t_local {r['t_local_ms']:.3f})"
+                                                if r['knee_reached'] else f"not reached (t_local {r['t_local_ms']:.3f})")
+                       for r in reps)
+        rng = ' / '.join(f"{m['Pstar_range'][k][0]}–{m['Pstar_range'][k][1]}" for k in KS)
+        a(f"| {mode} | {p['t_local_ms']:.3f} | {p['t_chain_ms']:.3f} | {p['knee_text']} | {kn} | "
+          f"{p['measured_knee_tested_k'] or 'none'} | {rng} |")
+    if comparison:
+        c = comparison
+        a(f"\nPooled t_chain full / probe = {c['t_chain_full_over_probe']:.2f}×; t_local probe − full = "
+          f"{c['t_local_probe_minus_full_ms']:+.3f} ms; P*(0.5) probe / full by k: "
+          + ', '.join(f"k={k} {v:.2f}×" for k, v in c['Pstar_probe_over_full'].items() if v) + '.')
 
 
 def write_md(path: str, s: Dict[str, Any]):
@@ -305,33 +361,11 @@ def write_md(path: str, s: Dict[str, Any]):
           f"{r['t_chain_ms']:.3f} | {ps} | {r['knee_text']} | {r['refresh_rpc_median'].get('1')} | "
           f"{'yes' if st['all_within_bound'] else 'NO'} ({'yes' if st['all_match_prediction'] else 'NO'}), "
           f"{st['finite_trials']} trials |")
-    a('\n## Pooled per mode\n')
-    a('| mode | reps | t_local | t_chain | k | mean | median | p95 | P*(0.5) |')
-    a('|---|---|---:|---:|---|---:|---:|---:|---:|')
-    for mode, m in s['modes'].items():
-        p = m['pooled']
-        for k in KS:
-            pk = p['per_k'][k]
-            a(f"| {mode} | {'+'.join(map(str, m['replicates']))} | {p['t_local_ms']:.3f} | {p['t_chain_ms']:.3f} | "
-              f"{k} | {pk['mean_ms']:.3f} | {pk['median_ms']:.3f} | {pk['p95_ms']:.3f} | {pk['P*(0.5)']} |")
-    a('\n## Knee per mode\n')
-    a('| mode | pooled t_local | pooled t_chain | knee (pooled) | per-replicate knees | smallest tested k with '
-      'measured P*(0.5) ≥ 100 | P*(0.5) range k=1 / 5 / 25 / ∞ |')
-    a('|---|---:|---:|---|---|---|---|')
-    for mode, m in s['modes'].items():
-        p = m['pooled']
-        reps = [r for r in s['replicates'] if r['mode'] == mode]
-        kn = '; '.join(f"r{r['replicate']}: " + (f"{r['knee_k_analytic']:.0f} (t_local {r['t_local_ms']:.3f})"
-                                                if r['knee_reached'] else f"not reached (t_local {r['t_local_ms']:.3f})")
-                       for r in reps)
-        rng = ' / '.join(f"{m['Pstar_range'][k][0]}–{m['Pstar_range'][k][1]}" for k in KS)
-        a(f"| {mode} | {p['t_local_ms']:.3f} | {p['t_chain_ms']:.3f} | {p['knee_text']} | {kn} | "
-          f"{p['measured_knee_tested_k'] or 'none'} | {rng} |")
-    if s['comparison']:
-        c = s['comparison']
-        a(f"\nPooled t_chain full / probe = {c['t_chain_full_over_probe']:.2f}×; t_local probe − full = "
-          f"{c['t_local_probe_minus_full_ms']:+.3f} ms; P*(0.5) probe / full by k: "
-          + ', '.join(f"k={k} {v:.2f}×" for k, v in c['Pstar_probe_over_full'].items() if v) + '.')
+    nc = [f"r{r['replicate']} ({'; '.join(r['not_clean_reasons'])})" for r in s['replicates'] if not r['clean']]
+    a(f"\nClean rule: {s['clean_rule']}. Not clean: {', '.join(nc) or 'none'}.")
+    if s.get('modes_clean'):
+        _md_pooled(a, 'clean replicates (headline)', s['modes_clean'], s['comparison_clean'], s['replicates'])
+    _md_pooled(a, 'all replicates', s['modes'], s['comparison'], s['replicates'])
     a('\n## Staleness bound (max accepted after revocation | max new-key rejected after rotation)\n')
     a('| rep | mode | k=1 | k=5 | k=25 | k=∞ (cap) |')
     a('|---:|---|---|---|---|---|')
@@ -365,11 +399,13 @@ def write_png(path: str, s: Dict[str, Any]) -> Optional[str]:
     xs = list(range(len(KS)))
     colors = {'full': '#1f5fa8', 'probe': '#c2571a'}
     for r in s['replicates']:
-        ax.plot(xs, [r['per_k'][k]['P*(0.5)'] for k in KS], color=colors[r['mode']], alpha=0.35, lw=1,
-                marker='.', label=None)
-    for mode, m in s['modes'].items():
+        ok = r.get('clean')
+        ax.plot(xs, [r['per_k'][k]['P*(0.5)'] for k in KS], color=colors[r['mode']], alpha=0.35 if ok else 0.2,
+                lw=1, ls='-' if ok else ':', marker='.', label=None)
+    tag = 'clean' if s.get('modes_clean') else 'all'
+    for mode, m in (s.get('modes_clean') or s['modes']).items():
         ax.plot(xs, [m['pooled']['per_k'][k]['P*(0.5)'] for k in KS], color=colors[mode], lw=2.2, marker='o',
-                label=f"{mode} refresh (pooled; t_local {m['pooled']['t_local_ms']:.3f} ms)")
+                label=f"{mode} refresh (pooled {tag}; t_local {m['pooled']['t_local_ms']:.3f} ms)")
     ax.axhline(100, color='#555', ls='--', lw=1)
     ax.text(0.02, 101.5, 'P*(0.5) = 100', color='#555', fontsize=8)
     ax.set_xticks(xs)
@@ -391,17 +427,24 @@ def main():
     ap.add_argument('--results-dir', default=os.path.join(ROOT, 'results'),
                     help='where the #32/#37 reference files are read from')
     ap.add_argument('--out', default=os.path.join(ROOT, 'results', 'freshness_k_samehost'))
+    ap.add_argument('--exclude', action='append', default=[], metavar='REP:REASON',
+                    help='mark a replicate contaminated (kept in "all", left out of "clean"); repeatable')
     args = ap.parse_args()
-    s = build(args.runs_dir, args.results_dir)
+    exclude = {}
+    for e in args.exclude:
+        rep, _, reason = e.partition(':')
+        exclude[int(rep)] = reason or 'excluded'
+    s = build(args.runs_dir, args.results_dir, exclude)
     with open(args.out + '.json', 'w') as f:
         json.dump(s, f, indent=2, default=str)
     write_csv(args.out + '.csv', s)
     write_md(args.out + '.md', s)
     err = write_png(args.out + '.png', s)
     print(f"Wrote {args.out}.{{json,csv,md}}" + (f" ({err})" if err else " and .png"))
-    for mode, m in s['modes'].items():
-        p = m['pooled']
-        print(f"  {mode}: t_local {p['t_local_ms']:.3f} t_chain {p['t_chain_ms']:.3f} "
+    for scope, ms in (('all', s['modes']), ('clean', s.get('modes_clean') or {})):
+        for mode, m in ms.items():
+            p = m['pooled']
+            print(f"  {scope} {mode} {m['replicates']}: t_local {p['t_local_ms']:.3f} t_chain {p['t_chain_ms']:.3f} "
               f"P* {[p['per_k'][k]['P*(0.5)'] for k in KS]} knee {p['knee_text']}")
 
 
