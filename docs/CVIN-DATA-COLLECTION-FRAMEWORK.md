@@ -19,6 +19,10 @@ Three design rules follow from the audit (F1–F10):
 
 ---
 
+## 0a. Relation to the basic digital-ID set
+
+This catalogue is an **extension of the programme's basic digital-ID set**, the canonical sandbox's `IMinimalSSI` F1–F12 (Set A identity/keys, Set B credentials) with its 12-test admission regime. The basic set decides *whether* a substrate implements the twelve functions; this framework keeps that decision as the conformance gate and adds exact per-function cost, lifecycle composition, read-path cost, a transport condition and breadth across ten substrates. The function-level mapping, the per-substrate coverage table (analysis A6) and the proposed reconciliation of the two compliance regimes are in `docs/BASIC_ID_SET_EXTENSION.md`; the two basic-set functions without a catalogue op yet (`execute`, F8 `createPresentation`) are scheduled there as `X1` and `P1`.
+
 ## 1. What is compared
 
 ### 1.1 Substrates (the nine standards + two baselines)

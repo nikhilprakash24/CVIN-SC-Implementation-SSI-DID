@@ -81,3 +81,14 @@ Criterion 'O(1) on-chain credential check' is a design property (a contract can 
 | 3.4.7 Verification relationships: delegate keys | delegates with TTL | delegates with TTL | approval (no expiry) | delegates with TTL | none | none | none | none | recovery guardian only | delegates with TTL |
 | 3.4.8 Relayed / signed operations (meta-tx) | yes | no | no | no | no | no | no | no | yes | no |
 | 3.7.2 ▲ Incentive for many DIDs: lifetime gas × baseline | 1 | 0.98 | 2.57 | 3 | 5.11† | 1.1† | 2.81† | 1.43† | 2.11 | 2.41 |
+
+### A6 — Basic digital-ID set (IMinimalSSI) coverage by catalogue op: Set A identity/keys, Set B credentials; `execute` and F8 createPresentation are not catalogue ops yet
+
+| Basic-set view | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Set A ops supported | 11/11 | 10/11 | 10/11 | 11/11 | 8/11 | 8/11 | 8/11 | 8/11 | 11/11 | 11/11 |
+| Set A missing | — | D2 | D2 | — | U2 R4 D1 | U2 R4 D1 | U2 R4 D1 | U2 R4 D1 | — | — |
+| Set B ops supported | 4/4 | 4/4 | 4/4 | 4/4 | 3/4 | 4/4 | 4/4 | 3/4 | 4/4 | 4/4 |
+| Set B missing | — | — | — | — | V1 | — | — | V1 | — | — |
+| **Admitted** (all mapped Set A + B ops present) | yes | no | no | yes | no | no | no | no | yes | yes |
+| Extension ops beyond the basic set | R2 U4 U5 | R2 U4 | R2 U4 | U4 | U4 | R2 U4 | U4 | R2 U4 | U4 U5 | U4 |

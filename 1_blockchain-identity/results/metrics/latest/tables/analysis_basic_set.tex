@@ -1,0 +1,18 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+Basic-set view & ERC-1056 & ERC-1056 (wrapper) & ERC-721 & ERC-725 & ERC-735 & ERC-1155 & ERC-725xy & LSP8 & ERC-4337 & CVIN-Combined \\
+\midrule
+Set A ops supported & 11/11 & 10/11 & 10/11 & 11/11 & 8/11 & 8/11 & 8/11 & 8/11 & 11/11 & 11/11 \\
+Set A missing & — & D2 & D2 & — & U2 R4 D1 & U2 R4 D1 & U2 R4 D1 & U2 R4 D1 & — & — \\
+Set B ops supported & 4/4 & 4/4 & 4/4 & 4/4 & 3/4 & 4/4 & 4/4 & 3/4 & 4/4 & 4/4 \\
+Set B missing & — & — & — & — & V1 & — & — & V1 & — & — \\
+**Admitted** (all mapped Set A + B ops present) & yes & no & no & yes & no & no & no & no & yes & yes \\
+Extension ops beyond the basic set & R2 U4 U5 & R2 U4 & R2 U4 & U4 & U4 & R2 U4 & U4 & R2 U4 & U4 U5 & U4 \\
+\bottomrule
+\end{tabular}
+\caption{A6 — Basic digital-ID set (IMinimalSSI) coverage by catalogue op: Set A identity/keys, Set B credentials; `execute` and F8 createPresentation are not catalogue ops yet Run 2026-10-04T09-50-29Z\_0eef6af · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056}
+\label{tab:analysis_basic_set}
+\end{table}
