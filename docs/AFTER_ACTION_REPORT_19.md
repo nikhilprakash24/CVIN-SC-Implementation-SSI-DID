@@ -32,3 +32,24 @@ work, without embellishment, showing the good work in the best honest light.
 
 ## 2. Execution log
 - 2026-10-15 — report opened.
+- **C3, runs.** Six runs, 05:00–05:01 UTC, on this container (Xeon 2.30 GHz × 4, Hardhat 2.28.6), each in a clean
+  worktree at its row's code (`git_dirty` false in all six), a fresh node per run, in the declared order. Each run took
+  8–12 s. Nothing else ran on the host; I wrote source files in the meantime and ran nothing heavy.
+- **C3, result, under the rule in §1a.**
+  - Full-refresh `t_chain`: #32 code 7.57 / 7.91 ms (r1 / r2), spread 0.34 ms; #37 code 6.94 / 8.15 ms, spread
+    1.21 ms. The means differ by 0.20 ms, within either spread, so the difference between #32 (10.52 ms) and #37
+    (14.38 / 10.28 ms) in the register is **attributed to the host**.
+  - The rule did not say which spread to use when the two configurations have different ones. In replicate 1 alone the
+    codes differ by 0.63 ms, more than the smaller spread. I report that rather than choose the reading that
+    passes most cleanly.
+  - P*(0.5) at k = 1 / 5 / 25 / ∞: full 5–6 / 23–28 / 65–80 / 127–149; probe 15–17 / 56–58 / 111–121 / 145–149. The
+    probe beats the full refresh at every finite k, as in #37.
+  - On this host `t_local` is 0.33 ms, so the probe reaches P*(0.5) ≥ 100 at k = 25. #37's host, with `t_local`
+    0.49–0.54 ms, did not reach it at any finite k. The knee depends on 0.5 − `t_local`, so it is the most
+    host-sensitive figure in both rows.
+  - Staleness equals its prediction in 30 of 30 k-rows (revocation and rotation, k = 1, 5, 25).
+- **C3, records.** The outputs are in `cv2x-testbed/results/freshness_k_c3/`, with a manifest of order, commits and
+  sha256, copied from `runs/c3` as declared. `check_stamps.py` aggregates the six runs (complete stamps, 6 of 6) and
+  classes the manifest. Its coverage guard fired on the new files before that, as it should. New row **#52**; #32
+  and #37 have a dated note; the result cards have a card for #52; plan C3 is marked done. One slip was caught before
+  commit: my note first gave the knee as k ≈ 44–49; the four runs give 40–49.

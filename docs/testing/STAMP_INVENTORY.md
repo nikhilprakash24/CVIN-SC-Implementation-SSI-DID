@@ -2,7 +2,7 @@
 
 **Generated** by `docs/testing/check_stamps.py`. A stamp = date, commit, producing-code cleanliness, toolchain. Columns *code* and *any* are both "dirty" (True = not clean): *code* covers the producing code only (what a run of record requires, guide rule 1.1.6); *any* covers every file, so False there implies clean code and True says nothing. *inert*: the code flag's source at that commit could not detect a change (after-action report 11); such a stamp is vouched for by *any* or by the hand check in the claim register. Rows without a complete stamp carry a class: *stamp producer* (the work list), *history* (a diff of two runs, exempt), *single run* (not a result of record). *code changed since*: whether the producing code of the result's family differs between the stamped commit and HEAD (yes = the result describes code the trunk no longer has; re-run or disclose).
 
-**Scope** (WM-2 step A1, N-21): 161 tracked result JSON files outside the lineage copies (docs/prior-survey/, docs/review02/, _research-copies/, sandbox/options/, docs/figures/). aggregated run directory: 46; covered by meta.json: 13; derived: 2; external tool output: 68; history: 2; own row: 30; uncovered: 0.
+**Scope** (WM-2 step A1, N-21): 168 tracked result JSON files outside the lineage copies (docs/prior-survey/, docs/review02/, _research-copies/, sandbox/options/, docs/figures/). aggregated run directory: 52; covered by meta.json: 13; derived: 3; external tool output: 68; history: 2; own row: 30; uncovered: 0.
 
 21 of 30 individually listed result files carry a complete stamp.
 
@@ -45,6 +45,7 @@
 |---|---|---|---|---|---|---|---|
 | `4_comparison-framework/results/infrastructure_gas_runs/run_*.json` | I4 repeated 30 times (#47) | 30 | 30 | a950cdf | False | True | no |
 | `4_comparison-framework/results/scaling_verify_repeats/*.json` | scaling-verify repeats (#26) | 16 | 8 | 38909df33fe1, d78e344a7970, f1c2399057f3, fd25d0529c6e | False (from any), None | False, None, True | None, yes |
+| `cv2x-testbed/results/freshness_k_c3/c3_*.json` | WM-2 C3: #32 and #37 configurations on one host, 2 replicates each (#52) | 6 | 6 | 8216507, f660402 | False (from any) | False | yes |
 
 ## Covered without an own stamp
 
@@ -55,5 +56,6 @@
 | `4_comparison-framework/results/infrastructure_gas_runs/summary.json` | derived | summary of the 30 stamped runs |
 | `cv2x-testbed/sumo/results/figures/*.json` | derived | down-sampled trace for the dashboard |
 | `cv2x-testbed/results/archive-2026-10-03/*.json` | history | archived pre-merge results |
+| `cv2x-testbed/results/freshness_k_c3/manifest.json` | derived | order, commits and sha256 of the six C3 runs (report 19) |
 | `docs/conformance/reports/**/*.json` | external tool output | jest reports of the W3C DID test suite, dated by directory (#24) |
 | `docs/conformance/reports/*.json` | external tool output | W3C DID test-suite run summaries, dated by file name (#24) |

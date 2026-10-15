@@ -1,0 +1,54 @@
+Environment: {
+  "date_utc": "2026-10-15T05:00:00+00:00",
+  "git_commit": "8216507",
+  "git_dirty": false,
+  "python_version": "3.11.15",
+  "node_version": "v22.22.2",
+  "hardhat_version": null,
+  "ethers_version": null,
+  "solc_version": null,
+  "cryptography_version": "41.0.7",
+  "os": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
+  "cpu_model": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+  "cpu_count": 4,
+  "timer": "time.perf_counter_ns",
+  "repetitions_per_op": 250,
+  "discarded_warmup_runs": 3,
+  "p95_method": "numpy.percentile(samples, 95), linear interpolation",
+  "web3_version": "8.0.0",
+  "rpc_url": "http://127.0.0.1:8548",
+  "chain_id": 31337,
+  "block_gas_limit": 60000000,
+  "automine": true,
+  "mining_mode": "automine (no interval mining)",
+  "contract_address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "contract_deploy_gas": 927756,
+  "client_version": "HardhatNetwork/2.28.6/@nomicfoundation/edr/0.3.8",
+  "registry_artifact": "artifacts/contracts/ERC1056Registry.sol/ERC1056Registry.json",
+  "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+  "registry_compiler": null,
+  "freshness": {
+    "enabled": true,
+    "max_age_s": 1.0,
+    "max_future_s": 0.1,
+    "replay_cache": true,
+    "replay_cache_size": 65536
+  },
+  "numpy_version": "2.4.6",
+  "matplotlib_version": "3.11.2"
+}
+
+=== Part 1: latency ===
+  k=   1: median=7.901 p95=12.120 mean=8.734 ms; refreshes 250/250; cached median=None
+  k=   5: median=0.341 p95=8.081 mean=1.853 ms; refreshes 50/250; cached median=0.335549
+  k=  25: median=0.324 p95=0.521 mean=0.642 ms; refreshes 10/250; cached median=0.3231775
+  k= inf: median=0.326 p95=0.405 mean=0.341 ms; refreshes 0/250; cached median=0.326334
+  one eth_call (isRevoked): median=4.713 p95=6.888 ms
+
+=== Part 2: staleness ===
+  staleness k=   1: accepted after revocation [0, 0, 0, 0, 0] (bound 0)
+  staleness k=   5: accepted after revocation [4, 3, 2, 1, 0] (bound 4)
+  staleness k=  25: accepted after revocation [24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0] (bound 24)
+  staleness k= inf: accepted after revocation [50, 50, 50] (bound none)
+
+Wrote /home/user/CVIN-SC-Implementation-SSI-DID/runs/c3/c3_r1_k32_full.{json,csv,md} and .png

@@ -198,6 +198,7 @@ def stamp_of(p):
 AGGREGATES = {
     "4_comparison-framework/results/infrastructure_gas_runs/run_*.json": "I4 repeated 30 times (#47)",
     "4_comparison-framework/results/scaling_verify_repeats/*.json": "scaling-verify repeats (#26)",
+    "cv2x-testbed/results/freshness_k_c3/c3_*.json": "WM-2 C3: #32 and #37 configurations on one host, 2 replicates each (#52)",
 }
 # Tracked result JSON that is not stamped on its own, by class (pattern -> class, reason).
 COVERED = [
@@ -206,6 +207,7 @@ COVERED = [
     ("4_comparison-framework/results/infrastructure_gas_runs/summary.json", "derived", "summary of the 30 stamped runs"),
     ("cv2x-testbed/sumo/results/figures/*.json", "derived", "down-sampled trace for the dashboard"),
     ("cv2x-testbed/results/archive-2026-10-03/*.json", "history", "archived pre-merge results"),
+    ("cv2x-testbed/results/freshness_k_c3/manifest.json", "derived", "order, commits and sha256 of the six C3 runs (report 19)"),
     ("docs/conformance/reports/**/*.json", "external tool output", "jest reports of the W3C DID test suite, dated by directory (#24)"),
     ("docs/conformance/reports/*.json", "external tool output", "W3C DID test-suite run summaries, dated by file name (#24)"),
 ]
