@@ -33,3 +33,19 @@ The harness code stays frozen until A6 (N-19). No new measurement is made in thi
   - 20 V register rows that report gas are classified. The check fails when a V gas row has no class, or a class
     names a missing row; both shown to fire by deleting #29 and adding #999 in a test import.
   - Register §5.A gained a "Gas class" row; the CI document step runs `gas_charter.py --check`; plan B2 marked done.
+- **RC, result cards.** `docs/figures/make_result_cards.py` writes `docs/figures/result_cards.html`: one card per V
+  register row (33), in eight groups, in the results board's palette and faces. Each card carries a headline value,
+  a title, a caption, the conditions tag, the gas class (from the charter), the thesis cruxes (from the dashboard
+  snapshot), the pre-registered verdict where there is one (7), and the register row behind it. The 18 rows that are
+  E, S or U are listed below the cards with no headline value.
+  - Titles and headlines are written by hand, because the register's bold text marks emphasis as well as values. The
+    check holds them to the register: every V row has a card; no card names a non-V row; each headline is verbatim in
+    its row; every number in a card's headline, caption and verdict is in its row; a verdict saying PASS or FAIL needs
+    the word in the row. Each guard shown to fire (wrong headline, extra number, PASS not in the row, missing card,
+    card on an E row). The number check is weak for small integers, which appear in most rows.
+  - One card was corrected on review: #6 first quoted the README's "10×"; its row says the ratio depends on the
+    operation definition (10.3× bare, 6.9× with the VIN bound), and the card now says so.
+  - Rendered once at 1,280 px (light) and 400 px (dark): no horizontal scroll. The filter bar stops being sticky below
+    760 px, where it covered most of the screen.
+  - Published as a private page: https://claude.ai/artifact/4vwTQ98TuLUgaWsiBim2Bq (beside the results board,
+    https://claude.ai/artifact/1C5X9GpPcEwyCRDMYxYhpa). CI runs `make_result_cards.py --check`.
