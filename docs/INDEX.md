@@ -32,6 +32,7 @@ provenance and must not be cited in chapters.
 | How is a substrate measured operation by operation (CRUD and beyond), and what did it show? | `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md` (method: 18-op catalogue, scenarios, falsifiers) + `HANDOFF-DATA-COLLECTION-FRAMEWORK.md` (results and hypothesis verdicts) | harness in `1_blockchain-identity/benchmarks/`; numbers via register #29–#31 only |
 | What did the code-level review find, and what was fixed? | `docs/REVIEW_02_CODEBASE.md` (findings K/H/S/T/Q), `docs/PLAN_REVIEW_02.md`, `docs/review02/PASS*_*.md` (per-stream changes), `docs/AFTER_ACTION_REPORT_03.md` | review 2, 2026-10-03; complements `AUDIT_01` (claims) and `RESEARCH_AUDIT` (validity) |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
+| What could the research become next, why, and in what order? | `docs/PLAN_RESEARCH_EXPANSION.md` (phased plan, author decisions AD-1–AD-6), `docs/research-expansion/` (`IDEAS.md` catalogue X/P/M, `WHY.md` rationale, `SOURCES.md`, `PROMPT_PACK.md` per-WP prompts) | 2026-10-15; scenario X1 (toll corridor) built: `1_blockchain-identity/contracts/Scenarios/`, `cv2x-testbed/scenarios/toll_corridor.py`; its numbers are proposed register #40/#41, not yet V |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 
 ## Historical (keep, do not cite)
