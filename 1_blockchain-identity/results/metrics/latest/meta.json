@@ -1,18 +1,18 @@
 {
-  "runId": "2026-10-04T09-50-29Z_0eef6af",
-  "commit": "0eef6af562589fbd58253f517b6ebdac0facf0db",
-  "commitShort": "0eef6af",
-  "branch": "claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt",
+  "runId": "2026-10-15T05-03-01Z_ef2c851",
+  "commit": "ef2c851f31fdc20dc4654b85ab4827f25bf95a2a",
+  "commitShort": "ef2c851",
+  "branch": "claude/testing-suite-organization-z5j7dc",
   "measured": {
     "benchmarksTree": "2c821dedf6d4fbfe1b47b36f0bcfbfcfaa3d1cd9",
-    "contractsTree": "6c58b31e9a58101aac8e5d07ea0341e363077471",
+    "contractsTree": "04c33c237d8853cb8e88068676d9580153c9a39a",
     "hardhatConfigBlob": "3c665d67e00f3d3290584dd0addf2e4e98470937",
     "lockfileBlob": "7115e9d1ea9bd8cfe975560066c46a30cde2637c"
   },
-  "dirty": false,
+  "dirty": true,
   "dirtyMeasured": false,
-  "date": "2026-10-04T09:50:30.375Z",
-  "node": "v22.22.2",
+  "date": "2026-10-15T05:03:01.903Z",
+  "node": "v22.22.0",
   "hardhat": "2.28.6",
   "ethers": "6.17.0",
   "solc": "0.8.24",
@@ -83,11 +83,11 @@
     "ethUSD": 3000
   },
   "scenarioSeconds": {
-    "crud": 236.078,
-    "lifecycle": 4.344,
-    "scale": 245.382,
-    "batch": 31.514,
-    "throughput": 43.003,
-    "resolve": 8.869
+    "crud": 235.272,
+    "lifecycle": 5.062,
+    "scale": 247.386,
+    "batch": 32.147,
+    "throughput": 48.416,
+    "resolve": 8.286
   }
 }

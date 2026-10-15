@@ -6,4 +6,4 @@
 | Log bytes | 6,464 | 6,592 | 4,288 | 3,072 | 12,576 | 6,080 | 3,744 | 8,288 | 3,968 | 6,496 |
 | Zero→nonzero SSTOREs | 8 | 9 | 92 | 83 | 145 | 18 | 38 | 42 | 37 | 81 |
 
-_Run 2026-10-04T09-50-29Z_0eef6af · commit 0eef6af · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-15T05-03-01Z_ef2c851 · commit ef2c851 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_

@@ -6,7 +6,7 @@ Rubric criterion,erc1056,erc1056w,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc
 3.2.8 ▲ Controller rotation: U1 (gas),"51,754","57,188","179,470","28,390","28,746","83,959","28,834","83,412","28,539","68,847"
 3.2.8 ▲ Deletion: D3 deactivate (gas),"34,230","43,809","27,689","23,091","28,530","37,443","23,182","43,076","28,323","51,016"
 3.3.2 ▲ Limited-resource resolution: R3 RPC calls at h=50,112,55,7,61,3,3,2,3,61,107
-3.3.2 ▲ Resolution median ms after lifecycle,20.306,12.23,6.996,15.317,7.619,2.625,4.246,3.886,8.329,12.796
+3.3.2 ▲ Resolution median ms after lifecycle,16.712,9.583,6.129,12.637,7.435,2.571,3.717,3.8,6.375,11.903
 3.4.1 Auditability: linked event chain vs state snapshot,full linked history (previousChange chain),full linked history (previousChange chain),events + current state (no chain pointer),current state (events unlinked),events + current state (no chain pointer),current state (events unlinked),current state (events unlinked),current state (events unlinked),current state (events unlinked),full linked history (previousChange chain)
 3.4.7 Verification relationships: delegate keys,delegates with TTL,delegates with TTL,approval (no expiry),delegates with TTL,none,none,none,none,recovery guardian only,delegates with TTL
 3.4.8 Relayed / signed operations (meta-tx),yes,no,no,no,no,no,no,no,yes,no
