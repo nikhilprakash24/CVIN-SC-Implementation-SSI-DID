@@ -13,4 +13,5 @@ node scripts/prove_and_verify.js --bench
 python3 bench/sigma_bench.py
 python3 bench/vin_bruteforce.py
 python3 bench/manual_burden.py
+python3 demos/full_circle_demo.py > /dev/null
 grep -h '"code_clean"' results/*.json | sort | uniq -c
