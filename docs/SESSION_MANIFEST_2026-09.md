@@ -231,3 +231,12 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/figures/make_result_cards.py`, `result_cards.html` | every V register row as a card, checked against the register | the author's request |
 | `.github/workflows/test-contracts.yml` | both checks in the document step | CI |
 | `docs/PLAN_WM-2.md`, `docs/HANDBACK_2026-10-14.md` §10 | B2 done; next C3 | records |
+
+## Pass 19 — WM-2 C3; contribution record (2026-10-15)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_19.md` | plan (C3 decision rule first), log, closing | standing rule |
+| `cv2x-testbed/results/freshness_k_c3/` | six C3 runs at `8216507` and `f660402`, with a manifest | C3 |
+| `docs/MEASUREMENT_CONDITIONS.md` #52; notes on #32 and #37; `docs/testing/check_stamps.py` aggregate | the host comparison | C3 |
+| `docs/figures/make_contribution_record.py`, `contribution_template.html`, `contribution_record.html` | the contribution calendar with sourced evidence | the author's request |
+| `docs/figures/make_result_cards.py` (card #52), `docs/PLAN_WM-2.md`, `docs/HANDBACK_2026-10-14.md` §11 | records | records |
