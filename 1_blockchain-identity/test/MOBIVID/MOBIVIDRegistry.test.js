@@ -730,6 +730,50 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
     });
   });
 
+  describe("H-A: one attestation per (event, attester)", function () {
+    async function dupFixture() {
+      const f = await deployV2Fixture();
+      const eventId = extractEventId(f.registry, await (await f.registry.connect(f.serviceCenter)
+        .recordLifecycleEvent(f.vehicle.address, EventType.MAINTENANCE, 12000, DATA_HASH, CRED_HASH, "BC-CAN")).wait());
+      const otherId = extractEventId(f.registry, await (await f.registry.connect(f.serviceCenter)
+        .recordLifecycleEvent(f.vehicle.address, EventType.REPAIR, 12500, DATA_HASH, CRED_HASH, "BC-CAN")).wait());
+      const chainId = (await ethers.provider.getNetwork()).chainId;
+      const sig = (signer, id) => attestationSignature(f.registry, chainId, f.vehicle.address, id, signer);
+      return { ...f, eventId, otherId, sig };
+    }
+
+    it("a second identical attestation by the same attester reverts and is not counted", async function () {
+      const f = await loadFixture(dupFixture);
+      const s = await f.sig(f.dmv, f.eventId);
+      await f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, s);
+      expect(await f.registry.hasAttested(f.eventId, f.dmv.address)).to.equal(true);
+      await expect(f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, s))
+        .to.be.revertedWith("Already attested by this attester");
+      expect((await f.registry.getEventAttestations(f.eventId)).length).to.equal(1);
+    });
+
+    it("distinct attesters are each counted once; the same attester may attest another event", async function () {
+      const f = await loadFixture(dupFixture);
+      await f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, await f.sig(f.dmv, f.eventId));
+      await f.registry.connect(f.inspection).attestEvent(f.eventId, f.vehicle.address, await f.sig(f.inspection, f.eventId));
+      await expect(f.registry.connect(f.dmv).attestEvent(f.otherId, f.vehicle.address, await f.sig(f.dmv, f.otherId)))
+        .to.emit(f.registry, "EventAttested");
+      const atts = await f.registry.getEventAttestations(f.eventId);
+      expect(atts.map((a) => a.attester)).to.deep.equal([f.dmv.address, f.inspection.address]);
+      expect((await f.registry.getEventAttestations(f.otherId)).length).to.equal(1);
+    });
+
+    it("a reverted attempt (bad signature) does not consume the attester's slot", async function () {
+      const f = await loadFixture(dupFixture);
+      const forged = await f.sig(f.inspection, f.eventId);
+      await expect(f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, forged))
+        .to.be.revertedWith("Invalid attestation signature");
+      expect(await f.registry.hasAttested(f.eventId, f.dmv.address)).to.equal(false);
+      await expect(f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, await f.sig(f.dmv, f.eventId)))
+        .to.emit(f.registry, "EventAttested");
+    });
+  });
+
   describe("history queries", function () {
     it("getCompleteHistory returns birth + event count + last event", async function () {
       const { registry, serviceCenter, police, vehicle } =

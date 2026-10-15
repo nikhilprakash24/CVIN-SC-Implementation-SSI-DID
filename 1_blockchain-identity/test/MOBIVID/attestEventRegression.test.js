@@ -9,7 +9,8 @@
  * it to equal msg.sender.
  *
  * The test (1) asserts the vulnerable path is closed, (2) asserts the H-A
- * access control (an OWNER-role attester must own the vehicle) and (3) pins
+ * access control (an OWNER-role attester must own the vehicle; one
+ * attestation per attester and event) and (3) pins
  * the gas of the fixed path. The 169,295 figure below is the F-C pin, before
  * the H-A changes; the current pin is PINNED_EXECUTION_GAS.
  *
@@ -53,7 +54,10 @@ const CRED_HASH = ethers.keccak256(ethers.toUtf8Bytes("signed-event-vc"));
 //   169,295  2026-10-04, F-C (signature verification only)
 //   169,509  2026-10-15, H-A fix 1 (+214: OWNER-role scope check, a warm
 //            SLOAD of the attester's role and a compare on this path)
-const PINNED_EXECUTION_GAS = 169_509n;
+//   191,974  2026-10-15, H-A fix 2 (+22,465: per-(eventId, attester) guard,
+//            a cold SLOAD and a zero-to-non-zero SSTORE of hasAttested)
+// Old value (F-C, register #28 before H-A): 169,295. Net change +22,679.
+const PINNED_EXECUTION_GAS = 191_974n;
 
 const TX_BASE_GAS = 21_000n;
 
@@ -135,6 +139,11 @@ describe("MOBI VID V2 attestEvent: M3 regression (forged-signature path closed, 
     const atts = await registry.getEventAttestations(eventId);
     expect(atts.length).to.equal(1);
     expect(atts[0].attester).to.equal(dmv.address);
+
+    // H-A: resubmitting the same valid attestation reverts and is not counted.
+    await expect(registry.connect(dmv).attestEvent(eventId, vehicle.address, valid))
+      .to.be.revertedWith("Already attested by this attester");
+    expect((await registry.getEventAttestations(eventId)).length).to.equal(1);
   });
 
   it("access control (H-A): an OWNER-role attester must be the vehicle's current owner", async function () {

@@ -105,6 +105,10 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     // Event attestations (eventId => array of attestations)
     mapping(bytes32 => EventAttestation[]) public eventAttestations;
 
+    // One attestation per (eventId, attester), so eventAttestations[eventId]
+    // counts distinct attesters (review-02 H-A, handback decision 4)
+    mapping(bytes32 => mapping(address => bool)) public hasAttested;
+
     // Event count per vehicle
     mapping(address => uint256) public vehicleEventCount;
 
@@ -317,7 +321,8 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
      * organisational role (MANUFACTURER, DEALER, SERVICE_CENTER,
      * INSURANCE_COMPANY, GOVERNMENT_DMV, POLICE, INSPECTION_STATION), on any
      * vehicle; an OWNER-role address only while it is V's current ERC-1056
-     * owner. Role-less addresses (NONE) cannot attest.
+     * owner. Role-less addresses (NONE) cannot attest. Each address can
+     * attest a given event once (hasAttested).
      *
      * The attester must sign the domain-separated attestation digest
      *
@@ -384,6 +389,14 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
             signature
         );
         require(recovered == msg.sender, "Invalid attestation signature");
+
+        // Review-02 H-A (handback decision 4): without this guard a
+        // role-holder could resubmit its own valid attestation and inflate
+        // the attestation count. Each attester is counted once per event.
+        // Checked after the signature, so a forged or replayed signature
+        // still reports "Invalid attestation signature".
+        require(!hasAttested[eventId][msg.sender], "Already attested by this attester");
+        hasAttested[eventId][msg.sender] = true;
 
         // Create attestation
         EventAttestation memory attestation = EventAttestation({
