@@ -1,0 +1,186 @@
+{
+  "implementation": "CVIN did_resolver.py (ERC-1056, on-chain)",
+  "implementer": "CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)",
+  "didMethod": "did:ethr",
+  "expectedOutcomes": {
+    "defaultOutcome": [
+      0,
+      1
+    ],
+    "invalidDidErrorOutcome": [
+      2
+    ],
+    "notFoundErrorOutcome": [
+      4
+    ],
+    "representationNotSupportedErrorOutcome": [],
+    "methodNotSupportedErrorOutcome": [
+      3
+    ],
+    "deactivatedOutcome": [
+      5
+    ]
+  },
+  "executions": [
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "retrieved": "2026-10-15T05:20:13Z",
+          "cvinResolutionMode": "erc1056-registry"
+        },
+        "didDocument": {
+          "@context": [
+            "https://www.w3.org/ns/did/v1",
+            "https://w3id.org/security/suites/secp256k1recovery-2020/v2",
+            "https://w3id.org/security/suites/secp256k1-2019/v1"
+          ],
+          "id": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "controller": "did:ethr:0x7a69:0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc",
+          "verificationMethod": [
+            {
+              "id": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#controller",
+              "type": "EcdsaSecp256k1RecoveryMethod2020",
+              "controller": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+              "blockchainAccountId": "eip155:31337:0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+            },
+            {
+              "id": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-1",
+              "type": "EcdsaSecp256k1RecoveryMethod2020",
+              "controller": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+              "blockchainAccountId": "eip155:31337:0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+            },
+            {
+              "id": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-2",
+              "type": "EcdsaSecp256k1RecoveryMethod2020",
+              "controller": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+              "blockchainAccountId": "eip155:31337:0x976EA74026E726554dB657fA54763abd0C3a0aa9"
+            },
+            {
+              "id": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-3",
+              "type": "EcdsaSecp256k1VerificationKey2019",
+              "controller": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+              "publicKeyHex": "021111111111111111111111111111111111111111111111111111111111111111"
+            }
+          ],
+          "authentication": [
+            "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#controller",
+            "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-1"
+          ],
+          "assertionMethod": [
+            "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#controller",
+            "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-1",
+            "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-2",
+            "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-3"
+          ],
+          "service": [
+            {
+              "id": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#service-1",
+              "type": "LinkedDomains",
+              "serviceEndpoint": "https://cvin.example.com"
+            }
+          ]
+        },
+        "didDocumentMetadata": {
+          "updated": "2026-10-15T05:20:16Z",
+          "versionId": "6"
+        }
+      }
+    },
+    {
+      "function": "resolveRepresentation",
+      "input": {
+        "did": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "resolutionOptions": {
+          "accept": "application/did+ld+json"
+        }
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "contentType": "application/did+ld+json",
+          "retrieved": "2026-10-15T05:20:13Z",
+          "cvinResolutionMode": "erc1056-registry"
+        },
+        "didDocumentStream": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1recovery-2020/v2\", \"https://w3id.org/security/suites/secp256k1-2019/v1\"], \"id\": \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8\", \"controller\": \"did:ethr:0x7a69:0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc\", \"verificationMethod\": [{\"id\": \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#controller\", \"type\": \"EcdsaSecp256k1RecoveryMethod2020\", \"controller\": \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8\", \"blockchainAccountId\": \"eip155:31337:0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\"}, {\"id\": \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-1\", \"type\": \"EcdsaSecp256k1RecoveryMethod2020\", \"controller\": \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8\", \"blockchainAccountId\": \"eip155:31337:0x90F79bf6EB2c4f870365E785982E1f101E93b906\"}, {\"id\": \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-2\", \"type\": \"EcdsaSecp256k1RecoveryMethod2020\", \"controller\": \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8\", \"blockchainAccountId\": \"eip155:31337:0x976EA74026E726554dB657fA54763abd0C3a0aa9\"}, {\"id\": \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-3\", \"type\": \"EcdsaSecp256k1VerificationKey2019\", \"controller\": \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8\", \"publicKeyHex\": \"021111111111111111111111111111111111111111111111111111111111111111\"}], \"authentication\": [\"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#controller\", \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-1\"], \"assertionMethod\": [\"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#controller\", \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-1\", \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-2\", \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#delegate-3\"], \"service\": [{\"id\": \"did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8#service-1\", \"type\": \"LinkedDomains\", \"serviceEndpoint\": \"https://cvin.example.com\"}]}",
+        "didDocumentMetadata": {
+          "updated": "2026-10-15T05:20:16Z",
+          "versionId": "6"
+        }
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:ethr_0x1234",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "error": "invalidDid",
+          "errorMessage": "Invalid DID format: did:ethr_0x1234"
+        },
+        "didDocument": null,
+        "didDocumentMetadata": {}
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:web:example.com",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "retrieved": "2026-10-15T05:20:13Z",
+          "error": "methodNotSupported",
+          "errorMessage": "DID method 'web' is not supported"
+        },
+        "didDocument": null,
+        "didDocumentMetadata": {}
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:ethr:0x1:0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "error": "notFound",
+          "errorMessage": "did:ethr:0x1:0x70997970C51812dc3A010C7d01b50e0d17dc79C8 names chain 1; this resolver reads the registry on chain 31337 only"
+        },
+        "didDocument": null,
+        "didDocumentMetadata": {}
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:ethr:0x7a69:0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "retrieved": "2026-10-15T05:20:13Z",
+          "cvinResolutionMode": "erc1056-registry"
+        },
+        "didDocument": {
+          "@context": [
+            "https://www.w3.org/ns/did/v1"
+          ],
+          "id": "did:ethr:0x7a69:0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc"
+        },
+        "didDocumentMetadata": {
+          "updated": "2026-10-15T05:20:17Z",
+          "deactivated": true,
+          "versionId": "7"
+        }
+      }
+    }
+  ]
+}

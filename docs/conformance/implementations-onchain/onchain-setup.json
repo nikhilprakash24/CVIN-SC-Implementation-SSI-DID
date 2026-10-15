@@ -1,0 +1,10 @@
+{
+  "ethr_registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "mobi_registry": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "ethr_did": "did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "ethr_deactivated": "did:ethr:0x7a69:0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
+  "ethr_other_chain": "did:ethr:0x1:0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "mobi_did": "did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff",
+  "mobi_deactivated": "did:mobi:0x554848380003cb7d807e39ac5899e2af2ff1fae0a5e6eeb849014eb42ffd6753",
+  "mobi_unknown": "did:mobi:0xabababababababababababababababababababababababababababababababab"
+}

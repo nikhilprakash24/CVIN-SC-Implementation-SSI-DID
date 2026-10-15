@@ -9,6 +9,7 @@
 //
 //   node run-cvin-cli.js cvin      -> CVIN implementations only
 //   node run-cvin-cli.js control   -> WG example implementation only
+//   node run-cvin-cli.js onchain   -> on-chain set (onchain-cvin-*.json, H-R)
 //
 // Outputs (report/tmp/):
 //   <mode>-cli-<suite>.json   jest --json output (assertionResults incl. failureMessages)
@@ -28,6 +29,11 @@ const lists = {
   control: {
     didMethods: ['did-example-didwg'],
     resolvers: ['resolver-example-didwg'],
+  },
+  // stream H-R: separate set from generate_implementations_onchain.py
+  onchain: {
+    didMethods: ['ethr', 'mobi'].map((m) => `onchain-cvin-did-${m}`),
+    resolvers: ['ethr', 'mobi'].map((m) => `onchain-cvin-resolver-${m}`),
   },
 }[mode];
 
