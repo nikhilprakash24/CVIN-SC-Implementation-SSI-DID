@@ -23,10 +23,12 @@ V1\_issuer\_key\_anchor & ✓ & ✓ & ✓ & ✓ & ✗ & ✓ & ✓ & ✗ & ✓ & 
 V3\_anchor\_status & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ \\
 V5\_revoke\_credential & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ \\
 V6\_status\_check & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ & ✓ \\
-**Core ops supported** & 17/17 & 16/17 & 16/17 & 16/17 & 12/17 & 14/17 & 13/17 & 13/17 & 16/17 & 16/17 \\
-Missing primitives & — & U5 D2 & U5 D2 & R2 U5 & R2 R4 U2 U5 D1 V1 & R4 U2 U5 D1 & R2 R4 U2 U5 D1 & R4 U2 U5 D1 V1 & R2 & R2 U5 \\
+P1\_create\_presentation & ✓ & ✓ & ✗ & ✓ & ✓ & ✗ & ✓ & ✗ & ✓ & ✓ \\
+X1\_execute\_call & ✗ & ✗ & ✗ & ✗ & ✗ & ✗ & ✓ & ✗ & ✓ & ✗ \\
+**Core ops supported** & 18/19 & 17/19 & 16/19 & 17/19 & 13/19 & 14/19 & 15/19 & 13/19 & 18/19 & 17/19 \\
+Missing primitives & X1 & U5 D2 X1 & U5 D2 P1 X1 & R2 U5 X1 & R2 R4 U2 U5 D1 V1 X1 & R4 U2 U5 D1 P1 X1 & R2 R4 U2 U5 D1 & R4 U2 U5 D1 V1 P1 X1 & R2 & R2 U5 X1 \\
 \bottomrule
 \end{tabular}
-\caption{A2 — Capability matrix: ✓ primitive present, ✗ none (reportable finding) Run 2026-10-04T09-50-29Z\_0eef6af · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056}
+\caption{A2 — Capability matrix: ✓ primitive present, ✗ none (reportable finding) Run 2026-10-15T05-07-33Z\_9bdf451 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056}
 \label{tab:analysis_capabilities}
 \end{table}

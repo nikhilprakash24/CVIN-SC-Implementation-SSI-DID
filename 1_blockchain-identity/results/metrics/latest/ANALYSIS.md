@@ -1,6 +1,6 @@
-# Analysis — 2026-10-04T09-50-29Z_0eef6af
+# Analysis — 2026-10-15T05-07-33Z_9bdf451
 
-_Run 2026-10-04T09-50-29Z_0eef6af · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
+_Run 2026-10-15T05-07-33Z_9bdf451 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
 
 ### A1 — Cost relative to the ERC-1056 baseline (ratio; >1 = more expensive; n/a = no primitive; † = lifetime excludes n/a events)
 
@@ -38,8 +38,10 @@ _Run 2026-10-04T09-50-29Z_0eef6af · computed from crud/lifecycle/scale/resolve.
 | V3_anchor_status | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | V5_revoke_credential | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | V6_status_check | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| **Core ops supported** | 17/17 | 16/17 | 16/17 | 16/17 | 12/17 | 14/17 | 13/17 | 13/17 | 16/17 | 16/17 |
-| Missing primitives | — | U5 D2 | U5 D2 | R2 U5 | R2 R4 U2 U5 D1 V1 | R4 U2 U5 D1 | R2 R4 U2 U5 D1 | R4 U2 U5 D1 V1 | R2 | R2 U5 |
+| P1_create_presentation | ✓ | ✓ | ✗ | ✓ | ✓ | ✗ | ✓ | ✗ | ✓ | ✓ |
+| X1_execute_call | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✓ | ✗ |
+| **Core ops supported** | 18/19 | 17/19 | 16/19 | 17/19 | 13/19 | 14/19 | 15/19 | 13/19 | 18/19 | 17/19 |
+| Missing primitives | X1 | U5 D2 X1 | U5 D2 P1 X1 | R2 U5 X1 | R2 R4 U2 U5 D1 V1 X1 | R4 U2 U5 D1 P1 X1 | R2 R4 U2 U5 D1 | R4 U2 U5 D1 V1 P1 X1 | R2 | R2 U5 X1 |
 
 ### A3 — H5 dominance analysis: a substrate is dominated if another is at least as good on every listed criterion and better on one. '—' = on the Pareto frontier for that criterion set
 
@@ -48,11 +50,11 @@ _Run 2026-10-04T09-50-29Z_0eef6af · computed from crud/lifecycle/scale/resolve.
 | Lifetime gas ↓ | 1,050,787 | 1,025,381 | 2,701,239 | 3,155,103 | 5,369,010 | 1,150,981 | 2,956,507 | 1,505,258 | 2,221,290 | 2,533,978 |
 | Zero→nonzero SSTOREs ↓ | 8 | 9 | 92 | 83 | 145 | 18 | 38 | 42 | 37 | 81 |
 | R3 RPC calls at h=50 ↓ | 112 | 55 | 7 | 61 | 3 | 3 | 2 | 3 | 61 | 107 |
-| R3 median ms after lifecycle ↓ | 20.31 | 12.23 | 7.00 | 15.32 | 7.62 | 2.63 | 4.25 | 3.89 | 8.33 | 12.80 |
-| Core ops supported ↑ | 17 | 16 | 16 | 16 | 12 | 14 | 13 | 13 | 16 | 16 |
+| R3 median ms after lifecycle ↓ | 17.17 | 15.61 | 6.96 | 14.39 | 10.46 | 2.71 | 4.30 | 5.06 | 9.48 | 15.92 |
+| Core ops supported ↑ | 18 | 17 | 16 | 17 | 13 | 14 | 15 | 13 | 18 | 17 |
 | O(1) on-chain credential check (view) ↑ | no | no | yes | yes | yes | yes | yes | yes | yes | yes |
 | **Dominated by** (cost axes: lifetime, SSTOREs) | — | — | ERC-1056, ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337, CVIN-Combined | ERC-1056, ERC-1056 (wrapper), ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined | ERC-1056, ERC-1056 (wrapper), ERC-721, ERC-725, ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined | ERC-1056, ERC-1056 (wrapper) | ERC-1056, ERC-1056 (wrapper), ERC-1155, ERC-4337 | ERC-1056, ERC-1056 (wrapper), ERC-1155 | ERC-1056, ERC-1056 (wrapper), ERC-1155 | ERC-1056, ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337 |
-| **Dominated by** (cost + read path) | — | — | ERC-1155, LSP8 | ERC-1056 (wrapper), ERC-1155, ERC-725xy, LSP8, ERC-4337 | ERC-1155, ERC-725xy, LSP8 | — | — | ERC-1155 | ERC-1155 | ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337 |
+| **Dominated by** (cost + read path) | — | — | ERC-1155, LSP8 | ERC-1155, ERC-725xy, LSP8, ERC-4337 | ERC-1155, ERC-725xy, LSP8 | — | — | ERC-1155 | ERC-1155 | ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337 |
 | **Dominated by** (all six criteria) | — | — | — | ERC-4337 | ERC-1155, ERC-725xy, LSP8 | — | — | ERC-1155 | — | ERC-4337 |
 
 ### A4 — Frontier summary
@@ -76,19 +78,19 @@ Criterion 'O(1) on-chain credential check' is a design property (a contract can 
 | 3.2.8 ▲ Controller rotation: U1 (gas) | 51,754 | 57,188 | 179,470 | 28,390 | 28,746 | 83,959 | 28,834 | 83,412 | 28,539 | 68,847 |
 | 3.2.8 ▲ Deletion: D3 deactivate (gas) | 34,230 | 43,809 | 27,689 | 23,091 | 28,530 | 37,443 | 23,182 | 43,076 | 28,323 | 51,016 |
 | 3.3.2 ▲ Limited-resource resolution: R3 RPC calls at h=50 | 112 | 55 | 7 | 61 | 3 | 3 | 2 | 3 | 61 | 107 |
-| 3.3.2 ▲ Resolution median ms after lifecycle | 20.31 | 12.23 | 7.00 | 15.32 | 7.62 | 2.63 | 4.25 | 3.89 | 8.33 | 12.80 |
+| 3.3.2 ▲ Resolution median ms after lifecycle | 17.17 | 15.61 | 6.96 | 14.39 | 10.46 | 2.71 | 4.30 | 5.06 | 9.48 | 15.92 |
 | 3.4.1 Auditability: linked event chain vs state snapshot | full linked history (previousChange chain) | full linked history (previousChange chain) | events + current state (no chain pointer) | current state (events unlinked) | events + current state (no chain pointer) | current state (events unlinked) | current state (events unlinked) | current state (events unlinked) | current state (events unlinked) | full linked history (previousChange chain) |
 | 3.4.7 Verification relationships: delegate keys | delegates with TTL | delegates with TTL | approval (no expiry) | delegates with TTL | none | none | none | none | recovery guardian only | delegates with TTL |
 | 3.4.8 Relayed / signed operations (meta-tx) | yes | no | no | no | no | no | no | no | yes | no |
 | 3.7.2 ▲ Incentive for many DIDs: lifetime gas × baseline | 1 | 0.98 | 2.57 | 3 | 5.11† | 1.1† | 2.81† | 1.43† | 2.11 | 2.41 |
 
-### A6 — Basic digital-ID set (IMinimalSSI) coverage by catalogue op: Set A identity/keys, Set B credentials; `execute` and F8 createPresentation are not catalogue ops yet
+### A6 — Basic digital-ID set (IMinimalSSI) coverage by catalogue op: Set A identity/keys incl. X1 execute, Set B credentials incl. P1 createPresentation (F8)
 
 | Basic-set view | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Set A ops supported | 11/11 | 10/11 | 10/11 | 11/11 | 8/11 | 8/11 | 8/11 | 8/11 | 11/11 | 11/11 |
-| Set A missing | — | D2 | D2 | — | U2 R4 D1 | U2 R4 D1 | U2 R4 D1 | U2 R4 D1 | — | — |
-| Set B ops supported | 4/4 | 4/4 | 4/4 | 4/4 | 3/4 | 4/4 | 4/4 | 3/4 | 4/4 | 4/4 |
-| Set B missing | — | — | — | — | V1 | — | — | V1 | — | — |
-| **Admitted** (all mapped Set A + B ops present) | yes | no | no | yes | no | no | no | no | yes | yes |
+| Set A ops supported | 11/12 | 10/12 | 10/12 | 11/12 | 8/12 | 8/12 | 9/12 | 8/12 | 12/12 | 11/12 |
+| Set A missing | X1 | D2 X1 | D2 X1 | X1 | U2 R4 D1 X1 | U2 R4 D1 X1 | U2 R4 D1 | U2 R4 D1 X1 | — | X1 |
+| Set B ops supported | 5/5 | 5/5 | 4/5 | 5/5 | 4/5 | 4/5 | 5/5 | 3/5 | 5/5 | 5/5 |
+| Set B missing | — | — | P1 | — | V1 | P1 | — | V1 P1 | — | — |
+| **Admitted** (all mapped Set A + B ops present) | no | no | no | no | no | no | no | no | yes | no |
 | Extension ops beyond the basic set | R2 U4 U5 | R2 U4 | R2 U4 | U4 | U4 | R2 U4 | U4 | R2 U4 | U4 U5 | U4 |

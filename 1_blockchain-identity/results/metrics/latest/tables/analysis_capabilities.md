@@ -20,7 +20,9 @@
 | V3_anchor_status | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | V5_revoke_credential | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | V6_status_check | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| **Core ops supported** | 17/17 | 16/17 | 16/17 | 16/17 | 12/17 | 14/17 | 13/17 | 13/17 | 16/17 | 16/17 |
-| Missing primitives | — | U5 D2 | U5 D2 | R2 U5 | R2 R4 U2 U5 D1 V1 | R4 U2 U5 D1 | R2 R4 U2 U5 D1 | R4 U2 U5 D1 V1 | R2 | R2 U5 |
+| P1_create_presentation | ✓ | ✓ | ✗ | ✓ | ✓ | ✗ | ✓ | ✗ | ✓ | ✓ |
+| X1_execute_call | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✓ | ✗ |
+| **Core ops supported** | 18/19 | 17/19 | 16/19 | 17/19 | 13/19 | 14/19 | 15/19 | 13/19 | 18/19 | 17/19 |
+| Missing primitives | X1 | U5 D2 X1 | U5 D2 P1 X1 | R2 U5 X1 | R2 R4 U2 U5 D1 V1 X1 | R4 U2 U5 D1 P1 X1 | R2 R4 U2 U5 D1 | R4 U2 U5 D1 V1 P1 X1 | R2 | R2 U5 X1 |
 
-_Run 2026-10-04T09-50-29Z_0eef6af · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
+_Run 2026-10-15T05-07-33Z_9bdf451 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
