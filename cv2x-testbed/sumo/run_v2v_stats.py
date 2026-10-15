@@ -252,10 +252,11 @@ def main():
             "Single host, single process per run, no CPU pinning: absolute latencies "
             "are hardware-dependent (this machine) and reflect a warm, uncontended "
             "core; runs were executed serially to avoid inter-run CPU contention.",
-            "verification_failures are exclusively the 5 injected attacks per run "
+            "verification_failures are exclusively the 7 injected attacks per run "
             "(tampered PKI BSM, tampered SSI BSM, stale PKI BSM, stale SSI BSM "
-            "[T-9 freshness window], uncredentialed SSI sender); the benign BSM "
-            "flow produces zero failures.",
+            "[T-9 freshness window], replayed PKI BSM, replayed SSI BSM [replay "
+            "cache], uncredentialed SSI sender); the benign BSM flow produces "
+            "zero failures. Runs before the replay cache had 5.",
             "p95 here is the 95th percentile OF the per-run medians (across-run tail "
             "of the typical latency), not a pooled per-message p95.",
         ],
