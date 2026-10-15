@@ -42,6 +42,36 @@ Overarching hypothesis: lightweight blockchain identity standards can provide su
 
 ---
 
+## 🔐 Layer 5 — Zero-Knowledge Proofs and the Agent-Wrapped Identity (2026-10-15)
+
+**Identity for machines; machines for identity.** A vehicle proves that its manufacturer is authorised, its model year
+meets a threshold and its region matches, against a commitment anchored on chain, **without revealing its VIN**
+(ZK-VIN, Groth16: prove 399 ms, verify 18.4 ms off chain, M0; verified on chain inside an identity-dependent
+transaction for **301,163 gas**, M1). Operating such proofs by hand is not tedious but infeasible (one ZK-VIN proof
+≈ 124,500 working years of hand computation, status E), so an agent, **the Steward**, wraps the identity: it turns the
+owner's plain-English rules into a signed policy, computes the proofs, refuses everything else, survives prompt
+injection, holds a twenty-questions attack (single, Sybil and accredited-insider variants) to **≤ 3.0 bits on 90/90
+runs**, and presents its own DID and delegation credential. Six of seven pre-registered expectations passed;
+**Z-E6 failed** (honest service fell below 90 % on 25 of 60 runs). Research code; the Groth16 keys come from an
+insecure single-party setup.
+
+| | |
+|:---:|:---:|
+| ![ZK pipeline](5_zkp-agent-identity/figures/fig01_zk_pipeline.png) | ![Circuit](5_zkp-agent-identity/figures/fig03_zkvin_circuit.png) |
+| ZK-VIN from statement to on-chain decision | What the circuit constrains, and what stays private |
+| ![Agent](5_zkp-agent-identity/figures/fig05_agent_architecture.png) | ![Manual vs agent](5_zkp-agent-identity/figures/fig07_manual_vs_agent.png) |
+| The Steward: the model proposes, the kernel disposes | The same cryptography by hand and by the agent |
+| ![Attack](5_zkp-agent-identity/figures/fig08_attack_leakage.png) | ![Loop](5_zkp-agent-identity/figures/fig12_full_circle.png) |
+| The twenty-questions attack under six defences | The closed loop |
+| ![Hex wall](5_zkp-agent-identity/figures/fig06_hex_wall.png) | ![SSI tables](5_zkp-agent-identity/figures/fig11_ssi_tables.png) |
+| One proof, as a person would have to copy it | An identity-management system first, SSI by extension |
+
+Read: [`docs/zkp/README.md`](docs/zkp/README.md) (index) · [Report A: build and verdicts](docs/zkp/REPORT_A_ZKP_INTEGRATION.md)
+· [Report B: the ZKP paper](docs/zkp/REPORT_B_ZKP_AND_IDENTITY.md) · [Report C: the agent-wrapped identity](docs/zkp/REPORT_C_AGENT_WRAPPED_IDENTITY.md)
+· [Thesis integration map](docs/zkp/THESIS_INTEGRATION_MAP.md) · Run: `cd 5_zkp-agent-identity && python3 demos/full_circle_demo.py`.
+
+---
+
 ## 🏗️ Repository Structure
 
 ```
@@ -68,6 +98,9 @@ CVIN-SC-Implementation-SSI-DID/
 │   ├── sumo/                           # V2V simulation (real ECDSA + real VC verify)
 │   ├── protocols/                      # protocol stack
 │   └── contracts/                      # testbed contracts
+│
+├── 5_zkp-agent-identity/              # Layer 5: zkid primitives, ZK-VIN circuit, ZkVinGate, the Steward agent,
+│                                       #   attacks, figures (docs/zkp/ for plans and reports)
 │
 ├── 4_comparison-framework/             # Comparative analysis (real data)
 │   ├── performance-metrics/            # gas/latency table + stats generators
