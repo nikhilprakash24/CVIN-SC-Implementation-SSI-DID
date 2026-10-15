@@ -23,7 +23,8 @@ sys.path.insert(0, HERE)
 
 from did_resolver import DIDResolver  # noqa: E402
 from resolver_chain_helpers import (  # noqa: E402
-    ERC1056_ARTIFACT, HARDHAT_CHAIN_ID, deploy, free_port, send,
+    ERC1056_ARTIFACT, HARDHAT_CHAIN_ID, deploy, free_port, node_url, send,
+    web3_for,
 )
 
 CHAIN = "0x7a69"
@@ -41,6 +42,16 @@ def b32(text: str) -> bytes:
 
 def did_of(address: str) -> str:
     return f"did:ethr:{CHAIN}:{address}"
+
+
+@pytest.fixture(scope="module")
+def resolver_node():
+    return node_url()
+
+
+@pytest.fixture(scope="module")
+def w3(resolver_node):
+    return web3_for(resolver_node)
 
 
 @pytest.fixture(scope="module")

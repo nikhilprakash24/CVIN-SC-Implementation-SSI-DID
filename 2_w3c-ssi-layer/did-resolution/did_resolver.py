@@ -1111,9 +1111,24 @@ class DIDResolver:
         """
         Resolve did:mobi (MOBI VID compliant)
 
-        Format: did:mobi:<vin>
-        Example: did:mobi:5YJ3E1EA0PF123456
+        On-chain mode (``mobi_registry`` configured), stream H-R:
+            Format: did:mobi:<0x + 64 hex>, the salted VIN hash
+            (``birth_certificate.salted_vin_hash``) the MOBIVIDRegistry is
+            keyed by. ``lookupByVINHash`` gives the vehicle identity,
+            ``getVehicleDID`` its did:ethr, and the vehicle's ERC-1056 state
+            in the MOBI registry gives controller (current owner), keys and
+            services. The did:ethr goes in ``alsoKnownAs``. A raw VIN is
+            rejected (invalidDid) and never appears in the output.
+
+        Offline mode (default): LEGACY PLACEHOLDER, unchanged apart from the
+        offline label. Format did:mobi:<vin>, e.g. did:mobi:5YJ3E1EA0PF123456.
+        It puts the VIN in the DID and carries placeholder key material; it
+        is kept only because the internal checker and the external-suite
+        generator register did:mobi:<VIN> as a resolvable vector (see
+        docs/review02/FOLLOWUP_HR.md).
         """
+        if self.on_chain:
+            return self._resolve_mobi_onchain(did, identifier)
         vin = identifier
 
         # MOBI VID uses VIN as identifier
@@ -1160,6 +1175,73 @@ class DIDResolver:
             )
         )
 
+    def _resolve_mobi_onchain(self, did: str,
+                              identifier: str) -> DIDResolutionResult:
+        if self.mobi_registry is None:
+            raise DIDResolutionError(
+                "methodNotSupported",
+                "this on-chain resolver has no MOBI VID registry configured "
+                "for did:mobi (mobi_registry)")
+        if not _VINHASH_RE.fullmatch(identifier):
+            # Do not echo the identifier: it may be a raw VIN.
+            raise DIDResolutionError(
+                "invalidDid",
+                "did:mobi method-specific id must be the 32-byte salted VIN "
+                "hash (0x + 64 hex digits); a raw VIN is never accepted")
+        from web3 import Web3
+        try:
+            node_chain = int(self.w3.eth.chain_id)
+        except Exception as e:
+            raise DIDResolutionError(
+                "internalError",
+                f"RPC failure reading eth_chainId: {type(e).__name__}: {e}"
+            ) from None
+        # did:mobi carries no chain id; the registry's chain is the one.
+        head = self._chain_head(did, node_chain)
+        try:
+            mobi = self.w3.eth.contract(
+                address=Web3.to_checksum_address(self.mobi_registry),
+                abi=_MOBI_ABI)
+            vehicle = mobi.functions.lookupByVINHash(
+                bytes.fromhex(identifier[2:])).call(
+                    block_identifier=head["number"])
+            if int(vehicle, 16) == 0:
+                raise DIDResolutionError(
+                    "notFound", "no vehicle is registered under this VIN "
+                    "hash in the configured MOBI VID registry")
+            ethr_did = mobi.functions.getVehicleDID(vehicle).call(
+                block_identifier=head["number"])
+        except DIDResolutionError:
+            raise
+        except Exception as e:
+            raise DIDResolutionError(
+                "internalError",
+                f"MOBI VID registry read failed: {type(e).__name__}: {e}"
+            ) from None
+
+        # getVehicleDID must name this vehicle on this chain
+        m = re.fullmatch(r"did:ethr:(0x[0-9a-fA-F]+):(0x[0-9a-fA-F]{40})",
+                         ethr_did)
+        if m is None or int(m.group(1), 16) != node_chain or \
+                m.group(2).lower() != vehicle.lower():
+            raise DIDResolutionError(
+                "internalError",
+                f"getVehicleDID returned {ethr_did!r}, which does not name "
+                f"vehicle {vehicle} on chain {node_chain}")
+
+        state = self._read_erc1056(self.mobi_registry, vehicle, head)
+        prefix = f"did:ethr:{m.group(1)}:"
+        controller_did = ethr_did if state.owner == state.identity else \
+            f"{prefix}{state.owner.lower()}"
+        doc, meta = erc1056_document(did, state, node_chain, controller_did)
+        if not state.deactivated:
+            doc.alsoKnownAs = [ethr_did]
+        return DIDResolutionResult(
+            didResolutionMetadata=DIDResolutionMetadata(
+                cvinResolutionMode=MODE_MOBI),
+            didDocument=doc,
+            didDocumentMetadata=meta)
+
     def create_did(self, method: DIDMethod, **kwargs) -> Tuple[str, DIDDocument]:
         """
         Create a new DID
@@ -1177,8 +1259,15 @@ class DIDResolver:
             did = f"did:ethr:{chain_id}:{address}"
 
         elif method == DIDMethod.MOBI:
-            vin = kwargs.get("vin")
-            did = f"did:mobi:{vin}"
+            # vin_hash (0x + 64 hex: the on-chain form) or, for the legacy
+            # offline placeholder only, vin
+            vin_hash = kwargs.get("vin_hash")
+            if vin_hash is not None:
+                if isinstance(vin_hash, (bytes, bytearray)):
+                    vin_hash = "0x" + bytes(vin_hash).hex()
+                did = f"did:mobi:{vin_hash}"
+            else:
+                did = f"did:mobi:{kwargs.get('vin')}"
 
         elif method == DIDMethod.NFT:
             chain_id = kwargs.get("chain_id", "0x1")
