@@ -1,17 +1,17 @@
 {
-  "runId": "2026-10-04T09-50-29Z_0eef6af",
-  "commit": "0eef6af562589fbd58253f517b6ebdac0facf0db",
-  "commitShort": "0eef6af",
+  "runId": "2026-10-15T05-07-33Z_9bdf451",
+  "commit": "9bdf451c5ba9052d29eb936af1bb1c6d3329c405",
+  "commitShort": "9bdf451",
   "branch": "claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt",
   "measured": {
-    "benchmarksTree": "2c821dedf6d4fbfe1b47b36f0bcfbfcfaa3d1cd9",
-    "contractsTree": "6c58b31e9a58101aac8e5d07ea0341e363077471",
+    "benchmarksTree": "e49e1dc126368be481f91fdb11e627f5765db20f",
+    "contractsTree": "04c33c237d8853cb8e88068676d9580153c9a39a",
     "hardhatConfigBlob": "3c665d67e00f3d3290584dd0addf2e4e98470937",
     "lockfileBlob": "7115e9d1ea9bd8cfe975560066c46a30cde2637c"
   },
   "dirty": false,
   "dirtyMeasured": false,
-  "date": "2026-10-04T09:50:30.375Z",
+  "date": "2026-10-15T05:07:34.432Z",
   "node": "v22.22.2",
   "hardhat": "2.28.6",
   "ethers": "6.17.0",
@@ -83,11 +83,11 @@
     "ethUSD": 3000
   },
   "scenarioSeconds": {
-    "crud": 236.078,
-    "lifecycle": 4.344,
-    "scale": 245.382,
-    "batch": 31.514,
-    "throughput": 43.003,
-    "resolve": 8.869
+    "crud": 317.054,
+    "lifecycle": 5.236,
+    "scale": 292.2,
+    "batch": 41.341,
+    "throughput": 57.122,
+    "resolve": 9.996
   }
 }

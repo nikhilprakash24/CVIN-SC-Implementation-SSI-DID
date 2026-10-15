@@ -15,5 +15,7 @@
 | V1_issuer_key_anchor | 192 | 192 | 416 | 128 | n/a | 128 | 160 | n/a | 160 | 192 |
 | V3_anchor_status | 256 | 256 | 256 | 128 | 960 | 352 | 160 | 352 | 160 | 512 |
 | V5_revoke_credential | 256 | 256 | 256 | 64 | 480 | 352 | 128 | 288 | 128 | 160 |
+| P1_create_presentation | 256 | 320 | n/a | 128 | 960 | n/a | 160 | n/a | 160 | 256 |
+| X1_execute_call | n/a | n/a | n/a | n/a | n/a | n/a | 256 | n/a | 320 | n/a |
 
-_Run 2026-10-04T09-50-29Z_0eef6af · commit 0eef6af · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-15T05-07-33Z_9bdf451 · commit 9bdf451 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_

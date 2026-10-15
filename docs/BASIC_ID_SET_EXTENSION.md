@@ -51,14 +51,19 @@ Every basic-set function except `execute` and `createPresentation` therefore has
 
 `npm run metrics:analyze` now emits **A6 — basic-set coverage**: for each substrate, how many Set-A-mapped and Set-B-mapped catalogue operations it supports natively. Reading from `results/metrics/latest/tables/analysis_basic_set.*` (run `0eef6af`):
 
-| | Set A ops | Set B ops | Admitted (strict: every mapped op present) |
-|---|---|---|---|
-| ERC-1056 (pure), ERC-725, ERC-4337, CVIN-Combined | 11/11 | 4/4 | **yes** |
-| ERC-1056 wrapper, ERC-721 | 10/11 (no D2) | 4/4 | no — only attribute revocation missing (**[B1]**: is D2 a Set A function?) |
-| ERC-1155, ERC-725xy | 8/11 (no U2/R4/D1) | 4/4 | no — no delegate primitive |
-| ERC-735, LSP8 | 8/11 (no U2/R4/D1) | 3/4 (no V1) | no — no delegates, no issuer-key anchor |
+With all twelve functions mapped (X1 `execute` in Set A, P1 `createPresentation` in Set B; run `9bdf451`):
 
-The delegate gap in the ERC-725 family is exactly what the canon's expectation column predicted ("claims absent", "Set A native at interface level"), and what the 12-test regime would report as *not admitted* unless a pattern supplies it. Every non-admitted substrate remains measured here, with the gap carried as a finding rather than an exclusion.
+| | Set A ops (12) | Set B ops (5) | **Natively** admitted (every mapped op is a native primitive) |
+|---|---|---|---|
+| ERC-4337 | 12/12 | 5/5 | **yes** — the only substrate whose identity can also *act* (`execute`) |
+| ERC-1056 (pure), ERC-725, CVIN-Combined | 11/12 (no X1) | 5/5 | no — registries cannot act; everything else native |
+| ERC-1056 wrapper, ERC-721 | 10/12 (no D2, X1) | 5/5 · 4/5 (ERC-721: no P1) | no |
+| ERC-725xy | 9/12 (no U2/R4/D1) | 5/5 | no — has `execute` but no delegates |
+| ERC-1155 | 8/12 | 4/5 (no P1) | no — soulbound: holder cannot present |
+| ERC-735 | 8/12 | 4/5 (no V1) | no |
+| LSP8 | 8/12 | 3/5 (no V1, P1) | no |
+
+Two readings. First, the canon admitted **O1_ERC1056 12/12**, while this table admits only ERC-4337 natively: the difference is that the canon's SP-1 is "ERC-1056 anchor **+ credential-anchor pattern**" — functions a bare registry lacks (`execute`, `createPresentation`) are realised by a pattern layered on it. A6 therefore answers a stricter question (*native* primitives) than canon admission (*pattern-realised* compliance); which of the two the thesis should use for "admitted" is the architect ruling the reconciliation needs (**[B1]**, §3). Second, the delegate gap across the ERC-725 family is exactly what the canon's expectation column predicted ("claims absent", "Set A native at interface level"). Every non-admitted substrate remains measured here, with each gap carried as a finding rather than an exclusion.
 
 ## 3. Reconciling the two compliance regimes (the open architect item)
 
