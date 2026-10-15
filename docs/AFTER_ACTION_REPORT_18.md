@@ -49,3 +49,9 @@ The harness code stays frozen until A6 (N-19). No new measurement is made in thi
     760 px, where it covered most of the screen.
   - Published as a private page: https://claude.ai/artifact/4vwTQ98TuLUgaWsiBim2Bq (beside the results board,
     https://claude.ai/artifact/1C5X9GpPcEwyCRDMYxYhpa). CI runs `make_result_cards.py --check`.
+- **Records.** Handback §10 and the session manifest (`af8a006`).
+- **Grand run (last), at `af8a006`.** ALL OK: smoke 11 adapters, L1 99, Hardhat 537, 92 demos / 1,752 steps
+  (594 mined transactions). Against the pass-17 run, the only gas changes are three MOBI demo totals moving by
+  ±12 gas (claims, creation, vin-linkage). These are the three `attestEvent` steps already declared
+  timestamp-dependent in pass 17. Everything else that changed is timings and stamps. The dashboard snapshot and page,
+  the presentation report and the result cards were regenerated afterwards, and all ten document checks pass.

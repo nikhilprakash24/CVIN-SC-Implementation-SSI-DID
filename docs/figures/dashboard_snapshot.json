@@ -767,8 +767,8 @@
     "source": {
       "path": "sandbox/grand/report/GRAND_REPORT.md"
     },
-    "generated": "2026-10-14T12:16:30Z",
-    "commit": "a950cdf",
+    "generated": "2026-10-15T04:15:44Z",
+    "commit": "af8a006",
     "stages": {
       "smoke": {
         "ok": true,
