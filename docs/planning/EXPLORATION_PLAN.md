@@ -243,11 +243,17 @@ claim or a measured result.
 | 6 | P6 backlog + top improvements | ongoing | P2, P3, P5 |
 | 7 | P7 watch | set once | P1 query set |
 
+## Decisions
+
+- **2026-10-15 — Canonical remote:** `origin`
+  (`nikhilprakash24/CVIN-SC-Implementation-SSI-DID`) is correct, and pushes to it
+  now succeed. Older docs that call it stale or push-blocked (`SOURCES.md` §5,
+  `NEXT_STAGES_PLAN.md` R-A) are out of date. Exploration work goes on branches
+  (`claude/exploration-plan` and successors) or as new sections in this file, and
+  gets merged by the author.
+
 ## Open decisions for the author
 
-- **Canonical remote:** earlier docs call `origin` (this repo) stale and say the
-  mirror `nikhilprakash-cvin/2_miniature-waffle-...` is current. This session can
-  only reach `origin`, so confirm which one exploration commits should go to.
 - **Scope of Phase 6 item 1:** a real 1609.2 baseline is the highest-value and
   highest-effort change. Decide whether it's in scope for the thesis or goes to
   future work.
