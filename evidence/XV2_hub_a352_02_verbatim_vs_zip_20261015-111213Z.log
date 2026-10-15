@@ -1,0 +1,43 @@
+step     : 02_verbatim_vs_zip
+utc      : 2026-10-15T11:12:13Z
+command  : Z=C:/Users/nikhilp/Downloads/cvin-sandbox-v1.3.zip; sha256sum "$Z"; X=$(mktemp -d); unzip -q "$Z" -d "$X"; echo "zip root extracted to $X"; echo "--- diff -r zip/cvin-sandbox vs sandbox/cvin-sandbox-v1.1 (excluding nothing):"; diff -rq "$X/cvin-sandbox" sandbox/cvin-sandbox-v1.1; echo "diff rc=$?"; echo "--- per-file sha256 check of zip files against repo copy:"; (cd "$X/cvin-sandbox" && find . -type f | sort | xargs sha256sum) > $X/sums; (cd sandbox/cvin-sandbox-v1.1 && sha256sum -c $X/sums | grep -v ": OK$"; echo "zip files: $(wc -l < $X/sums), mismatches above (none = verbatim)"); echo "--- package.json diff zip vs repo:"; diff "$X/cvin-sandbox/package.json" sandbox/cvin-sandbox-v1.1/package.json && echo IDENTICAL; echo "--- committed trace sha256 zip vs repo:"; sha256sum "$X/cvin-sandbox/traces/i2i_O1_ERC1056_1780620182135.jsonl" sandbox/cvin-sandbox-v1.1/traces/i2i_O1_ERC1056_1780620182135.jsonl; grep -o "\"fn\":\"[a-zA-Z]*\"[^}]*\"gasUsed\":\"[0-9]*\"" sandbox/cvin-sandbox-v1.1/traces/i2i_O1_ERC1056_1780620182135.jsonl | grep -E "createDID|issueCredential|createPresentation" | sed -E "s/\"fnId\".*\"gasUsed\"/ gasUsed/"; echo "--- fingerprint:"; for f in contracts/interfaces/IMinimalSSI.sol contracts/interfaces/ISetA.sol contracts/interfaces/ISetB.sol contracts/interfaces/ISetC.sol BUILD_DIRECTIONS/BUILD_PLAN.md docs/FINDINGS.md docs/METHODOLOGY.md cvin-v6; do [ -e sandbox/cvin-sandbox-v1.1/$f ] && echo "PRESENT $f" || echo "ABSENT  $f"; done; echo "F-ids in trace: $(grep -o "\"fnId\":\"F[0-9]*\"" sandbox/cvin-sandbox-v1.1/traces/*.jsonl | sort -u | tr -d "\"" | sed s/fnId://g | sort -V | tr "\n" " ")"; cmp sandbox/cvin-sandbox-v1.1/docs/METHODOLOGY.md docs/01_specification/METHODOLOGY.md && echo "METHODOLOGY twin: byte-identical"; echo "--- secret scan (32-hex, 64-hex excl txHash, mnemonic) on repo sandbox:"; grep -rnIE "(^|[^0-9a-fA-F])[0-9a-fA-F]{32}([^0-9a-fA-F]|$)" sandbox/cvin-sandbox-v1.1 --exclude=package-lock.json | head -3; grep -rnIE "[0-9a-fA-F]{64}" sandbox/cvin-sandbox-v1.1 --exclude=package-lock.json | grep -v "\"txHash\"" | head -3; grep -rnIi "mnemonic" sandbox/cvin-sandbox-v1.1 --exclude=package-lock.json | head -3; echo "scan done"; rm -rf "$X"
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+d02e0db06cc99edf7c3ebec47542d1e954ce742d6330cbb32dcdb34d6618f58b *C:/Users/nikhilp/Downloads/cvin-sandbox-v1.3.zip
+zip root extracted to /tmp/tmp.tCM2F28smO
+--- diff -r zip/cvin-sandbox vs sandbox/cvin-sandbox-v1.1 (excluding nothing):
+Only in /tmp/tmp.tCM2F28smO/cvin-sandbox: benchmarks
+Only in /tmp/tmp.tCM2F28smO/cvin-sandbox/contracts: credentials
+Only in /tmp/tmp.tCM2F28smO/cvin-sandbox/docs: source
+Only in sandbox/cvin-sandbox-v1.1: package-lock.json
+diff rc=1
+--- per-file sha256 check of zip files against repo copy:
+zip files: 29, mismatches above (none = verbatim)
+--- package.json diff zip vs repo:
+IDENTICAL
+--- committed trace sha256 zip vs repo:
+36811c6c6b8f0d89f18346a1ee81783b999b8ef02461f6931492eb933973577a */tmp/tmp.tCM2F28smO/cvin-sandbox/traces/i2i_O1_ERC1056_1780620182135.jsonl
+36811c6c6b8f0d89f18346a1ee81783b999b8ef02461f6931492eb933973577a *sandbox/cvin-sandbox-v1.1/traces/i2i_O1_ERC1056_1780620182135.jsonl
+"fn":"createDID", gasUsed:"178935"
+"fn":"createDID", gasUsed:"161835"
+"fn":"createDID", gasUsed:"161823"
+"fn":"issueCredential", gasUsed:"130163"
+"fn":"issueCredential", gasUsed:"130163"
+"fn":"createPresentation", gasUsed:"62441"
+--- fingerprint:
+PRESENT contracts/interfaces/IMinimalSSI.sol
+PRESENT contracts/interfaces/ISetA.sol
+PRESENT contracts/interfaces/ISetB.sol
+PRESENT contracts/interfaces/ISetC.sol
+PRESENT BUILD_DIRECTIONS/BUILD_PLAN.md
+PRESENT docs/FINDINGS.md
+PRESENT docs/METHODOLOGY.md
+ABSENT  cvin-v6
+F-ids in trace: F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12 
+METHODOLOGY twin: byte-identical
+--- secret scan (32-hex, 64-hex excl txHash, mnemonic) on repo sandbox:
+scan done
+---- exit code: 0 ----

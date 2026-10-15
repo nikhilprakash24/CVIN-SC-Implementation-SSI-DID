@@ -1,0 +1,17 @@
+step     : 05_compile_compiler_truth
+utc      : 2026-10-15T11:13:06Z
+command  : npx hardhat clean && npx hardhat compile && node /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/probe.js
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify/sandbox/cvin-sandbox-v1.1
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+Compiled 12 Solidity files successfully (evm target: paris).
+npm solc package.json version = 0.8.37
+solc.version()               = 0.8.37+commit.f401782d.Emscripten.clang
+soljson.js sha256            = 221d7a667378b5068d913e75fe092507e061363cd1d23b64c49ae82febabad4c
+true 0.8.24 release sha256   = 11b054b55273ec55f6ab3f445eb0eb2c83a23fed43d10079d34ac3eabe6ed8b1
+build-info 3ab9145a284571cac5c489542045803e.json solcVersion(label) = 0.8.24 | solcLongVersion(label) = solc-js 0.8.24 (local)
+O1_ERC1056 output metadata compiler.version = 0.8.37+commit.f401782d
+deployedBytecode CBOR "solc" bytes = 000825 => v0.8.37
+---- exit code: 0 ----

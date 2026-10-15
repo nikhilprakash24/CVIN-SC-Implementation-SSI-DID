@@ -1,0 +1,54 @@
+step     : 01_sha256sums
+utc      : 2026-10-15T11:11:56Z
+command  : sha256sum -c SHA256SUMS > /tmp/xv_s.txt 2>&1; rc=$?; grep -v ": OK$" /tmp/xv_s.txt; echo "lines OK: $(grep -c ": OK$" /tmp/xv_s.txt)"; echo "sha256sum rc=$rc"; echo "--- files tracked but not in SHA256SUMS:"; git ls-files | grep -v "^SHA256SUMS$" | sed "s|^|./|" | sort > /tmp/xv_g; awk "{print \$2}" SHA256SUMS | sort > /tmp/xv_m; comm -23 /tmp/xv_g /tmp/xv_m; echo "--- listed but not tracked:"; comm -13 /tmp/xv_g /tmp/xv_m; git log --oneline -1 -- SHA256SUMS; exit $rc
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+./BUILD_PLAN.md: FAILED
+./STATUS.md: FAILED
+sha256sum: ./sandbox/cvin-sandbox-v1.1/MISSING.md: No such file or directory
+./sandbox/cvin-sandbox-v1.1/MISSING.md: FAILED open or read
+sha256sum: WARNING: 1 listed file could not be read
+sha256sum: WARNING: 2 computed checksums did NOT match
+lines OK: 238
+sha256sum rc=1
+--- files tracked but not in SHA256SUMS:
+./handoff/CLAUDE_CODE_HANDOFF_v1-1.md
+./sandbox/cvin-sandbox-v1.1/BUILD_DIRECTIONS/BUILD_LOG.md
+./sandbox/cvin-sandbox-v1.1/BUILD_DIRECTIONS/BUILD_PLAN.md
+./sandbox/cvin-sandbox-v1.1/CLAUDE.md
+./sandbox/cvin-sandbox-v1.1/README.md
+./sandbox/cvin-sandbox-v1.1/contracts/implementations/O1_ERC1056.sol
+./sandbox/cvin-sandbox-v1.1/contracts/implementations/O2_ERC721.sol
+./sandbox/cvin-sandbox-v1.1/contracts/implementations/O3_ERC725.sol
+./sandbox/cvin-sandbox-v1.1/contracts/implementations/O4_ERC725xy.sol
+./sandbox/cvin-sandbox-v1.1/contracts/implementations/O5_ERC1155.sol
+./sandbox/cvin-sandbox-v1.1/contracts/implementations/O6_ERC4337.sol
+./sandbox/cvin-sandbox-v1.1/contracts/implementations/O7_ERC8004.sol
+./sandbox/cvin-sandbox-v1.1/contracts/implementations/O8_LFDT.sol
+./sandbox/cvin-sandbox-v1.1/contracts/interfaces/IMinimalSSI.sol
+./sandbox/cvin-sandbox-v1.1/contracts/interfaces/ISetA.sol
+./sandbox/cvin-sandbox-v1.1/contracts/interfaces/ISetB.sol
+./sandbox/cvin-sandbox-v1.1/contracts/interfaces/ISetC.sol
+./sandbox/cvin-sandbox-v1.1/docs/ARCHITECTURE.md
+./sandbox/cvin-sandbox-v1.1/docs/BRINGUP.md
+./sandbox/cvin-sandbox-v1.1/docs/FINDINGS.md
+./sandbox/cvin-sandbox-v1.1/docs/METHODOLOGY.md
+./sandbox/cvin-sandbox-v1.1/docs/fig_gate_pipeline.png
+./sandbox/cvin-sandbox-v1.1/docs/fig_solution_path_map.png
+./sandbox/cvin-sandbox-v1.1/explorer/README.md
+./sandbox/cvin-sandbox-v1.1/hardhat.config.js
+./sandbox/cvin-sandbox-v1.1/package-lock.json
+./sandbox/cvin-sandbox-v1.1/package.json
+./sandbox/cvin-sandbox-v1.1/scenarios/run_i2i.js
+./sandbox/cvin-sandbox-v1.1/test/compliance.js
+./sandbox/cvin-sandbox-v1.1/traces/SCHEMA.md
+./sandbox/cvin-sandbox-v1.1/traces/i2i_O1_ERC1056_1780620182135.jsonl
+./verification/2026-10-15_G0_bringup/G0_hardhat_test.txt
+./verification/2026-10-15_G0_bringup/README.md
+--- listed but not tracked:
+./sandbox/cvin-sandbox-v1.1/MISSING.md
+2de795c Set canonical remote nikhilprakash-cvin2/cvin-sc; add VERSIONING, SISTER_REPOS, VERSION 0.8.0, Claude Code handoff v1.0
+---- exit code: 1 ----

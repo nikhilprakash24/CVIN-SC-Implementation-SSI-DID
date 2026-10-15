@@ -1,0 +1,12 @@
+step     : 04_npm_ci
+utc      : 2026-10-15T11:12:33Z
+command  : npm ci --ignore-scripts --no-audit --no-fund 2>&1 | grep -v "npm warn deprecated"; echo "git status after ci:"; git status --short
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify/sandbox/cvin-sandbox-v1.1
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+
+added 643 packages in 30s
+git status after ci:
+---- exit code: 0 ----

@@ -1,0 +1,24 @@
+step     : 10_control_0835_caret_latest_at_trace_date
+utc      : 2026-10-15T11:14:50Z
+command  : set -e; (cd /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/solc0835 && npm pack solc@0.8.35 --silent && tar xzf solc-0.8.35.tgz); sha256sum /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/solc0835/package/soljson.js; cp node_modules/solc/soljson.js /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/soljson-0837.bak; cp /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/solc0835/package/soljson.js node_modules/solc/soljson.js; echo 'scratch-only swap: soljson.js <- npm solc@0.8.35 (caret-latest on 2026-06-05)'; npx hardhat clean; npx hardhat compile; node /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/probe.js | sed -n '2p;6,7p'; npx hardhat test | grep -E 'passing|failing'; IMPL=O1_ERC1056 npx hardhat run scenarios/run_i2i.js | tail -1; NEW=$(ls -t traces/i2i_O1_ERC1056_*.jsonl | head -1); mv $NEW /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/evidence-staging/XV2_hub_a352_S1_0835_$(basename $NEW); node /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/gascmp.js traces/i2i_O1_ERC1056_1780620182135.jsonl /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/evidence-staging/XV2_hub_a352_S1_0835_$(basename $NEW) | grep -E 'createPresentation|seq'; echo '--- restore 0.8.37'; cp /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/soljson-0837.bak node_modules/solc/soljson.js; sha256sum node_modules/solc/soljson.js; npx hardhat clean; npx hardhat compile; node /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/probe.js | sed -n 7p
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify/sandbox/cvin-sandbox-v1.1
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+solc-0.8.35.tgz
+fa4345d648d9a09c6601ffc978e78e9f5267b54e6d91e8f8c473f44c0c16323b */c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/solc0835/package/soljson.js
+scratch-only swap: soljson.js <- npm solc@0.8.35 (caret-latest on 2026-06-05)
+Compiled 12 Solidity files successfully (evm target: paris).
+solc.version()               = 0.8.35+commit.47b9dedd.Emscripten.clang
+O1_ERC1056 output metadata compiler.version = 0.8.35+commit.47b9dedd
+deployedBytecode CBOR "solc" bytes = 000823 => v0.8.35
+  12 passing (1s)
+Trace written: traces/i2i_O1_ERC1056_1792062916498.jsonl (22 entries, 12/12 functions)
+seq | fn | fnId | identity | i2i_O1_ERC1056_1780620182135.jsonl | XV2_hub_a352_S1_0835_i2i_O1_ERC1056_1792062916498.jsonl | delta(last-first)
+15 | createPresentation | F8 | IdentityA | 62441 | 62429 | -12
+--- restore 0.8.37
+221d7a667378b5068d913e75fe092507e061363cd1d23b64c49ae82febabad4c *node_modules/solc/soljson.js
+Compiled 12 Solidity files successfully (evm target: paris).
+deployedBytecode CBOR "solc" bytes = 000825 => v0.8.37
+---- exit code: 0 ----

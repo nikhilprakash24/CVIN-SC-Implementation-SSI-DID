@@ -1,0 +1,11 @@
+step     : 12_solc_sweep_deterministic
+utc      : 2026-10-15T11:19:48Z
+command  : bash /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/sweepdet.sh
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify/sandbox/cvin-sandbox-v1.1
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+Deterministic: crypto.randomBytes stubbed to 0xab-fill via --require /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/stubrand.js (fixes F8 challenge calldata)
+Could not determine Node.js install directory
+---- exit code: 1 ----

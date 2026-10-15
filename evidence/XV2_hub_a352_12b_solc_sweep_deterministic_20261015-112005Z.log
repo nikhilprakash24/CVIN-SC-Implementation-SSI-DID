@@ -1,0 +1,20 @@
+step     : 12b_solc_sweep_deterministic
+utc      : 2026-10-15T11:20:05Z
+command  : bash /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/sweepdet.sh
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify/sandbox/cvin-sandbox-v1.1
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+Deterministic: crypto.randomBytes stubbed to 0xab-fill via node --require (hardhat cli.js invoked directly) /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/stubrand.js (fixes F8 challenge calldata)
+npm solc@0.8.24 | metadata=0.8.24+commit.e11b9ed9 | createPresentation=62458 | tx rows differing from committed trace=1
+npm solc@0.8.24 | metadata=0.8.24+commit.e11b9ed9 | createPresentation=62458 | tx rows differing from committed trace=1
+npm solc@0.8.25 | metadata=0.8.25+commit.b61c2a91 | createPresentation=62458 | tx rows differing from committed trace=1
+npm solc@0.8.26 | metadata=0.8.26+commit.8a97fa7a | createPresentation=62441 | tx rows differing from committed trace=0
+npm solc@0.8.30 | metadata=0.8.30+commit.73712a01 | createPresentation=62441 | tx rows differing from committed trace=0
+npm solc@0.8.35 | metadata=0.8.35+commit.47b9dedd | createPresentation=62441 | tx rows differing from committed trace=0
+npm solc@0.8.36 | metadata=0.8.36+commit.8a079791 | createPresentation=62441 | tx rows differing from committed trace=0
+npm solc@0.8.37 | metadata=0.8.37+commit.f401782d | createPresentation=62441 | tx rows differing from committed trace=0
+npm solc@0.8.37 | metadata=0.8.37+commit.f401782d | createPresentation=62441 | tx rows differing from committed trace=0
+restored: deployedBytecode CBOR "solc" bytes = 000818 => v0.8.24
+---- exit code: 0 ----
