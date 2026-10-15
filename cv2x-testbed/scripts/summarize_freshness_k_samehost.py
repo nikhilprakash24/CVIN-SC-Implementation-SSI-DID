@@ -146,7 +146,9 @@ def summarize_run(run: Dict[str, Any], load: Optional[Dict[str, Any]], rep: int,
         'refresh_rpc_median': {k: by_k[k].get('refresh_rpc_median') for k in KS if k in by_k},
         't_chain_probe_direct_ms': d.get('t_chain_probe_direct_ms'),
         't_chain_one_call_ms': d.get('t_chain_one_call_ms'),
-        'load': load, 'load1_max': lmax,
+        'load': ({k: v for k, v in load.items() if k != 'samples'} if load else None), 'load1_max': lmax,
+        'foreign_cpu_mean': (load or {}).get('foreign_cpu_mean'),
+        'foreign_cpu_max': (load or {}).get('foreign_cpu_max'),
         'load_exceeded': (lmax is not None and lmax > LOAD_LIMIT),
         'staleness': staleness_check(run),
         **c,
@@ -286,16 +288,20 @@ def write_md(path: str, s: Dict[str, Any]):
     a(f"- Registry bytecode sha256: {', '.join(s['registry_bytecode_sha256'])}")
     a(f"- All result files from a clean tree (git_dirty false): {s['all_git_clean']}\n")
     a('## Per replicate\n')
-    a('| rep | mode | commit | load1 start / end / max sampled | t_local | t_chain | P*(0.5) k=1 / 5 / 25 / ∞ '
-      '| knee (P*(0.5)=100) | refresh RPCs | staleness ≤ k−1 (= prediction) |')
-    a('|---:|---|---|---|---:|---:|---|---|---:|---|')
+    a("load1 = /proc/loadavg 1-min value; it includes this replicate's own node + Python (≈1 CPU). Foreign CPU = "
+      'CPUs busy outside this replicate (all busy jiffies minus the :8562 node and the experiment), mean / max of '
+      f'2 s samples; r1 predates that sampler. **>{LOAD_LIMIT}** marks load1 above {LOAD_LIMIT}.\n')
+    a('| rep | mode | commit | load1 start / end / max sampled | foreign CPU mean / max | t_local | t_chain '
+      '| P*(0.5) k=1 / 5 / 25 / ∞ | knee (P*(0.5)=100) | refresh RPCs | staleness ≤ k−1 (= prediction) |')
+    a('|---:|---|---|---|---|---:|---:|---|---|---:|---|')
     for r in s['replicates']:
         ld = r['load'] or {}
         flag = ' **>1.5**' if r['load_exceeded'] else ''
         ps = ' / '.join(str(r['per_k'][k]['P*(0.5)']) for k in KS)
         st = r['staleness']
         a(f"| {r['replicate']} | {r['mode']} | `{r['git_commit']}` | {f3(ld.get('load1_start'), 2)} / "
-          f"{f3(ld.get('load1_end'), 2)} / {f3(ld.get('load1_max_sampled'), 2)}{flag} | {r['t_local_ms']:.3f} | "
+          f"{f3(ld.get('load1_end'), 2)} / {f3(ld.get('load1_max_sampled'), 2)}{flag} | "
+          f"{f3(r['foreign_cpu_mean'], 2)} / {f3(r['foreign_cpu_max'], 2)} | {r['t_local_ms']:.3f} | "
           f"{r['t_chain_ms']:.3f} | {ps} | {r['knee_text']} | {r['refresh_rpc_median'].get('1')} | "
           f"{'yes' if st['all_within_bound'] else 'NO'} ({'yes' if st['all_match_prediction'] else 'NO'}), "
           f"{st['finite_trials']} trials |")
