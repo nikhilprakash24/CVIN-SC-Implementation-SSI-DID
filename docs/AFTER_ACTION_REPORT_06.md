@@ -1,6 +1,6 @@
 # After-Action Report 06 — Testing suite & results organisation, Phases 0–1 (2026-10-15)
 
-**Opened:** at the start of the pass. **Status:** OPEN (closed at the end of this pass; see §Phase log).
+**Opened:** at the start of the pass. **Status:** CLOSED 2026-10-15; Phases 0 and 1 done under defaults; Phase 2 waits on the filled sheet.
 **Input:** `docs/planning/TESTING_SUITE_RESULTS_PLAN.md` (TSR Plan v1.0) and its second-pass sheet. The author has not yet filled the sheet; this pass runs **under the sheet's stated defaults** (D-01 a, D-02 a, D-03 a, D-04 c, D-07 c, D-10 a, D-11 a, D-16 a) and takes no author decision (D-20 … D-32 untouched).
 **Base:** `ef2c851` on `claude/testing-suite-organization-z5j7dc`. Standing rules S1–S13 apply; no test skipped or weakened; author-attributed commits.
 
@@ -17,10 +17,10 @@
 | Phase | Commit | Result |
 |---|---|---|
 | Open | — | fresh container: `npm ci`, `hardhat compile` (47 files), Python deps installed unpinned (as CI) |
-| 0 suites | — | Hardhat **369 / 23 pending** (13.7 s); Python **358 passed, 0 skipped** (11.4 s, node 8548 + MOBI artifacts, as CI); use cases **12/12**; checker **94.3 %**. All four match `HANDBACK_2026-10-04.md` §2 |
-| 0 producers | — | `benchmark_gas.js`: **0/55 cells changed** (date field only; restored). Harness re-run: HARNESS_LOG |
-| 0 quarantine | — | `sensitivity.*` and the July `w3c_compliance.json` moved; checker output of this pass placed at `4_comparison-framework/results/w3c_compliance.json` (94.3 %, unstamped) |
-| 1 registers | — | `build_register.py` v0: **ROWS rows** (mocha MOCHA, pytest PYTEST, script SCRIPT, harness 360); 0 unmapped after four rule iterations; UNTAGGED untagged (expected: tags are Phase 3). `results_register.csv` 19 rows; `claims.csv` 39 rows mirroring register #1–#39 |
+| 0 suites | `a01b5de` | Hardhat **369 / 23 pending** (13.7 s); Python **358 passed, 0 skipped** (11.4 s, node 8548 + MOBI artifacts, as CI); use cases **12/12**; checker **94.3 %**. All four match `HANDBACK_2026-10-04.md` §2 |
+| 0 producers | `a01b5de` | `benchmark_gas.js`: **0/55 cells changed** (date field only; restored). Harness re-run: `2026-10-15T05-03-01Z_ef2c851` promoted to `latest`; contracts tree = HEAD; **0/192 crud cells × 11 exact fields changed**, lifecycle totals unchanged, frontier unchanged; latency moved (different host). ≈ 55 min on this 4-vCPU host (the handback's ≈ 4 min was on a faster host) |
+| 0 quarantine | `a01b5de` | `sensitivity.*` and the July `w3c_compliance.json` moved; checker output of this pass placed at `4_comparison-framework/results/w3c_compliance.json` (94.3 %, unstamped) |
+| 1 registers | `a01b5de` | `build_register.py` v0: **1,504 rows** (mocha 679, pytest 378, script 87, harness 360); 0 unmapped after four rule iterations; 603 untagged (expected: tags are Phase 3). `results_register.csv` 19 rows; `claims.csv` 39 rows mirroring register #1–#39 |
 
 ## Decisions taken in this pass (reversible; recorded for the sheet)
 

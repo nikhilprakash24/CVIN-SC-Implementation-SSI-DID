@@ -1,6 +1,6 @@
 # Coverage Matrix (generated; do not edit)
 
-Built by `tools/testing/build_register.py` from 1504 register rows. Cells: `T<n>` = n tests/measurements with an asserting outcome · `N` = n/a, no primitive (declared) · `·` = no row (a gap until Phase 2 triages it as G/P/X). Harness cells (classes G, L) come from run `2026-10-04T09-50-29Z_0eef6af`; all other cells from parsed test titles with the heuristic rules in `tools/testing/mapping_rules.json` (Phase 1 v0; hand review in Phase 2; explicit tags replace the heuristics in Phase 3).
+Built by `tools/testing/build_register.py` from 1504 register rows. Cells: `T<n>` = n tests/measurements with an asserting outcome · `N` = n/a, no primitive (declared) · `·` = no row (a gap until Phase 2 triages it as G/P/X). Harness cells (classes G, L) come from run `2026-10-15T05-03-01Z_ef2c851`; all other cells from parsed test titles with the heuristic rules in `tools/testing/mapping_rules.json` (Phase 1 v0; hand review in Phase 2; explicit tags replace the heuristics in Phase 3).
 
 ## Class F — Functional
 
