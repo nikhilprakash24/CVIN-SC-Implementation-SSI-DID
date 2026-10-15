@@ -222,3 +222,12 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `1_blockchain-identity/scripts/infrastructure_gas.js`; `4_comparison-framework/results/infrastructure_gas.json`, `infrastructure_gas_runs/` | I4 over declared seeds, inputs recorded; runs of record at `a950cdf` | B1 |
 | `docs/STYLE_AND_RIGOUR_GUIDE.md` 1.1.10; `docs/MEASUREMENT_CONDITIONS.md` §1, #47 | the rule; the re-stated row | B1 |
 
+
+## Pass 18 — WM-2 B2 gas charter; result cards (2026-10-15)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_18.md` | plan, log, closing | standing rule |
+| `docs/testing/gas_charter.py`, `GAS_CHARTER.md`; `docs/MEASUREMENT_CONDITIONS.md` §5.A (gas class row) | class-G charter; varying harness cells root-caused; V gas rows classified | B2 |
+| `docs/figures/make_result_cards.py`, `result_cards.html` | every V register row as a card, checked against the register | the author's request |
+| `.github/workflows/test-contracts.yml` | both checks in the document step | CI |
+| `docs/PLAN_WM-2.md`, `docs/HANDBACK_2026-10-14.md` §10 | B2 done; next C3 | records |
