@@ -94,6 +94,7 @@ jobs:
         python3 docs/phase2/build_phase2.py --check
         python3 docs/phase2/focus/make_focus_figures.py --check
         python3 docs/phase2/focus/F3_interaction_modes/classify_modes.py --check
+        python3 docs/testing/gas_charter.py --check
 
     - name: Run tests
       shell: bash

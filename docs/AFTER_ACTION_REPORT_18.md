@@ -16,3 +16,20 @@ The harness code stays frozen until A6 (N-19). No new measurement is made in thi
 
 ## 2. Execution log
 - 2026-10-15 — report opened.
+- **B2, gas charter.** `docs/testing/gas_charter.py` writes `docs/testing/GAS_CHARTER.md` from the raw rows of run of
+  record `7a9a996` and from the register. Findings:
+  - **27 of 110** crud tx cells vary in total gas across their 36 iterations, not 14. The harness's `gasDeterministic`
+    flag covers execution gas only and marks 14; the other 13 vary in calldata only.
+  - Causes: calldata zero bytes 24 cells; execution path (8 or 16 EVM steps) 6; value-dependent cost (2–5 gas) 4;
+    first-call state 4 (erc721 C1 and U1 and lsp8 U1 at 2,800 gas; lsp8 C1 at 17,100 gas, one more new slot).
+  - **A correction to my own first draft.** It called the inputs random and the fix seeding. The harness has no random
+    input: keys and credential hashes are keccak-derived with zero bytes skipped, and signing is deterministic. Cells
+    reproduce run to run; they vary from iteration to iteration because each iteration uses a new key, and the values
+    derived from it are not filtered for zero bytes. The class is G-mode (reproducible mode, range beside it), and the
+    fix at A6 is to extend the zero-byte rule, not to seed.
+  - The plan's guess "address-dependent storage" is not borne out: only lsp8 C1 changes its storage writes, and that
+    is first-call state (checked over `sstoreCount` and `zeroToNonzeroSstores` of every varying cell).
+  - The two execution mechanisms are not traced to an opcode; the charter says so.
+  - 20 V register rows that report gas are classified. The check fails when a V gas row has no class, or a class
+    names a missing row; both shown to fire by deleting #29 and adding #999 in a test import.
+  - Register §5.A gained a "Gas class" row; the CI document step runs `gas_charter.py --check`; plan B2 marked done.

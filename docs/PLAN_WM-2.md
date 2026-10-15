@@ -42,7 +42,7 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 | Step | Work | Gate |
 |---|---|---|
 | B1 | **done (pass 17, report 17):** incidental randomness seeded (L1 99/99 cells and demos 1,749/1,752 steps identical across seeded runs; 3 MOBI steps declared timestamp-dependent); I4 over declared seeds 1–30, reproducible; rule in guide 1.1.10; #47 re-stated. N-18 and the I4 range: seed the random inputs of the L1 mechanism tests and of `infrastructure_gas.js`; or, where a seeded input would hide a real cost, report min–max by rule | two runs byte-identical where seeded; rule written |
-| B2 | Charter for class G (gas): exact vs range, the 14 non-deterministic harness cells root-caused (calldata zero bytes, address-dependent storage) | every gas row says exact or range |
+| B2 | **done (pass 18, report 18):** `docs/testing/GAS_CHARTER.md`, generated and CI-checked; 27 varying cells root-caused (the harness flag marks 14, execution only); 20 V gas rows classified; "address-dependent storage" not borne out. Charter for class G (gas): exact vs range, the 14 non-deterministic harness cells root-caused (calldata zero bytes, address-dependent storage) | every gas row says exact or range |
 | B3 | Charter for class L (latency): within-run comparison, host and library record, N ≥ 30 or "descriptive only" | every latency row conforms or is relabelled |
 
 ### C. Carried fixes from review-2, and the infrastructure verifier. *Owner: SSI/W3C specialist; contracts engineer; V2X specialist; security specialist.*
@@ -99,6 +99,7 @@ nine-standard contract set beyond C2, no chapter prose beyond the sentences D1 f
 
 ## 7. Revisions
 - 2026-10-10 (initial) — written before the WM-1 audit.
+- 2026-10-15 (pass 18) — B2 done (report 18). Next: C3.
 - 2026-10-14 (pass 17) — B1 done (report 17). Next: B2.
 - 2026-10-14 (pass 16) — C0 done (report 16). Phase 2 focus work alongside (`docs/phase2/PHASE2_PROGRAMME.md`). Next: B1.
 - 2026-10-14 (pass 15) — A4 done. The security-matrix producer is `securityScenarios.test.js` (A2 had registered `attackHarness.js`, which left the scenario file out of scope; corrected). Phase 2 opened beside WM-2 (`docs/phase2/`). Source: after-action report 15.

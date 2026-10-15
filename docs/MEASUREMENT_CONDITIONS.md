@@ -212,6 +212,7 @@ _Revised in review 02 (H-1, H-3, H-10)._
 | Clock | `process.hrtime.bigint()`; latency = send → last receipt, in-process | code |
 | Tracing | `debug_traceTransaction` (memory/stack/storage disabled) after the receipt; does not affect measured gas or latency | `meta.conditions.trace` |
 | Reproducibility | Two runs of one commit give byte-identical `crud_*` (except latency), `lifecycle_*`, `scale` and `batch` tables (checked on three runs of `6620ac7` and re-confirmed on `59405ff`) | — |
+| Gas class | Tables quote the **mode** of a cell's 36 iterations. 27 of 110 crud tx cells vary from iteration to iteration (24 through calldata zero bytes in derived values, 4 first-call state, the rest execution path or value-dependent cost); the harness's `gasDeterministic` flag covers execution gas only and marks 14 of them. Each cell's class and cause: `docs/testing/GAS_CHARTER.md` (WM-2 B2, 2026-10-15) | `crud.json` `gasUsedRange` |
 
 ### 5.B What each reported quantity means
 
