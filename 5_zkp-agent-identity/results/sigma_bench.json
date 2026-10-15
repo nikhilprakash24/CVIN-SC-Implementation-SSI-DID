@@ -1,0 +1,103 @@
+{
+ "condition": "M0 (in-process CPython, pure-Python secp256k1; not constant time; one warm-up discarded)",
+ "run": {
+  "commit": "9d26c2a",
+  "code_clean": false,
+  "tree_clean": false,
+  "host": {
+   "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
+   "machine": "x86_64",
+   "cpus": 4,
+   "processor": "x86_64"
+  },
+  "python": "3.13.16",
+  "at": "2026-10-15T05:13:32+00:00",
+  "seed_env": null
+ },
+ "timing": {
+  "schnorr_prove": {
+   "n": 30,
+   "median_ms": 4.5866355,
+   "min_ms": 4.354321,
+   "max_ms": 5.04676
+  },
+  "schnorr_verify": {
+   "n": 30,
+   "median_ms": 4.4985265000000005,
+   "min_ms": 4.418668,
+   "max_ms": 4.82392
+  },
+  "pedersen_commit": {
+   "n": 30,
+   "median_ms": 2.650243,
+   "min_ms": 2.601669,
+   "max_ms": 3.454911
+  },
+  "threshold_prove_6bit": {
+   "n": 30,
+   "median_ms": 58.4815635,
+   "min_ms": 56.322352,
+   "max_ms": 83.264434
+  },
+  "threshold_verify_6bit": {
+   "n": 30,
+   "median_ms": 63.3916945,
+   "min_ms": 58.320435,
+   "max_ms": 86.55686
+  },
+  "merkle_verify_16_leaves": {
+   "n": 30,
+   "median_ms": 0.004753,
+   "min_ms": 0.00464,
+   "max_ms": 0.019702
+  },
+  "keccak256_64B": {
+   "n": 30,
+   "median_ms": 0.4848305,
+   "min_ms": 0.423904,
+   "max_ms": 0.78738
+  }
+ },
+ "operation_counts": {
+  "schnorr_prove": {
+   "field_mul": 7573,
+   "field_inv": 2,
+   "point_add": 251,
+   "point_double": 507
+  },
+  "schnorr_verify": {
+   "field_mul": 7268,
+   "field_inv": 3,
+   "point_add": 233,
+   "point_double": 504
+  },
+  "pedersen_commit": {
+   "field_mul": 4077,
+   "field_inv": 3,
+   "point_add": 139,
+   "point_double": 263
+  },
+  "threshold_prove_6bit": {
+   "field_mul": 92243,
+   "field_inv": 45,
+   "point_add": 3083,
+   "point_double": 6105
+  },
+  "threshold_verify_6bit": {
+   "field_mul": 92623,
+   "field_inv": 56,
+   "point_add": 3097,
+   "point_double": 6121
+  }
+ },
+ "sizes_bytes": {
+  "schnorr_proof": 65,
+  "threshold_proof_6bit": 1362,
+  "pedersen_commitment": 33,
+  "merkle_path_16_leaves": 128
+ },
+ "hex_chars": {
+  "schnorr_proof": 148,
+  "threshold_proof_6bit": 3148
+ }
+}
