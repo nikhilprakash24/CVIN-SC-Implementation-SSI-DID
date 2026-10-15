@@ -55,3 +55,19 @@ The harness code stays frozen until A6 (N-19). No new measurement is made in thi
   ±12 gas (claims, creation, vin-linkage). These are the three `attestEvent` steps already declared
   timestamp-dependent in pass 17. Everything else that changed is timings and stamps. The dashboard snapshot and page,
   the presentation report and the result cards were regenerated afterwards, and all ten document checks pass.
+
+## 3. Closing
+The pass delivered every step of §1. **CI 8 of 8 green on `aba1d7c`**, including the two new document checks
+(`gas_charter.py --check`, `make_result_cards.py --check`).
+
+**B2 is done.** Every gas figure now has a class, and the harness's varying cells are root-caused from its raw rows.
+The step's premise was wrong twice, and both are corrected in the charter. The count is 27 varying cells, not 14,
+because the harness flag sees execution gas only. The cause is per-iteration deterministic inputs, not random inputs
+or address-dependent storage. I also had to correct my own first draft, which assumed randomness.
+
+**The result cards** give the register a second reading form beside the results board. They are held to the
+register by a check rather than copied from it by hand.
+
+**Next:**
+- WM-2 C3: #32 and #37 back to back on one host.
+- The author's decisions P2-D7 to P2-D10, D-1 to D-15, and N-23 remain open.
