@@ -59,7 +59,7 @@ sys.path.insert(0, ROOT)
 
 from identity.standard.pki_identity import VehiclePKIIdentity, VehiclePKI_CA  # noqa: E402
 from identity.centralized_provider import CentralizedIdentityProvider  # noqa: E402
-from identity.freshness import FreshnessPolicy  # noqa: E402
+from identity.freshness import FreshnessPolicy, REASON_REVOKED  # noqa: E402
 
 PSEUDONYM_POOL = 20          # pseudonym certificates issued at PKI registration (provider default)
 FUND_WEI = 10 ** 18          # 1 ETH per vehicle account (local chain provisioning, untimed)
@@ -122,6 +122,16 @@ class StandardPKIAdapter:
     def verify_message(self, signed_message: Dict):
         # The verifier's CRL copy is the CA's live revocation set (no copy per call).
         return self.peer.verify_message(signed_message, self.ca.certificate_revocation_list)
+
+    # The verifier's rejection reason (identity.freshness REASON_*), read and
+    # reset only by the untimed sanity checks.
+    @property
+    def last_reject_reason(self):
+        return self.peer.last_reject_reason
+
+    @last_reject_reason.setter
+    def last_reject_reason(self, value):
+        self.peer.last_reject_reason = value
 
     def revoke_credential(self, vehicle_id: str, reason: str = "") -> bool:
         v = self.vehicles[vehicle_id]
@@ -428,7 +438,7 @@ def run_backend(backend: Backend, n: int, warmup: int, run_tag: str) -> Dict[str
     altered = dict(prov.sign_message(v_sign, make_bsm(10)))
     altered['timestamp'] = datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
     sanity = {
-        'verify_after_revocation_is_false': bool(prov.verify_message(signed_before)[0]) is False,
+        'verify_after_revocation_is_false': rejected_for_revocation(prov, signed_before),
         'verify_tampered_message_is_false': bool(prov.verify_message(tampered)[0]) is False,
         'verify_genuine_message_is_true': genuine_ok,
         'verify_replayed_message_is_false': replay_rejected,
@@ -436,6 +446,21 @@ def run_backend(backend: Backend, n: int, warmup: int, run_tag: str) -> Dict[str
     }
     print(f"  sanity: {sanity}")
     return {'operations': results, 'sanity': sanity}
+
+
+def rejected_for_revocation(prov, signed_message: Dict) -> bool:
+    """True only if verify rejects `signed_message` AND the reason is revocation.
+
+    Review 02 Pass 3 Low: `verify(...) is False` alone also holds when the
+    packet is rejected as stale (ERC-1056 checks freshness before revocation),
+    so a > 1 s gap between signing and this check would have "passed" the
+    revocation sanity check without revocation being enforced. The reason is
+    read from the provider's `last_reject_reason`, which only rejection paths
+    write (the timed accept path is unchanged).
+    """
+    prov.last_reject_reason = None
+    ok = bool(prov.verify_message(signed_message)[0])
+    return ok is False and prov.last_reject_reason == REASON_REVOKED
 
 
 def _fail(msg: str):
