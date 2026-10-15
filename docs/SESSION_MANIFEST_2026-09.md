@@ -240,3 +240,11 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/MEASUREMENT_CONDITIONS.md` #52; notes on #32 and #37; `docs/testing/check_stamps.py` aggregate | the host comparison | C3 |
 | `docs/figures/make_contribution_record.py`, `contribution_template.html`, `contribution_record.html` | the contribution calendar with sourced evidence | the author's request |
 | `docs/figures/make_result_cards.py` (card #52), `docs/PLAN_WM-2.md`, `docs/HANDBACK_2026-10-14.md` §11 | records | records |
+
+## Pass 21 — WM-2 C1: did:ethr resolution reads the chain (2026-10-15)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_21.md` | plan, defaults, log, closing | standing rule |
+| `2_w3c-ssi-layer/did-resolution/did_resolver.py`; `tests/test_did_resolver_chain.py`; two tests in `mobi-vid/tests/test_mobi_vid_layer.py` | the chain path and its tests (9 of 11 fail on the old code) | C1 |
+| `docs/MEASUREMENT_CONDITIONS.md` (#4, #24 notes), `docs/MOBI_VID_CHECKLIST.md` (VID-R1), `docs/MILESTONE_NEXT.md` (N-24), `docs/PLAN_WM-2.md` | records | C1 |
+| `docs/tdp/requirements.yaml` STD-01, TDP-002, TDP-005 | the one change report 20's guard asked for | coordination |
