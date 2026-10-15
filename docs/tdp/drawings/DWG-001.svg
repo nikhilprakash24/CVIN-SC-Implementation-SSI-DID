@@ -72,7 +72,7 @@
 <circle cx="942" cy="680" r="9" stroke="#7cc9ff" fill="#0f2d5c" stroke-width="1.4"/>
 <text x="942" y="683.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">7</text>
 <text x="144" y="286" font-size="9.5" text-anchor="start" fill="#ffb454" font-weight="normal">register 52 rows: V 34 · S 10 · E 7 · U 1   |   producers of record 20   |   CI jobs 8</text>
-<text x="144" y="196" font-size="9.5" text-anchor="start" fill="#ffb454" font-weight="normal">suites at the last grand run (5cc751b): L1 {'passing': 99, 'failing': 0}  L1+L2 {'passing': 537, 'failing': 0}  L3+L4 {'passed': 342}</text>
+<text x="144" y="196" font-size="9.5" text-anchor="start" fill="#ffb454" font-weight="normal">suites at the last grand run: L1 {'passing': 99, 'failing': 0}  L1+L2 {'passing': 537, 'failing': 0}  L3+L4 {'passed': 342}</text>
 <line x1="46" y1="122" x2="46" y2="746" stroke="#93a9cb" stroke-width="0.8"/>
 <line x1="42" y1="122" x2="50" y2="122" stroke="#93a9cb" stroke-width="0.8"/>
 <line x1="42" y1="746" x2="50" y2="746" stroke="#93a9cb" stroke-width="0.8"/>
@@ -148,7 +148,7 @@
 <text x="44" y="826.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">2. P0 has no SUMO run of record (SC-22): every message-path result uses MockMobility (--simulate).</text>
 <text x="44" y="839.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">3. P1 has no radio, MAC or channel model; the back-haul is an in-process bus (register #44-#48 conditions).</text>
 <text x="44" y="851.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">4. P2 gas is M1 (in-process Hardhat, chain 31337); no M2 (public testnet) run exists (N-11).</text>
-<text x="44" y="864.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">5. Counts on P5 and P6 are read from docs/figures/dashboard_snapshot.json (grand run at 5cc751b).</text>
+<text x="44" y="864.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">5. Counts on P5 and P6 are read from docs/figures/dashboard_snapshot.json (the last grand run; its commit is in the snapshot).</text>
 <text x="44" y="876.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">6. Balloon numbers refer to the bill of materials; each item names the directory or file it stands for.</text>
 <text x="1000" y="118" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="bold">BILL OF MATERIALS (balloon → item)</text>
 <rect x="1000" y="126" width="356" height="206" stroke="#e3ecf9" fill="none" stroke-width="0.8" rx="0"/>

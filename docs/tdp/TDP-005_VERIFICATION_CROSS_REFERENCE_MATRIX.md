@@ -9,9 +9,9 @@
 
 | Status | Count | Meaning |
 |---|---|---|
-| VERIFIED | 28 | every evidence row V; files and CI present; threshold met; nothing pending |
+| VERIFIED | 29 | every evidence row V; files and CI present; threshold met; nothing pending |
 | PARTIAL | 7 | some evidence V; at least one row non-V, a threshold unmet, an item missing, or a named trunk item still open |
-| OPEN | 1 | no V evidence |
+| OPEN | 0 | no V evidence |
 
 Register at generation: E 7, S 10, U 1, V 34 (52 rows).
 
@@ -53,7 +53,7 @@ Register at generation: E 7, S 10, U 1, V 34 (52 rows).
 | EVD-02 | Promotion only from a clean run | Test | — | — | 2/2 files | **VERIFIED** | — |
 | EVD-03 | Pre-registration before any run, amendments dated | Inspection | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V), #33 (V), #38 (V) | — | 2/2 files | **VERIFIED** | — |
 | EVD-04 | Generated documents regenerated and checked | Inspection | — | — | 4/4 files; CI step found | **VERIFIED** | — |
-| EVD-05 | Every guard shown to fire | Demonstration | — | — | 2/3 files; CI step MISSING | **OPEN** | missing file: docs/tdp/probe_tdp_checks.sh; CI step not found: probe_tdp_checks.sh |
+| EVD-05 | Every guard shown to fire | Demonstration | — | — | 3/3 files; CI step found | **VERIFIED** | — |
 | EVD-06 | Full suite with no skips | Test | — | — | 2/2 files; CI step found | **VERIFIED** | — |
 
 ## 2. Reverse index: register row → requirements

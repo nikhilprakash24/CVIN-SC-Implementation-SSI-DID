@@ -262,7 +262,7 @@ def dwg_001():
     y5 = y0 + 1 * (h + 6)
     sh.text(x + 84, y5 + 74, f"register {SNAP['register']['rows']} rows: V {reg['V']} · S {reg['S']} · E {reg['E']} · U {reg['U']}   |   producers of record {producers}   |   CI jobs {len(jobs)}", 9.5, color=WARN)
     y6 = y0
-    sh.text(x + 84, y6 + 74, f"suites at the last grand run ({SNAP['tests']['commit']}): L1 {t['L1']['result']}  L1+L2 {t['L1+L2']['result']}  L3+L4 {t['L3+L4']['result']}", 9.5, color=WARN)
+    sh.text(x + 84, y6 + 74, f"suites at the last grand run: L1 {t['L1']['result']}  L1+L2 {t['L1+L2']['result']}  L3+L4 {t['L3+L4']['result']}", 9.5, color=WARN)
     # dependency rule, drawn as a dimension line on the left
     yt, yb = y0, y0 + 7 * (h + 6) - 6
     sh.line(46, yt, 46, yb, DIM, sw=0.8)
@@ -274,7 +274,7 @@ def dwg_001():
         "P0 has no SUMO run of record (SC-22): every message-path result uses MockMobility (--simulate).",
         "P1 has no radio, MAC or channel model; the back-haul is an in-process bus (register #44-#48 conditions).",
         "P2 gas is M1 (in-process Hardhat, chain 31337); no M2 (public testnet) run exists (N-11).",
-        f"Counts on P5 and P6 are read from docs/figures/dashboard_snapshot.json (grand run at {SNAP['tests']['commit']}).",
+        "Counts on P5 and P6 are read from docs/figures/dashboard_snapshot.json (the last grand run; its commit is in the snapshot).",
         "Balloon numbers refer to the bill of materials; each item names the directory or file it stands for.",
     ]
     bom = [(f"{p[0]} {p[1]}", p[3].split(",")[0]) for p in PLANES]

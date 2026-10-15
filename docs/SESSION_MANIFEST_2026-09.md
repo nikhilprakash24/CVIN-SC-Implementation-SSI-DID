@@ -241,6 +241,18 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/figures/make_contribution_record.py`, `contribution_template.html`, `contribution_record.html` | the contribution calendar with sourced evidence | the author's request |
 | `docs/figures/make_result_cards.py` (card #52), `docs/PLAN_WM-2.md`, `docs/HANDBACK_2026-10-14.md` §11 | records | records |
 
+## Pass 20 — Technical Data Package (parallel pass, 2026-10-15)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_20.md` | plan T0-T7, log, closing | standing rule |
+| `docs/tdp/README.md` (TDP-000) | index, conventions, sources for the formats | the author's request: a parallel document set in the engineering register |
+| `docs/tdp/requirements.yaml`, `make_vcrm.py` → `TDP-002_SYSTEM_SPECIFICATION.md`, `TDP-005_VERIFICATION_CROSS_REFERENCE_MATRIX.md` | 36 shall-statements; statuses computed from the register, snapshot, tree and CI | T3 |
+| `docs/tdp/make_blueprints.py` → `drawings/DWG-001..006.svg`; `TDP-004_DESIGN_DESCRIPTION_AND_BLUEPRINTS.md` | six blueprint sheets with title blocks, notes and bills of materials, every number read from a file | T4 |
+| `docs/tdp/make_fmeca.py` → `TDP-006_FMECA.md` | failure-mode worksheet over every logged defect, counts cross-checked with the snapshot | T5 |
+| `docs/tdp/TDP-001_PROGRAM_SUMMARY.md`, `TDP-003_INTERFACE_CONTROL_DOCUMENT.md`, `TDP-007_TEST_AND_EVALUATION_MASTER_PLAN.md`, `TDP-008_CONFIGURATION_BASELINE.md`, `TDP-009_RISK_REGISTER.md` | hand-written documents, every number a V row | T6 |
+| `docs/tdp/TDP-PLAN.md`, `TDP-RUNBOOK.md` | the plan with status and findings; the plan as phases with prompts | T1, T2 |
+| `docs/tdp/probe_tdp_checks.sh`; `.github/workflows/test-contracts.yml`; `docs/testing/stale_numbers.yaml` | the three checks and their probe in CI; the worksheet exempted as a record | T7 |
+| `docs/INDEX.md`, `docs/HANDBACK_2026-10-14.md` section 12 | records | records |
 ## Pass 21 — WM-2 C1: did:ethr resolution reads the chain (2026-10-15)
 | Artifact | What it is | Why |
 |---|---|---|

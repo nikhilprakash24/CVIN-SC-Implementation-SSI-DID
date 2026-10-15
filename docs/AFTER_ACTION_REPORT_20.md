@@ -34,3 +34,76 @@ measures changed); the document checks are run in full.
 
 ## 2. Execution log
 - 2026-10-15 — report opened.
+- **T0.** Report committed first (`854bf3b`); the push was refused because the parallel pass had landed its grand-run
+  commit, so the report was rebased onto it (`ac0dbb9`). Two sessions share the branch for the rest of this pass;
+  every push is preceded by a fetch and rebase, and the generated-document checks are re-run after each rebase.
+- **T3, requirements and matrix.** `docs/tdp/requirements.yaml` holds 36 shall-statements in seven groups (SYS, PRF,
+  SEC, STD, RTV, INF, EVD), each traced to an RQ, a hypothesis, a pre-registration, a threat goal or a rigour rule,
+  each ending with the register's own caveat. `make_vcrm.py` computes the status of each from the register (through
+  the dashboard's own parser), the snapshot (thresholds and pre-registered verdicts), the tree (inspection files) and
+  the workflows (CI steps). First build: 34 VERIFIED, 0 PARTIAL, 1 OPEN. That was wrong in a way the rule allowed:
+  SEC-04 (revoked key under clock skew) read VERIFIED on #32 and #37 although both await the A3b re-run, and SEC-05
+  read VERIFIED on #28 although D54 is open. A `pending` field was added; it caps status at PARTIAL and the build
+  fails if a pending defect is later marked fixed or a pending WM-2 step marked done (shown to fire by naming a fixed
+  defect). Eight requirements carried pending items (A3b, A6, C1, C2, D54, D64); the parallel pass removed C1 from STD-01
+  when WM-2 C1 landed, because the guard asked for it (`7e43ea0`). Close of pass: 29 VERIFIED, 7 PARTIAL, 0 OPEN. Seven V rows are cited by no requirement (#1, #2, #3, #22, #29, #42, #43); they are supporting data and are
+  listed as such in TDP-005 section 2 and TDP-PLAN section 4.
+- **T5, worksheet.** `make_fmeca.py` parses every defect row (66) with the same rules as the dashboard, so the
+  severity-by-status counts are cross-checked against the snapshot and the build fails on a disagreement. The
+  worksheet carries the log's letter and a declared translation to the MIL-STD-1629A class beside it; no rate or
+  criticality number is computed. Ten rows had no path in the Where column ("same", a chapter, a statement); the
+  plane rule in the generator classifies them and leaves none unclassified. The worksheet quotes a defect whose text
+  contains a superseded test count; it is a verbatim record like the defect log it quotes, and is added to the
+  stale-figure checker's history globs for that reason (the hand-written TDP documents stay scanned).
+- **T4, drawings.** `make_blueprints.py` writes six sheets; every number is read from the snapshot, the PKI result
+  file, `producers.json`, the workflows, the threat model's goal table, or source constants (the verifier's depth and
+  value limits, the freshness window and cache size, the rejection reasons, the adapter and provider method names).
+  Rendered to PNG with the installed headless Chromium and inspected at 1400 x 990. Four layout defects found and
+  fixed before commit: station body text overflowing the 108 px boxes on sheets 3 and 5 (sheet 5 re-laid as two rows
+  of four; sheet 3 texts shortened), the adapter operation list running into the bill of materials on sheet 2
+  (wrapped), notes colliding with the title block (wrapped at 150 characters), and the title block's two columns
+  overlapping. Two content corrections: ERC-725xy is not in the security harness and read "0 defended / 0 n/a"
+  (now "not in harness"); the grand-run commit printed on sheet 1 would have changed every pass for no change in
+  content (removed; the counts remain). After the CI workflow gained the TDP checks, `make_blueprints.py --check`
+  failed on the clean tree because sheet 5 reads the document-check list from the workflow; that is the check
+  firing as designed, and the sheet was regenerated (12 document checks listed).
+- **T6, hand-written documents.** TDP-000 (index, conventions, sources), TDP-001 (the eight Heilmeier questions
+  answered from V rows; readiness levels per plane with the reason each next level is withheld; the full-circle
+  statement in one paragraph; what is not claimed), TDP-003 (thirteen interfaces with fields copied from source),
+  TDP-004 (drawing index, the machine in one paragraph, eleven design decisions with their measured consequence),
+  TDP-007 (test architecture with counts, evaluation framework, pre-registration protocol, resources, exams,
+  limits), TDP-008 (configuration items, runs of record with identities, toolchain pins including the two pins that
+  disagree with the runs of record, build and change control), TDP-009 (thirteen risks on the five-by-five scale with
+  triggers, four issues). The stale-figure checker is clean over all of them.
+- **T1, T2.** `TDP-PLAN.md` (objective, principles, work breakdown with status, six findings made while building, what
+  the plan does not do) and `TDP-RUNBOOK.md` (phases 0 to 7 recording what this pass executed so each can be re-run
+  or audited; phases 8 to 12 as follow-on work; each with reads, writes, gate, stop condition and a self-contained
+  prompt under a standing preamble).
+- **T7, CI and probe.** The three `--check` commands are added to the document step of `test-contracts.yml`, and
+  `docs/tdp/probe_tdp_checks.sh` runs as its own step: for each generator it tampers the output, expects `--check` to
+  exit 1, restores, and expects 0. Run locally: all three probes pass. All fourteen document and stamp checks pass
+  locally after regeneration. Records: INDEX row, handback section 12 with four gotchas, session manifest pass 20.
+- **Interaction with the parallel pass (report 21).** Its grand run turned CI red on my first push (the worksheet
+  quoted a superseded test count); it applied the same exemption I had made locally, regenerated DWG-001 after its
+  grand run, and removed C1 from STD-01's pending list when the matrix guard asked for it. The rebase of this pass's
+  closing commit conflicted on the handback, the manifest, the matrix and sheet 1; the shared files keep both
+  passes' sections (handback section 12 is pass 21's, section 13 this pass's), and the generated ones were rebuilt
+  after the rebase. Every document check passed on the rebased tree.
+- **Not done, by scope.** No grand run (nothing it measures changed; the pass adds documents, generators and CI lines
+  only). The CI result of the closing commit could not be read from this session (no GitHub API access); it is to be
+  read by the author or the next session and recorded in the closing commit of this report.
+
+## 3. Closing
+The pass delivered every step of section 1. **CI: not readable from this session**; the closing commit's result is
+recorded by the "Report 20 closed" commit once read.
+
+**The package stands on the register and adds nothing to it.** 36 requirements, 29 verified by V rows with nothing
+pending and 7 partial with their blocking item named; 66 defects on a worksheet whose counts equal the snapshot's;
+six drawings whose every number has a file behind it; nine hand-written documents whose every number has a row.
+
+**What the author decides** (defaults T-a to T-d in section 1 stand until overturned): whether the package name and
+home stay; whether the thesis adapts TDP-002's shall-statements as chapter 3's commitments (runbook phase 10 maps
+them); whether to open the external review of the package (phase 11).
+
+**Next:** runbook phase 1 after C1 lands (requirements maintenance), phase 5 at every regeneration, phases 8 to 12
+when the author chooses. Phase 1 of WM-2 continues in report 21.
