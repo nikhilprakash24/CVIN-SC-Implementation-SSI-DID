@@ -267,6 +267,61 @@ def parse_chain_id(chain: str, did: str) -> int:
                              f"invalid chain id {chain!r} in {did}")
 
 
+_UNSET = object()
+_NO_CACHE = -1.0   # cache_ttl_s value: never cache
+
+# The part of the ERC-1056 EthereumDIDRegistry ABI the resolver reads
+_ERC1056_ABI = [
+    {"type": "function", "name": "identityOwner", "stateMutability": "view",
+     "inputs": [{"name": "identity", "type": "address"}], "outputs": [{"name": "", "type": "address"}]},
+    {"type": "function", "name": "changed", "stateMutability": "view",
+     "inputs": [{"name": "", "type": "address"}], "outputs": [{"name": "", "type": "uint256"}]},
+    {"type": "event", "name": "DIDOwnerChanged", "anonymous": False, "inputs": [
+        {"name": "identity", "type": "address", "indexed": True},
+        {"name": "owner", "type": "address", "indexed": False},
+        {"name": "previousChange", "type": "uint256", "indexed": False}]},
+    {"type": "event", "name": "DIDDelegateChanged", "anonymous": False, "inputs": [
+        {"name": "identity", "type": "address", "indexed": True},
+        {"name": "delegateType", "type": "bytes32", "indexed": False},
+        {"name": "delegate", "type": "address", "indexed": False},
+        {"name": "validTo", "type": "uint256", "indexed": False},
+        {"name": "previousChange", "type": "uint256", "indexed": False}]},
+    {"type": "event", "name": "DIDAttributeChanged", "anonymous": False, "inputs": [
+        {"name": "identity", "type": "address", "indexed": True},
+        {"name": "name", "type": "bytes32", "indexed": False},
+        {"name": "value", "type": "bytes", "indexed": False},
+        {"name": "validTo", "type": "uint256", "indexed": False},
+        {"name": "previousChange", "type": "uint256", "indexed": False}]},
+    # CVIN extension (MOBI ERC1056Registry): terminal identity revocation. Decoded so
+    # that the previousChange walk does not stop at it, and read as deactivation.
+    {"type": "event", "name": "DIDRevoked", "anonymous": False, "inputs": [
+        {"name": "identity", "type": "address", "indexed": True},
+        {"name": "revokedAt", "type": "uint256", "indexed": False},
+        {"name": "previousChange", "type": "uint256", "indexed": False}]},
+]
+_NULL_ADDRESS = "0x" + "0" * 40
+# did/pub/<algorithm>/<purpose>/<encoding> -> verification method type (reference did:ethr rules)
+_ETHR_KEY_TYPES = {
+    "Secp256k1": "EcdsaSecp256k1VerificationKey2019",
+    "Ed25519": "Ed25519VerificationKey2018",
+    "X25519": "X25519KeyAgreementKey2019",
+}
+_B58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+
+
+def _base58(data: bytes) -> str:
+    n = int.from_bytes(data, "big")
+    out = ""
+    while n:
+        n, r = divmod(n, 58)
+        out = _B58[r] + out
+    return "1" * (len(data) - len(data.lstrip(b"\0"))) + out
+
+
+def _bytes32_text(b: bytes) -> str:
+    return b.rstrip(b"\0").decode("utf-8", errors="replace")
+
+
 class DIDResolver:
     """
     Universal DID Resolver for all thesis blockchain identity standards
@@ -276,16 +331,27 @@ class DIDResolver:
     """
 
     def __init__(self, blockchain_provider=None,
-                 cache_ttl_s: Optional[float] = None):
+                 cache_ttl_s: Optional[float] = _UNSET,
+                 registries: Optional[Dict[int, str]] = None):
         """
         Initialize DID Resolver
 
         Args:
-            blockchain_provider: Web3 provider for blockchain lookups
-            cache_ttl_s: cache lifetime in seconds (None = never expires)
+            blockchain_provider: a ``web3.Web3`` instance. With it, did:ethr is
+                resolved from the ERC-1056 registry of the DID's chain (WM-2 C1);
+                without it, did:ethr resolves to the default document of an
+                identity with no registry events, which is NOT read from a chain.
+            cache_ttl_s: cache lifetime in seconds (None = never expires). The
+                default is None without a provider and no caching with one: a
+                resolver that reads the chain must not serve a document cached
+                from before an owner change or a revocation.
+            registries: EIP-155 chain id -> ERC-1056 registry address
         """
         self.blockchain_provider = blockchain_provider
+        if cache_ttl_s is _UNSET:
+            cache_ttl_s = None if blockchain_provider is None else _NO_CACHE
         self.cache_ttl_s = cache_ttl_s
+        self.registries = {int(k): v for k, v in (registries or {}).items()}
         # did -> (stored_at_monotonic, private copy of the result). Callers
         # only ever receive deep copies, so mutating a returned result
         # cannot poison later resolutions (review 02, S-10).
@@ -310,8 +376,9 @@ class DIDResolver:
             # Check cache
             if did in self.cache:
                 stored_at, cached = self.cache[did]
-                if self.cache_ttl_s is None or \
-                        time.monotonic() - stored_at <= self.cache_ttl_s:
+                if self.cache_ttl_s is None or (
+                        self.cache_ttl_s >= 0 and
+                        time.monotonic() - stored_at <= self.cache_ttl_s):
                     result = copy.deepcopy(cached)
                     result.didResolutionMetadata.retrieved = \
                         xml_datetime()
@@ -466,8 +533,12 @@ class DIDResolver:
                 f"did:ethr identifier must be a 0x-prefixed 20-byte address "
                 f"or 33-byte compressed public key: {did}")
 
-        # In production, would query ERC-1056 registry on blockchain
-        # For thesis demo, construct minimal valid DID document
+        if self.blockchain_provider is not None:
+            return self._resolve_ethr_chain(did, chain_id, address, public_key_hex)
+
+        # No provider: the default document of an identity with no registry
+        # events (owner = identity, no delegates, no attributes). It is not read
+        # from a chain; pass blockchain_provider and registries for that (C1).
 
         verification_method_id = f"{did}#controller"
 
@@ -498,6 +569,140 @@ class DIDResolver:
                 versionId=did_document.versionId
             )
         )
+
+    def _resolve_ethr_chain(self, did: str, chain_id: int, address: str,
+                            public_key_hex: Optional[str]) -> DIDResolutionResult:
+        """
+        did:ethr from the ERC-1056 registry (WM-2 C1), by the reference did:ethr
+        rules: the owner from ``identityOwner``; the identity's events found by
+        walking the ``changed`` -> ``previousChange`` block list; for each
+        delegate and attribute the latest event decides, and it counts only while
+        ``validTo`` is later than the chain's latest block timestamp (chain time,
+        as for D51; a revocation sets ``validTo`` to 0 or to the block time).
+        An identity whose latest DIDOwnerChanged event names 0x0 is deactivated
+        (``identityOwner`` cannot show it: it returns the identity itself when
+        the stored owner is 0x0), and so is one with a ``DIDRevoked`` event (the
+        CVIN MOBI registry's terminal revocation).
+        """
+        from web3 import Web3
+        w3 = self.blockchain_provider
+        registry = self.registries.get(chain_id)
+        if registry is None:
+            raise DIDResolutionError(
+                "notFound", f"no ERC-1056 registry configured for chain {chain_id}: {did}")
+        if int(w3.eth.chain_id) != chain_id:
+            raise DIDResolutionError(
+                "notFound", f"the provider is on chain {int(w3.eth.chain_id)}, the DID on chain {chain_id}: {did}")
+        contract = w3.eth.contract(address=Web3.to_checksum_address(registry), abi=_ERC1056_ABI)
+        identity = Web3.to_checksum_address(address)
+        owner = contract.functions.identityOwner(identity).call()
+        block = int(contract.functions.changed(identity).call())
+        latest = w3.eth.get_block("latest")
+        now = int(latest["timestamp"])
+        last_change = block
+
+        topic = "0x" + "0" * 24 + identity[2:].lower()
+        decoders = {}
+        for name in ("DIDOwnerChanged", "DIDDelegateChanged", "DIDAttributeChanged", "DIDRevoked"):
+            ev = getattr(contract.events, name)()
+            sig = "%s(%s)" % (name, ",".join(i["type"] for i in ev.abi["inputs"]))
+            decoders[Web3.keccak(text=sig).hex().removeprefix("0x")] = ev
+        events = []
+        seen = set()
+        while block and block not in seen:
+            seen.add(block)
+            logs = w3.eth.get_logs({"address": contract.address, "fromBlock": block, "toBlock": block,
+                                    "topics": [None, topic]})
+            previous = 0
+            for log in sorted(logs, key=lambda l: l["logIndex"], reverse=True):
+                t0 = log["topics"][0]
+                t0 = (t0.hex() if hasattr(t0, "hex") else str(t0)).removeprefix("0x")
+                ev = decoders.get(t0)
+                if ev is None:
+                    continue
+                e = ev.process_log(log)
+                events.append((block, log["logIndex"], e["event"], e["args"]))
+                previous = int(e["args"]["previousChange"])
+            block = previous if previous < block else 0
+        events.sort(key=lambda x: (x[0], x[1]))
+
+        owner_events = [a["owner"] for _b, _i, name, a in events if name == "DIDOwnerChanged"]
+        deactivated = (bool(owner_events) and owner_events[-1].lower() == _NULL_ADDRESS) or \
+            any(name == "DIDRevoked" for _b, _i, name, _a in events)
+        controller_id = f"{did}#controller"
+        vms: List[VerificationMethod] = []
+        auth: List[str] = []
+        assertion: List[str] = []
+        agreement: List[str] = []
+        services: List[Service] = []
+        if not deactivated:
+            vms.append(VerificationMethod(
+                id=controller_id, type="EcdsaSecp256k1VerificationKey2019", controller=did,
+                publicKeyHex=public_key_hex if owner.lower() == identity.lower() else None,
+                blockchainAccountId=f"eip155:{chain_id}:{owner}"))
+            auth.append(controller_id)
+            assertion.append(controller_id)
+            latest_by_key: Dict[Tuple, Any] = {}
+            for _b, _i, name, a in events:
+                if name == "DIDDelegateChanged":
+                    latest_by_key[("delegate", bytes(a["delegateType"]), a["delegate"])] = a
+                elif name == "DIDAttributeChanged":
+                    latest_by_key[("attribute", bytes(a["name"]), bytes(a["value"]))] = a
+            n = 0
+            for key, a in latest_by_key.items():
+                if int(a["validTo"]) <= now:
+                    continue
+                if key[0] == "delegate":
+                    kind = _bytes32_text(key[1])
+                    if kind not in ("veriKey", "sigAuth"):
+                        continue
+                    n += 1
+                    vid = f"{did}#delegate-{n}"
+                    vms.append(VerificationMethod(
+                        id=vid, type="EcdsaSecp256k1VerificationKey2019", controller=did,
+                        blockchainAccountId=f"eip155:{chain_id}:{key[2]}"))
+                    assertion.append(vid)
+                    if kind == "sigAuth":
+                        auth.append(vid)
+                    continue
+                parts = _bytes32_text(key[1]).split("/")
+                value = key[2]
+                if parts[:2] == ["did", "pub"] and len(parts) >= 4 and parts[2] in _ETHR_KEY_TYPES:
+                    purpose = parts[3]
+                    encoding = parts[4] if len(parts) > 4 else "hex"
+                    if encoding not in ("hex", "base58"):
+                        continue
+                    n += 1
+                    vid = f"{did}#delegate-{n}"
+                    vms.append(VerificationMethod(
+                        id=vid, type=_ETHR_KEY_TYPES[parts[2]], controller=did,
+                        publicKeyHex=value.hex() if encoding == "hex" else None,
+                        publicKeyBase58=_base58(value) if encoding == "base58" else None))
+                    if purpose == "enc":
+                        agreement.append(vid)
+                    else:
+                        assertion.append(vid)
+                        if purpose == "sigAuth":
+                            auth.append(vid)
+                elif parts[:2] == ["did", "svc"] and len(parts) >= 3:
+                    services.append(Service(id=f"{did}#service-{len(services) + 1}", type=parts[2],
+                                            serviceEndpoint=value.decode("utf-8", errors="replace")))
+
+        updated = None
+        version = None
+        if last_change:
+            version = str(last_change)
+            updated = xml_datetime(datetime.fromtimestamp(
+                int(w3.eth.get_block(last_change)["timestamp"]), tz=timezone.utc))
+        did_document = DIDDocument(
+            id=did, controller=did, verificationMethod=vms, authentication=auth,
+            assertionMethod=assertion, keyAgreement=agreement, service=services,
+            updated=updated, versionId=version, deactivated=deactivated)
+        return DIDResolutionResult(
+            didResolutionMetadata=DIDResolutionMetadata(),
+            didDocument=did_document,
+            didDocumentMetadata=DIDDocumentMetadata(
+                updated=updated, versionId=version, deactivated=deactivated))
 
     @staticmethod
     def _address_from_compressed_key(key_hex: str, did: str) -> str:

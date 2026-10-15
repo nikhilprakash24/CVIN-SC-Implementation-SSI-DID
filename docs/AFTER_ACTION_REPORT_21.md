@@ -24,3 +24,41 @@ be; perhaps later a handoff document and a summary of work for a check by the ot
 
 ## 2. Execution log
 - 2026-10-15 — report opened.
+- **C1-a, code.** `did_resolver.py`:
+  - **Chain path.** `_resolve_ethr` calls a new `_resolve_ethr_chain` when the resolver has a provider. That method
+    checks the provider's chain against the DID's, reads `identityOwner` and `changed`, and walks the identity's
+    events block by block through `previousChange`. For each delegate and each attribute, the latest event decides
+    its state. An entry counts only while `validTo` is later than the latest block's timestamp (chain time).
+  - **Document.** Delegates become `veriKey` / `sigAuth` methods. `did/pub/<alg>/<purpose>/<hex|base58>` attributes
+    become keys, and `did/svc/<type>` attributes become services. `versionId` and `updated` come from the last
+    change.
+  - **Constructor.** It takes `registries` (chain id to address). With a provider and no explicit TTL, the resolver
+    does not cache, so it cannot serve a document from before an owner change or a revocation.
+- **Two errors of mine, caught by the tests.**
+  - The first draft read deactivation from `identityOwner`. That call returns the identity itself when the stored
+    owner is 0x0, so deactivation never showed. Deactivation is now read from the latest `DIDOwnerChanged` event, as
+    the reference resolver does.
+  - The MOBI registry adds a `DIDRevoked` event. An undecoded event would have stopped the `previousChange` walk
+    early, silently dropping older events. It is now decoded and read as deactivation, since revocation is terminal
+    in that contract.
+- **C1-a, tests.**
+  - `test_did_resolver_chain.py` has 9 tests on a real node. It uses `CV2X_TEST_RPC_URL` when set, or else starts
+    its own node on 8563, because the L3 + L4 job fails on any skip.
+  - Against the old resolver on a fresh node, 7 fail (owner change, delegates, attributes, expiry, deactivation,
+    unconfigured chain, cache) and 2 pass. Those two pin behaviour that must not change: an identity without events,
+    and the no-provider document.
+  - Two MOBI tests were added. One checks that a born vehicle resolves from the chain to its first owner (VID-R1 (b),
+    review-02 FOLLOWUP_FE finding 2). The other checks that a revoked identity resolves as deactivated; it fails with
+    the `DIDRevoked` rule removed (shown). Both fail on the old code only because it has no `registries` parameter, so
+    of the 11 new tests, 9 fail on the old code and 7 of those on behaviour.
+- **A slip in the regression proof, caught.** My first old-versus-new run reported the old resolver passing all 9.
+  An earlier attempt had been aborted, and its shell was killed by `pkill -f`, which matched its own command line.
+  It had already copied the new file in, so the "old" run tested new code. I re-ran with the old file written from
+  git, checked by a grep, and caches removed: 7 failed. Processes are now stopped by checking their own argv.
+- **C1-b.**
+  - Checker (#4): 41 PASS, 1 PARTIAL, 2 FAIL of 44, so 94.3%, unchanged.
+  - Suite (#24): the regenerated inputs equal the committed ones up to timestamps, in 6 of 6 files. The suite reads
+    only these files, so its result cannot move, and I did not re-run it on identical inputs. A suite run on
+    chain-backed DIDs, and the chain-path resolution latency, are deferred as **N-24**.
+  - #4 and #24 have a dated note. The MOBI checklist's VID-R1 now reads "met with a provider; partial without".
+  - Python layers: 342 passed (331 + 9 + 2), no skips. A first count of 340 was taken before the two MOBI tests.
