@@ -26,6 +26,7 @@ class LSP8Adapter extends IdentityAdapter {
       D1_revoke_delegate: "revokeOperator not implemented",
       U5_meta_tx: "no signed entry point",
       V1_issuer_key_anchor: "single issuing authority (contract owner); issuer keys are not modelled",
+      P1_create_presentation: "only the issuing authority writes token data; the token owner has no anchor",
     });
     const k = (s) => this.ethers.keccak256(this.ethers.toUtf8Bytes(s));
     this.KEYS = { vin: k("CVIN_VIN"), make: k("CVIN_MAKE"), model: k("CVIN_MODEL"), year: k("CVIN_YEAR"), color: k("CVIN_COLOR"), engineNumber: k("CVIN_ENGINE"), manufacturingDate: k("CVIN_MFG_DATE"), autonomyLevel: k("CVIN_AUTONOMY") };

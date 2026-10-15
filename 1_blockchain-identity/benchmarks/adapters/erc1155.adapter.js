@@ -34,6 +34,7 @@ class ERC1155Adapter extends IdentityAdapter {
       U2_add_delegate: "no key management; operators cannot move soulbound credentials",
       D1_revoke_delegate: "no key management",
       U5_meta_tx: "no signed entry point",
+      P1_create_presentation: "holders cannot write: credentials are issuer-minted and soulbound",
     });
     this.attributesOffchain = true;
   }

@@ -15,6 +15,7 @@ class ERC721Adapter extends IdentityAdapter {
     super(opts);
     this.unsupported["U5_meta_tx"] = "no signed-operation primitive";
     this.unsupported["D2_revoke_attribute"] = "service records are append-only; no retract primitive";
+    this.unsupported["P1_create_presentation"] = "the token holder has no write path (service records are SERVICE_CENTER_ROLE)";
     this.issuerHandles = new Map();
   }
 

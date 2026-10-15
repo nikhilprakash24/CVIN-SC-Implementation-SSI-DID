@@ -127,6 +127,26 @@ describe("Benchmark adapter conformance", function () {
         expect(await adapter.statusCheck(h, c, iss)).to.equal("revoked");
       });
 
+      it("P1 create presentation (or declared n/a): anchor appears in R3", async function () {
+        if (!adapter.supports("P1_create_presentation")) return this.skip();
+        const presHash = hre.ethers.keccak256(hre.ethers.toUtf8Bytes("vp-" + id));
+        await wait(await adapter.createPresentation(h, presHash));
+        // raw bytes (most substrates) or the UTF-8 bytes of the hex text (string-typed setters, e.g. the ERC-1056 wrapper)
+        const doc = JSON.stringify(await adapter.resolveDocument(h)).toLowerCase();
+        const asText = hexlify(toUtf8Bytes(presHash)).slice(2).toLowerCase();
+        expect(doc.includes(presHash.slice(2).toLowerCase()) || doc.includes(asText), "presentation hash in document").to.equal(true);
+      });
+
+      it("X1 execute call (or declared n/a): the identity itself is the caller", async function () {
+        if (!adapter.supports("X1_execute_call")) return this.skip();
+        const T = await hre.ethers.getContractFactory("CVINExecuteTarget", actors.deployer);
+        const target = await T.deploy(); await target.waitForDeployment();
+        const data = target.interface.encodeFunctionData("setValue", [42]);
+        await wait(await adapter.executeCall(h, await target.getAddress(), data));
+        expect(await target.value()).to.equal(42n);
+        expect(await target.lastCaller()).to.equal(h.address); // the account, not the owner EOA
+      });
+
       it("U1/U4 controller rotation and transfer", async function () {
         await wait(await adapter.rotateController(h, actors.newOwner));
         expect(await adapter.resolveOwner(h)).to.equal(actors.newOwner.address);

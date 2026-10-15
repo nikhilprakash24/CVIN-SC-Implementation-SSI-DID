@@ -33,6 +33,7 @@ class ERC735Adapter extends IdentityAdapter {
       U5_meta_tx: "no signed entry point",
       V1_issuer_key_anchor: "issuer key is the issuer EOA; nothing to anchor on-chain",
     });
+    delete this.unsupported.P1_create_presentation;
   }
 
   async deploy() {
@@ -129,6 +130,14 @@ class ERC735Adapter extends IdentityAdapter {
   }
   async deactivate(h) {
     const tx = await h.id.connect(h.controller).transferOwnership(DEAD);
+    return { txs: [tx] };
+  }
+
+  async createPresentation(h, presHash) {
+    const topic = BigInt(this.ethers.keccak256(this.ethers.concat([this.ethers.toUtf8Bytes("vp:"), presHash])));
+    const data = this.ethers.getBytes(presHash);
+    const sig = await this._sign(h.controller, h.address, topic, data);
+    const tx = await h.id.connect(h.controller).addClaim(topic, ECDSA_SCHEME, h.controller.address, sig, data, "");
     return { txs: [tx] };
   }
 
