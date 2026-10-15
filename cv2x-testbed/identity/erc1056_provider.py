@@ -31,6 +31,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
 
 from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
+from identity.freshness import REASON_BAD_SIGNATURE, REASON_REVOKED, REASON_UNRESOLVED, REASON_UNTRUSTED
 from identity.base import (
     IdentityProvider,
     IdentityType,
@@ -99,6 +100,9 @@ class ERC1056Provider(IdentityProvider):
         # Freshness window + replay cache for verify_message (review 02, T-9).
         # On by default; the same FreshnessPolicy as the PKI providers.
         self.freshness = FreshnessPolicy()
+        # Why the last REJECTED verify failed (identity.freshness REASON_*);
+        # written on rejection paths only, never on the accept path.
+        self.last_reject_reason = None
         # Chain this provider's registry lives on; verify_message binds DIDs to
         # it (review 02 Pass 3: an unbound chain segment let a re-encoded DID
         # miss the replay cache). Cached so verification adds no RPC.
@@ -639,6 +643,7 @@ class ERC1056Provider(IdentityProvider):
             # Format: did:ethr:0x{chain_id}:{address}
             parts = did.split(':')
             if len(parts) != 4 or parts[0] != 'did' or parts[1] != 'ethr':
+                self.last_reject_reason = REASON_UNTRUSTED
                 return False, metrics
 
             # Bind the DID to this registry's chain and canonicalise it. The DID
@@ -650,15 +655,19 @@ class ERC1056Provider(IdentityProvider):
                 did_chain = int(parts[2], 16)
                 vehicle_address = Web3.to_checksum_address(parts[3])
             except ValueError:
+                self.last_reject_reason = REASON_UNTRUSTED
                 return False, metrics
             if did_chain != self._local_chain_id():
+                self.last_reject_reason = REASON_UNTRUSTED
                 return False, metrics
             signer_key = f"did:ethr:0x{did_chain:x}:{vehicle_address}"
 
             # Freshness window + replay cache (T-9), before any RPC
             timestamp = signed_message.get('timestamp')
             message_bytes = signed_bytes(message, timestamp)
-            if self.freshness.check(timestamp, signer_key, message_bytes) is not None:
+            stale = self.freshness.check(timestamp, signer_key, message_bytes)
+            if stale is not None:
+                self.last_reject_reason = stale
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
@@ -667,6 +676,7 @@ class ERC1056Provider(IdentityProvider):
             identity_data = self._sender_identity(signer_key, vehicle_address, metrics)
 
             if not identity_data:
+                self.last_reject_reason = REASON_UNRESOLVED
                 return False, metrics
 
             # Check revocation. getIdentityInfo (the eth_call inside the
@@ -674,11 +684,13 @@ class ERC1056Provider(IdentityProvider):
             # read together with the `changed` pointer the key was resolved
             # from; a second isRevoked eth_call is redundant (review 02, T-5).
             if identity_data.get('is_revoked', True):
+                self.last_reject_reason = REASON_REVOKED
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
             # Get public key (resolved from DIDAttributeChanged events)
             if not identity_data.get('public_key'):
+                self.last_reject_reason = REASON_UNRESOLVED
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
             public_key = identity_data.get('_public_key_obj')
@@ -710,6 +722,7 @@ class ERC1056Provider(IdentityProvider):
             return True, metrics
 
         except Exception as e:
+            self.last_reject_reason = REASON_BAD_SIGNATURE
             print(f"Verification error: {e}")
             metrics.verification_time_ms = (time.time() - start_time) * 1000
             return False, metrics
