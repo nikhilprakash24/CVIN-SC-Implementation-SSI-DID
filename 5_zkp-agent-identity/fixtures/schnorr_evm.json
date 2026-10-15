@@ -1,0 +1,10 @@
+{
+  "note": "seeded fixture; regenerate with python3 -m zkid.schnorr_evm",
+  "proof": {
+    "parity": 1,
+    "px": "0xd7da18e28d6463ea9b7e93402aec0e122b76a669e04ad12f5f4b913f772751ef",
+    "message": "0xd02ca9117945b55f99a7ac5da1f2b65c73bc27c4d19288fb695db38360ae7ac3",
+    "e": "0x0a3324d8229b9a3202378b750fe428c000a738b600ddbca23331f256c31d81c0",
+    "s": "0x6627cc67bfbd40ba99cf6c919ef1d56e6245a7b94b836c7bb10ec248e04646f7"
+  }
+}
