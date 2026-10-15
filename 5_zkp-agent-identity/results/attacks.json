@@ -1,9 +1,9 @@
 {
  "condition": "simulation (synthetic verifiers and adversary), seeds 1-30, parameters of Plan 1 amendment A1",
  "run": {
-  "commit": "85d18f9",
-  "code_clean": false,
-  "tree_clean": false,
+  "commit": "978988e",
+  "code_clean": true,
+  "tree_clean": true,
   "host": {
    "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
    "machine": "x86_64",
@@ -11,7 +11,7 @@
    "processor": "x86_64"
   },
   "python": "3.13.16",
-  "at": "2026-10-15T05:11:13+00:00",
+  "at": "2026-10-15T05:15:04+00:00",
   "seed_env": null
  },
  "prior_bits": 5.0,

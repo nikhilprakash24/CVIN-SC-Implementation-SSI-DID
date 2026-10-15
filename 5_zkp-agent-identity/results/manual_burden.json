@@ -1,8 +1,8 @@
 {
  "condition": "MEASURED counts (exact) priced at cited human rates (status E)",
  "run": {
-  "commit": "9d26c2a",
-  "code_clean": false,
+  "commit": "978988e",
+  "code_clean": true,
   "tree_clean": false,
   "host": {
    "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
@@ -11,7 +11,7 @@
    "processor": "x86_64"
   },
   "python": "3.13.16",
-  "at": "2026-10-15T05:14:29+00:00",
+  "at": "2026-10-15T05:15:22+00:00",
   "seed_env": null
  },
  "rates_E": {
@@ -39,7 +39,7 @@
    "agent private key (hex)": 64,
    "commitment salt (field element, decimal)": 77,
    "Ethereum address (hex)": 40,
-   "ZK-VIN Groth16 proof (JSON as produced)": 740,
+   "ZK-VIN Groth16 proof (JSON as produced)": 743,
    "ZK-VIN public signals (decimal)": 416,
    "6-bit threshold proof (sigma protocol, hex)": 3148
   }
@@ -86,16 +86,16 @@
    "agent private key (hex)": 0.680344066359634,
    "commitment salt (field element, decimal)": 0.6291462300663593,
    "Ethereum address (hex)": 0.7860594187607106,
-   "ZK-VIN Groth16 proof (JSON as produced)": 0.011639235460581486,
+   "ZK-VIN Groth16 proof (JSON as produced)": 0.011430983745645903,
    "ZK-VIN public signals (decimal)": 0.08179672380703767,
    "6-bit threshold proof (sigma protocol, hex)": 5.9202232307030545e-09
   },
-  "p_one_presentation_copied_without_error": 0.0004075121514351291
+  "p_one_presentation_copied_without_error": 0.00040022085599902705
  },
  "agent_measured_M0": {
-  "threshold_prove_ms": 58.4815635,
-  "threshold_verify_ms": 63.3916945,
-  "groth16_prove_ms": 356.444661,
-  "groth16_verify_ms": 16.5676685
+  "threshold_prove_ms": 64.2188275,
+  "threshold_verify_ms": 68.81903600000001,
+  "groth16_prove_ms": 398.5985885,
+  "groth16_verify_ms": 18.419023
  }
 }
