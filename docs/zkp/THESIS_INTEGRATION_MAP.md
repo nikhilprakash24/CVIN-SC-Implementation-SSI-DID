@@ -40,7 +40,7 @@ chapter plan in prose.
 | Z4 | zkid sigma timings and exact operation counts (Table A-3) | M0 | `results/sigma_bench.json` @ `978988e` | V |
 | Z5 | Unsalted SHA-256 of a VIN with only the serial unknown reversed in 3.58 s (10⁶ candidates, 279,587/s, one core) | M0 | `results/vin_bruteforce.json` @ `978988e` | V; extrapolations E |
 | Z6 | Narrowing attack and defences over seeds 1–30 (Table A-5); Z-E5 PASS; Z-E6 FAIL | Sim | `results/attacks.json` @ `978988e` | V (simulation) |
-| Z7 | Manual-burden inventory: counts measured; hand times and error probabilities | E | `results/manual_burden.json` @ `978988e` | counts V; times E |
+| Z7 | Manual-burden inventory: counts measured; hand times and error probabilities | E | `results/manual_burden.json` @ `e780d40` (values identical to the `978988e` run) | counts V; times E |
 
 ## 4. Scope changes to record (author's decision; default: record)
 

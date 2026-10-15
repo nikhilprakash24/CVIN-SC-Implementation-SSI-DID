@@ -5,7 +5,8 @@
 **Author:** Nikhil Prakash (MASc, UBC ECE)
 **Written:** 2026-10-15, after the runs of record. **Supersedes:** nothing. **Binds:** `docs/STYLE_AND_RIGOUR_GUIDE.md`.
 **Evidence:** every number below comes from `5_zkp-agent-identity/results/*.json`, produced by `bench/run_all.sh` at commit
-`978988e` with `code_clean: true` (the producing code equalled the commit), on one host: Linux x86-64, 4 vCPU Intel Xeon
+`978988e` with `code_clean: true` (the producing code equalled the commit; `manual_burden.json` was re-run at `e780d40`
+after a citation-key fix in comments and reproduced every value), on one host: Linux x86-64, 4 vCPU Intel Xeon
 @ 2.80 GHz, 16 GB, CPython 3.13.16, Node 22.22.0, snarkjs 0.7.6, circom 2.2.2, Hardhat 2.28.6, solc 0.8.24 (optimizer 200,
 viaIR, evm cancun). Condition tags: **M0** in-process, no chain; **M1** Hardhat in-process EVM, exact `gasUsed`;
 **E** estimate; **Sim** seeded simulation. None of these numbers is in the claim register yet; proposed rows are in

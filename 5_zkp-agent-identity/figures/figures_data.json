@@ -4,7 +4,7 @@
   "gas_zk.json": "978988e",
   "attacks.json": "978988e",
   "sigma_bench.json": "978988e",
-  "manual_burden.json": "978988e",
+  "manual_burden.json": "e780d40",
   "vin_bruteforce.json": "978988e"
  },
  "zkvin": {

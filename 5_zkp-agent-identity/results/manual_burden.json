@@ -1,9 +1,9 @@
 {
  "condition": "MEASURED counts (exact) priced at cited human rates (status E)",
  "run": {
-  "commit": "978988e",
+  "commit": "e780d40",
   "code_clean": true,
-  "tree_clean": false,
+  "tree_clean": true,
   "host": {
    "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
    "machine": "x86_64",
@@ -11,7 +11,7 @@
    "processor": "x86_64"
   },
   "python": "3.13.16",
-  "at": "2026-10-15T05:15:22+00:00",
+  "at": "2026-10-15T05:32:58+00:00",
   "seed_env": null
  },
  "rates_E": {
@@ -20,9 +20,9 @@
   "field_mul_s": 7730.7692307692305,
   "char_error": 0.006,
   "sources": [
-   "SHIRRIFF-2014",
-   "PANKO-ERR",
-   "FIPS-180-4"
+   "SHIRRIFF2014",
+   "PANKO-BASIC",
+   "FIPS180-4"
   ]
  },
  "measured": {
