@@ -1,6 +1,6 @@
 # After-Action Report 06 — Third next-session list (2026-10-15)
 
-**Opened:** before the pass ran. **Status:** OPEN.
+**Opened:** before the pass ran. **Status:** CLOSED 2026-10-15; results are in `docs/HANDBACK_2026-10-04.md` §4.
 **Input:** `docs/HANDBACK_2026-10-04.md` §4, the third "Next session (executable now)" list. Author
 decisions (handback items 1–15) are **not** taken here.
 **Base:** `fa6188e`. The register runs to #39 (the parallel harness session's HTTP-RPC row), so this
@@ -22,5 +22,30 @@ pass numbers new rows from **#40**. It fetches before every push and stays off
 
 | Phase | Commit | Result |
 |---|---|---|
+| Open | `ffb71b0` | Plan |
+| H-A | merge + register | attestEvent owner-scoped for OWNER roles, duplicate guard; M3 re-pinned 191,974; 2/55 gas cells |
+| H-L | `c0d436a` | Pass 3 Lows fixed; no number moved |
+| H-R | merge + register | On-chain did:ethr, did:mobi via the MOBI registry; suite offline 335/336, on-chain 311/311; checker 94.3 % (84.1 % if the placeholder is retired) |
+| H-K | merge | Same-host freshness, both modes: probe better at every k, no knee on this host |
+| M4 | (session) | Re-run on the post-H-A bytecode on a quiet host; verdicts unchanged; event gas 255,556 |
+| Close | this commit | #42, #33, LATENCY_BUDGET, README, handback |
 
 ## Notes in flight
+- **I contaminated a parallel measurement, and caught it.** I started an M4 latency run while H-K was
+  measuring latency on the same host. I discarded my run, sent H-K the exact time window, and H-K
+  excluded the overlapping replicate (r4) and added replicates under its load rule. The M4 re-run waited
+  until the host was quiet. A later quiet-host M4 run showed the same MOBI latencies, so the slower
+  numbers come from the host, not the contention; discarding was still the right call while H-K ran.
+- **Orphaned node.** H-A left a Hardhat node running on 8561 from its deleted worktree (killing the
+  `npx` wrapper doesn't kill the child). It was found before the Python run and stopped. Agent prompts
+  should say "kill the node process itself, not the npx wrapper".
+- **Register collisions (#40, #41).** The parallel session added rows while this pass was running; mine
+  were renumbered to #42 and every reference updated. A convention is proposed in the handback.
+- **The placeholder finding.** H-R correctly stopped rather than retire the did:mobi placeholder: doing
+  so drops the checker to 84.1 %. The headline 94.3 % therefore depends on a vector that puts the raw
+  VIN in the DID, and that is now disclosed in #4 and is author decision 16.
+
+## Closing summary
+- All four streams are done. New row #42; #4, #24, #25, #28 and #33 updated; LATENCY_BUDGET §4 now
+  quotes knees with their t_local.
+- Two new author decisions (16, 17) and a new next-session list.
