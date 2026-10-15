@@ -9,8 +9,8 @@
 
 | Status | Count | Meaning |
 |---|---|---|
-| VERIFIED | 27 | every evidence row V; files and CI present; threshold met; nothing pending |
-| PARTIAL | 8 | some evidence V; at least one row non-V, a threshold unmet, an item missing, or a named trunk item still open |
+| VERIFIED | 28 | every evidence row V; files and CI present; threshold met; nothing pending |
+| PARTIAL | 7 | some evidence V; at least one row non-V, a threshold unmet, an item missing, or a named trunk item still open |
 | OPEN | 1 | no V evidence |
 
 Register at generation: E 7, S 10, U 1, V 34 (52 rows).
@@ -36,7 +36,7 @@ Register at generation: E 7, S 10, U 1, V 34 (52 rows).
 | SEC-05 | Attestation authority | Test | #28 (V) | — | — | **PARTIAL** | pending: D54 (open), WM-2 C2 (open) |
 | SEC-06 | VIN confidentiality on chain | Inspection | #28 (V) | — | 2/2 files | **PARTIAL** | pending: D64 (open) |
 | SEC-07 | Pseudonym pool observability | Test | #38 (V) | pre-registered verdict as it fell: **FAIL** | — | **PARTIAL** | pending: WM-2 A3b (open) |
-| STD-01 | Internal structural checker at or above ninety percent | Test | #4 (V) | score >= 90: actual `94.3` → met | 1/1 files; CI step found | **PARTIAL** | pending: WM-2 C1 (open) |
+| STD-01 | Internal structural checker at or above ninety percent | Test | #4 (V) | score >= 90: actual `94.3` → met | 1/1 files; CI step found | **VERIFIED** | — |
 | STD-02 | External DID test suite | Test | #24 (V) | 335 of 336 generated tests: actual `335` → met | 1/1 files | **VERIFIED** | — |
 | STD-03 | MOBI-VID-inspired lifecycle on several backends | Demonstration | #30 (V), #33 (V) | — | 2/2 files | **VERIFIED** | — |
 | STD-04 | Database parity for lifecycle writes | Test | #33 (V) | pre-registered verdict as it fell: **FAIL** | — | **VERIFIED** | — |
@@ -111,7 +111,7 @@ V rows cited by no requirement: #1, #2, #3, #22, #29, #42, #43. A V row no requi
 | SEC-05 | The signature check is in place; the authority restriction is open (D54); any role-holder may attest any vehicle, and twice (WM-2 C2 pending). |
 | SEC-06 | The cv2x testbed derives a vehicle identity from an unsalted VIN hash (D64, open); the matrix row is structural, not a measurement of linkability. |
 | SEC-07 | Chain-layer linkability only; radio, timing and position linkability are out of scope (SC-02). |
-| STD-01 | Self-scored and structural; the DID Core checks test a synthesised document (C5 gap; WM-2 C1 pending). |
+| STD-01 | Self-scored and structural; the DID Core checks test a synthesised document (C5 gap). WM-2 C1 (report 21) made did:ethr resolution read the chain when given a provider, but the checker resolves without one, so its documents are still synthesised. |
 | STD-02 | The denominator is 336 generated tests, not 441; DID-URL dereferencing is not run. |
 | STD-03 | 2 of 8 VID I MUSTs met; the profile is "MOBI-VID-inspired, checked against the public texts" (SC-14a). |
 | STD-04 | Writes PASS (at least 10x); "equal once cached" FAIL (ratio set by the baseline's serialisation); the baseline is a lower bound. |

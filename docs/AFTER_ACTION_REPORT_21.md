@@ -62,3 +62,8 @@ be; perhaps later a handoff document and a summary of work for a check by the ot
     chain-backed DIDs, and the chain-path resolution latency, are deferred as **N-24**.
   - #4 and #24 have a dated note. The MOBI checklist's VID-R1 now reads "met with a provider; partial without".
   - Python layers: 342 passed (331 + 9 + 2), no skips. A first count of 340 was taken before the two MOBI tests.
+- **Coordination with report 20 (parallel pass).** After rebasing onto its TDP generators (`4699f21`), its
+  `make_vcrm.py --check` failed with "pending step C1 is marked done in PLAN_WM-2; remove it". That is its guard
+  working. I made the one change it asked for in `docs/tdp/requirements.yaml` STD-01: `pending: []`, with its limit
+  sentence updated to say the checker still resolves without a provider. I regenerated TDP-002 and TDP-005 with its
+  own generator; its three checks pass. No other report-20 file was touched.

@@ -148,7 +148,7 @@ Convention. "Shall" marks a requirement. The threshold values are the ones the t
 
 - Derived from: H2; RQ3
 - Verification: Test; register #4; threshold: score >= 90
-- Limit: Self-scored and structural; the DID Core checks test a synthesised document (C5 gap; WM-2 C1 pending).
+- Limit: Self-scored and structural; the DID Core checks test a synthesised document (C5 gap). WM-2 C1 (report 21) made did:ethr resolution read the chain when given a provider, but the checker resolves without one, so its documents are still synthesised.
 
 **STD-02 External DID test suite.** The resolver shall be run against the external W3C DID test suite and every generated test shall be reported with its outcome.
 

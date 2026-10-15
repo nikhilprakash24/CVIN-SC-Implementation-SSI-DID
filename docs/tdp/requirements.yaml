@@ -181,8 +181,8 @@ requirements:
     threshold: {path: compliance.score, op: ">=", value: 90, label: "score >= 90"}
     files: [cv2x-testbed/scripts/w3c_compliance_checker.py]
     ci: Gate on compliance floor
-    pending: [C1]
-    limit: Self-scored and structural; the DID Core checks test a synthesised document (C5 gap; WM-2 C1 pending).
+    pending: []
+    limit: Self-scored and structural; the DID Core checks test a synthesised document (C5 gap). WM-2 C1 (report 21) made did:ethr resolution read the chain when given a provider, but the checker resolves without one, so its documents are still synthesised.
   - id: STD-02
     title: External DID test suite
     shall: The resolver shall be run against the external W3C DID test suite and every generated test shall be reported with its outcome.
