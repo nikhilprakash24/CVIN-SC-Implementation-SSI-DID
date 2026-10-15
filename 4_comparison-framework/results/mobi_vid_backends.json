@@ -130,7 +130,7 @@
         "note": "recordLifecycleEvent (MOBI VID II, MAINTENANCE): dedicated event struct with eventType, issuer, timestamp, odometer, dataHash, W3C-VC hash, verified flag, jurisdiction, block number + per-type counters. Highest-fidelity native mapping (11 event types, issuer-role gating)."
       },
       "thirdPartyAttestation": {
-        "gasUsed": 192683,
+        "gasUsed": 215362,
         "nativeSupport": true,
         "approximate": false,
         "note": "attestEvent by a second authorized party (DMV): the attester's EIP-191 signature over a domain-separated digest (contract || chainId || vehicle || eventId) is ecrecover-verified on-chain (OZ ECDSA, low-s) and MUST match msg.sender; the verified attestation is appended to the event. Native, purpose-built multi-party attestation."
@@ -157,7 +157,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-04T22:13:17.721Z",
+    "date": "2026-10-15T05:15:05.258Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [

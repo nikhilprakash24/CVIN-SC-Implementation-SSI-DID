@@ -27,6 +27,7 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 
 const V1_FQN = "contracts/MOBI/MOBIVIDRegistry.sol:MOBIVIDRegistry";
 const V2_FQN = "contracts/MOBI/MOBIVIDRegistryV2.sol:MOBIVIDRegistryV2";
@@ -642,6 +643,134 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       await expect(
         registry.connect(dmv).attestEvent(bogusId, vehicle.address, sig)
       ).to.be.revertedWith("Event does not exist");
+    });
+  });
+
+  describe("H-A: OWNER-role attestations are limited to the vehicle's current owner", function () {
+    const NOT_OWNER = "OWNER role: not the current owner of this vehicle";
+
+    // Vehicle A (fixture vehicle) is owned by firstOwner; vehicle B by ownerB.
+    // Both owners and a later buyer hold the OWNER role. A service centre
+    // records one MAINTENANCE event on each vehicle.
+    async function attestFixture() {
+      const f = await deployV2Fixture();
+      const signers = await ethers.getSigners();
+      const ownerB = signers[9], vehicleB = signers[10], buyer = signers[11], delegateB = signers[12];
+      await f.registry.connect(f.manufacturer).registerVehicleBirth(
+        vehicleB.address, ethers.keccak256(ethers.toUtf8Bytes("VIN-B:salt")),
+        "encrypted:VIN-B", BIRTH_CERT_HASH, ownerB.address, BIRTH_ATTRS
+      );
+      await f.registry.authorizeIssuer(f.firstOwner.address, IssuerRole.OWNER);
+      await f.registry.authorizeIssuer(ownerB.address, IssuerRole.OWNER);
+      await f.registry.authorizeIssuer(buyer.address, IssuerRole.OWNER);
+      const record = async (vehicle) => extractEventId(f.registry, await (await f.registry
+        .connect(f.serviceCenter).recordLifecycleEvent(
+          vehicle, EventType.MAINTENANCE, 12000, DATA_HASH, CRED_HASH, "BC-CAN")).wait());
+      const eventA = await record(f.vehicle.address);
+      const eventB = await record(vehicleB.address);
+      const chainId = (await ethers.provider.getNetwork()).chainId;
+      const attest = async (signer, vehicle, eventId) => f.registry.connect(signer).attestEvent(
+        eventId, vehicle, await attestationSignature(f.registry, chainId, vehicle, eventId, signer));
+      return { ...f, ownerB, vehicleB, buyer, delegateB, eventA, eventB, attest };
+    }
+
+    it("the OWNER-role owner of vehicle A cannot attest vehicle B's event", async function () {
+      const f = await loadFixture(attestFixture);
+      await expect(f.attest(f.firstOwner, f.vehicleB.address, f.eventB))
+        .to.be.revertedWith(NOT_OWNER);
+      expect((await f.registry.getEventAttestations(f.eventB)).length).to.equal(0);
+    });
+
+    it("the owner of vehicle B can attest B's event (stored with role OWNER)", async function () {
+      const f = await loadFixture(attestFixture);
+      await expect(f.attest(f.ownerB, f.vehicleB.address, f.eventB))
+        .to.emit(f.registry, "EventAttested")
+        .withArgs(f.eventB, f.ownerB.address, IssuerRole.OWNER, anyValue);
+      const atts = await f.registry.getEventAttestations(f.eventB);
+      expect(atts.length).to.equal(1);
+      expect(atts[0].attester).to.equal(f.ownerB.address);
+      expect(atts[0].role).to.equal(BigInt(IssuerRole.OWNER));
+    });
+
+    it("after a transfer the previous owner cannot attest, the new owner can", async function () {
+      const f = await loadFixture(attestFixture);
+      await f.registry.connect(f.firstOwner).transferVehicleOwnership(
+        f.vehicle.address, f.buyer.address, 15000, "BC-ICBC");
+      await expect(f.attest(f.firstOwner, f.vehicle.address, f.eventA))
+        .to.be.revertedWith(NOT_OWNER);
+      await expect(f.attest(f.buyer, f.vehicle.address, f.eventA))
+        .to.emit(f.registry, "EventAttested");
+      const atts = await f.registry.getEventAttestations(f.eventA);
+      expect(atts.length).to.equal(1);
+      expect(atts[0].attester).to.equal(f.buyer.address);
+    });
+
+    it("an ERC-1056 delegate of B does not gain attestation rights (no on-chain delegate record)", async function () {
+      const f = await loadFixture(attestFixture);
+      await f.registry.authorizeIssuer(f.delegateB.address, IssuerRole.OWNER);
+      await f.registry.connect(f.ownerB).addDelegate(
+        f.vehicleB.address, ethers.encodeBytes32String("sigAuth"), f.delegateB.address, 86400);
+      await expect(f.attest(f.delegateB, f.vehicleB.address, f.eventB))
+        .to.be.revertedWith(NOT_OWNER);
+    });
+
+    it("a role-less current owner still cannot attest (authorisation is checked first)", async function () {
+      const f = await loadFixture(attestFixture);
+      // vehicle A's ERC-1056 owner is firstOwner; revoke its OWNER role.
+      await f.registry.revokeIssuerAuthorization(f.firstOwner.address);
+      await expect(f.attest(f.firstOwner, f.vehicle.address, f.eventA))
+        .to.be.revertedWith("Not authorized to attest");
+    });
+
+    it("organisational roles keep registry-wide attestation scope (DMV and inspection on B)", async function () {
+      const f = await loadFixture(attestFixture);
+      await expect(f.attest(f.dmv, f.vehicleB.address, f.eventB)).to.emit(f.registry, "EventAttested");
+      await expect(f.attest(f.inspection, f.vehicleB.address, f.eventB)).to.emit(f.registry, "EventAttested");
+      expect((await f.registry.getEventAttestations(f.eventB)).length).to.equal(2);
+    });
+  });
+
+  describe("H-A: one attestation per (event, attester)", function () {
+    async function dupFixture() {
+      const f = await deployV2Fixture();
+      const eventId = extractEventId(f.registry, await (await f.registry.connect(f.serviceCenter)
+        .recordLifecycleEvent(f.vehicle.address, EventType.MAINTENANCE, 12000, DATA_HASH, CRED_HASH, "BC-CAN")).wait());
+      const otherId = extractEventId(f.registry, await (await f.registry.connect(f.serviceCenter)
+        .recordLifecycleEvent(f.vehicle.address, EventType.REPAIR, 12500, DATA_HASH, CRED_HASH, "BC-CAN")).wait());
+      const chainId = (await ethers.provider.getNetwork()).chainId;
+      const sig = (signer, id) => attestationSignature(f.registry, chainId, f.vehicle.address, id, signer);
+      return { ...f, eventId, otherId, sig };
+    }
+
+    it("a second identical attestation by the same attester reverts and is not counted", async function () {
+      const f = await loadFixture(dupFixture);
+      const s = await f.sig(f.dmv, f.eventId);
+      await f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, s);
+      expect(await f.registry.hasAttested(f.eventId, f.dmv.address)).to.equal(true);
+      await expect(f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, s))
+        .to.be.revertedWith("Already attested by this attester");
+      expect((await f.registry.getEventAttestations(f.eventId)).length).to.equal(1);
+    });
+
+    it("distinct attesters are each counted once; the same attester may attest another event", async function () {
+      const f = await loadFixture(dupFixture);
+      await f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, await f.sig(f.dmv, f.eventId));
+      await f.registry.connect(f.inspection).attestEvent(f.eventId, f.vehicle.address, await f.sig(f.inspection, f.eventId));
+      await expect(f.registry.connect(f.dmv).attestEvent(f.otherId, f.vehicle.address, await f.sig(f.dmv, f.otherId)))
+        .to.emit(f.registry, "EventAttested");
+      const atts = await f.registry.getEventAttestations(f.eventId);
+      expect(atts.map((a) => a.attester)).to.deep.equal([f.dmv.address, f.inspection.address]);
+      expect((await f.registry.getEventAttestations(f.otherId)).length).to.equal(1);
+    });
+
+    it("a reverted attempt (bad signature) does not consume the attester's slot", async function () {
+      const f = await loadFixture(dupFixture);
+      const forged = await f.sig(f.inspection, f.eventId);
+      await expect(f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, forged))
+        .to.be.revertedWith("Invalid attestation signature");
+      expect(await f.registry.hasAttested(f.eventId, f.dmv.address)).to.equal(false);
+      await expect(f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, await f.sig(f.dmv, f.eventId)))
+        .to.emit(f.registry, "EventAttested");
     });
   });
 
