@@ -26,7 +26,7 @@ TRANSLIT = {**{str(d): d for d in range(10)}, "A": 1, "B": 2, "C": 3, "D": 4, "E
             "Y": 8, "Z": 9}
 WEIGHTS = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2]
 TARGET = "1HGCM82633A004352"  # a widely published sample VIN
-GPU_SHA256_PER_S = 22.1e9  # hashcat mode 1400 on one RTX 4090 (SOURCES_ZKP.md [HASHCAT-4090]); not measured here
+GPU_SHA256_PER_S = 22.1e9  # hashcat mode 1400 on one RTX 4090 (SOURCES_ZKP.md [Hashcat4090]); not measured here
 
 
 def check_digit(vin16_with_placeholder: str) -> str:

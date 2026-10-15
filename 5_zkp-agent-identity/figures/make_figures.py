@@ -230,7 +230,7 @@ def fig06_hexwall(plt, d):
     ax.text(0.0, -0.05, f"{len(proof):,} characters.  Chance of copying them with no error at 0.6 % per character: "
             f"{d['p_copy'] * 100:.2f} % (status E).  The Steward produces and checks this in {d['zkvin']['prove_ms']:.0f} ms + "
             f"{d['zkvin']['verify_ms']:.0f} ms.", ha="left", va="top", fontsize=9.5, color=INK, transform=ax.transAxes)
-    save(fig, "fig06_hex_wall.png", "Proof from results/zkvin_bench.json (sample_proof); error rate per docs/zkp/SOURCES_ZKP.md [PANKO-ERR].")
+    save(fig, "fig06_hex_wall.png", "Proof from results/zkvin_bench.json (sample_proof); error rate per docs/zkp/SOURCES_ZKP.md [PANKO-BASIC].")
 
 
 def fig07_manual(plt, d):

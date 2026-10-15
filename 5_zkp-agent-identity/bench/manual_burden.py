@@ -8,12 +8,12 @@ Two kinds of numbers, kept apart in the output:
   rates. Each rate is cited in docs/zkp/SOURCES_ZKP.md and chosen to be generous to the human.
 
 Rates.
-* SHA-256 by hand: one round in 16 min 45 s (Shirriff 2014, [SHIRRIFF-2014]). The FIPS 180-4 round function is about
+* SHA-256 by hand: one round in 16 min 45 s (Shirriff 2014, [SHIRRIFF2014]). The FIPS 180-4 round function is about
   26 operations on 32-bit words (Sigma1 5, Ch 4, four additions for T1; Sigma0 5, Maj 5, one addition for T2; two
   final additions), so one 32-bit word operation takes about 38.7 s.
 * A 256-bit modular multiplication priced at 200 word operations: 64 word products (each 32x32 product counted as ONE
   operation, which is very generous), about 100 additions with carries, and a reduction; about 2.1 hours.
-* Transcription: 0.6 % residual error per character typed (Panko's compilation, [PANKO-ERR]); the chance of copying
+* Transcription: 0.6 % residual error per character typed (Panko's compilation, [PANKO-BASIC]); the chance of copying
   n characters with no error is (1 - 0.006)^n.
 * Groth16 prover (no Pippenger, the textbook algorithm a person would follow): multi-scalar multiplications over the
   wires and the evaluation domain, about 384 point operations per 254-bit scalar, 12 field multiplications per G1 point
@@ -79,7 +79,7 @@ def main():
         "condition": "MEASURED counts (exact) priced at cited human rates (status E)",
         "run": run_identity(),
         "rates_E": {"sha256_round_s": SHA_ROUND_S, "word_op_s": WORD_OP_S, "field_mul_s": FIELD_MUL_S,
-                    "char_error": CHAR_ERROR, "sources": ["SHIRRIFF-2014", "PANKO-ERR", "FIPS-180-4"]},
+                    "char_error": CHAR_ERROR, "sources": ["SHIRRIFF2014", "PANKO-BASIC", "FIPS180-4"]},
         "measured": {"zkvin_wires": wires, "zkvin_constraints": constraints, "groth16_domain": domain,
                      "field_mul_counts": {k: v for k, v in tasks.items() if "(E" not in k},
                      "characters_to_copy": copy},
