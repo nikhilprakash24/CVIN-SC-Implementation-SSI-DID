@@ -1,0 +1,40 @@
+step     : 08_control_true_0824
+utc      : 2026-10-15T11:13:49Z
+command  : set -e; V=/c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/solc/soljson-v0.8.24+commit.e11b9ed9.js; cp node_modules/solc/soljson.js /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/soljson-0837.bak; cp $V node_modules/solc/soljson.js; echo 'scratch-only swap: node_modules/solc/soljson.js <- vendored official release'; npx hardhat clean; npx hardhat compile; node /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/probe.js | sed -n '2,3p;6,7p'; npx hardhat test | grep -E 'passing|failing'; IMPL=O1_ERC1056 npx hardhat run scenarios/run_i2i.js | tail -1; NEW=$(ls -t traces/i2i_O1_ERC1056_*.jsonl | head -1); sha256sum $NEW; mv $NEW /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/evidence-staging/XV2_hub_a352_S1_true0824_$(basename $NEW); node /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/gascmp.js traces/i2i_O1_ERC1056_1780620182135.jsonl /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/evidence-staging/XV2_hub_a352_S1_0837_i2i_O1_ERC1056_1792062818150.jsonl /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/evidence-staging/XV2_hub_a352_S1_true0824_$(basename $NEW); echo '--- restore 0.8.37 soljson + rebuild'; cp /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/soljson-0837.bak node_modules/solc/soljson.js; sha256sum node_modules/solc/soljson.js; npx hardhat clean; npx hardhat compile; node /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/probe.js | sed -n 7p
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify/sandbox/cvin-sandbox-v1.1
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+scratch-only swap: node_modules/solc/soljson.js <- vendored official release
+Compiled 12 Solidity files successfully (evm target: paris).
+solc.version()               = 0.8.24+commit.e11b9ed9.Emscripten.clang
+soljson.js sha256            = 11b054b55273ec55f6ab3f445eb0eb2c83a23fed43d10079d34ac3eabe6ed8b1
+O1_ERC1056 output metadata compiler.version = 0.8.24+commit.e11b9ed9
+deployedBytecode CBOR "solc" bytes = 000818 => v0.8.24
+  12 passing (920ms)
+Trace written: traces/i2i_O1_ERC1056_1792062845135.jsonl (22 entries, 12/12 functions)
+7e97457b57693c20f633d67f0bf583ffbed5e4921fdd8edbdc23b548707a7b0b *traces/i2i_O1_ERC1056_1792062845135.jsonl
+seq | fn | fnId | identity | i2i_O1_ERC1056_1780620182135.jsonl | XV2_hub_a352_S1_0837_i2i_O1_ERC1056_1792062818150.jsonl | XV2_hub_a352_S1_true0824_i2i_O1_ERC1056_1792062845135.jsonl | delta(last-first)
+2 | createDID | F1 | Registry | 178935 | 178935 | 178935 | 0
+3 | createDID | F1 | IdentityA | 161835 | 161835 | 161835 | 0
+4 | createDID | F1 | IdentityB | 161823 | 161823 | 161823 | 0
+5 | issueCredential | F5 | Registry | 130163 | 130163 | 130163 | 0
+6 | issueCredential | F5 | Registry | 130163 | 130163 | 130163 | 0
+7 | addVerificationMethod | F9 | IdentityA | 59607 | 59607 | 59607 | 0
+8 | addVerificationMethod | F9 | IdentityA | 59607 | 59607 | 59607 | 0
+9 | addDelegate | F11 | IdentityA | 54227 | 54227 | 54227 | 0
+15 | createPresentation | F8 | IdentityA | 62441 | 62441 | 62458 | 17
+17 | revokeCredential | F7 | Registry | 32980 | 32980 | 32980 | 0
+19 | removeVerificationMethod | F10 | IdentityA | 36478 | 36478 | 36478 | 0
+20 | updateDID | F3 | IdentityB | 44760 | 44760 | 44760 | 0
+21 | deactivateDID | F4 | IdentityA | 55127 | 55127 | 55127 | 0
+summary lines: i2i_O1_ERC1056_1780620182135.jsonl tx=13; XV2_hub_a352_S1_0837_i2i_O1_ERC1056_1792062818150.jsonl tx=13; XV2_hub_a352_S1_true0824_i2i_O1_ERC1056_1792062845135.jsonl tx=13
+i2i_O1_ERC1056_1780620182135.jsonl -> functions covered: 12/12
+XV2_hub_a352_S1_0837_i2i_O1_ERC1056_1792062818150.jsonl -> functions covered: 12/12
+XV2_hub_a352_S1_true0824_i2i_O1_ERC1056_1792062845135.jsonl -> functions covered: 12/12
+--- restore 0.8.37 soljson + rebuild
+221d7a667378b5068d913e75fe092507e061363cd1d23b64c49ae82febabad4c *node_modules/solc/soljson.js
+Compiled 12 Solidity files successfully (evm target: paris).
+deployedBytecode CBOR "solc" bytes = 000825 => v0.8.37
+---- exit code: 0 ----

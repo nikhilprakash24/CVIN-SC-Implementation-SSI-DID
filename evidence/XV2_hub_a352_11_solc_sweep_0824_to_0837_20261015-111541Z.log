@@ -1,0 +1,38 @@
+step     : 11_solc_sweep_0824_to_0837
+utc      : 2026-10-15T11:15:41Z
+command  : bash /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/sweep.sh
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify/sandbox/cvin-sandbox-v1.1
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.24 | metadata=0.8.24+commit.e11b9ed9 | createPresentation=62458 | tx rows differing from committed trace=1
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.25 | metadata=0.8.25+commit.b61c2a91 | createPresentation=62446 | tx rows differing from committed trace=1
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.26 | metadata=0.8.26+commit.8a97fa7a | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.27 | metadata=0.8.27+commit.40a35a09 | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.28 | metadata=0.8.28+commit.7893614a | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.29 | metadata=0.8.29+commit.ab55807c | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.30 | metadata=0.8.30+commit.73712a01 | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.31 | metadata=0.8.31+commit.fd3a2265 | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.32 | metadata=0.8.32+commit.ebbd65e5 | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.33 | metadata=0.8.33+commit.64118f21 | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.34 | metadata=0.8.34+commit.80d5c536 | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.35 | metadata=0.8.35+commit.47b9dedd | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.36 | metadata=0.8.36+commit.8a079791 | createPresentation=62441 | tx rows differing from committed trace=0
+awk: warning: escape sequence `\|' treated as plain `|'
+npm solc@0.8.37 | metadata=0.8.37+commit.f401782d | createPresentation=62441 | tx rows differing from committed trace=0
+restored: deployedBytecode CBOR "solc" bytes = 000825 => v0.8.37
+---- exit code: 0 ----

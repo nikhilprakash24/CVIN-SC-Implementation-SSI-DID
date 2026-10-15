@@ -124,3 +124,13 @@ Executed per `docs/NEXT_STEPS_PLAN_v1.0.md` P1; scope = the 2-of-5 install set (
 - **Collision (P0 per hub rules):** 2026-09-24 onboarding pushes copied TEST history (key at `cvin-v6/index.js:19`, public since 2023-11) into the public SSI-DID spoke (branches `sandbox-onboarding`, `wo-s0/*`, `docs/root-readme`, tag `asfound/pre-onboarding`). Awaiting operator ruling U3; no further spoke pushes.
 - **Hub WO-0:** `cvin-sandbox-v1.3` matches the hub's missing-sandbox fingerprint and acceptance numbers → recommend declaring it the recovery (U5).
 - **B↔C:** spoke contracts don't implement IMinimalSSI (ERC-1056: F3/F11/F12 native; F1/F2/F9/F10 adapted; F4 convention; F5–F8 absent) → adapter required (A7).
+
+---
+
+## I. XV2 — verification of hub WO-0 (`a352fa2`, 2026-10-15)
+
+WO-0 substance **holds**: verbatim import (29/29 files byte-identical to `cvin-sandbox-v1.3.zip`), fingerprint OK except the recorded `cvin-v6/` absence, secret scan clean, G0 12/12, cited O1 trace byte-identical (sha256 `36811c6c…577a`). No hub record claims 0.8.24 ran.
+
+**F-XV-1 sharpened:** the hub lockfile pins solc **0.8.37** (metadata `0.8.37+commit.f401782d`; build-info "0.8.24" is a config label). Deterministic sweep: createPresentation = **62,458 for 0.8.24/0.8.25** and **62,441 for ≥0.8.26**; all other 12 tx identical. ⇒ The cited June figure 62,441 was **not** produced by 0.8.24; most likely by 0.8.35 (caret-latest on 2026-06-05). Corollary: npm `solc@0.8.24` `soljson.js` hashes `fb59b825…` (wrapper differs; embedded wasm identical to the official release), so a hash check must target the wasm, not the JS wrapper.
+
+**Hub record defects (proposed corrections, not applied):** stale `SHA256SUMS` (not regenerated in a352fa2); CLAUDE.md §2 "pins solc 0.8.24" contradicted; STATUS "O1 trace confirmed" needs compiler qualification; G0 log location/header deviates from BUILD_PLAN WO-0; commit author `cvin-sc@local`; root `.gitignore` `*.log` will swallow future `gates/*.log`. Evidence: `evidence/XV2_hub_a352_*`.

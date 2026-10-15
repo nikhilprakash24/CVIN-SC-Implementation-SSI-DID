@@ -1,0 +1,15 @@
+step     : 03_lockfile_resolution
+utc      : 2026-10-15T11:12:22Z
+command  : grep -n "\"solc\"" package.json; node -e "const l=require(\"./package-lock.json\");console.log(\"lockfileVersion\",l.lockfileVersion,\"root deps\",JSON.stringify(l.packages[\"\"].dependencies));for(const k of [\"node_modules/solc\",\"node_modules/hardhat\",\"node_modules/@nomicfoundation/hardhat-toolbox\"]){const e=l.packages[k];console.log(k,e.version,e.resolved,e.integrity)}"; git log --format="%h %an %ad %s" -- package-lock.json
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify/sandbox/cvin-sandbox-v1.1
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+15:    "solc": "^0.8.24"
+lockfileVersion 3 root deps {"@nomicfoundation/hardhat-toolbox":"^5.0.0","hardhat":"^2.28.6","solc":"^0.8.24"}
+node_modules/solc 0.8.37 https://registry.npmjs.org/solc/-/solc-0.8.37.tgz sha512-ieUYdPDRGNKMsZpCfi9tY64Q+ASoL8tyhLuvf9cFiqDs+6ijlx8Wn2CRi0N71AlCvRx0V092rlUYu3b3PuxWlA==
+node_modules/hardhat 2.29.1 https://registry.npmjs.org/hardhat/-/hardhat-2.29.1.tgz sha512-BVPE15F9+gWH5Eof7aAhprXTi05mNHwn32fwIKMeMFqrkU3Jun1f7NubXsJ0SOeMqu0mchF6KkW7rx1CHinlWw==
+node_modules/@nomicfoundation/hardhat-toolbox 5.0.0 https://registry.npmjs.org/@nomicfoundation/hardhat-toolbox/-/hardhat-toolbox-5.0.0.tgz sha512-FnUtUC5PsakCbwiVNsqlXVIWG5JIb5CEZoSXbJUsEBun22Bivx2jhF1/q9iQbzuaGpJKFQyOhemPB2+XlEE6pQ==
+a352fa2 cvin-sc Thu Oct 15 04:06:17 2026 -0700 WO-0: recover cvin-sandbox-v1.1, G0 12/12
+---- exit code: 0 ----

@@ -1,0 +1,29 @@
+step     : 06_G0_test_as_committed
+utc      : 2026-10-15T11:13:26Z
+command  : node /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/probe.js | sed -n 2p; npx hardhat test
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify/sandbox/cvin-sandbox-v1.1
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+solc.version()               = 0.8.37+commit.f401782d.Emscripten.clang
+
+
+  O1_ERC1056 — IMinimalSSI compliance
+    ✔ test_01 createDID returns non-zero id; DID resolvable
+    ✔ test_02 resolveDID returns empty for non-existent DIDs (no revert)
+    ✔ test_03 updateDID emits; unauthorized reverts NotAuthorized
+    ✔ test_04 deactivateDID irreversible; updates revert DIDAlreadyDeactivated
+    ✔ test_05 issueCredential returns id; unauthorized issuer reverts
+    ✔ test_06 verifyCredential valid=true for fresh credential, correct issuer
+    ✔ test_07 revokeCredential -> verification returns revoked=true
+    ✔ test_08 createPresentation prevents replay; verifies holder ownership
+    ✔ test_09 addVerificationMethod returns non-zero keyId
+    ✔ test_10 removeVerificationMethod ok for non-last; fails for last key
+    ✔ test_11 addDelegate -> validDelegate true
+    ✔ test_12 validDelegate false after expiration
+
+
+  12 passing (1s)
+
+---- exit code: 0 ----

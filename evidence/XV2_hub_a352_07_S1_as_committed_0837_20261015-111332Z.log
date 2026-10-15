@@ -1,0 +1,35 @@
+step     : 07_S1_as_committed_0837
+utc      : 2026-10-15T11:13:32Z
+command  : node /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/probe.js | sed -n '2p;6,7p'; IMPL=O1_ERC1056 npx hardhat run scenarios/run_i2i.js | tail -3; NEW=$(ls -t traces/i2i_O1_ERC1056_*.jsonl | head -1); echo new trace: $NEW; sha256sum $NEW; cp $NEW /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/evidence-staging/XV2_hub_a352_S1_0837_$(basename $NEW); node /c/Users/nikhilp/AppData/Local/Temp/claude/C--Users-nikhilp-Desktop/4c145d73-58c1-4217-919e-d748f4224fd2/scratchpad/gascmp.js traces/i2i_O1_ERC1056_1780620182135.jsonl $NEW; git status --short
+cwd      : /c/Users/nikhilp/Desktop/CVIN-2026-Sanbox1_v6/toolchain/runs/hub-a352-verify/sandbox/cvin-sandbox-v1.1
+node -v  : v24.16.0
+npm -v   : 11.13.0
+git HEAD : a352fa20ea4c5913587d8e31c58325d0fdd24280
+---- output ----
+solc.version()               = 0.8.37+commit.f401782d.Emscripten.clang
+O1_ERC1056 output metadata compiler.version = 0.8.37+commit.f401782d
+deployedBytecode CBOR "solc" bytes = 000825 => v0.8.37
+[22] done: functions covered: 12/12
+
+Trace written: traces/i2i_O1_ERC1056_1792062818150.jsonl (22 entries, 12/12 functions)
+new trace: traces/i2i_O1_ERC1056_1792062818150.jsonl
+a234b7236124c69aadb5a84731697abb8e3233a480f9bb72f7a22a72c87467b4 *traces/i2i_O1_ERC1056_1792062818150.jsonl
+seq | fn | fnId | identity | i2i_O1_ERC1056_1780620182135.jsonl | i2i_O1_ERC1056_1792062818150.jsonl | delta(last-first)
+2 | createDID | F1 | Registry | 178935 | 178935 | 0
+3 | createDID | F1 | IdentityA | 161835 | 161835 | 0
+4 | createDID | F1 | IdentityB | 161823 | 161823 | 0
+5 | issueCredential | F5 | Registry | 130163 | 130163 | 0
+6 | issueCredential | F5 | Registry | 130163 | 130163 | 0
+7 | addVerificationMethod | F9 | IdentityA | 59607 | 59607 | 0
+8 | addVerificationMethod | F9 | IdentityA | 59607 | 59607 | 0
+9 | addDelegate | F11 | IdentityA | 54227 | 54227 | 0
+15 | createPresentation | F8 | IdentityA | 62441 | 62441 | 0
+17 | revokeCredential | F7 | Registry | 32980 | 32980 | 0
+19 | removeVerificationMethod | F10 | IdentityA | 36478 | 36478 | 0
+20 | updateDID | F3 | IdentityB | 44760 | 44760 | 0
+21 | deactivateDID | F4 | IdentityA | 55127 | 55127 | 0
+summary lines: i2i_O1_ERC1056_1780620182135.jsonl tx=13; i2i_O1_ERC1056_1792062818150.jsonl tx=13
+i2i_O1_ERC1056_1780620182135.jsonl -> functions covered: 12/12
+i2i_O1_ERC1056_1792062818150.jsonl -> functions covered: 12/12
+?? traces/i2i_O1_ERC1056_1792062818150.jsonl
+---- exit code: 0 ----
