@@ -180,3 +180,17 @@ Marked **[try]** where this session attempts them, **[later]** where they are wr
 
 WP0 → WP1 (in the background) → WP2 → WP3 → WP4 → WP5 → WP6 → WP7 → WP8 → WP9 → WP10, with a commit and push at
 each package boundary (rule 1.3.2).
+
+## Amendments
+
+**A1 (2026-10-15, before any run of the attack simulation; not post hoc).** Z-E5 and Z-E6 are evaluated under these
+parameters, fixed before the simulator was first executed: attribute model year, uniform prior over 1995–2026 (32
+values, 5 bits); 40 honest requests per episode from six accredited insurers plus a 10 % share of first-time
+unaccredited honest insurers; honest thresholds on a 5-year bucket boundary with probability 0.7, otherwise uniform
+over 1996–2025; one adversary making 12 adaptive bisection queries interleaved at random, from one identity
+(variant *single*) or a fresh identity per query (variant *Sybil*); defences: none; static cap of 2 answers per
+verifier; global budget only (3.0 bits, no coarsening); Steward with fixed responder (3.0 bits, 5-year coarsening);
+Steward with learned responder (the same plus Q-learning trained on seeds 10,000–12,999, disjoint from evaluation
+seeds 1–30); Steward learner without budget (ablation). Honest service counts a request as served when the answer
+settles the requester's question (an exact answer, or a coarsened proof that holds). Z-E6 is read per seed, as
+written: on every one of the 30 seeds, adversary leakage ≤ 3.0 bits in both variants **and** honest service ≥ 90 %.
