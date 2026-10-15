@@ -53,3 +53,22 @@ work, without embellishment, showing the good work in the best honest light.
   classes the manifest. Its coverage guard fired on the new files before that, as it should. New row **#52**; #32
   and #37 have a dated note; the result cards have a card for #52; plan C3 is marked done. One slip was caught before
   commit: my note first gave the knee as k ≈ 44–49; the four runs give 40–49.
+- **CR, contribution record.** `docs/figures/make_contribution_record.py` and `contribution_template.html` write
+  `docs/figures/contribution_record.html`: a contribution calendar (commits per day, fixed bins 1–4, 5–14, 15–29,
+  30+), month totals with a table view, milestones (release tags, merged pull requests, report openings), what the
+  work produced (eight tiles, each naming its source file), the pre-registered verdicts as they fell, and commits by
+  area. Published privately: https://claude.ai/artifact/6kumQ7cg1tHRjiQJy7MmAp.
+  - **Scope decisions, each stated on the page.**
+    - 9 commits on one branch belong to an unrelated planning project and are left out.
+    - The repository's creation commit (`0ab45bb`, 2023-11-07) is counted in the totals but falls before the
+      calendar, which starts in November 2025.
+    - The identities are reported as git has them: 369 the author's, 23 an AI coding assistant's (the first
+      implementation commits of 2025-11-10 among them), 1 the organisation account's.
+    - No line counts, because generated result files would dominate them. A commit count measures activity, not
+      effort. The December–May gap is shown as it is.
+  - **Corrections before publishing.**
+    - Three tile labels claimed more than the records show. One said every report had closed with a CI result,
+      which the early reports do not have. One gave the Python layers a vaguer name. One called the 99 cells
+      "tests across nine standards", when they are 11 adapters × 9 mechanisms, including declared n/a cells.
+    - A verdict chip overflowed at phone width.
+  - The page depends on the git history, so it is regenerated at each pass's close rather than checked in CI.

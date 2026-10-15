@@ -1,0 +1,280 @@
+<title>CVIN Contribution Record</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the results board's palette and faces. A contribution calendar across the top (the history), then what the history produced, then where it went, then how to read it. */
+:root {
+  --bg: #f3f4f2; --panel: #ffffff; --ink: #15191c; --ink-2: #4c555b; --muted: #7d868b; --rule: #dde1df;
+  --accent: #c27a00; --accent-soft: #f6e7c8; --good: #217a3c; --warn: #a86400; --crit: #b3261e; --na: #8a9399; --bar: #2f5d73;
+  --c0: #e6eae8; --c1: #b9e2c3; --c2: #74c58c; --c3: #2f9a55; --c4: #145f34;
+  --font-display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101416; --panel: #171d20; --ink: #e8ecea; --ink-2: #b4bdc1; --muted: #87929a; --rule: #2a3236;
+    --accent: #f0a529; --accent-soft: #3a2d14; --good: #5cc27a; --warn: #f0a529; --crit: #ef6b62; --na: #7d878d; --bar: #6aa6c2;
+    --c0: #222a2e; --c1: #1b4a30; --c2: #23743f; --c3: #36a85c; --c4: #6fe293;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101416; --panel: #171d20; --ink: #e8ecea; --ink-2: #b4bdc1; --muted: #87929a; --rule: #2a3236;
+  --accent: #f0a529; --accent-soft: #3a2d14; --good: #5cc27a; --warn: #f0a529; --crit: #ef6b62; --na: #7d878d; --bar: #6aa6c2;
+  --c0: #222a2e; --c1: #1b4a30; --c2: #23743f; --c3: #36a85c; --c4: #6fe293;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; display: grid; gap: 22px; }
+header { display: grid; gap: 8px; border-bottom: 3px solid var(--accent); padding-bottom: 16px; }
+.eyebrow { font-family: var(--font-display); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; color: var(--accent); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 4vw, 40px); line-height: 1.05; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 20px; margin: 0; text-wrap: balance; }
+.lede { color: var(--ink-2); max-width: 72ch; margin: 0; }
+.kpis { display: flex; flex-wrap: wrap; gap: 10px 32px; margin-top: 6px; }
+.kpi { display: grid; }
+.kpi .k { font-family: var(--font-data); font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 12px; color: var(--ink-2); }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 18px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.sub { margin: 0; color: var(--ink-2); font-size: 14px; max-width: 75ch; }
+.src { font-family: var(--font-data); font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
+.scroll { overflow-x: auto; padding-bottom: 4px; }
+.cal { display: grid; grid-template-columns: 28px auto; gap: 4px 6px; width: max-content; }
+.mlab { display: grid; grid-auto-flow: column; grid-auto-columns: 13px; gap: 3px; font: 11px var(--font-data); color: var(--muted); height: 14px; }
+.mlab span { white-space: nowrap; overflow: visible; }
+.dlab { display: grid; grid-template-rows: repeat(7, 13px); gap: 3px; font: 10px var(--font-data); color: var(--muted); }
+.grid { display: grid; grid-template-rows: repeat(7, 13px); grid-auto-flow: column; grid-auto-columns: 13px; gap: 3px; }
+.cell { width: 13px; height: 13px; border-radius: 3px; background: var(--c0); }
+.cell[data-l="1"] { background: var(--c1); } .cell[data-l="2"] { background: var(--c2); }
+.cell[data-l="3"] { background: var(--c3); } .cell[data-l="4"] { background: var(--c4); }
+.cell.out { background: transparent; }
+.cell:hover { outline: 2px solid var(--ink); outline-offset: 1px; }
+.marks { display: grid; grid-auto-flow: column; grid-auto-columns: 13px; gap: 3px; height: 16px; }
+.mk { justify-self: center; width: 9px; height: 9px; margin-top: 4px; border-radius: 50%; border: 2px solid var(--panel); }
+.mk[data-k="release"] { background: var(--accent); border-radius: 2px; transform: rotate(45deg); width: 9px; height: 9px; }
+.mk[data-k="merge"] { background: var(--bar); }
+.mk[data-k="report"] { background: var(--ink-2); width: 7px; height: 7px; margin-top: 5px; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 12px; color: var(--ink-2); }
+.legend .sw { display: inline-flex; align-items: center; gap: 3px; }
+.legend .cell { display: inline-block; }
+.legend .mk { display: inline-block; margin: 0 4px 0 0; vertical-align: middle; }
+.months { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 12px var(--font-data); color: var(--ink-2); }
+.months b { color: var(--ink); font-weight: 500; }
+.months .z { color: var(--muted); }
+#tip { position: fixed; z-index: 5; pointer-events: none; background: var(--ink); color: var(--bg); border-radius: 4px; padding: 6px 9px; font-size: 12px; max-width: 320px; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+#tip b { font-family: var(--font-data); font-weight: 500; }
+#tip ul { margin: 4px 0 0; padding-left: 14px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.tile { border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; display: grid; gap: 2px; align-content: start; background: var(--panel); min-width: 0; }
+.tile .k { font-family: var(--font-data); font-weight: 500; font-size: 26px; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.tile .l { font-size: 13.5px; color: var(--ink); }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+@media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+.vlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.vlist li { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 8px; align-items: baseline; font-size: 13.5px; }
+.vlist .rid { font-family: var(--font-data); font-size: 12px; color: var(--muted); }
+.vchip { font: 600 11.5px var(--font-display); letter-spacing: .03em; padding: 0 6px; border-radius: 3px; border: 1px solid currentColor; margin-left: 4px; display: inline-block; max-width: 100%; overflow-wrap: anywhere; }
+.v-pass { color: var(--good); } .v-fail { color: var(--crit); } .v-mixed { color: var(--warn); } .v-none { color: var(--na); }
+.bars { display: grid; gap: 7px; }
+.bar-row { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 40px; gap: 10px; align-items: center; font-size: 13px; }
+.bar-track { height: 12px; background: var(--rule); border-radius: 2px; position: relative; overflow: hidden; }
+.bar-fill { position: absolute; inset: 0 auto 0 0; background: var(--bar); border-radius: 0 4px 4px 0; }
+.bar-row .v { font-family: var(--font-data); font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) { .bar-row { grid-template-columns: minmax(0, 1fr) 40px; } .bar-row .bar-track { grid-column: 1 / -1; grid-row: 2; } }
+.mlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 13.5px; }
+.mlist li { display: grid; grid-template-columns: 92px 14px minmax(0, 1fr); gap: 8px; align-items: center; }
+.mlist .d { font-family: var(--font-data); font-size: 12px; color: var(--muted); }
+.notes { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; color: var(--ink-2); max-width: 80ch; }
+.notes b { color: var(--ink); font-weight: 600; }
+table { border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 3px 10px 3px 0; border-bottom: 1px solid var(--rule); }
+td.num { text-align: right; font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+summary { font: 600 12px var(--font-display); letter-spacing: .04em; color: var(--muted); cursor: pointer; text-transform: uppercase; }
+footer { color: var(--muted); font-size: 12px; }
+code { font-family: var(--font-data); font-size: .92em; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+<div class="wrap">
+<header>
+  <span class="eyebrow">MASc thesis · UBC ECE · Nikhil Prakash</span>
+  <h1>CVIN contribution record</h1>
+  <p class="lede">The history of the CVIN repository: blockchain identity for connected and autonomous vehicles, compared across nine Ethereum identity standards, with a W3C credential layer and a V2V and V2I verification testbed. The calendar shows commits per day. The panels below show what the work produced, each figure with the file it comes from.</p>
+  <div class="kpis" id="kpis"></div>
+</header>
+
+<section class="panel" aria-labelledby="h-cal">
+  <h2 id="h-cal">Commits per day</h2>
+  <div class="scroll"><div class="cal" id="cal"></div></div>
+  <div class="legend" id="legend"></div>
+  <div class="months" id="months"></div>
+  <details><summary>Table view</summary><div class="scroll"><table id="mtable"></table></div></details>
+</section>
+
+<section class="panel" aria-labelledby="h-out">
+  <h2 id="h-out">What the work produced</h2>
+  <p class="sub">Figures from the committed records at the last full test run. Each tile names its source file.</p>
+  <div class="tiles" id="tiles"></div>
+</section>
+
+<div class="two">
+  <section class="panel" aria-labelledby="h-v">
+    <h2 id="h-v">Pre-registered experiments, reported as they fell</h2>
+    <p class="sub">Each prediction and its pass band were committed before the first run. Failed and out-of-band verdicts are kept, not re-run to a pass.</p>
+    <ul class="vlist" id="verdicts"></ul>
+    <span class="src">docs/MEASUREMENT_CONDITIONS.md; docs/figures/result_cards.html</span>
+  </section>
+  <section class="panel" aria-labelledby="h-a">
+    <h2 id="h-a">Where the commits went</h2>
+    <p class="sub">Commits touching each part of the repository. A commit that touches two parts counts in both, so the bars sum to more than the commit total.</p>
+    <div class="bars" id="areas"></div>
+  </section>
+</div>
+
+<div class="two">
+  <section class="panel" aria-labelledby="h-m">
+    <h2 id="h-m">Milestones</h2>
+    <ul class="mlist" id="mlist"></ul>
+  </section>
+  <section class="panel" aria-labelledby="h-r">
+    <h2 id="h-r">How to read this page</h2>
+    <ul class="notes" id="notes"></ul>
+  </section>
+</div>
+
+<footer id="foot"></footer>
+</div>
+<div id="tip" hidden></div>
+<script>
+(function () {
+  var D = {"first": "2025-11-10", "last": "2026-10-15", "before": [{"d": "2023-11-07", "h": "0ab45bb", "s": "first commit"}], "commits": 393, "active_days": 22, "branches": 10, "excluded_commits": 9, "identities": {"author": 369, "assistant": 23, "other": 1}, "days": {"2023-11-07": {"n": 1, "s": ["first commit"]}, "2025-11-10": {"n": 19, "s": ["Add comprehensive ERC-721 Vehicle NFT implementation", "Add Comparison Framework, Use Cases & Realistic CV2X Roadmap", "Implement ERC-1056 Lightweight DID + Complete SSI Architecture"]}, "2025-11-11": {"n": 3, "s": ["Add Session 3 Summary - All Use Cases & SUMO Integration Complete", "Add Complete SUMO Traffic Simulation Integration", "Complete All 10 Use Cases & Add Comprehensive Demo Suite"]}, "2026-06-21": {"n": 3, "s": ["Add comprehensive thesis documentation - Second Pass Deliverables", "Add comprehensive thesis integration session summary", "Thesis Integration: Complete Repository Restructuring"]}, "2026-07-05": {"n": 13, "s": ["Merge branches 'wo-s0/evidence-and-findings' and 'wo-s0/onboarding-plans' into sandbox-onb", "Handoff: architect handback document (Directions SS-8)", "Integration: parallel-work record (cvin-sandbox-v1.3 canon) in FINDINGS SS-G"]}, "2026-07-10": {"n": 9, "s": ["Consolidation: honest-claims cleanup and structure mapping", "MOBI VID canonical layer: fix V1 contract bugs, build VID I/II Python stack", "Fix use-case suite: 12/12 passing with real crypto and truthful reporting"]}, "2026-07-13": {"n": 3, "s": ["Complete 9-standard gas benchmark: full RQ1 comparison matrix", "SUMO V2V loop: real cryptographic verification replaces simulated latencies", "Complete the 9-standard set: ERC-735, ERC-1155, LSP8, ERC-4337, CVIN-Combined"]}, "2026-07-14": {"n": 5, "s": ["Release v0.7.0 — Integration & Verification Milestone", "Refresh security matrix artifact + gitignore note", "Add Thrust 5 security analysis (two complementary lenses) + Chapter 5 sec. section"]}, "2026-07-15": {"n": 1, "s": ["Add NEXT_STAGES_PLAN: post-v0.7.0 deep-dive roadmap (stages 0.8-1.0)"]}, "2026-07-19": {"n": 8, "s": ["Stage 0.9 (dev): Sepolia public-testnet validation harness", "Release v0.8.0 — Rigor & Ground-Truth Hardening", "Stage 0.8: gas benchmark reproducibility (N=30, deterministic)"]}, "2026-07-23": {"n": 24, "s": ["update with mobi vid w3c did ssi compliance and more", "Chapter 5 §5.9: synthesize scaling & lifetime cost (all four experiments)", "Scaling Exp A+B: marginal-cost stationarity + lifetime cost model"]}, "2026-07-24": {"n": 4, "s": ["Add MASTER_UPDATE: comprehensive single-source status for audit + parallel research", "Sensitivity analysis (§5.9.4): gas comparison is compiler- and calldata-robust", "Formalize H5 frontier/dominance (RESEARCH_AUDIT §4.9)"]}, "2026-09-24": {"n": 27, "s": ["Add comprehensive handoff document for data collection framework", "Register #4: merged checker methodology (executable score, VC DM 2.0); SC-06: instrument a", "CI: compliance gate accepts the merged checker's 'EXECUTABLE COMPLIANCE SCORE' label"]}, "2026-09-30": {"n": 5, "s": ["benchmarks: size dataset for N=1000 population plus measured identity", "Add CRUD-and-beyond data-collection framework and measurement harness", "Verification pass clean; add the original prompt-and-direction record and the 2026-09-30 h"]}, "2026-10-03": {"n": 49, "s": ["CI: install numpy for the full Python suite job", "Close Pass 1: claim register and HANDOFF numbers follow the review-02 runs", "Metrics run of record on the merged Pass 1 tree (2026-10-03T23-23-59Z_59405ff)"]}, "2026-10-04": {"n": 136, "s": ["Handback 0d: CI result recorded for the pass-06 commits", "Pass 06 closed: results of record re-executed on the final contracts (nine-standard table,", "Handback §7: log the analysis layer, rubric inputs, HTTP condition and the measured-code r"]}, "2026-10-06": {"n": 11, "s": ["Merge S5: nine-standard gas determinism re-checked on the merged contracts — N=30 runs, ev", "Review-2 documents point at the renamed after-action reports (docs/review02/AAR_REVIEW2_03", "docs/testing/README.md: entry point for the organised suite after the merge (three clicks "]}, "2026-10-09": {"n": 27, "s": ["Pass 11 closed: grand run ALL OK (Hardhat 536, Python layers 291, 92 demos / 1,752 steps);", "Infrastructure results of record re-run on the hardened verifier (f1f9e37, amendment A4): ", "Generated-document checks hardened after the adversarial review: stale-figure checker scan"]}, "2026-10-10": {"n": 15, "s": ["WM-2 A1 (N-21): stamp inventory accounts for every tracked result file (161, 0 uncovered);", "After-action report 13 opened: WM-2 step A1 (stamp inventory over every result directory)", "WM-1 close recorded: CI 8/8 green on 8c9fe6b; dashboard v6 and presentation page v2 publis"]}, "2026-10-12": {"n": 5, "s": ["Report 14 closed: CI 8/8 green on 1f3cd8f", "WM-2 A2: CI checks out full history (stamp-only verification needs it; shallow clone now f", "WM-2 A2: harness run.js restored (benchmarksTree equals the run of record's again; switch "]}, "2026-10-14": {"n": 17, "s": ["Report 17 closed: CI 8/8 green on 8855a4d", "WM-2 B1 closed: I4 runs of record over declared seeds 1-30 at a950cdf (seed 1 exact, range", "WM-2 B1: seeded randomness for incidental inputs; I4 over declared seeds; the rule written"]}, "2026-10-15": {"n": 8, "s": ["WM-2 C3: #32 and #37 at their own code on one host, two replicates; the host explains thei", "Report 19 opened: contribution record; WM-2 C3 design and decision rule written before any", "Report 18 closed: CI 8/8 green on aba1d7c"]}}, "months": {"2023-11": 1, "2025-11": 22, "2026-06": 3, "2026-07": 67, "2026-09": 32, "2026-10": 268}, "areas": [{"label": "Thesis, register and documents", "n": 237}, {"label": "Contracts and gas benchmarks", "n": 79}, {"label": "V2X testbed", "n": 73}, {"label": "Comparison framework and results", "n": 44}, {"label": "Sandbox, test harness and run identity", "n": 42}, {"label": "CI", "n": 30}, {"label": "Other", "n": 22}, {"label": "W3C SSI credential layer", "n": 18}, {"label": "Phase 2", "n": 4}], "milestones": [{"d": "2026-07-14", "kind": "release", "label": "Tag v0.7.0"}, {"d": "2026-07-19", "kind": "release", "label": "Tag v0.8.0"}, {"d": "2026-09-24", "kind": "merge", "label": "Pull request #2 merged"}, {"d": "2026-09-30", "kind": "report", "label": "After-action report 2 opened"}, {"d": "2026-10-03", "kind": "report", "label": "After-action report 3 opened"}, {"d": "2026-10-04", "kind": "report", "label": "After-action report 4 opened"}, {"d": "2026-10-04", "kind": "report", "label": "After-action report 5 opened"}, {"d": "2026-10-04", "kind": "report", "label": "After-action report 6 opened"}, {"d": "2026-10-06", "kind": "report", "label": "After-action report 7 opened"}, {"d": "2026-10-09", "kind": "report", "label": "After-action report 8 opened"}, {"d": "2026-10-09", "kind": "report", "label": "After-action report 9 opened"}, {"d": "2026-10-09", "kind": "report", "label": "After-action report 10 opened"}, {"d": "2026-10-09", "kind": "report", "label": "After-action report 11 opened"}, {"d": "2026-10-10", "kind": "report", "label": "After-action report 12 opened"}, {"d": "2026-10-10", "kind": "report", "label": "After-action report 13 opened"}, {"d": "2026-10-12", "kind": "report", "label": "After-action report 14 opened"}, {"d": "2026-10-14", "kind": "report", "label": "After-action report 15 opened"}, {"d": "2026-10-14", "kind": "report", "label": "After-action report 16 opened"}, {"d": "2026-10-14", "kind": "report", "label": "After-action report 17 opened"}, {"d": "2026-10-15", "kind": "report", "label": "After-action report 18 opened"}, {"d": "2026-10-15", "kind": "report", "label": "After-action report 19 opened"}], "head": "3c9fd89", "tiles": [{"k": "537", "l": "Hardhat tests passing, 0 failing", "src": "sandbox/grand/report/GRAND_REPORT.md at af8a006"}, {"k": "331", "l": "Python tests passing (SSI credential layer and V2X exemplar interactions)", "src": "sandbox/grand/report/GRAND_REPORT.md at af8a006"}, {"k": "92", "l": "feature demos, 1,752 steps, 594 transactions mined, 0 failures", "src": "sandbox/grand/report/demos.json"}, {"k": "52", "l": "claims in the register; 34 verified, the rest labelled estimate, superseded or unsupported", "src": "docs/MEASUREMENT_CONDITIONS.md"}, {"k": "66", "l": "defects logged in the project's own code and documents; 41 fixed", "src": "docs/DEFECT_LOG.md"}, {"k": "18", "l": "after-action reports, one per work pass: the plan committed before the work, then the log and the closing", "src": "docs/AFTER_ACTION_REPORT_*.md"}, {"k": "9", "l": "document and record checks run in CI on every push, each failing on a stale or unsupported figure", "src": ".github/workflows/test-contracts.yml"}, {"k": "99", "l": "mechanism cells passing: 11 identity adapters × 9 mechanisms, each implemented or declared not applicable", "src": "sandbox/grand/report/GRAND_REPORT.md at af8a006"}], "verdicts": [{"row": 33, "title": "M4 lifecycle parity", "verdict": "writes ≥10×: PASS ×3; equal once cached: FAIL"}, {"row": 38, "title": "M5 pseudonym pool, per epoch", "verdict": "gas FAIL; linkability PASS (fully linkable)"}, {"row": 44, "title": "SPaT against BSM warm verify (I1)", "verdict": "outside band, not falsified"}, {"row": 45, "title": "SPaT attacks rejected (I2)", "verdict": "PASS"}, {"row": 46, "title": "Revoked RSU in a verifier's cache (I3)", "verdict": "PASS"}, {"row": 47, "title": "RSU key anchor (I4)", "verdict": "reported, no verdict"}, {"row": 48, "title": "Crypto on the controller to vehicle path (I5)", "verdict": "reported, no verdict"}, {"row": 52, "title": "#32 against #37 on one host (C3)", "verdict": "decision rule committed before the runs"}]};
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]; }); };
+  var fmt = function (n) { return n.toLocaleString("en-US"); };
+  var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var parse = function (s) { var p = s.split("-"); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])); };
+  var iso = function (d) { return d.toISOString().slice(0, 10); };
+  var nice = function (s) { var d = parse(s); return d.getUTCDate() + " " + MON[d.getUTCMonth()] + " " + d.getUTCFullYear(); };
+
+  var first = parse(D.first), last = parse(D.last);
+  var weeks = Math.round((last - first) / 864e5 / 7) + 1;
+  var span = Math.round((last - first) / 864e5) + 1;
+  document.getElementById("kpis").innerHTML = [
+    [fmt(D.commits), "commits"], [fmt(D.active_days), "days with commits"],
+    [nice(D.first) + " to " + nice(D.last), "span (" + fmt(span) + " days)"], [D.milestones.filter(function (m) { return m.kind === "report"; }).length, "after-action reports"]
+  ].map(function (k) { return '<div class="kpi"><span class="k">' + esc(k[0]) + '</span><span class="l">' + esc(k[1]) + "</span></div>"; }).join("");
+
+  // levels: fixed bins, stated in the legend
+  var BINS = [[1, 4], [5, 14], [15, 29], [30, Infinity]];
+  var level = function (n) { if (!n) return 0; for (var i = 0; i < BINS.length; i++) if (n <= BINS[i][1]) return i + 1; return 4; };
+
+  // calendar: columns are weeks starting Monday
+  var start = new Date(first); start.setUTCDate(start.getUTCDate() - ((start.getUTCDay() + 6) % 7));
+  var end = new Date(last); end.setUTCDate(end.getUTCDate() + (6 - (end.getUTCDay() + 6) % 7));
+  var ncol = Math.round((end - start) / 864e5 / 7) + 1;
+  var cells = [], mlab = [], marks = [];
+  var msByWeek = {};
+  D.milestones.forEach(function (m) {
+    var w = Math.floor((parse(m.d) - start) / 864e5 / 7);
+    (msByWeek[w] = msByWeek[w] || []).push(m);
+  });
+  var lastMonth = -1;
+  for (var c = 0; c < ncol; c++) {
+    var wk = new Date(start); wk.setUTCDate(wk.getUTCDate() + 7 * c);
+    var label = "";
+    for (var r = 0; r < 7; r++) {
+      var d = new Date(wk); d.setUTCDate(d.getUTCDate() + r);
+      var key = iso(d), info = D.days[key], n = info ? info.n : 0;
+      if (d.getUTCDate() === 1 || (c === 0 && r === 0)) { if (d.getUTCMonth() !== lastMonth) { label = MON[d.getUTCMonth()] + (d.getUTCMonth() === 0 || c === 0 ? " " + String(d.getUTCFullYear()).slice(2) : ""); lastMonth = d.getUTCMonth(); } }
+      var out = d < first || d > last;
+      cells.push('<div class="cell' + (out ? " out" : "") + '" data-l="' + level(n) + '" data-d="' + key + '" aria-label="' + key + ": " + n + ' commits"></div>');
+    }
+    mlab.push("<span>" + label + "</span>");
+    var ms = msByWeek[c];
+    if (ms) {
+      var kind = ms.some(function (m) { return m.kind === "release"; }) ? "release" : ms.some(function (m) { return m.kind === "merge"; }) ? "merge" : "report";
+      marks.push('<span class="mk" data-k="' + kind + '" data-w="' + c + '"></span>');
+    } else marks.push("<span></span>");
+  }
+  document.getElementById("cal").innerHTML =
+    "<span></span><div class=\"mlab\">" + mlab.join("") + "</div>" +
+    '<div class="dlab"><span></span><span>Tue</span><span></span><span>Thu</span><span></span><span>Sat</span><span></span></div>' +
+    '<div class="grid">' + cells.join("") + "</div>" +
+    "<span></span><div class=\"marks\">" + marks.join("") + "</div>";
+
+  var lg = '<span>Fewer</span>' + [0, 1, 2, 3, 4].map(function (l) {
+    var t = l === 0 ? "0" : BINS[l - 1][1] === Infinity ? BINS[l - 1][0] + "+" : BINS[l - 1][0] + "–" + BINS[l - 1][1];
+    return '<span class="sw"><span class="cell" data-l="' + l + '"></span>' + t + "</span>";
+  }).join("") + "<span>More</span>" +
+    '<span class="sw"><span class="mk" data-k="release"></span>release tag</span>' +
+    '<span class="sw"><span class="mk" data-k="merge"></span>pull request merged</span>' +
+    '<span class="sw"><span class="mk" data-k="report"></span>after-action report opened</span>';
+  document.getElementById("legend").innerHTML = lg;
+  // open on the most recent weeks when the calendar is wider than the screen, as GitHub's does
+  var sc = document.querySelector(".scroll"); sc.scrollLeft = sc.scrollWidth;
+
+  var months = [], mrows = [];
+  for (var m = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth(), 1)); m <= last; m.setUTCMonth(m.getUTCMonth() + 1)) {
+    var k = iso(m).slice(0, 7), n = D.months[k] || 0;
+    var days = Object.keys(D.days).filter(function (x) { return x.slice(0, 7) === k; }).length;
+    months.push('<span class="' + (n ? "" : "z") + '">' + MON[m.getUTCMonth()] + " " + String(m.getUTCFullYear()).slice(2) + " <b>" + n + "</b></span>");
+    mrows.push("<tr><td>" + k + '</td><td class="num">' + n + '</td><td class="num">' + days + "</td></tr>");
+  }
+  document.getElementById("months").innerHTML = months.join("");
+  document.getElementById("mtable").innerHTML = "<tr><th>Month</th><th>Commits</th><th>Days with commits</th></tr>" + mrows.join("");
+
+  // tooltip
+  var tip = document.getElementById("tip");
+  var show = function (html, x, y) {
+    tip.innerHTML = html; tip.hidden = false;
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 12)) + "px";
+    tip.style.top = Math.max(8, (y - h - 12 < 8 ? y + 16 : y - h - 12)) + "px";
+  };
+  document.getElementById("cal").addEventListener("mousemove", function (e) {
+    var t = e.target;
+    if (t.classList.contains("cell") && !t.classList.contains("out")) {
+      var info = D.days[t.dataset.d];
+      var h = "<b>" + (info ? info.n : 0) + "</b> commit" + ((info && info.n === 1) ? "" : "s") + " · " + nice(t.dataset.d);
+      if (info) h += "<ul>" + info.s.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + (info.n > 3 ? "<li>and " + (info.n - 3) + " more</li>" : "") + "</ul>";
+      show(h, e.clientX, e.clientY);
+    } else if (t.classList.contains("mk")) {
+      var ms = msByWeek[+t.dataset.w] || [];
+      show(ms.map(function (m) { return "<b>" + esc(m.d) + "</b> " + esc(m.label); }).join("<br>"), e.clientX, e.clientY);
+    } else tip.hidden = true;
+  });
+  document.getElementById("cal").addEventListener("mouseleave", function () { tip.hidden = true; });
+
+  document.getElementById("tiles").innerHTML = D.tiles.map(function (t) {
+    return '<div class="tile"><span class="k">' + esc(t.k) + '</span><span class="l">' + esc(t.l) + '</span><span class="src">' + esc(t.src) + "</span></div>";
+  }).join("");
+
+  var vclass = function (v) { return /FAIL/.test(v) && /PASS/.test(v) ? "v-mixed" : /FAIL|outside/.test(v) ? "v-fail" : /PASS/.test(v) ? "v-pass" : "v-none"; };
+  document.getElementById("verdicts").innerHTML = D.verdicts.map(function (v) {
+    return '<li><span class="rid">#' + v.row + "</span><span>" + esc(v.title) + ' <span class="vchip ' + vclass(v.verdict) + '">' + esc(v.verdict) + "</span></span></li>";
+  }).join("");
+
+  var max = Math.max.apply(null, D.areas.map(function (a) { return a.n; }));
+  document.getElementById("areas").innerHTML = D.areas.map(function (a) {
+    return '<div class="bar-row"><span>' + esc(a.label) + '</span><div class="bar-track"><div class="bar-fill" style="width:' + (100 * a.n / max).toFixed(1) + '%"></div></div><span class="v">' + a.n + "</span></div>";
+  }).join("");
+
+  var kindMark = function (k) { return '<span class="mk" data-k="' + k + '" style="margin:0"></span>'; };
+  document.getElementById("mlist").innerHTML = D.milestones.map(function (m) {
+    return '<li><span class="d">' + esc(m.d) + "</span>" + kindMark(m.kind) + "<span>" + esc(m.label) + "</span></li>";
+  }).join("");
+
+  var I = D.identities;
+  document.getElementById("notes").innerHTML = [
+    "<b>Scope.</b> Every commit reachable from the repository's branches and tags, each counted once, by author date. " + D.excluded_commits + " commits on one branch that holds an unrelated planning project are left out." +
+      (D.before.length ? " The calendar starts in November 2025; " + D.before.map(function (b) { return "<code>" + esc(b.h) + "</code> (" + esc(b.d) + ", \u201c" + esc(b.s) + "\u201d)"; }).join(", ") + " is counted in the totals but falls before it." : ""),
+    "<b>Identities.</b> " + fmt(I.author || 0) + " commits carry the author's git identity and " + fmt(I.assistant || 0) + " an AI coding assistant's" + (I.other ? "; " + I.other + " another identity" : "") + ". All are counted.",
+    "<b>What a commit count measures.</b> Activity, not effort or quality. Commits vary in size, and the work is written in passes, which is why most of it falls on fewer days. The gap from December 2025 to May 2026 is shown as it is.",
+    "<b>No line counts.</b> Generated result files would dominate them.",
+    "<b>Evidence tiles</b> come from the committed test report and records, not from this page's own counting. The result cards and the results board give every result with its conditions."
+  ].map(function (s) { return "<li>" + s + "</li>"; }).join("");
+
+  document.getElementById("foot").innerHTML = "Generated by <code>docs/figures/make_contribution_record.py</code> from git history up to <code>" + esc(D.head) + "</code> and the committed records.";
+})();
+</script>
