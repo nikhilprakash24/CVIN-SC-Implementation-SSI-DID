@@ -67,3 +67,14 @@ be; perhaps later a handoff document and a summary of work for a check by the ot
   working. I made the one change it asked for in `docs/tdp/requirements.yaml` STD-01: `pending: []`, with its limit
   sentence updated to say the checker still resolves without a provider. I regenerated TDP-002 and TDP-005 with its
   own generator; its three checks pass. No other report-20 file was touched.
+- **Records.** Handback §12 and the session manifest (`5cc751b`).
+- **Grand run (last), at `5cc751b`.** ALL OK: smoke 11 adapters, L1 99, Hardhat 537, Python layers **342** (331 + the
+  11 new tests), 92 demos / 1,752 steps. The only demo gas change is the timestamp-dependent MOBI claims total
+  (+24 gas, two zero bytes). The dashboard, presentation, result cards and contribution record were regenerated.
+- **CI was red before this close, from the parallel pass.** "Compile and test contracts" had failed since
+  `4699f21` (report 20's TDP generators), before my commits on top. I reproduced it locally in a clean worktree at
+  that commit. The stale-figure checker flagged 3 lines in `docs/tdp/TDP-006_FMECA.md`, which copies defect-log rows
+  that quote superseded figures as history. The defect log itself is a history document for the checker, so I added
+  TDP-006, which is generated verbatim from it, to the same list in `docs/testing/stale_numbers.yaml`, with the
+  reason. I also regenerated DWG-001 with report 20's own generator, because it reads the test counts this run
+  updated. All thirteen document checks pass, report 20's three included.

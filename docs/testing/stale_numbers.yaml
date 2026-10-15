@@ -11,6 +11,7 @@ history:
 - docs/PLAN_*.md
 - docs/SCOPE_CHANGES.md
 - docs/DEFECT_LOG.md
+- docs/tdp/TDP-006_FMECA.md   # generated verbatim from docs/DEFECT_LOG.md, a history document (report 21)
 - docs/MEASUREMENT_CONDITIONS.md
 - docs/review02/*
 - docs/reconciliation/*

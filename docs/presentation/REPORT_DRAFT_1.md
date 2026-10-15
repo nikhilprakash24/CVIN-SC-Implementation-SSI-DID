@@ -1,6 +1,6 @@
 # Self-Sovereign Identity for Connected Vehicles — Results, Work and Implementation
 
-**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `c4b35ce` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
+**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `5cc751b` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
 
 > Scope of every number: smart-contract gas is exact `receipt.gasUsed` on a local Hardhat chain (condition M1); latency is in-process cryptography with simulated mobility and no radio (condition M0). Nothing here was measured on a public network or a real road.
 
@@ -14,7 +14,7 @@
 | Do the identities meet W3C DID / VC? | internal checker 94.3 % (41 pass, 1 partial, 2 fail of 44); external DID suite 335/336 | #4, #24 |
 | Are the identity contracts attack-resistant? | 43 of 43 applicable attack cells defended (11 not applicable), strict harness | #28 |
 | Can infrastructure (RSUs, controllers) use the same identity layer? | I1 outside band, not falsified (SPaT/BSM warm ratio 1.226), I2 PASS (15 registered checks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
-| How large is the test and evidence base? | 537 Hardhat tests, 331 Python-layer tests, 92 feature demos (1,752 steps); 34 verified register rows | grand report |
+| How large is the test and evidence base? | 537 Hardhat tests, 342 Python-layer tests, 92 feature demos (1,752 steps); 34 verified register rows | grand report |
 
 ## 2. Research questions and hypotheses
 
@@ -245,7 +245,7 @@ flowchart LR
 | Layer | What it contains | How it is tested |
 |---|---|---|
 | Contracts | ERC-1056, ERC-721, ERC-725, ERC-725xy, ERC-735, ERC-1155, ERC-4337, LSP8, CVIN-Combined; MOBI VID V2 profile | 537 Hardhat tests (L1 mechanisms, L2 system, security harness) |
-| W3C SSI layer | VC issuance and verification, DID resolution, MOBI VID I/II | Python layers (331 tests: L3, L4 and the SSI-layer suites); external DID suite 335/336 |
+| W3C SSI layer | VC issuance and verification, DID resolution, MOBI VID I/II | Python layers (342 tests: L3, L4 and the SSI-layer suites); external DID suite 335/336 |
 | V2X testbed | identity providers, message-path harness, infrastructure layer, trace and renderers | seeded 30-run statistics; no-change gates; 31 infrastructure tests |
 | Comparison and sandbox | producers of the results of record; per-option sandboxes with adapters and demos | grand runner; 92 demos, 1,752 steps |
 | Documents | claim register, defect log, crux register, test register, dashboard, stale-figure check | regenerated and compared in CI |
