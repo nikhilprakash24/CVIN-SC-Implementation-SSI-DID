@@ -262,7 +262,7 @@
   },
   "MOBI-VID-V2": {
     "deployRegistry": {
-      "gasUsed": 4058713,
+      "gasUsed": 4115781,
       "txCount": 1,
       "notes": "Single shared registry (V2 = ERC-1056 base + MOBI VID I birth certificates + VID II lifecycle events); deployer becomes registry authority + authorized manufacturer."
     },
@@ -279,10 +279,10 @@
     "addDelegateOrClaim": {
       "gasUsed": 35277,
       "txCount": 1,
-      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 192683 gas."
+      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 215362 gas."
     },
     "transferOwnership": {
-      "gasUsed": 200023,
+      "gasUsed": 200045,
       "txCount": 1,
       "notes": "transferVehicleOwnership: appends odometer-stamped ownership record + ERC-1056 changeOwner. Called by current owner."
     },
@@ -334,7 +334,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-04T22:12:48.074Z",
+    "date": "2026-10-15T05:14:30.862Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [
