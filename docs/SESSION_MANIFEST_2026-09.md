@@ -231,3 +231,9 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/figures/make_result_cards.py`, `result_cards.html` | every V register row as a card, checked against the register | the author's request |
 | `.github/workflows/test-contracts.yml` | both checks in the document step | CI |
 | `docs/PLAN_WM-2.md`, `docs/HANDBACK_2026-10-14.md` §10 | B2 done; next C3 | records |
+
+## Pass 19 — Plan 1: ZKP and the agent-wrapped identity (2026-10-15)
+Outputs: `docs/zkp/` (plans 1 and 2 with phased prompts; reports A, B, C; sources; integration map; citation checker);
+`5_zkp-agent-identity/` (zkid, ZK-VIN circuit and artefacts, ZkVinGate, Schnorr verifier, the Steward, attacks, bench,
+figures, demo, tests, mutation probe); `1_blockchain-identity/hardhat.zkp.config.js`; `.github/workflows/zkp-layer5.yml`;
+README section. Report: `docs/AFTER_ACTION_REPORT_19.md`.
