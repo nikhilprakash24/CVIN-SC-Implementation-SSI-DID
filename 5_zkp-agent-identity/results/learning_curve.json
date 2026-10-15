@@ -1,0 +1,77 @@
+{
+ "condition": "simulation, seeded; held-out seeds 20000-20029",
+ "curve": [
+  {
+   "episodes": 250,
+   "epsilon": 0.2751,
+   "adversary_bits_mean": 0.17415422024361263,
+   "honest_service_mean": 0.8929166666666667
+  },
+  {
+   "episodes": 500,
+   "epsilon": 0.2501,
+   "adversary_bits_mean": 0.08333333333333333,
+   "honest_service_mean": 0.8941666666666667
+  },
+  {
+   "episodes": 750,
+   "epsilon": 0.2251,
+   "adversary_bits_mean": 0.08333333333333333,
+   "honest_service_mean": 0.8941666666666667
+  },
+  {
+   "episodes": 1000,
+   "epsilon": 0.2001,
+   "adversary_bits_mean": 0.06666666666666667,
+   "honest_service_mean": 0.8941666666666667
+  },
+  {
+   "episodes": 1250,
+   "epsilon": 0.1751,
+   "adversary_bits_mean": 0.06666666666666667,
+   "honest_service_mean": 0.8941666666666667
+  },
+  {
+   "episodes": 1500,
+   "epsilon": 0.1501,
+   "adversary_bits_mean": 0.06666666666666667,
+   "honest_service_mean": 0.8941666666666667
+  },
+  {
+   "episodes": 1750,
+   "epsilon": 0.1251,
+   "adversary_bits_mean": 0.06666666666666667,
+   "honest_service_mean": 0.8941666666666667
+  },
+  {
+   "episodes": 2000,
+   "epsilon": 0.1001,
+   "adversary_bits_mean": 0.06666666666666667,
+   "honest_service_mean": 0.8941666666666667
+  },
+  {
+   "episodes": 2250,
+   "epsilon": 0.0751,
+   "adversary_bits_mean": 0.06666666666666667,
+   "honest_service_mean": 0.8941666666666667
+  },
+  {
+   "episodes": 2500,
+   "epsilon": 0.0501,
+   "adversary_bits_mean": 0.06666666666666667,
+   "honest_service_mean": 0.8941666666666667
+  },
+  {
+   "episodes": 2750,
+   "epsilon": 0.0251,
+   "adversary_bits_mean": 0.06666666666666667,
+   "honest_service_mean": 0.8941666666666667
+  },
+  {
+   "episodes": 3000,
+   "epsilon": 0.02,
+   "adversary_bits_mean": 0.06666666666666667,
+   "honest_service_mean": 0.8941666666666667
+  }
+ ]
+}

@@ -1,0 +1,6848 @@
+{
+ "condition": "simulation (synthetic verifiers and adversary), seeds 1-30, parameters of Plan 1 amendment A1",
+ "run": {
+  "commit": "85d18f9",
+  "code_clean": false,
+  "tree_clean": false,
+  "host": {
+   "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
+   "machine": "x86_64",
+   "cpus": 4,
+   "processor": "x86_64"
+  },
+  "python": "3.13.16",
+  "at": "2026-10-15T05:11:13+00:00",
+  "seed_env": null
+ },
+ "prior_bits": 5.0,
+ "budget_bits": 3.0,
+ "expectations": {
+  "Z-E5 undefended single-verifier attack recovers the exact value in <= 5 queries on every seed": "PASS",
+  "Z-E6 Steward keeps adversary leakage <= 3.0 bits AND serves >= 90% of honest requests, on every seed of both variants": "FAIL"
+ },
+ "z_e6_parts": {
+  "leakage_bound_held_on_all_60": true,
+  "seeds_below_90pct_service": 25,
+  "min_service": 0.7
+ },
+ "results": {
+  "none|single": {
+   "adversary_bits": {
+    "mean": 5.0,
+    "max": 5.0,
+    "min": 5.0
+   },
+   "adversary_exact_recoveries": 30,
+   "honest_service": {
+    "mean": 1.0,
+    "min": 1.0
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    }
+   ]
+  },
+  "none|sybil": {
+   "adversary_bits": {
+    "mean": 5.0,
+    "max": 5.0,
+    "min": 5.0
+   },
+   "adversary_exact_recoveries": 30,
+   "honest_service": {
+    "mean": 1.0,
+    "min": 1.0
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    }
+   ]
+  },
+  "none|none": {
+   "adversary_bits": {
+    "mean": 0.0,
+    "max": 0.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 1.0,
+    "min": 1.0
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    }
+   ]
+  },
+  "static_cap|single": {
+   "adversary_bits": {
+    "mean": 2.0,
+    "max": 2.0,
+    "min": 2.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.4125,
+    "min": 0.325
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.325,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.525,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.325,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.475,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.5,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.5,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.475,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.35,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.325,
+     "collusion_bits": 3.415
+    }
+   ]
+  },
+  "static_cap|sybil": {
+   "adversary_bits": {
+    "mean": 5.0,
+    "max": 5.0,
+    "min": 5.0
+   },
+   "adversary_exact_recoveries": 30,
+   "honest_service": {
+    "mean": 0.4125,
+    "min": 0.325
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.325,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.45,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.525,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.45,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.325,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.475,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.4,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.4,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.45,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.5,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.375,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.375,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.4,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.375,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.4,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.5,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.425,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.375,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.375,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.45,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.4,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.425,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.425,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.375,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.4,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.475,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.425,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.425,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.35,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.325,
+     "collusion_bits": 5.0
+    }
+   ]
+  },
+  "static_cap|none": {
+   "adversary_bits": {
+    "mean": 0.0,
+    "max": 0.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.4008333333333333,
+    "min": 0.325
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.325,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.525,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.35,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.35,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.35,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.325,
+     "collusion_bits": 1.5406
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.5,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.35,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.475,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.35,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.325,
+     "collusion_bits": 3.415
+    }
+   ]
+  },
+  "budget_only|single": {
+   "adversary_bits": {
+    "mean": 1.9333333333333333,
+    "max": 3.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.9033333333333333,
+    "min": 0.75
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    }
+   ]
+  },
+  "budget_only|sybil": {
+   "adversary_bits": {
+    "mean": 1.9333333333333333,
+    "max": 3.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.9033333333333333,
+    "min": 0.75
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    }
+   ]
+  },
+  "budget_only|none": {
+   "adversary_bits": {
+    "mean": 0.0,
+    "max": 0.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.8841666666666667,
+    "min": 0.625
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.625,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    }
+   ]
+  },
+  "steward_fixed|single": {
+   "adversary_bits": {
+    "mean": 2.4833638770847526,
+    "max": 2.678071905112638,
+    "min": 1.415037499278844
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.84,
+    "min": 0.725
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 1.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.725,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 1.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.725,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 1.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 1.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    }
+   ]
+  },
+  "steward_fixed|sybil": {
+   "adversary_bits": {
+    "mean": 2.4833638770847526,
+    "max": 2.678071905112638,
+    "min": 1.415037499278844
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.84,
+    "min": 0.725
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 1.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.725,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 1.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.725,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 1.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 1.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    }
+   ]
+  },
+  "steward_fixed|none": {
+   "adversary_bits": {
+    "mean": 0.0,
+    "max": 0.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.8266666666666667,
+    "min": 0.7
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.7,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    }
+   ]
+  },
+  "steward|single": {
+   "adversary_bits": {
+    "mean": 0.0,
+    "max": 0.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.8833333333333333,
+    "min": 0.7
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.7,
+     "collusion_bits": 1.6781
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.725,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 3.0
+    }
+   ]
+  },
+  "steward|sybil": {
+   "adversary_bits": {
+    "mean": 0.23333333333333334,
+    "max": 1.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.8783333333333333,
+    "min": 0.7
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.725,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.7,
+     "collusion_bits": 1.6781
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.725,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 3.0
+    }
+   ]
+  },
+  "steward|none": {
+   "adversary_bits": {
+    "mean": 0.0,
+    "max": 0.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.87,
+    "min": 0.625
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.625,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    }
+   ]
+  },
+  "steward_no_budget|single": {
+   "adversary_bits": {
+    "mean": 0.0,
+    "max": 0.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.9766666666666667,
+    "min": 0.95
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    }
+   ]
+  },
+  "steward_no_budget|sybil": {
+   "adversary_bits": {
+    "mean": 0.0,
+    "max": 0.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.9766666666666667,
+    "min": 0.95
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    }
+   ]
+  },
+  "steward_no_budget|none": {
+   "adversary_bits": {
+    "mean": 0.0,
+    "max": 0.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.9741666666666666,
+    "min": 0.925
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 1.0,
+     "collusion_bits": 3.415
+    }
+   ]
+  }
+ },
+ "post_hoc_A2_insider": {
+  "none|insider": {
+   "adversary_bits": {
+    "mean": 5.0,
+    "max": 5.0,
+    "min": 5.0
+   },
+   "adversary_exact_recoveries": 30,
+   "honest_service": {
+    "mean": 1.0,
+    "min": 1.0
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    }
+   ]
+  },
+  "static_cap|insider": {
+   "adversary_bits": {
+    "mean": 2.0,
+    "max": 2.0,
+    "min": 2.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.4125,
+    "min": 0.325
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.325,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.525,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.325,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.475,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.5,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.5,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.45,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 3.415
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.375,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.4,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.475,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 4.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.425,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.35,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.325,
+     "collusion_bits": 3.415
+    }
+   ]
+  },
+  "budget_only|insider": {
+   "adversary_bits": {
+    "mean": 1.9333333333333333,
+    "max": 3.0,
+    "min": 0.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.9033333333333333,
+    "min": 0.75
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 0.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    }
+   ]
+  },
+  "steward_fixed|insider": {
+   "adversary_bits": {
+    "mean": 2.4833638770847526,
+    "max": 2.678071905112638,
+    "min": 1.415037499278844
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.84,
+    "min": 0.725
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 1.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.725,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 1.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.725,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 1.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 1.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.775,
+     "collusion_bits": 2.6781
+    }
+   ]
+  },
+  "steward|insider": {
+   "adversary_bits": {
+    "mean": 2.4503552459466205,
+    "max": 3.0,
+    "min": 1.0
+   },
+   "adversary_exact_recoveries": 0,
+   "honest_service": {
+    "mean": 0.8891666666666667,
+    "min": 0.725
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 2.1926,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.9,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.875,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 2.1926,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 2.1926,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.725,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.8,
+     "collusion_bits": 2.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 2.415,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 1.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.75,
+     "collusion_bits": 2.1926
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 2.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.85,
+     "collusion_bits": 2.415
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.825,
+     "collusion_bits": 3.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.975,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 2.6781,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.925,
+     "collusion_bits": 2.6781
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 3.0,
+     "exact": false,
+     "queries_to_exact": null,
+     "honest_service": 0.95,
+     "collusion_bits": 3.0
+    }
+   ]
+  },
+  "steward_no_budget|insider": {
+   "adversary_bits": {
+    "mean": 5.0,
+    "max": 5.0,
+    "min": 5.0
+   },
+   "adversary_exact_recoveries": 30,
+   "honest_service": {
+    "mean": 0.9766666666666667,
+    "min": 0.95
+   },
+   "per_seed": [
+    {
+     "seed": 1,
+     "value": 2003,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 2,
+     "value": 1998,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.95,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 3,
+     "value": 2010,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.95,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 4,
+     "value": 2010,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 5,
+     "value": 2011,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 6,
+     "value": 2000,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 7,
+     "value": 2015,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 8,
+     "value": 2009,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 9,
+     "value": 2024,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 10,
+     "value": 1997,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.95,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 11,
+     "value": 2023,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 12,
+     "value": 2025,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 13,
+     "value": 2011,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 14,
+     "value": 2001,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.95,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 15,
+     "value": 2008,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 16,
+     "value": 2018,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.95,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 17,
+     "value": 2021,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 18,
+     "value": 2006,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 19,
+     "value": 1997,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 20,
+     "value": 2004,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 21,
+     "value": 2005,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 22,
+     "value": 2003,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.95,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 23,
+     "value": 2013,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 24,
+     "value": 2019,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 25,
+     "value": 2019,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 26,
+     "value": 2007,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 27,
+     "value": 2025,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 28,
+     "value": 2002,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 0.975,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 29,
+     "value": 1999,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    },
+    {
+     "seed": 30,
+     "value": 2013,
+     "adversary_bits": 5.0,
+     "exact": true,
+     "queries_to_exact": 5,
+     "honest_service": 1.0,
+     "collusion_bits": 5.0
+    }
+   ]
+  }
+ }
+}

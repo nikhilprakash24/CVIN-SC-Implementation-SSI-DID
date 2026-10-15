@@ -194,3 +194,12 @@ Steward with learned responder (the same plus Q-learning trained on seeds 10,000
 seeds 1–30); Steward learner without budget (ablation). Honest service counts a request as served when the answer
 settles the requester's question (an exact answer, or a coarsened proof that holds). Z-E6 is read per seed, as
 written: on every one of the 30 seeds, adversary leakage ≤ 3.0 bits in both variants **and** honest service ≥ 90 %.
+
+**A2 (2026-10-15, post hoc: added after the first trial run of the attack simulator, which was a wiring check on a
+dirty tree and is not reported as a result).** The trial showed that in A1's threat model the adversary never holds
+an accreditation credential, so a learner can separate it from honest verifiers by that feature alone, and the
+ablation "learner without budget" looked strongest. That is an artefact of the threat model, not a defence. A third
+variant, *insider* (the adversary's single identity holds an accreditation credential, as a malicious but licensed
+insurer would), is added and reported separately under `post_hoc_A2_insider`. It does not enter Z-E5 or Z-E6, whose
+definitions and verdicts are unchanged. The learner is not retrained on it. No code that produces the pre-registered
+variants changed: the new branch is taken only when `variant == "insider"`.

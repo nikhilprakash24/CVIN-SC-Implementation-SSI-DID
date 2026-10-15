@@ -27,10 +27,11 @@ def agent_did(address: str, chain_id: str = "0x1") -> str:
 
 def issue_delegation(owner: CredentialIssuer, agent_address: str, scope: list[str], policy_hash: str,
                      validity_days: int = 90) -> dict:
-    return owner.issue_credential(
+    issued = owner.issue_credential(
         CREDENTIAL_TYPE, agent_did(agent_address),
         {"role": "identity-steward", "scope": scope, "policyHash": policy_hash},
         validity_days=validity_days, enforce_schema=False)
+    return issued["verifiableCredential"]
 
 
 def verify_delegation(vc: dict, owner: CredentialIssuer, agent_address: str, presentation_text: str,
