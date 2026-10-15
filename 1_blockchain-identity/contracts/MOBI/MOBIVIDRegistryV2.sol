@@ -313,6 +313,12 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
      * @dev Attest to an event
      * Allows multiple parties to sign off on an event
      *
+     * Who may attest an event on vehicle V: any address holding an
+     * organisational role (MANUFACTURER, DEALER, SERVICE_CENTER,
+     * INSURANCE_COMPANY, GOVERNMENT_DMV, POLICE, INSPECTION_STATION), on any
+     * vehicle; an OWNER-role address only while it is V's current ERC-1056
+     * owner. Role-less addresses (NONE) cannot attest.
+     *
      * The attester must sign the domain-separated attestation digest
      *
      *     keccak256(abi.encodePacked(
@@ -347,6 +353,23 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
             authorizedIssuers[msg.sender] != IssuerRole.NONE,
             "Not authorized to attest"
         );
+
+        // Review-02 H-A (handback next-session item 2): the role check alone
+        // let any OWNER-role address attest events on any vehicle. Same scope
+        // rule as recordLifecycleEvent (K-15): an OWNER-role attester must be
+        // the vehicle's current ERC-1056 owner, so a previous owner loses the
+        // right on transfer. ERC1056Registry keeps delegates only as events
+        // (no on-chain delegate mapping, K-5), so there is no delegate check.
+        // The organisational roles (manufacturer, dealer, service centre,
+        // insurer, DMV, police, inspection station) keep their registry-wide
+        // scope: they are the documented third-party co-signers of the
+        // multi-party attestation design.
+        if (authorizedIssuers[msg.sender] == IssuerRole.OWNER) {
+            require(
+                identityOwner(vehicleIdentity) == msg.sender,
+                "OWNER role: not the current owner of this vehicle"
+            );
+        }
 
         // ---- On-chain attestation signature verification (security fix) ----
         // Bind the signature to (contract, chain, vehicle, event) to stop

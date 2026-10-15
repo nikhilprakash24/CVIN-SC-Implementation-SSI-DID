@@ -8,8 +8,10 @@
  * keccak256(address(this), chainid, vehicle, eventId) (EIP-191) and requires
  * it to equal msg.sender.
  *
- * The test (1) asserts the vulnerable path is closed and (2) pins the gas of
- * the fixed path.
+ * The test (1) asserts the vulnerable path is closed, (2) asserts the H-A
+ * access control (an OWNER-role attester must own the vehicle) and (3) pins
+ * the gas of the fixed path. The 169,295 figure below is the F-C pin, before
+ * the H-A changes; the current pin is PINNED_EXECUTION_GAS.
  *
  * Why the pin is on EXECUTION gas, not on receipt.gasUsed:
  * eventId = keccak256(vehicle, type, issuer, block.timestamp, count), so it
@@ -35,7 +37,7 @@ const { loadFixture, time } = require("@nomicfoundation/hardhat-toolbox/network-
 
 const V2_FQN = "contracts/MOBI/MOBIVIDRegistryV2.sol:MOBIVIDRegistryV2";
 const MAINTENANCE = 0;
-const ROLE = { MANUFACTURER: 1, SERVICE_CENTER: 3, GOVERNMENT_DMV: 5, INSPECTION_STATION: 7 };
+const ROLE = { MANUFACTURER: 1, SERVICE_CENTER: 3, GOVERNMENT_DMV: 5, INSPECTION_STATION: 7, OWNER: 8 };
 
 const VIN_HASH = ethers.keccak256(ethers.toUtf8Bytes("5YJ3E1EA0PF123456:salt"));
 const BIRTH_CERT_HASH = ethers.keccak256(ethers.toUtf8Bytes("signed-birth-vc"));
@@ -44,10 +46,14 @@ const DATA_HASH = ethers.keccak256(ethers.toUtf8Bytes("event-data"));
 const CRED_HASH = ethers.keccak256(ethers.toUtf8Bytes("signed-event-vc"));
 
 // Pinned execution gas of the fixed path: the FIRST attestation on an event,
-// 65-byte signature, attester already authorized (gasUsed minus the 21,000
-// base and the calldata bytes). Measured 2026-10-04 on solc 0.8.24, viaIR,
-// optimizer 200, evm cancun, Hardhat 2.28.6.
-const PINNED_EXECUTION_GAS = 169_295n;
+// 65-byte signature, attester already authorized with an organisational role
+// (GOVERNMENT_DMV) (gasUsed minus the 21,000 base and the calldata bytes).
+// Measured on solc 0.8.24, viaIR, optimizer 200, evm cancun, Hardhat 2.28.6.
+// History (register #28):
+//   169,295  2026-10-04, F-C (signature verification only)
+//   169,509  2026-10-15, H-A fix 1 (+214: OWNER-role scope check, a warm
+//            SLOAD of the attester's role and a compare on this path)
+const PINNED_EXECUTION_GAS = 169_509n;
 
 const TX_BASE_GAS = 21_000n;
 
@@ -90,7 +96,7 @@ describe("MOBI VID V2 attestEvent: M3 regression (forged-signature path closed, 
     await registry.connect(manufacturer).registerVehicleBirth(
       vehicle.address, VIN_HASH, "encrypted:VIN", BIRTH_CERT_HASH, firstOwner.address, BIRTH_ATTRS
     );
-    return { registry, serviceCenter, dmv, inspection, vehicle };
+    return { registry, serviceCenter, dmv, inspection, vehicle, firstOwner };
   }
 
   async function recordEvent(registry, serviceCenter, vehicle, odometer) {
@@ -129,6 +135,42 @@ describe("MOBI VID V2 attestEvent: M3 regression (forged-signature path closed, 
     const atts = await registry.getEventAttestations(eventId);
     expect(atts.length).to.equal(1);
     expect(atts[0].attester).to.equal(dmv.address);
+  });
+
+  it("access control (H-A): an OWNER-role attester must be the vehicle's current owner", async function () {
+    const { registry, serviceCenter, dmv, vehicle, firstOwner } = await loadFixture(fixture);
+    const signers = await ethers.getSigners();
+    const otherOwner = signers[7], buyer = signers[8];
+    await registry.authorizeIssuer(firstOwner.address, ROLE.OWNER);
+    await registry.authorizeIssuer(otherOwner.address, ROLE.OWNER);
+    await registry.authorizeIssuer(buyer.address, ROLE.OWNER);
+    const eventId = await recordEvent(registry, serviceCenter, vehicle, 11_000);
+    const NOT_OWNER = "OWNER role: not the current owner of this vehicle";
+
+    // An OWNER-role address that does not own this vehicle, with its own
+    // valid signature, is rejected.
+    const otherSig = await attestationSignature(registry, vehicle.address, eventId, otherOwner);
+    await expect(registry.connect(otherOwner).attestEvent(eventId, vehicle.address, otherSig))
+      .to.be.revertedWith(NOT_OWNER);
+
+    // The current owner is accepted.
+    const ownerSig = await attestationSignature(registry, vehicle.address, eventId, firstOwner);
+    await expect(registry.connect(firstOwner).attestEvent(eventId, vehicle.address, ownerSig))
+      .to.emit(registry, "EventAttested");
+
+    // After a transfer the previous owner is rejected on a new event.
+    await registry.connect(firstOwner).transferVehicleOwnership(vehicle.address, buyer.address, 12_000, "BC-ICBC");
+    const eventId2 = await recordEvent(registry, serviceCenter, vehicle, 12_500);
+    const prevSig = await attestationSignature(registry, vehicle.address, eventId2, firstOwner);
+    await expect(registry.connect(firstOwner).attestEvent(eventId2, vehicle.address, prevSig))
+      .to.be.revertedWith(NOT_OWNER);
+
+    // An organisational role-holder (dmv) still attests on any vehicle.
+    const dmvSig = await attestationSignature(registry, vehicle.address, eventId2, dmv);
+    await expect(registry.connect(dmv).attestEvent(eventId2, vehicle.address, dmvSig))
+      .to.emit(registry, "EventAttested");
+    expect((await registry.getEventAttestations(eventId)).map((a) => a.attester)).to.deep.equal([firstOwner.address]);
+    expect((await registry.getEventAttestations(eventId2)).map((a) => a.attester)).to.deep.equal([dmv.address]);
   });
 
   it(`fixed-path gas pinned: execution gas = ${PINNED_EXECUTION_GAS} ± 0 across event ids; gasUsed = 21,000 + calldata + execution`, async function () {
