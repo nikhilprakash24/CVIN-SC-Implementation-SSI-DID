@@ -77,3 +77,21 @@ work, without embellishment, showing the good work in the best honest light.
   1,752 steps (594 mined transactions). The only gas changes are the timestamp-dependent MOBI demo totals (±12 gas),
   as in pass 18. The dashboard, presentation report, result cards and contribution record were regenerated
   afterwards, and all ten document checks pass.
+
+## 3. Closing
+The pass delivered every step of §1. **CI 8 of 8 green on `9975a2e`.**
+
+**C3 is done.** On one host, at each row's own code, the code difference between #32 and #37 is within the
+replicate spread, so their difference in the register is the host's. That holds under the rule committed before the
+runs. In replicate 1 alone the codes differed by more than the smaller spread, and that is reported. The comparison
+also shows why "no finite k reaches P*(0.5) = 100" in #37 is a property of its host: on a host with `t_local` near
+0.33 ms, the probe refresh reaches it at k = 25.
+
+**The contribution record** shows the history at its real size and scope. It leaves out an unrelated branch and
+names the repository's creation commit. It reports the assistant's commits rather than hiding them, gives no line
+counts, and ties every evidence figure to its source file. I corrected three tile labels before publishing because
+they claimed more than the records show.
+
+**Next:**
+- WM-2 C1.
+- The author's decisions P2-D7 to P2-D10, D-1 to D-15, and N-23 remain open.
