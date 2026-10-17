@@ -141,3 +141,13 @@ registry.
   75,404, transfer 200,155, lifetime 9,858,020. The security results are unchanged. #25 and #26 now cite
   `a45be79`, chapter 5's addDelegate cell is 57,667, and the stale-figure list also catches the two first-design
   values. The check brief's K10 and K11 point at the final design. All 13 document checks pass.
+- **Records.** Handback §13 and the session manifest (`16099ed`).
+- **Grand runs.**
+  - **First, at `16099ed` (first design): FAILED.** erc-1056-vehicle/keys-delegates failed, which led to the
+    redesign above. Reported as it fell.
+  - **Second, at `7e00cf1` (final design): ALL OK.** Smoke 11 adapters, L1 99, Hardhat **541**, Python layers 342,
+    92 demos / **1,758** steps (597 mined transactions; the 6 new steps are C2's consent and duplicate steps in the
+    MOBI demos).
+  - Against the report from before C2, only MOBI demo totals move. The erc-1056-vehicle option is identical.
+  - The test register and the F3 mode classification were regenerated, since they read the demo report, along with
+    the dashboard, presentation, result cards, contribution record and DWG-002. All 13 document checks pass.

@@ -767,8 +767,8 @@
     "source": {
       "path": "sandbox/grand/report/GRAND_REPORT.md"
     },
-    "generated": "2026-10-15T05:35:27Z",
-    "commit": "5cc751b",
+    "generated": "2026-10-17T23:51:03Z",
+    "commit": "7e00cf1",
     "stages": {
       "smoke": {
         "ok": true,
@@ -780,7 +780,7 @@
       },
       "L1+L2": {
         "ok": true,
-        "result": "{'passing': 537, 'failing': 0}"
+        "result": "{'passing': 541, 'failing': 0}"
       },
       "L3+L4": {
         "ok": true,
@@ -788,7 +788,7 @@
       },
       "demos": {
         "ok": true,
-        "result": "{'demos': 92, 'steps': 1752, 'transactions_mined': 594, 'onchain_no_gas': 458, 'offchain': 700, 'flagged': 62, 'failures': []}"
+        "result": "{'demos': 92, 'steps': 1758, 'transactions_mined': 597, 'onchain_no_gas': 458, 'offchain': 703, 'flagged': 60, 'failures': []}"
       }
     }
   },
@@ -860,8 +860,8 @@
       "mobi-vid": {
         "demos": 11,
         "ok": 11,
-        "steps": 276,
-        "flagged": 17
+        "steps": 282,
+        "flagged": 15
       }
     }
   },
