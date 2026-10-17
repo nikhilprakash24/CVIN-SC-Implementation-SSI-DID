@@ -421,3 +421,24 @@ Both admitted **12/12 unmodified**; S1, S7, S8 run unchanged on both; all **eigh
 The eight columns sort into the three placement classes 01 §10 predicted: *log it* (ERC-1056, -721, -1155: cheapest, nothing queryable without an indexer), *store it* (ERC-725, -725xy, -4337, -8004: document, claim, authorisation or metadata on-chain, three to ten times dearer per write), and *anchor the definition, not the credential* (Indy-on-Besu: expensive once per issuer, then no per-credential content on the ledger at all). The family taxonomy of Chapter 3 and the placement taxonomy of 01 are the same partition seen from two sides — the sentence 11 §3 needs.
 
 What remains of the canonical plan: WO-4 (S2–S4 scripts), the coverage matrix with native/assisted/absent per function (WO-5 second half — now writable, since every option exists), WO-6 explorer, WO-7 IDPP port O1 → O8 (unblocked), WO-8 Besu/Caliper, WO-9 adapters (S19/S20 are the first two).
+
+## Addendum J — The ID Porting Protocol executed (S5) and the coverage matrix (2026-10-17)
+
+**S5.** `run_idpp_port.js` ports an identity, its VID birth credential and its OBU delegate between two options standing in for two ledgers, in both directions (O1 → O8 and O8 → O1). The holder exports an off-chain bundle (credential objects, delegate list); the issuer re-anchors the *same* typed hash under its target DID; the delegate is re-established; the target carries a `ported-from` attribute and the source a `ported-to` attribute (target DID plus registry address); the source identity is then retired. Nine continuity assertions pass in both directions. The 2020 paper's IDPP concept is therefore testable with the twelve functions and nothing else (**F-S5-1**). The one thing the interface cannot say is that the source is *superseded*: its credential anchor remains F6-valid after the port because only the subject, not the issuer, was deactivated, so continuity is a verifier policy over the pointer, not a chain fact (**F-S5-2**, spec v1.1 candidate; it also bears on Local CVIN shards in 03 §4).
+
+**Coverage.** `benchmarks/coverage.js` writes `coverage_matrix.csv` and `coverage_report.md`: for each option and function, whether the standard's own primitive implements it (native), sandbox-side state was added beside the standard (assisted), the shared hash-anchor pattern is used (anchor), or the standard has no such thing (absent). The declaration is taken from each implementation's NatSpec and trace-checked (every option ran all twelve functions). WO-5's acceptance is now fully met: a gas matrix and a coverage matrix, both generated, with a report that flags every target miss.
+
+| Option | Native | Assisted | Anchor | Absent | Set C |
+|---|---|---|---|---|---|
+| ERC-725xy | 9 | 2 | 1 | 0 | — |
+| Indy-on-Besu | 9 | 0 | 0 | 3 | — |
+| ERC-1056 | 8 | 0 | 4 | 0 | harness |
+| ERC-725 | 6 | 2 | 4 | 0 | — |
+| ERC-4337 | 6 | 2 | 4 | 0 | — |
+| ERC-1155 | 5 | 6 | 1 | 0 | — |
+| ERC-8004 | 3 | 5 | 4 | 0 | **native** |
+| ERC-721 | 2 | 6 | 4 | 0 | — |
+
+Three readings for Chapter 4. F8 is an anchor on every EVM option and off-ledger on Indy — the createPresentation finding, now stated per option from code rather than from inspection. Set B is native only where the standard has a credential-shaped object (ERC-735 claims, ERC-1155 tokens), and neither carries expiry or presentation. And the coverage ordering (ERC-725xy and Indy first, ERC-721 last) is not the gas ordering (ERC-1056 and ERC-721 first, ERC-725xy last): the two matrices rank the options differently, which is why the evaluation needs both and why the placement axis of 01 is the thing that reconciles them (**F-WO5-4**).
+
+Canonical work orders now closed: WO-1, WO-2, WO-3, WO-5, WO-7. Open: WO-4 (S2–S4 scripts), WO-6 (explorer), WO-8 (Besu/Caliper), WO-9 (adapters; S19/S20 are the first two). WO-0 (ingest of the v2-0 plan document) remains the architect's.

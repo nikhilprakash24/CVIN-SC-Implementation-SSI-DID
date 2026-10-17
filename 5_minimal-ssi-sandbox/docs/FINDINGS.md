@@ -220,3 +220,29 @@
     §5.3 misses: O7 five (F3, F4, F9, F10, F11), O8 three (F3, F5, F7). Every option misses F1
     except O7/O8 against the 725 column (223K and 255K are under 600K; both are over the 100K
     light target, so the F1 verdict depends on which column applies: spec v1.1 item).
+
+## WO-7 S5 IDPP port and WO-5 coverage matrix (2026-10-17; traces idpp_port_O1_ERC1056_to_O8_LFDT_1792281220403, idpp_port_O8_LFDT_to_O1_ERC1056_1792281224976)
+42. **F-S5-1 — the 2020 ID Porting Protocol is executable with the twelve functions alone.** An
+    identity with a VID birth credential and an OBU delegate was ported O1 → O8 and O8 → O1 in one
+    script with no interface extension: F1 on the target, F5 re-anchoring the SAME typed hash
+    under the issuer's target DID, F11 re-establishing the delegate, F3 writing a ported-from
+    pointer on the target and a ported-to pointer on the source (target DID + registry address),
+    F4 retiring the source. Nine continuity assertions pass both ways: source resolvable and
+    deactivated, target active, credential hash identical, off-chain verification unchanged,
+    target F6 valid, delegate invalid on source and valid on target. Port cost O1 → O8 = target
+    createDID 254,829 + first-issuance 697,203 (lazy definitions; 164,966 thereafter) + delegate
+    54,113 + pointers 191,835 (O8 document rewrite) and 45,558 (O1 event) + deactivate 55,127.
+43. **F-S5-2 — IMinimalSSI has no "superseded" status.** After the port the SOURCE anchor still
+    reports valid=true from F6 (its issuer is active; only the subject was deactivated). A
+    verifier must follow the ported-to pointer and policy, which the interface neither expresses
+    nor enforces. Candidate for spec v1.1: either F6 consults the subject's deactivation, or a
+    pointer-aware status (superseded) is added beside validity. Design item; also bears on
+    Local CVIN shards (HDA doc 03 §4).
+44. **F-WO5-4 — coverage matrix generated (benchmarks/coverage.js → coverage_matrix.csv,
+    coverage_report.md).** Declared per option from implementation NatSpec, trace-checked that
+    every option ran all twelve functions. Readings: Set B is native on no EVM option except via
+    ERC-735 claims (O4) and ERC-1155 tokens (O5), neither carrying expiry or a presentation; F8
+    is anchor on every EVM option and off-ledger on Indy — the createPresentation finding per
+    option; Set A fully native on O1, O3, O6, O8 only; Set C native only on O7. Native counts /12:
+    O4 9, O8 9, O1 8, O3 6, O6 6, O5 5, O7 3, O2 2 — a different ordering from the gas ranking,
+    which is the point the thesis makes with two matrices rather than one.
