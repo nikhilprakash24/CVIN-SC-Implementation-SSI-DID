@@ -181,3 +181,42 @@
     O6 84.3K, O3 111.0K, O4 111.5K. The adapter's resolveDID cost is the whole difference;
     O6 is cheap because owner() and validationKeyCount() are two warm reads, O3/O4 need four
     getData calls. This column belongs in the per-function placement matrix (HDA doc 01 §8).
+
+## WO-2 (O7 ERC-8004) and WO-3 (O8 Indy-on-Besu) (2026-10-17; traces i2i/vid_minimal/vid_lifecycle for O7_ERC8004 and O8_LFDT)
+37. **F-O7-1 — ERC-8004's interface does not fit legacy codegen.** giveFeedback (8 arguments, four
+    dynamic strings) and the 11-argument NewFeedback event exceed the stack without the IR
+    pipeline. The two ERC-8004 files compile with a per-file viaIR override (hardhat.config.js);
+    every other contract keeps the global envelope. O7 gas is therefore a viaIR measurement and is
+    labelled so. Logged as a deviation, not smoothed.
+38. **F-O7-2 — the compliance layer over three registries measured.** O7 createDID 240,154 / 223,042
+    (ERC-721 mint + Registered + agentWallet metadata); updateDID 168,285, addVerificationMethod
+    186,362, addDelegate 113,444 and deactivateDID 90,622 are all setMetadata writes with string
+    keys and dynamic values (the spec's on-chain metadata hook), three to four times O1. Set B is
+    the anchor pattern (136,362). ISetC is native: attestReputation = giveFeedback(value = score,
+    decimals 0, tag1 "starred") by the CALLER as client; owner/operator feedback reverts
+    SelfFeedback (spec MUST); getReputation = getSummary over all recorded clients;
+    requestValidation / validationStatus map onto the Validation Registry (validator named in the
+    payload; status 0/1/2/3 from response >= 50). Agents are transferable: a transfer changes the
+    controller and clears agentWallet, as the spec says. The one option where the identity is an
+    asset, not a binding. Mainnet fidelity: IdentityRegistry 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432,
+    ReputationRegistry 0x8004BAa17C55a88189AE136b182e5fdA19dE9b63 (erc-8004/erc-8004-contracts,
+    2026-10-06); Validation Registry reported not production-deployed (DIGEST-LEVEL).
+39. **F-O8-1 — the credential-definition anchor, priced.** O8's first issueCredential by an issuer
+    costs 697,203 gas (lazy SCHEMA + CLAIM_DEF + REVOC_REG_DEF creation plus the index); every
+    subsequent credential 164,966, of which the ledger-side write is an index allocation and a
+    RevocationRegistryEntry event. The per-credential CONTENT HASH IS NOT STORED (AnonCreds
+    posture: the credential is bound to the definition by the issuer's signature off-ledger).
+    revokeCredential 66,016 = registry entry (accumulator stand-in update). This is the placement
+    HDA doc 01 §3.7 describes, now measured beside the anchor pattern: amortised, O8 issuance is
+    ~27% dearer than O1 because the sandbox index (issuer, subject, validUntil, revIndex) is what
+    the interface's F6 obliges it to keep; pure Indy stores less.
+40. **F-O8-2 — did:indy stores the document; did:ethr logs it.** O8 updateDID 168,952 (document
+    rewrite, Indy ATTRIB semantics) vs O1 44,760 (event only); addVerificationMethod 78,521
+    (document rewrite) vs 59,607. Delegation is non-native (annotated); F8 remains an anchor.
+    AnonCreds presentations never touch the ledger, which is the Set B ceiling restated from the
+    ledger side: the option with the richest off-chain credential model is the one whose on-chain
+    F5–F8 carry the least per-credential state.
+41. **F-WO5-3 — eight-option matrix.** benchmarks/gas_report.md regenerated from 32 traces. Spec
+    §5.3 misses: O7 five (F3, F4, F9, F10, F11), O8 three (F3, F5, F7). Every option misses F1
+    except O7/O8 against the 725 column (223K and 255K are under 600K; both are over the 100K
+    light target, so the F1 verdict depends on which column applies: spec v1.1 item).

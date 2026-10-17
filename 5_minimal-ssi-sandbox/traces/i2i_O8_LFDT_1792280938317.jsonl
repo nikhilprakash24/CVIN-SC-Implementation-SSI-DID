@@ -1,0 +1,22 @@
+{"seq":1,"impl":"O8_LFDT","ts":1792280938230,"kind":"deploy","phase":"deploy","note":"O8_LFDT at 0x5FbDB2315678afecb367f032d93F642f64180aa3"}
+{"seq":2,"impl":"O8_LFDT","ts":1792280938240,"kind":"tx","fn":"createDID","fnId":"F1","identity":"Registry","txHash":"0x2e2574892b28bae86180746b2d80310ecdaf1eaab2665691827529fd7e818018","gasUsed":"271929","events":2,"note":"gas=271929"}
+{"seq":3,"impl":"O8_LFDT","ts":1792280938247,"kind":"tx","fn":"createDID","fnId":"F1","identity":"IdentityA","txHash":"0x9c58a684597fdea65737c92d4ed62c1014516ba87cea840d4b3c73df4d94fe7f","gasUsed":"254829","events":2,"note":"gas=254829"}
+{"seq":4,"impl":"O8_LFDT","ts":1792280938251,"kind":"tx","fn":"createDID","fnId":"F1","identity":"IdentityB","txHash":"0x8e738502a8a9e53e7de7e343bed7d50228787a04de4075affbe71eeb4872494d","gasUsed":"254817","events":2,"note":"gas=254817"}
+{"seq":5,"impl":"O8_LFDT","ts":1792280938260,"kind":"tx","fn":"issueCredential","fnId":"F5","identity":"Registry","txHash":"0x2bc726dad0397f0934f416270180092941fb0a66f4549bf42f3155d9ad3f5907","gasUsed":"697203","events":5,"note":"gas=697203"}
+{"seq":6,"impl":"O8_LFDT","ts":1792280938270,"kind":"tx","fn":"issueCredential","fnId":"F5","identity":"Registry","txHash":"0x78825705420042772024c7cc5db2083b4cb049420fee1fb9aea0ad4a1512b86a","gasUsed":"164966","events":2,"note":"gas=164966"}
+{"seq":7,"impl":"O8_LFDT","ts":1792280938276,"kind":"tx","fn":"addVerificationMethod","fnId":"F9","identity":"IdentityA","txHash":"0x3f599579987baf780d09aedc7a361df1a7f8da5034d735f8e45562eeb385905e","gasUsed":"78521","events":2,"note":"gas=78521"}
+{"seq":8,"impl":"O8_LFDT","ts":1792280938280,"kind":"tx","fn":"addVerificationMethod","fnId":"F9","identity":"IdentityA","txHash":"0x348ecaad9fe5a6598a48dfcc341f881ab7447fb9ee3df1462b7b28a6a56b4b03","gasUsed":"78521","events":2,"note":"gas=78521"}
+{"seq":9,"impl":"O8_LFDT","ts":1792280938288,"kind":"tx","fn":"addDelegate","fnId":"F11","identity":"IdentityA","txHash":"0x882f6008bac3027110322635d57533527e730621c38a5ca98741d4705ef96452","gasUsed":"54125","events":1,"note":"gas=54125"}
+{"seq":10,"impl":"O8_LFDT","ts":1792280938291,"kind":"view","fn":"resolveDID","fnId":"F2","identity":"IdentityB checks A","note":"doc 96 bytes"}
+{"seq":11,"impl":"O8_LFDT","ts":1792280938292,"kind":"view","fn":"verifyCredential","fnId":"F6","identity":"IdentityB checks A","note":"valid=true"}
+{"seq":12,"impl":"O8_LFDT","ts":1792280938293,"kind":"view","fn":"resolveDID","fnId":"F2","identity":"IdentityA checks B","note":"doc 96 bytes"}
+{"seq":13,"impl":"O8_LFDT","ts":1792280938294,"kind":"view","fn":"verifyCredential","fnId":"F6","identity":"IdentityA checks B","note":"valid=true"}
+{"seq":14,"impl":"O8_LFDT","ts":1792280938295,"kind":"view","fn":"validDelegate","fnId":"F12","identity":"IdentityB","note":"OBU delegate=true"}
+{"seq":15,"impl":"O8_LFDT","ts":1792280938300,"kind":"tx","fn":"createPresentation","fnId":"F8","identity":"IdentityA","txHash":"0x50bbb40c63c214a2bcad1cc00ef155731ae9a4e49b215faf69b2ef19c80652eb","gasUsed":"68629","events":1,"note":"gas=68629"}
+{"seq":16,"impl":"O8_LFDT","ts":1792280938301,"kind":"offchain","phase":"secure-channel","identity":"A->B","note":"ECDH P-256 + AES-256-GCM, ct=42B, tag=16B (off-chain; VP challenge anchors payload)"}
+{"seq":17,"impl":"O8_LFDT","ts":1792280938306,"kind":"tx","fn":"revokeCredential","fnId":"F7","identity":"Registry","txHash":"0xda6b4de5ae55c2819b2de6196592b7bcf4305865619fb0c1dd2451c85d83e8e2","gasUsed":"66016","events":2,"note":"gas=66016"}
+{"seq":18,"impl":"O8_LFDT","ts":1792280938307,"kind":"view","fn":"verifyCredential","fnId":"F6","identity":"IdentityB","note":"post-revocation valid=false revoked=true -> channel torn down"}
+{"seq":19,"impl":"O8_LFDT","ts":1792280938310,"kind":"tx","fn":"removeVerificationMethod","fnId":"F10","identity":"IdentityA","txHash":"0x94b840155270b86f97db7c9de97a3e6948ff50402839227363e5309c1a2b96a1","gasUsed":"55333","events":2,"note":"gas=55333"}
+{"seq":20,"impl":"O8_LFDT","ts":1792280938314,"kind":"tx","fn":"updateDID","fnId":"F3","identity":"IdentityB","txHash":"0x87c41a7b5a8212d8ff4afddeabcf170a1f35bde8f0c38f3dbe316062c544ce25","gasUsed":"168952","events":2,"note":"gas=168952"}
+{"seq":21,"impl":"O8_LFDT","ts":1792280938316,"kind":"tx","fn":"deactivateDID","fnId":"F4","identity":"IdentityA","txHash":"0x6efca705b6ab17f77b2fd664a28dca4556624d3cfbcd32abf409ed16a226bc6b","gasUsed":"56079","events":2,"note":"gas=56079"}
+{"seq":22,"impl":"O8_LFDT","ts":1792280938317,"kind":"summary","phase":"done","note":"functions covered: 12/12"}
