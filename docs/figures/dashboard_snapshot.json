@@ -49,7 +49,7 @@
     "source": {
       "path": "4_comparison-framework/results/gas_benchmark.json"
     },
-    "measured": "2026-10-09T02:27:39.007Z",
+    "measured": "2026-10-17T23:32:24.373Z",
     "condition": "M1",
     "operations": [
       "deployRegistry",
@@ -134,13 +134,13 @@
         "transferOwnership": 80568
       },
       "MOBI-VID-V2": {
-        "deployRegistry": 4225285,
-        "createIdentity": 299143,
-        "updateAttribute": 307210,
+        "deployRegistry": 4366383,
+        "createIdentity": 299165,
+        "updateAttribute": 307254,
         "updateAttributeVia4337": null,
-        "addDelegateOrClaim": 35321,
-        "revoke": 75382,
-        "transferOwnership": 200089
+        "addDelegateOrClaim": 57649,
+        "revoke": 75404,
+        "transferOwnership": 200155
       },
       "CVIN-Combined": {
         "deployRegistry": 1531487,
@@ -202,9 +202,9 @@
       },
       {
         "standard": "MOBI-VID-V2",
-        "total": 9856260,
-        "low": 5077702,
-        "high": 14634819
+        "total": 9858020,
+        "low": 5078593,
+        "high": 14637448
       },
       {
         "standard": "ERC-735",
@@ -285,15 +285,15 @@
       },
       "MOBI-VID-V2": {
         "birthAttestation": {
-          "gas": 299143,
+          "gas": 299165,
           "native": true
         },
         "lifecycleEvent": {
-          "gas": 307210,
+          "gas": 307254,
           "native": true
         },
         "thirdPartyAttestation": {
-          "gas": 192749,
+          "gas": 222082,
           "native": true
         },
         "fidelity": "5/5"
@@ -1570,7 +1570,7 @@
         {
           "row": 28,
           "status": "V",
-          "claim": "Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); on the current build the fixed pa…"
+          "claim": "Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); since WM-2 C2 (2026-10-17: the at…"
         },
         {
           "row": 42,
@@ -1752,7 +1752,7 @@
     "28": {
       "row": 28,
       "status": "V",
-      "claim": "Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); on the current build the fixed pa…",
+      "claim": "Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); since WM-2 C2 (2026-10-17: the at…",
       "tag": "M1"
     },
     "29": {

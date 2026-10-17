@@ -69,3 +69,36 @@ registry.
   no longer pending, and its TDP-002, TDP-005 and TDP-006 were regenerated with its own generators. The dashboard and
   presentation were regenerated (Medium defects: 17 fixed, 9 open).
 - **Results so far:** Hardhat **541** (537 + 4); Python MOBI 43; all 11 MOBI demos pass; 13 document checks pass.
+- **C2-c, re-runs of record** at `92cc4d5` (clean tree, stamped): `benchmark_gas.js` with `generate_tables.py`,
+  `mobi_vid_backend_sweep.js`, `benchmark_scaling.js` and `security_scenarios.js`. Every changed field was compared
+  with the committed results. **Only MOBI-VID-V2 cells move:**
+
+  | Cell | Before | After | Change | Why |
+  |---|---:|---:|---:|---|
+  | deploy | 4,225,285 | 4,366,383 | +141,098 | larger contract |
+  | addDelegate | 35,321 | 57,649 | +22,328 | the stored delegation |
+  | third-party attestation (sweep) | 192,749 | 222,082 | +29,333 | consent and duplicate checks |
+  | create / birth | 299,143 | 299,165 | +22 | dispatch offset (new selectors) |
+  | update (`recordLifecycleEvent`), first / marginal | 307,210 / 255,910 | 307,254 / 255,954 | +44 | dispatch offset |
+  | revoke | 75,382 | 75,404 | +22 | dispatch offset |
+  | transfer | 200,089 | 200,155 | +66 | dispatch offset |
+  | 15-year lifetime | 9,856,260 | 9,858,020 | +1,760 | the offsets above |
+
+  The lifetime ranking is unchanged. The on-chain security results did not change in any number.
+- **A slip in my own comparison, caught.** My first diff script skipped any key containing "date", to drop
+  timestamps. That also skipped `updateAttribute`, which contains "date", so the +44 on the update cell went
+  unreported, and my first #25 note missed it. I found it when chapter 5's 307,210 did not match the file. The
+  re-diff skips exact key names only, and the table above is from it.
+- **Comparative claims re-checked against the new values; all still hold.**
+  - Chapter 5 says event-log backends are "roughly 6–9× cheaper" than MOBI: 5.8× and 8.9×.
+  - It calls `attestEvent` "the cheapest native attestation": 222,082 is below 295,289 (ERC-735) and 336,896
+    (CVIN-Combined). The sentence now says "still", and names the C2 check.
+  - CVIN-Combined at f = 1 (9.84 M) still dominates MOBI (9.86 M) over a lifetime.
+- **C2-c, records.**
+  - **Register:** #28's claim re-stated from the new pin (198,694; total 222,058–222,082), with 169,295 and 169,361
+    kept as history. #25 and #26 have dated notes listing every moved cell.
+  - **Stale-figure list:** eleven superseded values added. The checker found 21 quotes in five files: chapter 5,
+    chapter 6, README, CAPABILITIES and QUICKSTART. Each was updated, history lines with an arrow to the new value.
+  - **Generated documents:** card #28's caption now says 198,694; it had quoted the review-2 value, which the check
+    allowed because the number is still in the row as history. The dashboard, presentation, result cards and DWG-002
+    were regenerated. All 13 document checks pass.

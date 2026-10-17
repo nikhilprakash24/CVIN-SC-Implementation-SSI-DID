@@ -186,7 +186,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 | Row | Status | Claim (from the register) |
 |---|---|---|
-| #28 | V | Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); on the current build the fixed pa… |
+| #28 | V | Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); since WM-2 C2 (2026-10-17: the at… |
 | #42 | V | (sandbox lineage, was #31; history row for the pre-merge contracts) Gas moved by the 2026-10-04 defect fixes (D13 VIN normalisation on three mint paths; D21 `revoked` check and `previousChange` on the vehicle-profile reg… |
 | #43 | V | (sandbox lineage, was #32; history row for the pre-merge contracts) Gas moved by the 2026-10-04 pass-06 fixes (D7/D8 ERC-1155: standard transfers closed, held-type bitmap, `issuerTransferIdentity`; D11b MOBI `anchorVehic… |
 

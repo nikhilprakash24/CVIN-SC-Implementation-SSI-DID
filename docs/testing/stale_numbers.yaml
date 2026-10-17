@@ -209,3 +209,36 @@ entries:
   current: 94.3 %
   row: 4
   note: 'audit finding T-17: decimal comma and spelled percent'
+- pattern: '35321'
+  current: 57,649 MOBI-VID-V2 addDelegate (WM-2 C2, stored delegation)
+  row: 25
+- pattern: '4225285'
+  current: 4,366,383 MOBI-VID-V2 deploy (WM-2 C2)
+  row: 25
+- pattern: '299143'
+  current: 299,165 MOBI-VID-V2 create / birth (WM-2 C2)
+  row: 25
+- pattern: '75382'
+  current: 75,404 MOBI-VID-V2 revoke (WM-2 C2)
+  row: 25
+- pattern: '200089'
+  current: 200,155 MOBI-VID-V2 transfer (WM-2 C2)
+  row: 25
+- pattern: '307210'
+  current: 307,254 MOBI-VID-V2 first lifecycle event (WM-2 C2)
+  row: 26
+- pattern: '255910'
+  current: 255,954 MOBI-VID-V2 marginal lifecycle event (WM-2 C2)
+  row: 26
+- pattern: '9856260'
+  current: 9,858,020 MOBI-VID-V2 15-year lifetime (WM-2 C2)
+  row: 26
+- pattern: '192749'
+  current: 222,082 MOBI-VID-V2 third-party attestation (WM-2 C2)
+  row: 28
+- pattern: '169361'
+  current: 198,694 attestEvent execution gas (WM-2 C2)
+  row: 28
+- pattern: '19267[1-9]|19266[0-9]|192659'
+  current: 222,058–222,082 attestEvent gasUsed (WM-2 C2)
+  row: 28

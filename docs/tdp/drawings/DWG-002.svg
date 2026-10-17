@@ -194,13 +194,13 @@
 <path d="M871,532 a41.0,10 0 0,0 82,0" stroke="#e3ecf9" fill="none" stroke-width="1.3"/>
 <text x="912.0" y="262" font-size="9.5" text-anchor="middle" fill="#e3ecf9" font-weight="bold">MOBI-VID-V2</text>
 <text x="912.0" y="288" font-size="8" text-anchor="middle" fill="#93a9cb" font-weight="normal">create</text>
-<text x="912.0" y="302" font-size="9.5" text-anchor="middle" fill="#ffb454" font-weight="normal">299,143</text>
+<text x="912.0" y="302" font-size="9.5" text-anchor="middle" fill="#ffb454" font-weight="normal">299,165</text>
 <text x="912.0" y="324" font-size="8" text-anchor="middle" fill="#93a9cb" font-weight="normal">deploy</text>
-<text x="912.0" y="338" font-size="9" text-anchor="middle" fill="#ffb454" font-weight="normal">4,225,285</text>
+<text x="912.0" y="338" font-size="9" text-anchor="middle" fill="#ffb454" font-weight="normal">4,366,383</text>
 <text x="912.0" y="360" font-size="8" text-anchor="middle" fill="#93a9cb" font-weight="normal">update</text>
-<text x="912.0" y="374" font-size="9" text-anchor="middle" fill="#ffb454" font-weight="normal">307,210</text>
+<text x="912.0" y="374" font-size="9" text-anchor="middle" fill="#ffb454" font-weight="normal">307,254</text>
 <text x="912.0" y="396" font-size="8" text-anchor="middle" fill="#93a9cb" font-weight="normal">revoke</text>
-<text x="912.0" y="410" font-size="9" text-anchor="middle" fill="#ffb454" font-weight="normal">75,382</text>
+<text x="912.0" y="410" font-size="9" text-anchor="middle" fill="#ffb454" font-weight="normal">75,404</text>
 <text x="912.0" y="436" font-size="8" text-anchor="middle" fill="#93a9cb" font-weight="normal">harness</text>
 <text x="912.0" y="450" font-size="8.5" text-anchor="middle" fill="#e3ecf9" font-weight="normal">5 DEF / 1 n/a</text>
 <text x="912.0" y="476" font-size="8" text-anchor="middle" fill="#93a9cb" font-weight="normal">frontier</text>

@@ -53,7 +53,7 @@
 | ERC-1155 | 2,871,435 | 107,729 | 51,199 | — | 80,131 | 33,049 | 86,298 |
 | ERC-4337 | 456,294 | 759,088 | 49,343 | 96,173 | 47,557 | 25,429 | 28,539 |
 | LSP8 | 1,670,271 | 152,644 | 55,133 | — | — | 42,116 | 80,568 |
-| MOBI-VID-V2 | 4,225,285 | 299,143 | 307,210 | — | 35,321 | 75,382 | 200,089 |
+| MOBI-VID-V2 | 4,366,383 | 299,165 | 307,254 | — | 57,649 | 75,404 | 200,155 |
 | CVIN-Combined | 1,531,487 | 52,216 | 35,116 | — | 291,977 | 73,248 | 51,747 |
 *Exact gas, condition M1 (`4_comparison-framework/results/gas_benchmark.json`). — = operation not offered by the standard.*
 
@@ -68,7 +68,7 @@
 | ERC-1056 | 1,450,146 | 751,370 | 2,148,922 |
 | ERC-1155 | 1,865,183 | 986,456 | 2,743,910 |
 | CVIN-Combined | 9,831,477 | 4,941,847 | 14,721,108 |
-| MOBI-VID-V2 | 9,856,260 | 5,077,702 | 14,634,819 |
+| MOBI-VID-V2 | 9,858,020 | 5,078,593 | 14,637,448 |
 | ERC-735 | 11,692,092 | 6,724,987 | 16,659,198 |
 *A model over an assumed 15-year event profile, not a measurement; band ±50 % event frequency.*
 
@@ -84,7 +84,7 @@
 | ERC-735 | 295,242 | 295,277 | 295,289 (native) | 5/5 |
 | ERC-1155 | 107,729 | 80,131 | 63,031 (emulated) | 3/5 |
 | CVIN-Combined | 51,766 | 34,690 | 336,896 (native) | 5/5 |
-| MOBI-VID-V2 | 299,143 | 307,210 | 192,749 (native) | 5/5 |
+| MOBI-VID-V2 | 299,165 | 307,254 | 222,082 (native) | 5/5 |
 *`4_comparison-framework/results/mobi_vid_backends.json`.*
 
 ### 3.4 Security (register #28)

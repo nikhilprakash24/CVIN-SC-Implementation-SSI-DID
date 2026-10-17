@@ -262,32 +262,32 @@
   },
   "MOBI-VID-V2": {
     "deployRegistry": {
-      "gasUsed": 4225285,
+      "gasUsed": 4366383,
       "txCount": 1,
       "notes": "Single shared registry (V2 = ERC-1056 base + MOBI VID I birth certificates + VID II lifecycle events); deployer becomes registry authority + authorized manufacturer."
     },
     "createIdentity": {
-      "gasUsed": 299143,
+      "gasUsed": 299165,
       "txCount": 1,
       "notes": "registerVehicleBirth (MOBI VID I birth certificate): VIN hash + encrypted VIN + cert hash + first owner. birthAttributes left empty to avoid known V1 validity-overflow bug."
     },
     "updateAttribute": {
-      "gasUsed": 307210,
+      "gasUsed": 307254,
       "txCount": 1,
       "notes": "recordLifecycleEvent (MOBI VID II, MAINTENANCE): stores full event struct + VC hash + counters on-chain. Issuer authorization excluded as setup."
     },
     "addDelegateOrClaim": {
-      "gasUsed": 35321,
+      "gasUsed": 57649,
       "txCount": 1,
-      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 192749 gas."
+      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 222058 gas."
     },
     "transferOwnership": {
-      "gasUsed": 200089,
+      "gasUsed": 200155,
       "txCount": 1,
       "notes": "transferVehicleOwnership: appends odometer-stamped ownership record + ERC-1056 changeOwner. Called by current owner."
     },
     "revoke": {
-      "gasUsed": 75382,
+      "gasUsed": 75404,
       "txCount": 1,
       "notes": "revokeIdentity (inherited ERC-1056 extension): permanently flags the vehicle DID as revoked (decommissioning)."
     }
@@ -326,9 +326,13 @@
   },
   "metadata": {
     "solcVersion": "0.8.24",
-    "commit": "d0cc19c",
+    "commit": "92cc4d5",
+    "commitFull": "92cc4d5ccdd9b45ab1f2c4ec7caae96369aee5ef",
     "dirty": false,
     "dirtyAnyFile": false,
+    "scope": "1_blockchain-identity/scripts/benchmark_gas.js",
+    "scopeFiles": 7,
+    "scopeSha": "80feb0d10db2",
     "node": "v22.22.2",
     "hardhat": "2.28.6",
     "solcSettings": {
@@ -339,7 +343,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-09T02:27:39.007Z",
+    "date": "2026-10-17T23:32:24.373Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [

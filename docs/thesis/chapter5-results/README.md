@@ -74,7 +74,7 @@ Exact `receipt.gasUsed` per standard for an identical operation set. "—"
 | ERC-1056 | 52,594 | 35,494 | 54,831 | 35,046 | 51,754 |
 | ERC-1155 | 107,729 | 51,199 | 80,131 | 33,049 | 86,298 |
 | LSP8 | 152,644 | 55,133 | — | 42,116 | 80,568 |
-| MOBI-VID-V2 | 299,143 | 307,210 | 35,321 | 75,382 | 200,089 |
+| MOBI-VID-V2 | 299,165 | 307,254 | 57,649 | 75,404 | 200,155 |
 | ERC-725 | 519,384 | 137,096 | 119,996 | 43,388 | 28,390 |
 | ERC-721 | 545,101 | 119,737 | 48,302 | 27,677 | 174,670 |
 | ERC-4337 | 759,088 | 49,343 | 47,557 | 25,429 | 28,539 |
@@ -164,7 +164,7 @@ realization):
 | ERC-735 | 295,242 | 295,277 | 295,289 | 5/5 |
 | ERC-1155 | 107,729 | 80,131 | 63,031 † | 3/5 |
 | CVIN-Combined | **51,766** | **34,690** | 336,896 | **5/5** |
-| MOBI-VID-V2 | 299,143 | 307,210 | 192,749 | 5/5 |
+| MOBI-VID-V2 | 299,165 | 307,254 | 222,082 | 5/5 |
 
 **Fidelity matrix** — native support for each of the five MOBI VID concepts
 (✓ native, ✗ not native / off-chain only):
@@ -202,7 +202,7 @@ linkage to a specific prior event.
    event-log backends own the cheapest birth
    and lifecycle writes (CVIN-Combined 51,766 / 34,690; ERC-1056 51,944 /
    34,928) — roughly **6–9× cheaper** than the purpose-built MOBI-VID-V2
-   registry (299,143 / 307,210), which pays for dedicated on-chain structs
+   registry (299,165 / 307,254), which pays for dedicated on-chain structs
    (typed events, odometer, jurisdiction, verified flag, VIN-hash index).
 
 3. **Claim-based standards are the faithful way to get attestation.** Only
@@ -210,8 +210,8 @@ linkage to a specific prior event.
    CVIN-Combined) or a purpose-built attestation (MOBI-VID-V2) reach 5/5;
    they are exactly the backends that natively support both multi-party
    attestation and verifiable on-chain claims. A subtlety the raw score
-   hides: the **purpose-built `attestEvent` (192,749) is actually the
-   cheapest native attestation**, undercutting the generic claim structs of
+   hides: the **purpose-built `attestEvent` (222,082, with the owner-or-delegate
+   check of WM-2 C2) is still the cheapest native attestation**, undercutting the generic claim structs of
    ERC-735 (295,289) and CVIN-Combined (336,896) because it stores a compact
    attestation record (signature + role + timestamp) rather than a full
    claim struct with topic/scheme/data/URI strings.
@@ -514,8 +514,9 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
    eventId, EIP-191, OZ ECDSA low-s) and reverts on mismatch. A
    before/after test (`test/MOBIVID/MOBIVIDRegistry.test.js`) confirms a
    valid attestation succeeds while forged, wrong-key, and replayed
-   signatures revert. Cost: attestEvent rose from **121,110 → 192,749
-   gas** (the added `ecrecover` + storing a real 65-byte signature) — the
+   signatures revert. Cost: attestEvent rose from **121,110 → 192,749 → 222,082
+   gas** (the added `ecrecover` + storing a real 65-byte signature;
+   then WM-2 C2's owner-or-delegate check and one attestation per attester) — the
    security/performance trade-off made concrete. This flipped the MOBI
    `Replay` cell from ◐ to ✓ in the matrix above.
 
@@ -601,7 +602,7 @@ fix added) and CVIN-Combined (claim array + change pointer); ×3 for MOBI-VID-V2
 | ERC-1155 | `issueCredential` | 42,816 | O(1) |
 | ERC-735 | `addClaim` | 281,379 | O(1) |
 | CVIN-Combined | `addClaim` | 274,987 | O(1) |
-| MOBI-VID-V2 | `recordLifecycleEvent` | 255,910 | O(1) |
+| MOBI-VID-V2 | `recordLifecycleEvent` | 255,954 | O(1) |
 
 This is a **null result, and an important one**: the a-priori concern that
 claim-storing or event-storing substrates would degrade to O(n) as a vehicle's history
@@ -623,7 +624,7 @@ work, not fiat.**
 | 1 | ERC-1056 | 1,450,146 | 0.75–2.15 M |
 | 2 | ERC-1155 | 1,865,183 | 0.99–2.74 M |
 | 3 | CVIN-Combined | 9,831,477 | 4.94–14.72 M |
-| 4 | MOBI-VID-V2 | 9,856,260 | 5.08–14.63 M |
+| 4 | MOBI-VID-V2 | 9,858,020 | 5.08–14.64 M |
 | 5 | ERC-735 | 11,692,092 | 6.72–16.66 M |
 
 **The ranking reverses §5.2.** CVIN-Combined, the *cheapest* substrate to *create* an
@@ -660,9 +661,9 @@ dominates *y* iff gas(*x*) ≤ gas(*y*) and fidelity(*x*) ≥ fidelity(*y*) with
 one strict. At creation, CVIN-Combined = (52,216 gas, 5/5) is **non-dominated**: it is
 the unique point attaining full fidelity at near-minimal cost — ERC-1056 (52,594, 3/5)
 is neither cheaper *and* higher-fidelity, and every other 5/5 substrate (ERC-735 1.60 M,
-MOBI-VID-V2 299,143) is strictly dominated *by* it. At lifetime scope, among all
+MOBI-VID-V2 299,165) is strictly dominated *by* it. At lifetime scope, among all
 full-fidelity substrates CVIN-Combined at *f*=1 (9.84 M) is the cheapest — it dominates
-ERC-735 (11.44 M) and MOBI-VID-V2 (9.85 M); it is incomparable to ERC-1056 (1.45 M, but
+ERC-735 (11.44 M) and MOBI-VID-V2 (9.86 M); it is incomparable to ERC-1056 (1.45 M, but
 only 3/5). As *f* varies in [0,1], CVIN-Combined **traces the efficient frontier itself**
 between the cheap-lower-fidelity corner and the full-fidelity corner. So the rigorous H5
 statement is not "cheapest" but: **CVIN-Combined is Pareto-non-dominated on the

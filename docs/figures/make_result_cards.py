@@ -68,7 +68,7 @@ CARDS = {
     37: ("fresh", "One-call probe refresh", "2.76 / 2.89 ms", "against 14.38 / 10.28 ms for a full refresh; no finite k reaches P*(0.5) = 100 on this host", None),
     52: ("fresh", "#32 against #37 on one host (C3)", "attributed to the host", "full-refresh t_chain 7.57 / 7.91 ms (#32 code) and 6.94 / 8.15 ms (#37 code); here the probe reaches P*(0.5) ≥ 100 at k = 25", "decision rule committed before the runs"),
     46: ("fresh", "Revoked RSU in a verifier's cache (I3)", "k − 1", "the most SPaT accepted after revocation: 0, 4, 24 at k = 1, 5, 25, over N=30 runs", "PASS"),
-    28: ("security", "Attacks defended", "43/43", "each reverted with its documented reason; attestEvent fixed path 169,295 execution gas", None),
+    28: ("security", "Attacks defended", "43/43", "each reverted with its documented reason; attestEvent fixed path 198,694 execution gas since the owner-or-delegate check (WM-2 C2)", None),
     45: ("security", "SPaT attacks rejected (I2)", "30/30", "runs: each of 15 registered checks rejected for its expected reason; 0 legitimate SPaT rejected of 138,895", "PASS"),
     4: ("w3c", "W3C compliance, internal checker", "94.3%", "44 executed checks: 41 PASS, 1 PARTIAL, 2 FAIL; self-scored", None),
     24: ("w3c", "External W3C DID test suite", "335/336", "generated tests; resolution 193/194; not comparable with 336/441", None),
