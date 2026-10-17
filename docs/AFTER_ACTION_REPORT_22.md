@@ -128,3 +128,16 @@ registry.
   - **N-25 is restated.** The testbed's `ERC1056Registry` differs from the main project's only by the two `virtual`
     keywords. Its `MOBIVIDRegistry` and `MOBIVIDRegistryV2` lack C2. Sync at A3b.
   - The re-runs of record above (`92cc4d5`) measured the first design and are re-done below.
+- **C2-c, re-runs of record for the final design**, at `a45be79` (clean tree, stamped). The same four producers and
+  `generate_tables.py`. Every field was compared with the results at `7b65d80`, from before C2. **Only MOBI-VID-V2
+  cells move**, and the final values match the first design's table except two cells:
+
+  | Cell | Before C2 | First design (`92cc4d5`, replaced) | Final (`a45be79`) |
+  |---|---:|---:|---:|
+  | addDelegate | 35,321 | 57,649 | **57,667** (+22,346; the override's extra internal call) |
+  | deploy | 4,225,285 | 4,366,383 | **4,370,878** (+145,593) |
+
+  All other moved cells are as tabled above: attestation 222,082, create 299,165, update 307,254 / 255,954, revoke
+  75,404, transfer 200,155, lifetime 9,858,020. The security results are unchanged. #25 and #26 now cite
+  `a45be79`, chapter 5's addDelegate cell is 57,667, and the stale-figure list also catches the two first-design
+  values. The check brief's K10 and K11 point at the final design. All 13 document checks pass.

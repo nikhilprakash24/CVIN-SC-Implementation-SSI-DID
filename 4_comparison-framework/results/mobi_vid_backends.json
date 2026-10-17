@@ -149,8 +149,8 @@
   "metadata": {
     "title": "MOBI VID cross-backend realization (H4)",
     "solcVersion": "0.8.24",
-    "commit": "92cc4d5",
-    "commitFull": "92cc4d5ccdd9b45ab1f2c4ec7caae96369aee5ef",
+    "commit": "a45be79",
+    "commitFull": "a45be793240a8b39ce871c8971af2897c67e85a7",
     "dirty": false,
     "dirtyAnyFile": true,
     "scope": "1_blockchain-identity/scripts/mobi_vid_backend_sweep.js",
@@ -166,7 +166,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-17T23:32:27.696Z",
+    "date": "2026-10-17T23:45:51.684Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [
