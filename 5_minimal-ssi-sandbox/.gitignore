@@ -1,0 +1,6 @@
+node_modules/
+artifacts/
+cache/
+zk/pot12_0.ptau
+zk/pot12_1.ptau
+zk/AgeGate_0.zkey

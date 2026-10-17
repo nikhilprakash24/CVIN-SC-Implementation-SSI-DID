@@ -1,0 +1,28 @@
+{"seq":1,"impl":"O1_ERC1056","ts":1792035487400,"kind":"deploy","phase":"deploy","note":"O1_ERC1056 + adapter + EndorsementRegistry + BatchAnchorRegistry"}
+{"seq":2,"impl":"O1_ERC1056","ts":1792035487408,"kind":"tx","fn":"createDID","fnId":"F1","identity":"Ministry","txHash":"0xe8a820ad5adc051a07b7ca792cf9e9024a606ce9be0a8a03315e61049081ffe5","gasUsed":"178935","events":1,"note":"gas=178935"}
+{"seq":3,"impl":"O1_ERC1056","ts":1792035487413,"kind":"tx","fn":"createDID","fnId":"F1","identity":"DMV","txHash":"0x40a4c573cacb05bc91a3a3b1f1e6aa1869ec1bc15affa478f360fc30138d88de","gasUsed":"161823","events":1,"note":"gas=161823"}
+{"seq":4,"impl":"O1_ERC1056","ts":1792035487418,"kind":"tx","fn":"createDID","fnId":"F1","identity":"Vehicle","txHash":"0xcaa6fb10a6517fa3ed9e42a2170a4d505150a3cde1256ddf556533ddc6ef28be","gasUsed":"161835","events":1,"note":"gas=161835"}
+{"seq":5,"impl":"O1_ERC1056","ts":1792035487421,"kind":"tx","fn":"createDID","fnId":"F1","identity":"TollOperator","txHash":"0x551bcad0fe990464d49dd70e880a180fb95199724e632653241e43bcca82d797","gasUsed":"161835","events":1,"note":"gas=161835"}
+{"seq":6,"impl":"O1_ERC1056","ts":1792035487426,"kind":"tx","fn":"addRoot","fnId":"G0","identity":"RegistryAdmin","txHash":"0x323e2bec16a7020cedd39088dbd5ed2dd9c5db9c438ff651b8d43d983081bbfe","gasUsed":"47592","events":1,"note":"gas=47592"}
+{"seq":7,"impl":"O1_ERC1056","ts":1792035487429,"kind":"tx","fn":"registerIssuer","fnId":"G1","identity":"DMV","txHash":"0x1491ec6e2c4cac41e18a7713c5431df620add771fa2b8c48a5f0eff696538136","gasUsed":"76800","events":1,"note":"gas=76800"}
+{"seq":8,"impl":"O1_ERC1056","ts":1792035487432,"kind":"tx","fn":"endorseIssuer","fnId":"G2","identity":"Ministry","txHash":"0x229bd4f1629ef13eff1a0233c4bc36a6b49f99e6563ad584510d491c2cf3bdcd","gasUsed":"151437","events":1,"note":"gas=151437"}
+{"seq":9,"impl":"O1_ERC1056","ts":1792035487436,"kind":"tx","fn":"issueCredential","fnId":"F5","identity":"DMV","txHash":"0xe05d89a6c984a401ec9ee7d32cd4586106a56e6ae323157bac5797de36afa3a0","gasUsed":"130151","events":1,"note":"gas=130151 · registration anchor"}
+{"seq":10,"impl":"O1_ERC1056","ts":1792035487443,"kind":"view","fn":"resolveDID+verifyCredential","fnId":"F6","identity":"TollOperator","note":"cache warmed while ONLINE: registration valid=true"}
+{"seq":11,"impl":"O1_ERC1056","ts":1792035487443,"kind":"offchain","phase":"link","identity":"Vehicle","note":"mode=READ_ONLY (relayer refuses writes; chain readable)"}
+{"seq":12,"impl":"O1_ERC1056","ts":1792035487444,"kind":"view","fn":"verifyCredential","fnId":"F6","identity":"TollOperator","note":"live read in READ_ONLY: registration valid=true"}
+{"seq":13,"impl":"O1_ERC1056","ts":1792035487445,"kind":"offchain","phase":"queued","identity":"Vehicle","note":"#1 TOLL_PASS signed and queued (write refused; depends on registration 0x4425036a…)"}
+{"seq":14,"impl":"O1_ERC1056","ts":1792035487445,"kind":"offchain","phase":"gate-decision","identity":"TollOperator","note":"admits vehicle on cached status (fresh=true) + off-chain VP; settlement deferred"}
+{"seq":15,"impl":"O1_ERC1056","ts":1792035487445,"kind":"offchain","phase":"link","identity":"Vehicle","note":"mode=PARTITIONED (no reads, no writes)"}
+{"seq":16,"impl":"O1_ERC1056","ts":1792035487479,"kind":"offchain","phase":"verify-offline","identity":"TollOperator","note":"registration from cache: ok=true cacheFresh=true (no chain access)"}
+{"seq":17,"impl":"O1_ERC1056","ts":1792035487483,"kind":"offchain","phase":"queued","identity":"Vehicle","note":"#2, #3 TELEMETRY_SUMMARY signed and queued (no dependencies)"}
+{"seq":18,"impl":"O1_ERC1056","ts":1792035487499,"kind":"tx","fn":"revokeCredential","fnId":"F7","identity":"DMV","txHash":"0xedfa241dedfcd0a31d56fce47f405753c3106da3869f6977f9552eecacb64c80","gasUsed":"32968","events":1,"note":"gas=32968 · revoked DURING the vehicle's partition"}
+{"seq":19,"impl":"O1_ERC1056","ts":1792035487503,"kind":"offchain","phase":"verify-offline","identity":"TollOperator","note":"still partitioned: cache says ok=true — stale acceptance window open (F-VID-3)"}
+{"seq":20,"impl":"O1_ERC1056","ts":1792035487503,"kind":"offchain","phase":"link","identity":"Vehicle","note":"mode=ONLINE (reconnect)"}
+{"seq":21,"impl":"O1_ERC1056","ts":1792035487504,"kind":"offchain","phase":"reconcile","identity":"Vehicle","note":"REJECT #1 TOLL_PASS: dependency 0x4425036a… no longer valid (revocation wins)"}
+{"seq":22,"impl":"O1_ERC1056","ts":1792035487505,"kind":"offchain","phase":"reconcile","identity":"Vehicle","note":"ACCEPT #2 TELEMETRY_SUMMARY"}
+{"seq":23,"impl":"O1_ERC1056","ts":1792035487505,"kind":"offchain","phase":"reconcile","identity":"Vehicle","note":"ACCEPT #3 TELEMETRY_SUMMARY"}
+{"seq":24,"impl":"O1_ERC1056","ts":1792035487505,"kind":"view","fn":"verifyCredential","fnId":"F6","identity":"TollOperator","note":"cache refreshed on reconnect: valid=false revoked=true → toll settlement for #1 denied; dispute path (doc 06 §3)"}
+{"seq":25,"impl":"O1_ERC1056","ts":1792035487510,"kind":"tx","fn":"anchorBatch","fnId":"B1","identity":"Vehicle","txHash":"0xf56500d915b225523756755905f5dc6b98cc0850308a3e123d1d25cd80cb28ce","gasUsed":"122127","events":1,"note":"gas=122127 · ONE write anchors 2 queued events"}
+{"seq":26,"impl":"O1_ERC1056","ts":1792035487511,"kind":"view","fn":"verifyInclusion","fnId":"B2","identity":"Auditor","note":"queued event #2 provably anchored: included=true"}
+{"seq":27,"impl":"O1_ERC1056","ts":1792035487511,"kind":"offchain","phase":"summary","identity":"Vehicle","note":"queued=3 accepted=2 rejected=1; writes during outage=0; writes on reconnect=1"}
+{"seq":28,"impl":"O1_ERC1056","ts":1792035487512,"kind":"summary","phase":"done","note":"tags covered: B1,B2,F1,F5,F6,F7,G0,G1,G2 (F: 4/12)"}
