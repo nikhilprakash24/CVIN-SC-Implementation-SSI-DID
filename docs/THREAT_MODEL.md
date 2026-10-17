@@ -86,10 +86,12 @@ G1/G4; unauthorized attribute write → G1; unauthorized delegate/claim → G2/G
 replay → G3; unauthorized revocation → G4; identity hijack → G8. The found-and-fixed
 MOBI `attestEvent` gap (§5.6) was a **G2/G3 violation** (an attestation accepted without
 verifying the attester's signature) — the signature check is now in place with domain-separated `ecrecover`
-(EIP-191 over contract address and `block.chainid`; "EIP-155" was a mislabel). *Still open (WM-1 audit U-F10,
-defect D54):* the signature is the attester's own and adds no authority — any role-holder can attest any
-vehicle's event, and the same attester can attest twice (G4 is not met for attestations; review-2's
-"restrict `attestEvent` to owner and delegates", WM-2 step C2).
+(EIP-191 over contract address and `block.chainid`; "EIP-155" was a mislabel). *Closed 2026-10-17 (WM-1 audit U-F10,
+defect D54; WM-2 C2, after-action report 22):* the signature is the attester's own and adds no authority, so
+before C2 any role-holder could attest any vehicle's event, and the same attester could attest twice. Since C2 the
+attester must also be the vehicle's current owner or hold its owner's unexpired `veriKey` delegation (stored on
+chain, `validDelegate`), and may attest an event once. G4 is met for attestations within that rule; the role list
+itself is still granted registry-wide by the authority.
 
 ## 6. Out of scope (stated, not hidden)
 

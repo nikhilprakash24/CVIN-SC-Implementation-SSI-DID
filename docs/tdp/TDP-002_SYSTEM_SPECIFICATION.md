@@ -128,7 +128,7 @@ Convention. "Shall" marks a requirement. The threshold values are the ones the t
 
 - Derived from: goal G2, G4; register
 - Verification: Test; register #28
-- Limit: The signature check is in place; the authority restriction is open (D54); any role-holder may attest any vehicle, and twice (WM-2 C2 pending).
+- Limit: The signature check is in place; since WM-2 C2 (report 22) the attester must also be the vehicle's owner or its veriKey delegate, once per event (D54 fixed); the role list is still granted registry-wide.
 
 **SEC-06 VIN confidentiality on chain.** The vehicle identification number shall not appear in plaintext in any on-chain state or event of the MOBI VID registries.
 

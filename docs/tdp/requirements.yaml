@@ -151,8 +151,8 @@ requirements:
     derived_from: goal G2, G4; register #28 (attestEvent found-and-fixed); WM-2 step C2
     method: T
     evidence_rows: [28]
-    pending: [D54, C2]
-    limit: The signature check is in place; the authority restriction is open (D54); any role-holder may attest any vehicle, and twice (WM-2 C2 pending).
+    pending: []
+    limit: The signature check is in place; since WM-2 C2 (report 22) the attester must also be the vehicle's owner or its veriKey delegate, once per event (D54 fixed); the role list is still granted registry-wide.
   - id: SEC-06
     title: VIN confidentiality on chain
     shall: The vehicle identification number shall not appear in plaintext in any on-chain state or event of the MOBI VID registries.

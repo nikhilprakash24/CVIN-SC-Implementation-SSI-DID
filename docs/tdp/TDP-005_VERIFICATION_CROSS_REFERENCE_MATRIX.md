@@ -9,8 +9,8 @@
 
 | Status | Count | Meaning |
 |---|---|---|
-| VERIFIED | 29 | every evidence row V; files and CI present; threshold met; nothing pending |
-| PARTIAL | 7 | some evidence V; at least one row non-V, a threshold unmet, an item missing, or a named trunk item still open |
+| VERIFIED | 30 | every evidence row V; files and CI present; threshold met; nothing pending |
+| PARTIAL | 6 | some evidence V; at least one row non-V, a threshold unmet, an item missing, or a named trunk item still open |
 | OPEN | 0 | no V evidence |
 
 Register at generation: E 7, S 10, U 1, V 34 (52 rows).
@@ -33,7 +33,7 @@ Register at generation: E 7, S 10, U 1, V 34 (52 rows).
 | SEC-02 | Signed generation time, freshness window and replay cache | Test | #21 (V), #45 (V) | — | 2/2 files | **VERIFIED** | — |
 | SEC-03 | Revocation staleness bounded by the re-check cadence | Test | #32 (V), #37 (V), #46 (V) | I3 at k=25 PASS (bound 24): actual `PASS` → met | — | **VERIFIED** | — |
 | SEC-04 | Revoked key under clock skew | Test | #32 (V), #37 (V) | — | 1/1 files | **PARTIAL** | pending: WM-2 A3b (open) |
-| SEC-05 | Attestation authority | Test | #28 (V) | — | — | **PARTIAL** | pending: D54 (open), WM-2 C2 (open) |
+| SEC-05 | Attestation authority | Test | #28 (V) | — | — | **VERIFIED** | — |
 | SEC-06 | VIN confidentiality on chain | Inspection | #28 (V) | — | 2/2 files | **PARTIAL** | pending: D64 (open) |
 | SEC-07 | Pseudonym pool observability | Test | #38 (V) | pre-registered verdict as it fell: **FAIL** | — | **PARTIAL** | pending: WM-2 A3b (open) |
 | STD-01 | Internal structural checker at or above ninety percent | Test | #4 (V) | score >= 90: actual `94.3` → met | 1/1 files; CI step found | **VERIFIED** | — |
@@ -108,7 +108,7 @@ V rows cited by no requirement: #1, #2, #3, #22, #29, #42, #43. A V row no requi
 | SEC-02 | A fresh message relayed inside the window to a receiver that never heard it is not detected (#45); ERC-1056 signed operations do not bind the chain id (D52, G3 narrowed). |
 | SEC-03 | A message count, not a time; the verifier cache does not expire; the registry is in-process for I3 (#46). |
 | SEC-04 | Rows |
-| SEC-05 | The signature check is in place; the authority restriction is open (D54); any role-holder may attest any vehicle, and twice (WM-2 C2 pending). |
+| SEC-05 | The signature check is in place; since WM-2 C2 (report 22) the attester must also be the vehicle's owner or its veriKey delegate, once per event (D54 fixed); the role list is still granted registry-wide. |
 | SEC-06 | The cv2x testbed derives a vehicle identity from an unsalted VIN hash (D64, open); the matrix row is structural, not a measurement of linkability. |
 | SEC-07 | Chain-layer linkability only; radio, timing and position linkability are out of scope (SC-02). |
 | STD-01 | Self-scored and structural; the DID Core checks test a synthesised document (C5 gap). WM-2 C1 (report 21) made did:ethr resolution read the chain when given a provider, but the checker resolves without one, so its documents are still synthesised. |

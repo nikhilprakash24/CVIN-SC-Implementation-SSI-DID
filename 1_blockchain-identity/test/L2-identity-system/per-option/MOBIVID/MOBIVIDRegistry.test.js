@@ -356,6 +356,11 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       vehicle.address, VIN_HASH, "encrypted:VIN", BIRTH_CERT_HASH,
       firstOwner.address, BIRTH_ATTRS
     );
+    // WM-2 C2 (D54): attesters need the owner's consent, as veriKey delegations.
+    for (const att of [dmv, inspection]) {
+      await registry.connect(firstOwner).addDelegate(
+        vehicle.address, ethers.encodeBytes32String("veriKey"), att.address, 86400);
+    }
 
     return { registry, authority, manufacturer, firstOwner, serviceCenter,
              police, dmv, inspection, vehicle, outsider };
@@ -589,10 +594,8 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       const eventId = extractEventId(registry, await tx.wait());
       const chainId = (await ethers.provider.getNetwork()).chainId;
 
-      // (1) A valid signature by the attester (dmv) is accepted.
-      const validSig = await attestationSignature(registry, chainId, vehicle.address, eventId, dmv);
-      await expect(registry.connect(dmv).attestEvent(eventId, vehicle.address, validSig))
-        .to.emit(registry, "EventAttested");
+      // (1) is last: since WM-2 C2 a second attestation by dmv would revert
+      //     "Already attested" before its signature is checked.
 
       // (2) Garbage bytes (the previous placeholder style) now revert
       //     (OZ ECDSA: ECDSAInvalidSignatureLength).
@@ -616,6 +619,11 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       await expect(
         registry.connect(dmv).attestEvent(eventId, vehicle.address, replay)
       ).to.be.revertedWith("Invalid attestation signature");
+
+      // (1) A valid signature by the attester (dmv) is accepted.
+      const validSig = await attestationSignature(registry, chainId, vehicle.address, eventId, dmv);
+      await expect(registry.connect(dmv).attestEvent(eventId, vehicle.address, validSig))
+        .to.emit(registry, "EventAttested");
 
       // Only the single valid attestation from (1) was recorded.
       const attestations = await registry.getEventAttestations(eventId);

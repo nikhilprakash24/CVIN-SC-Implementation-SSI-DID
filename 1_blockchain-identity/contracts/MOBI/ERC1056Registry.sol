@@ -64,6 +64,11 @@ contract ERC1056Registry {
     // Revocation tracking
     mapping(address => uint) public revokedAt;
 
+    // Delegations, stored as the canonical ERC-1056 registry stores them:
+    // identity => delegateType => delegate => validTo. Before WM-2 C2 they were
+    // only emitted, so no contract could check one (defect D54).
+    mapping(address => mapping(bytes32 => mapping(address => uint))) public delegates;
+
     modifier onlyOwner(address identity, address actor) {
         require(
             actor == identityOwner(identity),
@@ -94,6 +99,18 @@ contract ERC1056Registry {
             return owner;
         }
         return identity;
+    }
+
+    /**
+     * @dev True while `delegate` holds an unexpired delegation of `delegateType`
+     *      for `identity`, and the identity is not revoked (WM-2 C2).
+     */
+    function validDelegate(
+        address identity,
+        bytes32 delegateType,
+        address delegate
+    ) public view returns (bool) {
+        return !revoked[identity] && delegates[identity][delegateType][delegate] > block.timestamp;
     }
 
     /**
@@ -140,6 +157,7 @@ contract ERC1056Registry {
         uint validity
     ) internal onlyOwner(identity, actor) notRevoked(identity) {
         uint validTo = block.timestamp + validity;
+        delegates[identity][delegateType][delegate] = validTo;
 
         emit DIDDelegateChanged(
             identity,
@@ -170,6 +188,7 @@ contract ERC1056Registry {
         bytes32 delegateType,
         address delegate
     ) internal onlyOwner(identity, actor) notRevoked(identity) {
+        delegates[identity][delegateType][delegate] = block.timestamp;
         emit DIDDelegateChanged(
             identity,
             delegateType,

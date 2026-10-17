@@ -274,7 +274,7 @@ flowchart LR
 | Severity | Fixed | Partly fixed | Open |
 |---|---|---|---|
 | High | 16 | 1 | 0 |
-| Medium | 16 | 4 | 10 |
+| Medium | 17 | 4 | 9 |
 | Low | 9 | 1 | 9 |
 *Defect log D1–D36 by severity and status (`docs/DEFECT_LOG.md`). Open items wait for author decisions (§C).*
 

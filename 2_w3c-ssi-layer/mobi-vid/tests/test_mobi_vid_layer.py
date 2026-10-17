@@ -378,7 +378,9 @@ def lifecycle(registry, accounts, vehicle, birth):
                       ("RECALL", recall)):
         print(f"[gas] recordLifecycleEvent {name}: {rec['gasUsed']}")
 
-    # DMV attests to the maintenance event (multi-party sign-off)
+    # DMV attests to the maintenance event (multi-party sign-off), with the
+    # owner's consent: a veriKey delegation (WM-2 C2, D54)
+    registry.add_delegate(a["first_owner"], vehicle.address, a["dmv"].address)
     dmv_recorder = LifecycleEventRecorder(registry, a["dmv"], "BC DMV")
     attestation = dmv_recorder.attest_event(
         maintenance["eventId"], vehicle.address)

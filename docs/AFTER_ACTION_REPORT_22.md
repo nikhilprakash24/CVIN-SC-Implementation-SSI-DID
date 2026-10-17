@@ -31,3 +31,41 @@ registry.
 
 ## 3. Execution log
 - 2026-10-17 — report opened.
+- **C2-a, contracts.** MOBI `ERC1056Registry` stores `delegates[identity][type][delegate] = validTo` in `addDelegate`.
+  `revokeDelegate` sets it to `block.timestamp`, and a new `validDelegate` returns false for a revoked identity.
+  `MOBIVIDRegistryV2.attestEvent` keeps the role check and adds two rules: the attester must be `identityOwner(vehicle)`
+  or a valid `veriKey` delegate, and `hasAttested[eventId][attester]` blocks a second attestation. The consent and
+  duplicate checks run before the signature check (cheap checks first).
+- **The testbed copies are not changed (a declared deviation).** `cv2x-testbed/contracts/MOBIVIDRegistryV2.sol` was
+  identical to the main project's, but it compiles against the testbed's own `ERC1056Registry`, a different contract
+  with `updateVehicleKey` and `getIdentityInfo`. Giving that registry delegate storage would change its bytecode and
+  so #22's deploy gas. No testbed code calls `attestEvent`, and the testbed's MOBI tests already load the main
+  project's artifacts. The copies now differ, logged as **N-25**: sync them at A3b, when the testbed's results are
+  re-run anyway.
+- **C2-a, tests.** Four D54 tests in `attestEventRegression.test.js`: a role-holder without consent is rejected; a
+  duplicate is rejected; a revoked and an expired delegation are rejected; the owner holding a role is accepted. On the
+  old contracts, written from git and checked by grep, 3 of the 4 fail. The owner test passes on both, because it pins
+  behaviour that must not change. The fixed-path gas pin is re-pinned: **attestEvent execution gas 169,361 → 198,694**
+  (+29,333: one new storage write and four cold reads), 0 spread over 6 event ids. Total gas is 222,058–222,082 from
+  calldata zero bytes.
+- **C2-b, callers.**
+  - **Tests:** three Hardhat fixtures now have the owner delegate the attester. The security scenario's control, a
+    dealer attesting, needs the owner's delegation; its attack, an attester with no role, is still refused by the role
+    check with the same reason, so the matrix's verdict does not change. One test was reordered: its valid
+    attestation now comes after the bad-signature cases, which would otherwise hit "Already attested" first.
+  - **Python MOBI layer:** the client gained `add_delegate`, and the lifecycle fixture delegates the DMV.
+  - **Demos:**
+    - `claims.js`: the owner delegates three attesters, and a new step shows a role-holder without consent being
+      refused. "Attest twice" is now an expected revert (it was an observation). The malformed-signature step moved
+      to an attester that has not yet attested.
+    - `keys-delegates.js`: its assertion that `validDelegate` does not exist is now the opposite. Two notes that
+      said delegations store nothing were corrected, and a step checks the stored state against the log replay.
+    - `lifecycle-history.js`: the current owner, the buyer after the sale, delegates the station. The ERC-1056 event
+      chain is now three links long.
+  - **Producers** (`benchmark_gas.js`, `mobi_vid_backend_sweep.js`): the owner's delegation is uncounted setup, as
+    issuer authorisation already is.
+- **C2-b, records.** D54 is marked fixed. The threat model's G4 note and the MOBI sandbox README are updated. The
+  feature matrix was regenerated (MOBI gains `delegates`, `validDelegate` and `hasAttested`). Report 20's SEC-05 is
+  no longer pending, and its TDP-002, TDP-005 and TDP-006 were regenerated with its own generators. The dashboard and
+  presentation were regenerated (Medium defects: 17 fixed, 9 open).
+- **Results so far:** Hardhat **541** (537 + 4); Python MOBI 43; all 11 MOBI demos pass; 13 document checks pass.

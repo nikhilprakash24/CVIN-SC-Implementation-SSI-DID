@@ -39,6 +39,7 @@ d.run(async () => {
   const e4 = await rec('accident-41000', police, EVENT.ACCIDENT, 41000, 'life: accident');
   const e5 = await rec('repair-28000', serviceCenter, EVENT.REPAIR, 28000, 'life: repair with a ROLLED-BACK odometer (accepted on-chain)');
   const e6 = await rec('maintenance-45000', serviceCenter, EVENT.MAINTENANCE, 45000, 'life: second service');
+  await d.tx('owner-delegates-station', 'MOBIVIDRegistryV2.addDelegate', reg.connect(buyer).addDelegate(vehicle, ethers.encodeBytes32String('veriKey'), station.address, 86400n), 'the CURRENT owner (the buyer, after the sale) consents to the station attesting: a veriKey delegation (WM-2 C2, D54)');
   const sig = await station.signMessage(ethers.getBytes(ethers.solidityPackedKeccak256(['address', 'uint256', 'address', 'bytes32'], [regAddr, chainId, vehicle, e4])));
   await d.tx('attest-accident', 'MOBIVIDRegistryV2.attestEvent', reg.connect(station).attestEvent(e4, vehicle, sig), 'MEASURED (attestEvent): inspection station co-signs the accident');
 
@@ -74,8 +75,8 @@ d.run(async () => {
     const prev = logs.find((l) => l.args.previousChange !== undefined);
     block = prev ? prev.args.previousChange : 0n;
   }
-  assert.equal(chain.length, 2);
-  d.offchain('walk-previous-change', 'MOBIVIDRegistryV2.DIDOwnerChanged.previousChange (logs)', `ERC-1056 linked list walked from changed(): ${chain.join(' <- ')} (sale, then birth) — only ERC-1056 events are chained; VID II events are not`);
+  assert.equal(chain.length, 3);
+  d.offchain('walk-previous-change', 'MOBIVIDRegistryV2.DIDOwnerChanged.previousChange (logs)', `ERC-1056 linked list walked from changed(): ${chain.join(' <- ')} (the station's delegation, the sale, then birth) — only ERC-1056 events are chained; VID II events are not`);
   const [lifecycle, attested, transfers] = await Promise.all([reg.queryFilter(reg.filters.LifecycleEventRecorded(vehicle), 0, 'latest'), reg.queryFilter(reg.filters.EventAttested(e4), 0, 'latest'), reg.queryFilter(reg.filters.VehicleOwnershipTransferred(vehicle), 0, 'latest')]);
   assert.equal(lifecycle.length, 6); assert.equal(attested.length, 1); assert.equal(transfers.length, 1);
   d.offchain('replay-vid2-events', 'MOBIVIDRegistryV2.LifecycleEventRecorded+EventAttested+VehicleOwnershipTransferred', `${lifecycle.length} lifecycle, ${attested.length} attestation, ${transfers.length} transfer logs agree with storage: this option keeps history in BOTH storage and logs (most expensive, most queryable)`);

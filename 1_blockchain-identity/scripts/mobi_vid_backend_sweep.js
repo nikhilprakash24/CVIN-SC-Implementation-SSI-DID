@@ -403,6 +403,8 @@ async function sweepMOBIVIDV2(signers) {
 
   // 3. Third-party attestation -> attestEvent (on-chain signature verification).
   await (await registry.authorizeIssuer(dmv.address, 5 /* GOVERNMENT_DMV */)).wait(); // setup
+  await (await registry.connect(firstOwner).addDelegate(  // setup: owner's consent (WM-2 C2, D54)
+    vehicleIdentity, ethers.encodeBytes32String("veriKey"), dmv.address, 86400)).wait();
   const chainId = (await ethers.provider.getNetwork()).chainId;
   const attestInner = ethers.solidityPackedKeccak256(
     ["address", "uint256", "address", "bytes32"],
@@ -412,7 +414,7 @@ async function sweepMOBIVIDV2(signers) {
   out.thirdPartyAttestation = cell(
     await gasOf(registry.connect(dmv).attestEvent(eventId, vehicleIdentity, attestSig)),
     true,
-    "attestEvent by a second authorized party (DMV): the attester's EIP-191 signature over a domain-separated digest (contract || chainId || vehicle || eventId) is ecrecover-verified on-chain (OZ ECDSA, low-s) and MUST match msg.sender; the verified attestation is appended to the event. Native, purpose-built multi-party attestation."
+    "attestEvent by a second authorized party (DMV) holding the owner's veriKey delegation (WM-2 C2): the attester's EIP-191 signature over a domain-separated digest (contract || chainId || vehicle || eventId) is ecrecover-verified on-chain (OZ ECDSA, low-s) and MUST match msg.sender; the verified attestation is appended to the event. Native, purpose-built multi-party attestation."
   );
 
   out.fidelity = fidelity({

@@ -35,7 +35,9 @@ const { loadFixture, time } = require("@nomicfoundation/hardhat-toolbox/network-
 
 const V2_FQN = "contracts/MOBI/MOBIVIDRegistryV2.sol:MOBIVIDRegistryV2";
 const MAINTENANCE = 0;
-const ROLE = { MANUFACTURER: 1, SERVICE_CENTER: 3, GOVERNMENT_DMV: 5, INSPECTION_STATION: 7 };
+const ROLE = { MANUFACTURER: 1, SERVICE_CENTER: 3, GOVERNMENT_DMV: 5, INSPECTION_STATION: 7, OWNER: 8 };
+const VERI_KEY = ethers.encodeBytes32String("veriKey");
+const DAY = 86_400;
 
 const VIN_HASH = ethers.keccak256(ethers.toUtf8Bytes("5YJ3E1EA0PF123456:salt"));
 const BIRTH_CERT_HASH = ethers.keccak256(ethers.toUtf8Bytes("signed-birth-vc"));
@@ -47,7 +49,7 @@ const CRED_HASH = ethers.keccak256(ethers.toUtf8Bytes("signed-event-vc"));
 // 65-byte signature, attester already authorized (gasUsed minus the 21,000
 // base and the calldata bytes). Measured 2026-10-04 on solc 0.8.24, viaIR,
 // optimizer 200, evm cancun, Hardhat 2.28.6.
-const PINNED_EXECUTION_GAS = 169_361n; // re-pinned 2026-10-06 on the merged bytecode (anchorVehicleKey + K-3/K-4 moved the dispatch by +66); was 169_295 on the review-2 tree
+const PINNED_EXECUTION_GAS = 198_694n; // re-pinned 2026-10-17 for WM-2 C2 (D54: owner-or-delegate check, one attestation per attester): +29,333; was 169_361, re-pinned 2026-10-06 on the merged bytecode (anchorVehicleKey + K-3/K-4 moved the dispatch by +66); was 169_295 on the review-2 tree
 
 const TX_BASE_GAS = 21_000n;
 
@@ -90,7 +92,9 @@ describe("MOBI VID V2 attestEvent: M3 regression (forged-signature path closed, 
     await registry.connect(manufacturer).registerVehicleBirth(
       vehicle.address, VIN_HASH, "encrypted:VIN", BIRTH_CERT_HASH, firstOwner.address, BIRTH_ATTRS
     );
-    return { registry, serviceCenter, dmv, inspection, vehicle };
+    // WM-2 C2 (D54): an attester needs the owner's consent, as a veriKey delegation.
+    await registry.connect(firstOwner).addDelegate(vehicle.address, VERI_KEY, dmv.address, DAY);
+    return { registry, firstOwner, serviceCenter, dmv, inspection, vehicle };
   }
 
   async function recordEvent(registry, serviceCenter, vehicle, odometer) {
@@ -152,5 +156,52 @@ describe("MOBI VID V2 attestEvent: M3 regression (forged-signature path closed, 
       `        attestEvent gasUsed over ${seen.length} event ids: ` +
       `${totals.join(", ")} (execution ${PINNED_EXECUTION_GAS} each; spread is calldata zero bytes)`
     );
+  });
+
+  // ---- WM-2 C2 (D54): consent and one attestation per attester. Each of these
+  // failed on the code before C2, where any role-holder could attest any vehicle
+  // any number of times.
+  it("D54: a role-holder that is neither owner nor delegate cannot attest", async function () {
+    const { registry, serviceCenter, inspection, vehicle } = await loadFixture(fixture);
+    const eventId = await recordEvent(registry, serviceCenter, vehicle, 13_000);
+    const sig = await attestationSignature(registry, vehicle.address, eventId, inspection);
+    await expect(registry.connect(inspection).attestEvent(eventId, vehicle.address, sig))
+      .to.be.revertedWith("Attester is not the vehicle's owner or delegate");
+  });
+
+  it("D54: the same attester cannot attest the same event twice", async function () {
+    const { registry, serviceCenter, dmv, vehicle } = await loadFixture(fixture);
+    const eventId = await recordEvent(registry, serviceCenter, vehicle, 14_000);
+    const sig = await attestationSignature(registry, vehicle.address, eventId, dmv);
+    await registry.connect(dmv).attestEvent(eventId, vehicle.address, sig);
+    await expect(registry.connect(dmv).attestEvent(eventId, vehicle.address, sig))
+      .to.be.revertedWith("Already attested");
+    expect((await registry.getEventAttestations(eventId)).length).to.equal(1);
+  });
+
+  it("D54: a revoked or expired delegation no longer lets its holder attest", async function () {
+    const { registry, firstOwner, serviceCenter, dmv, inspection, vehicle } = await loadFixture(fixture);
+    const e1 = await recordEvent(registry, serviceCenter, vehicle, 15_000);
+    await registry.connect(firstOwner).revokeDelegate(vehicle.address, VERI_KEY, dmv.address);
+    expect(await registry.validDelegate(vehicle.address, VERI_KEY, dmv.address)).to.equal(false);
+    await expect(registry.connect(dmv).attestEvent(e1, vehicle.address,
+      await attestationSignature(registry, vehicle.address, e1, dmv)))
+      .to.be.revertedWith("Attester is not the vehicle's owner or delegate");
+
+    await registry.connect(firstOwner).addDelegate(vehicle.address, VERI_KEY, inspection.address, 60);
+    const e2 = await recordEvent(registry, serviceCenter, vehicle, 16_000);
+    await time.increase(120);
+    await expect(registry.connect(inspection).attestEvent(e2, vehicle.address,
+      await attestationSignature(registry, vehicle.address, e2, inspection)))
+      .to.be.revertedWith("Attester is not the vehicle's owner or delegate");
+  });
+
+  it("D54: the vehicle's current owner, holding a role, can attest without a delegation", async function () {
+    const { registry, firstOwner, serviceCenter, vehicle } = await loadFixture(fixture);
+    await registry.authorizeIssuer(firstOwner.address, ROLE.OWNER);
+    const eventId = await recordEvent(registry, serviceCenter, vehicle, 17_000);
+    await expect(registry.connect(firstOwner).attestEvent(eventId, vehicle.address,
+      await attestationSignature(registry, vehicle.address, eventId, firstOwner)))
+      .to.emit(registry, "EventAttested");
   });
 });
