@@ -154,3 +154,30 @@
     This is exactly why F5-F7 stay "assisted": the native object lacks two of the VC Data Model's
     status fields. Governance writes on O4 track O3 (+~34K over O1: registerIssuer 111,474,
     endorseIssuer 185,991, revokeEndorsement 90,139) - the adapter read-path effect (F-O3-2) again.
+
+## WO-1 complete (O5, O6) and WO-5 first run (2026-10-17; traces i2i/vid_minimal/vid_lifecycle for O5_ERC1155 and O6_ERC4337; benchmarks/gas_report.md)
+33. **F-O5-1 — credential-as-token is the dearest anchor among the light options.** O5 issueCredential
+    160,562 (a second ERC-1155 mint to the subject + record) vs 130,163 O1 / 128,393 O2; revoke =
+    burn 40,788 (vs 32,980). createDID 207,354/190,242 (+28K over O1: the 1155 balance slot and
+    TransferSingle event). Everything else matches O1/O2 within 1%: once lifecycle, keys and
+    delegates are added as per-token state, the three light options are gas-indistinguishable.
+    The ERC-1155 batch advantage is not reachable through IMinimalSSI (no batch functions) -
+    a coverage-matrix note, not a measurement.
+34. **F-O6-1 — the smart account's native expiry is the cheapest delegation of the contract
+    options.** O6 addDelegate 60,318 = setSessionKey(validAfter, validUntil) on the account, vs
+    85,306 O3 and 214,107 O4; validDelegate reads the account's session window - ERC-4337
+    validationData semantics with no registry-side bookkeeping. createDID 1,096,819/1,079,707
+    (SmartAccount deployment: ecrecover validation, key sets, data store). addVerificationMethod
+    193,265 first / 176,165 next when the key is a 20-byte validation key (full authority), the
+    one place where F9 changes who may act. test/o5_o6_native.js shows validateUserOp over a real
+    signed op returning 0 (owner), 1 (stranger), and packed validUntil/validAfter (session key),
+    and that the direct path agrees with it.
+35. **F-WO5-1 — the gas matrix is generated, not typed.** benchmarks/gas_matrix.js aggregates all
+    26 trace files into gas_matrix.csv and gas_report.md (6 options x 19 tags). Spec §5.3 misses
+    by minimum observed value: O1 3, O2 3, O5 3 (all F1, F4, F5), O3 7, O4 8, O6 4. F1 is missed
+    by every option; the <100K/<600K targets assumed implicit identity creation (pure
+    event-sourcing / no deployment), which interface uniformity rules out - spec v1.1 item.
+36. **F-WO5-2 — governance read-path tax by option** (registerIssuer): O1 76.8K, O2 75.3K, O5 76.7K,
+    O6 84.3K, O3 111.0K, O4 111.5K. The adapter's resolveDID cost is the whole difference;
+    O6 is cheap because owner() and validationKeyCount() are two warm reads, O3/O4 need four
+    getData calls. This column belongs in the per-function placement matrix (HDA doc 01 §8).

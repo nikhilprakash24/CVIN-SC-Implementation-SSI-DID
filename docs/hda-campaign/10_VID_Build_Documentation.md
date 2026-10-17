@@ -380,3 +380,23 @@ Remaining in WO-1: O4 ERC-725xy (adds ERC-735 claims and key purposes — the op
 The result the thesis needs from this option is now a number: the only EVM pattern with a *native* credential object costs 2.4× the anchor pattern per issuance and 2.3× per revocation, and buys a credential record that is queryable from the subject's own account without an indexer. Whether that is worth it is a placement decision, not a coverage one (01 §10): the claim is on-chain state, the anchor is an off-chain attestation with an on-chain residue. ERC-735's missing expiry and revocation state (**F-O4-3**) keep F5–F7 "assisted" rather than native, confirming the Set B coverage table in `ARCHITECTURE.md` §5 from measurement rather than inspection.
 
 With four options the cross-option gas matrix (WO-5) can be generated from traces; O5 ERC-1155 and O6 ERC-4337 remain in WO-1.
+
+## Addendum H — WO-1 complete: all six EVM options run the layer; the gas matrix is generated from traces (2026-10-17)
+
+O5 (`O5_ERC1155.sol`, OpenZeppelin ERC-1155 base) makes the identity *and every credential* a soulbound token: `issueCredential` mints a credential token to the subject, `revokeCredential` burns it, `verifyCredential` reads a balance. O6 (`SmartAccount.sol` + `O6_ERC4337.sol`) deploys a smart account per DID whose `validateUserOp` (ERC-4337 v0.7 layout) checks a signature against owner-class validation keys or session keys and returns the standard's packed `validUntil|validAfter`; delegates *are* session keys, so F11/F12 use the account's own expiry. Both admitted **12/12 unmodified**; S1, S7, S8 run unchanged on both. Suite **101 passing**; **26 traces** on file.
+
+WO-5's first deliverable exists: `benchmarks/gas_matrix.js` reads every trace and writes `gas_matrix.csv` and `gas_report.md` — six options × nineteen tags, nothing hand-entered. The report is the table of record; the headline rows:
+
+| Function | ERC-1056 | ERC-721 | ERC-1155 | ERC-4337 | ERC-725 | ERC-725xy |
+|---|---|---|---|---|---|---|
+| createDID | 161,823–178,935 | 168,214–185,326 | 190,242–207,354 | 1,079,707–1,096,819 | 746,978–764,090 | 1,615,982–1,633,094 |
+| issueCredential | 130,139–150,099 | 128,381–148,341 | 160,562–180,522 | 133,231–153,203 | 142,353–162,325 | 308,298–328,270 |
+| revokeCredential | 32,968–32,980 | 33,087 | 40,788 | 36,362 | 74,587 | 75,518 |
+| createPresentation | 62,441–69,798 | 60,729–68,069 | 64,819–74,336 | 65,702–73,042 | 79,084–98,248 | 72,625–82,815 |
+| addDelegate | 54,227 | 52,495 | 54,233 | 60,318 | 85,306 | 214,107–231,207 |
+| registerIssuer (G1) | 76,800 | 75,314 | 76,718 | 84,258 | 111,002 | 111,474 |
+| Spec §5.3 misses | 3 | 3 | 3 | 4 | 7 | 8 |
+
+Three results for the thesis. (1) The three light options are gas-indistinguishable once the lifecycle and key semantics they lack natively are added as per-token state; what separates them is coverage and what the token primitive can and cannot express (**F-O5-1**, F-O2-2). (2) The contract-account options split by what they store: ERC-4337 stores authorisation and is cheap to delegate through (its native session-key expiry, **F-O6-1**); ERC-725 stores the document and pays on every write; ERC-725xy stores the credential itself and pays 2.4× per issuance. (3) Every option misses the createDID target, because the targets assumed implicit creation; this is a specification item (**F-WO5-1**), and the governance "read-path tax" (**F-WO5-2**) is now a measured column for 01 §8.
+
+What remains of the canonical plan: O7 ERC-8004 (WO-2; the Set C harness is not it), O8 Indy-on-Besu (WO-3), the S2–S4 catalog scripts (WO-4), the coverage matrix with its native/assisted/absent column (WO-5 second half), the explorer (WO-6), S5 IDPP (WO-7), Caliper/Besu (WO-8), and the Set B adapters (WO-9, partly anticipated by S19/S20).

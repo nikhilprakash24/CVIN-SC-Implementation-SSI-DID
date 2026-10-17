@@ -9,8 +9,9 @@ const IMPLEMENTATIONS = [
   "O2_ERC721",
   "O3_ERC725",
   "O4_ERC725xy",
-  // "O5_ERC1155",
-  // "O6_ERC4337", "O7_ERC8004", "O8_LFDT",  <- enable as ported (bring-up Step 3)
+  "O5_ERC1155",
+  "O6_ERC4337",
+  // "O7_ERC8004", "O8_LFDT",  <- enable as ported (bring-up Step 3)
 ];
 
 const B32 = (s) => ethers.id(s);
