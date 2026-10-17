@@ -260,3 +260,12 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `2_w3c-ssi-layer/did-resolution/did_resolver.py`; `tests/test_did_resolver_chain.py`; two tests in `mobi-vid/tests/test_mobi_vid_layer.py` | the chain path and its tests (9 of 11 fail on the old code) | C1 |
 | `docs/MEASUREMENT_CONDITIONS.md` (#4, #24 notes), `docs/MOBI_VID_CHECKLIST.md` (VID-R1), `docs/MILESTONE_NEXT.md` (N-24), `docs/PLAN_WM-2.md` | records | C1 |
 | `docs/tdp/requirements.yaml` STD-01, TDP-002, TDP-005 | the one change report 20's guard asked for | coordination |
+
+## Pass 22 — WM-2 C2: attestation restricted (D54); hand-off and check brief (2026-10-17)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_22.md` | plan, defaults, log, closing | standing rule |
+| `1_blockchain-identity/contracts/MOBI/ERC1056Registry.sol`, `MOBIVIDRegistryV2.sol`; tests; scripts; Python MOBI client; MOBI demos | the fix and its callers | C2 |
+| `4_comparison-framework/results/gas_benchmark.json`, `gas_comparison.*`, `mobi_vid_backends.json`, `scaling_*.json`, `security-analysis/results/onchain_security.json` | re-runs of record at `92cc4d5` | C2 |
+| register #25, #26, #28; `docs/testing/stale_numbers.yaml`; chapters 5 and 6; README, CAPABILITIES, QUICKSTART; DEFECT_LOG D54; THREAT_MODEL G4; N-25 | records | C2 |
+| `docs/HANDOFF_2026-10-17.md`, `docs/milestones/check_passes_16-22/CHECK_BRIEF.md` | hand-off and the check brief for the other model | the author's request |
