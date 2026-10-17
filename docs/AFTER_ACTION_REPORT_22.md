@@ -102,3 +102,9 @@ registry.
   - **Generated documents:** card #28's caption now says 198,694; it had quoted the review-2 value, which the check
     allowed because the number is still in the row as history. The dashboard, presentation, result cards and DWG-002
     were regenerated. All 13 document checks pass.
+- **Hand-off and check brief.** `docs/HANDOFF_2026-10-17.md` covers where things stand, passes 16–22 with their
+  closing commits, the rules that matter most, open decisions, and N-24 and N-25. It names no model.
+  `docs/milestones/check_passes_16-22/CHECK_BRIEF.md` has 13 claims (K1–K13), each with its command, expected result
+  and falsifier. It names the places where judgement was used, and gives a findings format. Every path it names was
+  checked to exist. K4's command was corrected before commit: `infrastructure_gas.js` writes to the tracked results,
+  so the brief now says to diff and restore them.
