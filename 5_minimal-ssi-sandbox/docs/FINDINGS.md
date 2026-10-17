@@ -117,3 +117,21 @@
     cost of not using the token's native lifecycle primitive at all.
 26. **Governance gas on O2** (S7): registerIssuer 75,326; endorseIssuer 149,975; revokeEndorsement
     54,123; declare 148,740 - within ~1.5K of O1, as expected (the registry's own storage dominates).
+
+## WO-1: O3_ERC725 port (2026-10-17; traces i2i_O3_ERC725_1792279664711, vid_minimal_O3_ERC725_1792279669808, vid_lifecycle_O3_ERC725_1792279675063)
+27. **F-O3-1 — contract-per-identity measured: createDID 764,090 / 746,978 gas**, above the spec's
+    <600K ERC-725 target by ~25%. The cost is the ERC725Account deployment (owner, manager, four
+    initial setData writes). Every per-identity datum is thereafter an external call into the
+    account: addVerificationMethod 169,101 (the key bytes are stored and queryable, vs 59,607 on
+    O1 where only the keyId flag is stored), updateDID 178,398 (attribute value stored, vs 44,760
+    event-only on O1), addDelegate 85,306, deactivateDID 92,675, revokeCredential 74,587. F5
+    142,377 and F8 79,084 are closer to O1 (+12K/+17K) because they add one external write each.
+    O3 pays for queryability on every write; O1 pays for it off-chain in an indexer (doc 01 §4).
+28. **F-O3-2 — read-path cost propagates into governance writes.** On O3, registerIssuer 111,002
+    (vs 76,800 O1, 75,326 O2), endorseIssuer 185,519 (vs 151,449 / 149,975), revokeEndorsement
+    89,667 (vs 55,597 / 54,123), declare 183,850 (vs 150,463 / 148,740). The registry code is
+    identical; the delta (~34K) is the adapter's controllerOf/isActive resolving through four
+    cold external getData calls. Any layer that authorises BY DID inherits the option's read
+    cost — the first measured cross-layer effect of data placement.
+29. **F-O3-3 — the layer ran unchanged on a third option.** Same document layout convention;
+    no script or contract above the interface was touched. Three options now carry S1/S7/S8.

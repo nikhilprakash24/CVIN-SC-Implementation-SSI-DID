@@ -334,3 +334,27 @@ S1, S7 and S8 were then run with `IMPL=O2_ERC721` and **no script changes** — 
 The mint costs about 6.4K more than O1's explicit-DID write; everything else is marginally cheaper on O2. The thesis's Pass-1 Set A anchor placed ERC-721 at 15/24 against ERC-1056's 23/24; these traces show that gap is one of *semantics* (what the standard offers natively), not of *gas* once the missing semantics are added as per-token state — a point the comparative evaluation should make explicitly (**F-O2-2**). Governance writes on O2 are within ~1.5K of O1 (registry storage dominates).
 
 Remaining in WO-1: O3 ERC-725, O4 ERC-725xy, O5 ERC-1155, O6 ERC-4337 — each needs its native pattern and, where its document layout differs, its own controller adapter.
+
+## Addendum F — O3 (ERC-725) ported: the contract-per-identity profile measured (2026-10-17)
+
+`ERC725Account.sol` is a minimal ERC-725X/Y account (key-value `getData`/`setData`, `execute`, owner plus a manager role) written fresh because the ERC725Alliance package pins OpenZeppelin 4.x against the 5.x pin O2 uses. `O3_ERC725.sol` deploys one account per `createDID`; the DID is the account address and every identity datum — metadata, verification keys (the key bytes themselves), delegates, the deactivation flag, and the credential anchors (in the issuer's own store) — is ERC-725Y data readable with `getData` and no indexer. Admitted **12/12 unmodified**; S1, S7, S8 run unchanged; suite **60 passing** (12 × 3 options + 24 layer tests).
+
+| Function | O1 ERC-1056 | O2 ERC-721 | O3 ERC-725 | Spec target (725) |
+|---|---|---|---|---|
+| createDID (first / next) | 178,935 / 161,835 | 185,326 / 168,226 | **764,090 / 746,978** | <600K — missed |
+| updateDID | 44,760 | 42,935 | 178,398 | <100K — missed |
+| deactivateDID | 55,127 | 53,280 | 92,675 | <60K — missed |
+| issueCredential | 130,163 | 128,393 | 142,377 | <150K |
+| revokeCredential | 32,980 | 33,087 | 74,587 | <60K — missed |
+| createPresentation (1 cred.) | 62,441 | 60,729 | 79,084 | <200K |
+| addVerificationMethod | 59,607 | 57,767 | 169,101 | <120K — missed |
+| removeVerificationMethod | 36,478 | 34,743 | 66,974 | <60K — missed |
+| addDelegate | 54,227 | 52,495 | 85,306 | <70K — missed |
+| registerIssuer (G1) | 76,800 | 75,326 | 111,002 | — |
+| endorseIssuer (G2, root) | 151,449 | 149,975 | 185,519 | — |
+| revokeEndorsement (G3) | 55,597 | 54,123 | 89,667 | — |
+| declare (T1) | 150,463 | 148,740 | 183,850 | — |
+
+Two results. First, the Family C placement is quantified: O3 stores what O1 only logs (key bytes, attribute values), so the functions that write identity content cost three to four times more, and identity creation costs a deployment — about 4.3× O1. The spec's ERC-725 targets are missed on seven functions; the cause is architectural (external writes into a per-identity contract), so per FINDINGS rule 6 it is recorded, not optimised away. Second, and new: the governance layer's cost rose ~34K per write on O3 although its code is identical, because authorising *by DID* means resolving the controller through the option's read path, which on O3 is four cold external calls. Data placement in the identity layer is inherited by every layer that reads it (**F-O3-2**) — the per-function placement matrix in 01 §8 should carry an "authorisation read cost" column.
+
+Remaining in WO-1: O4 ERC-725xy (adds ERC-735 claims and key purposes — the option expected to carry the highest native Set B coverage), O5 ERC-1155, O6 ERC-4337.
