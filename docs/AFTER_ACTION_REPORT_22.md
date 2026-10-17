@@ -108,3 +108,23 @@ registry.
   and falsifier. It names the places where judgement was used, and gives a findings format. Every path it names was
   checked to exist. K4's command was corrected before commit: `infrastructure_gas.js` writes to the tracked results,
   so the brief now says to diff and restore them.
+- **The grand run found a design error of mine, and the design was changed.**
+  - The first grand run of this pass failed: erc-1056-vehicle/keys-delegates, and every erc-1056-vehicle demo's gas
+    rose. That sandbox option models the testbed's registry (`cv2x-testbed/contracts/ERC1056Registry.sol`), and it
+    deploys the main project's `contracts/MOBI/ERC1056Registry.sol`. Before C2 the two files were **identical**.
+  - My earlier log entry said the testbed's registry "is a different contract". That was wrong: I had run the `diff`
+    after editing the main project's copy, so it compared my edit with the original. Corrected here.
+  - Putting delegate storage in the shared base therefore also changed the vehicle-profile comparison column, and
+    reversed one of its findings: "delegates are event-only, no `validDelegate`".
+  - **Redesign, closer to default C2-d2's own words ("store delegations in the MOBI registry").** The base
+    `ERC1056Registry` is back to its original source, except that its two internal delegate functions are now
+    `virtual`. `MOBIVIDRegistry` overrides them: it calls the base, then stores `delegates[identity][type][delegate]`,
+    and it adds `validDelegate`. `attestEvent` is unchanged.
+  - **Checked:**
+    - all nine erc-1056-vehicle demos give exactly their pre-C2 gas totals;
+    - the feature matrix differs from pre-C2 only in the two MOBI rows;
+    - Hardhat 541, with the `attestEvent` pin still 198,694;
+    - Python MOBI 43; all 20 demos of the two options pass.
+  - **N-25 is restated.** The testbed's `ERC1056Registry` differs from the main project's only by the two `virtual`
+    keywords. Its `MOBIVIDRegistry` and `MOBIVIDRegistryV2` lack C2. Sync at A3b.
+  - The re-runs of record above (`92cc4d5`) measured the first design and are re-done below.

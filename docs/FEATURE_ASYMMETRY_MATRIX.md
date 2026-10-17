@@ -20,7 +20,7 @@
 | ERC-4337 | `CVINMinimalEntryPoint` | 3 | 1 | 2 | 1 |
 | LSP8 | `CVINVehicleLSP8` | 21 | 6 | 15 | 6 |
 | CVIN-Combined | `CVINCombinedIdentity` | 20 | 8 | 12 | 6 |
-| MOBI-VID (I+II) | `ERC1056Registry` | 19 | 8 | 11 | 4 |
+| MOBI-VID (I+II) | `ERC1056Registry` | 17 | 8 | 9 | 4 |
 | MOBI-VID (I+II) | `MOBIVIDRegistry` | 40 | 14 | 26 | 9 |
 | MOBI-VID (I+II) | `MOBIVIDRegistryV2` | 60 | 18 | 42 | 13 |
 
