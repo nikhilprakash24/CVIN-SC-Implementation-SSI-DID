@@ -312,3 +312,25 @@ What this settles. The thesis's standing "≈200–350K gas" for Groth16 verific
 What it does not settle. All timings are a laptop with a WASM witness generator on a cold start; nothing here is an OBU figure. The ceremony is a sandbox ceremony (single contributor) and the circuit has no revocation input; a non-revocation predicate (accumulator witness) is stage (d) territory.
 
 **Slice 2 status:** (a) salted digests — in repo; (b) BBS+ — done; (c) Groth16 predicate — done; (d) anoncreds-rs comparison — not started (Rust/Python FFI; needs a decision on whether it lives in this repository).
+
+## Addendum E — WO-1 begins: O2 (ERC-721) ported; the VID layer runs on a second option (2026-10-17)
+
+`O2_ERC721.sol` is a fresh native implementation (the Stage 12 source was not available; WO-1's fallback clause applies): `createDID` mints a soulbound token (OpenZeppelin 5.0.2 base, `_update` reverts every transfer and burn), `ownerOf` is the controller, deactivation sets a flag and keeps the token so the DID stays resolvable (DID Core §7.3 — the burn-versus-deactivate gap recorded in Building Paths is closed by *not* using burn), keys and delegates are per-token state, and Set B is the shared anchor pattern. It is admitted to the compliance suite at **12/12 unmodified**; four native-semantics tests were added (mint, soulbound, deactivate-without-burn, adapter reuse). Suite: **48 passing** (12 compliance tests × 2 options + 24 layer tests).
+
+S1, S7 and S8 were then run with `IMPL=O2_ERC721` and **no script changes** — the implementation-agnostic claim of §7 is now observed, because O2 returns the same `resolveDID` document layout as O1, so the controller adapter and every governance and credential contract work unchanged (a convention now recorded for O3–O8).
+
+| Function | O1 (S1) | O2 (S1) | Δ |
+|---|---|---|---|
+| createDID (first / subsequent) | 178,935 / 161,835 | 185,326 / 168,226 | +6,391 |
+| issueCredential | 130,163 | 128,393 | −1,770 |
+| addVerificationMethod | 59,607 | 57,767 | −1,840 |
+| addDelegate | 54,227 | 52,495 | −1,732 |
+| createPresentation (1 credential) | 62,441 | 60,729 | −1,712 |
+| revokeCredential | 32,980 | 33,087 | +107 |
+| removeVerificationMethod | 36,478 | 34,743 | −1,735 |
+| updateDID | 44,760 | 42,935 | −1,825 |
+| deactivateDID | 55,127 | 53,280 | −1,847 |
+
+The mint costs about 6.4K more than O1's explicit-DID write; everything else is marginally cheaper on O2. The thesis's Pass-1 Set A anchor placed ERC-721 at 15/24 against ERC-1056's 23/24; these traces show that gap is one of *semantics* (what the standard offers natively), not of *gas* once the missing semantics are added as per-token state — a point the comparative evaluation should make explicitly (**F-O2-2**). Governance writes on O2 are within ~1.5K of O1 (registry storage dominates).
+
+Remaining in WO-1: O3 ERC-725, O4 ERC-725xy, O5 ERC-1155, O6 ERC-4337 — each needs its native pattern and, where its document layout differs, its own controller adapter.

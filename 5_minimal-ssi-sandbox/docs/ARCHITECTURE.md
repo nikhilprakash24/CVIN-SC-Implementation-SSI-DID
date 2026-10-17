@@ -43,7 +43,7 @@ Two structures exist in the project corpus and both are carried here, with the v
 | # | Standard | Identity model | Key characteristics | Build status |
 |---|----------|---------------|---------------------|--------------|
 | O1 | ERC-1056 | Address = DID, event-sourced (did:ethr) | Veramo ecosystem anchor; lowest gas | **In sandbox, 12/12 passing** |
-| O2 | ERC-721 | Soulbound NFT = identity | Simple ownership; limited key mgmt | Port (Stage 12 code) |
+| O2 | ERC-721 | Soulbound NFT = identity | Simple ownership; limited key mgmt | **In sandbox, 12/12 passing** (fresh native implementation 2026-10-17, WO-1 fallback clause) |
 | O3 | ERC-725 | Proxy contract = DID | Key-value store (725Y); direct queryability | Port (Stage 12 code) |
 | O4 | ERC-725xy | Contract + ERC-735 claims | LUKSO-inspired; key purposes; highest native coverage (~79%) | Port (Stage 12 code) |
 | O5 | ERC-1155 | Multi-token soulbound bundle | Batch capable; weak DID lifecycle | Port (Stage 12 code) |
@@ -117,6 +117,15 @@ The three latency tiers originate in the published CVIN paper (IEEE VTC2020-Spri
 | S4 | High-tier lifecycle: insurance credential (ICBC example from the 2020 paper), vehicle history attestation, ownership transfer with key rotation | High | F3, F5, F6, F7, F9, F10 | Specified (WO-4) |
 | S5 | **IDPP port**: identity + credentials ported O1 → O8 (E1) — makes the 2020 ID Porting Protocol concept testable for the first time | Cross | F1, F2, F4, F5 ×2 impls | Specified (WO-7) |
 | S6 | Agentic wrapper: agent principal with ERC-8004 reputation + validation, credential-gated action (Stage 31 feed) | Cross | Set C + F8 | Deferred to Stage 31 |
+| S7 | Minimal VID with endorsement (birth certificate, registration, driver licence; G0–G4, T1–T2) | High | 12/12 + G/T | **Verified on O1 and O2** |
+| S8 | All eleven MOBI VID II lifecycle event types, role-gated endorsement, Merkle batch | High | F1,F2,F4–F8 + G | **Verified on O1 and O2** |
+| S14 | Delayed write: READ_ONLY/PARTITIONED modes, signed queue, reconcile (revocation wins), one batch anchor | Medium (offline) | F5–F7 + B1–B2 | **Verified on O1** |
+| S16 | Reputation-weighted federated round, GATED vs UNGATED Sybil experiment (Set C harness) | High | C1–C4 + B1 | **Verified on O1 (harness)** |
+| S17 | Batch anchor with on-chain inclusion proofs; A/B/C anchoring comparison | High | F5 + B1–B3 | **Verified on O1** |
+| S19 | BBS+ policy-selected disclosure to three verifier classes | Medium | F5,F8,F9 | **Verified on O1** |
+| S20 | Groth16 age-gate predicate, on-chain verification (250,283 gas) | Medium | F5,F8 + Z1–Z2 | **Verified on O1** |
+
+Detail for S7–S20: `../docs/hda-campaign/10_VID_Build_Documentation.md`; canonical register: `../docs/hda-campaign/00_HDA_Master_Plan_and_Attack.md` §6.
 
 ## 5. Verified state (as of this version)
 
@@ -124,6 +133,7 @@ The three latency tiers originate in the published CVIN paper (IEEE VTC2020-Spri
 |---|---|
 | Interfaces | `IMinimalSSI.sol`, `ISetA.sol`, `ISetB.sol`, `ISetC.sol` — compile clean (solc 0.8.24) |
 | O1_ERC1056 | Complete reference implementation, **12/12 compliance tests passing** |
+| O2_ERC721 | Native soulbound port, **12/12 passing**; S1/S7/S8 traces on file (2026-10-17) |
 | Compliance suite | `test/compliance.js`, parameterized; spec §4.1 implemented verbatim |
 | Scenario S1 | Executed; 22-entry JSONL trace, 12/12 functions, real gas |
 | Offline toolchain | Hardhat compiles via npm solc-js (no binary downloads) — CI/air-gap reproducible |

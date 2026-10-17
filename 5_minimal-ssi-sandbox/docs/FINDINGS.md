@@ -97,3 +97,23 @@
     32-byte values), with no change to the anchor rule or to the interface.
 22. **F-VID-18 — the under-age case is not a rejected proof but a non-existent one.** Witness
     generation fails at the constraint; a verifier never sees a "false" proof for a true holder.
+
+## WO-1 start: O2_ERC721 port (2026-10-17; traces i2i_O2_ERC721_1792279382879, vid_minimal_O2_ERC721_1792279388171, vid_lifecycle_O2_ERC721_1792279393778)
+23. **F-O2-1 — O2 admitted 12/12 unmodified; S1, S7, S8 run on it without a single line changed.**
+    The VID layer (endorsement, typing, off-chain library) is implementation-agnostic in fact,
+    not only by construction: the controller adapter is reused because O2 returns the same
+    resolveDID document layout (did, controller, keyCount). Convention recorded for O3-O8.
+24. **F-O2-2 — token-as-identity costs +6.4K on creation and is marginally cheaper elsewhere.**
+    O2 vs O1 (S1 trace): createDID 185,326/168,226 vs 178,935/161,835 (+6,391: the mint's
+    balance/owner slots and the Locked event); issueCredential 128,393 vs 130,163 (-1,770);
+    addDelegate 52,495 vs 54,227; createPresentation 60,729 vs 62,441; deactivateDID 53,280 vs
+    55,127; revokeCredential 33,087 vs 32,980 (+107). The ERC-721 option's low Set A anchor
+    (15/24) is a semantics gap (no native deactivate-with-history, no key management), not a
+    gas gap: the port had to add per-token state to close it, and that state is what O1
+    already carries. Gas does not discriminate between these two options; coverage does.
+25. **F-O2-3 — burn is not deactivate, enforced.** O2 refuses burn and transfer (Soulbound) and keeps
+    the token after deactivateDID so the DID remains resolvable with its flag (DID Core 7.3). The
+    structural weakness recorded for ERC-721 in Building Paths is closable in the port, at the
+    cost of not using the token's native lifecycle primitive at all.
+26. **Governance gas on O2** (S7): registerIssuer 75,326; endorseIssuer 149,975; revokeEndorsement
+    54,123; declare 148,740 - within ~1.5K of O1, as expected (the registry's own storage dominates).

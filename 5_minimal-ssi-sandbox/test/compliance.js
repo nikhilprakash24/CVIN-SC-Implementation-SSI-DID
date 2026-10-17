@@ -6,7 +6,8 @@ const { ethers } = require("hardhat");
 
 const IMPLEMENTATIONS = [
   "O1_ERC1056",
-  // "O2_ERC721", "O3_ERC725", "O4_ERC725xy", "O5_ERC1155",
+  "O2_ERC721",
+  // "O3_ERC725", "O4_ERC725xy", "O5_ERC1155",
   // "O6_ERC4337", "O7_ERC8004", "O8_LFDT",  <- enable as ported (bring-up Step 3)
 ];
 

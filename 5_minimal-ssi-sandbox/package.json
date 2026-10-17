@@ -13,6 +13,7 @@
   "dependencies": {
     "@mattrglobal/bbs-signatures": "^1.4.0",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.0.2",
     "circom2": "^0.2.8",
     "circomlib": "^2.0.5",
     "circomlibjs": "^0.1.7",
