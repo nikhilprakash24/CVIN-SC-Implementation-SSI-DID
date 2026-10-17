@@ -358,3 +358,25 @@ Remaining in WO-1: O3 ERC-725, O4 ERC-725xy, O5 ERC-1155, O6 ERC-4337 — each n
 Two results. First, the Family C placement is quantified: O3 stores what O1 only logs (key bytes, attribute values), so the functions that write identity content cost three to four times more, and identity creation costs a deployment — about 4.3× O1. The spec's ERC-725 targets are missed on seven functions; the cause is architectural (external writes into a per-identity contract), so per FINDINGS rule 6 it is recorded, not optimised away. Second, and new: the governance layer's cost rose ~34K per write on O3 although its code is identical, because authorising *by DID* means resolving the controller through the option's read path, which on O3 is four cold external calls. Data placement in the identity layer is inherited by every layer that reads it (**F-O3-2**) — the per-function placement matrix in 01 §8 should carry an "authorisation read cost" column.
 
 Remaining in WO-1: O4 ERC-725xy (adds ERC-735 claims and key purposes — the option expected to carry the highest native Set B coverage), O5 ERC-1155, O6 ERC-4337.
+
+## Addendum G — O4 (ERC-725xy) ported: the native-claim path priced (2026-10-17)
+
+`ClaimHolderAccount.sol` combines an ERC-725Y store, ERC-734 purpose keys (MANAGEMENT, ACTION, CLAIM, ENCRYPTION) and ERC-735 claims, written fresh from the drafts. `O4_ERC725xy.sol` deploys one per `createDID`; the controller is the MANAGEMENT key; verification methods are ERC-734 keys; delegates are ACTION keys with a 725Y expiry beside them (ERC-734 has none); and — the point of this option — **credentials are ERC-735 claims written on the subject's account**, read back with `getClaim` and revoked with `removeClaim`, with a registry index supplying the `validUntil` that ERC-735 lacks. Admitted **12/12 unmodified**; S1, S7, S8 run unchanged; suite **72 passing**.
+
+| Function | O1 ERC-1056 | O2 ERC-721 | O3 ERC-725 | O4 ERC-725xy |
+|---|---|---|---|---|
+| createDID (first / next) | 178,935 / 161,835 | 185,326 / 168,226 | 764,090 / 746,978 | **1,633,094 / 1,615,982** |
+| updateDID | 44,760 | 42,935 | 178,398 | 180,877 |
+| deactivateDID | 55,127 | 53,280 | 92,675 | 95,120 |
+| issueCredential | 130,163 | 128,393 | 142,377 | **308,310** |
+| revokeCredential | 32,980 | 33,087 | 74,587 | 75,518 |
+| createPresentation (1 cred.) | 62,441 | 60,729 | 79,084 | 72,625 |
+| addVerificationMethod | 59,607 | 57,767 | 169,101 | 180,375 / 163,275 |
+| removeVerificationMethod | 36,478 | 34,743 | 66,974 | 69,177 |
+| addDelegate | 54,227 | 52,495 | 85,306 | 214,107 |
+| registerIssuer (G1) | 76,800 | 75,326 | 111,002 | 111,474 |
+| endorseIssuer (G2, root) | 151,449 | 149,975 | 185,519 | 185,991 |
+
+The result the thesis needs from this option is now a number: the only EVM pattern with a *native* credential object costs 2.4× the anchor pattern per issuance and 2.3× per revocation, and buys a credential record that is queryable from the subject's own account without an indexer. Whether that is worth it is a placement decision, not a coverage one (01 §10): the claim is on-chain state, the anchor is an off-chain attestation with an on-chain residue. ERC-735's missing expiry and revocation state (**F-O4-3**) keep F5–F7 "assisted" rather than native, confirming the Set B coverage table in `ARCHITECTURE.md` §5 from measurement rather than inspection.
+
+With four options the cross-option gas matrix (WO-5) can be generated from traces; O5 ERC-1155 and O6 ERC-4337 remain in WO-1.

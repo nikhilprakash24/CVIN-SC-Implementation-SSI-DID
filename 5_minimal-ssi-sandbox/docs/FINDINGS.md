@@ -135,3 +135,22 @@
     cost — the first measured cross-layer effect of data placement.
 29. **F-O3-3 — the layer ran unchanged on a third option.** Same document layout convention;
     no script or contract above the interface was touched. Three options now carry S1/S7/S8.
+
+## WO-1: O4_ERC725xy port (2026-10-17; traces i2i_O4_ERC725xy_1792279894803, vid_minimal_O4_ERC725xy_1792279900331, vid_lifecycle_O4_ERC725xy_1792279905881)
+30. **F-O4-1 — the only native credential object on the EVM costs 2.4x the anchor pattern.**
+    issueCredential on O4 = 308,310 (an ERC-735 claim written on the SUBJECT's account: claim
+    struct with dynamic bytes, topic index, plus the registry index and the ClaimAdded event
+    carrying the bytes) vs 130,163 (O1), 128,393 (O2), 142,377 (O3). With validUntil: 328,270.
+    revokeCredential = removeClaim = 75,518 (vs 32,980 O1). The claim IS a queryable credential
+    record (getClaim from the subject, no indexer) - the thesis's "claims-assisted" Set B path
+    priced for the first time. F8 stays an anchor (72,625; no ERC provides presentation).
+31. **F-O4-2 — createDID 1,633,094 / 1,615,982**: ClaimHolderAccount deployment (725Y store + 734
+    keys + 735 claims + indices) is 2.2x O3's account and 9x O1. Key ops: addVerificationMethod
+    180,375 first / 163,275 next (ERC-734 addKey + purpose index), addDelegate 214,107 (an ACTION
+    key AND a 725Y expiry record, because ERC-734 has no expiry - annotated hybrid). Nine of the
+    eleven spec ERC-725 targets are missed; architectural, recorded not optimised.
+32. **F-O4-3 — ERC-735 has no expiry and no revocation state.** A removed claim is indistinguishable
+    from a never-made one at the account; the registry index supplies existence and validUntil.
+    This is exactly why F5-F7 stay "assisted": the native object lacks two of the VC Data Model's
+    status fields. Governance writes on O4 track O3 (+~34K over O1: registerIssuer 111,474,
+    endorseIssuer 185,991, revokeEndorsement 90,139) - the adapter read-path effect (F-O3-2) again.
