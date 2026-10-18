@@ -168,3 +168,15 @@ registry.
   - One cleanup: `cv2x-testbed/node_modules` is a real directory here, so my `ln -sfn` (copied from CI) made a stray
     link inside it. It was removed before commit.
   - The hand-off, check brief, plan, handback and N-25 are updated.
+- **CI failed once more, on the testbed artifacts, and I reproduced it before fixing it.**
+  - "Testbed artifacts match a fresh compile" failed at `e40c50a`, though it passed locally. CI links
+    `cv2x-testbed/node_modules` to the main project's (Hardhat 2.28.6 and its OpenZeppelin). This container has a
+    separate one in the testbed (Hardhat 2.27.0), and `MOBIVIDRegistryV2` imports OpenZeppelin's ECDSA, so the two
+    setups give different bytecode.
+  - I reproduced CI's setup locally: moved the testbed's `node_modules` aside and linked as CI does. The check then
+    failed the same way.
+  - I recompiled under that setup, the check passed, and the testbed's own `node_modules` was restored.
+  - Only `MOBIVIDRegistryV2.json`'s bytecode changed (and the debug files). The `ERC1056Registry` artifact is
+    unchanged, so the metadata-only finding above stands.
+  - **Gotcha for the hand-off:** build the testbed's tracked artifacts with CI's `node_modules`, not the testbed's
+    local one.
