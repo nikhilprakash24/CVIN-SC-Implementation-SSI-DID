@@ -183,3 +183,34 @@ registry.
 - **Grand run (last), at `72a29de`, after the testbed sync.** ALL OK: smoke 11, L1 99, Hardhat 541, Python layers 342,
   92 demos / 1,758 steps. The only demo changes are the declared timestamp-dependent MOBI steps (±12 gas). The
   generated documents were regenerated, and all 13 checks pass.
+
+## 4. Closing
+The pass delivered every step of §2. **CI 8 of 8 green on `160b425`.** It was red from `92cc4d5` to `e40c50a`, on
+guards I had not read in time; see the log.
+
+**C2 is done, and D54 is fixed.**
+- `attestEvent` now needs the vehicle's current owner or its `veriKey` delegate, once per event. The MOBI registry
+  stores delegations and answers `validDelegate`.
+- 3 of the 4 new tests fail on the old contracts.
+- Only MOBI-VID-V2 gas moved: `attestEvent` execution 198,694, `addDelegate` 57,667, deploy 4,370,878, and
+  dispatch offsets of +22 to +66 elsewhere. The lifetime ranking and every chapter comparison still hold.
+- The testbed copies are synced and recompiled; the testbed registry's code is unchanged but for its metadata.
+
+**What went wrong, in order, and was caught.**
+1. I wrongly called the testbed's registry a different contract, from a `diff` run after my own edit.
+2. The first design put delegate storage in the shared base. That changed the vehicle-profile comparison column,
+   found by the grand run, and the design was redone so that only the MOBI registry stores delegations.
+3. My first result comparison skipped `updateAttribute`, because a key filter matched "date".
+4. I did not read CI between pushes, so the copies guard stayed red for several commits.
+5. The testbed artifacts were first built with this container's local `node_modules`, not CI's.
+
+Each was found by a check: the grand run, CI, or a number that did not match. Each is recorded, with the gotcha
+added to the hand-off. Points 1, 2 and 4 are the main reason a check by a different model is worth doing now.
+
+**Hand-off.** `docs/HANDOFF_2026-10-17.md` and `docs/milestones/check_passes_16-22/CHECK_BRIEF.md` (K1–K13) are ready
+for a session on a different assistant model.
+
+**Next:**
+- The check of passes 16–22, then WM-2 A3.
+- The author's decisions: C2-d1 to C2-d5 (with C2-d2 as redesigned), C1-d1 to C1-d4, P2-D7 to P2-D10, D-1 to D-15,
+  and N-23.
