@@ -41,7 +41,9 @@ cryptography web3 pytest numpy pyyaml`. A Hardhat node, when a command needs one
 - Report 21's defaults C1-d1 to C1-d4: keeping the default document without a provider, and deferring a chain-backed
   suite run (N-24).
 - Report 22's defaults C2-d1 to C2-d5: the plan's fix over review-02's narrower one; storing delegations in the
-  registry; `veriKey` as the delegate type; the role still required; and leaving the testbed copies unchanged (N-25).
+  MOBI registry rather than the shared base (a redesign after the first design changed the vehicle-profile option);
+  `veriKey` as the delegate type; the role still required. Check also that the testbed copies are byte-identical and
+  its artifacts fresh, and that the testbed registry's compiled code differs only by its metadata hash.
 - The contribution record shows the repository's history to readers outside the project; whether anything on it can
   mislead.
 

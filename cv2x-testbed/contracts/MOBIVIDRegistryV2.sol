@@ -105,6 +105,9 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     // Event attestations (eventId => array of attestations)
     mapping(bytes32 => EventAttestation[]) public eventAttestations;
 
+    // eventId => attester => attested (WM-2 C2, D54: one attestation per attester)
+    mapping(bytes32 => mapping(address => bool)) public hasAttested;
+
     // Event count per vehicle
     mapping(address => uint256) public vehicleEventCount;
 
@@ -347,6 +350,16 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
             authorizedIssuers[msg.sender] != IssuerRole.NONE,
             "Not authorized to attest"
         );
+        // WM-2 C2 (D54): a role is authority, not consent. The attester must also
+        // be the vehicle's current owner or a valid veriKey delegate of it, and
+        // may attest an event once.
+        require(
+            msg.sender == identityOwner(vehicleIdentity) ||
+                validDelegate(vehicleIdentity, "veriKey", msg.sender),
+            "Attester is not the vehicle's owner or delegate"
+        );
+        require(!hasAttested[eventId][msg.sender], "Already attested");
+        hasAttested[eventId][msg.sender] = true;
 
         // ---- On-chain attestation signature verification (security fix) ----
         // Bind the signature to (contract, chain, vehicle, event) to stop

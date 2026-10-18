@@ -151,3 +151,20 @@ registry.
   - Against the report from before C2, only MOBI demo totals move. The erc-1056-vehicle option is identical.
   - The test register and the F3 mode classification were regenerated, since they read the demo report, along with
     the dashboard, presentation, result cards, contribution record and DWG-002. All 13 document checks pass.
+- **CI found a guard I had missed, and N-25 is closed in this pass.**
+  - "Compile and test contracts" failed on every commit from `92cc4d5`. Its step "MOBI contract copies are
+    byte-identical (plan S0)" requires `cv2x-testbed/contracts/` to equal `1_blockchain-identity/contracts/MOBI/` for
+    the three files. Deferring the testbed copies (N-25) was therefore not open to me: the guard exists for exactly
+    this. I did not read CI between the C2 commits and the grand run, which broke the standing rule to read CI
+    after each push.
+  - The three files were synced, and the testbed artifacts recompiled with the testbed's own configuration (solc
+    0.8.20, paris), with the ABI and bytecode files written as `scripts/deploy.js` writes them.
+    `check_artifacts_fresh.js` passes.
+  - **Effect on testbed results, measured.** The testbed `ERC1056Registry`'s ABI, creation code and runtime code are
+    identical apart from the metadata hash. Its deploy gas is the same for the old and new bytecode (944,729 each on
+    the main project's network), so #21, #22, #32, #37 and #52 are unaffected.
+  - The testbed `MOBIVIDRegistry` and `MOBIVIDRegistryV2` artifacts now carry C2. The MOBI rows measured with them
+    (#33, and the D11b provider paths) will move by the dispatch offsets when A3b re-runs them.
+  - One cleanup: `cv2x-testbed/node_modules` is a real directory here, so my `ln -sfn` (copied from CI) made a stray
+    link inside it. It was removed before commit.
+  - The hand-off, check brief, plan, handback and N-25 are updated.
