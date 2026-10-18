@@ -180,3 +180,6 @@ registry.
     unchanged, so the metadata-only finding above stands.
   - **Gotcha for the hand-off:** build the testbed's tracked artifacts with CI's `node_modules`, not the testbed's
     local one.
+- **Grand run (last), at `72a29de`, after the testbed sync.** ALL OK: smoke 11, L1 99, Hardhat 541, Python layers 342,
+  92 demos / 1,758 steps. The only demo changes are the declared timestamp-dependent MOBI steps (±12 gas). The
+  generated documents were regenerated, and all 13 checks pass.
