@@ -26,11 +26,13 @@ Companions: 00 Master Plan · 01 On/Off-Chain Data Architecture · 02 ZKP and Ve
 | Code added (Slice 1, 10-14) | 2 Solidity files (`BatchAnchorRegistry`, `harness/SetCHarness`), 2 JS libraries (`merkle`, `offline`), 3 scenarios (S14, S16, S17), 2 test files, `latencyMs` in the trace emitter |
 | Code added (Slice 2b, 10-15) | `lib/vid/bbs.js`, scenario S19, `test/bbs.js`; one new dependency (`@mattrglobal/bbs-signatures` 1.4.0) |
 | Code added (Slice 2c, 10-15) | `circuits/AgeGate.circom`, `zk/` ceremony artefacts, `contracts/zk/ZKAgeGate.sol`, scenario S20, tests; four new pins (`circom2` 0.2.8 WASM, `snarkjs` 0.7.5, `circomlib` 2.0.5, `circomlibjs` 0.1.7) |
-| Tests | **32 passing** (12 compliance unchanged + 7 VID + batch/offline + Set C harness + BBS+ + ZK) |
-| Traces | **11 on file** (2 × S1, 2 × S7, 2 × S8, S14, S16, S17, S19, S20 — S7/S8 duplicated because they were re-emitted under schema v1.1) |
-| Findings | **F-VID-1 to F-VID-18** (`docs/FINDINGS.md`); 8–11 from Slice 1, 13–14 from Slice 2(b), 16–17 from Slice 2(c) |
+| Code added (WO-1/2/3/5/7, 10-17) | Options O2–O8 (`O2_ERC721` … `O8_LFDT`, plus `ERC8004Registries`, `SmartAccount`), per-option controller adapters, `benchmarks/gas_matrix.js` and `coverage.js`, scenario S5 `run_idpp_port.js` |
+| Integration (10-19) | Main line `claude/clone-cvin-id-scs` (277 commits of the H-stream) merged into `vid-build`. Textually clean, disjoint trees, no main-line file altered; suite re-run green on the combined state |
+| Tests | **131 passing** on the merged tree (eight options × compliance, plus VID, batch/offline, Set C, BBS+, ZK) |
+| Traces | **68 on file** — S1/S7/S8 on all eight options, S14/S16/S17/S19/S20 on O1, S2–S4 across all eight, and the two IDPP ports |
+| Findings | **F-VID-1 to F-VID-18**, plus the per-option series (F-O2-*, F-O5-1, F-O6-1, F-O7-1), F-WO5-1/2/4 and F-S5-1/2 (`docs/FINDINGS.md`) |
 | Corrections raised | K-HDA-1 to K-HDA-19 (§4) |
-| Slice status (00 §7) | Slice 0, **Slice 1 complete** (1a–1e), **Slice 2 complete except (d)** — (a) salted digests in repo, (b) BBS+, (c) Groth16 predicate with on-chain verification. Open: 2(d) anoncreds-rs (Rust/Python FFI; needs a repository decision); Slice 3 (other options, Besu); Slice 4 (hardware) |
+| Slice status (00 §7) | Slice 0; **Slice 1 complete**; **Slice 2 complete except (d)** anoncreds-rs; **Slice 3 half complete** — all eight options ported and matrixed, Besu/Caliper (WO-8) still open and now the *only* route to a latency figure; Slice 4 (hardware) open. Canonical WOs closed: 1, 2, 3, 5, 7 |
 | Interface changes | **None.** `IMinimalSSI`, `ISetA/B/C`, `O1_ERC1056` byte-identical to canon v1.3 |
 | Open decisions | D1–D8 (00 §8) |
 
@@ -131,7 +133,7 @@ K-HDA-8 is resolved by fiat rather than by correction, which is a compromise: th
 | 3a | **The warm Groth16 verification time** (new, 2026-10-17) | Whether predicate proofs are usable at Tier 2 at all (05 §3.2.1) | **The cheapest decision-relevant measurement in the programme.** 645.3 ms is a cold snarkjs first call; if the warm figure is tens of milliseconds, the pre-computation placement rescues predicates for gated access, and if it is not, predicates are Tier 3 only. One benchmarking line against artefacts already on disk |
 | 4 | Delayed-write reconciliation behaviour | 03 §3.3; 06 §5 | **Discharged** (S14, F-VID-9): queue, reconcile, "revocation wins", zero writes during outage, one on reconnect. The link model is a flag in a script, not a network |
 | 5 | On-chain Merkle inclusion | 01 §11; 04 §2.6 batching's on-chain half | **Discharged** (S17, F-VID-8), and it corrected 01 §7's estimate by ≈2× (K-HDA-18) |
-| 6 | Cross-option placement (O2–O8) | 01's comparison columns; the "beside, not inside" argument's strongest form | **Unchanged.** WO-1 ports, then one controller adapter per option. Now the biggest single lever on the thesis's existing contributions |
+| 6 | Cross-option placement (O2–O8) | 01's comparison columns; the "beside, not inside" argument's strongest form | **Discharged, 2026-10-17** (10 Addenda E–J). All eight options ported and admitted **12/12 unmodified**; S1/S7/S8 run unchanged on each; `gas_matrix.csv` and `coverage_matrix.csv` generated from traces, not hand-entered; S5 IDPP executed both directions. This was the largest single debt in the register and it closed in one work session. It also verified the claim §6.2 had flagged as possibly wrong, and produced F-WO5-4 (coverage and gas rank the options differently) |
 | 7 | Revocation-propagation latency | The staleness bound that 05 §5 says couples every tier | **Unchanged.** Besu QBFT (WO-8), then hardware. S14 sharpened *why* it matters without measuring it |
 | 8 | **Attenuated delegation** (new, 2026-10-15) | 04 §3.5, §4; the C14 agent wrapper's security story | **Not in any slice plan.** The only structural gap left in either full-coverage scenario (04 §5). A registry beside the interface, shaped like the endorsement registry |
 
@@ -149,7 +151,9 @@ K-HDA-8 is resolved by fiat rather than by correction, which is a compromise: th
 4. ~~S14 and the Merkle verifier.~~ **Done** (Slice 1a, 1b), and the Merkle result corrected an estimate in 01 §7 by about a factor of two.
 5. **Read the four sessions of S1 §5.2**, starting with IEEE 1609.2 and Brecht et al. **Promoted to second place in substance.** Slice 1 widened the gap this addresses by adding artefacts and no readings, and the first session settles whether the thesis's problem statement — the accountability gap and the Tier 1 boundary — is correctly stated. Everything below is optional; this is not.
 6. **Build the attenuated-delegation registry** (debt item 8). Small, closes the last structural gap in 04, and it is a contribution candidate rather than plumbing — but 04 §4 flags that the finding should be adversarially checked against the interface *before* it is built, not after.
-7. **Then choose**: Slice 2(b) proofs, or WO-1 ports (Slice 3) for the cross-option argument. The ports strengthen the thesis's existing contributions and would let the "beside, not inside" claim be *demonstrated* rather than argued, by running the unchanged VID layer on a second option; the proofs open a new contribution and close the suite's largest remaining gap. 00 §8 D8 is that choice, and Slice 1's experience is mild evidence for taking the cheaper, more certain option first.
+7. ~~**Then choose**: Slice 2(b) proofs, or WO-1 ports (Slice 3) for the cross-option argument.~~ **Both were taken, 2026-10-15 and 2026-10-17.** The choice turned out to be a false one: proofs closed the ZKP gap and reframed its cost question, and the ports closed the cross-option gap *and* verified the portability claim §6.2 had doubted. The lesson for D8 is that the two were complementary rather than competing, and that the programme's capacity was underestimated by every plan that posed them as alternatives.
+
+   What is genuinely left of the canonical plan: **WO-4** (S2–S4 catalog scripts — traces now exist across all eight options, so this may be closed already and needs confirming), **WO-6** (explorer), **WO-8** (Besu/Caliper, which is the only remaining route to a latency figure), **WO-9** (Set B adapters, of which S19 and S20 are the first two), and **WO-0** (the architect's ingest of the v2-0 plan). Of these only WO-8 blocks a thesis claim.
 8. **Merge the H-series into the programme's R-series**, and apply the five dischargeable K-corrections (§4) to the canonical documents. Pure bookkeeping, and §6.5 is about why it keeps not happening.
 
 ### 5.3 What S1 added after this section was first drafted
@@ -222,7 +226,19 @@ Document 05 §3.2 had concluded, on the strength of the one external figure avai
 
 A note on how both Slice 2 results arrived. Stage (b) refuted a claim the suite had made; stage (c) reframed a question the suite had been asking. Neither was produced by more analysis, and neither could have been — the first needed a number the suite did not have, the second needed two numbers side by side. Three sessions of building have now corrected the documents more than three sessions of writing corrected each other, which is §6.5's thesis stated as an observation rather than a worry.
 
-One further correction to §6.2's "possibly wrong rather than merely unproven" list. It flagged the attenuation finding of 04 §3.5 as one author's reading of the interface that should be attacked before publication. Slice 1 produced an independent instance of the same species: **F-VID-11 — `ISetC` has no function by which a validator may answer a validation request**, found by trying to make the sequence run. That is now the third case of the interface describing a check while omitting the write that would make the check meaningful (F-VID-1 content binding, F-VID-7 entitlement, F-VID-11 validation answer), and attenuation would be a fourth if it survives scrutiny. Four instances is a pattern worth a paragraph in Chapter 5 rather than four scattered findings, and that reframing is the single most useful thing this log can hand the thesis.
+One further correction to §6.2's "possibly wrong rather than merely unproven" list. It flagged the attenuation finding of 04 §3.5 as one author's reading of the interface that should be attacked before publication. Slice 1 produced an independent instance of the same species: **F-VID-11 — `ISetC` has no function by which a validator may answer a validation request**, found by trying to make the sequence run. That is the third case of the interface describing a check while omitting the write that would make the check meaningful, and attenuation would be a further one if it survives scrutiny.
+
+**The pattern now has five instances, found by five unrelated pieces of work, and that is this log's main contribution to the thesis.** Set out in one place:
+
+| # | Finding | The interface can check… | …but cannot record |
+|---|---|---|---|
+| 1 | F-VID-1 | that a credential is live (F6) | which content it was anchored over |
+| 2 | F-VID-7 | that an issuer anchored it (F6) | that the issuer was *entitled* to — hence endorsement |
+| 3 | F-VID-11 | that a validation was *requested* (C3/C4) | the validator's *answer* |
+| 4 | F-VID-14 | that a credential was *issued* (a BBS+ proof) | that it is still *current* |
+| 5 | **F-S5-2** | that a ported credential is valid (F6) | that its source has been **superseded** |
+
+Four were found by building (the harness, the proof, the port, the first VID layer) and none by reading the specification, which is itself the finding's strongest support: a specification can look complete on the page and be missing a write that only shows up when something tries to use the check. The unifying statement — **`IMinimalSSI` is a complete set of *questions* and an incomplete set of *answers*** — is a better Chapter 5 section than five scattered errata, it explains why every extension this programme has built (endorsement, typed credentials, the Set C harness's `resolveValidationAs`) has the same shape, and it reframes the twelve-function minimality result from a clean positive into a precise and more interesting one. **This is the single most useful thing this log can hand the thesis**, and it did not exist in any document before the builds ran.
 
 ### 6.5 What the shape of this pass reveals about the programme
 

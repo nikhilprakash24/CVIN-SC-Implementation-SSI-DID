@@ -1,7 +1,9 @@
-# Identity Sandbox Explorer (next visual pass)
+# Identity Sandbox Explorer (Layer 2)
 
-React artifact (Stage 14 lineage) that REPLAYS JSONL traces from `traces/`
-instead of simulating. Panels: identity cards (DID, keys, delegates, VCs +
-revocation state), transaction timeline (gas, F1–F12 tags), I2I channel pane
-(handshake sequence + teardown on revocation), and a 12-function coverage
-tracker driven by `fnId` fields. Input: paste or upload a trace file.
+`index.html` — a single static page, no build step. Open it in a browser, paste or upload any
+`traces/*.jsonl` file (schema v1 or v1.1) and it REPLAYS the trace: coverage tracker (F1–F12 plus
+the extension tags G/T/B/C/Z/P), identity cards (per acting principal: tx count, gas, keys,
+delegates, credentials issued/revoked, presentations, deactivation), the I2I channel / off-chain
+pane (off-chain steps and revocation teardowns), and the full timeline with gas and `latencyMs`.
+It renders only what the trace contains; nothing is simulated. A malformed trace fails with a
+schema error naming the line and the missing field (WO-6 acceptance).

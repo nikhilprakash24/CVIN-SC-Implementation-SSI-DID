@@ -22,7 +22,7 @@ The sixteen documents of this suite were written in parallel against a common br
 
 - **[1]–[28]** — the thesis reference list, carried forward verbatim from the Narrative Synthesis v11.3 (brief §10). These numbers are stable and are used unchanged throughout the suite.
 - **H1–H48** — *HDA-provisional* identifiers for sources new in this campaign. They replace every per-document `NEW-n`. On merge into the Systematic Review they become R-numbers; until then, **cite H-numbers in this suite and never a bare `NEW-n`.**
-- **A1–A30** — the campaign's own **primary artefacts**: code, traces, tests and programme documents read at source. These are not literature and are not weighted on the same scale; they are the suite's evidence, and §3 lists them separately because a reader checking a measured claim goes there first.
+- **A1–A33** — the campaign's own **primary artefacts**: code, traces, tests and programme documents read at source. These are not literature and are not weighted on the same scale; they are the suite's evidence, and §3 lists them separately because a reader checking a measured claim goes there first.
 
 **The collision this document fixes (K-HDA-10).** The per-document `NEW-n` series were assigned independently and conflict in at least eleven places. `NEW-1` denotes the W3C Bitstring Status List in 01, 03, 06 and 08, the GDPR data-minimisation articles in 02, eIDAS 2.0 in 07, and McMahan's FedAvg paper in 09. `NEW-2` denotes EIP-2929 in 01, 03 and 06, the EVM gas schedule generally in 02, the EUDI reference framework in 07, the Noise Protocol Framework in 08, and Kairouz et al. in 09. `NEW-8` and `NEW-11` collide four ways each. No document is wrong internally; the suite is unusable as a corpus. This is logged as **K-HDA-10** and is added to the ledger in S3 §4. The crosswalk in §6 is the remedy for documents that are not rewritten.
 
@@ -84,7 +84,11 @@ Every measured number in the suite traces to one of these. All are VERIFIED AT S
 
 | A30 | `circuits/AgeGate.circom`, `zk/` (2¹² ceremony + Groth16 zkey), `contracts/zk/ZKAgeGate.sol`, `scenarios/run_zk_age_gate.js` (S20), trace `zk_age_gate_…1792062543673` (17 entries) | **Slice 2(c), 2026-10-15.** A range predicate proven and verified on-chain: Poseidon(birthYear, salt) commitment ∧ birthYear ≤ maxBirthYear, 256 constraints, two public signals. Generation **3,999.9 ms**; off-chain verification **645.3 ms** (cold first call); calldata 705 B; `check` view 0 gas; **`admit` 250,283 gas**; F8 alongside 62,458. Replay and wrong-holder both revert; an under-age year produces no witness. **F-VID-16** (proving exceeds verifying by ~2 orders of magnitude, so prover placement is the design question), **F-VID-17** (predicate-capable credentials need a Poseidon commitment beside the keccak one). Pins: `circom2` 0.2.8 WASM, `snarkjs` 0.7.5, `circomlib` 2.0.5, `circomlibjs` 0.1.7. Sandbox ceremony, single contributor; no revocation input | 02, 04 §2.4, 05 §3.2.1, 10 Add. D |
 
-Suite totals after Slice 2(c): **32 passing tests, eleven traces on file, findings F-VID-1 to F-VID-18.** The A-series is now the suite's single largest body of VERIFIED AT SOURCE evidence, and the asymmetry §5.1 identifies — thoroughly verified code, barely verified premises — widened rather than narrowed, because Slice 1 added eight artefacts and no readings.
+| A31 | `contracts/implementations/O2_ERC721` … `O8_LFDT`, `ERC8004Registries.sol`, `SmartAccount.sol`, per-option controller adapters; S1/S7/S8 traces on all eight options | **WO-1/2/3, 2026-10-17.** Every option admits the layer **12/12 unmodified**, with the three scenarios running unchanged. This is the measured form of the "extend beside, never inside" claim, and it verified the portability doubt recorded in S3 §6.2. Includes the O8 property that no per-credential content hash is stored at all, and F-O7-1 (ERC-8004 needs `viaIR`) | 01, 04 §5, 11, 10 Add. E–I |
+| A32 | `benchmarks/gas_matrix.js` → `gas_matrix.csv`, `gas_report.md`; `benchmarks/coverage.js` → `coverage_matrix.csv`, `coverage_report.md` | **WO-5, 2026-10-17.** Eight options × nineteen tags, and a native/assisted/anchor/absent declaration per function — both **generated from traces, nothing hand-entered**, which is the acceptance condition the build plan set. **F-WO5-4: the coverage ordering and the gas ordering rank the options differently**, so neither matrix alone ranks the standards and the placement axis is what reconciles them — document 01's thesis confirmed by an experiment aimed at something else | 01 §8/§10, 03, 11 §3, 10 Add. H–J |
+| A33 | `scenarios/run_idpp_port.js` (S5), traces `idpp_port_O1→O8` and `idpp_port_O8→O1` | **WO-7, 2026-10-17.** The 2020 paper's ID Porting Protocol executed in both directions with nine continuity assertions, using the twelve functions and nothing else (**F-S5-1**). **F-S5-2:** the source credential stays F6-valid after the port, so supersession is verifier policy rather than a chain fact — the fifth instance of the interface-gap pattern (S3 §6.4) and a spec v1.1 candidate | 03 §4.3, 07, 11, 10 Add. J |
+
+Suite totals after the option ports: **131 passing tests, 68 traces on file**, findings F-VID-1 to F-VID-18 plus the per-option series (F-O2-*, F-O5-1, F-O6-1, F-O7-1), F-WO5-1/2/4 and F-S5-1/2. The A-series is now the suite's single largest body of VERIFIED AT SOURCE evidence, and the asymmetry §5.1 identifies — thoroughly verified code, barely verified premises — widened rather than narrowed, because Slice 1 added eight artefacts and no readings.
 
 **One caveat on A19 and A20.** The brief is VERIFIED AT SOURCE as a document, but the memos and the synthesis reach most documents of this suite *through* it rather than directly. Where a document attributes a framing sentence to "memo stance", the chain of custody is memo → brief → document, and the memo itself is DIGEST-LEVEL for that document. This is recorded here once rather than repeated in nine tables.
 
@@ -241,7 +245,7 @@ Eleven: [28], H7, H9, H10, H20, H21, H31, H36, H37, H38, H39. Of these only [28]
 
 ### 5.4 Measurement debt, restated by source
 
-Distinct from source debt, and not dischargeable by reading. The full register is S3 §5.1. As first written, this section recorded three absences: no internal source for any latency figure, none for Set C costs, and none for any generated proof. **Slice 1 (2026-10-14) changed two of the three** (A21–A30 below):
+Distinct from source debt, and not dischargeable by reading. The full register is S3 §5.1. As first written, this section recorded three absences: no internal source for any latency figure, none for Set C costs, and none for any generated proof. **Slice 1 (2026-10-14) changed two of the three** (A21–A33 below):
 
 | Absence | State after Slice 1 |
 |---|---|
@@ -273,7 +277,7 @@ Three rules, to keep the next pass from re-creating K-HDA-10.
 
 1. **Cite [n] for thesis-list sources and Hn for everything else.** A bare `NEW-n` is not a citation; it is a per-document note that means nothing outside its document.
 2. **Carry the verification label with the number on first use in any new document**, and take it from this index rather than re-deciding it. A source that is DIGEST-LEVEL here is DIGEST-LEVEL everywhere until someone reads it and updates §4.
-3. **Cite A-numbers for measured claims**, never a prose restatement of a figure from a sibling document. Every gas number in the suite is in A1–A4 and A21–A30; a figure without an A-number behind it is a hypothesis.
+3. **Cite A-numbers for measured claims**, never a prose restatement of a figure from a sibling document. Every gas number in the suite is in A1–A4 and A21–A33; a figure without an A-number behind it is a hypothesis.
 
 ---
 
