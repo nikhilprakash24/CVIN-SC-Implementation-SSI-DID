@@ -16,7 +16,8 @@ console.log(ethrDidOnGoerliNamed)
 import { Resolver } from 'did-resolver'
 import { getResolver } from 'ethr-did-resolver'
 
-const rpcUrl = "https://goerli.infura.io/v3/8d4d2bdf63884069abea4d210804f252";
+// RPC endpoint is supplied by the environment; no credential is committed.
+const rpcUrl = process.env.ETH_RPC_URL;
 const didResolver = new Resolver(getResolver({ rpcUrl, name: "goerli" }));
 
 const didDocument = (await didResolver.resolve(ethrDidOnGoerliNamed.did)).didDocument
