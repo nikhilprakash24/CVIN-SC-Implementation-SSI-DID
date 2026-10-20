@@ -27,3 +27,17 @@ No code, test, result file or register row changes in this pass; no grand run (a
 
 ## 3. Execution log
 - 2026-10-20 — report opened (committed locally; the push waits for the check session).
+- **L2, pre-push guard.** `tools/prepush_check.sh` runs the MOBI-copies check, the feature-matrix check and the
+  thirteen document checks of CI's document step; `--probe` breaks a MOBI copy, expects the failure, and restores it.
+  Shown to fire; passes on the clean tree. The testbed artifact check runs when `cv2x-testbed/node_modules` is CI's
+  link, or with `PREPUSH_TESTBED=1`.
+- **L1, decision sheet.** `docs/DECISION_SHEET_2026-10-20.md`: 26 decision ids from five files, in four groups by
+  what they unblock, each with the file it lives in, the default in force and a recommendation. Every id in the five
+  sources is on the sheet (checked by grep). The sheet decides nothing.
+- **L3, progress report, draft 1.** `docs/PROGRESS_REPORT_2026-07_TO_2026-10.md` (nine sections) with the generated
+  appendix `docs/PROGRESS_APPENDIX_2026-07_TO_2026-10.md` from `docs/make_progress_appendix.py` (175 commits in 21
+  groups since July; passes whose opening commit lacks the "report N opened" subject merge into their neighbour, as
+  the generator's docstring says). The stale-figure checker is clean on both. Every register number carries its row;
+  the defect counts (42 fixed, 6 partly, 18 open of 66) and test counts are from the dashboard snapshot at this
+  commit. The reader and the AI-use statement are marked gaps for the author (decision sheet §A). The appendix is
+  regenerated at each pass's close rather than CI-checked, like the contribution record, because it reads git.

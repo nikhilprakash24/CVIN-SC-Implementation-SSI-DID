@@ -277,3 +277,11 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/phase2/briefs/I-24_IDTX.md`, `I-24_sources.json`, `I-05_FRESHNESS.md`, `I-05_sources.json` | the two briefs with every cited source's URL and quote | session 3 |
 | `docs/phase2/sessions/SESSION_LOG.md` entry 3; `ideas.yaml` (I-24 test count) | records | session 3 |
 | `docs/milestones/check_passes_16-22/START_PROMPT.md`; `docs/planning/PROGRESS_REPORT_PLAN_2026-10-20.md` | the fresh-session prompt; the plan for the hand-over write-up | the author's requests |
+
+## Pass 24 — Lead's pass: decision sheet, pre-push guard, progress report (2026-10-20)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_24.md` | plan, log, closing | standing rule |
+| `tools/prepush_check.sh` | CI's document and copy guards, run locally before a push; probe included | pass 22's three red runs |
+| `docs/DECISION_SHEET_2026-10-20.md` | every open author decision on one page | the backlog was scattered over five files |
+| `docs/PROGRESS_REPORT_2026-07_TO_2026-10.md`, `docs/make_progress_appendix.py`, `PROGRESS_APPENDIX_2026-07_TO_2026-10.md` | the hand-over write-up, draft 1, with its generated commit appendix | the author's request |
