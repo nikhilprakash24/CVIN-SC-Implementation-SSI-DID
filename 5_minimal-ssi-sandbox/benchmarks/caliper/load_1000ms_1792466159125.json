@@ -1,0 +1,92 @@
+{
+  "harness": "hardhat-interval (NOT Caliper, NOT Besu) — lower bound",
+  "blockMs": 1000,
+  "n": 40,
+  "generatedAt": "2026-10-20T03:15:48.946Z",
+  "results": {
+    "O1_ERC1056": {
+      "F1": {
+        "fn": "createDID",
+        "ops": 40,
+        "tps": 37.4,
+        "p50_ms": 1057.8,
+        "p95_ms": 1061.4,
+        "gas_avg": 162263
+      },
+      "F5": {
+        "fn": "issueCredential",
+        "ops": 40,
+        "tps": 42.66,
+        "p50_ms": 928.8,
+        "p95_ms": 931.6,
+        "gas_avg": 130109
+      },
+      "F11": {
+        "fn": "addDelegate",
+        "ops": 40,
+        "tps": 37.23,
+        "p50_ms": 1058.4,
+        "p95_ms": 1062.7,
+        "gas_avg": 54224
+      },
+      "F3": {
+        "fn": "updateDID",
+        "ops": 40,
+        "tps": 41.99,
+        "p50_ms": 940.6,
+        "p95_ms": 946.8,
+        "gas_avg": 44721
+      },
+      "F6": {
+        "fn": "verifyCredential(view)",
+        "ops": 40,
+        "tps": null,
+        "p50_ms": 0.89,
+        "p95_ms": 2.2,
+        "gas_avg": 0
+      }
+    },
+    "O3_ERC725": {
+      "F1": {
+        "fn": "createDID",
+        "ops": 40,
+        "tps": 37.98,
+        "p50_ms": 1035.1,
+        "p95_ms": 1045.7,
+        "gas_avg": 747418
+      },
+      "F5": {
+        "fn": "issueCredential",
+        "ops": 40,
+        "tps": 40.99,
+        "p50_ms": 964.5,
+        "p95_ms": 971,
+        "gas_avg": 142325
+      },
+      "F11": {
+        "fn": "addDelegate",
+        "ops": 40,
+        "tps": 39.9,
+        "p50_ms": 990.3,
+        "p95_ms": 995,
+        "gas_avg": 85305
+      },
+      "F3": {
+        "fn": "updateDID",
+        "ops": 40,
+        "tps": 39.08,
+        "p50_ms": 1013,
+        "p95_ms": 1018.3,
+        "gas_avg": 178373
+      },
+      "F6": {
+        "fn": "verifyCredential(view)",
+        "ops": 40,
+        "tps": null,
+        "p50_ms": 0.76,
+        "p95_ms": 1.71,
+        "gas_avg": 0
+      }
+    }
+  }
+}

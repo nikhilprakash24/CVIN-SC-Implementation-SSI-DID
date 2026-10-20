@@ -33,6 +33,8 @@ const DECL = {
   O8_LFDT: { F1: "native", F2: "native", F3: "native", F4: "native", F5: "native", F6: "native", F7: "native", F8: "absent", F9: "native", F10: "native", F11: "absent", F12: "absent",
     note: "did:indy nym/attrib/deactivate; F5 = schema/cred-def/rev-reg (definition anchor, no per-credential hash); F7 = revocation entry; F8 off-ledger in AnonCreds (sandbox anchor stands in); no delegation in did:indy (sandbox-side)" },
 };
+// Set B path per option (WO-9 AC column): how F5–F8 are realised and which overlay adapters apply.
+const SETB = { O1_ERC1056: "anchor + adapters (SD-JWT digests, BBS+ S19, Groth16 S20, PresentationAnchor)", O2_ERC721: "anchor + adapters", O3_ERC725: "anchor (issuer 725Y store) + adapters", O4_ERC725xy: "ERC-735 claims (native object, no expiry) + adapters", O5_ERC1155: "credential tokens (native object, no expiry) + adapters", O6_ERC4337: "anchor + adapters", O7_ERC8004: "anchor + adapters", O8_LFDT: "definition anchor (AnonCreds posture: no per-credential hash) + off-ledger presentations" };
 const SETC = { O7_ERC8004: "native", O1_ERC1056: "harness (SetCHarness)", };
 
 // trace check: which impls actually ran every function
@@ -46,16 +48,16 @@ for (const f of fs.readdirSync(TR).filter(x => x.endsWith(".jsonl"))) {
   }
 }
 
-const rows = [["impl", ...F, "native", "assisted", "anchor", "absent", "setC", "ranAll12", "note"]];
-let md = "# Coverage matrix (declared per option from implementation NatSpec; trace-checked)\n\n| Option | " + F.join(" | ") + " | native | assisted | anchor | absent | Set C | ran 12/12 |\n|---|" + F.map(() => "---").join("|") + "|---|---|---|---|---|---|\n";
+const rows = [["impl", ...F, "native", "assisted", "anchor", "absent", "setB_path", "setC", "ranAll12", "note"]];
+let md = "# Coverage matrix (declared per option from implementation NatSpec; trace-checked)\n\n| Option | " + F.join(" | ") + " | native | assisted | anchor | absent | Set B path | Set C | ran 12/12 |\n|---|" + F.map(() => "---").join("|") + "|---|---|---|---|---|---|---|\n";
 for (const impl of Object.keys(DECL)) {
   const d = DECL[impl];
   const cnt = { native: 0, assisted: 0, anchor: 0, absent: 0 };
   for (const k of F) cnt[d[k]]++;
   const all = F.every(k => ran[impl]?.has(k));
-  rows.push([impl, ...F.map(k => d[k]), cnt.native, cnt.assisted, cnt.anchor, cnt.absent, SETC[impl] || "—", all, JSON.stringify(d.note)]);
+  rows.push([impl, ...F.map(k => d[k]), cnt.native, cnt.assisted, cnt.anchor, cnt.absent, JSON.stringify(SETB[impl] || ""), SETC[impl] || "—", all, JSON.stringify(d.note)]);
   const sym = { native: "N", assisted: "A", anchor: "H", absent: "—" };
-  md += `| ${impl} | ${F.map(k => sym[d[k]]).join(" | ")} | ${cnt.native} | ${cnt.assisted} | ${cnt.anchor} | ${cnt.absent} | ${SETC[impl] || "—"} | ${all ? "yes" : "NO"} |\n`;
+  md += `| ${impl} | ${F.map(k => sym[d[k]]).join(" | ")} | ${cnt.native} | ${cnt.assisted} | ${cnt.anchor} | ${cnt.absent} | ${SETB[impl] || "—"} | ${SETC[impl] || "—"} | ${all ? "yes" : "NO"} |\n`;
 }
 md += "\nN = native · A = assisted (sandbox-side state beside the standard) · H = hash-anchor pattern · — = absent in the standard (sandbox supplies).\n\n## Notes per option\n\n" + Object.entries(DECL).map(([i, d]) => `- **${i}**: ${d.note}`).join("\n") + "\n\n## Readings\n\n- Set B (F5–F8) is native on no EVM option except through ERC-735 claims (O4) and ERC-1155 tokens (O5), neither of which carries expiry or a presentation; F8 is an anchor everywhere and off-ledger on Indy — the createPresentation finding, now per option.\n- Set A (F1–F4, F9–F12) is fully native on O1, O3, O6, O8 only; O2/O5/O7 lack a lifecycle and key model and are assisted.\n- Set C is native only on O7.\n";
 fs.writeFileSync(path.join(__dirname, "coverage_matrix.csv"), rows.map(r => r.join(",")).join("\n") + "\n");

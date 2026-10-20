@@ -75,7 +75,16 @@ async function main() {
 
   // Tier 2: a commercial transaction uses the VERINYM, not a pseudonym (presentation of the VID)
   const ch = V.presentationChallenge({ verifierDid: authority, holderDid: verinym, credentialIds: [vidId], purpose: "charging", nonce: crypto.randomBytes(8).toString("hex"), domain: "cvin-sandbox" });
-  await T.tx("createPresentation", "F8", "Vehicle(verinym)", ssi.connect(vehicleS).createPresentation(verinym, [vidId], ch, "cvin-sandbox"), { note: "verinym presents the VID for a commercial session (Tier 2)" });
+  const rcP = await T.tx("createPresentation", "F8", "Vehicle(verinym)", ssi.connect(vehicleS).createPresentation(verinym, [vidId], ch, "cvin-sandbox"), { note: "verinym presents the VID for a commercial session (Tier 2)" });
+  // WO-9 overlay adapter: the presentation is an SD-JWT-style selective disclosure (salted digests);
+  // its proof hash and format are anchored beside the F8 record; the disclosed claims stay off-chain.
+  const pa = await (await ethers.getContractFactory("PresentationAnchor")).deploy(await ssi.getAddress());
+  const salts = Object.fromEntries(Object.keys(vid.body.credentialSubject).map(k => [k, crypto.randomBytes(8).toString("hex")]));
+  const sdProof = { format: "sd-jwt-vc/rfc9901", digests: V.disclosureDigests(vid.body.credentialSubject, salts), disclosed: { make: vid.body.credentialSubject.make, modelYear: vid.body.credentialSubject.modelYear } };
+  const presId = T.parseEvent(ssi, rcP, "PresentationCreated").presentationId;
+  await T.tx("anchorPresentation", "A1", "Vehicle(verinym)", pa.connect(vehicleS).anchorPresentation(verinym, await pa.FMT_SD_JWT(), V.contentHash(sdProof), presId), { note: "SD-JWT presentation anchored: format + proof hash (2 claims disclosed off-chain)" });
+  const [anch, wd] = await pa.verifyAnchored(verinym, await pa.FMT_SD_JWT(), V.contentHash(sdProof), presId);
+  T.view("verifyAnchored", "A2", "ChargingOperator", `proof I hold matches an anchored SD-JWT presentation: ${anch}, withdrawn=${wd}`);
   T.view("resolveDID", "F2", "ChargingOperator", `verinym resolvable: ${(await ssi.resolveDID(verinym))[0].length > 2}; pseudonyms never presented here`);
 
   // Misbehaviour: the authority revokes epoch 1's authorisation; the verinym and other epochs continue.

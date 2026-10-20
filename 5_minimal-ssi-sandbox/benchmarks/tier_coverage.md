@@ -8,7 +8,7 @@
 | fl_round | High | 1 (1) | F1 (1) | B1 C1 C2 C3 C4 G0 G1 G2 | 80.0 / 4.0 / 10.0 | C2 C4 |
 | i2i | Low (anchors off-chain) | 9 (8) | F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12 (12) | — | 13.0 / 6.0 / 1.0 | F12 F2 F6 |
 | idpp_port | Cross (High) | 2 (2) | F1 F3 F4 F5 F6 F11 (6) | P1 | 11.0 / 10.0 / 2.0 | F6 P1 |
-| s2_dualmode | Low + Medium | 9 (8) | F1 F2 F4 F5 F6 F7 F8 F11 F12 (9) | — | 16.0 / 5.0 / 3.0 | F12 F2 F6 |
+| s2_dualmode | Low + Medium | 11 (8) | F1 F2 F4 F5 F6 F7 F8 F11 F12 (9) | A1 A2 | 16.2 / 5.2 / 3.0 | A2 F12 F2 F6 |
 | s3_evcharging | Medium | 9 (8) | F1 F5 F6 F8 (4) | G0 G1 G2 | 17.0 / 2.0 / 3.0 | F6 |
 | s4_insurance | High | 9 (8) | F1 F2 F3 F5 F6 F7 F9 F10 F11 F12 (10) | G0 G1 G2 | 28.0 / 6.0 / 1.0 | F12 F2 F6 |
 | vid_lifecycle | High | 9 (8) | F1 F2 F4 F5 F6 F7 F8 (7) | G0 G1 G2 G4 | 47.0 / 6.0 / 14.0 | F2 F6 G4 |

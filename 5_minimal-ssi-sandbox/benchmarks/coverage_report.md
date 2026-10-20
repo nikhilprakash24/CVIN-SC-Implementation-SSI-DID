@@ -1,15 +1,15 @@
 # Coverage matrix (declared per option from implementation NatSpec; trace-checked)
 
-| Option | F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8 | F9 | F10 | F11 | F12 | native | assisted | anchor | absent | Set C | ran 12/12 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| O1_ERC1056 | N | N | N | N | H | H | H | H | N | N | N | N | 8 | 0 | 4 | 0 | harness (SetCHarness) | yes |
-| O2_ERC721 | N | N | A | A | H | H | H | H | A | A | A | A | 2 | 6 | 4 | 0 | — | yes |
-| O3_ERC725 | N | N | N | N | H | H | H | H | N | N | A | A | 6 | 2 | 4 | 0 | — | yes |
-| O4_ERC725xy | N | N | N | N | N | N | N | H | N | N | A | A | 9 | 2 | 1 | 0 | — | yes |
-| O5_ERC1155 | N | N | A | A | N | N | N | H | A | A | A | A | 5 | 6 | 1 | 0 | — | yes |
-| O6_ERC4337 | N | N | A | A | H | H | H | H | N | N | N | N | 6 | 2 | 4 | 0 | — | yes |
-| O7_ERC8004 | N | N | N | A | H | H | H | H | A | A | A | A | 3 | 5 | 4 | 0 | native | yes |
-| O8_LFDT | N | N | N | N | N | N | N | — | N | N | — | — | 9 | 0 | 0 | 3 | — | yes |
+| Option | F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8 | F9 | F10 | F11 | F12 | native | assisted | anchor | absent | Set B path | Set C | ran 12/12 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| O1_ERC1056 | N | N | N | N | H | H | H | H | N | N | N | N | 8 | 0 | 4 | 0 | anchor + adapters (SD-JWT digests, BBS+ S19, Groth16 S20, PresentationAnchor) | harness (SetCHarness) | yes |
+| O2_ERC721 | N | N | A | A | H | H | H | H | A | A | A | A | 2 | 6 | 4 | 0 | anchor + adapters | — | yes |
+| O3_ERC725 | N | N | N | N | H | H | H | H | N | N | A | A | 6 | 2 | 4 | 0 | anchor (issuer 725Y store) + adapters | — | yes |
+| O4_ERC725xy | N | N | N | N | N | N | N | H | N | N | A | A | 9 | 2 | 1 | 0 | ERC-735 claims (native object, no expiry) + adapters | — | yes |
+| O5_ERC1155 | N | N | A | A | N | N | N | H | A | A | A | A | 5 | 6 | 1 | 0 | credential tokens (native object, no expiry) + adapters | — | yes |
+| O6_ERC4337 | N | N | A | A | H | H | H | H | N | N | N | N | 6 | 2 | 4 | 0 | anchor + adapters | — | yes |
+| O7_ERC8004 | N | N | N | A | H | H | H | H | A | A | A | A | 3 | 5 | 4 | 0 | anchor + adapters | native | yes |
+| O8_LFDT | N | N | N | N | N | N | N | — | N | N | — | — | 9 | 0 | 0 | 3 | definition anchor (AnonCreds posture: no per-credential hash) + off-ledger presentations | — | yes |
 
 N = native · A = assisted (sandbox-side state beside the standard) · H = hash-anchor pattern · — = absent in the standard (sandbox supplies).
 

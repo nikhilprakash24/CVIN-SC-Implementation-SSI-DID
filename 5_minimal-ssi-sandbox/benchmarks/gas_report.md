@@ -1,6 +1,6 @@
 # Gas report (generated from traces; do not edit)
 
-Generated 2026-10-20T03:11:05.563Z from 61 trace files. Values are min–max of `gasUsed` over kind=tx entries, Hardhat network, solc 0.8.24 / optimizer 200 / paris. Spec §5.3 targets: ERC-1056 column for O1_ERC1056, O2_ERC721, O5_ERC1155; ERC-725 column for the rest. ✗ marks a miss by the minimum observed value.
+Generated 2026-10-20T03:17:39.243Z from 63 trace files. Values are min–max of `gasUsed` over kind=tx entries, Hardhat network, solc 0.8.24 / optimizer 200 / paris. Spec §5.3 targets: ERC-1056 column for O1_ERC1056, O2_ERC721, O5_ERC1155; ERC-725 column for the rest. ✗ marks a miss by the minimum observed value.
 
 | Tag | Function | ERC1056 | ERC721 | ERC725 | ERC725xy | ERC1155 | ERC4337 | ERC8004 | LFDT |
 |---|---|---|---|---|---|---|---|---|---|
@@ -23,6 +23,7 @@ Generated 2026-10-20T03:11:05.563Z from 61 trace files. Values are min–max of 
 | C1 | attestReputationAs | 53,112–154,438 | — | — | — | — | — | — | — |
 | C3 | requestValidation | 53,795–114,397 | — | — | — | — | — | — | — |
 | Z1 | admit | 250,283 | — | — | — | — | — | — | — |
+| A1 | anchorPresentation | 180,776 | — | — | — | — | — | — | 185,418 |
 
 ## Target misses (minimum observed ≥ target)
 

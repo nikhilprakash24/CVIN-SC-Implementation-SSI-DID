@@ -452,3 +452,18 @@ The three catalog scenarios the canon specified in June now exist and ran on eve
 ## Addendum L — WO-6: the Layer 2 explorer (2026-10-19)
 
 `explorer/index.html` is the Layer 2 of the two-layer design: a single static page that replays any `traces/*.jsonl` file and renders a coverage tracker (F1–F12 and the extension tags), identity cards per transacting principal, the I2I channel / off-chain pane (off-chain steps and revocation teardowns), and the full timeline with gas and `latencyMs`. It simulates nothing; a malformed trace fails with a schema error naming the line and the field. Verified in the browser with the S1 trace (12/12, teardown at seq 18) and with a bogus line. Canonical work orders closed: WO-1 to WO-7. Open: WO-8 (Besu/Caliper), WO-9 (adapters).
+
+## Addendum M — WO-9 adapter and WO-8 load harness; the canonical plan closed out (2026-10-19)
+
+**WO-9.** `PresentationAnchor.sol` anchors, beside the interface's F8 record, *which format* a presentation used (SD-JWT, BBS+, AnonCreds, Groth16) and the hash of its proof bytes, with a holder-side withdraw flag — status on-chain, proof off-chain. It is wired into S2 (an SD-JWT-style selective disclosure of two claims from the MOBI VID, anchored at 180,776 gas on O1 / 185,418 on O8) and ran on both ends of the family range. It is optional — S19 and S20 ran without it — and dearer than F8 itself; its purpose is policy (a verifier class that admits only unlinkable formats) and audit (matching held proof bytes to a record). The coverage matrix now carries the Set B path column WO-9 asked for (**F-WO9-1**).
+
+**WO-8.** No Besu node exists on this machine (no binary, no Docker), so Caliper against QBFT is owed. In its place `benchmarks/load.js` produces the Caliper-shaped table — TPS, p50/p95 submit-to-receipt latency, gas per operation, per function per option — against the Hardhat network with interval mining, and maps each row to the three tiers by p95. Two runs:
+
+| Block interval | Writes (F1, F3, F5, F11) p95 | Reads (F6 view) p95 | TPS (N = 40) | Tier of writes / reads |
+|---|---|---|---|---|
+| 1000 ms (O1, O3) | 929–1,063 ms | 1.7–2.2 ms | 37–43 | 3 / 1 |
+| 200 ms (O1, O6) | 166–257 ms | 2.0–2.7 ms | 150–228 | 2 / 1 |
+
+Every number is a lower bound on any real network and is labelled so in the output. The reading that matters is structural (**F-WO8-1**): write latency is block time and read latency is not, for every option alike. The option decides gas and coverage; the *deployment* — a Local CVIN shard, an L2, a QBFT round time — decides which tier a write lands in, which is what 05 §1 and 03 §4 argue and what the 2020 paper's edge/sidechain proposals were for. Hardware (AURORA) and a real Besu run remain the only route to an absolute Tier 2 claim.
+
+**Status of the canonical plan.** WO-1 to WO-9 are now built, with two stand-ins recorded as deviations (Caliper/Besu → interval-mined Hardhat; ERC-8004 → per-file viaIR). WO-0 (ingesting the v2-0 plan DOCX) is the architect's. The HDA suite's open items are unchanged: decisions D2–D8 in 00 §8, the source-reading sessions in S1, and the angle passes in 99.

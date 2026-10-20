@@ -271,3 +271,24 @@
 48. **F-WO4-1 — S2–S4 ran on all eight options with no per-option code**; 24 traces. Per-tier
     coverage summarised in benchmarks/tier_coverage.md (generated). Generic-schema fallback added
     to lib/vid/credentials.js for scenario-local credential types (tariff, receipt, insurance).
+
+## WO-9 adapter and WO-8 load harness (2026-10-19; traces s2_dualmode_O1_ERC1056_1792466139439 / _O8_LFDT_1792466143954; benchmarks/caliper/load_1000ms_1792466159125, load_200ms_1792466185717)
+49. **F-WO9-1 — a format-aware presentation anchor costs more than F8 itself.** PresentationAnchor
+    .anchorPresentation (holder, format, proofHash, F8 presentationId) measured 180,776 (O1) and
+    185,418 (O8) gas — three new slots plus a per-format counter — against F8's 62,470. The
+    adapter is optional: S19's BBS+ and S20's Groth16 paths ran without it. Its value is
+    policy-side (a verifier class may require unlinkable formats; an auditor can match held
+    proof bytes to a record) and it exposes a cost the hash path does not pay. The coverage
+    matrix now carries a Set B path column: anchor + adapters on O1/O2/O3/O6/O7; native objects
+    without expiry on O4 (claims) and O5 (tokens); definition anchor with off-ledger
+    presentations on O8.
+50. **F-WO8-1 — write latency IS block time; read latency is not.** Hardhat network with interval
+    mining (Caliper-shaped harness, NOT Caliper, NOT Besu — lower bound). Block 1000 ms: F1/F3/F5/
+    F11 p95 929–1,063 ms on O1, 971–1,046 ms on O3 (Tier 3); F6 view p95 2.2 / 1.7 ms (Tier 1).
+    Block 200 ms: writes p95 166–257 ms on O1 and O6 (Tier 2); views unchanged (~2–3 ms). TPS
+    37–43 at 1 s blocks and 150–228 at 200 ms blocks (N=40 open-loop). Gas is invariant to block
+    time, as expected. Reading for the thesis: the three-tier mapping is a property of the
+    CHAIN's block interval, not of the option — every option's writes move from Tier 3 to Tier 2
+    together when blocks go from 1 s to 200 ms, and every option's reads sit at Tier 1 at any
+    block time. The option choice sets gas and coverage; the deployment (Local CVIN / L2 /
+    QBFT round time) sets the tier. Hardware and Besu remain owed for any absolute claim.

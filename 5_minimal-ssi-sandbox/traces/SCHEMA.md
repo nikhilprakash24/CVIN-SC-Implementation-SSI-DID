@@ -38,3 +38,4 @@ F-tags separately. `kind=offchain` entries now also use `phase` values `queued`,
 
 v1 consumers ignore unknown fields; no existing field changed.
 Further tags: `Z1` ZKAgeGate.admit (on-chain Groth16 verification, tx) · `Z2` ZKAgeGate.check (view). `phase` values `zk-prove`, `zk-verify-offchain`, `bbs-sign`, `bbs-proof`, `commitment`, `unlinkability`, `comparison`.
+Adapter tags: `A1` PresentationAnchor.anchorPresentation (tx) · `A2` PresentationAnchor.verifyAnchored (view) · `P1` IDPP continuity assertion (view).
