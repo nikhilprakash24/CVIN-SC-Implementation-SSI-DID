@@ -47,3 +47,16 @@ No code, test, result file or register row changes in this pass; no grand run (a
   checker's history list, as the defect log and TDP-006 are, because it reproduces history verbatim); and my sentence
   "43 of 43 injected attacks" matched the pattern for #27's old attack count (reworded to "attack scenarios"). The
   guard now warns when untracked files sit under `docs/`.
+
+## 4. Closing
+The pass delivered every step of §2. **CI 8 of 8 green on `46f8d1f`**, after one red run on a slip of my own,
+reproduced and fixed the same day. The author released the push before the check session had run, so the
+one-session-at-a-time rule now applies the other way: the check session should start after this close, which it can.
+
+**What the pass adds.** One page of decisions with recommendations; a local guard that mirrors CI's document and copy
+checks and now warns about untracked documents; and the hand-over progress report, draft 1, with a generated commit
+appendix. The progress report waits on two answers from the author (its reader, and the AI-use statement, N-23).
+
+**Next:**
+- The check session (`docs/milestones/check_passes_16-22/START_PROMPT.md`); its report number is 25.
+- Record the author's decision-sheet answers; then WM-2 A3.
