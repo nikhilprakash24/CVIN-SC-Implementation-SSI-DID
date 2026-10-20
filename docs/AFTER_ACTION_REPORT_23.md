@@ -25,3 +25,14 @@ A source that could not be fetched is listed as not read, never cited as read. B
 
 ## 3. Execution log
 - 2026-10-20 — report opened.
+- **S3-1, brief I-24 accepted after its gate.** The research agent wrote `docs/phase2/briefs/I-24_IDTX.md` with 18
+  cited sources (15 literature, 3 tooling) and 8 not read. I re-fetched 10 of the 18 at their URLs and checked each
+  quote in the fetched text: 7 exact, 2 differing only in whitespace from stripped markup (S04, S09), and the Oyente
+  PDF exact once its ligatures were joined (S01). None differed in substance. The brief's main findings: the
+  mechanism is not new (ERC-3643 transfers check the receiver's identity claims; Luu et al. 2016 proposed guarded
+  transactions), "named identity, not caller" does not set IDTx apart from attribute-based access control (NIST SP
+  800-162), and E-F1-1 alone cannot decide the kill criterion. Those are findings for the author's decision; the plan
+  is not changed here. The agent found that `ideas.yaml` said "10 behaviour tests" where the file has 12; corrected,
+  register regenerated.
+- **Progress report planned.** The author asked for a hand-over write-up from July onwards; the plan is in
+  `docs/planning/PROGRESS_REPORT_PLAN_2026-10-20.md`, for report 24, with the two decisions it needs.

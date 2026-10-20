@@ -322,7 +322,7 @@
 - **Why (Phase 1).** The author's coined concept; Phase 1 holds 25 implicit instances and measures the storage trade-off (#49, #35, #31) but never what a storage choice forbids.
 - **Anchors.** C1, C8, D51, D54, D64, #49, #31
 - **Builds on.** `docs/phase2/focus/F1_onchain_storage_idtx/ANALYSIS.md`, `phase2/idtx/contracts/IdtxExecutor.sol`
-- **First step.** Done: the prototype with 10 behaviour tests. Next: lock the F1 plan as a pre-registration and run E-F1-1 and E-F1-2.
+- **First step.** Done: the prototype with 12 behaviour tests (count corrected in session 3). Next: lock the F1 plan as a pre-registration and run E-F1-1 and E-F1-2.
 - **Kill criterion.** If the measured overhead and the TOCTOU result add nothing beyond access control, keep IDTx as a taxonomy in chapter 6 and drop the paper.
 - **Needs:** nothing · **needed by:** nothing
 
