@@ -29,6 +29,7 @@ for (const f of files) {
     if (e.kind !== "tx" || !e.gasUsed) continue;
     const tag = e.fnId || e.fn;
     const impl = e.impl;
+    if (impl.includes("_to_")) continue; // IDPP port traces span two options; excluded from per-option gas
     const g = Number(e.gasUsed);
     const a = (agg[impl] ??= {});
     const r = (a[tag] ??= { fn: e.fn, min: Infinity, max: -Infinity, n: 0, files: new Set() });

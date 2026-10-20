@@ -81,11 +81,12 @@ const W3C_CONTEXT = ["https://www.w3.org/ns/credentials/v2", "https://cvin.ubc.c
 // ---- builders (all off-chain; no chain interaction) ----
 
 function buildCredential({ tId, issuerDid, subjectDid, claims, validUntil = 0 }) {
-  const schema = SCHEMAS[tId];
+  // Unknown type ids (scenario-local credential families) get a generic schema: the typed anchor still binds type + schema + content.
+  const schema = SCHEMAS[tId] || { $id: "cvin/generic/" + tId.slice(0, 18), required: [] };
   for (const r of schema.required) if (!(r in claims)) throw new Error(`missing claim ${r} for ${TYPE_NAME[tId]}`);
   const body = {
     "@context": W3C_CONTEXT,
-    type: ["VerifiableCredential", TYPE_NAME[tId]],
+    type: ["VerifiableCredential", TYPE_NAME[tId] || tId],
     issuer: issuerDid,
     credentialSubject: { id: subjectDid, ...claims },
     validUntil: validUntil || null,

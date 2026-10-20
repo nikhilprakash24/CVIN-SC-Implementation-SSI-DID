@@ -100,7 +100,8 @@ The primary documents were written in parallel and several independently propose
 | ID | Scenario | Specified in | State |
 |---|---|---|---|
 | S1 | End-to-end secure I2I channel, 12/12 functions, mid-session revocation | sandbox; 08 §1 | **Built**; two traces (June architect pass; September rerun on this machine) |
-| S2–S4, S6 | Dual-mode identity; EV charging; insurance lifecycle; agentic wrapper | sandbox `ARCHITECTURE.md` §4 | Specified in canon; unbuilt |
+| S2–S4 | Dual-mode identity; EV charging; insurance lifecycle | sandbox `ARCHITECTURE.md` §4; 10 Addendum K | **Built**; 24 traces (all eight options) |
+| S6 | Agentic wrapper (Stage 31) | sandbox `ARCHITECTURE.md` §4 | Specified in canon; unbuilt (O7 + 04's S10 design are its inputs) |
 | S5 | IDPP port O1 ↔ O8 | sandbox `ARCHITECTURE.md` §4; 10 Addendum J | **Built** both directions; traces on file |
 | S7 | Minimal VID with endorsement | 10 | **Built**; trace on file |
 | S8 | All eleven lifecycle VIDs, Merkle batch | 10 | **Built**; trace on file |

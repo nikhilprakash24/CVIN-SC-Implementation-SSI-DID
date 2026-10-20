@@ -112,9 +112,9 @@ The three latency tiers originate in the published CVIN paper (IEEE VTC2020-Spri
 | ID | Scenario | Tier | Functions | Status |
 |---|---|---|---|---|
 | **S1** | E2E secure I2I channel: mutual auth → VP challenge-binding → off-chain ECDH/AES-256-GCM → **mid-session revocation teardown** | Low (anchors off-chain) | **12/12** | **Verified, trace on file** |
-| S2 | Dual-mode identity: pseudonymous DID for BSM stream + verinym DID with MOBI VID for commercial tx — one system, both modes (the SCMS differentiator) | Low + Medium | F1, F2, F5, F6, F8, F11 | Specified (WO-4) |
-| S3 | Medium-tier commercial: EV-charging session — verinym handshake, tariff credential, payment-anchored receipt | Medium | F2, F5, F6, F8 | Specified (WO-4) |
-| S4 | High-tier lifecycle: insurance credential (ICBC example from the 2020 paper), vehicle history attestation, ownership transfer with key rotation | High | F3, F5, F6, F7, F9, F10 | Specified (WO-4) |
+| S2 | Dual-mode identity: pseudonymous DID for BSM stream + verinym DID with MOBI VID for commercial tx — one system, both modes (the SCMS differentiator) | Low + Medium | F1, F2, F4–F8, F11, F12 | **Verified on O1–O8 (2026-10-19)**; escrowed linkage shown |
+| S3 | Medium-tier commercial: EV-charging session — verinym handshake, tariff credential, payment-anchored receipt | Medium | F1, F2, F5, F6, F8 + G | **Verified on O1–O8 (2026-10-19)**; Tier 2 path has zero chain entries |
+| S4 | High-tier lifecycle: insurance credential (ICBC example from the 2020 paper), vehicle history attestation, ownership transfer with key rotation | High | F1–F3, F5–F7, F9–F12 + G | **Verified on O1–O8 (2026-10-19)**; transfer = rotation + expiry + re-issuance |
 | S5 | **IDPP port**: identity + credentials ported O1 → O8 (E1) — makes the 2020 ID Porting Protocol concept testable for the first time | Cross | F1, F3, F4, F5, F6, F11, F12 ×2 impls | **Verified both directions (O1→O8, O8→O1), traces on file (2026-10-17)**; finding: no 'superseded' status in the interface |
 | S6 | Agentic wrapper: agent principal with ERC-8004 reputation + validation, credential-gated action (Stage 31 feed) | Cross | Set C + F8 | Deferred to Stage 31 |
 | S7 | Minimal VID with endorsement (birth certificate, registration, driver licence; G0–G4, T1–T2) | High | 12/12 + G/T | **Verified on O1–O8** |
@@ -141,6 +141,7 @@ Detail for S7–S20: `../docs/hda-campaign/10_VID_Build_Documentation.md`; canon
 | O7_ERC8004 | Three ERC-8004 registries + compliance layer (reference ISetC), **12/12 passing**; S1/S7/S8 traces on file (2026-10-17) |
 | O8_LFDT | Indy-on-Besu adapter, **12/12 passing**; S1/S7/S8 traces on file (2026-10-17) |
 | Gas matrix | `benchmarks/gas_matrix.js` → `gas_matrix.csv`, `gas_report.md` generated from traces, eight options |
+| Tier coverage | `benchmarks/tier_coverage.js` → `tier_coverage.md` (per-scenario, per-tier function coverage from traces; WO-4 AC) |
 | Coverage matrix | `benchmarks/coverage.js` → `coverage_matrix.csv`, `coverage_report.md` (native/assisted/anchor/absent per option × F1–F12, trace-checked) — WO-5 complete |
 | Compliance suite | `test/compliance.js`, parameterized; spec §4.1 implemented verbatim; **O1–O8 enabled, 96/96** |
 | Scenario S1 | Executed; 22-entry JSONL trace, 12/12 functions, real gas |

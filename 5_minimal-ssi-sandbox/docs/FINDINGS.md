@@ -246,3 +246,28 @@
     option; Set A fully native on O1, O3, O6, O8 only; Set C native only on O7. Native counts /12:
     O4 9, O8 9, O1 8, O3 6, O6 6, O5 5, O7 3, O2 2 — a different ordering from the gas ranking,
     which is the point the thesis makes with two matrices rather than one.
+
+## WO-4: scenario catalog S2–S4 on all eight options (2026-10-19; 24 traces s2_dualmode/s3_evcharging/s4_insurance × O1–O8)
+45. **F-S2-1 — dual-mode identity is realisable with the twelve functions; the pseudonym–verinym
+    link never touches the chain.** Three pseudonym DIDs created by unrelated signers, each with an
+    epoch authorisation anchored by the misbehaviour authority (F5) and a BSM delegate key (F11);
+    100 BSMs verified against cached delegate validity and authorisation status with zero chain
+    reads (375 ms for 100 on a laptop, signature + cache; not a Tier 1 timing claim). The
+    verinym→pseudonym mapping exists only in the off-chain authorisation credential held by the
+    vehicle and the authority (escrowed linkability, HDA 02 §8). Revoking one epoch (F7) leaves the
+    verinym and other epochs valid; the retired pseudonym is deactivated, not deleted.
+46. **F-S3-1 — the Tier 2 critical path has no chain entries.** EV-charging: mutual authentication
+    from warmed caches (49.65 ms laptop, 0 chain reads), AEAD metering session off-chain, then two
+    asynchronous F8 commits and one receipt anchor (F5) whose hash commits to the metering-log
+    root and the payment reference. On-chain learns that two presentations happened and a receipt
+    exists; price, energy and location do not appear. The operator's tariff licence is itself an
+    endorsement-gated credential (regulator endorsed transitively by the ministry).
+47. **F-S4-1 — ownership transfer is re-issuance plus delegate expiry, because IMinimalSSI has
+    neither controller transfer nor early delegate revocation.** The vehicle DID persists across
+    the sale; Owner1's "owner" delegate is withdrawn by re-issuing it with validity 0; keys rotate
+    (F9/F10); registration and the ICBC policy (the 2020 paper's Fig. 5 credential) are revoked
+    and re-issued to Owner2; the maintenance history remains valid. Confirms HDA 04/05's reading
+    from code: two spec v1.1 candidates (transferController; revokeDelegate).
+48. **F-WO4-1 — S2–S4 ran on all eight options with no per-option code**; 24 traces. Per-tier
+    coverage summarised in benchmarks/tier_coverage.md (generated). Generic-schema fallback added
+    to lib/vid/credentials.js for scenario-local credential types (tariff, receipt, insurance).
