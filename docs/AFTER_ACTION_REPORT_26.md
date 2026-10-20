@@ -21,3 +21,8 @@ blocking items and the parallel session.
   figure checker is clean. The draft says in its header that D-15 is not adopted and that the two Springer sources
   were not re-verifiable from the build container. Chapter 2's other sections still wait on the author's reference
   set. Committed locally; push held for the check session.
+- **Chapter 6 §6.8 drafted** (`docs/thesis/chapter6-discussion/DRAFT_6.8_IDTX_2026-10-20.md`): examiner question 12,
+  six subsections, the same citation keys as the chapter 2 draft; rows #25, #28, #31, #35, #37, #46, #49, #51, #52.
+  Two corrections before commit, both my own: I had attributed ERC-735's 149 storage slots (#49) to the MOBI
+  registry, which is not a harness column; and the history figure 169,361 was written without the arrow the
+  stale-figure checker requires. The D54 fix is placed as a fifth IDTx instance in the thesis's own code.
