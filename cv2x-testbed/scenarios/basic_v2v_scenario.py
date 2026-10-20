@@ -4,6 +4,7 @@ Basic V2V Communication Scenario
 Tests basic vehicle-to-vehicle communication with BSM exchange.
 """
 
+import statistics
 import sys
 import time
 from datetime import datetime
@@ -100,6 +101,10 @@ def run_basic_v2v_scenario(use_identity: bool = True,
         'total_transmissions': 0,
         'successful_receptions': 0,
         'failed_receptions': 0,
+        # Received over the radio but rejected by the identity check
+        # (signature / certificate / freshness). Not a successful reception
+        # (review 02, T-9).
+        'rejected_messages': 0,
         'latencies': [],
         'distances': [],
         'verification_times': []
@@ -153,6 +158,9 @@ def run_basic_v2v_scenario(use_identity: bool = True,
                               f"{rx_vehicle.vehicle_id} ← {tx_vehicle.vehicle_id}: "
                               f"d={rx_info['distance']:.0f}m, "
                               f"lat={rx_info['latency_ms']:.2f}ms")
+                elif rx_info.get('signature_valid') is False:
+                    # Delivered but failed verification: not a success (T-9).
+                    all_metrics['rejected_messages'] += 1
                 else:
                     all_metrics['failed_receptions'] += 1
 
@@ -172,6 +180,7 @@ def run_basic_v2v_scenario(use_identity: bool = True,
     print(f"  Total Transmissions: {all_metrics['total_transmissions']}")
     print(f"  Successful Receptions: {all_metrics['successful_receptions']}")
     print(f"  Failed Receptions: {all_metrics['failed_receptions']}")
+    print(f"  Rejected (identity check failed): {all_metrics['rejected_messages']}")
 
     if all_metrics['successful_receptions'] > 0:
         pdr = (all_metrics['successful_receptions'] /
@@ -180,7 +189,6 @@ def run_basic_v2v_scenario(use_identity: bool = True,
 
     # Latency metrics
     if all_metrics['latencies']:
-        import statistics
         print(f"\nLatency Statistics:")
         print(f"  Mean: {statistics.mean(all_metrics['latencies']):.2f} ms")
         print(f"  Median: {statistics.median(all_metrics['latencies']):.2f} ms")
@@ -198,8 +206,10 @@ def run_basic_v2v_scenario(use_identity: bool = True,
         print(f"\nIdentity Verification (PKI):")
         print(f"  Mean Time: {statistics.mean(all_metrics['verification_times']):.2f} ms")
         print(f"  Median Time: {statistics.median(all_metrics['verification_times']):.2f} ms")
-        print(f"  Overhead: {(statistics.mean(all_metrics['verification_times']) /
-                              statistics.mean(all_metrics['latencies']) * 100):.1f}% of total latency")
+        if all_metrics['latencies']:
+            overhead_pct = (statistics.mean(all_metrics['verification_times']) /
+                            statistics.mean(all_metrics['latencies']) * 100)
+            print(f"  Overhead: {overhead_pct:.1f}% of total latency")
 
     # Per-vehicle statistics
     print(f"\nPer-Vehicle Statistics:")

@@ -1,0 +1,12 @@
+# Experiment D: V2V per-interval verification time vs neighbor density
+P_neighbors,per_interval_median_ms,per_interval_p95_ms,per_message_median_ms,pct_of_100ms_budget
+5,0.81694,0.94944,0.156475,0.82
+10,1.60899,1.9403,0.153963,1.61
+20,3.18674,4.0802,0.152493,3.19
+40,6.39915,8.88746,0.153463,6.40
+80,13.13381,17.63213,0.155267,13.13
+
+# budget ms,100.0
+# saturation_P within range,
+# extrapolated saturation P*,609.2
+# fit,per_interval_ms = -0.063088 + 0.164265*P  (R^2=0.9998)

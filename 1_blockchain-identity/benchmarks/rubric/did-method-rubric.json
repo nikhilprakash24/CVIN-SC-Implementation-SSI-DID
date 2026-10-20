@@ -1,0 +1,52 @@
+{
+  "_about": "W3C DID Method Rubric (https://www.w3.org/TR/did-rubric/) scoring template used as the qualitative axis (framework §7). Scores: 1 (best) – 4 (worst) per the rubric's own response scales, or 'tbd'. Every non-tbd cell must cite a file:line or a measured value from results/metrics/latest. assessor = who scored; reviewed = independent check done?",
+  "criteria": [
+    { "id": "3.1", "name": "Rulemaking",            "question": "Who can change the DID method rules?" },
+    { "id": "3.2", "name": "Design and operation",   "question": "Who designs and operates the method infrastructure?" },
+    { "id": "3.3", "name": "Enforcement",            "question": "How are rules enforced?" },
+    { "id": "4.1", "name": "Open contribution",      "question": "Can anyone contribute to the specification/implementation?" },
+    { "id": "4.2", "name": "Open participation",     "question": "Can anyone create/resolve DIDs?" },
+    { "id": "5.1", "name": "Key rotation",           "question": "Can the controller rotate keys without changing the DID?" },
+    { "id": "5.2", "name": "Deactivation",           "question": "Can the DID be deactivated and resolve as such?" },
+    { "id": "5.3", "name": "DID Document integrity", "question": "Can a resolver verify the document was not tampered with?" },
+    { "id": "6.1", "name": "Correlation risk",       "question": "Does use of the DID create linkable records?" },
+    { "id": "6.2", "name": "PII in DID Document",    "question": "Does the method require/encourage PII on the ledger?" },
+    { "id": "7.1", "name": "DID Core conformance",   "question": "Is a conformant resolver available?" },
+    { "id": "7.2", "name": "Resolver availability",  "question": "Are independent resolvers available?" },
+    { "id": "8.1", "name": "Transaction cost",        "question": "Cost of create/update/deactivate (from L1 measurements)" },
+    { "id": "8.2", "name": "Scalability",            "question": "Cost/latency behaviour as the registry grows (from L3)" },
+    { "id": "8.3", "name": "Storage footprint",      "question": "Persistent state per identity (from L1 newSlots / L2 totals)" },
+    { "id": "9.1", "name": "Decentralised operation","question": "Any single point of operational control?" },
+    { "id": "9.2", "name": "Sustainability",         "question": "Long-term maintenance and ecosystem" }
+  ],
+  "substrates": {
+    "erc1056": {
+      "5.1": { "score": 1, "evidence": "contracts/ERC1056/EthereumDIDRegistry.sol:136 changeOwner keeps identity address; did:ethr id unchanged", "assessor": "NP", "reviewed": false },
+      "5.2": { "score": 3, "evidence": "no deactivate primitive; owner=0x0 resolves to self (EthereumDIDRegistry.sol:105); adapter uses a 'did/deactivated' attribute (benchmarks/adapters/erc1056.adapter.js deactivate())", "assessor": "NP", "reviewed": false },
+      "6.2": { "score": 2, "evidence": "vehicle attributes are emitted in clear in DIDAttributeChanged events when setVehicleAttributes is used (CVINVehicleDIDRegistry.sol:200-207); VIN on-chain", "assessor": "NP", "reviewed": false },
+      "7.1": { "score": 1, "evidence": "ethr-did-resolver (external) + 2_w3c-ssi-layer/did-resolution/did_resolver.py", "assessor": "NP", "reviewed": false },
+      "8.1": { "score": "measured", "evidence": "results/metrics/latest/tables/crud_gas.md", "assessor": "harness", "reviewed": false },
+      "8.2": { "score": "measured", "evidence": "results/metrics/latest/tables/scale.md", "assessor": "harness", "reviewed": false },
+      "8.3": { "score": "measured", "evidence": "results/metrics/latest/tables/crud_storage.md", "assessor": "harness", "reviewed": false }
+    },
+    "erc721": {
+      "5.1": { "score": 2, "evidence": "control == token ownership; rotation is a transfer (CVINVehicleNFT.sol:166 _update) which appends to public transferHistory", "assessor": "NP", "reviewed": false },
+      "5.2": { "score": 2, "evidence": "deactivateVehicle flag (CVINVehicleNFT.sol:258), admin-only", "assessor": "NP", "reviewed": false },
+      "6.1": { "score": 3, "evidence": "full ownership chain public on-chain (getOwnershipChain, CVINVehicleNFT.sol:237)", "assessor": "NP", "reviewed": false },
+      "6.2": { "score": 3, "evidence": "VIN, make, model, colour stored in clear (VehicleMetadata struct)", "assessor": "NP", "reviewed": false },
+      "7.1": { "score": 3, "evidence": "did:nft is a draft method; resolver is project-local (did_resolver.py)", "assessor": "NP", "reviewed": false },
+      "8.1": { "score": "measured", "evidence": "results/metrics/latest/tables/crud_gas.md", "assessor": "harness", "reviewed": false },
+      "8.2": { "score": "measured", "evidence": "results/metrics/latest/tables/scale.md", "assessor": "harness", "reviewed": false },
+      "8.3": { "score": "measured", "evidence": "results/metrics/latest/tables/crud_storage.md", "assessor": "harness", "reviewed": false }
+    },
+    "erc725": {
+      "5.1": { "score": 1, "evidence": "transferOwnership keeps contract address (CVIN_DID_ERC725.sol:37)", "assessor": "NP", "reviewed": false },
+      "5.2": { "score": 2, "evidence": "renounceOwnership (CVIN_DID_ERC725.sol:43) leaves keys readable", "assessor": "NP", "reviewed": false },
+      "7.1": { "score": 4, "evidence": "no registered DID method for bare ERC-725 key managers; project-local resolution only", "assessor": "NP", "reviewed": false },
+      "8.1": { "score": "measured", "evidence": "results/metrics/latest/tables/crud_gas.md (includes per-identity contract deployment)", "assessor": "harness", "reviewed": false },
+      "8.2": { "score": "measured", "evidence": "results/metrics/latest/tables/scale.md (removeKey is O(k) linear scan, CVIN_DID_ERC725.sol:69)", "assessor": "harness", "reviewed": false },
+      "8.3": { "score": "measured", "evidence": "results/metrics/latest/tables/crud_storage.md", "assessor": "harness", "reviewed": false }
+    },
+    "erc735": {}, "erc1155": {}, "erc725xy": {}, "lsp8": {}, "erc4337": {}, "cvin": {}
+  }
+}

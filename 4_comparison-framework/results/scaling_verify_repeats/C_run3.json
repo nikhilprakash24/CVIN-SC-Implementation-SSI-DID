@@ -1,0 +1,110 @@
+{
+  "credential_richness": {
+    "N": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "median_ms": [
+      0.18968,
+      0.19107,
+      0.19424,
+      0.19077,
+      0.20271,
+      0.21954
+    ],
+    "p95_ms": [
+      0.34602,
+      0.34211,
+      0.29334,
+      0.31384,
+      0.3898,
+      0.46927
+    ],
+    "mean_ms": [
+      0.21458,
+      0.21456,
+      0.21089,
+      0.21453,
+      0.23349,
+      0.27732
+    ],
+    "runs_per_point": 300,
+    "warmup_per_point": 50,
+    "sig_check_target_ms": 10.0,
+    "stays_under_target_across_range": true,
+    "scaling": {
+      "slope_ms_per_unit": 0.000952,
+      "intercept_ms": 0.18801,
+      "r2": 0.9512,
+      "spread_ratio_max_over_min": 1.157,
+      "relative_slope_per_unit": 0.00506,
+      "order": "O(1) \u2014 effectively constant (ECDSA recovery dominates)"
+    }
+  },
+  "selective_disclosure": {
+    "N": 16,
+    "k": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "median_ms": [
+      0.2289,
+      0.22912,
+      0.24247,
+      0.23812,
+      0.26738
+    ],
+    "p95_ms": [
+      0.50365,
+      0.49904,
+      0.4372,
+      0.31064,
+      0.45874
+    ],
+    "mean_ms": [
+      0.29884,
+      0.29301,
+      0.27377,
+      0.2496,
+      0.292
+    ],
+    "runs_per_point": 300,
+    "warmup_per_point": 50,
+    "scaling": {
+      "slope_ms_per_unit": 0.002439,
+      "intercept_ms": 0.226076,
+      "r2": 0.8908,
+      "spread_ratio_max_over_min": 1.168,
+      "relative_slope_per_unit": 0.01079,
+      "order": "O(1) \u2014 effectively constant (ECDSA recovery dominates)"
+    }
+  },
+  "method": "Real W3C VC DM 2.0 verification via the canonical VC layer (2_w3c-ssi-layer/verifiable-credentials: secp256k1 EIP-191 sign + public-key recovery, verify_credential runs structure/schema/temporal/revocation/signature/disclosure checks). For each point we warm up 50 runs then take the MEDIAN over 300 warm runs (p95 is the warm tail), timed with time.perf_counter. Credential richness varies N claims in {1,2,4,8,16,32}; selective disclosure fixes N=16 salted claim digests and discloses k in {1,2,4,8,16}. Scaling order is a least-squares fit of median latency vs N (and vs k).",
+  "host_note": "Linux 6.18.44-fc-v64 | x86_64 | python 3.11.15 | processor=x86_64",
+  "repeatability_caveat": "Single host, crypto-only, warm uncontended core (thesis \u00a75.4 / RESEARCH_AUDIT \u00a74.5 repeatability framing). Absolute latencies are hardware-dependent; the transferable results are the median and the scaling ORDER, not a population confidence interval.",
+  "environment_richness": {
+    "date_utc": "2026-10-04T09:22:46+00:00",
+    "commit": "d78e344a79705286bf7572a0afb4218eba361c39",
+    "tree_clean": false,
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "logical_cpus": 4,
+    "platform": "Linux-6.18.44-fc-v64-x86_64-with-glibc2.39",
+    "python": "3.11.15",
+    "libraries": {
+      "coincurve": "21.0.0",
+      "eth-account": "0.14.0",
+      "eth-keys": "0.8.0",
+      "cryptography": "49.0.0",
+      "numpy": "2.4.6",
+      "web3": "8.0.0"
+    }
+  },
+  "repeat_note": "Experiment C repeat 3 of 5, same clean tree and host, run back to back (F-A, 2026-10-04). Repeat 1 is the run of record in ../scaling_verify.json."
+}

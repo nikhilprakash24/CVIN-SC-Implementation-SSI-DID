@@ -1,4 +1,5 @@
 const { expect } = require("chai");
+const { ethers } = require("hardhat");
 
 describe("ERC721 Regular Test Suite with Extended Scenarios", function () {
     let CVIN_NFT_DID_ERC721, cvin_nft_did_erc721;
@@ -9,7 +10,7 @@ describe("ERC721 Regular Test Suite with Extended Scenarios", function () {
 
         CVIN_NFT_DID_ERC721 = await ethers.getContractFactory("CVIN_NFT_DID_ERC721");
         cvin_nft_did_erc721 = await CVIN_NFT_DID_ERC721.deploy("CVIN", "CVN", owner.address, 500);
-        await cvin_nft_did_erc721.deployed();
+        await cvin_nft_did_erc721.waitForDeployment();
     });
 
     it("Should mint a token", async function () {
@@ -38,7 +39,7 @@ describe("ERC721 Regular Test Suite with Extended Scenarios", function () {
         await cvin_nft_did_erc721.mint(addr1.address, 1, "tokenURI");
 
         // Assuming the contract has a function to handle toll payments
-        const tollAmount = ethers.utils.parseEther("0.1");
+        const tollAmount = ethers.parseEther("0.1");
         await expect(() =>
             cvin_nft_did_erc721.connect(addr1).payToll(1, { value: tollAmount })
         ).to.changeEtherBalance(addr1, -tollAmount);

@@ -1,0 +1,70 @@
+{
+ "meta": {
+  "condition": "M0 in-process (no chain access)",
+  "python": "3.11.15",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+  "commit": "f602fdf",
+  "date": "2026-09-24",
+  "n": 30,
+  "warmup_discarded": 3,
+  "timer": "perf_counter_ns",
+  "cold": "resolver cache cleared before every timed call (document constructed each time)",
+  "warm": "cache hit (dict lookup + metadata timestamp refresh)"
+ },
+ "results": {
+  "did:ethr": {
+   "cold": {
+    "n": 30,
+    "mean_ms": 0.0102,
+    "median_ms": 0.0089,
+    "p95_ms": 0.0127,
+    "min_ms": 0.0067,
+    "max_ms": 0.0375
+   },
+   "warm": {
+    "n": 30,
+    "mean_ms": 0.0025,
+    "median_ms": 0.0024,
+    "p95_ms": 0.0028,
+    "min_ms": 0.0022,
+    "max_ms": 0.005
+   }
+  },
+  "did:mobi": {
+   "cold": {
+    "n": 30,
+    "mean_ms": 0.0083,
+    "median_ms": 0.0082,
+    "p95_ms": 0.0093,
+    "min_ms": 0.0073,
+    "max_ms": 0.0108
+   },
+   "warm": {
+    "n": 30,
+    "mean_ms": 0.0023,
+    "median_ms": 0.0023,
+    "p95_ms": 0.0026,
+    "min_ms": 0.0021,
+    "max_ms": 0.0028
+   }
+  },
+  "did:nft": {
+   "cold": {
+    "n": 30,
+    "mean_ms": 0.0095,
+    "median_ms": 0.0081,
+    "p95_ms": 0.0126,
+    "min_ms": 0.0073,
+    "max_ms": 0.0341
+   },
+   "warm": {
+    "n": 30,
+    "mean_ms": 0.0024,
+    "median_ms": 0.0023,
+    "p95_ms": 0.0025,
+    "min_ms": 0.0022,
+    "max_ms": 0.0027
+   }
+  }
+ }
+}

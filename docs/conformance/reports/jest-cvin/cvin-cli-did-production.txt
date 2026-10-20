@@ -1,0 +1,100 @@
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+(node:1105) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS suites/did-production/did-production.spec.js
+  suites/did-production
+    IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056) (DID v1.0)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      6.1 Production
+        did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678
+          application/did+ld+json
+            ✓ 6.1 Production and Consumption - A conforming producer MUST take a DID document data model and a representation-specific entries map as input into the production process. The conforming producer MAY accept additional options as input into the production process. (2 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST serialize all entries in the DID document data model, and the representation-specific entries map, that do not have explicit processing rules for the representation being produced using only the representation's data type processing rules and return the serialization after the production process completes. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST return the Media Type string associated with the representation after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST NOT produce non-conforming DIDs or DID documents.
+      6.3.1 JSON-LD Production
+        did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678
+          ✓ 6.3.1 JSON-LD Production - The DID document and any DID document data structures expressed by the data model MUST be serialized to the JSON-LD representation according to the JSON representation production rules as defined in § 6.2 JSON. (1 ms)
+          ✓ 6.3.1 JSON-LD Production - In addition to using the JSON  representation production rules, JSON-LD production MUST include the representation-specific @context entry.
+          ✓ 6.3.1 JSON-LD Production - The serialized value of @context MUST be the JSON String https://www.w3.org/ns/did/v1 (DID v1.0) or https://www.w3.org/ns/did/v1.1 (DID v1.1), or a JSON Array where the first item is the JSON String https://www.w3.org/ns/did/v1 or https://www.w3.org/ns/did/v1.1, and the subsequent items are serialized according to the JSON representation production rules. (1 ms)
+          ✓ 6.3.1 JSON-LD Production - When serializing a JSON-LD representation of a DID document, a conforming producer MUST specify a media type of application/did+ld+json to downstream applications such as described in § 7.1.2 DID Resolution Metadata.
+    IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056) (DID v1.1)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      6.1 Production
+        did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678
+          application/did+ld+json
+            ✓ 6.1 Production and Consumption - A conforming producer MUST take a DID document data model and a representation-specific entries map as input into the production process. The conforming producer MAY accept additional options as input into the production process. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST serialize all entries in the DID document data model, and the representation-specific entries map, that do not have explicit processing rules for the representation being produced using only the representation's data type processing rules and return the serialization after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST return the Media Type string associated with the representation after the production process completes. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST NOT produce non-conforming DIDs or DID documents.
+      6.3.1 JSON-LD Production
+        did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678
+          ✓ 6.3.1 JSON-LD Production - The DID document and any DID document data structures expressed by the data model MUST be serialized to the JSON-LD representation according to the JSON representation production rules as defined in § 6.2 JSON.
+          ✓ 6.3.1 JSON-LD Production - In addition to using the JSON  representation production rules, JSON-LD production MUST include the representation-specific @context entry.
+          ✓ 6.3.1 JSON-LD Production - The serialized value of @context MUST be the JSON String https://www.w3.org/ns/did/v1 (DID v1.0) or https://www.w3.org/ns/did/v1.1 (DID v1.1), or a JSON Array where the first item is the JSON String https://www.w3.org/ns/did/v1 or https://www.w3.org/ns/did/v1.1, and the subsequent items are serialized according to the JSON representation production rules. (1 ms)
+          ✓ 6.3.1 JSON-LD Production - When serializing a JSON-LD representation of a DID document, a conforming producer MUST specify a media type of application/did+ld+json to downstream applications such as described in § 7.1.2 DID Resolution Metadata.
+    IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID) (DID v1.0)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      6.1 Production
+        did:mobi:5YJ3E1EA0PF123456
+          application/did+ld+json
+            ✓ 6.1 Production and Consumption - A conforming producer MUST take a DID document data model and a representation-specific entries map as input into the production process. The conforming producer MAY accept additional options as input into the production process.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST serialize all entries in the DID document data model, and the representation-specific entries map, that do not have explicit processing rules for the representation being produced using only the representation's data type processing rules and return the serialization after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST return the Media Type string associated with the representation after the production process completes. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST NOT produce non-conforming DIDs or DID documents.
+      6.3.1 JSON-LD Production
+        did:mobi:5YJ3E1EA0PF123456
+          ✓ 6.3.1 JSON-LD Production - The DID document and any DID document data structures expressed by the data model MUST be serialized to the JSON-LD representation according to the JSON representation production rules as defined in § 6.2 JSON.
+          ✓ 6.3.1 JSON-LD Production - In addition to using the JSON  representation production rules, JSON-LD production MUST include the representation-specific @context entry.
+          ✓ 6.3.1 JSON-LD Production - The serialized value of @context MUST be the JSON String https://www.w3.org/ns/did/v1 (DID v1.0) or https://www.w3.org/ns/did/v1.1 (DID v1.1), or a JSON Array where the first item is the JSON String https://www.w3.org/ns/did/v1 or https://www.w3.org/ns/did/v1.1, and the subsequent items are serialized according to the JSON representation production rules. (1 ms)
+          ✓ 6.3.1 JSON-LD Production - When serializing a JSON-LD representation of a DID document, a conforming producer MUST specify a media type of application/did+ld+json to downstream applications such as described in § 7.1.2 DID Resolution Metadata.
+    IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID) (DID v1.1)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      6.1 Production
+        did:mobi:5YJ3E1EA0PF123456
+          application/did+ld+json
+            ✓ 6.1 Production and Consumption - A conforming producer MUST take a DID document data model and a representation-specific entries map as input into the production process. The conforming producer MAY accept additional options as input into the production process.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST serialize all entries in the DID document data model, and the representation-specific entries map, that do not have explicit processing rules for the representation being produced using only the representation's data type processing rules and return the serialization after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST return the Media Type string associated with the representation after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST NOT produce non-conforming DIDs or DID documents.
+      6.3.1 JSON-LD Production
+        did:mobi:5YJ3E1EA0PF123456
+          ✓ 6.3.1 JSON-LD Production - The DID document and any DID document data structures expressed by the data model MUST be serialized to the JSON-LD representation according to the JSON representation production rules as defined in § 6.2 JSON.
+          ✓ 6.3.1 JSON-LD Production - In addition to using the JSON  representation production rules, JSON-LD production MUST include the representation-specific @context entry.
+          ✓ 6.3.1 JSON-LD Production - The serialized value of @context MUST be the JSON String https://www.w3.org/ns/did/v1 (DID v1.0) or https://www.w3.org/ns/did/v1.1 (DID v1.1), or a JSON Array where the first item is the JSON String https://www.w3.org/ns/did/v1 or https://www.w3.org/ns/did/v1.1, and the subsequent items are serialized according to the JSON representation production rules.
+          ✓ 6.3.1 JSON-LD Production - When serializing a JSON-LD representation of a DID document, a conforming producer MUST specify a media type of application/did+ld+json to downstream applications such as described in § 7.1.2 DID Resolution Metadata.
+    IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721) (DID v1.0)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      6.1 Production
+        did:nft:0x1:0xabc:123
+          application/did+ld+json
+            ✓ 6.1 Production and Consumption - A conforming producer MUST take a DID document data model and a representation-specific entries map as input into the production process. The conforming producer MAY accept additional options as input into the production process.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST serialize all entries in the DID document data model, and the representation-specific entries map, that do not have explicit processing rules for the representation being produced using only the representation's data type processing rules and return the serialization after the production process completes. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST return the Media Type string associated with the representation after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST NOT produce non-conforming DIDs or DID documents.
+      6.3.1 JSON-LD Production
+        did:nft:0x1:0xabc:123
+          ✓ 6.3.1 JSON-LD Production - The DID document and any DID document data structures expressed by the data model MUST be serialized to the JSON-LD representation according to the JSON representation production rules as defined in § 6.2 JSON.
+          ✓ 6.3.1 JSON-LD Production - In addition to using the JSON  representation production rules, JSON-LD production MUST include the representation-specific @context entry.
+          ✓ 6.3.1 JSON-LD Production - The serialized value of @context MUST be the JSON String https://www.w3.org/ns/did/v1 (DID v1.0) or https://www.w3.org/ns/did/v1.1 (DID v1.1), or a JSON Array where the first item is the JSON String https://www.w3.org/ns/did/v1 or https://www.w3.org/ns/did/v1.1, and the subsequent items are serialized according to the JSON representation production rules.
+          ✓ 6.3.1 JSON-LD Production - When serializing a JSON-LD representation of a DID document, a conforming producer MUST specify a media type of application/did+ld+json to downstream applications such as described in § 7.1.2 DID Resolution Metadata.
+    IMPLEMENTATION ::did:nft::CVIN did_resolver.py (ERC-721) (DID v1.1)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      6.1 Production
+        did:nft:0x1:0xabc:123
+          application/did+ld+json
+            ✓ 6.1 Production and Consumption - A conforming producer MUST take a DID document data model and a representation-specific entries map as input into the production process. The conforming producer MAY accept additional options as input into the production process.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST serialize all entries in the DID document data model, and the representation-specific entries map, that do not have explicit processing rules for the representation being produced using only the representation's data type processing rules and return the serialization after the production process completes. (1 ms)
+            ✓ 6.1 Production and Consumption - A conforming producer MUST return the Media Type string associated with the representation after the production process completes.
+            ✓ 6.1 Production and Consumption - A conforming producer MUST NOT produce non-conforming DIDs or DID documents.
+      6.3.1 JSON-LD Production
+        did:nft:0x1:0xabc:123
+          ✓ 6.3.1 JSON-LD Production - The DID document and any DID document data structures expressed by the data model MUST be serialized to the JSON-LD representation according to the JSON representation production rules as defined in § 6.2 JSON.
+          ✓ 6.3.1 JSON-LD Production - In addition to using the JSON  representation production rules, JSON-LD production MUST include the representation-specific @context entry.
+          ✓ 6.3.1 JSON-LD Production - The serialized value of @context MUST be the JSON String https://www.w3.org/ns/did/v1 (DID v1.0) or https://www.w3.org/ns/did/v1.1 (DID v1.1), or a JSON Array where the first item is the JSON String https://www.w3.org/ns/did/v1 or https://www.w3.org/ns/did/v1.1, and the subsequent items are serialized according to the JSON representation production rules. (5 ms)
+          ✓ 6.3.1 JSON-LD Production - When serializing a JSON-LD representation of a DID document, a conforming producer MUST specify a media type of application/did+ld+json to downstream applications such as described in § 7.1.2 DID Resolution Metadata.
+
+Test Suites: 1 passed, 1 total
+Tests:       48 passed, 48 total
+Snapshots:   0 total
+Time:        0.997 s, estimated 1 s
+Ran all test suites matching /suites\/did-production/i.
+Test results written to: report/tmp/cvin-cli-did-production.json

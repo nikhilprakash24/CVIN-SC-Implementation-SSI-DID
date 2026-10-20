@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-10-04T09:19:33.391175+00:00",
+  "mode": "simulate",
+  "sim_duration_s": 20,
+  "wall_clock_s": 11.3,
+  "step_length_ms": 100,
+  "bsm_rate_hz": 10,
+  "neighbor_radius_m": 300.0,
+  "max_receivers_per_broadcast": 8,
+  "vehicles": {
+    "total": 50,
+    "ssi_mobi_vid": 35,
+    "pki": 15
+  },
+  "pki": {
+    "sign_ms": {
+      "n": 3000,
+      "mean_ms": 0.0947,
+      "median_ms": 0.0807,
+      "p95_ms": 0.1532,
+      "min_ms": 0.0451,
+      "max_ms": 1.76
+    },
+    "cold_ms": {
+      "n": 177,
+      "mean_ms": 0.2531,
+      "median_ms": 0.2326,
+      "p95_ms": 0.348,
+      "min_ms": 0.1954,
+      "max_ms": 0.9782
+    },
+    "warm_ms": {
+      "n": 16156,
+      "mean_ms": 0.1042,
+      "median_ms": 0.0955,
+      "p95_ms": 0.1446,
+      "min_ms": 0.0775,
+      "max_ms": 2.7474
+    },
+    "messages_sent": 3000,
+    "messages_verified": 16333,
+    "verification_failures": 2
+  },
+  "ssi": {
+    "sign_ms": {
+      "n": 7012,
+      "mean_ms": 0.2594,
+      "median_ms": 0.2314,
+      "p95_ms": 0.3931,
+      "min_ms": 0.1781,
+      "max_ms": 4.3385
+    },
+    "cold_ms": {
+      "n": 225,
+      "mean_ms": 0.4055,
+      "median_ms": 0.391,
+      "p95_ms": 0.4972,
+      "min_ms": 0.3408,
+      "max_ms": 0.7342
+    },
+    "warm_ms": {
+      "n": 39601,
+      "mean_ms": 0.1785,
+      "median_ms": 0.1578,
+      "p95_ms": 0.2696,
+      "min_ms": 0.1235,
+      "max_ms": 40.6973
+    },
+    "messages_sent": 7012,
+    "messages_verified": 39826,
+    "verification_failures": 3
+  },
+  "messages_sent": 10012,
+  "messages_delivered": 56159,
+  "messages_verified": 56159,
+  "verification_failures": 5,
+  "safety_events_detected": 12,
+  "eebl_warnings_delivered": 8,
+  "attack_tests": {
+    "tampered_pki_rejected": true,
+    "tampered_ssi_rejected": true,
+    "stale_pki_rejected": true,
+    "stale_ssi_rejected": true,
+    "uncredentialed_sender_rejected": true
+  },
+  "budgets": {
+    "v2v_budget_ms": 100.0,
+    "signature_check_target_ms": 10.0,
+    "pki": {
+      "cold_p95_within_100ms_budget": true,
+      "warm_p95_within_100ms_budget": true,
+      "warm_p95_within_10ms_sig_target": true
+    },
+    "ssi": {
+      "cold_p95_within_100ms_budget": true,
+      "warm_p95_within_100ms_budget": true,
+      "warm_p95_within_10ms_sig_target": true
+    }
+  },
+  "notes": {
+    "real": "ECDSA P-256 sign/verify, X.509 chain validation, secp256k1 EIP-191 sign/recover, W3C VC verification (all latencies measured with time.perf_counter)",
+    "mock": "vehicle mobility (in --simulate mode) and radio channel (in-process delivery; no network stack, no channel loss, no MAC-layer latency)"
+  }
+}

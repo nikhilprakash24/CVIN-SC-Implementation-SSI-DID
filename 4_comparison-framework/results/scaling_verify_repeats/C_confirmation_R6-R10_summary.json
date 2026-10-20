@@ -1,0 +1,55 @@
+{
+  "credential_richness": {
+    "N": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "median_of_repeat_medians_ms": [
+      0.17746,
+      0.17143,
+      0.17707,
+      0.18634,
+      0.18868,
+      0.19513
+    ],
+    "max_p95_ms_any_repeat": 0.43053,
+    "scaling": {
+      "slope_ms_per_unit": 0.000673,
+      "intercept_ms": 0.175622,
+      "r2": 0.8168,
+      "spread_ratio_max_over_min": 1.138,
+      "relative_slope_per_unit": 0.00383,
+      "order": "O(1) \u2014 effectively constant (ECDSA recovery dominates)"
+    }
+  },
+  "selective_disclosure": {
+    "k": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "median_of_repeat_medians_ms": [
+      0.19632,
+      0.20567,
+      0.20908,
+      0.22831,
+      0.25885
+    ],
+    "max_p95_ms_any_repeat": 0.51629,
+    "scaling": {
+      "slope_ms_per_unit": 0.004053,
+      "intercept_ms": 0.19452,
+      "r2": 0.9922,
+      "spread_ratio_max_over_min": 1.319,
+      "relative_slope_per_unit": 0.02084,
+      "order": "O(N) \u2014 linear marginal growth"
+    }
+  },
+  "note": "F-A Exp C confirmation block R6-R10 (declared in f1c2399 before running): per point, median of the 5 repeat medians; scaling order by run_verify_richness.scaling_verdict()."
+}

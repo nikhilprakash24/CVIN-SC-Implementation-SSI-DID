@@ -1,0 +1,1961 @@
+{
+  "environment": {
+    "date_utc": "2026-10-04T22:17:54.329Z",
+    "git_commit": "e49bcb4",
+    "git_dirty": false,
+    "node_version": "v22.22.0",
+    "hardhat_version": "2.28.6",
+    "ethers_version": "6.17.0",
+    "network": "hardhat",
+    "chain_id": 31337,
+    "contract": "contracts/ERC1056/EthereumDIDRegistry.sol (standard ERC-1056)",
+    "compiler": "solc 0.8.24, optimizer 200, viaIR, evm cancun (hardhat.config.js; pragma ^0.8.20 selects 0.8.24)",
+    "registry_deploy_gas": 958726,
+    "cpu_model": "Intel(R) Xeon(R) Processor @ 2.80GHz",
+    "cpu_count": 4,
+    "os": "Linux 6.18.44-fc-v64"
+  },
+  "config": {
+    "pool": 20,
+    "epoch_s": 300,
+    "epochs": 3,
+    "band": 0.1,
+    "prereg_epoch_gas": 1444380,
+    "row2_add_delegate_gas": 72219,
+    "delegate_type": "veriKey (bytes32)",
+    "fund_wei": "10000000000000000"
+  },
+  "delegate_pool": {
+    "epochs": [
+      {
+        "epoch": 0,
+        "start_timestamp": 1791152271,
+        "pseudonyms": [
+          "0x768F8e671C4dE99A2C6002d2d9e5626D85c0148f",
+          "0xA39C7F1684f12Ec15f2D438AEc614bc394614E97",
+          "0xA9c8d5b51E09Df313bbAcbc5B259F8cc58D04EF6",
+          "0x1Fc9b972513647aEDE5504B2Ed345eDBC8769A9d",
+          "0xE4870937D4f91C9a05639CE0d40A1A0B577aF6a0",
+          "0x7459fd6765b79Ce5C3b47aa04324cB3524a326f9",
+          "0xa59364f11902960D162A1aD75362DC5974a95408",
+          "0xB57A9DAEDd1986D97266eC10664E93dCDdBC8094",
+          "0x246080243a1BE42FB4Be3633FB0013a728bd5264",
+          "0xFaB9C4Fd59F698129528f326092eD1359908efD4",
+          "0xC9c98410f2ED1C7b8e5D970C3FF897e96df1e6F4",
+          "0xB8F8196c201389177D9859EfCed7ACCC3426dE5f",
+          "0xBcB76Ce2ecE78E4511cc1c89c1ee3e8e748b2AEA",
+          "0xaF658C321118CB9c0d7c2511300FB762794652f6",
+          "0x020EaacEb83004501c3053749662DbA0a9fA6D18",
+          "0x0A04eAa36181b877f14eeb910D3a195d78e21cA3",
+          "0x89D1a397eb6B54ec4D3DeD381C921F9eddD50f60",
+          "0xa4C2BC1C3F14075493895495F411C2D23024FAE2",
+          "0x4485FA4De184B25565a4a346C86e8826a9212d49",
+          "0x5AC019364Fe2755151d9308388A27B00D882115f"
+        ],
+        "gas_per_add_delegate": [
+          71919,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54807,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54807
+        ],
+        "epoch_gas": 1113456,
+        "all_current_valid": true,
+        "previous_epoch_expired": null
+      },
+      {
+        "epoch": 1,
+        "start_timestamp": 1791152591,
+        "pseudonyms": [
+          "0x83E81d540a3bBd3424741FB2A44D396f699fDcDd",
+          "0x4643263Ce938529179543675B32349c26A679Cab",
+          "0x11F85FA04954Ce85f3bEFd1367aDF75d2c716D16",
+          "0x517A8888a69C7DE051c446B881A635f2b6204735",
+          "0xaA90F0b4946B71a9ba3930E7C5365D3d1453F8f6",
+          "0xB8BA8a1D76182E41a5A8ac212C9E91452Db1A94C",
+          "0x42Ff63D7e596045a0F1226a2c1876F24e870784F",
+          "0x85D55f26FF5DF74aE0162C0a4f33050d3Aa67aC4",
+          "0xC91CE4FE18BE2B366504B52a85d2C3C3B64c9A14",
+          "0x00D9090853dEA2f0c4B712515895a2c5a6e8aFd8",
+          "0x7b5AF254Aa0f45d1DC97E17A67A44e0fb8158E63",
+          "0x7d7433AB3c488a1aF8C2995eBA7c58eECa42Eb17",
+          "0xE1B6EC57E6359B86129C03CF45B505ba56d969B8",
+          "0x6057C6352c9CA9443067B4eB6279078Ff55dF8f6",
+          "0x5214216Be58c38B788F19CEFC08b672f6676c45F",
+          "0xc6770B19A04bf33bdc6762305d67591cb558a464",
+          "0x6c49f0c35C64527aB8e52D2bc06E79e07f3204d4",
+          "0xd7e3101745045F74DcEBa820759eB86E24442ac5",
+          "0xC4Be0c9714b56B7362700Ee39CEC06F68b0F4f0e",
+          "0x3c48A39d2df40502f5EBE7DaAA33Cb887dc1eADA"
+        ],
+        "gas_per_add_delegate": [
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54807,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819
+        ],
+        "epoch_gas": 1096368,
+        "all_current_valid": true,
+        "previous_epoch_expired": true
+      },
+      {
+        "epoch": 2,
+        "start_timestamp": 1791152911,
+        "pseudonyms": [
+          "0xE4d943FccDDAC6b4ca0b3B49eff09bc9e332e240",
+          "0x67A20BB5EB47dfedc9Ec7EBD6D0F9B3426194210",
+          "0xbb88C7F068D8590cf9be9B057F90fF3B29f9E9FF",
+          "0x575AAC5E01a34146033E6567927f15f3BA4A565f",
+          "0x9A0BFDa0B0d164d5461231D1648Ce1c4f0918276",
+          "0x21CF915f97DE367E53C51317478aEAEd03255197",
+          "0xF20D51daD0b38CdE6DFC8db4c7B3C9Ef2d1F5298",
+          "0xbaadA5Cc088A96AEF23dC0a8cA6BCd4BE790A8FE",
+          "0x8AAce83aC04BAC89Bd2027F9acE36B7885DB314D",
+          "0xA67566B33D150c99Fe1530C37362402002100e03",
+          "0x6b0122BD2fe19C0c7977412D9472F791DD97eEDa",
+          "0xe33fb7f39ec8d6e37345Bb00A020e4d7cfF0f590",
+          "0x6050C58e1365e49C7b92a44c4aEB3eE42fD356bF",
+          "0xcE4D5721607f07c8b0E7CC4d605385fb86F61B35",
+          "0x5B95250e2F6b1584D50A850176f7460BFdd47517",
+          "0xa938dE03acDa5b0f99eBd9997D1A8775bE4ce155",
+          "0xEEB426a2C55A2B26b0B7e13b9155116C3b397703",
+          "0x92FB9c5046e9f9F21E7fdc5dcEe00b38870f15Ad",
+          "0xFf3BE6262F51Cb549fCBc18367a36769Be600A64",
+          "0x4bF71D54bd30a876A8b97CA935873e6023603b79"
+        ],
+        "gas_per_add_delegate": [
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54807,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819,
+          54819
+        ],
+        "epoch_gas": 1096368,
+        "all_current_valid": true,
+        "previous_epoch_expired": true
+      }
+    ],
+    "last_epoch_expired_after_rotation": true,
+    "linkability": {
+      "query": {
+        "method": "eth_getLogs",
+        "params": {
+          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          "fromBlock": 0,
+          "toBlock": "latest",
+          "topics": [
+            "0x5a5084339536bcab65f20799fcc58724588145ca054bd2be626174b27ba156f7",
+            "0x00000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8"
+          ]
+        }
+      },
+      "logs_returned": 60,
+      "distinct_pseudonyms_returned": 60,
+      "per_epoch": [
+        {
+          "epoch": 0,
+          "pseudonyms_returned": 20,
+          "of": 20
+        },
+        {
+          "epoch": 1,
+          "pseudonyms_returned": 20,
+          "of": 20
+        },
+        {
+          "epoch": 2,
+          "pseudonyms_returned": 20,
+          "of": 20
+        }
+      ],
+      "reverse_link_from_one_pseudonym": {
+        "pseudonym": "0x85D55f26FF5DF74aE0162C0a4f33050d3Aa67aC4",
+        "step1": "eth_getLogs topics=[DIDDelegateChanged] (all identities), filter data.delegate == pseudonym",
+        "identities_found": [
+          "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+        ],
+        "step2": "the identity query above",
+        "siblings_reached": 60
+      },
+      "linkable": true
+    }
+  },
+  "per_pseudonym": {
+    "B0": {
+      "mode": "B0",
+      "epochs": [
+        {
+          "epoch": 0,
+          "pseudonyms": [
+            "0x258Ab3d0882ad8aF29EA7D1B66e35B7893ea96D6",
+            "0x708c1e7411271A0e62d5Df5086F617AB626393D5",
+            "0xd7bbC7377009E63B9ED1e2f9A8188812377E13BA",
+            "0x66e6b71aBaff01d3C1F6Dc5F2897E6Bc7ef1617D",
+            "0xFc2CE24F778D5228A19b567EBa1b7bbC082bb266",
+            "0xa6f136D18bBDbB8E277c15704B110056F486c55B",
+            "0xd54aa67aAB0533B46d6ce81E5aeb238a36bDC318",
+            "0xf1F1D0254088352943784E4560bcb7b89F886144",
+            "0x18fdd98B408EB1512533F49273E4218018cf5568",
+            "0x88eE85C3E846e5885D0Eb4dbca7DB8034b222fa0",
+            "0x6794CEaECdB143d730B867DF1d0C1AF81e6506b2",
+            "0x97C384856bE949A788508362fd47a539DD0a1036",
+            "0xd520C6B0E3D540da9aaa140C17b371E4FFb8cfB0",
+            "0xf4d992A69722DC55A2713a83a53c90701D41b33d",
+            "0x8e59e47C9206407d43ABC523aC3D7634C91B8BC6",
+            "0xb548a487f1A5DB484aead5783bD811D583f6a885",
+            "0xA7cD809b5E0208ad7e968A84309Eaa33F59F1DBc",
+            "0xfDc361E84845B25f11f1EC4E388b9E9C65BcF085",
+            "0x9C25915886b805Ef3e93Ee81320C81Bca184B600",
+            "0x290FD5E035e4E884e1c136bb4323D7cb51d549B9"
+          ],
+          "gas_funding": [],
+          "gas_set_attribute": [],
+          "epoch_gas": 0,
+          "implicit_owner_is_self": true,
+          "txs": []
+        },
+        {
+          "epoch": 1,
+          "pseudonyms": [
+            "0x35AD92A47ac4501B6Ac717ef7DB00Bdd136eEfBC",
+            "0xa09a23993f104e297E09C7d4194011aF54c5f641",
+            "0x2E8234eadAa04E394B0C602557f276115a4eC2DC",
+            "0x64E4AF292247d1fC870582498Df6F8390389d1Ad",
+            "0xDC5016105E28a9a039B013A92903f6c108b20891",
+            "0x16B70F8563015206B87cA0d1Ad6514FdE7a576f5",
+            "0x7c3729EF946a324c633bC82649Cd6b0AC6782c6D",
+            "0x9fbF163C9C1b7Cb1D923F19e3EAaFE52286D682B",
+            "0xd9838b8f703d17246e6Fa9D9253bd6b398641a9d",
+            "0x530B92363FE76490A21adcEa07ea234942151C2E",
+            "0xcDB58495CF2651b2C15aCD9Eae82dC07A81cB626",
+            "0x25E72F112C7a0f8b99D5b695D213a742CF5dD640",
+            "0xe2929eC01247Ae4Cc44a4Eb00177b15adBE1c0af",
+            "0x77F143541baC18Cd3A30911F7B542E63eAdCE273",
+            "0x67Ce3A520bA15459ffE71f6f6B7339214201CF88",
+            "0x00f69d8610E9a7171D06bf4568840854B7B8EC0a",
+            "0x6f9Eb1329a7A779F1C42C61011D119fD1F44C08e",
+            "0x65E232b9d0b38d4D8FAADf45A163E0270B0ba010",
+            "0x77c09123f8ed13D5d992d859399023c346a99dDE",
+            "0xe1E8a01F6C90a5C03999461124512DFF8c8Ecbd7"
+          ],
+          "gas_funding": [],
+          "gas_set_attribute": [],
+          "epoch_gas": 0,
+          "implicit_owner_is_self": true,
+          "txs": []
+        },
+        {
+          "epoch": 2,
+          "pseudonyms": [
+            "0x7796715469430D698C22A30c9a4d4d9F3Ce39e86",
+            "0x98a53016cE8dC89f87DFA01f4B0B24c33a144779",
+            "0xF27F46545dF37aa535415418A41eBAC86e430334",
+            "0xABBD14F08085868D678aB84a1C12BCf61b0a931f",
+            "0xc3288BAFD4D610f7c093Fb7b06fc92e6Ce8c796E",
+            "0x4F4Bd7F15190deb245A2b035442a02f5B75f7B59",
+            "0x17eEa882a9852D129E61BD68A2FcEECfbE15d2E5",
+            "0x848a5Ff86A8D774119EC3A3d06ea2D19BC822338",
+            "0xE216E199a8049806fd8272a9373794875c8C0E71",
+            "0x8d060efB7015482Cbea474cCc9158acda03b739f",
+            "0x032050c8b422F0D51f99d209AcD3D83bF946A69B",
+            "0x6A458384e2014f5f585891C47603C513bc5324a9",
+            "0xCcdbA77100Aba4DC82681d659Be8BC5A9ED46B04",
+            "0x21D6dAFc1B3C43B9f0ef28405dc4F10dCa8A7724",
+            "0xB4D58262AD9396c51D2F3795afF4C91d42f43E1B",
+            "0xCd2E0a5053B057DeF36AEF68F6958c35c2d4B587",
+            "0x1598BF3F1384E3d2082Ce29A6CAb39fE367BA526",
+            "0x2f8c2c2bFE21551606046f37B06f79673369266C",
+            "0xB9CE031Dd045a725f1e1237d68d31b2B172Ff720",
+            "0x473B9992B67462DeDb84C88f3bA31f5B55445592"
+          ],
+          "gas_funding": [],
+          "gas_set_attribute": [],
+          "epoch_gas": 0,
+          "implicit_owner_is_self": true,
+          "txs": []
+        }
+      ],
+      "linkability": {
+        "query": "the same eth_getLogs (DIDDelegateChanged, topic1 = identity), run for each pseudonym identity; also all registry events with topic1 = pseudonym",
+        "pseudonyms": 60,
+        "delegate_logs_total_over_pseudonym_queries": 0,
+        "registry_events_per_pseudonym": {
+          "min": 0,
+          "max": 0
+        },
+        "max_other_pseudonyms_reached_by_one_query": 0,
+        "vehicle_identity_delegate_logs": 0,
+        "linkable_by_identity_query": false,
+        "tx_layer_scan": {
+          "blocks_scanned": 69,
+          "txs_touching_pseudonyms": 0,
+          "funders": {},
+          "registry_senders": {}
+        },
+        "funding_senders": [],
+        "registry_tx_senders_other_than_pseudonym": [],
+        "registry_tx_sender_is_vehicle": false,
+        "residual_linkage": "none at the chain layer: no transaction touches any pseudonym. Linkage, if any, is off-chain (radio, timing, position)."
+      }
+    },
+    "B1": {
+      "mode": "B1",
+      "epochs": [
+        {
+          "epoch": 0,
+          "pseudonyms": [
+            "0xa33b66FE4B370f656294Fdb86E76aa3a216A5702",
+            "0xfC5FeEd6518A98Ce30A78B52dd113aC612bC86Bc",
+            "0xF8893F4257aDEd99AECd21Eabbf00d526a01ccaA",
+            "0x885796114B40720219a85102fCf96D85e16B7fDE",
+            "0x7D737F44e7A626613a8A7cf31c5dA65c2524e856",
+            "0xcF9ACe546a81C274DE061102534852ce3B1569bD",
+            "0xb6333678Ca1a7A462425587b2B645B326E00dBD4",
+            "0xD1236c2CEfC9828E056C8459249Aef7E57E76bc7",
+            "0x0c030B99e451052D7bCd93489a28Dbeb3B4f4509",
+            "0xF48F293F8bffd82d975C39aF9039322120bb5af4",
+            "0x6b251aa548F05869C70a6c0669FC08A82CDc3c36",
+            "0xf157f0e65476AD29139B189d016697318aa0d9fe",
+            "0xf0751A425E3B93cb2eBCdf1Bd1759561FeF55962",
+            "0x77b163C83BEa53e6B2b3B8DCD7C2C27d1655FCe1",
+            "0x86fc2a84b21c02f54536f3376EBC1ffc9Cc876e0",
+            "0xE6D7aAf910169cd75FceEE14473EcA75D621fc1D",
+            "0x7328d07Dfaab92D42a7d6b15b9Be6f20D9027548",
+            "0x92d55904d17A16ede34Cd6c56631580E77cc2445",
+            "0xB72F38530B2cc0b00C3e4A14492cA47fBC49Aa1F",
+            "0x9dED8ece3f57c8C6f4E9e2Ab9Bc8f0Da0Da7D11E"
+          ],
+          "gas_funding": [
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000
+          ],
+          "gas_set_attribute": [
+            51728,
+            51740,
+            51740,
+            51728,
+            51728,
+            51740,
+            51716,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51728
+          ],
+          "epoch_gas": 1454728,
+          "implicit_owner_is_self": true,
+          "txs": [
+            {
+              "hash": "0x2b4e220110bbc07d3fa47c24d7b226aacc776dfa379f9b10e46ec0cbb79e2b4f",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xa33b66FE4B370f656294Fdb86E76aa3a216A5702",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x8fb35fe60e919309710e525ee52a64618722f9f18e111e7b95eb443d039768b2",
+              "from": "0xa33b66FE4B370f656294Fdb86E76aa3a216A5702",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x39f4087c1359ed93bb3f2ba6ee272d521c101c30db1cee13c5b31997961c9d01",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xfC5FeEd6518A98Ce30A78B52dd113aC612bC86Bc",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xc61be2e898de80e8310565691f032ce9e4a0b76ed6215290228f13c34c113fa9",
+              "from": "0xfC5FeEd6518A98Ce30A78B52dd113aC612bC86Bc",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x39957eeb21a5d080813b7f3ea43329f704c3bef2c41cd7b1930d25c192d0e11f",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xF8893F4257aDEd99AECd21Eabbf00d526a01ccaA",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x783686658311b9b55eeafc4119278d473a7305a4c230b43934fe5026736574ff",
+              "from": "0xF8893F4257aDEd99AECd21Eabbf00d526a01ccaA",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x8042bcbce52818c56857df145b29968a392ca883827927bf2756bc5a3cd45f1e",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x885796114B40720219a85102fCf96D85e16B7fDE",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xdd779099fdae7a74a6e1be85f6d398171fdef0d13406b8318f93cefa9bf6e092",
+              "from": "0x885796114B40720219a85102fCf96D85e16B7fDE",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x8a4739a319570fd3945bb945c5f3a9475d115ad5c31649f6c1b98589621670a1",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x7D737F44e7A626613a8A7cf31c5dA65c2524e856",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xf886e7f458bb7d2be3cd7d4620d558b19d1643c95f66cf7b11c3419f472b520e",
+              "from": "0x7D737F44e7A626613a8A7cf31c5dA65c2524e856",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xe5b3ed9f9057023241934a7272659a2c5df9a2dc782ad8ef6a72515144315635",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xcF9ACe546a81C274DE061102534852ce3B1569bD",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x5c19a3362f75619326303abd9386fef244be0aa50c52413aa485e4daf68beefe",
+              "from": "0xcF9ACe546a81C274DE061102534852ce3B1569bD",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x404645f154212afe3ac398826987ce0f269799957d4230ef7a4a58fdccace4f6",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xb6333678Ca1a7A462425587b2B645B326E00dBD4",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xa3cc1e522ac20afa1aa1692e5a5d0195990abee48e534134ddd3cbd1d430c49a",
+              "from": "0xb6333678Ca1a7A462425587b2B645B326E00dBD4",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x6e8b1ff82bd7c1ae4ec6122b673600e6cec92b40db08048c5e3f24d0c2b097f3",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xD1236c2CEfC9828E056C8459249Aef7E57E76bc7",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x1e26de052652ca2347acc18cd4af442bcec80fa9797004019523e9ccacf23f3e",
+              "from": "0xD1236c2CEfC9828E056C8459249Aef7E57E76bc7",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x0084ed0f5f04bff24af446bc3bfce1ce376171eeea0493d3bf860cf7f5b0080f",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x0c030B99e451052D7bCd93489a28Dbeb3B4f4509",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xfd01efa5846e332b066264dd87d18ca40dece30c7b127c8e4831487b7be3b0c7",
+              "from": "0x0c030B99e451052D7bCd93489a28Dbeb3B4f4509",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xc37ffb467fc4d2caf53e7c08794f94ca396fe92a61d79ce2cb078d6b26f7ce37",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xF48F293F8bffd82d975C39aF9039322120bb5af4",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xa10ecd748236b81c4d545d405267fad88232740645c99ba70ca20df26e998bff",
+              "from": "0xF48F293F8bffd82d975C39aF9039322120bb5af4",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xa5ae983daa799b59b7978b8cd5e2b3280e8381a56d1e99340c62b77de239580a",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x6b251aa548F05869C70a6c0669FC08A82CDc3c36",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x7b1bd5dddaae756aebd63c7ab1f3c928a0a2bcdca3650983948acd7426c4a249",
+              "from": "0x6b251aa548F05869C70a6c0669FC08A82CDc3c36",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x89b6bd529b08501ae7be639024f2ba9573c61caffa831e6797f675a2e1b3dee5",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xf157f0e65476AD29139B189d016697318aa0d9fe",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xf9c443669dd7d2a5e08851eca35c22699b58de97b099479e7e442f006f400ae7",
+              "from": "0xf157f0e65476AD29139B189d016697318aa0d9fe",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x9286ffe4b0f567c6e0f7723bb523a7f09b6f216608e631c8ed02f594ce7a2865",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xf0751A425E3B93cb2eBCdf1Bd1759561FeF55962",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x92368aa1a3126af2b588532b4ca07b2b2af4fd058da995b6d185733bbc015bb6",
+              "from": "0xf0751A425E3B93cb2eBCdf1Bd1759561FeF55962",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x35074e77511c187539e98565917e0f8436f5ac8221a17a1449ae0373b876106d",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x77b163C83BEa53e6B2b3B8DCD7C2C27d1655FCe1",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x6f9aebf5379032068e8037cb2246d6382097cd085e84790612c4083f91ef17aa",
+              "from": "0x77b163C83BEa53e6B2b3B8DCD7C2C27d1655FCe1",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x5f715c677ec2e5e90611d25d1563b4388184cfe09bebd4cc78e0c1f1c195f399",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x86fc2a84b21c02f54536f3376EBC1ffc9Cc876e0",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x2234e024603a008f8fed44834aaad3a370fb4017a3d54026b0e561c6980890bd",
+              "from": "0x86fc2a84b21c02f54536f3376EBC1ffc9Cc876e0",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x5e00a41560c626ee223c9bb8974e3abf81fca1eedb4c491cb51c83bacb7604d0",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xE6D7aAf910169cd75FceEE14473EcA75D621fc1D",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xd20f08fc34c71b1c966949a47717ac5b4b9a37a71aff02e62023d0ad66f3e551",
+              "from": "0xE6D7aAf910169cd75FceEE14473EcA75D621fc1D",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x82217ea35cda7b0154c51f1649fbb895db4ab2404e65dcdf0bddbb7c72634b9a",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x7328d07Dfaab92D42a7d6b15b9Be6f20D9027548",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xab22615ccb32f4505afd5cd864bfb21f7ad69616b103e130a2b461fca6624b07",
+              "from": "0x7328d07Dfaab92D42a7d6b15b9Be6f20D9027548",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x6e721c5f5d77bc262e0e7001d1de11a1fb36004598a503ff583639b2cdc2d63c",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x92d55904d17A16ede34Cd6c56631580E77cc2445",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xda8261fe2142e46d59a75b1bc37881b0c04a1666b5ebb1dd35557fe0ac15b945",
+              "from": "0x92d55904d17A16ede34Cd6c56631580E77cc2445",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x51c221b33c90ee8974bfd93318b81efe355eaf7ed19b47f0ee5bcb565499fb8b",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xB72F38530B2cc0b00C3e4A14492cA47fBC49Aa1F",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x0283b2726317c1e196db00d96a2da39758b351fcacb4bd937c9b3b92179d895c",
+              "from": "0xB72F38530B2cc0b00C3e4A14492cA47fBC49Aa1F",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x3fa9a8e589ebfb1a7a18e3c78c6c0d4cf598278a8392a01442b9c34ec565c1eb",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x9dED8ece3f57c8C6f4E9e2Ab9Bc8f0Da0Da7D11E",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x3fdd93abaa905b670d7c55a8a74d33bf09328225dfbe094cf579244f67dd6c79",
+              "from": "0x9dED8ece3f57c8C6f4E9e2Ab9Bc8f0Da0Da7D11E",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            }
+          ]
+        },
+        {
+          "epoch": 1,
+          "pseudonyms": [
+            "0xf2D340F97B35Abeb2Ac8E3dcB1C1F45377441F48",
+            "0x5dc5317EAEDE4b4D04287811bE9336f78205153a",
+            "0xAf385f2Aeb98Fd7cAe1C9083F21905520497cC86",
+            "0x749E3C32d9Eaa1CEe34312467940D3F8b76f5cfC",
+            "0xD7d2ff5e04b11DADf4f41739aB1E2976F3335C77",
+            "0x67e750C5Bdc94757085a0E55e1818E330fE60C00",
+            "0x07c13fC357EE94Cd804bca1Dd7CaB0679fcd735A",
+            "0xE6147D2C0b918821DB21AfC278096238b79726fa",
+            "0xc4273943da59323f691a312Cc6489A7c32d4F03A",
+            "0x7738DBAf94A3336B9C01fC4819683A91d1031bD2",
+            "0x72C8312Fa3D04501d47DBdC566498B9d75638647",
+            "0xE6F17472B7B108ecb0a084459F4B72DCAf6082CB",
+            "0x1d8dB7cea4EF05d53885512A5aFB77c5Dd804D24",
+            "0x9F5e03d7C4679d00c40088a1fC4d0Af755Fac337",
+            "0xDB938F2223C1cd2b6485F0221F46B9350bEA3DaC",
+            "0xc5A1e3dF19CECe9ce9D71F0aa36cb91359ff23aC",
+            "0x93c1BDDC7bF6833c1ddF7446319BD45b1c196956",
+            "0x82103116A2374cdd4925F3f9c47865A02f792dF7",
+            "0x55ac50ADCe303154E055C87f5a2Be0Af73937819",
+            "0xbF817e23B2271f2E779533937AE33A8F6eb3667C"
+          ],
+          "gas_funding": [
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000
+          ],
+          "gas_set_attribute": [
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51728,
+            51740,
+            51728,
+            51728,
+            51740,
+            51740,
+            51740,
+            51740,
+            51704,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740
+          ],
+          "epoch_gas": 1454728,
+          "implicit_owner_is_self": true,
+          "txs": [
+            {
+              "hash": "0xca0b81e9f1056cb31c465b23f32f413790410d000132b309b912e204b77f4c48",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xf2D340F97B35Abeb2Ac8E3dcB1C1F45377441F48",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x2168350561e2c80855005f5d2f7dc7b4e623380e4a37904aa1fcd7dbb69e6296",
+              "from": "0xf2D340F97B35Abeb2Ac8E3dcB1C1F45377441F48",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xa64493687304cf6bc7bf3db41b3dfda98c083e012a51847e64a00acde977977d",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x5dc5317EAEDE4b4D04287811bE9336f78205153a",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xb5534908cc5e89e5c00d031f2084d588daeacb17b9149842b2fdb1317b9bba60",
+              "from": "0x5dc5317EAEDE4b4D04287811bE9336f78205153a",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x88b8395796762b15c915d032c56252b380c3d9e6ec49c49293b9e7deb6656990",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xAf385f2Aeb98Fd7cAe1C9083F21905520497cC86",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x818e48ea65a9cafdb0591d614414a54af3890e5d6d07e288d94dddc7d4731108",
+              "from": "0xAf385f2Aeb98Fd7cAe1C9083F21905520497cC86",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x86b7c4252e8b44ed22fa20d51bd70f976268f320d1c34403c7fcc93d9939f427",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x749E3C32d9Eaa1CEe34312467940D3F8b76f5cfC",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x9e2f949d40be2fadb43329064945b137ef691fb88fce4abfacef7277b0759b73",
+              "from": "0x749E3C32d9Eaa1CEe34312467940D3F8b76f5cfC",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x22b416f6b16905968d815099e23e21a768ed5e6bb020adc4b989b4243e0aa25d",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xD7d2ff5e04b11DADf4f41739aB1E2976F3335C77",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x54ac0918d3abe86d755fdd15570ed037cdce8f96a05e03e812e8e0d1b1aa7bfb",
+              "from": "0xD7d2ff5e04b11DADf4f41739aB1E2976F3335C77",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x13818e4617ffd649e4cdda638717c644e4e2ef4f569e0d2a64f47e71bf6d8511",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x67e750C5Bdc94757085a0E55e1818E330fE60C00",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xf5429ad1b75857f62330d127445b514e8efcf5d115eefb8208295eb506c18616",
+              "from": "0x67e750C5Bdc94757085a0E55e1818E330fE60C00",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x935b1cebdcabc659fd5eb13cfa5581cb57a4c090a86a9498de5dd05c7ab9b28f",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x07c13fC357EE94Cd804bca1Dd7CaB0679fcd735A",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x63dc29beb28bdeae522d064ec70dee4a397b4105368e218f7549ea4a1f2f7c8e",
+              "from": "0x07c13fC357EE94Cd804bca1Dd7CaB0679fcd735A",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xe6f7baab3103db75ff5e3b1f254a882ad9ce8be036fbe2a953f02948a954cad8",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xE6147D2C0b918821DB21AfC278096238b79726fa",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x68486fda30cdef88cacb7de14936f4e190b2088aa81576dcdc142e2e4f7e4920",
+              "from": "0xE6147D2C0b918821DB21AfC278096238b79726fa",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xa26006618e10f7cbdc3036ec3aeee6968f0f1a44feffc1a1b24044b187e30a84",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xc4273943da59323f691a312Cc6489A7c32d4F03A",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x55eaa24585d5d46a7c26a90b65127da38d3416514b43ed6679cef56214104276",
+              "from": "0xc4273943da59323f691a312Cc6489A7c32d4F03A",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x2a241ea9e4926e334284d8189493cb27413c7600849896d7393fe872df65b145",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x7738DBAf94A3336B9C01fC4819683A91d1031bD2",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x6b8d9477dbcee9d87ff36e030668ac0779cb36792014e9ca2c5ee7cfd542f020",
+              "from": "0x7738DBAf94A3336B9C01fC4819683A91d1031bD2",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xf12ba00850dfd0f532c8062179b8fd1905a5a5a60d95afc53aca9c25069294fb",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x72C8312Fa3D04501d47DBdC566498B9d75638647",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xfcecdb756b484efeeab4df73c0499c8d3b5282a6a44120ee2483e73453a61267",
+              "from": "0x72C8312Fa3D04501d47DBdC566498B9d75638647",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x348c3368547787f36d77d6d8bcf2237f185ac6ab674ce0fadff1c3408c098ac6",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xE6F17472B7B108ecb0a084459F4B72DCAf6082CB",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xccc2211fee3d59dd7730e786582b3803a340c297f55da6262f5555fc12ee94b9",
+              "from": "0xE6F17472B7B108ecb0a084459F4B72DCAf6082CB",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x6d49c8e5f90ac6b71bdc8a8367e16560c0d755d40e5d64c209fdce45df874e29",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x1d8dB7cea4EF05d53885512A5aFB77c5Dd804D24",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x1ad8f366717ad5bb2747fa192bde57ae5d4895f09feb4d34e503a4f03026f289",
+              "from": "0x1d8dB7cea4EF05d53885512A5aFB77c5Dd804D24",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x58f719a8f5ba7ebbedee4458191aff3a7738e339e1fd4bf38a1780580473bf82",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x9F5e03d7C4679d00c40088a1fC4d0Af755Fac337",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x847a160d8ff45c4ee1878e009c2baafe9fca4346cad1ff9a87a56edd0c779940",
+              "from": "0x9F5e03d7C4679d00c40088a1fC4d0Af755Fac337",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xf1a53be18379cf663d59a70cbc3ee457615fd85d113f03b023759ccbf9366ee2",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xDB938F2223C1cd2b6485F0221F46B9350bEA3DaC",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x8888010c89110c2be837c9ee5aae111a032855a7814a7ea9e6c5df1aeb838861",
+              "from": "0xDB938F2223C1cd2b6485F0221F46B9350bEA3DaC",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xaf125cae30a3fdf866ec3ff28ab084bb32e5f85c8101b97f2104ad1a8c3def26",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xc5A1e3dF19CECe9ce9D71F0aa36cb91359ff23aC",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xfa1140855b3472ee4542d36c757f257a1a5f4c5495e098296170047edc5aa9d1",
+              "from": "0xc5A1e3dF19CECe9ce9D71F0aa36cb91359ff23aC",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x175d839e255b7ea1ead6295da73881543008d72f3e12fe689706b4e6f830ef3f",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x93c1BDDC7bF6833c1ddF7446319BD45b1c196956",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x876412751fd5fb74754768fc080935ecc96ce3c73dd149c07629fa1895c28ac6",
+              "from": "0x93c1BDDC7bF6833c1ddF7446319BD45b1c196956",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x8d0db8045dac1c8c68306a857590db993d4e4a624498e644ca9f1b3097a8bf75",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x82103116A2374cdd4925F3f9c47865A02f792dF7",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x67e9edf50ae16d8b6945f8b85475cc7201770b76c628accf51379f9e460430f4",
+              "from": "0x82103116A2374cdd4925F3f9c47865A02f792dF7",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x50c3776a9ec150d2033b85da7ee8645fbd10a58d125999979df89e74294614eb",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x55ac50ADCe303154E055C87f5a2Be0Af73937819",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x372bd1f0b63cf7f5008ad4311f6843823de324cfb3ecc3940862412bfcac55cc",
+              "from": "0x55ac50ADCe303154E055C87f5a2Be0Af73937819",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xd1227424d35fe75c7eeab506683ec9088afae8719a11559aa2e5243ed48bdd8c",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xbF817e23B2271f2E779533937AE33A8F6eb3667C",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x1aa8a3564ea8879b73a9b5cd3a6a0b2f354e17aaa1ba77cefd593efd736206ea",
+              "from": "0xbF817e23B2271f2E779533937AE33A8F6eb3667C",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            }
+          ]
+        },
+        {
+          "epoch": 2,
+          "pseudonyms": [
+            "0xd06929c1556caB4B82a5Eb8EE0f817EaF528ed8f",
+            "0xa88AbA244eCD3c57846080B7F238ed9c4A7c6942",
+            "0x98AB5CbF77162c02788Bc2b7767Bb5A6d6F5EDD7",
+            "0xB4cf969f33e95b702f890bc72A4f9596f4B5e8C6",
+            "0x96e6ED7a40E626179268A2552f9aB813E852c7f2",
+            "0x1047A6BeE16996C99c89454aE93A02E9D12a2D6A",
+            "0x0F2bf265a6579C02e9cE5A2E3EB0262AC1CCB337",
+            "0xEe5F623E256607eC17af25E8E080286c403E89A7",
+            "0x607FE9331091e4a40512a10535d3a728CcC0D4f1",
+            "0x65097751F6fE882561FA508e91acE2af2f44E638",
+            "0xdbD801184fB802266463a9085620B5bd62302078",
+            "0x0E61feed7d87b3dAd7c951Fe94d7aee5e758606b",
+            "0x7835C23D4f8C98adf1cf4D271A20F80587B6940B",
+            "0x9959e11C8099C38Fd6bde6F8de0904e192Da788d",
+            "0xDcaC650333850564EA83690e95DCeBc52b229Ae5",
+            "0x9b20F848ecc65edAFD9B62175f007fAEfD7B7D5e",
+            "0x3338120B58C7Ba44583504BBA953EdB5A933Ea9F",
+            "0x39d1FC1d90a5AA6f94feB4a36013334125b83244",
+            "0x22909ADaed44108da6Ea66a886A890d4bC69Ae71",
+            "0xbAeE672444Ba245c5315408a90B2ee4033Ee29f1"
+          ],
+          "gas_funding": [
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000,
+            21000
+          ],
+          "gas_set_attribute": [
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51728,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51740,
+            51728,
+            51740,
+            51740,
+            51740,
+            51740
+          ],
+          "epoch_gas": 1454776,
+          "implicit_owner_is_self": true,
+          "txs": [
+            {
+              "hash": "0x58672723ce3521fd94dadcc8526f33b61c8235d4cdc822f382ce8ffd0477d23d",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xd06929c1556caB4B82a5Eb8EE0f817EaF528ed8f",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xe1e5ea637155d2bafdf7f55f81b6e85b0fc6679616f2996d6c62bd5067536177",
+              "from": "0xd06929c1556caB4B82a5Eb8EE0f817EaF528ed8f",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x0dfe9b851760bc9547a5f290167c3da362d586c239a5ade0139f019d9ff98f20",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xa88AbA244eCD3c57846080B7F238ed9c4A7c6942",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x94e0b7dfa92d040ec863540b526f8f8c154948e1369d8c23ad520647d025eb3b",
+              "from": "0xa88AbA244eCD3c57846080B7F238ed9c4A7c6942",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x9cef5b6149e93680040aded3269f546dfa75de7fc625cbd94d9dddc9cb4785cd",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x98AB5CbF77162c02788Bc2b7767Bb5A6d6F5EDD7",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x045fda97fc2339f080e776fc48b469b0340480e5ab59fb1fd85eec849fcb1c6e",
+              "from": "0x98AB5CbF77162c02788Bc2b7767Bb5A6d6F5EDD7",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x85794abbf0ffb66ddd2e923ca0a11635cb3a9322e56a068ffe307d2c5e211884",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xB4cf969f33e95b702f890bc72A4f9596f4B5e8C6",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x7696cccbba89bc594233a4ebb4b5fcc08f7de603c7ec9bdb2e24e2ff265400ef",
+              "from": "0xB4cf969f33e95b702f890bc72A4f9596f4B5e8C6",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x992858ba7461296515335237f3d78c5cd830e26decd100eff91bd69c6f36857a",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x96e6ED7a40E626179268A2552f9aB813E852c7f2",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x13844dad4474554ce82395ea21ae5d8e0fb277d6d9a2d648ef52f6defdbbce1b",
+              "from": "0x96e6ED7a40E626179268A2552f9aB813E852c7f2",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x406b6c808cedaae4c2cb95a7ea0d0cbcf10657bd971d6af809f298fb153e13cb",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x1047A6BeE16996C99c89454aE93A02E9D12a2D6A",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x5cc9104afaf5a03dc391152cc88ff0606120135c4d9f4ec1765f5be9c8db542e",
+              "from": "0x1047A6BeE16996C99c89454aE93A02E9D12a2D6A",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xaa5f816704ed028732d42bf96eeb3c6ef1603eb9ce066ebf5077a1d47e965c98",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x0F2bf265a6579C02e9cE5A2E3EB0262AC1CCB337",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x6e34bfba3c34a9c6bb587370c7287d56af3b7dad3eff070d6590b59cd6295892",
+              "from": "0x0F2bf265a6579C02e9cE5A2E3EB0262AC1CCB337",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x480fa05bb10d987c486cc662885ed58b79e3ec4dd76fcea9669b1e6ed3959411",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xEe5F623E256607eC17af25E8E080286c403E89A7",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xa1a8934a73481ddb4684023cabc29ab4d439d5fae2fb26f2212e0e70d1509ad8",
+              "from": "0xEe5F623E256607eC17af25E8E080286c403E89A7",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x4cd24d8533d89b3ffd838b1c018a95e90a2d2852e3a2c0ff89252916a6abe129",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x607FE9331091e4a40512a10535d3a728CcC0D4f1",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x55001138c0813c8da52625a60d51431f72161c1ecd90cb489a290b670b00d612",
+              "from": "0x607FE9331091e4a40512a10535d3a728CcC0D4f1",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x60027c6a9c1afb296d47bfe3b728dfc3c7afea711df7d9096ebd9844fec1c443",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x65097751F6fE882561FA508e91acE2af2f44E638",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x883e838d3a4d87791c991bebcb7f32e21c9c17efb799b653a5c5e026dc5c1b1f",
+              "from": "0x65097751F6fE882561FA508e91acE2af2f44E638",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x5ff5f03a73fe604b23633152e7df68a7aab2e2fce2b04d900a10b9457060f80f",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xdbD801184fB802266463a9085620B5bd62302078",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x5d5b46fad4be4a3a5d352886426dcbb32e8596038317e5f41da6ada77ce18a01",
+              "from": "0xdbD801184fB802266463a9085620B5bd62302078",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x9ffad3ae0f89f9438b39515d67f6347193f1d00ac5932ba5da7d5f3795b18582",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x0E61feed7d87b3dAd7c951Fe94d7aee5e758606b",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x957feca3195e1a8841929fbc6f97ce1cc3fedff0d9a5509b1db49ba5531cf0b8",
+              "from": "0x0E61feed7d87b3dAd7c951Fe94d7aee5e758606b",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xca72cb72d75c77f226c143d8dac6210d525b0bbdbdaccb250a7075da85000071",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x7835C23D4f8C98adf1cf4D271A20F80587B6940B",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x4acab5c71f6caadb4db9db2b948f73d38e58b648d3413452c924625b8cd3dd04",
+              "from": "0x7835C23D4f8C98adf1cf4D271A20F80587B6940B",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x37e0d93425c2184f14b656abd238c8c0a01353ff7a57f1caeb8f8adcc439299d",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x9959e11C8099C38Fd6bde6F8de0904e192Da788d",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xf5e3f054067bf3a47428b88a96a46a02f8e44f4b4dd11db1ded31529dc75ede6",
+              "from": "0x9959e11C8099C38Fd6bde6F8de0904e192Da788d",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x7265fcdbfe51111c193f55cadf65a014d2c8470368a2e5ae2a75ca576a026c4d",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xDcaC650333850564EA83690e95DCeBc52b229Ae5",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xc57ef65ac35bfe7e7af55c66d1d5de0ae9f153772aaf490c09e3572d6f2132dc",
+              "from": "0xDcaC650333850564EA83690e95DCeBc52b229Ae5",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x50a840c58c2ba380e4003709bafae810017841c29ad55dc0a395e05ac2e04a7d",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x9b20F848ecc65edAFD9B62175f007fAEfD7B7D5e",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x89c9c6cb15abd5aea7d24c49f787047e6e954f4c28114f659318202893c3ce03",
+              "from": "0x9b20F848ecc65edAFD9B62175f007fAEfD7B7D5e",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x455c7b9510384a825c75caa6a2a8e952a85ff9edba389c62e9e22b3176e6bbaa",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x3338120B58C7Ba44583504BBA953EdB5A933Ea9F",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x6d9f6a5e9198198dfc618565be09ad3c5edc21ddc54df5af451bc0c65be6431c",
+              "from": "0x3338120B58C7Ba44583504BBA953EdB5A933Ea9F",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xa258f81ccbbd3dbbbb5eb635acd3d614ee237d9204a8b27e3b0096c50b2493a4",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x39d1FC1d90a5AA6f94feB4a36013334125b83244",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x34a28ccb0eae77853d9eb096191693bd29b88d61b93d25c47d40680820cebd53",
+              "from": "0x39d1FC1d90a5AA6f94feB4a36013334125b83244",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0xe127f0ce753e33a570c209f6a6276ded43b50246d225dd1f6fc6d8f1bf63360b",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0x22909ADaed44108da6Ea66a886A890d4bC69Ae71",
+              "kind": "funding"
+            },
+            {
+              "hash": "0x069c4b3abaeab99b98d662d838bd74e52df6679bac2a55ceb0d8b89277d6cc78",
+              "from": "0x22909ADaed44108da6Ea66a886A890d4bC69Ae71",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            },
+            {
+              "hash": "0x18ca9f10a986a797d417e1cbaabc710713b4941e4a484a9575d43eb28ca0dcb0",
+              "from": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+              "to": "0xbAeE672444Ba245c5315408a90B2ee4033Ee29f1",
+              "kind": "funding"
+            },
+            {
+              "hash": "0xd2edbc64c5166ef1c21cb67c451589e0da6766671c8943a3b8eb2fb6610b5da6",
+              "from": "0xbAeE672444Ba245c5315408a90B2ee4033Ee29f1",
+              "to": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+              "kind": "setAttribute"
+            }
+          ]
+        }
+      ],
+      "linkability": {
+        "query": "the same eth_getLogs (DIDDelegateChanged, topic1 = identity), run for each pseudonym identity; also all registry events with topic1 = pseudonym",
+        "pseudonyms": 60,
+        "delegate_logs_total_over_pseudonym_queries": 0,
+        "registry_events_per_pseudonym": {
+          "min": 1,
+          "max": 1
+        },
+        "max_other_pseudonyms_reached_by_one_query": 0,
+        "vehicle_identity_delegate_logs": 0,
+        "linkable_by_identity_query": false,
+        "tx_layer_scan": {
+          "blocks_scanned": 193,
+          "txs_touching_pseudonyms": 120,
+          "funders": {
+            "0x90F79bf6EB2c4f870365E785982E1f101E93b906": 60
+          },
+          "registry_senders": {
+            "0xa33b66FE4B370f656294Fdb86E76aa3a216A5702": 1,
+            "0xfC5FeEd6518A98Ce30A78B52dd113aC612bC86Bc": 1,
+            "0xF8893F4257aDEd99AECd21Eabbf00d526a01ccaA": 1,
+            "0x885796114B40720219a85102fCf96D85e16B7fDE": 1,
+            "0x7D737F44e7A626613a8A7cf31c5dA65c2524e856": 1,
+            "0xcF9ACe546a81C274DE061102534852ce3B1569bD": 1,
+            "0xb6333678Ca1a7A462425587b2B645B326E00dBD4": 1,
+            "0xD1236c2CEfC9828E056C8459249Aef7E57E76bc7": 1,
+            "0x0c030B99e451052D7bCd93489a28Dbeb3B4f4509": 1,
+            "0xF48F293F8bffd82d975C39aF9039322120bb5af4": 1,
+            "0x6b251aa548F05869C70a6c0669FC08A82CDc3c36": 1,
+            "0xf157f0e65476AD29139B189d016697318aa0d9fe": 1,
+            "0xf0751A425E3B93cb2eBCdf1Bd1759561FeF55962": 1,
+            "0x77b163C83BEa53e6B2b3B8DCD7C2C27d1655FCe1": 1,
+            "0x86fc2a84b21c02f54536f3376EBC1ffc9Cc876e0": 1,
+            "0xE6D7aAf910169cd75FceEE14473EcA75D621fc1D": 1,
+            "0x7328d07Dfaab92D42a7d6b15b9Be6f20D9027548": 1,
+            "0x92d55904d17A16ede34Cd6c56631580E77cc2445": 1,
+            "0xB72F38530B2cc0b00C3e4A14492cA47fBC49Aa1F": 1,
+            "0x9dED8ece3f57c8C6f4E9e2Ab9Bc8f0Da0Da7D11E": 1,
+            "0xf2D340F97B35Abeb2Ac8E3dcB1C1F45377441F48": 1,
+            "0x5dc5317EAEDE4b4D04287811bE9336f78205153a": 1,
+            "0xAf385f2Aeb98Fd7cAe1C9083F21905520497cC86": 1,
+            "0x749E3C32d9Eaa1CEe34312467940D3F8b76f5cfC": 1,
+            "0xD7d2ff5e04b11DADf4f41739aB1E2976F3335C77": 1,
+            "0x67e750C5Bdc94757085a0E55e1818E330fE60C00": 1,
+            "0x07c13fC357EE94Cd804bca1Dd7CaB0679fcd735A": 1,
+            "0xE6147D2C0b918821DB21AfC278096238b79726fa": 1,
+            "0xc4273943da59323f691a312Cc6489A7c32d4F03A": 1,
+            "0x7738DBAf94A3336B9C01fC4819683A91d1031bD2": 1,
+            "0x72C8312Fa3D04501d47DBdC566498B9d75638647": 1,
+            "0xE6F17472B7B108ecb0a084459F4B72DCAf6082CB": 1,
+            "0x1d8dB7cea4EF05d53885512A5aFB77c5Dd804D24": 1,
+            "0x9F5e03d7C4679d00c40088a1fC4d0Af755Fac337": 1,
+            "0xDB938F2223C1cd2b6485F0221F46B9350bEA3DaC": 1,
+            "0xc5A1e3dF19CECe9ce9D71F0aa36cb91359ff23aC": 1,
+            "0x93c1BDDC7bF6833c1ddF7446319BD45b1c196956": 1,
+            "0x82103116A2374cdd4925F3f9c47865A02f792dF7": 1,
+            "0x55ac50ADCe303154E055C87f5a2Be0Af73937819": 1,
+            "0xbF817e23B2271f2E779533937AE33A8F6eb3667C": 1,
+            "0xd06929c1556caB4B82a5Eb8EE0f817EaF528ed8f": 1,
+            "0xa88AbA244eCD3c57846080B7F238ed9c4A7c6942": 1,
+            "0x98AB5CbF77162c02788Bc2b7767Bb5A6d6F5EDD7": 1,
+            "0xB4cf969f33e95b702f890bc72A4f9596f4B5e8C6": 1,
+            "0x96e6ED7a40E626179268A2552f9aB813E852c7f2": 1,
+            "0x1047A6BeE16996C99c89454aE93A02E9D12a2D6A": 1,
+            "0x0F2bf265a6579C02e9cE5A2E3EB0262AC1CCB337": 1,
+            "0xEe5F623E256607eC17af25E8E080286c403E89A7": 1,
+            "0x607FE9331091e4a40512a10535d3a728CcC0D4f1": 1,
+            "0x65097751F6fE882561FA508e91acE2af2f44E638": 1,
+            "0xdbD801184fB802266463a9085620B5bd62302078": 1,
+            "0x0E61feed7d87b3dAd7c951Fe94d7aee5e758606b": 1,
+            "0x7835C23D4f8C98adf1cf4D271A20F80587B6940B": 1,
+            "0x9959e11C8099C38Fd6bde6F8de0904e192Da788d": 1,
+            "0xDcaC650333850564EA83690e95DCeBc52b229Ae5": 1,
+            "0x9b20F848ecc65edAFD9B62175f007fAEfD7B7D5e": 1,
+            "0x3338120B58C7Ba44583504BBA953EdB5A933Ea9F": 1,
+            "0x39d1FC1d90a5AA6f94feB4a36013334125b83244": 1,
+            "0x22909ADaed44108da6Ea66a886A890d4bC69Ae71": 1,
+            "0xbAeE672444Ba245c5315408a90B2ee4033Ee29f1": 1
+          }
+        },
+        "funding_senders": [
+          "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+        ],
+        "registry_tx_senders_other_than_pseudonym": [],
+        "registry_tx_sender_is_vehicle": false,
+        "residual_linkage": "LINKABLE by funding pattern: 60 of 60 pseudonyms were funded by one address (0x90F79bf6EB2c4f870365E785982E1f101E93b906); query: every block's transactions, filter to ∈ pseudonym set, group by from."
+      }
+    },
+    "B2": {
+      "mode": "B2",
+      "epochs": [
+        {
+          "epoch": 0,
+          "pseudonyms": [
+            "0x7680C018aB44f94f377d2644069D079359469E65",
+            "0x7E30325f890036FC06bE40710b2711C3Fa0CF185",
+            "0x4A0Cac92f1735402670De7C61aC68B2f2A7D9ac8",
+            "0x95A156880Ff8bC87A25D3A97220a2a54e08D6115",
+            "0x652C33F992D677e54fa8c3675a36DefC8908d873",
+            "0x28958cBfDc355b73936C757aea5b5683d70F85fE",
+            "0x81D77528ad0aACeDA52381B80e7473c67228c626",
+            "0x92eE6b9d5D3BC474c2Ee8a16866AE20Eb6F4B6Aa",
+            "0xEc3b7125a7239B69152Adc86B5C25f8904b7F4E1",
+            "0x79B1D29327AE1228B5fC6a1ec30660751C8BC599",
+            "0xB32cf106d4F48d01e1672a0f1569a5887032A365",
+            "0x5D2165e746B2919bc4eEF714140fD218D70274d6",
+            "0x1C07e8dfEb5f094Ae953f6B7D7aE0f01Eb413d55",
+            "0x8f6fb9BBc02aAC30D20e7AB501173bb053d8dfa7",
+            "0x5183D66037043b2A84C9E50FEf32C94908836C2B",
+            "0xeCa0B7C653164d15491f2dcB2bAc2B16Fb6C0705",
+            "0xAB47382d3D65f31170333cc047Dc9aB618B8E5Dc",
+            "0xf45BBeAF4fEC2eaf34f1270c445c85189A9A83A9",
+            "0x4986c6E74AD17562eD024605De0c5bdC7b3842D5",
+            "0xc2CeEeA7c20202e99c9f83Ff24aE8CA584Fd8E6C"
+          ],
+          "gas_funding": [],
+          "gas_set_attribute": [
+            79340,
+            79316,
+            79352,
+            79340,
+            79352,
+            79352,
+            79340,
+            79352,
+            79352,
+            79352,
+            79316,
+            79352,
+            79352,
+            79352,
+            79352,
+            79340,
+            79352,
+            79340,
+            79352,
+            79352
+          ],
+          "epoch_gas": 1586908,
+          "implicit_owner_is_self": true,
+          "txs": [
+            {
+              "hash": "0x115c54ed6f9f32535da95a1a3125ab0660194e73878125d7675f407ecb274f8d",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x0dad9f023521e04e4695d108dc7efdb46a78c4c7fb0e0541d1522d25e35496bb",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x1bda60a45dbac56f168961f521c624f31b28b72937a145955a7b9cde92381597",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xfa5f1ff61ee0588c19ff6baefdddcfe0e9b851e9ac45eb4450f8ddd8dd07441e",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x5e7692a49eaa6c3d07e72da961a9ba471d5120ea77b66a9a8e569283a5e24745",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x881187baf6b869b5cf3f86cf7b247aa51d9b1d72e5227cfd07c13323e41aac05",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x18b16e93abdcf6161f06165f4be22877fe69b230ee9fc825e9230c44288a72a4",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x3c154d797182e06dbdc4d6f679635e522433dbced8d4890150371ef29684d655",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x941b6bcdfdb32d648b120cf5ec30d0145a7eeef8c1a1ca5417d766ec4212bb90",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x1f9c5500ee65e0c8c7396bcf721b094361e26a16115c624806020af463754d0e",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x25ad334e9d691f0eec7530a8c6a34f20fe3c39b3c7c6f142e0fdf54d36b10b00",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xcd435b1b9fff1546ee93ae32930cde8a0ca4cb227c76fc21e23a914f0e11943f",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x29ca2ea719f1b6579e61ed78f522feec5d568590c4fa1436b0c0dd2765c86b68",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xd8556aff25de96abf1fd8cbc8d56a47cc7010cba7702b4ba00b23e9bba61e800",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x08a896f4ae047cd56fe6d7995aba0ee763615bfead34b642d70581e95e64dc1b",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x02b1b9514413672823c5bbb36a9e1acafb53f2532319044a9552cd64d7a857fe",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x804283eaa807bda487e9fcff9a49114ddfa66bf71612713a0885534d0bb6e63d",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x70741e9648de33154995ccb2e3f48461e98823a1c972b16224770c13a5a4d21a",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xe01e7fbb2c2c2a6efecfbd760433b1f8dc5d7fc1dbf338ff9fca6d90d1bdbf33",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x6e2aff5f36b0dc82f77b81b5a288f653223effd628d417ffc43be72e2e2315a0",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            }
+          ]
+        },
+        {
+          "epoch": 1,
+          "pseudonyms": [
+            "0x4bfE3debC2E1C6b16798494E3b27b0a1ef90394e",
+            "0x0F07B58d16b8974DF336AB9764EC015D2F66B4c1",
+            "0xBb231809b6d6A923ae6e987374BD4411D78Db8ec",
+            "0x6494D3C4162123Fb0910098963C25945f833f50f",
+            "0xa0c53D0BCC00423Ab76eA8239857ff58b37511BE",
+            "0x3906302d4C55aF6b05285C897B44b7Af2a37DA3d",
+            "0x79768f8cD4b0FCfF67bcEFBBF004C963aac49b7b",
+            "0xBDb922F0902A67f8A9398ff1010a7577C88aBf05",
+            "0xe08cdCa36B8cfC7F7D360e4200201D4774eE4487",
+            "0xF637424E9dDE24C5F7b34E9B2860732068E5d2A4",
+            "0xa6B1e87ca5112cf7F3D570bF1C38Fa0dC576433F",
+            "0x5a733473494AEB9AC748e751169C5b4556C705D2",
+            "0x71dbA0B7da00C5fdCA0F7A4bfe431dc0888bE061",
+            "0x0523b2553d7190168525b24df36E5eAa496253ac",
+            "0x9bC494856772f54eE5b1ae16609F8A6858fE602F",
+            "0x8c4A5469540dD203D33BBAcd67a67Dd3DD798ACF",
+            "0x26BCFceF8Eef841E353691d309e58dC983Cc08De",
+            "0x598b1DaFc1Bbc8D3092a4729A733e3c943941CEb",
+            "0x62E0f51465059EE12189815742e7218ec25116b9",
+            "0x5562560c5cE8af036740F8e609DC3c149f1735Eb"
+          ],
+          "gas_funding": [],
+          "gas_set_attribute": [
+            79340,
+            79340,
+            79340,
+            79352,
+            79340,
+            79352,
+            79352,
+            79352,
+            79340,
+            79352,
+            79352,
+            79340,
+            79328,
+            79352,
+            79340,
+            79352,
+            79352,
+            79352,
+            79352,
+            79328
+          ],
+          "epoch_gas": 1586908,
+          "implicit_owner_is_self": true,
+          "txs": [
+            {
+              "hash": "0xe70ba5786ae9f85092a5f53f3ea301da2ad46dc0f9664d99cb173bb601c14617",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x0cae635ea68392c26a7f4381b9f12b61adbcbd85f2356ca1f8022eb56a4d62fc",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x20b2c772a8ccdca19c56a1cdf82c27a0c04b34bc3688c38522d8ec4835caa1c9",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xd69030b142959632f07ed784920f53ab435e5c4781be429a5c0e1a32e8376dc8",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x1a058684cba4227b6b2dfd79f6cf5ed3123a22cadb793a620c18e908061410ad",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x9d6e6a21d18f9807a48a4ac3b08d534b2af315d8d943d7cd670d5cb59d4800fd",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xe8d6e0cdab9b554a5213261f195b7f0c3615533dcb6f0368c7bd1de1dd149b28",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x7861b96104899c5f75235b8a924eab8ebdd850ea6ca129d9905a9dd6f3e3a9b4",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x85fc071a151b17e0721dabeaf4241edbe551f219453dfdb42c9e74f8418f4733",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xbd0dc2c232fa69ab5c07644399f1006ca380dab6006fbf9235190ea37ecb8b64",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x8b8dd101e9383125520e10620f0beb8cc21bc37f9cb8552a8b4ae84a1656c5db",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x1f10b73a1d6484137a043398866d24d8e3d64b4706edafc9147b621827db22f9",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x393db70ab9011e984e49a3656f49cb44a817bf1b27c318098e8e50c2534613ae",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xad565830bcb8366305db8350440f0a56b5850bfa8fd214d1ef05b80b3f70a25a",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x9bb79980bb65ea75c9d7631eb5a6089d2235a1d0f9703ca4bd4b3826a097f67b",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x88da015b8d12c4cb9daf230cf023c847411a586e1bd9ba800910db2ecd4c505d",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x3c968ff81d1277c8cce9aa4d9df6c8654839fe472e2452fcab7937ee5f8b1ace",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x5855a88de586a3e3355b80ace9e6851d6b4c31c977010eebeb8d3cca91726a91",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x67cc45ecc6a223b94927ca6313214d2885dea435e2deacbb858d594a6960459c",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x1747e131aadcc5b2e6d0d0557c1be9858c91559c25961c08a743dc379aacff8b",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            }
+          ]
+        },
+        {
+          "epoch": 2,
+          "pseudonyms": [
+            "0x310da9764d0F265b0b5db20d0704f04B0D14bc42",
+            "0x62B886ede38Fd308ed4f704BDef67478Ef38F9c9",
+            "0x468bCcdEb48eA70c44184BDADd760A8ce8E23a4B",
+            "0x4E3233f9995fFDAf6cE1fc60a0A53289724C2051",
+            "0x72bA3Ad1FEB637Ee37166cC78F44daa12151c8dE",
+            "0x9B5E46B60bC0AF5c56012F232AFD21D51cF0311E",
+            "0xf6C1Cf4054eCE0649448f8704991583cb19Eea8C",
+            "0x6A73598014A281E37EfaAaFc361C98B4f75B70d5",
+            "0x8C4C357bda2b085d8aDE23fc428C3631E8B42a4B",
+            "0xAcdd5b998cf7e906C2C2351FF24CDEe1E407031D",
+            "0xb00dc73FF59E4629BDcAba154F77ECbaa4D1701A",
+            "0x6Df8bcE5879C7ECb16c0D1d593B3a7fb01722504",
+            "0xcc8E85190221Ffbf2848d8F8811e68E8833cF3Ff",
+            "0x35e992c5c11825c8A680854C85f18c438760543B",
+            "0x06284B3cE72e31f7F466C4c3e6E7D9904BeCB000",
+            "0x304880117D89236F03942710a52c3D81F064576a",
+            "0x350bED129ac96C54Ca9C2b79f12e221aB499E21F",
+            "0x3921Dd0AA24da734d17553b8b0230937912f0e5e",
+            "0x5478bb25eD5A50C44CC39b05A261C479A954863a",
+            "0x465D666604276476Ffdb7e550Fc05f75301AEB6b"
+          ],
+          "gas_funding": [],
+          "gas_set_attribute": [
+            79352,
+            79352,
+            79352,
+            79340,
+            79340,
+            79352,
+            79340,
+            79352,
+            79352,
+            79352,
+            79340,
+            79340,
+            79352,
+            79340,
+            79328,
+            79352,
+            79340,
+            79352,
+            79340,
+            79352
+          ],
+          "epoch_gas": 1586920,
+          "implicit_owner_is_self": true,
+          "txs": [
+            {
+              "hash": "0x366706b5ae869f51563e469a9a3b6728667848df352fbc809eef371042dfcc38",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x20c35e086aaf66776731c0178ea094738d7e75eed7f42fb7fb95a91d0fdbe0b2",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x2fa3209b1551434f4d41aa42783eee0c8c999b11ce22edea9d8284a0c912d361",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x98dd6aed86a667adbdd1cd0178e84e6d776c057ab38a4cf795ad7a05982dd77e",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xdcc1de671647d8c3818ecdeb87bfd3938a698d811fedbabda19b5aa41cd409bc",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xdcc600e7c65f7bd7f884da08cf1343ede9d4fd002de7f77359552ca682c86e3a",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x736f075e64c1fc2629ed5a51d6fa1369e980f9dc35c853c026c35abb6cba72b2",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xb671ee4d940cad83f7fdb12e868fd2bccaaf61fe6d6525b2fc4b4d13597875d9",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x2fcf407a63a121af3700f5b1bcf21e2e372c993a53fd2d91830fbd3228140ee9",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x843f9dda486584346feefab54df0a5d3465a4234eae2a911b0b5807a3abd342a",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x97e73397abd88ae693d77b1cda7af1feacb9e3aa417f814ccc44ea23414033dc",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xf142fedd6893c35f7e2372ac013352407d843db35fcbb33f7413befa49b75879",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x2acf20fe637f9a0f8f56edabbcab6b2b4d5a79b612f729ff53b8797588876eb9",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xf99228a6ec0be9572bced988fbf122b62f84163488383cb4b499570fa4d5f87a",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xe6173b59f674df1cdf77ecc6dec11593e9b42fa7a3fcfab2672c6b6a825ce010",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x1864f6dc811db9ddf4086c8a189aba6baa69319ed679223a0ab4868d808fb65e",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x219bb0942711276619bfe4745853bf10da0de3e88201dc06899d9b0623f904d2",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0xb4308114382dae89851a4251411a1f73bc1f7732ef157fdbf49e9473e49f1b52",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x36d5884af3f7ad4070ae024da665250ed65b039ced03d544105d522734fc6b36",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            },
+            {
+              "hash": "0x014e8ee42506069d0c56de4ea901ebd132d918dd182166a6eadf42beabce9137",
+              "from": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+              "to": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+              "kind": "setAttributeSigned"
+            }
+          ]
+        }
+      ],
+      "linkability": {
+        "query": "the same eth_getLogs (DIDDelegateChanged, topic1 = identity), run for each pseudonym identity; also all registry events with topic1 = pseudonym",
+        "pseudonyms": 60,
+        "delegate_logs_total_over_pseudonym_queries": 0,
+        "registry_events_per_pseudonym": {
+          "min": 1,
+          "max": 1
+        },
+        "max_other_pseudonyms_reached_by_one_query": 0,
+        "vehicle_identity_delegate_logs": 0,
+        "linkable_by_identity_query": false,
+        "tx_layer_scan": {
+          "blocks_scanned": 257,
+          "txs_touching_pseudonyms": 60,
+          "funders": {},
+          "registry_senders": {
+            "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC": 60
+          }
+        },
+        "funding_senders": [],
+        "registry_tx_senders_other_than_pseudonym": [
+          "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+        ],
+        "registry_tx_sender_is_vehicle": false,
+        "residual_linkage": "linked to the RELAYER, not to the vehicle: 60 registry writes for 60 pseudonyms were sent by 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC; the anonymity set is the relayer's client population (1 vehicle in this simulation, so here it is trivially linkable by sender + timing)."
+      }
+    }
+  },
+  "verdicts": {
+    "gas": {
+      "claim": "≈20 × addDelegate (≈1.44 M gas) per rotation epoch",
+      "prereg_value": 1444380,
+      "band": [
+        1299942,
+        1588818
+      ],
+      "measured_epoch_gas": [
+        1113456,
+        1096368,
+        1096368
+      ],
+      "ratio_to_prereg": [
+        0.7708885473351889,
+        0.7590578656586217,
+        0.7590578656586217
+      ],
+      "verdict": "FAIL"
+    },
+    "linkability": {
+      "claim": "fully linkable from chain data (all delegates hang off one identity)",
+      "measured": "YES",
+      "verdict": "PASS"
+    },
+    "alternative": {
+      "claim": "per-pseudonym identities are cheap (creation implicit) and not linkable by the same query",
+      "creation_gas": 0,
+      "linkable_by_same_query": {
+        "B0": false,
+        "B1": false,
+        "B2": false
+      }
+    }
+  }
+}

@@ -31,7 +31,9 @@ module.exports = {
   paths: {
     sources: "./contracts",
     tests: "./test",
-    cache: "./cache",
-    artifacts: "./artifacts"
+    // Overridable so scripts/check_artifacts_fresh.js can compile into a
+    // scratch dir and compare against the tracked artifacts (REVIEW_02 Q-9).
+    cache: process.env.CV2X_CACHE_DIR || "./cache",
+    artifacts: process.env.CV2X_ARTIFACTS_DIR || "./artifacts"
   }
 };

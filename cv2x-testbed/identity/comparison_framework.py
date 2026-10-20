@@ -24,6 +24,11 @@ class IdentityMetrics:
     verification_time_ms: float = 0.0
     revocation_check_time_ms: float = 0.0
 
+    # Verification outcome (review 02, T-12): verification_time_ms is the mean
+    # over SUCCESSFUL verifications only; failures are counted, not timed in.
+    verification_success_count: int = 0
+    verification_failure_count: int = 0
+
     # Size Metrics (bytes)
     credential_size: int = 0
     signature_size: int = 0
@@ -53,8 +58,17 @@ class IdentitySystemBenchmark:
     Tests both PKI and DID/SSI systems with identical workloads.
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, ca=None):
+        """
+        Args:
+            name: benchmark label
+            ca: the CA a PKI identity enrolls with and requests pseudonym
+                certificates from. Required for the PKI enrollment and
+                credential-request benchmarks; before review 02 (T-12) they
+                passed `None` and always raised (the error was swallowed).
+        """
         self.name = name
+        self.ca = ca
         self.results = []
 
     def benchmark_enrollment(self, identity_system, vehicle_id: str,
@@ -79,7 +93,10 @@ class IdentitySystemBenchmark:
             if hasattr(identity_system, 'enroll_vehicle'):
                 identity_system.enroll_vehicle(f"{vehicle_id}_{i}")
             elif hasattr(identity_system, 'request_enrollment_certificate'):
-                identity_system.request_enrollment_certificate(None)
+                if self.ca is None:
+                    raise ValueError("PKI enrollment benchmark needs a CA: "
+                                     "IdentitySystemBenchmark(name, ca=...)")
+                identity_system.request_enrollment_certificate(self.ca)
 
             elapsed = (time.time() - start) * 1000
             times.append(elapsed)
@@ -100,7 +117,10 @@ class IdentitySystemBenchmark:
             start = time.time()
 
             if hasattr(identity_system, 'request_pseudonym_certificates'):
-                identity_system.request_pseudonym_certificates(None, count=20)
+                if self.ca is None:
+                    raise ValueError("PKI credential-request benchmark needs a CA: "
+                                     "IdentitySystemBenchmark(name, ca=...)")
+                identity_system.request_pseudonym_certificates(self.ca, count=20)
             elif hasattr(identity_system, 'request_credential'):
                 identity_system.request_credential()
 
@@ -132,26 +152,39 @@ class IdentitySystemBenchmark:
         return times
 
     def benchmark_verification(self, identity_system, signed_message: dict,
-                              crl_or_registry, iterations: int = 1000) -> List[float]:
+                              crl_or_registry, iterations: int = 1000,
+                              message: dict = None) -> List[Tuple[float, bool]]:
         """
         Benchmark message verification performance.
 
         Critical metric as vehicles receive many BSMs per second.
+
+        Returns one (elapsed_ms, verified) pair per iteration (review 02,
+        T-12: the verify result used to be discarded, so a failing verify was
+        timed as if it had succeeded).
+
+        If `message` is given, a FRESH signed message is produced (untimed)
+        for every iteration, which is the realistic hot path and passes the
+        T-9 freshness window and replay cache. Otherwise `signed_message` is
+        verified every time; with the replay cache on (the default) every
+        iteration after the first is then a rejected replay, and the result
+        says so.
         """
-        times = []
+        if not hasattr(identity_system, 'verify_message'):
+            raise ValueError("Identity system must implement verify_message()")
+
+        results = []
 
         for i in range(iterations):
+            target = (identity_system.sign_message(message)
+                      if message is not None else signed_message)
             start = time.time()
-
-            if hasattr(identity_system, 'verify_message'):
-                identity_system.verify_message(signed_message, crl_or_registry)
-            else:
-                raise ValueError("Identity system must implement verify_message()")
-
+            outcome = identity_system.verify_message(target, crl_or_registry)
             elapsed = (time.time() - start) * 1000
-            times.append(elapsed)
+            ok = bool(outcome[0] if isinstance(outcome, tuple) else outcome)
+            results.append((elapsed, ok))
 
-        return times
+        return results
 
     def measure_sizes(self, identity_system, signed_message: dict) -> Dict[str, int]:
         """
@@ -180,13 +213,18 @@ class IdentitySystemBenchmark:
 
         return sizes
 
-    def run_full_benchmark(self, identity_system, system_type: str) -> IdentityMetrics:
+    def run_full_benchmark(self, identity_system, system_type: str,
+                           enrollment_iterations: int = 50,
+                           credential_iterations: int = 50,
+                           signing_iterations: int = 1000,
+                           verification_iterations: int = 1000) -> IdentityMetrics:
         """
         Run complete benchmark suite.
 
         Args:
             identity_system: Identity system instance to test
             system_type: "PKI" or "DID"
+            *_iterations: repetitions per step (defaults as before)
 
         Returns:
             IdentityMetrics with all measured values
@@ -210,7 +248,7 @@ class IdentitySystemBenchmark:
         print("1. Testing enrollment...")
         try:
             enrollment_times = self.benchmark_enrollment(
-                identity_system, "TEST_VEHICLE", iterations=50
+                identity_system, "TEST_VEHICLE", iterations=enrollment_iterations
             )
             metrics.enrollment_time_ms = statistics.mean(enrollment_times)
             print(f"   Mean enrollment time: {metrics.enrollment_time_ms:.2f} ms")
@@ -221,7 +259,7 @@ class IdentitySystemBenchmark:
         print("2. Testing credential request...")
         try:
             cred_times = self.benchmark_credential_request(
-                identity_system, iterations=50
+                identity_system, iterations=credential_iterations
             )
             metrics.credential_request_time_ms = statistics.mean(cred_times)
             print(f"   Mean credential request time: {metrics.credential_request_time_ms:.2f} ms")
@@ -229,10 +267,10 @@ class IdentitySystemBenchmark:
             print(f"   Error: {e}")
 
         # 3. Message signing benchmark
-        print("3. Testing message signing (1000 iterations)...")
+        print(f"3. Testing message signing ({signing_iterations} iterations)...")
         try:
             signing_times = self.benchmark_message_signing(
-                identity_system, test_message, iterations=1000
+                identity_system, test_message, iterations=signing_iterations
             )
             metrics.signing_time_ms = statistics.mean(signing_times)
             print(f"   Mean signing time: {metrics.signing_time_ms:.3f} ms")
@@ -251,17 +289,26 @@ class IdentitySystemBenchmark:
 
         # 5. Message verification benchmark
         if signed_message:
-            print("4. Testing message verification (1000 iterations)...")
+            print(f"4. Testing message verification ({verification_iterations} iterations, "
+                  "fresh signed message per iteration)...")
             try:
                 # Create empty CRL/registry for testing
                 crl = set()
 
-                verification_times = self.benchmark_verification(
-                    identity_system, signed_message, crl, iterations=1000
+                outcomes = self.benchmark_verification(
+                    identity_system, signed_message, crl,
+                    iterations=verification_iterations, message=test_message
                 )
 
-                # Filter out failed verifications (if any returned None)
-                verification_times = [t for t in verification_times if t is not None]
+                # Only successful verifications are timed into the mean
+                # (review 02, T-12); failures are counted and reported.
+                verification_times = [t for t, ok in outcomes if ok]
+                metrics.verification_success_count = len(verification_times)
+                metrics.verification_failure_count = len(outcomes) - len(verification_times)
+                print(f"   Verified: {metrics.verification_success_count}/{len(outcomes)}")
+                if metrics.verification_failure_count:
+                    print(f"   WARNING: {metrics.verification_failure_count} verifications FAILED; "
+                          "they are excluded from the timing")
 
                 if verification_times:
                     metrics.verification_time_ms = statistics.mean(verification_times)

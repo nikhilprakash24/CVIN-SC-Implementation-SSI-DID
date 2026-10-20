@@ -1,0 +1,19 @@
+# SN-1 optimizer sensitivity (createIdentity + update gasUsed)
+standard,operation,runs_1,runs_200,runs_10000,max_rel_delta_pct
+ERC-1056,createIdentity,52651,52612,52525,0.240
+ERC-1056,setAttribute (key rotation),35551,35512,35425,0.356
+ERC-721,createIdentity,542576,542429,542057,0.096
+ERC-721,addServiceRecord,119792,119753,119660,0.110
+ERC-725xy,createIdentity,1692527,1704992,1933355,14.229
+ERC-725xy,setData (ERC-725Y VIN),49965,49950,49851,0.229
+CVIN-Combined,createIdentity,52235,52178,52133,0.196
+CVIN-Combined,setAttribute (key rotation),35135,35078,35033,0.291
+MOBI-VID-V2,createIdentity,299034,298923,298755,0.093
+MOBI-VID-V2,recordLifecycleEvent,306995,306980,306845,0.049
+
+# SN-2 calldata composition (ERC-1056 setAttribute, 128-byte payload)
+metric,value
+zero_byte_payload_gas,52254
+nonzero_byte_payload_gas,53790
+total_delta_gas,1536
+per_byte_delta_gas,12

@@ -1,0 +1,24 @@
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+PASS suites/did-identifier/did-identifier.spec.js
+  suites/did-identifier
+    IMPLEMENTATION ::did:ethr::CVIN did_resolver.py (ERC-1056, on-chain)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      3.x Identifier - did:ethr - CVIN did_resolver.py (ERC-1056, on-chain) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        3.1 DID Syntax
+          did:ethr:0x7a69:0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+            ✓ 3.1 DID Syntax - All DIDs MUST conform to the DID Syntax ABNF Rules. (3 ms)
+    IMPLEMENTATION ::did:mobi::CVIN did_resolver.py (MOBI VID, on-chain)::CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)::
+      3.x Identifier - did:mobi - CVIN did_resolver.py (MOBI VID, on-chain) - CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)
+        3.1 DID Syntax
+          did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff
+            ✓ 3.1 DID Syntax - All DIDs MUST conform to the DID Syntax ABNF Rules. (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        1.275 s
+Ran all test suites matching /suites\/did-identifier/i.
+Test results written to: report/tmp/onchain-cli-did-identifier.json

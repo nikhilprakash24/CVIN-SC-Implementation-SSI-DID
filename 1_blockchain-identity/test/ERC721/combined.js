@@ -1,4 +1,5 @@
 const { expect } = require("chai");
+const { ethers } = require("hardhat");
 
 describe("ERC721 Combined Test Suite", function () {
     let CVIN_NFT_DID_ERC721, CVIN_NFT_DID_ERC721_Monolithic, cvin_nft_did_erc721, cvin_nft_did_erc721_monolithic;
@@ -9,11 +10,11 @@ describe("ERC721 Combined Test Suite", function () {
 
         CVIN_NFT_DID_ERC721 = await ethers.getContractFactory("CVIN_NFT_DID_ERC721");
         cvin_nft_did_erc721 = await CVIN_NFT_DID_ERC721.deploy("CVIN", "CVN", owner.address, 500);
-        await cvin_nft_did_erc721.deployed();
+        await cvin_nft_did_erc721.waitForDeployment();
 
         CVIN_NFT_DID_ERC721_Monolithic = await ethers.getContractFactory("CVIN_NFT_DID_ERC721_Monolithic");
         cvin_nft_did_erc721_monolithic = await CVIN_NFT_DID_ERC721_Monolithic.deploy("CVIN", "CVN", owner.address, 500);
-        await cvin_nft_did_erc721_monolithic.deployed();
+        await cvin_nft_did_erc721_monolithic.waitForDeployment();
     });
 
     describe("Regular ERC721", function () {
@@ -26,6 +27,16 @@ describe("ERC721 Combined Test Suite", function () {
             await cvin_nft_did_erc721.mint(addr1.address, 1, "tokenURI");
             expect(await cvin_nft_did_erc721.ownerOf(1)).to.equal(addr1.address);
         });
+
+        // REVIEW_02 Q-14: mint is onlyOwner; no test exercised the negative path.
+        it("Should reject mint from a non-owner (onlyOwner)", async function () {
+            await expect(cvin_nft_did_erc721.connect(addr1).mint(addr1.address, 1, "tokenURI"))
+                .to.be.revertedWithCustomError(cvin_nft_did_erc721, "OwnableUnauthorizedAccount")
+                .withArgs(addr1.address);
+            await expect(cvin_nft_did_erc721.ownerOf(1))
+                .to.be.revertedWithCustomError(cvin_nft_did_erc721, "ERC721NonexistentToken")
+                .withArgs(1);
+        });
     });
 
     describe("Monolithic ERC721", function () {
@@ -37,6 +48,25 @@ describe("ERC721 Combined Test Suite", function () {
         it("Should mint a token", async function () {
             await cvin_nft_did_erc721_monolithic.mint(addr1.address, 1, "tokenURI");
             expect(await cvin_nft_did_erc721_monolithic.ownerOf(1)).to.equal(addr1.address);
+        });
+
+        it("Should reject mint from a non-owner (onlyOwner)", async function () {
+            await expect(cvin_nft_did_erc721_monolithic.connect(addr1).mint(addr1.address, 1, "tokenURI"))
+                .to.be.revertedWithCustomError(cvin_nft_did_erc721_monolithic, "OwnableUnauthorizedAccount")
+                .withArgs(addr1.address);
+        });
+    });
+
+    describe("Royalty (ERC2981)", function () {
+        it("Should report the default royalty configured at deployment", async function () {
+            await cvin_nft_did_erc721.mint(addr1.address, 1, "tokenURI");
+
+            const salePrice = ethers.parseEther("1");
+            const [receiver, royaltyAmount] = await cvin_nft_did_erc721.royaltyInfo(1, salePrice);
+
+            expect(receiver).to.equal(owner.address);
+            // 500 basis points = 5%
+            expect(royaltyAmount).to.equal((salePrice * 500n) / 10000n);
         });
     });
 });

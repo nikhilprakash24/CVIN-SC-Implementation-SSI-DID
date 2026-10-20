@@ -1,0 +1,754 @@
+{
+  "n_runs": 30,
+  "all_deterministic": true,
+  "non_deterministic_cells": [],
+  "method": "Full 9-standard gas benchmark re-run N times on a fresh in-process Hardhat network each time; gasUsed aggregated per (standard, operation). EVM gas is deterministic for fixed calldata + pre-state, so identical values across runs (range_min_max width 0) is the expected, correct reproducibility result. range_min_max is the observed envelope, not a CI.",
+  "source_metadata": {
+    "solcVersion": "0.8.24",
+    "solcSettings": {
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "viaIR": true
+    },
+    "ozVersion": "5.0.2",
+    "date": "2026-10-15T05:14:30.862Z",
+    "network": "hardhat-local",
+    "chainId": 31337,
+    "operations": [
+      "deployRegistry",
+      "createIdentity",
+      "updateAttribute",
+      "updateAttributeVia4337",
+      "addDelegateOrClaim",
+      "revoke",
+      "transferOwnership"
+    ],
+    "contracts": {
+      "ERC-1056": "contracts/ERC1056/EthereumDIDRegistry.sol:EthereumDIDRegistry",
+      "ERC-721": "contracts/ERC721/CVINVehicleNFT.sol:CVINVehicleNFT",
+      "ERC-725": "contracts/ERC725/CVIN_DID_ERC725.sol:CVIN_SCBasedAccOrID_DID_ERC725Basic",
+      "ERC-725xy": "contracts/ERC725xy/CVINVehicleERC725XY.sol:CVINVehicleERC725XY (full ERC-725 X+Y smart account)",
+      "ERC-735": "contracts/ERC735/CVINVehicleClaimHolder.sol:CVINVehicleClaimHolder",
+      "ERC-1155": "contracts/ERC1155/CVINVehicleCredential1155.sol:CVINVehicleCredential1155",
+      "ERC-4337": "contracts/ERC4337/CVINVehicleAccount.sol:CVINVehicleAccount + contracts/ERC4337/CVINMinimalEntryPoint.sol:CVINMinimalEntryPoint",
+      "LSP8": "contracts/LSP8/CVINVehicleLSP8.sol:CVINVehicleLSP8",
+      "MOBI-VID-V2": "contracts/MOBI/MOBIVIDRegistryV2.sol:MOBIVIDRegistryV2 (copied unmodified from cv2x-testbed)",
+      "CVIN-Combined": "contracts/CVINCombined/CVINCombinedIdentity.sol:CVINCombinedIdentity"
+    },
+    "notes": "gasUsed is the exact receipt.gasUsed of a single representative transaction per operation on a fresh Hardhat in-process network. null = operation not supported by the standard (see notes). Setup transactions (role grants, issuer authorization) are excluded from operation gas. updateAttributeVia4337 exists only for ERC-4337: it is the same setAttribute routed through the EntryPoint as a UserOperation, so the delta vs updateAttribute is the 4337 indirection overhead (bundler overhead excluded)."
+  },
+  "per_standard": {
+    "ERC-1056": {
+      "deployRegistry": {
+        "n": 30,
+        "median": 958726.0,
+        "min": 958726,
+        "max": 958726,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          958726,
+          958726
+        ]
+      },
+      "createIdentity": {
+        "n": 30,
+        "median": 52594.0,
+        "min": 52594,
+        "max": 52594,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          52594,
+          52594
+        ]
+      },
+      "updateAttribute": {
+        "n": 30,
+        "median": 35494.0,
+        "min": 35494,
+        "max": 35494,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          35494,
+          35494
+        ]
+      },
+      "addDelegateOrClaim": {
+        "n": 30,
+        "median": 54831.0,
+        "min": 54831,
+        "max": 54831,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          54831,
+          54831
+        ]
+      },
+      "revoke": {
+        "n": 30,
+        "median": 35046.0,
+        "min": 35046,
+        "max": 35046,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          35046,
+          35046
+        ]
+      },
+      "transferOwnership": {
+        "n": 30,
+        "median": 51754.0,
+        "min": 51754,
+        "max": 51754,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          51754,
+          51754
+        ]
+      }
+    },
+    "ERC-721": {
+      "deployRegistry": {
+        "n": 30,
+        "median": 2721476.0,
+        "min": 2721476,
+        "max": 2721476,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          2721476,
+          2721476
+        ]
+      },
+      "createIdentity": {
+        "n": 30,
+        "median": 542378.0,
+        "min": 542378,
+        "max": 542378,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          542378,
+          542378
+        ]
+      },
+      "updateAttribute": {
+        "n": 30,
+        "median": 119737.0,
+        "min": 119737,
+        "max": 119737,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          119737,
+          119737
+        ]
+      },
+      "addDelegateOrClaim": {
+        "n": 30,
+        "median": 48302.0,
+        "min": 48302,
+        "max": 48302,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          48302,
+          48302
+        ]
+      },
+      "transferOwnership": {
+        "n": 30,
+        "median": 174670.0,
+        "min": 174670,
+        "max": 174670,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          174670,
+          174670
+        ]
+      },
+      "revoke": {
+        "n": 30,
+        "median": 27677.0,
+        "min": 27677,
+        "max": 27677,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          27677,
+          27677
+        ]
+      }
+    },
+    "ERC-725": {
+      "deployRegistry": {
+        "n": 0,
+        "gasUsed": null,
+        "note": "not supported by this standard"
+      },
+      "createIdentity": {
+        "n": 30,
+        "median": 519384.0,
+        "min": 519384,
+        "max": 519384,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          519384,
+          519384
+        ]
+      },
+      "updateAttribute": {
+        "n": 30,
+        "median": 137096.0,
+        "min": 137096,
+        "max": 137096,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          137096,
+          137096
+        ]
+      },
+      "addDelegateOrClaim": {
+        "n": 30,
+        "median": 119996.0,
+        "min": 119996,
+        "max": 119996,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          119996,
+          119996
+        ]
+      },
+      "revoke": {
+        "n": 30,
+        "median": 43388.0,
+        "min": 43388,
+        "max": 43388,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          43388,
+          43388
+        ]
+      },
+      "transferOwnership": {
+        "n": 30,
+        "median": 28390.0,
+        "min": 28390,
+        "max": 28390,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          28390,
+          28390
+        ]
+      }
+    },
+    "ERC-725xy": {
+      "deployRegistry": {
+        "n": 0,
+        "gasUsed": null,
+        "note": "not supported by this standard"
+      },
+      "createIdentity": {
+        "n": 30,
+        "median": 1680816.0,
+        "min": 1680816,
+        "max": 1680816,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          1680816,
+          1680816
+        ]
+      },
+      "updateAttribute": {
+        "n": 30,
+        "median": 49937.0,
+        "min": 49937,
+        "max": 49937,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          49937,
+          49937
+        ]
+      },
+      "addDelegateOrClaim": {
+        "n": 0,
+        "gasUsed": null,
+        "note": "not supported by this standard"
+      },
+      "revoke": {
+        "n": 0,
+        "gasUsed": null,
+        "note": "not supported by this standard"
+      },
+      "transferOwnership": {
+        "n": 30,
+        "median": 28834.0,
+        "min": 28834,
+        "max": 28834,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          28834,
+          28834
+        ]
+      }
+    },
+    "ERC-735": {
+      "deployRegistry": {
+        "n": 0,
+        "gasUsed": null,
+        "note": "not supported by this standard"
+      },
+      "createIdentity": {
+        "n": 30,
+        "median": 1535776.0,
+        "min": 1535776,
+        "max": 1535776,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          1535776,
+          1535776
+        ]
+      },
+      "addDelegateOrClaim": {
+        "n": 30,
+        "median": 292730.0,
+        "min": 292730,
+        "max": 292730,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          292730,
+          292730
+        ]
+      },
+      "updateAttribute": {
+        "n": 30,
+        "median": 77713.0,
+        "min": 77713,
+        "max": 77713,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          77713,
+          77713
+        ]
+      },
+      "revoke": {
+        "n": 30,
+        "median": 72195.0,
+        "min": 72195,
+        "max": 72195,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          72195,
+          72195
+        ]
+      },
+      "transferOwnership": {
+        "n": 30,
+        "median": 28746.0,
+        "min": 28746,
+        "max": 28746,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          28746,
+          28746
+        ]
+      }
+    },
+    "ERC-1155": {
+      "deployRegistry": {
+        "n": 30,
+        "median": 2304865.0,
+        "min": 2304865,
+        "max": 2304865,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          2304865,
+          2304865
+        ]
+      },
+      "createIdentity": {
+        "n": 30,
+        "median": 103913.0,
+        "min": 103913,
+        "max": 103913,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          103913,
+          103913
+        ]
+      },
+      "updateAttribute": {
+        "n": 30,
+        "median": 49130.0,
+        "min": 49130,
+        "max": 49130,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          49130,
+          49130
+        ]
+      },
+      "addDelegateOrClaim": {
+        "n": 30,
+        "median": 57147.0,
+        "min": 57147,
+        "max": 57147,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          57147,
+          57147
+        ]
+      },
+      "revoke": {
+        "n": 30,
+        "median": 30625.0,
+        "min": 30625,
+        "max": 30625,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          30625,
+          30625
+        ]
+      },
+      "transferOwnership": {
+        "n": 30,
+        "median": 83947.0,
+        "min": 83947,
+        "max": 83947,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          83947,
+          83947
+        ]
+      }
+    },
+    "ERC-4337": {
+      "deployRegistry": {
+        "n": 30,
+        "median": 456294.0,
+        "min": 456294,
+        "max": 456294,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          456294,
+          456294
+        ]
+      },
+      "createIdentity": {
+        "n": 30,
+        "median": 759088.0,
+        "min": 759088,
+        "max": 759088,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          759088,
+          759088
+        ]
+      },
+      "updateAttribute": {
+        "n": 30,
+        "median": 49343.0,
+        "min": 49343,
+        "max": 49343,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          49343,
+          49343
+        ]
+      },
+      "updateAttributeVia4337": {
+        "n": 30,
+        "median": 96173.0,
+        "min": 96173,
+        "max": 96173,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          96173,
+          96173
+        ]
+      },
+      "addDelegateOrClaim": {
+        "n": 30,
+        "median": 47557.0,
+        "min": 47557,
+        "max": 47557,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          47557,
+          47557
+        ]
+      },
+      "transferOwnership": {
+        "n": 30,
+        "median": 28539.0,
+        "min": 28539,
+        "max": 28539,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          28539,
+          28539
+        ]
+      },
+      "revoke": {
+        "n": 30,
+        "median": 25429.0,
+        "min": 25429,
+        "max": 25429,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          25429,
+          25429
+        ]
+      }
+    },
+    "LSP8": {
+      "deployRegistry": {
+        "n": 30,
+        "median": 1614592.0,
+        "min": 1614592,
+        "max": 1614592,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          1614592,
+          1614592
+        ]
+      },
+      "createIdentity": {
+        "n": 30,
+        "median": 149615.0,
+        "min": 149615,
+        "max": 149615,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          149615,
+          149615
+        ]
+      },
+      "updateAttribute": {
+        "n": 30,
+        "median": 55114.0,
+        "min": 55114,
+        "max": 55114,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          55114,
+          55114
+        ]
+      },
+      "addDelegateOrClaim": {
+        "n": 0,
+        "gasUsed": null,
+        "note": "not supported by this standard"
+      },
+      "transferOwnership": {
+        "n": 30,
+        "median": 80600.0,
+        "min": 80600,
+        "max": 80600,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          80600,
+          80600
+        ]
+      },
+      "revoke": {
+        "n": 30,
+        "median": 42141.0,
+        "min": 42141,
+        "max": 42141,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          42141,
+          42141
+        ]
+      }
+    },
+    "MOBI-VID-V2": {
+      "deployRegistry": {
+        "n": 30,
+        "median": 4115781.0,
+        "min": 4115781,
+        "max": 4115781,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          4115781,
+          4115781
+        ]
+      },
+      "createIdentity": {
+        "n": 30,
+        "median": 299143.0,
+        "min": 299143,
+        "max": 299143,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          299143,
+          299143
+        ]
+      },
+      "updateAttribute": {
+        "n": 30,
+        "median": 307166.0,
+        "min": 307166,
+        "max": 307166,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          307166,
+          307166
+        ]
+      },
+      "addDelegateOrClaim": {
+        "n": 30,
+        "median": 35277.0,
+        "min": 35277,
+        "max": 35277,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          35277,
+          35277
+        ]
+      },
+      "transferOwnership": {
+        "n": 30,
+        "median": 200045.0,
+        "min": 200045,
+        "max": 200045,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          200045,
+          200045
+        ]
+      },
+      "revoke": {
+        "n": 30,
+        "median": 75052.0,
+        "min": 75052,
+        "max": 75052,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          75052,
+          75052
+        ]
+      }
+    },
+    "CVIN-Combined": {
+      "deployRegistry": {
+        "n": 30,
+        "median": 1490166.0,
+        "min": 1490166,
+        "max": 1490166,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          1490166,
+          1490166
+        ]
+      },
+      "createIdentity": {
+        "n": 30,
+        "median": 52216.0,
+        "min": 52216,
+        "max": 52216,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          52216,
+          52216
+        ]
+      },
+      "updateAttribute": {
+        "n": 30,
+        "median": 35116.0,
+        "min": 35116,
+        "max": 35116,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          35116,
+          35116
+        ]
+      },
+      "addDelegateOrClaim": {
+        "n": 30,
+        "median": 287570.0,
+        "min": 287570,
+        "max": 287570,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          287570,
+          287570
+        ]
+      },
+      "revoke": {
+        "n": 30,
+        "median": 69721.0,
+        "min": 69721,
+        "max": 69721,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          69721,
+          69721
+        ]
+      },
+      "transferOwnership": {
+        "n": 30,
+        "median": 51747.0,
+        "min": 51747,
+        "max": 51747,
+        "stdev": 0.0,
+        "deterministic": true,
+        "range_min_max": [
+          51747,
+          51747
+        ]
+      }
+    }
+  }
+}

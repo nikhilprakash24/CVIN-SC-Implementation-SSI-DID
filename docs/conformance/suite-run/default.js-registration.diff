@@ -1,0 +1,70 @@
+diff --git a/packages/did-core-test-server/suites/did-consumption/default.js b/packages/did-core-test-server/suites/did-consumption/default.js
+index 447d186..c5dd423 100644
+--- a/packages/did-core-test-server/suites/did-consumption/default.js
++++ b/packages/did-core-test-server/suites/did-consumption/default.js
+@@ -53,6 +53,9 @@ module.exports = {
+     require('../implementations/did-cid.json'),
+     require('../implementations/did-neuralkey-neuralsh.com.json'),
+     require('../implementations/did-neuralkey-neuralsh.json'),
++    require('../implementations/cvin-did-ethr.json'),
++    require('../implementations/cvin-did-mobi.json'),
++    require('../implementations/cvin-did-nft.json'),
+     ...brokenFixtures
+   ]
+ };
+diff --git a/packages/did-core-test-server/suites/did-core-properties/default.js b/packages/did-core-test-server/suites/did-core-properties/default.js
+index c0170a1..c4ce8fd 100644
+--- a/packages/did-core-test-server/suites/did-core-properties/default.js
++++ b/packages/did-core-test-server/suites/did-core-properties/default.js
+@@ -53,6 +53,9 @@ module.exports = {
+     require('../implementations/did-cid.json'),
+     require('../implementations/did-neuralkey-neuralsh.com.json'),
+     require('../implementations/did-neuralkey-neuralsh.json'),
++    require('../implementations/cvin-did-ethr.json'),
++    require('../implementations/cvin-did-mobi.json'),
++    require('../implementations/cvin-did-nft.json'),
+     ...brokenFixtures
+   ],
+ };
+diff --git a/packages/did-core-test-server/suites/did-identifier/default.js b/packages/did-core-test-server/suites/did-identifier/default.js
+index bc577d1..a4fdf1f 100644
+--- a/packages/did-core-test-server/suites/did-identifier/default.js
++++ b/packages/did-core-test-server/suites/did-identifier/default.js
+@@ -55,6 +55,9 @@ module.exports = {
+     require('../implementations/did-cid.json'),
+     require('../implementations/did-neuralkey-neuralsh.com.json'),
+     require('../implementations/did-neuralkey-neuralsh.json'),
++    require('../implementations/cvin-did-ethr.json'),
++    require('../implementations/cvin-did-mobi.json'),
++    require('../implementations/cvin-did-nft.json'),
+     ...brokenFixtures
+   ],
+ };
+diff --git a/packages/did-core-test-server/suites/did-production/default.js b/packages/did-core-test-server/suites/did-production/default.js
+index 6d2ca2d..640a1ed 100644
+--- a/packages/did-core-test-server/suites/did-production/default.js
++++ b/packages/did-core-test-server/suites/did-production/default.js
+@@ -54,6 +54,9 @@ module.exports = {
+     require('../implementations/did-cid.json'),
+     require('../implementations/did-neuralkey-neuralsh.com.json'),
+     require('../implementations/did-neuralkey-neuralsh.json'),
++    require('../implementations/cvin-did-ethr.json'),
++    require('../implementations/cvin-did-mobi.json'),
++    require('../implementations/cvin-did-nft.json'),
+     ...brokenFixtures
+   ]),
+ };
+diff --git a/packages/did-core-test-server/suites/did-resolution/default.js b/packages/did-core-test-server/suites/did-resolution/default.js
+index fe470b9..e685293 100644
+--- a/packages/did-core-test-server/suites/did-resolution/default.js
++++ b/packages/did-core-test-server/suites/did-resolution/default.js
+@@ -64,6 +64,9 @@ module.exports = {
+     require('../implementations/resolver-did-cheqd.json'),
+     require('../implementations/resolver-knox.json'),
+     require('../implementations/universal-resolver-neuralkey.json'),
++    require('../implementations/cvin-resolver-ethr.json'),
++    require('../implementations/cvin-resolver-mobi.json'),
++    require('../implementations/cvin-resolver-nft.json'),
+     ...brokenFixtures
+   ],
+ };

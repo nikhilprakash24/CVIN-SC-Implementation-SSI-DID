@@ -1,72 +1,39 @@
 name: Smart Contract Tests
 
+# Compiles and tests the Hardhat project in 1_blockchain-identity.
+# Verified locally on this trunk: 32 contracts compile (solc 0.8.24, cancun),
+# 47 tests pass. The VC-layer pytest suite runs in w3c-compliance.yml.
+
 on:
   push:
     branches: [ main, claude/** ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  test-erc-standards:
+  hardhat-tests:
+    name: Compile and test contracts
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        standard: [ERC721, ERC725, ERC735, ERC1056, ERC1155]
+    defaults:
+      run:
+        working-directory: 1_blockchain-identity
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '22'
         cache: 'npm'
         cache-dependency-path: 1_blockchain-identity/package-lock.json
 
     - name: Install dependencies
-      working-directory: 1_blockchain-identity
       run: npm ci
 
     - name: Compile contracts
-      working-directory: 1_blockchain-identity
       run: npx hardhat compile
 
-    - name: Run ${{ matrix.standard }} tests
-      working-directory: 1_blockchain-identity
-      run: npx hardhat test test/${{ matrix.standard }}*.js
-
-    - name: Gas report
-      working-directory: 1_blockchain-identity
-      run: REPORT_GAS=true npx hardhat test
-
-    - name: Upload gas report
-      uses: actions/upload-artifact@v3
-      with:
-        name: gas-report-${{ matrix.standard }}
-        path: 1_blockchain-identity/gas-report.txt
-
-  coverage:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
-    - name: Install dependencies
-      working-directory: 1_blockchain-identity
-      run: npm ci
-
-    - name: Run coverage
-      working-directory: 1_blockchain-identity
-      run: npx hardhat coverage
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        files: 1_blockchain-identity/coverage/lcov.info
-        flags: smart-contracts
+    - name: Run tests
+      run: npx hardhat test

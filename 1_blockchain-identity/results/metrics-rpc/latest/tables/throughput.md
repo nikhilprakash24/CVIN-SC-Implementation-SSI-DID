@@ -1,0 +1,9 @@
+### L5 — Single-node throughput for U3 (median of 3 bursts of 200 tx)
+
+| Metric | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| tx / s (queue + mine) | 72.79 | 68.32 | 68.32 | 87.46 | 42.87 | 82.82 | 86.44 | 87.67 | 83.57 | 97.56 |
+| tx / s (mine only) | 643.00 | 257.68 | 250.89 | 948.94 | 97.61 | 437.28 | 686.94 | 941.03 | 635.73 | 1978.63 |
+| gas / s | 2,418,011 | 2,870,500 | 8,645,165 | 10,494,351 | 13,622,200 | 3,109,468 | 8,240,373 | 8,816,736 | 7,909,920 | 3,176,941 |
+
+_Run 2026-10-04T22-09-23Z_c3b7cb1 · commit c3b7cb1 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine · N=30_

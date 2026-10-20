@@ -25,6 +25,8 @@ from cryptography import x509
 from cryptography.x509.oid import NameOID
 import json
 
+from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
+from identity.freshness import REASON_BAD_SIGNATURE, REASON_REVOKED, REASON_VALIDITY
 from identity.base import (
     IdentityProvider,
     IdentityType,
@@ -59,6 +61,13 @@ class CentralizedIdentityProvider(IdentityProvider):
 
         # Certificate transparency log (simplified)
         self.ct_log = []
+
+        # Freshness window + replay cache for verify_message (review 02, T-9).
+        # On by default; see identity/freshness.py for the default window.
+        self.freshness = FreshnessPolicy()
+        # Why the last REJECTED verify failed (identity.freshness REASON_*);
+        # written on rejection paths only, never on the accept path.
+        self.last_reject_reason = None
 
         # Performance tracking
         self._init_ca()
@@ -249,7 +258,11 @@ class CentralizedIdentityProvider(IdentityProvider):
         return pool
 
     def sign_message(self, vehicle_id: str, message: Dict) -> Dict:
-        """Sign V2X message with current pseudonym"""
+        """Sign V2X message with current pseudonym.
+
+        The signature covers the message AND its generation time
+        (`freshness.signed_bytes`, review 02 T-9).
+        """
         start_time = time.time()
 
         if vehicle_id not in self.vehicles:
@@ -268,8 +281,9 @@ class CentralizedIdentityProvider(IdentityProvider):
             vehicle['current_pseudonym_idx'] = (pseudonym_idx + 1) % len(vehicle['pseudonym_pool'])
             pseudonym = vehicle['pseudonym_pool'][vehicle['current_pseudonym_idx']]
 
-        # Serialize message
-        message_bytes = json.dumps(message, sort_keys=True).encode()
+        # Serialize message + generation time
+        timestamp = generation_timestamp()
+        message_bytes = signed_bytes(message, timestamp)
 
         # Sign with pseudonym private key
         signature = pseudonym['private_key'].sign(
@@ -289,7 +303,7 @@ class CentralizedIdentityProvider(IdentityProvider):
             'message': message,
             'signature': signature.hex(),
             'certificate': cert_pem,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': timestamp,
             'identity_type': 'centralized_pki'
         }
 
@@ -302,7 +316,13 @@ class CentralizedIdentityProvider(IdentityProvider):
         return signed_message
 
     def verify_message(self, signed_message: Dict) -> Tuple[bool, IdentityMetrics]:
-        """Verify signed message"""
+        """
+        Verify signed message: CRL lookup, certificate validity window, CA
+        signature on the certificate (plus issuer name), freshness of the
+        signed generation time and the replay cache (`self.freshness`, review
+        02 T-9), then the message signature over message + generation time
+        under the certificate key. Any failure returns False.
+        """
         start_time = time.time()
         metrics = IdentityMetrics()
 
@@ -320,22 +340,34 @@ class CentralizedIdentityProvider(IdentityProvider):
 
             # Check revocation (CRL)
             if cert.serial_number in self.revocation_list:
+                self.last_reject_reason = REASON_REVOKED
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
             # Check certificate validity
             now = datetime.utcnow()
             if now < cert.not_valid_before or now > cert.not_valid_after:
+                self.last_reject_reason = REASON_VALIDITY
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
-            # Verify certificate chain (simplified - check issuer)
-            if cert.issuer != self.ca_certificate.subject:
+            # Verify the certificate was issued by this CA (review 02, T-1):
+            # issuer name == CA subject AND the CA's ECDSA P-256 signature over
+            # the TBS certificate verifies under the CA public key. Comparing
+            # the issuer *name* alone accepted any self-signed certificate
+            # that copied the CA subject. Raises on mismatch.
+            cert.verify_directly_issued_by(self.ca_certificate)
+
+            # Freshness window + replay cache (T-9)
+            timestamp = signed_message.get('timestamp')
+            message_bytes = signed_bytes(message, timestamp)
+            stale = self.freshness.check(timestamp, cert.serial_number, message_bytes)
+            if stale is not None:
+                self.last_reject_reason = stale
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
-            # Verify signature
-            message_bytes = json.dumps(message, sort_keys=True).encode()
+            # Verify signature (covers the generation time)
             public_key = cert.public_key()
 
             public_key.verify(
@@ -343,6 +375,7 @@ class CentralizedIdentityProvider(IdentityProvider):
                 message_bytes,
                 ec.ECDSA(hashes.SHA256())
             )
+            self.freshness.accept(cert.serial_number, message_bytes, timestamp)
 
             # Success
             elapsed = (time.time() - start_time) * 1000
@@ -355,6 +388,7 @@ class CentralizedIdentityProvider(IdentityProvider):
             return True, metrics
 
         except Exception as e:
+            self.last_reject_reason = REASON_BAD_SIGNATURE
             metrics.verification_time_ms = (time.time() - start_time) * 1000
             return False, metrics
 
@@ -402,9 +436,27 @@ class CentralizedIdentityProvider(IdentityProvider):
         return is_revoked, elapsed
 
     def update_credential(self, vehicle_id: str, updates: Dict) -> bool:
-        """Update credential metadata"""
+        """
+        Update credential.
+
+        `{'rotate_key': True}` makes the CA issue one new short-lived pseudonym
+        certificate (fresh keypair, CA-signed) and adds it to the vehicle's pool:
+        the PKI counterpart of publishing a new verification key. Other keys are
+        stored as metadata.
+        """
         if vehicle_id not in self.vehicles:
             return False
+
+        updates = dict(updates or {})
+        if updates.pop('rotate_key', False):
+            new_cert = self._generate_pseudonym_pool(vehicle_id, count=1)[0]
+            self.vehicles[vehicle_id]['pseudonym_pool'].append(new_cert)
+            self.ct_log.append({
+                'vehicle_id': vehicle_id,
+                'cert_serial': new_cert['certificate'].serial_number,
+                'timestamp': time.time(),
+                'operation': 'pseudonym_issuance'
+            })
 
         self.vehicles[vehicle_id]['metadata'].update(updates)
         return True

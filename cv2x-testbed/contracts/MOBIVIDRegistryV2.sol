@@ -2,6 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "./MOBIVIDRegistry.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
 /**
  * @title MOBI VID Registry V2
@@ -56,7 +58,7 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
         GOVERNMENT_DMV,    // Can issue registrations, inspections
         POLICE,            // Can issue theft reports, accidents
         INSPECTION_STATION,// Can issue safety/emissions tests
-        OWNER              // Can report events (unverified)
+        OWNER              // Can report events (unverified) on a vehicle it currently owns
     }
 
     // ============ STRUCTS ============
@@ -102,6 +104,10 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
 
     // Event attestations (eventId => array of attestations)
     mapping(bytes32 => EventAttestation[]) public eventAttestations;
+
+    // One attestation per (eventId, attester), so eventAttestations[eventId]
+    // counts distinct attesters (review-02 H-A, handback decision 4)
+    mapping(bytes32 => mapping(address => bool)) public hasAttested;
 
     // Event count per vehicle
     mapping(address => uint256) public vehicleEventCount;
@@ -203,7 +209,9 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Check if address is authorized to issue event type
+     * @dev Check if address is authorized to issue event type.
+     * Role check only: recordLifecycleEvent also requires an OWNER-role
+     * issuer to be the vehicle's current owner (K-15).
      * @param issuer Address to check
      * @param eventType Type of event
      * @return True if authorized
@@ -248,6 +256,20 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
         returns (bytes32 eventId)
     {
         require(!revoked[vehicleIdentity], "Vehicle identity is revoked");
+
+        // Review-02 K-15: OWNER is a global role, so on its own it let any
+        // OWNER-role address file MAINTENANCE, ACCIDENT, MODIFICATION,
+        // THEFT_REPORT or INSURANCE_CLAIM events against any vehicle. An
+        // OWNER-role issuer must also be the vehicle's current ERC-1056
+        // owner, so a previous owner loses the right on transfer. The
+        // organisational roles (service centre, police, insurer, DMV, ...)
+        // keep their registry-wide scope by design.
+        if (authorizedIssuers[msg.sender] == IssuerRole.OWNER) {
+            require(
+                identityOwner(vehicleIdentity) == msg.sender,
+                "OWNER role: not the current owner of this vehicle"
+            );
+        }
 
         // Generate unique event ID
         eventId = keccak256(abi.encodePacked(
@@ -295,9 +317,31 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
      * @dev Attest to an event
      * Allows multiple parties to sign off on an event
      *
+     * Who may attest an event on vehicle V: any address holding an
+     * organisational role (MANUFACTURER, DEALER, SERVICE_CENTER,
+     * INSURANCE_COMPANY, GOVERNMENT_DMV, POLICE, INSPECTION_STATION), on any
+     * vehicle; an OWNER-role address only while it is V's current ERC-1056
+     * owner. Role-less addresses (NONE) cannot attest. Each address can
+     * attest a given event once (hasAttested).
+     *
+     * The attester must sign the domain-separated attestation digest
+     *
+     *     keccak256(abi.encodePacked(
+     *         address(this), block.chainid, vehicleIdentity, eventId))
+     *
+     * wrapped with the EIP-191 ("\x19Ethereum Signed Message:\n32") prefix.
+     * The signature is recovered on-chain and MUST match msg.sender.
+     *
+     * SECURITY (before/after): earlier revisions stored `signature` verbatim
+     * and NEVER verified it on-chain (no ecrecover) — the call was gated only
+     * by the attester's role, so any role-holder could record a garbage or
+     * forged attestation signature (a replay/forgery gap). This revision binds
+     * the signature to this contract, this chain, the vehicle and the event,
+     * and rejects anything that does not recover to the attester.
+     *
      * @param eventId Event to attest
      * @param vehicleIdentity Vehicle DID
-     * @param signature Signature of event data
+     * @param signature EIP-191 signature over the attestation digest, by msg.sender
      */
     function attestEvent(
         bytes32 eventId,
@@ -314,6 +358,45 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
             authorizedIssuers[msg.sender] != IssuerRole.NONE,
             "Not authorized to attest"
         );
+
+        // Review-02 H-A (handback next-session item 2): the role check alone
+        // let any OWNER-role address attest events on any vehicle. Same scope
+        // rule as recordLifecycleEvent (K-15): an OWNER-role attester must be
+        // the vehicle's current ERC-1056 owner, so a previous owner loses the
+        // right on transfer. ERC1056Registry keeps delegates only as events
+        // (no on-chain delegate mapping, K-5), so there is no delegate check.
+        // The organisational roles (manufacturer, dealer, service centre,
+        // insurer, DMV, police, inspection station) keep their registry-wide
+        // scope: they are the documented third-party co-signers of the
+        // multi-party attestation design.
+        if (authorizedIssuers[msg.sender] == IssuerRole.OWNER) {
+            require(
+                identityOwner(vehicleIdentity) == msg.sender,
+                "OWNER role: not the current owner of this vehicle"
+            );
+        }
+
+        // ---- On-chain attestation signature verification (security fix) ----
+        // Bind the signature to (contract, chain, vehicle, event) to stop
+        // cross-contract / cross-chain replay, then recover the signer.
+        // OpenZeppelin ECDSA.recover enforces EIP-2 low-s malleability and
+        // rejects the zero address (it reverts on a malformed signature).
+        bytes32 attestationHash = keccak256(
+            abi.encodePacked(address(this), block.chainid, vehicleIdentity, eventId)
+        );
+        address recovered = ECDSA.recover(
+            MessageHashUtils.toEthSignedMessageHash(attestationHash),
+            signature
+        );
+        require(recovered == msg.sender, "Invalid attestation signature");
+
+        // Review-02 H-A (handback decision 4): without this guard a
+        // role-holder could resubmit its own valid attestation and inflate
+        // the attestation count. Each attester is counted once per event.
+        // Checked after the signature, so a forged or replayed signature
+        // still reports "Invalid attestation signature".
+        require(!hasAttested[eventId][msg.sender], "Already attested by this attester");
+        hasAttested[eventId][msg.sender] = true;
 
         // Create attestation
         EventAttestation memory attestation = EventAttestation({

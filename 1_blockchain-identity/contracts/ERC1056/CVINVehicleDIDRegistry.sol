@@ -33,6 +33,12 @@ contract CVINVehicleDIDRegistry {
     /// @dev Contract owner
     address public owner;
 
+    /// @dev Vehicle owner recorded by this registry while it holds ERC-1056
+    ///      control of a DID (see vehicleOwnerOf). address(0) means "the DID
+    ///      address itself", mirroring identityOwner()'s default, so
+    ///      createVehicleDID needs no extra storage write.
+    mapping(address => address) public vehicleOwners;
+
     // ============ Attribute Keys (bytes32) ============
 
     bytes32 public constant DID_VIN = keccak256("did/vehicle/vin");
@@ -51,6 +57,13 @@ contract CVINVehicleDIDRegistry {
         keccak256("did/svc/CredentialService");
     bytes32 public constant SVC_MESSAGING = keccak256("did/svc/MessagingService");
     bytes32 public constant SVC_TELEMETRY = keccak256("did/svc/TelemetryService");
+
+    /// @dev Validity of the "permanent" vehicle attributes written by
+    ///      setVehicleAttributes. EthereumDIDRegistry computes
+    ///      block.timestamp + validity with checked arithmetic, so the value
+    ///      must be finite; 100 years matches
+    ///      MOBIVIDRegistry.PERMANENT_ATTRIBUTE_VALIDITY.
+    uint256 public constant VEHICLE_ATTRIBUTE_VALIDITY = 100 * 365 days;
 
     // Delegate Types
     bytes32 public constant DELEGATE_VERIKEY = keccak256("veriKey");
@@ -90,7 +103,7 @@ contract CVINVehicleDIDRegistry {
 
     modifier onlyVehicleOwner(address did) {
         require(
-            msg.sender == didRegistry.identityOwner(did),
+            msg.sender == vehicleOwnerOf(did),
             "CVINRegistry: not vehicle owner"
         );
         _;
@@ -156,7 +169,9 @@ contract CVINVehicleDIDRegistry {
 
         // Note: In ERC-1056, attributes are set by the DID owner (vehicle owner)
         // The manufacturer just creates the registration mapping
-        // Vehicle owner will call setVehicleAttributes() to add attributes
+        // Attributes: the vehicle owner either calls didRegistry.setAttribute
+        // directly, or hands ERC-1056 control to this registry and calls
+        // setVehicleAttributes(did, ...) (one tx for the whole VID-I set).
 
         emit VehicleDIDCreated(did, vin, vehicleOwner, msg.sender);
 
@@ -164,7 +179,23 @@ contract CVINVehicleDIDRegistry {
     }
 
     /**
-     * @notice Set vehicle attributes (called by vehicle owner after registration)
+     * @notice Publish the vehicle attribute set (VID-I data) for a DID in one
+     *         transaction, as eight ERC-1056 DIDAttributeChanged events.
+     * @dev Wrapper-controlled mode only: ERC-1056 lets only the identity owner
+     *      write attributes, so the vehicle owner must first hand ERC-1056
+     *      control of the DID to this registry
+     *      (didRegistry.changeOwner(did, address(this))), exactly as for
+     *      setServiceEndpoint / addVerificationDelegate. The caller must be
+     *      the vehicle owner as this registry defines it (vehicleOwnerOf).
+     *      In the direct ERC-1056 flow the owner calls
+     *      didRegistry.setAttribute itself.
+     *
+     *      REVIEW_02 K-1: the previous version took no DID (it used
+     *      msg.sender as the DID, which is never the ERC-1056 owner once the
+     *      registry holds control) and passed validity = type(uint256).max,
+     *      so `block.timestamp + validity` overflowed (panic 0x11). It
+     *      reverted on every call.
+     * @param did Vehicle DID
      * @param make Vehicle make
      * @param model Vehicle model
      * @param year Manufacturing year
@@ -174,6 +205,7 @@ contract CVINVehicleDIDRegistry {
      * @param autonomyLevel SAE autonomy level
      */
     function setVehicleAttributes(
+        address did,
         string memory make,
         string memory model,
         uint16 year,
@@ -181,27 +213,53 @@ contract CVINVehicleDIDRegistry {
         string memory engineNumber,
         uint256 manufacturingDate,
         string memory autonomyLevel
-    ) external {
-        // Caller's address is their DID in ERC-1056
-        address did = msg.sender;
+    ) external onlyVehicleOwner(did) {
+        require(
+            didRegistry.identityOwner(did) == address(this),
+            "CVINRegistry: registry does not control DID"
+        );
+        string memory vin = didToVIN[did];
+        require(bytes(vin).length > 0, "CVINRegistry: DID not registered");
 
-        // Verify this DID has a registered VIN
-        require(bytes(didToVIN[did]).length > 0, "CVINRegistry: DID not registered");
-
-        uint256 permanentValidity = type(uint256).max;
+        uint256 validity = VEHICLE_ATTRIBUTE_VALIDITY;
 
         // Set all vehicle attributes
-        didRegistry.setAttribute(did, DID_VIN, bytes(didToVIN[did]), permanentValidity);
-        didRegistry.setAttribute(did, DID_MAKE, bytes(make), permanentValidity);
-        didRegistry.setAttribute(did, DID_MODEL, bytes(model), permanentValidity);
-        didRegistry.setAttribute(did, DID_YEAR, abi.encodePacked(year), permanentValidity);
-        didRegistry.setAttribute(did, DID_COLOR, bytes(color), permanentValidity);
-        didRegistry.setAttribute(did, DID_ENGINE, bytes(engineNumber), permanentValidity);
-        didRegistry.setAttribute(did, DID_MANUFACTURING_DATE, abi.encodePacked(manufacturingDate), permanentValidity);
-        didRegistry.setAttribute(did, DID_AUTONOMY_LEVEL, bytes(autonomyLevel), permanentValidity);
+        didRegistry.setAttribute(did, DID_VIN, bytes(vin), validity);
+        didRegistry.setAttribute(did, DID_MAKE, bytes(make), validity);
+        didRegistry.setAttribute(did, DID_MODEL, bytes(model), validity);
+        didRegistry.setAttribute(did, DID_YEAR, abi.encodePacked(year), validity);
+        didRegistry.setAttribute(did, DID_COLOR, bytes(color), validity);
+        didRegistry.setAttribute(did, DID_ENGINE, bytes(engineNumber), validity);
+        didRegistry.setAttribute(did, DID_MANUFACTURING_DATE, abi.encodePacked(manufacturingDate), validity);
+        didRegistry.setAttribute(did, DID_AUTONOMY_LEVEL, bytes(autonomyLevel), validity);
     }
 
     // ============ Ownership Management ============
+
+    /**
+     * @notice Transfer vehicle ownership in a single step via this registry
+     * @dev Requires this contract to hold ERC-1056 control of the DID (the
+     *      vehicle owner calls didRegistry.changeOwner(did, address(this))
+     *      once). The DID itself is unchanged; only its owner record moves.
+     *      For the direct ERC-1056 flow use updateOwnershipMapping instead.
+     * @param did Vehicle DID
+     * @param newOwner New vehicle owner address
+     */
+    function transferVehicleOwnership(
+        address did,
+        address newOwner
+    ) external onlyVehicleOwner(did) {
+        require(newOwner != address(0), "CVINRegistry: new owner is zero address");
+        require(
+            didRegistry.identityOwner(did) == address(this),
+            "CVINRegistry: registry does not control DID"
+        );
+
+        address previousOwner = vehicleOwnerOf(did);
+        vehicleOwners[did] = newOwner;
+
+        emit VehicleOwnershipTransferred(did, previousOwner, newOwner);
+    }
 
     /**
      * @notice Transfer vehicle ownership
@@ -306,12 +364,33 @@ contract CVINVehicleDIDRegistry {
     }
 
     /**
+     * @notice Resolve the vehicle owner of a DID
+     * @dev ERC-1056 only lets the identity owner mutate a DID, so the wrapper
+     *      functions above (service endpoints, delegates) can only act once the
+     *      vehicle owner has handed ERC-1056 control of the DID to this contract
+     *      via didRegistry.changeOwner(did, address(this)). While this contract
+     *      is the ERC-1056 owner, the vehicle owner is tracked in vehicleOwners
+     *      (defaulting to the DID address itself, the initial owner set by
+     *      createVehicleDID). Otherwise the ERC-1056 owner is authoritative.
+     * @param did Vehicle DID
+     * @return Vehicle owner address
+     */
+    function vehicleOwnerOf(address did) public view returns (address) {
+        address controller = didRegistry.identityOwner(did);
+        if (controller != address(this)) {
+            return controller;
+        }
+        address recorded = vehicleOwners[did];
+        return recorded == address(0) ? did : recorded;
+    }
+
+    /**
      * @notice Get vehicle owner
      * @param did Vehicle DID
      * @return Owner address
      */
     function getVehicleOwner(address did) external view returns (address) {
-        return didRegistry.identityOwner(did);
+        return vehicleOwnerOf(did);
     }
 
     /**

@@ -1,0 +1,70 @@
+{
+  "v2v_density": {
+    "P": [
+      5,
+      10,
+      20,
+      40,
+      80
+    ],
+    "per_interval_ms": [
+      0.82911,
+      1.66294,
+      3.40164,
+      6.62339,
+      13.65171
+    ],
+    "per_interval_p95_ms": [
+      1.2654,
+      2.02902,
+      5.37109,
+      10.66424,
+      20.24037
+    ],
+    "per_interval_mean_ms": [
+      0.88673,
+      1.70846,
+      3.66414,
+      7.19628,
+      14.61981
+    ],
+    "per_message_median_ms": [
+      0.160053,
+      0.158599,
+      0.160738,
+      0.159099,
+      0.157281
+    ],
+    "budget_ms": 100.0,
+    "saturation_P": null,
+    "extrapolated_saturation_P": 586.5,
+    "fit": {
+      "slope_ms_per_neighbor": 0.170604,
+      "intercept_ms": -0.054972,
+      "r2": 0.9997
+    },
+    "intervals_per_point": 300,
+    "warmup_per_point": 50,
+    "saturation_note": "per-interval verification stays within the 100 ms budget across the whole tested range (P<=80); saturation is beyond the tested range, extrapolated P*~=586 neighbors",
+    "environment": {
+      "date_utc": "2026-10-04T09:25:30+00:00",
+      "commit": "38909df33fe104d4e11c247bf1de8379331d413f",
+      "tree_clean": false,
+      "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+      "logical_cpus": 4,
+      "platform": "Linux-6.18.44-fc-v64-x86_64-with-glibc2.39",
+      "python": "3.11.15",
+      "libraries": {
+        "coincurve": "21.0.0",
+        "eth-account": "0.14.0",
+        "eth-keys": "0.8.0",
+        "cryptography": "49.0.0",
+        "numpy": "2.4.6",
+        "web3": "8.0.0"
+      }
+    },
+    "method": "Reuses SSIIdentityLayer from sumo_identity_integration.py (real secp256k1 EIP-191 sign at sender, signature recovery + cached-peer address comparison at receiver = warm V2V verify path). One receiver verifies P pre-cached neighbors per 100 ms interval; P neighbors are signed fresh each interval OUTSIDE the timed region, and only the receiver's P verifications are timed (time.perf_counter). Reported per_interval_ms is the MEDIAN over the timed intervals. P* is the smallest P whose median exceeds 100 ms; if none within P<=80 it is extrapolated from a least-squares linear fit.",
+    "honesty": "Crypto verification LOAD ONLY (RESEARCH_AUDIT \u00a74.4). Excludes radio propagation, MAC-layer contention, channel loss and queueing; BSMs are delivered in-process. This is a CPU-time saturation bound, not end-to-end V2V latency. Warm path (cached peers) only \u2014 first-contact VC verification is amortised and not included per interval.",
+    "repeat_note": "Experiment D repeat 5 of 5, same clean tree (38909df content) and host, back to back (F-A, 2026-10-04). Repeat 1 is the run of record in ../scaling_verify.json."
+  }
+}

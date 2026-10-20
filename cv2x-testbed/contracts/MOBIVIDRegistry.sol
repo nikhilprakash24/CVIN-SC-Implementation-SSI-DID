@@ -52,6 +52,18 @@ contract MOBIVIDRegistry is ERC1056Registry {
         string registrationAuthority; // Government authority that processed transfer
     }
 
+    // ============ CONSTANTS ============
+
+    /**
+     * @dev Validity period used for "permanent" birth attributes.
+     *
+     * ERC1056Registry.setAttribute computes `block.timestamp + validity`
+     * with Solidity 0.8 checked arithmetic, so passing type(uint256).max
+     * overflows and reverts with panic 0x11. A finite 100-year validity is
+     * effectively permanent for a vehicle lifecycle and never overflows.
+     */
+    uint256 public constant PERMANENT_ATTRIBUTE_VALIDITY = 100 * 365 days;
+
     // ============ STORAGE ============
 
     // Registry authority (can authorize manufacturers)
@@ -228,6 +240,14 @@ contract MOBIVIDRegistry is ERC1056Registry {
         require(vinHash != bytes32(0), "Invalid VIN hash");
         require(firstOwner != address(0), "Invalid first owner");
         require(vinHashToIdentity[vinHash] == address(0), "VIN hash already registered");
+        // REVIEW_02 K-4: only a pristine identity can be born. changed[] is
+        // advanced by every path that writes DID state (changeOwner,
+        // setAttribute, addDelegate, revoke*, revokeIdentity, and a previous
+        // birth), so changed == 0 means: no ERC-1056 owner other than itself,
+        // not revoked, and no published DID history. Without this an
+        // authorised manufacturer could take over any did:ethr in use, or
+        // re-birth a revoked vehicle. One SLOAD, re-read warm below.
+        require(changed[vehicleIdentity] == 0, "MOBIVID: identity already has DID history");
 
         // Create birth certificate
         vehicleBirths[vehicleIdentity] = VehicleBirth({
@@ -249,14 +269,30 @@ contract MOBIVIDRegistry is ERC1056Registry {
 
         // Store birth attributes as ERC-1056 attributes
         // This allows W3C DID document construction from events
+        //
+        // ORDERING / ACTOR CONSTRAINT: ERC1056Registry.setAttribute is
+        // guarded by onlyOwner(identity, actor). The line above has just set
+        // owners[vehicleIdentity] = firstOwner, so from this point on the
+        // ONLY actor that passes that check is firstOwner. Passing
+        // msg.sender (the manufacturer) as the actor — as this function
+        // originally did — reverts whenever manufacturer != firstOwner,
+        // which made every realistic birth registration fail.
+        //
+        // The manufacturer's authority to perform birth registration is
+        // already enforced by the onlyAuthorizedManufacturer modifier on
+        // this function; the ERC-1056 attribute is written with firstOwner
+        // as the actor (on behalf of the brand-new identity owner) as part
+        // of this single atomic registration transaction. This preserves the
+        // ERC-1056 invariant that only the current identity owner writes
+        // attributes, without weakening the registry's access control.
         if (birthAttributes.length > 0) {
             bytes32 attrName = keccak256("mobi/vid/birth/attributes");
             setAttribute(
                 vehicleIdentity,
-                msg.sender,
+                firstOwner,
                 attrName,
                 birthAttributes,
-                type(uint256).max  // Permanent attribute
+                PERMANENT_ATTRIBUTE_VALIDITY  // finite ~100y; avoids overflow panic
             );
         }
 
@@ -275,6 +311,21 @@ contract MOBIVIDRegistry is ERC1056Registry {
     }
 
     // ============ VEHICLE OWNERSHIP (MOBI VID II) ============
+
+    /**
+     * @dev The inherited public ERC-1056 changeOwner would move a registered
+     *      vehicle without an ownershipHistory record (odometer, authority).
+     *      REVIEW_02 K-3: registered vehicles must use
+     *      transferVehicleOwnership; identities with no birth certificate keep
+     *      plain ERC-1056 behaviour.
+     */
+    function changeOwner(address identity, address newOwner) public override {
+        require(
+            !vehicleBirths[identity].exists,
+            "MOBIVID: use transferVehicleOwnership"
+        );
+        super.changeOwner(identity, newOwner);
+    }
 
     /**
      * @dev Transfer vehicle ownership
@@ -425,7 +476,7 @@ contract MOBIVIDRegistry is ERC1056Registry {
     /**
      * @dev Get DID string for vehicle
      * @param vehicleIdentity Vehicle address
-     * @return DID string in format: did:ethr:0x{chainId}:{address}
+     * @return DID string in format: did:ethr:0x{chainId}:0x{address}
      *
      * Note: This is a view helper. In practice, DID resolution
      * happens off-chain by parsing events.
@@ -435,13 +486,14 @@ contract MOBIVIDRegistry is ERC1056Registry {
         view
         returns (string memory)
     {
-        // Format: did:ethr:0x{chainId}:{address}
-        // Chain ID is retrieved from block.chainid
-        // In production, implement proper DID string formatting
+        // Format: did:ethr:0x{chainId hex}:0x{40 lowercase hex address},
+        // e.g. did:ethr:0x7a69:0x70997970c51812dc3a010c7d01b50e0d17dc79c8.
+        // Review-02 K-15: earlier revisions omitted the "0x" before the
+        // address, which did:ethr (and the repo's did_resolver.py) rejects.
         return string(abi.encodePacked(
             "did:ethr:0x",
             _toHexString(block.chainid),
-            ":",
+            ":0x",
             _toHexString(uint256(uint160(vehicleIdentity)), 20)
         ));
     }

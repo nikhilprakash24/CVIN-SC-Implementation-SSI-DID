@@ -1,0 +1,17 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+Operation & ERC-1056 & ERC-1056 (wrapper) & ERC-721 & ERC-725 & ERC-735 & ERC-1155 & ERC-725xy & LSP8 & ERC-4337 & CVIN-Combined \\
+\midrule
+R1\_resolve\_owner & 1 / 68 / 0.763 & 1 / 68 / 1.082 & 1 / 68 / 1.041 & 1 / 68 / 0.764 & 1 / 68 / 0.796 & 1 / 68 / 1.103 & 1 / 68 / 0.748 & 2 / 136 / 1.481 & 1 / 68 / 0.763 & 1 / 68 / 0.713 \\
+R2\_resolve\_by\_vin & 1 / 68 / 1.067 & 1 / 68 / 0.682 & 1 / 68 / 1.074 & n/a & n/a & 1 / 68 / 0.958 & n/a & 1 / 68 / 0.928 & n/a & n/a \\
+R3\_resolve\_document & 12 / 8592 / 11.169 & 6 / 9170 / 6.913 & 7 / 2652 / 5.403 & 12 / 2800 / 11.269 & 3 / 11935 / 4.323 & 3 / 908 / 2.471 & 2 / 1992 / 2.847 & 3 / 2060 / 3.518 & 11 / 1964 / 4.857 & 7 / 8896 / 5.78 \\
+R4\_verify\_delegate & 1 / 68 / 0.993 & 1 / 68 / 0.978 & 2 / 136 / 1.21 & 1 / 196 / 0.812 & n/a & n/a & n/a & n/a & 1 / 68 / 0.739 & 1 / 68 / 0.769 \\
+V6\_status\_check & 1 / 852 / 2 & 1 / 851 / 1.12 & 1 / 708 / 1.328 & 1 / 196 / 0.808 & 1 / 68 / 0.846 & 1 / 68 / 0.718 & 1 / 196 / 0.626 & 1 / 196 / 0.928 & 1 / 196 / 0.77 & 1 / 68 / 0.917 \\
+\bottomrule
+\end{tabular}
+\caption{L1 — Read ops: RPC calls / bytes / median ms Run 2026-10-15T05-07-33Z\_9bdf451 · commit 9bdf451 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30}
+\label{tab:crud_reads}
+\end{table}

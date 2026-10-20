@@ -1,0 +1,108 @@
+<style>
+  :root{
+    --paper:#f4f6f9; --surface:#ffffff; --ink:#161a21; --muted:#5f6b7c;
+    --line:#e2e6ec; --accent:#3a49c9; --accent-soft:rgba(58,73,201,.08);
+    --good:#1f7a4d; --good-soft:rgba(31,122,77,.10);
+    --font-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --maxw:44rem;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0e1116; --surface:#161b23; --ink:#e7eaf0; --muted:#8b95a6;
+      --line:#232b36; --accent:#8091ff; --accent-soft:rgba(128,145,255,.13);
+      --good:#4bbd85; --good-soft:rgba(75,189,133,.14);
+    }
+  }
+  :root[data-theme="light"]{
+    --paper:#f4f6f9; --surface:#ffffff; --ink:#161a21; --muted:#5f6b7c;
+    --line:#e2e6ec; --accent:#3a49c9; --accent-soft:rgba(58,73,201,.08);
+    --good:#1f7a4d; --good-soft:rgba(31,122,77,.10);
+  }
+  :root[data-theme="dark"]{
+    --paper:#0e1116; --surface:#161b23; --ink:#e7eaf0; --muted:#8b95a6;
+    --line:#232b36; --accent:#8091ff; --accent-soft:rgba(128,145,255,.13);
+    --good:#4bbd85; --good-soft:rgba(75,189,133,.14);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans);
+    line-height:1.55;-webkit-font-smoothing:antialiased;
+    padding:clamp(1.25rem,4vw,3rem);}
+  .card{max-width:var(--maxw);margin:0 auto;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 32px -18px rgba(0,0,0,.22);}
+  .band{height:4px;background:linear-gradient(90deg,var(--accent),transparent 78%);}
+  .pad{padding:clamp(1.5rem,4vw,2.5rem);}
+  .eyebrow{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 .9rem;}
+  h1{font-size:clamp(1.65rem,4.5vw,2.3rem);line-height:1.08;margin:0 0 .5rem;
+    letter-spacing:-.015em;text-wrap:balance;font-weight:650;}
+  .spec{font-family:var(--font-mono);font-size:.82rem;color:var(--muted);
+    margin:0 0 1.15rem;}
+  .role{font-size:1.05rem;color:var(--ink);margin:0 0 1.6rem;max-width:38rem;
+    text-wrap:pretty;}
+  dl{display:grid;grid-template-columns:minmax(9rem,10rem) 1fr;gap:.05rem 1.4rem;
+    margin:0;border-top:1px solid var(--line);padding-top:1.3rem;}
+  dt{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--muted);padding:.55rem 0;}
+  dd{margin:0;padding:.55rem 0;font-size:.94rem;border-bottom:1px solid var(--line);}
+  dt{border-bottom:1px solid var(--line);}
+  dd code,dd .path{font-family:var(--font-mono);font-size:.82em;
+    background:var(--accent-soft);color:var(--accent);padding:.08em .4em;
+    border-radius:5px;word-break:break-word;}
+  dd a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft);}
+  dd a:hover{border-bottom-color:var(--accent);}
+  .callout{margin-top:1.6rem;display:flex;gap:.85rem;align-items:flex-start;
+    background:var(--good-soft);border:1px solid color-mix(in srgb,var(--good) 30%,transparent);
+    border-radius:10px;padding:.95rem 1.1rem;}
+  .callout .tag{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--good);border:1px solid currentColor;
+    border-radius:4px;padding:.15em .45em;white-space:nowrap;margin-top:.15rem;}
+  .callout p{margin:0;font-size:.9rem;}
+  .callout .num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;
+    font-weight:650;color:var(--ink);}
+  footer{border-top:1px solid var(--line);margin-top:1.9rem;padding-top:1.1rem;
+    font-size:.78rem;color:var(--muted);}
+  footer strong{color:var(--ink);font-weight:600;}
+  @media (max-width:34rem){dl{grid-template-columns:1fr;gap:0}
+    dt{border-bottom:none;padding-bottom:.1rem}}
+</style>
+
+<article class="card">
+  <div class="band"></div>
+  <div class="pad">
+    <p class="eyebrow">Source Register &middot; Blockchain Identity Standard</p>
+    <h1>ERC-735 &mdash; On-Chain Claim Holder</h1>
+    <p class="spec">ERC-735 draft &middot; Claim Holder &middot; on-chain verifiable claims</p>
+    <p class="role">Identity as a container of signed, on-chain claims: a per-vehicle claim holder that stores each attestation in state after verifying the issuer's signature. High fidelity, high cost &mdash; the claim-faithful end of the spectrum.</p>
+
+    <dl>
+      <dt>What it is</dt>
+      <dd>A claim-holder standard (the ERC-735 draft) where a per-vehicle contract stores full signed claims on-chain. Adding a claim verifies the issuer's EIP-191 signature over (identity, topic, data) via <code>ecrecover</code> and then persists the claim, so verification is done once and re-checkable cheaply thereafter.</dd>
+
+      <dt>Reference</dt>
+      <dd><a href="https://github.com/ethereum/EIPs/issues/735">ERC-735 &mdash; Claim Holder (draft)</a></dd>
+
+      <dt>Role in thesis</dt>
+      <dd>The on-chain verifiable-claims substrate; one of the nine compared standards. Its claim model is one of the two halves fused in the researcher's CVIN-Combined hybrid.</dd>
+
+      <dt>Where used</dt>
+      <dd><span class="path">1_blockchain-identity/contracts/ERC735/CVINVehicleClaimHolder.sol</span></dd>
+
+      <dt>Provenance</dt>
+      <dd>Standard selection and comparative design are the researcher's (<code>SOURCES.md</code> &sect;1). The intuition that a claim-based standard would be the most <em>faithful</em> but not the cheapest &mdash; one arm of the fidelity-per-gas sub-hypothesis &mdash; was the researcher's from the outset; the toolchain implemented and measured it under that direction (<code>PROVENANCE.md</code>).</dd>
+    </dl>
+
+    <div class="callout" style="background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 30%,transparent);">
+      <span class="tag" style="color:var(--accent);">On-chain claims</span>
+      <p>Creating an identity costs <span class="num">1,404,108</span> gas (per-vehicle claim-holder deployment), and each on-chain claim adds <span class="num">290,212</span> gas. This is the faithful-but-costly arm of the fidelity-per-gas frontier; pairing its claims with the cheap ERC-1056 substrate is what motivates hypothesis <strong>H5</strong>. <em>(Results &sect;5.2, &sect;5.3.)</em></p>
+    </div>
+
+    <footer>
+      Part of the <strong>CVIN-SSI Source Register</strong> (<code>SOURCES.md</code>) for
+      the MASc thesis <em>Comparative Analysis of Self-Sovereign Identity Systems for
+      Connected and Autonomous Vehicles</em> &mdash; <strong>Nikhil Prakash</strong>, UBC ECE.
+      Provenance and attribution: <code>PROVENANCE.md</code>, <code>docs/DEVELOPMENT_HISTORY.md</code>.
+    </footer>
+  </div>
+</article>
