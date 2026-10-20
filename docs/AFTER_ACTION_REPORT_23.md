@@ -46,3 +46,20 @@ A source that could not be fetched is listed as not read, never cited as read. B
 - **S3-3.** Session log entry 3, handback §14, manifest. `build_phase2.py --check` and the document checks pass.
 - **No grand run this pass:** it changed no code, test, result file or register row (documents only), as report 20
   did for the same reason.
+
+## 4. Closing
+The pass delivered every step of §2. **CI 8 of 8 green on `024274d`.**
+
+**Session 3 is done.** Two deep-dive briefs, each with every cited source fetched at origin and a sample re-fetched by
+the orchestrator. The I-24 brief's finding that the IDTx mechanism is not new is the most consequential item of the
+pass, and it is the author's to decide. The I-05 brief gives the freshness work a formal frame and two predictions
+stated before any new measurement.
+
+**The model serving this session changed mid-pass** (after the briefs were commissioned). Nothing in the repository
+names a model, by rule; the point is recorded here because the cross-model check that follows must run in a fresh
+session, not in this one, to be independent of the reasoning this conversation holds.
+
+**Next:**
+- The cross-model check of passes 16–22, in a new session: `docs/milestones/check_passes_16-22/START_PROMPT.md`.
+- Then WM-2 A3; the progress report (report 24) when the author has answered its two questions.
+- The author's decisions: the I-24 findings, P2-D1, P2-D7 to P2-D10, D-1 to D-15, C1-d*, C2-d*, N-23.
