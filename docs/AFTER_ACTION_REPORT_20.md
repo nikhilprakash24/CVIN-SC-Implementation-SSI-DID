@@ -94,8 +94,10 @@ measures changed); the document checks are run in full.
   read by the author or the next session and recorded in the closing commit of this report.
 
 ## 3. Closing
-The pass delivered every step of section 1. **CI: not readable from this session**; the closing commit's result is
-recorded by the "Report 20 closed" commit once read.
+The pass delivered every step of section 1. **CI 8 of 8 green on the closing commit `914dcb2`** (Smart Contract
+Tests run 38688011214, W3C SSI Compliance Tests 38688011299, Performance Benchmarks 38688011225), read over the
+public Actions API from this session after the push. Closed 2026-10-20; passes 21 to 24 landed on the branch in
+between and kept the three TDP checks green (report 21 section 2 records the one red they caused and fixed).
 
 **The package stands on the register and adds nothing to it.** 36 requirements, 29 verified by V rows with nothing
 pending and 7 partial with their blocking item named; 66 defects on a worksheet whose counts equal the snapshot's;
