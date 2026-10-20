@@ -41,7 +41,7 @@
 | [TS-1] | Empirical | Build-III ERC725 passes X/Y suite at Node 16.19.0? | CLI agent (WO-S1) + operator | **Open** — restore source now **pinned**: upstream `ERC725Alliance/ERC725` commit `3b1b4935db8c8576647bd064bf9c9c2f8724721e` byte-matches all 13/13 checked-in contracts AND contains the missing `custom/`/`interfaces/`/`helpers/` dirs (evidence `P1_upstream_diff_*`); awaiting **D2** ratification, then WO-S1 runs |
 | [TS-2] | Empirical | ERC-725 X/Y compiles at 0.8.24 offline unmodified or only after mechanical port? | CLI agent (WO-S2) | **Open** |
 | [TS-3] | Empirical | `CVIN_ERC725.sol` (0.4.24) ports cleanly to 0.8.24; what changes? | CLI agent (WO-S2) | **Open** |
-| [TS-4] | Documentary→action | Is in-repo Infura key live? (Rotate regardless.) | **Operator** | **Open** — H1 |
+| [TS-4] | Documentary→action | Is in-repo Infura key live? (Rotate regardless.) | **Operator** | **CLOSED 2026-10-19** — operator declared the key retired and unused anywhere; removed from HEAD (`fix/remove-infura-key`, upstream PR #5); history not rewritten (value stays in `0ab45bb`, treated as dead) |
 | [TS-5] | Design | Canonical SP-2 ERC-725/735 anchor in `cvin-sandbox-v1.x`? | **Architect** (WO-S4) | **Open** |
 | [TS-6] | Design | Minimal scope to make V7 the SP-1 on-chain ERC-1056 host? | Architect + CLI (later WO-1) | **Open** |
 | [TS-7] | Scope | Is LSP0 in the evaluation window or parked? | Architect / supervisor | **Open** |
@@ -134,3 +134,10 @@ WO-0 substance **holds**: verbatim import (29/29 files byte-identical to `cvin-s
 **F-XV-1 sharpened:** the hub lockfile pins solc **0.8.37** (metadata `0.8.37+commit.f401782d`; build-info "0.8.24" is a config label). Deterministic sweep: createPresentation = **62,458 for 0.8.24/0.8.25** and **62,441 for ≥0.8.26**; all other 12 tx identical. ⇒ The cited June figure 62,441 was **not** produced by 0.8.24; most likely by 0.8.35 (caret-latest on 2026-06-05). Corollary: npm `solc@0.8.24` `soljson.js` hashes `fb59b825…` (wrapper differs; embedded wasm identical to the official release), so a hash check must target the wasm, not the JS wrapper.
 
 **Hub record defects (proposed corrections, not applied):** stale `SHA256SUMS` (not regenerated in a352fa2); CLAUDE.md §2 "pins solc 0.8.24" contradicted; STATUS "O1 trace confirmed" needs compiler qualification; G0 log location/header deviates from BUILD_PLAN WO-0; commit author `cvin-sc@local`; root `.gitignore` `*.log` will swallow future `gates/*.log`. Evidence: `evidence/XV2_hub_a352_*`.
+
+
+---
+
+## J. [TS-4] closure (2026-10-19)
+
+Operator ruling: the Infura project ID is not used anywhere and needs no secret handling. Action: line 19 of `cvin-v6/index.js` now reads `process.env.ETH_RPC_URL`; `git grep` confirms the value appears in no tracked file at HEAD; pushed to the fork (`fix/remove-infura-key`, merged into `sandbox-onboarding`), to the SSI-DID spoke`s `sandbox-onboarding`, and opened upstream as CVIN-ID/TEST PR #5. **Not done:** history rewrite (the value remains in `0ab45bb` on CVIN-ID/TEST, the fork, `prevWork_testingIDSystems` and the spoke tag `asfound/pre-onboarding`) and revocation inside the Infura account (operator dashboard). With the key retired, the spoke key-history collision (U3) drops from P0 to housekeeping.
