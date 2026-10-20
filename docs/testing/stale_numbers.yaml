@@ -11,6 +11,7 @@ history:
 - docs/PLAN_*.md
 - docs/SCOPE_CHANGES.md
 - docs/DEFECT_LOG.md
+- docs/PROGRESS_APPENDIX_*.md   # generated from git subjects, which quote figures as they were (report 24)
 - docs/tdp/TDP-006_FMECA.md   # generated verbatim from docs/DEFECT_LOG.md, a history document (report 21)
 - docs/MEASUREMENT_CONDITIONS.md
 - docs/review02/*

@@ -56,7 +56,7 @@ number stays as history with an arrow to its replacement. Three examples of each
 
 **Established and unchanged since July.** The nine-standard gas table (#25): creating an identity spans 52,216 gas
 (CVIN-Combined) to 1,757,881 (ERC-735), 33.7×. V2V credential verification on the warm path at 0.153 ms, 95 % CI
-[0.151, 0.154] (#27). 43 of 43 injected attacks defended, each reverting with its documented reason (#28).
+[0.151, 0.154] (#27). 43 of 43 attack scenarios defended, each reverting with its documented reason (#28).
 
 **Re-measured, and reported as it fell.** The infrastructure experiment I1 (#44): the ratio of SPaT verification to
 BSM verification is 1.226 [1.219, 1.238] on verifier v3, against a pass band of [0.80, 1.20] pre-registered before

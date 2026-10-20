@@ -11,6 +11,11 @@
 set -u
 cd "$(dirname "$0")/.."
 
+# The stale-figure checker scans tracked files only: stage new files before running this (report 24 learned it).
+if [ -n "$(git ls-files --others --exclude-standard -- docs | head -1)" ]; then
+  echo "PREPUSH NOTE: untracked files under docs/ are not scanned by the document checks; git add them first:"; git ls-files --others --exclude-standard -- docs | head -5
+fi
+
 fail() { echo "PREPUSH FAIL: $1"; exit 1; }
 
 echo "== MOBI contract copies byte-identical"

@@ -41,3 +41,9 @@ No code, test, result file or register row changes in this pass; no grand run (a
   the defect counts (42 fixed, 6 partly, 18 open of 66) and test counts are from the dashboard snapshot at this
   commit. The reader and the AI-use statement are marked gaps for the author (decision sheet §A). The appendix is
   regenerated at each pass's close rather than CI-checked, like the contribution record, because it reads git.
+- **CI red on the push, on a slip of mine.** I ran `prepush_check.sh` before staging the new files, and the
+  stale-figure checker scans tracked files only, so it passed here and failed in CI. Reproduced in a clean worktree at
+  HEAD. Two hits: the generated appendix quotes a 2026-09 commit subject with a since-superseded figure (added to the
+  checker's history list, as the defect log and TDP-006 are, because it reproduces history verbatim); and my sentence
+  "43 of 43 injected attacks" matched the pattern for #27's old attack count (reworded to "attack scenarios"). The
+  guard now warns when untracked files sit under `docs/`.
