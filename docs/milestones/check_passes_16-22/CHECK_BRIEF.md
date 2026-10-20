@@ -7,12 +7,13 @@ record, a second configuration re-verifies what those passes claim. The check re
 
 ## 1. How to work
 1. Read `docs/STYLE_AND_RIGOUR_GUIDE.md`, `docs/HANDBACK_2026-10-14.md` §7, and `docs/HANDOFF_2026-10-17.md`.
-2. Open after-action report 23 for the check and commit it before anything else.
+2. Open the next free after-action report number for the check (report 23 is the Phase 2 session 3 pass that
+   followed this brief) and commit it before anything else.
 3. For each claim in §3, run the command, compare with the expected result, and record a finding when they disagree,
    when the command cannot be run as written, or when the claim says more than the evidence shows. Agreement is
    recorded too, as one line, so the coverage is visible.
 4. Also look for what this brief does not list. Section 4 names places where judgement was used.
-5. Write `FINDINGS.md` in this directory (format in §5). Commit and push it; close report 23 with CI's result.
+5. Write `FINDINGS.md` in this directory (format in §5). Commit and push it; close that report with CI's result.
 
 ## 2. Setup
 `(cd 1_blockchain-identity && npm ci && npx hardhat compile)`; Python 3.11 with `pip install eth-account coincurve
