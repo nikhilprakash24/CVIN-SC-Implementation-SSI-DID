@@ -269,3 +269,11 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `4_comparison-framework/results/gas_benchmark.json`, `gas_comparison.*`, `mobi_vid_backends.json`, `scaling_*.json`, `security-analysis/results/onchain_security.json` | re-runs of record at `92cc4d5` | C2 |
 | register #25, #26, #28; `docs/testing/stale_numbers.yaml`; chapters 5 and 6; README, CAPABILITIES, QUICKSTART; DEFECT_LOG D54; THREAT_MODEL G4; N-25 | records | C2 |
 | `docs/HANDOFF_2026-10-17.md`, `docs/milestones/check_passes_16-22/CHECK_BRIEF.md` | hand-off and the check brief for the other model | the author's request |
+
+## Pass 23 — Phase 2 session 3: deep-dive briefs (2026-10-20)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_23.md` | plan, log, closing | standing rule |
+| `docs/phase2/briefs/I-24_IDTX.md`, `I-24_sources.json`, `I-05_FRESHNESS.md`, `I-05_sources.json` | the two briefs with every cited source's URL and quote | session 3 |
+| `docs/phase2/sessions/SESSION_LOG.md` entry 3; `ideas.yaml` (I-24 test count) | records | session 3 |
+| `docs/milestones/check_passes_16-22/START_PROMPT.md`; `docs/planning/PROGRESS_REPORT_PLAN_2026-10-20.md` | the fresh-session prompt; the plan for the hand-over write-up | the author's requests |

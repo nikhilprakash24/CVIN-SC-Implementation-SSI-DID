@@ -36,3 +36,13 @@ A source that could not be fetched is listed as not read, never cited as read. B
   register regenerated.
 - **Progress report planned.** The author asked for a hand-over write-up from July onwards; the plan is in
   `docs/planning/PROGRESS_REPORT_PLAN_2026-10-20.md`, for report 24, with the two decisions it needs.
+- **S3-2, brief I-05 accepted after its gate.** 15 cited entries from 14 documents, 7 not read. I re-fetched 7 sampled
+  plus S06's PDF: 8 verified (6 exact, S09 whole but for markup whitespace, S06 exact from the PDF after the abstract
+  page gave nothing). S01 (Rivest, Springer) could not be re-verified: three addresses each served a 2,950-byte block
+  page. The brief says so in its closing note. The agent's own least-sure claims (its hit-fraction derivation, P2's
+  equal-RPC-cost assumption, S13's venue from a CV) stand in the brief as stated; none is a result.
+- **S3-0.** No open review finding beyond AR-13 (deferred by decision); inbox empty; D-15 not adopted, so chapter 2's
+  positioning waits. Stated in the session log.
+- **S3-3.** Session log entry 3, handback §14, manifest. `build_phase2.py --check` and the document checks pass.
+- **No grand run this pass:** it changed no code, test, result file or register row (documents only), as report 20
+  did for the same reason.

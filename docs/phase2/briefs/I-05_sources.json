@@ -1,0 +1,107 @@
+[
+  {
+    "id": "S01",
+    "citation": "Rivest, R. L. Can we eliminate certificate revocation lists? In: Financial Cryptography (FC '98), Lecture Notes in Computer Science, Springer, 1998, pp. 178-183. doi:10.1007/BFb0055482",
+    "url": "https://link.springer.com/chapter/10.1007/BFb0055482",
+    "quote": "We briefly consider certificate revocation lists (CRLs), and ask whether they could, and should, be eliminated, in favor of other mechanisms. In most cases, the answer seems to be “yes.”",
+    "used_for": "The classic argument against CRLs in favour of other freshness mechanisms; frames the choice of who sets the recency of status data."
+  },
+  {
+    "id": "S02",
+    "citation": "McDaniel, P. and Rubin, A. A Response to “Can We Eliminate Certificate Revocation Lists?” In: Financial Cryptography (FC 2000), Lecture Notes in Computer Science, Springer, 2001, pp. 245-258. doi:10.1007/3-540-45472-1_17",
+    "url": "https://link.springer.com/chapter/10.1007/3-540-45472-1_17",
+    "quote": "The lessons learned from our case studies are applied to a realistic PKI environment. The result, revocation on demand, is a CRL based mechanism providing timely revocation information.",
+    "used_for": "The response: the best revocation mechanism depends on the environment; timeliness can be bought within a CRL design."
+  },
+  {
+    "id": "S03",
+    "citation": "Santesson, S., Myers, M., Ankney, R., Malpani, A., Galperin, S. and Adams, C. X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP. IETF RFC 6960, Standards Track, June 2013.",
+    "url": "https://www.rfc-editor.org/rfc/rfc6960.txt",
+    "quote": "Responses whose nextUpdate value is earlier than the local system time value SHOULD be considered unreliable. Responses whose thisUpdate time is later than the local system time SHOULD be considered unreliable.",
+    "used_for": "Status freshness in OCSP is a time bound judged against the relying party's clock; the clock question that D51 raises for chain time."
+  },
+  {
+    "id": "S04",
+    "citation": "Larisch, J., Choffnes, D., Levin, D., Maggs, B. M., Mislove, A. and Wilson, C. CRLite: A Scalable System for Pushing All TLS Revocations to All Browsers. IEEE Symposium on Security and Privacy (S&P), 2017.",
+    "url": "https://www.ieee-security.org/TC/SP2017/papers/567.pdf",
+    "quote": "In this paper, we present CRLite, an efficient and easily-deployable system for proactively pushing all TLS certificate revocations to browsers. CRLite servers aggregate revocation information for all known, valid TLS certificates on the web, and store them in a space-efficient filter cascade data structure.",
+    "used_for": "Push-based revocation with periodic client updates: the time-bounded alternative to per-message pull."
+  },
+  {
+    "id": "S05",
+    "citation": "Liu, Y., Tome, W., Zhang, L., Choffnes, D., Levin, D., Maggs, B., Mislove, A., Schulman, A. and Wilson, C. An End-to-End Measurement of Certificate Revocation in the Web's PKI. ACM Internet Measurement Conference (IMC '15), Tokyo, 2015.",
+    "url": "https://mislove.org/publications/SSLClient-IMC.pdf",
+    "quote": "Using 74 full IPv4 HTTPS scans, we find that a surprisingly large fraction (8%) of the certificates served have been revoked, and that obtaining certificate revocation information can often be expensive in terms of latency and bandwidth for clients.",
+    "used_for": "Evidence that the cost of checking revocation is what drives relying parties to skip or cache it."
+  },
+  {
+    "id": "S06",
+    "citation": "Brecht, B., Therriault, D., Weimerskirch, A., Whyte, W., Kumar, V., Hehn, T. and Goudy, R. A Security Credential Management System for V2X Communications. arXiv:1802.05323 (accepted version, IEEE Transactions on Intelligent Transportation Systems), 2018.",
+    "url": "https://arxiv.org/abs/1802.05323",
+    "quote": "The SCMS enforces revocation by periodically distributing a Certificate Revocation List (CRL) with an updated list of entries. Devices use the CRL to identify and reject messages from revoked devices.",
+    "used_for": "The V2X baseline: revocation reaches vehicles by periodic CRL distribution, a time-bounded push model."
+  },
+  {
+    "id": "S07",
+    "citation": "Papadimitratos, P., Mezzour, G. and Hubaux, J.-P. Certificate Revocation List Distribution in Vehicular Communication Systems. ACM VANET '08 (short paper), San Francisco, 2008.",
+    "url": "https://people.kth.se/~papadim/publications/fulltext/certificate-revocation-list-distribution-vanet-short.pdf",
+    "quote": "Our scheme can distribute large CRLs across wide VC regions within minutes, by utilizing a bandwidth of only a few Kbps at each road-side infrastructure unit.",
+    "used_for": "Vehicular CRL distribution latency is minutes, which sets the scale a chain-read freshness policy is compared against."
+  },
+  {
+    "id": "S08",
+    "citation": "Sporny, M., Longley, D., Prorock, M. and Alkhraishi, M. (eds.). Bitstring Status List v1.0. W3C Recommendation, 15 May 2025.",
+    "url": "https://www.w3.org/TR/vc-bitstring-status-list/",
+    "quote": "The ttl is an OPTIONAL property that indicates the \"time to live\" in milliseconds before a refresh SHOULD be attempted. If not present, no default value is assumed.",
+    "used_for": "The W3C credential status method gives a time-to-live, not a message count, and sets no default."
+  },
+  {
+    "id": "S09",
+    "citation": "Sporny, M., Longley, D., Prorock, M. and Alkhraishi, M. (eds.). Bitstring Status List v1.0. W3C Recommendation, 15 May 2025 (section 3, validation).",
+    "url": "https://www.w3.org/TR/vc-bitstring-status-list/",
+    "quote": "Verifiers SHOULD cache the retrieved status list and SHOULD use proxies or other mechanisms, such as Oblivious HTTP, that hide retrieval behavior from the issuer.",
+    "used_for": "The specification tells verifiers to cache and ties caching to privacy of retrieval; it does not fix the cache lifetime."
+  },
+  {
+    "id": "S10",
+    "citation": "Jung, J., Berger, A. W. and Balakrishnan, H. Modeling TTL-based Internet Caches. IEEE INFOCOM 2003.",
+    "url": "https://people.csail.mit.edu/awberger/papers/modeling_ttl_based_internet_caches_infocom2002.pdf",
+    "quote": "TTL-based consistency, as exemplified by DNS and Web caches, is a policy in which a data item, once retrieved, remains valid for a period known as the “time-to-live”. Cache systems using large TTL periods are known to have high hit rates and scale well, but the effects of using shorter TTL periods are not well understood.",
+    "used_for": "Closed-form hit rate of a TTL cache under renewal arrivals: the cost side of a time-bounded policy."
+  },
+  {
+    "id": "S11",
+    "citation": "Fielding, R., Nottingham, M. and Reschke, J. (eds.). HTTP Caching. IETF RFC 9111 (STD 98), June 2022.",
+    "url": "https://www.rfc-editor.org/rfc/rfc9111.txt",
+    "quote": "A \"fresh\" response is one whose age has not yet exceeded its freshness lifetime. Conversely, a \"stale\" response is one where it has.",
+    "used_for": "The standard definition of freshness as age against a lifetime, the vocabulary the brief uses for time-bounded caches."
+  },
+  {
+    "id": "S12",
+    "citation": "Cho, J. and Garcia-Molina, H. Synchronizing a database to Improve Freshness. Stanford preprint dated 25 October 1999 (the fetched copy; later published at ACM SIGMOD 2000, version not read).",
+    "url": "https://www.kth.se/social/files/554f1d5bf27654514fd00393/synchronizing-a-database-to-improve-freshness.pdf",
+    "quote": "In many cases, the remote source is updated independently without pushing updates to the client that has a copy, so the client must periodically poll the source to detect changes and refresh its copy.",
+    "used_for": "Freshness and age of a polled copy under Poisson changes: the closest analytic template for a verifier polling the chain."
+  },
+  {
+    "id": "S13",
+    "citation": "Kaul, S., Gruteser, M., Rai, V. and Kenney, J. Minimizing Age of Information in Vehicular Networks. IEEE SECON 2011 (venue as listed in the first author's CV; author copy fetched).",
+    "url": "https://www.winlab.rutgers.edu/~gruteser/papers/SECON2011_minAge.pdf",
+    "quote": "We show that information age is minimized at an optimal operating point that lies between the extremes of maximum throughput and minimum delay.",
+    "used_for": "Age of information introduced for vehicular status messages; an interior optimum between throughput and timeliness."
+  },
+  {
+    "id": "S14",
+    "citation": "Yates, R. D., Sun, Y., Brown III, D. R., Kaul, S. K., Modiano, E. and Ulukus, S. Age of Information: An Introduction and Survey. arXiv:2007.08564, 2020.",
+    "url": "https://arxiv.org/abs/2007.08564",
+    "quote": "These applications desire status updates at the recipients to be as timely as possible; however, this is typically constrained by limited system resources.",
+    "used_for": "The general AoI frame: timeliness of status at a monitor against a resource constraint."
+  },
+  {
+    "id": "S15",
+    "citation": "Maatouk, A., Kriouile, S., Assaad, M. and Ephremides, A. The Age of Incorrect Information: A New Performance Metric for Status Updates. arXiv:1907.06604, 2019.",
+    "url": "https://arxiv.org/abs/1907.06604",
+    "quote": "This new metric deals with the shortcomings of both the Age of Information (AoI) and the conventional error penalty functions as it neatly extends the notion of fresh updates to that of fresh \"informative\" updates. The word informative in this context refers to updates that bring new and correct information to the monitor side.",
+    "used_for": "A penalty that counts only time the monitor's copy is wrong: the right shape for revocation exposure."
+  }
+]
