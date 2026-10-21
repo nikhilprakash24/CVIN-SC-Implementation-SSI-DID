@@ -2,7 +2,7 @@
 % Requires \usepackage{booktabs}.
 \begin{table}[htbp]
   \centering
-  \caption{Gas cost comparison of blockchain vehicle-identity standards (rows: standards, columns: lifecycle operations). Each cell reports the measured \texttt{gasUsed} of one representative transaction, with the relative cost versus the cheapest standard supporting that operation in parentheses. Measured on a local Hardhat network (chain id 31337) with Solidity 0.8.24 (optimizer enabled, 200 runs, via-IR) and OpenZeppelin Contracts 5.0.2, 2026-10-06. ``\textemdash'' denotes an operation not supported by the standard; for ERC-725, ERC-735 and ERC-4337 the per-identity contract deployment is counted as identity creation. ``Update via EP'' is the ERC-4337-only measurement of the same attribute update routed through the EntryPoint as a UserOperation (indirection overhead; bundler overhead excluded).}
+  \caption{Gas cost comparison of blockchain vehicle-identity standards (rows: standards, columns: lifecycle operations). Each cell reports the measured \texttt{gasUsed} of one representative transaction, with the relative cost versus the cheapest standard supporting that operation in parentheses. Measured on a local Hardhat network (chain id 31337) with Solidity 0.8.24 (optimizer enabled, 200 runs, via-IR) and OpenZeppelin Contracts 5.0.2, 2026-10-21. ``\textemdash'' denotes an operation not supported by the standard; for ERC-725, ERC-735 and ERC-4337 the per-identity contract deployment is counted as identity creation. ``Update via EP'' is the ERC-4337-only measurement of the same attribute update routed through the EntryPoint as a UserOperation (indirection overhead; bundler overhead excluded).}
   \label{tab:gas-comparison}
   \footnotesize
   \setlength{\tabcolsep}{4pt}
@@ -19,7 +19,7 @@
     ERC-1155 & 2,871,435 (6.29$\times$) & 107,729 (2.06$\times$) & 51,199 (1.46$\times$) & \textemdash & 80,131 (2.27$\times$) & 33,049 (1.30$\times$) & 86,298 (3.04$\times$) \\
     ERC-4337 & 456,294 (1.00$\times$) & 759,088 (14.54$\times$) & 49,343 (1.41$\times$) & 96,173 (1.00$\times$) & 47,557 (1.35$\times$) & 25,429 (1.00$\times$) & 28,539 (1.01$\times$) \\
     LSP8 & 1,670,271 (3.66$\times$) & 152,644 (2.92$\times$) & 55,133 (1.57$\times$) & \textemdash & \textemdash & 42,116 (1.66$\times$) & 80,568 (2.84$\times$) \\
-    MOBI-VID-V2 & 4,225,285 (9.26$\times$) & 299,143 (5.73$\times$) & 307,210 (8.75$\times$) & \textemdash & 35,321 (1.00$\times$) & 75,382 (2.96$\times$) & 200,089 (7.05$\times$) \\
+    MOBI-VID-V2 & 4,309,419 (9.44$\times$) & 299,143 (5.73$\times$) & 307,210 (8.75$\times$) & \textemdash & 35,321 (1.00$\times$) & 75,382 (2.96$\times$) & 200,111 (7.05$\times$) \\
     CVIN-Combined & 1,531,487 (3.36$\times$) & 52,216 (1.00$\times$) & 35,116 (1.00$\times$) & \textemdash & 291,977 (8.27$\times$) & 73,248 (2.88$\times$) & 51,747 (1.82$\times$) \\
     \bottomrule
   \end{tabular}}

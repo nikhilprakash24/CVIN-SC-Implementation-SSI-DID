@@ -262,7 +262,7 @@
   },
   "MOBI-VID-V2": {
     "deployRegistry": {
-      "gasUsed": 4225285,
+      "gasUsed": 4309419,
       "txCount": 1,
       "notes": "Single shared registry (V2 = ERC-1056 base + MOBI VID I birth certificates + VID II lifecycle events); deployer becomes registry authority + authorized manufacturer."
     },
@@ -279,10 +279,10 @@
     "addDelegateOrClaim": {
       "gasUsed": 35321,
       "txCount": 1,
-      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 192749 gas."
+      "notes": "Inherited ERC-1056 addDelegate (sigAuth, 1 year). V2-native multi-party attestEvent (claim analogue, 65-byte signature stored) measured separately: 215428 gas."
     },
     "transferOwnership": {
-      "gasUsed": 200089,
+      "gasUsed": 200111,
       "txCount": 1,
       "notes": "transferVehicleOwnership: appends odometer-stamped ownership record + ERC-1056 changeOwner. Called by current owner."
     },
@@ -326,10 +326,14 @@
   },
   "metadata": {
     "solcVersion": "0.8.24",
-    "commit": "d0cc19c",
+    "commit": "1445b9b",
+    "commitFull": "1445b9b36e9cd99eda5c434085547f0e4f6b1ce5",
     "dirty": false,
     "dirtyAnyFile": false,
-    "node": "v22.22.2",
+    "scope": "1_blockchain-identity/scripts/benchmark_gas.js",
+    "scopeFiles": 7,
+    "scopeSha": "80feb0d10db2",
+    "node": "v22.22.0",
     "hardhat": "2.28.6",
     "solcSettings": {
       "optimizer": {
@@ -339,7 +343,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-09T02:27:39.007Z",
+    "date": "2026-10-21T03:15:18.910Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [

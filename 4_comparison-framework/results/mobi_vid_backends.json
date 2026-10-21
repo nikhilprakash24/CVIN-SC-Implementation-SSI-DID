@@ -130,7 +130,7 @@
         "note": "recordLifecycleEvent (MOBI VID II, MAINTENANCE): dedicated event struct with eventType, issuer, timestamp, odometer, dataHash, W3C-VC hash, verified flag, jurisdiction, block number + per-type counters. Highest-fidelity native mapping (11 event types, issuer-role gating)."
       },
       "thirdPartyAttestation": {
-        "gasUsed": 192749,
+        "gasUsed": 215428,
         "nativeSupport": true,
         "approximate": false,
         "note": "attestEvent by a second authorized party (DMV): the attester's EIP-191 signature over a domain-separated digest (contract || chainId || vehicle || eventId) is ecrecover-verified on-chain (OZ ECDSA, low-s) and MUST match msg.sender; the verified attestation is appended to the event. Native, purpose-built multi-party attestation."
@@ -149,10 +149,14 @@
   "metadata": {
     "title": "MOBI VID cross-backend realization (H4)",
     "solcVersion": "0.8.24",
-    "commit": "d0cc19c",
+    "commit": "1445b9b",
+    "commitFull": "1445b9b36e9cd99eda5c434085547f0e4f6b1ce5",
     "dirty": false,
     "dirtyAnyFile": true,
-    "node": "v22.22.2",
+    "scope": "1_blockchain-identity/scripts/mobi_vid_backend_sweep.js",
+    "scopeFiles": 7,
+    "scopeSha": "b6947bd6a9a6",
+    "node": "v22.22.0",
     "hardhat": "2.28.6",
     "solcSettings": {
       "optimizer": {
@@ -162,7 +166,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-09T02:27:44.231Z",
+    "date": "2026-10-21T03:15:32.987Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [
