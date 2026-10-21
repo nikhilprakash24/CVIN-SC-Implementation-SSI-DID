@@ -275,11 +275,21 @@
 | `024274d` | 2026-10-20 | Phase 2 session 3: deep-dive brief I-05 (freshness theory), 15 entries fetched at origin, 8 re-checked (Springer not re-verifiable here, sta… |
 | `de27b7c` | 2026-10-20 | Report 23 closed: CI 8/8 green on 024274d |
 
-## report 24 (2026-10-20 to 2026-10-20, 2 commits)
+## report 24 (2026-10-20 to 2026-10-20, 6 commits)
 
 | Commit | Date | Subject |
 |---|---|---|
 | `c6dc3af` | 2026-10-20 | Report 24 opened (lead's pass); tools/prepush_check.sh mirrors CI's document and copy guards locally, with a probe that shows it fires |
 | `e3944ec` | 2026-10-20 | Decision sheet: every open author decision on one page, with what it blocks, the default in force and a recommendation |
+| `41c0535` | 2026-10-20 | Progress report July to October 2026, draft 1, with a generated commit appendix; handback addendum; manifest; report 24 log |
+| `46f8d1f` | 2026-10-20 | Fix the red document step: the generated progress appendix is a history document for the stale-figure checker; one sentence reworded; prepus… |
+| `b7ea6f4` | 2026-10-20 | Report 24 closed: CI 8/8 green on 46f8d1f |
+| `a9b03c2` | 2026-10-20 | Report 20 closed: CI 8/8 green on 914dcb2 |
 
-175 commits in 21 groups.
+## report 25 (2026-10-21 to 2026-10-21, 1 commits)
+
+| Commit | Date | Subject |
+|---|---|---|
+| `d1a7cbf` | 2026-10-21 | After-action report 25 opened: TDP runbook phase 10, thesis adaptation map onto chapter 3 |
+
+180 commits in 22 groups.

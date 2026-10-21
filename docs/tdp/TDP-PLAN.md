@@ -64,3 +64,4 @@ rows they quote; the generated ones will regenerate.
 ## 6. Revisions
 
 - 2026-10-15, Rev A: initial issue, after-action report 20.
+- 2026-10-21, Rev A unchanged; TDP-010 added by runbook phase 10 (after-action report 25). The matrix read 30 VERIFIED, 6 PARTIAL after passes 21 and 22 cleared C1 and D54.

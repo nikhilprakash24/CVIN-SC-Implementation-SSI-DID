@@ -4,8 +4,8 @@
 **Written:** 2026-10-15 (after-action report 20). **Revision:** A.
 **Purpose:** the same plan as `TDP-PLAN.md`, cut into phases that a later session can run one at a time with no
 memory of this one. Each phase states what it reads, what it may write, its gate command and its stop condition.
-Phases 0 to 7 record what this pass executed (so a session can re-run or audit one); phases 8 to 12 are the
-follow-on work this pass did not do. A prompt is text to paste; the words in angle brackets are filled in by the
+Phases 0 to 7 record what pass 20 executed (so a session can re-run or audit one); phase 10 was executed in pass 25;
+phases 8, 9, 11 and 12 remain. A prompt is text to paste; the words in angle brackets are filled in by the
 person running it.
 
 ## How to run a phase
@@ -166,7 +166,7 @@ check, not by reading.
 > reasons). Add it to the CI document step and to `docs/tdp/probe_tdp_checks.sh` with a tamper probe. Show it firing on
 > a fake identifier. Commit as "TDP phase 9: ICD gate", and stop.
 
-## Phase 10 — Thesis adaptation map
+## Phase 10 — Thesis adaptation map (executed 2026-10-21, after-action report 25; output `TDP-010_THESIS_ADAPTATION_MAP.md`)
 
 **Reads:** TDP-002 section 3, `docs/thesis/chapter3-methodology/README.md`, `docs/thesis/chapter5-results/README.md`.
 **Writes:** `docs/tdp/TDP-010_THESIS_ADAPTATION_MAP.md`. **Gate:** the stale-figure checker. **Stop:** every

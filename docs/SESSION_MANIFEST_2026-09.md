@@ -285,3 +285,10 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `tools/prepush_check.sh` | CI's document and copy guards, run locally before a push; probe included | pass 22's three red runs |
 | `docs/DECISION_SHEET_2026-10-20.md` | every open author decision on one page | the backlog was scattered over five files |
 | `docs/PROGRESS_REPORT_2026-07_TO_2026-10.md`, `docs/make_progress_appendix.py`, `PROGRESS_APPENDIX_2026-07_TO_2026-10.md` | the hand-over write-up, draft 1, with its generated commit appendix | the author's request |
+
+## Pass 25 — TDP runbook phase 10: thesis adaptation map (2026-10-21)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_25.md` | plan, log, closing | standing rule |
+| `docs/tdp/TDP-010_THESIS_ADAPTATION_MAP.md` | requirements onto chapter 3; drift table; outline v2 | the author's request |
+| `docs/tdp/README.md`, `TDP-RUNBOOK.md`, `TDP-PLAN.md`; handback section 16 | records | records |

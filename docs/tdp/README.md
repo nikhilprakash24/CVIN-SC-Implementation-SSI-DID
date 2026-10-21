@@ -31,6 +31,7 @@ code and toolchain behind every figure.
 | TDP-007 | `TDP-007_TEST_AND_EVALUATION_MASTER_PLAN.md` — test architecture, pre-registration protocol, gates, exams | hand-written | DoD TEMP structure (test architecture, evaluation framework, resources) | grand report; CI; pre-registrations | `check_docs_numbers.py` |
 | TDP-008 | `TDP-008_CONFIGURATION_BASELINE.md` — as-built baseline: commits, runs of record, toolchain pins, producers | hand-written | MIL-STD-498 SVD (software version description) | `meta.json`, `package.json`, workflows, `producers.json` | `check_docs_numbers.py` |
 | TDP-009 | `TDP-009_RISK_REGISTER.md` — programme risks on the DoD five-by-five matrix | hand-written | DoD Risk, Issue and Opportunity Management Guide (likelihood × consequence) | crux gaps; deferred items; defects | `check_docs_numbers.py` |
+| TDP-010 | `TDP-010_THESIS_ADAPTATION_MAP.md` — the specification mapped onto chapter 3: state of the current text per requirement, the sentence that carries it, the drift table, chapter 3 outline v2 | hand-written | — | TDP-002; chapter 3; register; passes 21 to 24 | `check_docs_numbers.py` |
 | TDP-PLAN | `TDP-PLAN.md` — the plan that produced this package and what remains | hand-written | — | — | — |
 | TDP-RUNBOOK | `TDP-RUNBOOK.md` — the same plan as phases with self-contained prompts for another session | hand-written | — | — | — |
 
