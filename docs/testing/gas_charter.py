@@ -54,6 +54,7 @@ ROWS = {
     47: ("G-range", "I4 over declared seeds 1–30; seed 1 exact (WM-2 B1)"),
     49: ("G-mode", "metrics harness storage and log counts; gas column inherits §2"),
     50: ("G-mode", "metrics harness: ERC-1056 U5 varies 62,634–62,646 (calldata only); U3 exact"),
+    53: ("G-mode", "metrics harness, clone-lineage run 9bdf451: P1 and X1 cells are modes; re-run due on the merged tree (lineage merge, PR #3)"),
 }
 
 

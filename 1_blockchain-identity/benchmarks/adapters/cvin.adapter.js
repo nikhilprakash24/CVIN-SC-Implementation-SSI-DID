@@ -35,6 +35,7 @@ class CVINCombinedAdapter extends IdentityAdapter {
     });
     const { keccak256, toUtf8Bytes } = this.ethers;
     this.K = { veriKey: keccak256(toUtf8Bytes("veriKey")), attr: keccak256(toUtf8Bytes(this.payloads.attributeName)), deactivated: keccak256(toUtf8Bytes(this.payloads.deactivatedName)) };
+    delete this.unsupported.P1_create_presentation;
   }
 
   async deploy() {
@@ -163,6 +164,12 @@ class CVINCombinedAdapter extends IdentityAdapter {
   }
   async deactivate(h) {
     const tx = await this._reg(h.controller).setAttribute(h.did, this.K.deactivated, this.ethers.toUtf8Bytes("true"), PERMANENT_VALIDITY);
+    return { txs: [tx] };
+  }
+
+  async createPresentation(h, presHash) {
+    const key = this.ethers.keccak256(this.ethers.concat([this.ethers.toUtf8Bytes("did/vp/"), presHash]));
+    const tx = await this._reg(h.controller).setAttribute(h.did, key, this.ethers.getBytes(presHash), 300);
     return { txs: [tx] };
   }
 

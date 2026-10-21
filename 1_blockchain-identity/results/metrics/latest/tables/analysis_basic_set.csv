@@ -1,0 +1,7 @@
+Basic-set view,erc1056,erc1056w,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
+Set A ops supported,11/12,10/12,10/12,11/12,8/12,8/12,9/12,8/12,12/12,11/12
+Set A missing,X1,D2 X1,D2 X1,X1,U2 R4 D1 X1,U2 R4 D1 X1,U2 R4 D1,U2 R4 D1 X1,—,X1
+Set B ops supported,5/5,5/5,4/5,5/5,4/5,4/5,5/5,3/5,5/5,5/5
+Set B missing,—,—,P1,—,V1,P1,—,V1 P1,—,—
+**Admitted** (all mapped Set A + B ops present),no,no,no,no,no,no,no,no,yes,no
+Extension ops beyond the basic set,R2 U4 U5,R2 U4,R2 U4,U4,U4,R2 U4,U4,R2 U4,U4 U5,U4

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-15T04:12:08.891Z",
+  "generatedAt": "2026-10-21T03:11:44.744Z",
   "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
   "options": [
     "cvin-combined",
@@ -245,7 +245,7 @@
       "option": "mobi-vid",
       "mechanism": "controller-change",
       "outcome": "ok",
-      "gasUsed": "180105",
+      "gasUsed": "180127",
       "reason": null,
       "note": "transferVehicleOwnership (K-3: changeOwner reverts for born vehicles); appends an OwnershipTransfer record + ERC-1056 DIDOwnerChanged; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
@@ -429,9 +429,9 @@
       "option": "cvin-combined",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "316465",
+      "gasUsed": "316451",
       "reason": null,
-      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x380054… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
+      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0xB50e79… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
     },
     {
       "option": "erc-1056-uport",
@@ -511,13 +511,13 @@
       "outcome": "ok",
       "gasUsed": "287310",
       "reason": null,
-      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x108c715bc42b9823f2604012b1f47dff6dd000cc0f4…)"
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0xdb1a0cb2158f41741615516121577426f46660885cb…)"
     },
     {
       "option": "cvin-combined",
       "mechanism": "revoke",
       "outcome": "ok",
-      "gasUsed": "70883",
+      "gasUsed": "70873",
       "reason": null,
       "note": "removeClaim (storage refund applies); prep: addClaim; document differs from pre-revoke document"
     },
@@ -685,7 +685,7 @@
       "option": "mobi-vid",
       "mechanism": "transfer",
       "outcome": "ok",
-      "gasUsed": "180105",
+      "gasUsed": "180127",
       "reason": null,
       "note": "transferVehicleOwnership: odometer-stamped OwnershipTransfer record + ERC-1056 changeOwner; recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },

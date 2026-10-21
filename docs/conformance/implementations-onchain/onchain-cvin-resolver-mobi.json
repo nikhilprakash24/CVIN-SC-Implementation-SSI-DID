@@ -1,0 +1,141 @@
+{
+  "implementation": "CVIN did_resolver.py (MOBI VID, on-chain)",
+  "implementer": "CVIN-SC-Implementation-SSI-DID (Nikhil Prakash, UBC ECE MASc thesis)",
+  "didMethod": "did:mobi",
+  "expectedOutcomes": {
+    "defaultOutcome": [
+      0,
+      1
+    ],
+    "invalidDidErrorOutcome": [
+      2
+    ],
+    "notFoundErrorOutcome": [
+      3
+    ],
+    "representationNotSupportedErrorOutcome": [],
+    "methodNotSupportedErrorOutcome": [],
+    "deactivatedOutcome": [
+      4
+    ]
+  },
+  "executions": [
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "retrieved": "2026-10-15T05:20:13Z",
+          "cvinResolutionMode": "mobi-vid-registry"
+        },
+        "didDocument": {
+          "@context": [
+            "https://www.w3.org/ns/did/v1",
+            "https://w3id.org/security/suites/secp256k1recovery-2020/v2"
+          ],
+          "id": "did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff",
+          "controller": "did:ethr:0x7a69:0x15d34aaf54267db7d7c367839aaf71a00a2c6a65",
+          "verificationMethod": [
+            {
+              "id": "did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff#controller",
+              "type": "EcdsaSecp256k1RecoveryMethod2020",
+              "controller": "did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff",
+              "blockchainAccountId": "eip155:31337:0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65"
+            }
+          ],
+          "authentication": [
+            "did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff#controller"
+          ],
+          "assertionMethod": [
+            "did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff#controller"
+          ],
+          "alsoKnownAs": [
+            "did:ethr:0x7a69:0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e"
+          ]
+        },
+        "didDocumentMetadata": {
+          "updated": "2026-10-15T05:20:19Z",
+          "versionId": "9"
+        }
+      }
+    },
+    {
+      "function": "resolveRepresentation",
+      "input": {
+        "did": "did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff",
+        "resolutionOptions": {
+          "accept": "application/did+ld+json"
+        }
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "contentType": "application/did+ld+json",
+          "retrieved": "2026-10-15T05:20:13Z",
+          "cvinResolutionMode": "mobi-vid-registry"
+        },
+        "didDocumentStream": "{\"@context\": [\"https://www.w3.org/ns/did/v1\", \"https://w3id.org/security/suites/secp256k1recovery-2020/v2\"], \"id\": \"did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff\", \"controller\": \"did:ethr:0x7a69:0x15d34aaf54267db7d7c367839aaf71a00a2c6a65\", \"verificationMethod\": [{\"id\": \"did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff#controller\", \"type\": \"EcdsaSecp256k1RecoveryMethod2020\", \"controller\": \"did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff\", \"blockchainAccountId\": \"eip155:31337:0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65\"}], \"authentication\": [\"did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff#controller\"], \"assertionMethod\": [\"did:mobi:0x0793dde2e98c6cf03dda06dda21962ac2107d8e65dd6877983ae4797bf4a47ff#controller\"], \"alsoKnownAs\": [\"did:ethr:0x7a69:0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e\"]}",
+        "didDocumentMetadata": {
+          "updated": "2026-10-15T05:20:19Z",
+          "versionId": "9"
+        }
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:mobi:",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "error": "invalidDid",
+          "errorMessage": "Invalid DID format: did:mobi:"
+        },
+        "didDocument": null,
+        "didDocumentMetadata": {}
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:mobi:0xabababababababababababababababababababababababababababababababab",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "error": "notFound",
+          "errorMessage": "no vehicle is registered under this VIN hash in the configured MOBI VID registry"
+        },
+        "didDocument": null,
+        "didDocumentMetadata": {}
+      }
+    },
+    {
+      "function": "resolve",
+      "input": {
+        "did": "did:mobi:0x554848380003cb7d807e39ac5899e2af2ff1fae0a5e6eeb849014eb42ffd6753",
+        "resolutionOptions": {}
+      },
+      "output": {
+        "didResolutionMetadata": {
+          "retrieved": "2026-10-15T05:20:13Z",
+          "cvinResolutionMode": "mobi-vid-registry"
+        },
+        "didDocument": {
+          "@context": [
+            "https://www.w3.org/ns/did/v1"
+          ],
+          "id": "did:mobi:0x554848380003cb7d807e39ac5899e2af2ff1fae0a5e6eeb849014eb42ffd6753"
+        },
+        "didDocumentMetadata": {
+          "updated": "2026-10-15T05:20:21Z",
+          "deactivated": true,
+          "versionId": "11"
+        }
+      }
+    }
+  ]
+}

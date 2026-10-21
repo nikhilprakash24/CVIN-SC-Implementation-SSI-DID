@@ -94,8 +94,12 @@ class TestSumoSelfIssuedCredential:
         pkg, _ = layer.sign("legit", {"msgID": "BSM", "speed": 10, "timestamp": time.time()})
         ok, _, cold = layer.verify("rx", pkg)
         assert ok and cold
-        ok, _, cold = layer.verify("rx", pkg)
+        # warm path: a NEW message from the same peer (re-delivering `pkg`
+        # itself is a replay, rejected since the SUMO replay cache)
+        pkg2, _ = layer.sign("legit", {"msgID": "BSM", "speed": 11, "timestamp": time.time()})
+        ok, _, cold = layer.verify("rx", pkg2)
         assert ok and not cold
+        assert layer.verify("rx", pkg)[0] is False
 
     def test_revoked_consortium_credential_rejected(self, sumo):
         layer = sumo.SSIIdentityLayer()

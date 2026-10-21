@@ -14,7 +14,7 @@
 | Do the identities meet W3C DID / VC? | internal checker 94.3 % (41 pass, 1 partial, 2 fail of 44); external DID suite 335/336 | #4, #24 |
 | Are the identity contracts attack-resistant? | 43 of 43 applicable attack cells defended (11 not applicable), strict harness | #28 |
 | Can infrastructure (RSUs, controllers) use the same identity layer? | I1 outside band, not falsified (SPaT/BSM warm ratio 1.226), I2 PASS (15 registered checks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
-| How large is the test and evidence base? | 537 Hardhat tests, 331 Python-layer tests, 92 feature demos (1,752 steps); 33 verified register rows | grand report |
+| How large is the test and evidence base? | 537 Hardhat tests, 331 Python-layer tests, 92 feature demos (1,752 steps); 36 verified register rows | grand report |
 
 ## 2. Research questions and hypotheses
 
@@ -145,13 +145,13 @@
 
 | Experiment | Pre-registered claim | Verdict | Measured |
 |---|---|---|---|
-| M4 lifecycle parity: birth | centralized >= 10x faster (median) | PASS | ratio 4,862.289 |
-| M4 lifecycle parity: lifecycle_event | centralized >= 10x faster (median) | PASS | ratio 1,636.209 |
-| M4 lifecycle parity: ownership_transfer | centralized >= 10x faster (median) | PASS | ratio 6,044.237 |
-| M4 lifecycle parity: history_query_cached | equal once cached (median ratio in [0.5, 2.0]) | FAIL | ratio 0.041 |
-| M4 lifecycle parity: history_query | reported, no pre-registered verdict | (outside band) | ratio 434.831 |
-| M4 lifecycle parity: history_query_cached_validated | reported, no pre-registered verdict | (outside band) | ratio 58.636 |
-| M4 lifecycle parity: history_query_cached vs centralized unserialised (post-hoc diagnostic) | post-hoc diagnostic, no verdict | (outside band) | ratio 16.670 |
+| M4 lifecycle parity: birth | centralized >= 10x faster (median) | PASS | ratio 8,141.206 |
+| M4 lifecycle parity: lifecycle_event | centralized >= 10x faster (median) | PASS | ratio 2,637.515 |
+| M4 lifecycle parity: ownership_transfer | centralized >= 10x faster (median) | PASS | ratio 8,567.778 |
+| M4 lifecycle parity: history_query_cached | equal once cached (median ratio in [0.5, 2.0]) | FAIL | ratio 0.035 |
+| M4 lifecycle parity: history_query | reported, no pre-registered verdict | (outside band) | ratio 478.191 |
+| M4 lifecycle parity: history_query_cached_validated | reported, no pre-registered verdict | (outside band) | ratio 63.152 |
+| M4 lifecycle parity: history_query_cached vs centralized unserialised (post-hoc diagnostic) | post-hoc diagnostic, no verdict | (outside band) | ratio 7.899 |
 | M5 pseudonym pool: gas | ≈ 1,444,380 gas per epoch (±10 %) | FAIL | 1,113,456, 1,096,368, 1,096,368 |
 | M5 pseudonym pool: linkability | delegate pool fully linkable from chain data | PASS | linkable |
 *Failed and out-of-band verdicts are shown, not hidden.*

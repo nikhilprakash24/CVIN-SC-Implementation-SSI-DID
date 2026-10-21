@@ -62,6 +62,20 @@ DEFAULT_MAX_AGE_S = 1.0
 DEFAULT_MAX_FUTURE_S = 0.1
 DEFAULT_REPLAY_CACHE_SIZE = 65_536
 
+# Rejection reasons a provider's verify_message() records in its
+# `last_reject_reason` attribute (review 02 Pass 3 Low, #21 sanity check).
+# The attribute is written ONLY on a rejection path: the accept path (the one
+# every timed verify takes) does not touch it, so recording a reason adds no
+# work to a measured verify. A caller that wants the reason of one specific
+# call resets the attribute to None before the call. Freshness rejections
+# record the string FreshnessPolicy.check() returned.
+REASON_REVOKED = "revoked"
+REASON_UNTRUSTED = "untrusted or malformed credential"
+REASON_VALIDITY = "certificate outside its validity window"
+REASON_NO_TRUST_ANCHOR = "no trust anchor"
+REASON_BAD_SIGNATURE = "signature or decoding failure"
+REASON_UNRESOLVED = "sender identity not resolvable"
+
 
 def generation_timestamp() -> str:
     """Current UTC time as the providers have always written it (naive ISO 8601).

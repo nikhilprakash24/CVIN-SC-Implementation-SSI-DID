@@ -4,9 +4,9 @@
     "source": {
       "path": "docs/MEASUREMENT_CONDITIONS.md"
     },
-    "rows": 51,
+    "rows": 54,
     "by_status": {
-      "V": 33,
+      "V": 36,
       "S": 10,
       "E": 7,
       "U": 1
@@ -544,43 +544,43 @@
         "operation": "birth",
         "claim": "centralized >= 10x faster (median)",
         "verdict": "PASS",
-        "ratio_median": 4862.289
+        "ratio_median": 8141.206
       },
       {
         "operation": "lifecycle_event",
         "claim": "centralized >= 10x faster (median)",
         "verdict": "PASS",
-        "ratio_median": 1636.209
+        "ratio_median": 2637.515
       },
       {
         "operation": "ownership_transfer",
         "claim": "centralized >= 10x faster (median)",
         "verdict": "PASS",
-        "ratio_median": 6044.237
+        "ratio_median": 8567.778
       },
       {
         "operation": "history_query_cached",
         "claim": "equal once cached (median ratio in [0.5, 2.0])",
         "verdict": "FAIL",
-        "ratio_median": 0.041
+        "ratio_median": 0.035
       },
       {
         "operation": "history_query",
         "claim": "reported, no pre-registered verdict",
         "verdict": "(outside band)",
-        "ratio_median": 434.831
+        "ratio_median": 478.191
       },
       {
         "operation": "history_query_cached_validated",
         "claim": "reported, no pre-registered verdict",
         "verdict": "(outside band)",
-        "ratio_median": 58.636
+        "ratio_median": 63.152
       },
       {
         "operation": "history_query_cached vs centralized unserialised (post-hoc diagnostic)",
         "claim": "post-hoc diagnostic, no verdict",
         "verdict": "(outside band)",
-        "ratio_median": 16.67
+        "ratio_median": 7.899
       }
     ]
   },
@@ -1892,6 +1892,24 @@
       "status": "V",
       "claim": "Harness L3 read cost of document resolution (R3) against history, all ten columns (Phase 2 focus F1; added 2026-10-14 from the existing run of record, no new run; academic review AR-15). RPC calls / bytes at h = 1 · 10 ·…",
       "tag": "M1-H"
+    },
+    "52": {
+      "row": 52,
+      "status": "V",
+      "claim": "(clone lineage, was #40) Basic digital-ID set coverage: the catalogue mapped onto IMinimalSSI Set A (identity/keys) and Set B (credentials); per substrate, Set A ops supported 11/11 (ERC-1056 pure, ERC-725, ERC-4337, CVI…",
+      "tag": "M1-H (derived)"
+    },
+    "53": {
+      "row": 53,
+      "status": "V",
+      "claim": "(clone lineage, was #41) Basic-set functions P1 createPresentation (F8) and X1 execute measured (run `2026-10-15T05-07-33Z_9bdf451`, measured hashes in its meta.json; all other cells byte-identical to `0eef6af`). P1 gas:…",
+      "tag": "M1-H"
+    },
+    "54": {
+      "row": 54,
+      "status": "V",
+      "claim": "(clone lineage, was #42) Freshness-k, same host, both refresh modes (12 replicates in alternating blocks, fresh node each; clean pool by foreign-CPU load; one replicate excluded for overlapping another experiment): t_loc…",
+      "tag": "M0/M1, Hardhat 2.28.6, chain 31337, automine; Intel Xeon 2.80 GHz × 4, shared"
     }
   }
 }

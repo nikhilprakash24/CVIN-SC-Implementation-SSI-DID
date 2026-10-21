@@ -55,6 +55,7 @@ describe("Security / harness self-check (attempt classifier)", function () {
 
   it("a TypeError (attack never sent) is FAILED-TO-RUN, not DEFENDED", async function () {
     const r = await H.attempt(() => lsp8.connect(attacker).noSuchFunction(attacker.address), {
+      target: lsp8,
       reason: "LSP8: caller is not the contract owner",
     });
     expect(r.outcome).to.equal("FAILED-TO-RUN");
@@ -63,6 +64,7 @@ describe("Security / harness self-check (attempt classifier)", function () {
 
   it("an ethers ABI/argument error is FAILED-TO-RUN, not DEFENDED", async function () {
     const r = await H.attempt(() => lsp8.connect(attacker).mintVehicle(attacker.address), {
+      target: lsp8,
       reason: "LSP8: caller is not the contract owner",
     });
     expect(r.outcome).to.equal("FAILED-TO-RUN");
@@ -72,6 +74,7 @@ describe("Security / harness self-check (attempt classifier)", function () {
     // The authority (who passes onlyOwner) mints an empty VIN: it reverts, but
     // on the input check, not on the access-control gate the cell would claim.
     const r = await H.attempt(() => lsp8.connect(authority).mintVehicle(attacker.address, ""), {
+      target: lsp8,
       reason: "LSP8: caller is not the contract owner",
     });
     expect(r.outcome).to.equal("UNEXPECTED-REVERT");
@@ -83,12 +86,14 @@ describe("Security / harness self-check (attempt classifier)", function () {
     await nft.waitForDeployment();
     const thunk = () => nft.connect(attacker).mintVehicle(attacker.address, "V", "a", "b", 1, "c", "d");
     const wrongRole = await H.attempt(thunk, {
+      target: nft,
       customError: "AccessControlUnauthorizedAccount",
       args: [attacker.address, await nft.SERVICE_CENTER_ROLE()],
       iface: nft.interface,
     });
     expect(wrongRole.outcome).to.equal("UNEXPECTED-REVERT");
     const rightRole = await H.attempt(thunk, {
+      target: nft,
       customError: "AccessControlUnauthorizedAccount",
       args: [attacker.address, await nft.MANUFACTURER_ROLE()],
       iface: nft.interface,
@@ -98,11 +103,13 @@ describe("Security / harness self-check (attempt classifier)", function () {
 
   it("decodes Error(string) from raw revert data where Hardhat 'couldn't infer the reason' (solc 0.8.20 viaIR ERC-725)", async function () {
     const r = await H.attempt(() => id725.connect(attacker).addKey(ethers.ZeroHash, 1, 1), {
+      target: id725,
       reason: "Only owner can add keys",
     });
     expect(r.outcome).to.equal("DEFENDED");
     expect(r.revertReason).to.equal('Error("Only owner can add keys")');
     const wrong = await H.attempt(() => id725.connect(attacker).addKey(ethers.ZeroHash, 1, 1), {
+      target: id725,
       reason: "Only owner can remove keys",
     });
     expect(wrong.outcome).to.equal("UNEXPECTED-REVERT");
@@ -112,6 +119,59 @@ describe("Security / harness self-check (attempt classifier)", function () {
     let threw = false;
     try {
       await H.attempt(() => lsp8.connect(attacker).mintVehicle(attacker.address, "X"));
+    } catch (_) {
+      threw = true;
+    }
+    expect(threw).to.equal(true);
+  });
+
+  // Review 02 Pass 3 Low: matchesExpected() compared the revert reason only,
+  // so the identical reason bubbled up from ANOTHER contract counted as the
+  // named defense. CVINVehicleAccount.execute() forwards a failed call's
+  // revert data unchanged (`revert(add(ret,32), mload(ret))`).
+  async function bubblingAccount() {
+    const ep = await (await ethers.getContractFactory("CVINMinimalEntryPoint", authority)).deploy();
+    await ep.waitForDeployment();
+    const acc = await (await ethers.getContractFactory("CVINVehicleAccount", authority)).deploy(
+      await ep.getAddress(), attacker.address);
+    await acc.waitForDeployment();
+    const inner = lsp8.interface.encodeFunctionData("mintVehicle", [attacker.address, "X"]);
+    return { acc, thunk: () => acc.connect(attacker).execute(lsp8.target, 0, inner) };
+  }
+
+  it("an identical revert bubbled up from another contract is UNEXPECTED-REVERT", async function () {
+    const { acc, thunk } = await bubblingAccount();
+    const r = await H.attempt(thunk, { target: acc, reason: "LSP8: caller is not the contract owner" });
+    // the reason matches exactly, but LSP8's code produced it, not the account's
+    expect(r.revertReason).to.equal('Error("LSP8: caller is not the contract owner")');
+    expect(r.revertOrigin).to.equal(lsp8.target);
+    expect(r.outcome).to.equal("UNEXPECTED-REVERT");
+  });
+
+  it("the origin is traced through a forwarding contract to the reverting one", async function () {
+    const { thunk } = await bubblingAccount();
+    const r = await H.attempt(thunk, { target: lsp8, reason: "LSP8: caller is not the contract owner" });
+    expect(r.outcome).to.equal("DEFENDED");
+    // a direct call: the origin is the called contract itself
+    const direct = await H.attempt(() => lsp8.connect(attacker).mintVehicle(attacker.address, "X"), {
+      target: lsp8,
+      reason: "LSP8: caller is not the contract owner",
+    });
+    expect(direct.outcome).to.equal("DEFENDED");
+    expect(direct.revertOrigin).to.equal(lsp8.target);
+    const wrongTarget = await H.attempt(() => lsp8.connect(attacker).mintVehicle(attacker.address, "X"), {
+      target: id725,
+      reason: "LSP8: caller is not the contract owner",
+    });
+    expect(wrongTarget.outcome).to.equal("UNEXPECTED-REVERT");
+  });
+
+  it("refuses an attack that names no target contract", async function () {
+    let threw = false;
+    try {
+      await H.attempt(() => lsp8.connect(attacker).mintVehicle(attacker.address, "X"), {
+        reason: "LSP8: caller is not the contract owner",
+      });
     } catch (_) {
       threw = true;
     }
@@ -155,7 +215,7 @@ describe("Security / ERC-1056 (EthereumDIDRegistry)", function () {
   it("unauthorizedAttributeWrite: attacker cannot setAttribute on a victim DID", async function () {
     const r = await H.attempt(() =>
       registry.connect(attacker).setAttribute(victim.address, name, value, ONE_YEAR),
-      { reason: "DIDRegistry: unauthorized" }
+      { target: registry, reason: "DIDRegistry: unauthorized" }
     );
     const ctl = await H.control(() =>
       registry.connect(victim).setAttribute(victim.address, name, value, ONE_YEAR)
@@ -177,7 +237,7 @@ describe("Security / ERC-1056 (EthereumDIDRegistry)", function () {
     const dtype = ethers.encodeBytes32String("veriKey");
     const r = await H.attempt(() =>
       registry.connect(attacker).addDelegate(victim.address, dtype, attacker.address, ONE_YEAR),
-      { reason: "DIDRegistry: unauthorized" }
+      { target: registry, reason: "DIDRegistry: unauthorized" }
     );
     const ctl = await H.control(() =>
       registry.connect(victim).addDelegate(victim.address, dtype, relayer.address, ONE_YEAR)
@@ -200,7 +260,7 @@ describe("Security / ERC-1056 (EthereumDIDRegistry)", function () {
   it("unauthorizedRevocation: attacker cannot revokeAttribute on a victim DID", async function () {
     const r = await H.attempt(() =>
       registry.connect(attacker).revokeAttribute(victim.address, name, value),
-      { reason: "DIDRegistry: unauthorized" }
+      { target: registry, reason: "DIDRegistry: unauthorized" }
     );
     const ctl = await H.control(() =>
       registry.connect(victim).revokeAttribute(victim.address, name, value)
@@ -221,7 +281,7 @@ describe("Security / ERC-1056 (EthereumDIDRegistry)", function () {
   it("identityHijack: attacker cannot changeOwner of a victim DID", async function () {
     const r = await H.attempt(() =>
       registry.connect(attacker).changeOwner(victim.address, attacker.address),
-      { reason: "DIDRegistry: unauthorized" }
+      { target: registry, reason: "DIDRegistry: unauthorized" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     // Owner unchanged (still self-owned).
@@ -267,7 +327,7 @@ describe("Security / ERC-1056 (EthereumDIDRegistry)", function () {
       registry.connect(attacker).setAttributeSigned(identity, sig.v, sig.r, sig.s, name, value, ONE_YEAR),
       // The nonce is folded into the signed hash, so after the bump the same
       // (v,r,s) recovers a different address: the owner check fails.
-      { reason: "DIDRegistry: invalid signature" }
+      { target: registry, reason: "DIDRegistry: invalid signature" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     H.record(STD, "signatureReplay", {
@@ -307,7 +367,7 @@ describe("Security / ERC-721 (CVINVehicleNFT)", function () {
   it("unauthorizedIssuance: attacker without MANUFACTURER_ROLE cannot mint", async function () {
     const r = await H.attempt(() =>
       nft.connect(attacker).mintVehicle(attacker.address, "2HGBH41JXMN109187", "Ford", "F150", 2024, "Red", "ipfs://x"),
-      { customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await nft.MANUFACTURER_ROLE()], iface: nft.interface }
+      { target: nft, customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await nft.MANUFACTURER_ROLE()], iface: nft.interface }
     );
     const ctl = await H.control(() =>
       nft.connect(deployer).mintVehicle(other.address, "3HGBH41JXMN109188", "Toyota", "Camry", 2024, "White", "ipfs://y")
@@ -328,7 +388,7 @@ describe("Security / ERC-721 (CVINVehicleNFT)", function () {
   it("unauthorizedAttributeWrite: attacker without SERVICE_CENTER_ROLE cannot addServiceRecord", async function () {
     const r = await H.attempt(() =>
       nft.connect(attacker).addServiceRecord(tokenId, "ipfs://malicious"),
-      { customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await nft.SERVICE_CENTER_ROLE()], iface: nft.interface }
+      { target: nft, customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await nft.SERVICE_CENTER_ROLE()], iface: nft.interface }
     );
     await (await nft.grantServiceCenterRole(other.address)).wait();
     const ctl = await H.control(() =>
@@ -350,7 +410,7 @@ describe("Security / ERC-721 (CVINVehicleNFT)", function () {
   it("unauthorizedDelegateOrClaim: attacker cannot approve a token it does not own", async function () {
     const r = await H.attempt(() =>
       nft.connect(attacker).approve(attacker.address, tokenId),
-      { customError: "ERC721InvalidApprover", args: [attacker.address], iface: nft.interface }
+      { target: nft, customError: "ERC721InvalidApprover", args: [attacker.address], iface: nft.interface }
     );
     const ctl = await H.control(() =>
       nft.connect(victim).approve(other.address, tokenId)
@@ -370,6 +430,7 @@ describe("Security / ERC-721 (CVINVehicleNFT)", function () {
 
   it("unauthorizedRevocation: attacker without DEFAULT_ADMIN_ROLE cannot deactivateVehicle", async function () {
     const r = await H.attempt(() => nft.connect(attacker).deactivateVehicle(tokenId), {
+      target: nft,
       customError: "AccessControlUnauthorizedAccount",
       args: [attacker.address, ethers.ZeroHash], // DEFAULT_ADMIN_ROLE
       iface: nft.interface,
@@ -391,7 +452,7 @@ describe("Security / ERC-721 (CVINVehicleNFT)", function () {
   it("identityHijack: attacker cannot transferFrom a victim's token", async function () {
     const r = await H.attempt(() =>
       nft.connect(attacker).transferFrom(victim.address, attacker.address, tokenId),
-      { customError: "ERC721InsufficientApproval", args: [attacker.address, tokenId], iface: nft.interface }
+      { target: nft, customError: "ERC721InsufficientApproval", args: [attacker.address, tokenId], iface: nft.interface }
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(await nft.ownerOf(tokenId)).to.equal(victim.address);
@@ -450,7 +511,7 @@ describe("Security / ERC-725 (CVIN_SCBasedAccOrID_DID_ERC725Basic)", function ()
   });
 
   it("unauthorizedAttributeWrite: attacker cannot addKey to a victim identity", async function () {
-    const r = await H.attempt(() => id.connect(attacker).addKey(claimKey, 1, 1), { reason: "Only owner can add keys" });
+    const r = await H.attempt(() => id.connect(attacker).addKey(claimKey, 1, 1), { target: id, reason: "Only owner can add keys" });
     const ctl = await H.control(() => id.connect(victim).addKey(claimKey, 1, 1));
     expect(r.outcome).to.equal("DEFENDED");
     expect(ctl).to.equal("PASS");
@@ -466,7 +527,7 @@ describe("Security / ERC-725 (CVIN_SCBasedAccOrID_DID_ERC725Basic)", function ()
   });
 
   it("unauthorizedDelegateOrClaim: attacker cannot add a CLAIM-signer key", async function () {
-    const r = await H.attempt(() => id.connect(attacker).addKey(claimKey, 3, 1), { reason: "Only owner can add keys" });
+    const r = await H.attempt(() => id.connect(attacker).addKey(claimKey, 3, 1), { target: id, reason: "Only owner can add keys" });
     const ctl = await H.control(() => id.connect(victim).addKey(claimKey, 3, 1));
     expect(r.outcome).to.equal("DEFENDED");
     expect(ctl).to.equal("PASS");
@@ -482,7 +543,7 @@ describe("Security / ERC-725 (CVIN_SCBasedAccOrID_DID_ERC725Basic)", function ()
   });
 
   it("unauthorizedRevocation: attacker cannot removeKey from a victim identity", async function () {
-    const r = await H.attempt(() => id.connect(attacker).removeKey(mgmtKey), { reason: "Only owner can remove keys" });
+    const r = await H.attempt(() => id.connect(attacker).removeKey(mgmtKey), { target: id, reason: "Only owner can remove keys" });
     const ctl = await H.control(() => id.connect(victim).removeKey(mgmtKey));
     expect(r.outcome).to.equal("DEFENDED");
     expect(ctl).to.equal("PASS");
@@ -498,7 +559,7 @@ describe("Security / ERC-725 (CVIN_SCBasedAccOrID_DID_ERC725Basic)", function ()
   });
 
   it("identityHijack: attacker cannot transferOwnership of a victim identity", async function () {
-    const r = await H.attempt(() => id.connect(attacker).transferOwnership(attacker.address), { reason: "Only owner can transfer ownership" });
+    const r = await H.attempt(() => id.connect(attacker).transferOwnership(attacker.address), { target: id, reason: "Only owner can transfer ownership" });
     expect(r.outcome).to.equal("DEFENDED");
     expect(await id.owner()).to.equal(victim.address);
     const ctl = await H.control(() => id.connect(victim).transferOwnership(other.address));
@@ -570,7 +631,7 @@ describe("Security / ERC-735 (CVINVehicleClaimHolder)", function () {
     const sig = await signClaim(issuer, holderAddr, TOPIC, data);
     const r = await H.attempt(() =>
       holder.connect(attacker).addClaim(TOPIC, SCHEME, issuer.address, sig, data, "ipfs://a"),
-      { reason: "ERC735: caller is not the owner" }
+      { target: holder, reason: "ERC735: caller is not the owner" }
     );
     const ctl = await H.control(() =>
       holder.connect(owner).addClaim(TOPIC, SCHEME, issuer.address, sig, data, "ipfs://a")
@@ -595,7 +656,7 @@ describe("Security / ERC-735 (CVINVehicleClaimHolder)", function () {
     const good = await signClaim(issuer, holderAddr, TOPIC, data);
     const r = await H.attempt(() =>
       holder.connect(owner).addClaim(TOPIC, SCHEME, issuer.address, forged, data, "ipfs://forged"),
-      { reason: "ERC735: invalid issuer signature" }
+      { target: holder, reason: "ERC735: invalid issuer signature" }
     );
     const ctl = await H.control(() =>
       holder.connect(owner).addClaim(TOPIC, SCHEME, issuer.address, good, data, "ipfs://good")
@@ -619,7 +680,7 @@ describe("Security / ERC-735 (CVINVehicleClaimHolder)", function () {
     await (await holder.connect(owner).addClaim(TOPIC, SCHEME, issuer.address, good, data, "ipfs://good")).wait();
     const claimId = ethers.solidityPackedKeccak256(["address", "uint256"], [issuer.address, TOPIC]);
     // `other` is neither owner nor issuer.
-    const r = await H.attempt(() => holder.connect(other).removeClaim(claimId), { reason: "ERC735: caller is not owner nor issuer" });
+    const r = await H.attempt(() => holder.connect(other).removeClaim(claimId), { target: holder, reason: "ERC735: caller is not owner nor issuer" });
     expect(r.outcome).to.equal("DEFENDED");
     expect(await holder.claimExists(issuer.address, TOPIC)).to.equal(true);
     const ctl = await H.control(() => holder.connect(issuer).removeClaim(claimId));
@@ -636,7 +697,7 @@ describe("Security / ERC-735 (CVINVehicleClaimHolder)", function () {
   });
 
   it("identityHijack: non-owner cannot transferOwnership", async function () {
-    const r = await H.attempt(() => holder.connect(attacker).transferOwnership(attacker.address), { reason: "ERC735: caller is not the owner" });
+    const r = await H.attempt(() => holder.connect(attacker).transferOwnership(attacker.address), { target: holder, reason: "ERC735: caller is not the owner" });
     expect(r.outcome).to.equal("DEFENDED");
     expect(await holder.owner()).to.equal(owner.address);
     const ctl = await H.control(() => holder.connect(owner).transferOwnership(other.address));
@@ -668,7 +729,7 @@ describe("Security / ERC-735 (CVINVehicleClaimHolder)", function () {
     const r = await H.attempt(() =>
       holderB.connect(attacker).addClaim(TOPIC, SCHEME, issuer.address, sigA, data, "ipfs://B"),
       // attacker owns holderB, so the owner gate passes; the issuer check fails.
-      { reason: "ERC735: invalid issuer signature" }
+      { target: holderB, reason: "ERC735: invalid issuer signature" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(await holderB.claimExists(issuer.address, TOPIC)).to.equal(false);
@@ -709,7 +770,7 @@ describe("Security / ERC-1155 (CVINVehicleCredential1155)", function () {
   it("unauthorizedIssuance: attacker without ISSUER_ROLE cannot registerVehicle", async function () {
     const r = await H.attempt(() =>
       cred.connect(attacker).registerVehicle(attacker.address, "2HGBH41JXMN109187"),
-      { customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await cred.ISSUER_ROLE()], iface: cred.interface }
+      { target: cred, customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await cred.ISSUER_ROLE()], iface: cred.interface }
     );
     const ctl = await H.control(() =>
       cred.connect(deployer).registerVehicle(other.address, "3HGBH41JXMN109188")
@@ -730,7 +791,7 @@ describe("Security / ERC-1155 (CVINVehicleCredential1155)", function () {
   it("unauthorizedAttributeWrite: attacker without ISSUER_ROLE cannot setTokenURI", async function () {
     const r = await H.attempt(() =>
       cred.connect(attacker).setTokenURI(INSPECTION_CERT, "ipfs://malicious"),
-      { customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await cred.ISSUER_ROLE()], iface: cred.interface }
+      { target: cred, customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await cred.ISSUER_ROLE()], iface: cred.interface }
     );
     const ctl = await H.control(() =>
       cred.connect(deployer).setTokenURI(INSPECTION_CERT, "ipfs://legit")
@@ -751,7 +812,7 @@ describe("Security / ERC-1155 (CVINVehicleCredential1155)", function () {
   it("unauthorizedDelegateOrClaim: attacker without ISSUER_ROLE cannot issueCredential", async function () {
     const r = await H.attempt(() =>
       cred.connect(attacker).issueCredential(vehicle.address, INSPECTION_CERT, 1),
-      { customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await cred.ISSUER_ROLE()], iface: cred.interface }
+      { target: cred, customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await cred.ISSUER_ROLE()], iface: cred.interface }
     );
     const ctl = await H.control(() =>
       cred.connect(deployer).issueCredential(vehicle.address, INSPECTION_CERT, 1)
@@ -772,7 +833,7 @@ describe("Security / ERC-1155 (CVINVehicleCredential1155)", function () {
   it("unauthorizedRevocation: attacker without ISSUER_ROLE cannot revokeCredential", async function () {
     const r = await H.attempt(() =>
       cred.connect(attacker).revokeCredential(vehicle.address, BIRTH_CERT, 1),
-      { customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await cred.ISSUER_ROLE()], iface: cred.interface }
+      { target: cred, customError: "AccessControlUnauthorizedAccount", args: [attacker.address, await cred.ISSUER_ROLE()], iface: cred.interface }
     );
     const ctl = await H.control(() =>
       cred.connect(deployer).revokeCredential(vehicle.address, BIRTH_CERT, 1)
@@ -795,8 +856,9 @@ describe("Security / ERC-1155 (CVINVehicleCredential1155)", function () {
     const r = await H.attempt(() =>
       cred.connect(attacker).safeTransferFrom(vehicle.address, attacker.address, BIRTH_CERT, 1, "0x"),
       // D7 (merged 2026-10-06): the standard entry points are overridden to revert for everyone,
-      // before OZ's operator-approval check is reached.
-      { reason: "CVIN1155: credentials are soulbound (issuer-mediated transfer only)" }
+      // before OZ's operator-approval check is reached. Lineage merge 2026-10-15: the H-L harness requires the
+      // revert to originate in the named target, so the expectation names it.
+      { target: cred, reason: "CVIN1155: credentials are soulbound (issuer-mediated transfer only)" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(await cred.balanceOf(vehicle.address, BIRTH_CERT)).to.equal(1n);
@@ -860,7 +922,7 @@ describe("Security / ERC-4337 (CVINVehicleAccount + CVINMinimalEntryPoint)", fun
   });
 
   it("unauthorizedAttributeWrite: attacker cannot setAttribute directly", async function () {
-    const r = await H.attempt(() => account.connect(attacker).setAttribute(ATTR, VAL), { reason: "CVINVehicleAccount: not owner or entryPoint" });
+    const r = await H.attempt(() => account.connect(attacker).setAttribute(ATTR, VAL), { target: account, reason: "CVINVehicleAccount: not owner or entryPoint" });
     const ctl = await H.control(() => account.connect(owner).setAttribute(ATTR, VAL));
     expect(r.outcome).to.equal("DEFENDED");
     expect(ctl).to.equal("PASS");
@@ -876,7 +938,7 @@ describe("Security / ERC-4337 (CVINVehicleAccount + CVINMinimalEntryPoint)", fun
   });
 
   it("unauthorizedDelegateOrClaim: attacker cannot setGuardian", async function () {
-    const r = await H.attempt(() => account.connect(attacker).setGuardian(attacker.address), { reason: "CVINVehicleAccount: not owner or entryPoint" });
+    const r = await H.attempt(() => account.connect(attacker).setGuardian(attacker.address), { target: account, reason: "CVINVehicleAccount: not owner or entryPoint" });
     const ctl = await H.control(() => account.connect(owner).setGuardian(guardian.address));
     expect(r.outcome).to.equal("DEFENDED");
     expect(ctl).to.equal("PASS");
@@ -893,7 +955,7 @@ describe("Security / ERC-4337 (CVINVehicleAccount + CVINMinimalEntryPoint)", fun
 
   it("unauthorizedRevocation: attacker cannot clear the guardian", async function () {
     await (await account.connect(owner).setGuardian(guardian.address)).wait();
-    const r = await H.attempt(() => account.connect(attacker).setGuardian(ethers.ZeroAddress), { reason: "CVINVehicleAccount: not owner or entryPoint" });
+    const r = await H.attempt(() => account.connect(attacker).setGuardian(ethers.ZeroAddress), { target: account, reason: "CVINVehicleAccount: not owner or entryPoint" });
     expect(r.outcome).to.equal("DEFENDED");
     expect(await account.guardian()).to.equal(guardian.address);
     const ctl = await H.control(() => account.connect(owner).setGuardian(ethers.ZeroAddress));
@@ -916,12 +978,12 @@ describe("Security / ERC-4337 (CVINVehicleAccount + CVINMinimalEntryPoint)", fun
     // Direct key rotation by a stranger.
     const rTransfer = await H.attempt(
       () => account.connect(attacker).transferOwnership(attacker.address),
-      { reason: "CVINVehicleAccount: not owner or entryPoint" }
+      { target: account, reason: "CVINVehicleAccount: not owner or entryPoint" }
     );
     // Recovery abuse by a non-guardian.
     const rRecover = await H.attempt(
       () => account.connect(attacker).recoverOwner(attacker.address),
-      { reason: "CVINVehicleAccount: not guardian" }
+      { target: account, reason: "CVINVehicleAccount: not guardian" }
     );
     expect(rTransfer.outcome).to.equal("DEFENDED");
     expect(rRecover.outcome).to.equal("DEFENDED");
@@ -972,7 +1034,7 @@ describe("Security / ERC-4337 (CVINVehicleAccount + CVINMinimalEntryPoint)", fun
     expect(await entryPoint.nonces(sender)).to.equal(1n);
 
     // Attack: replay the identical userOp (same nonce, same signature).
-    const r = await H.attempt(() => entryPoint.connect(attacker).handleOp(userOp), { reason: "CVINEntryPoint: invalid nonce" });
+    const r = await H.attempt(() => entryPoint.connect(attacker).handleOp(userOp), { target: entryPoint, reason: "CVINEntryPoint: invalid nonce" });
     expect(r.outcome).to.equal("DEFENDED");
     H.record(STD, "signatureReplay", {
       outcome: r.outcome,
@@ -1011,7 +1073,7 @@ describe("Security / LSP8 (CVINVehicleLSP8)", function () {
   it("unauthorizedIssuance: attacker (not the issuing authority) cannot mintVehicle", async function () {
     const r = await H.attempt(
       () => lsp8.connect(attacker).mintVehicle(attacker.address, "2HGBH41JXMN109187"),
-      { reason: "LSP8: caller is not the contract owner" }
+      { target: lsp8, reason: "LSP8: caller is not the contract owner" }
     );
     const ctl = await H.control(() => lsp8.connect(authority).mintVehicle(buyer.address, "3HGBH41JXMN109188"));
     expect(r.outcome).to.equal("DEFENDED");
@@ -1031,7 +1093,7 @@ describe("Security / LSP8 (CVINVehicleLSP8)", function () {
     const key = await lsp8.DATA_KEY_INSPECTION();
     const r = await H.attempt(() =>
       lsp8.connect(attacker).setDataForTokenId(tokenId, key, ethers.toUtf8Bytes("forged:pass")),
-      { reason: "LSP8: caller is not the contract owner" }
+      { target: lsp8, reason: "LSP8: caller is not the contract owner" }
     );
     const ctl = await H.control(() =>
       lsp8.connect(authority).setDataForTokenId(tokenId, key, ethers.toUtf8Bytes("2026-07:pass"))
@@ -1061,7 +1123,7 @@ describe("Security / LSP8 (CVINVehicleLSP8)", function () {
   it("unauthorizedRevocation: attacker (neither authority nor token owner) cannot revokeVehicle", async function () {
     const r = await H.attempt(
       () => lsp8.connect(attacker).revokeVehicle(tokenId, "0x"),
-      { reason: "LSP8: caller is not authority nor token owner" }
+      { target: lsp8, reason: "LSP8: caller is not authority nor token owner" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(await lsp8.exists(tokenId)).to.equal(true);
@@ -1081,7 +1143,7 @@ describe("Security / LSP8 (CVINVehicleLSP8)", function () {
   it("identityHijack: attacker cannot transfer a token it does not own", async function () {
     const r = await H.attempt(() =>
       lsp8.connect(attacker).transfer(vehicleOwner.address, attacker.address, tokenId, true, "0x"),
-      { reason: "LSP8: caller is not the token owner" }
+      { target: lsp8, reason: "LSP8: caller is not the token owner" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(await lsp8.tokenOwnerOf(tokenId)).to.equal(vehicleOwner.address);
@@ -1143,7 +1205,7 @@ describe("Security / MOBI-VID-V2 (MOBIVIDRegistryV2)", function () {
       registry.connect(attacker).registerVehicleBirth(
         attacker.address, ethers.keccak256(ethers.toUtf8Bytes(vin2)), "enc", ethers.keccak256(ethers.toUtf8Bytes("ipfs://c2")), attacker.address, "0x"
       ),
-      { reason: "Only authorized manufacturers can register vehicles" }
+      { target: registry, reason: "Only authorized manufacturers can register vehicles" }
     );
     const vin3 = "5YJSA1E26MF888888";
     const ctl = await H.control(() =>
@@ -1168,7 +1230,7 @@ describe("Security / MOBI-VID-V2 (MOBIVIDRegistryV2)", function () {
     // MAINTENANCE (EventType 0) — attacker holds no issuer role.
     const r = await H.attempt(() =>
       registry.connect(attacker).recordLifecycleEvent(vehicle, 0, 15000, ethers.keccak256(ethers.toUtf8Bytes("ipfs://m")), ethers.keccak256(ethers.toUtf8Bytes("vc")), "BC-CAN"),
-      { reason: "Not authorized to issue this event type" }
+      { target: registry, reason: "Not authorized to issue this event type" }
     );
     const ctl = await H.control(() =>
       registry.connect(serviceCenter).recordLifecycleEvent(vehicle, 0, 15000, ethers.keccak256(ethers.toUtf8Bytes("ipfs://m")), ethers.keccak256(ethers.toUtf8Bytes("vc")), "BC-CAN")
@@ -1198,7 +1260,7 @@ describe("Security / MOBI-VID-V2 (MOBIVIDRegistryV2)", function () {
     // to prove the defense here.
     const r = await H.attempt(() =>
       registry.connect(attacker).attestEvent(eventId, vehicle, "0x" + "ab".repeat(65)),
-      { reason: "Not authorized to attest" }
+      { target: registry, reason: "Not authorized to attest" }
     );
     // Control: the authorized dealer must supply a VALID attestation signature.
     // attestEvent now verifies the signature on-chain (ecrecover, bound to
@@ -1227,7 +1289,7 @@ describe("Security / MOBI-VID-V2 (MOBIVIDRegistryV2)", function () {
   it("unauthorizedRevocation: attacker cannot revokeIdentity of a victim vehicle", async function () {
     const r = await H.attempt(
       () => registry.connect(attacker).revokeIdentity(vehicle),
-      { reason: "Only owner can perform this action" }
+      { target: registry, reason: "Only owner can perform this action" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(await registry.revoked(vehicle)).to.equal(false);
@@ -1247,7 +1309,7 @@ describe("Security / MOBI-VID-V2 (MOBIVIDRegistryV2)", function () {
   it("identityHijack: attacker cannot transferVehicleOwnership of a victim vehicle", async function () {
     const r = await H.attempt(() =>
       registry.connect(attacker).transferVehicleOwnership(vehicle, attacker.address, 20000, "ICBC"),
-      { reason: "Only owner can perform this action" }
+      { target: registry, reason: "Only owner can perform this action" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(await registry.identityOwner(vehicle)).to.equal(firstOwner.address);
@@ -1328,7 +1390,7 @@ describe("Security / CVIN-Combined (CVINCombinedIdentity)", function () {
   it("unauthorizedAttributeWrite: attacker cannot setAttribute on a victim identity", async function () {
     const r = await H.attempt(() =>
       registry.connect(attacker).setAttribute(victim.address, name, value, 86400),
-      { reason: "CVINCombined: unauthorized" }
+      { target: registry, reason: "CVINCombined: unauthorized" }
     );
     const ctl = await H.control(() =>
       registry.connect(victim).setAttribute(victim.address, name, value, 86400)
@@ -1352,7 +1414,7 @@ describe("Security / CVIN-Combined (CVINCombinedIdentity)", function () {
     const good = rawClaimSig(regAddr, victim.address, TOPIC, claimData, issuerWallet);
     const r = await H.attempt(() =>
       registry.connect(victim).addClaim(victim.address, TOPIC, SCHEME, issuerWallet.address, forged, claimData, "ipfs://forged"),
-      { reason: "CVINCombined: invalid claim signature" }
+      { target: registry, reason: "CVINCombined: invalid claim signature" }
     );
     const ctl = await H.control(() =>
       registry.connect(victim).addClaim(victim.address, TOPIC, SCHEME, issuerWallet.address, good, claimData, "ipfs://good")
@@ -1377,7 +1439,7 @@ describe("Security / CVIN-Combined (CVINCombinedIdentity)", function () {
     const claimId = ethers.solidityPackedKeccak256(["address", "uint256"], [issuerWallet.address, TOPIC]);
     const r = await H.attempt(
       () => registry.connect(attacker).removeClaim(victim.address, claimId),
-      { reason: "CVINCombined: unauthorized" }
+      { target: registry, reason: "CVINCombined: unauthorized" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(await registry.hasValidClaim(victim.address, TOPIC, issuerWallet.address)).to.equal(true);
@@ -1397,7 +1459,7 @@ describe("Security / CVIN-Combined (CVINCombinedIdentity)", function () {
   it("identityHijack: attacker cannot changeOwner of a victim identity", async function () {
     const r = await H.attempt(
       () => registry.connect(attacker).changeOwner(victim.address, attacker.address),
-      { reason: "CVINCombined: unauthorized" }
+      { target: registry, reason: "CVINCombined: unauthorized" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(await registry.identityOwner(victim.address)).to.equal(victim.address);
@@ -1426,7 +1488,7 @@ describe("Security / CVIN-Combined (CVINCombinedIdentity)", function () {
     // Attacker replays the victim's issuer signature onto ITS OWN identity (attacker owns attacker.address).
     const r = await H.attempt(() =>
       registry.connect(attacker).addClaim(attacker.address, TOPIC, SCHEME, issuerWallet.address, sigForVictim, claimData, "ipfs://attacker"),
-      { reason: "CVINCombined: invalid claim signature" }
+      { target: registry, reason: "CVINCombined: invalid claim signature" }
     );
     expect(r.outcome).to.equal("DEFENDED");
     expect(await registry.hasValidClaim(attacker.address, TOPIC, issuerWallet.address)).to.equal(false);
