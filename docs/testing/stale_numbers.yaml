@@ -58,7 +58,7 @@ entries:
 - pattern: 35014[–-]35062
   current: 35,038–35,062 over declared seeds 1–30 (WM-2 B1)
   row: 47
-- pattern: 1\.096
+- pattern: (?<![\d.])1\.096(?!\d)   # anchored at the lineage merge (PR #3): matched inside arXiv 2501.09674
   current: 1.226 [1.219, 1.238], outside band, not falsified (verifier v3, WM-2 C0)
   row: 44
 - pattern: 0\.886 ms

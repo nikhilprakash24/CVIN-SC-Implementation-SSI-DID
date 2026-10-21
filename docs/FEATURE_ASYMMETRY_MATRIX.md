@@ -22,7 +22,7 @@
 | CVIN-Combined | `CVINCombinedIdentity` | 20 | 8 | 12 | 6 |
 | MOBI-VID (I+II) | `ERC1056Registry` | 17 | 8 | 9 | 4 |
 | MOBI-VID (I+II) | `MOBIVIDRegistry` | 38 | 14 | 24 | 9 |
-| MOBI-VID (I+II) | `MOBIVIDRegistryV2` | 57 | 18 | 39 | 13 |
+| MOBI-VID (I+II) | `MOBIVIDRegistryV2` | 58 | 18 | 40 | 13 |
 
 ## 2. Capability families × option (count of matching functions/events; the names are listed in §3)
 
@@ -32,7 +32,7 @@
 | Ownership / controller change | **12** | **10** | **4** | **4** | **3** | **2** | **5** | **4** | **3** | **9** |
 | Key / delegate management | **12** | — | **4** | — | — | — | **5** | — | **5** | **3** |
 | Attributes / data store | **9** | **11** | — | **8** | — | **4** | **4** | **4** | **3** | **5** |
-| Claims / credentials | **1** | — | — | — | **18** | **12** | — | **1** | **13** | **11** |
+| Claims / credentials | **1** | — | — | — | **18** | **12** | — | **1** | **13** | **12** |
 | Revocation / status | **5** | **3** | — | — | **4** | **4** | — | **2** | **4** | **11** |
 | Delegated / signed (off-chain-authorised) execution | **5** | — | **2** | **3** | — | — | **6** | — | — | — |
 | Lifecycle events / history | **4** | **9** | — | **1** | **1** | **1** | **2** | **2** | **5** | **25** |
@@ -159,7 +159,7 @@ Heuristics (name regex, case-insensitive) — auditable:
 - **Ownership / controller change:** `DIDOwnerChanged`, `VehicleOwnershipTransferred`, `changeOwner`, `getOwnershipHistory`, `getOwnershipHistoryCount`, `identityOwner`, `owners`, `ownershipHistory`, `transferVehicleOwnership`
 - **Key / delegate management:** `DIDDelegateChanged`, `addDelegate`, `revokeDelegate`
 - **Attributes / data store:** `DIDAttributeChanged`, `PERMANENT_ATTRIBUTE_VALIDITY`, `VEHICLE_KEY_ATTRIBUTE`, `revokeAttribute`, `setAttribute`
-- **Claims / credentials:** `EventAttested`, `IssuerAuthorizationRevoked`, `IssuerAuthorized`, `allowedIssuers`, `attestEvent`, `authorizeIssuer`, `authorizedIssuers`, `eventAttestations`, `getEventAttestations`, `isAuthorizedIssuer`, `revokeIssuerAuthorization`
+- **Claims / credentials:** `EventAttested`, `IssuerAuthorizationRevoked`, `IssuerAuthorized`, `allowedIssuers`, `attestEvent`, `authorizeIssuer`, `authorizedIssuers`, `eventAttestations`, `getEventAttestations`, `hasAttested`, `isAuthorizedIssuer`, `revokeIssuerAuthorization`
 - **Revocation / status:** `DIDRevoked`, `IssuerAuthorizationRevoked`, `ManufacturerAuthorizationRevoked`, `isRevoked`, `revokeAttribute`, `revokeDelegate`, `revokeIdentity`, `revokeIssuerAuthorization`, `revokeManufacturerAuthorization`, `revoked`, `revokedAt`
 - **Lifecycle events / history:** `DIDAttributeChanged`, `DIDDelegateChanged`, `DIDOwnerChanged`, `EventAttested`, `LifecycleEventRecorded`, `attestEvent`, `changed`, `eventAttestations`, `eventTypeCount`, `getCompleteHistory`, `getEvent`, `getEventAttestations`, `getEventTypeCount`, `getEventsByType`, `getOdometerHistory`, `getOwnershipHistory`, `getOwnershipHistoryCount`, `getVehicleEvents`, `lastChanged`, `lifecycleEvents`, `lookupByVINHash`, `ownershipHistory`, `recordLifecycleEvent`, `vehicleEventCount`, `vehicleEventIds`
 - **Authorisation / roles:** `IssuerAuthorizationRevoked`, `IssuerAuthorized`, `ManufacturerAuthorizationRevoked`, `ManufacturerAuthorized`, `allowedIssuers`, `authorizeIssuer`, `authorizeManufacturer`, `authorizedIssuers`, `authorizedManufacturers`, `isAuthorizedIssuer`, `registryAuthority`, `revokeIssuerAuthorization`, `revokeManufacturerAuthorization`, `transferRegistryAuthority`
