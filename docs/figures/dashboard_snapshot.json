@@ -544,43 +544,43 @@
         "operation": "birth",
         "claim": "centralized >= 10x faster (median)",
         "verdict": "PASS",
-        "ratio_median": 8141.206
+        "ratio_median": 4732.234
       },
       {
         "operation": "lifecycle_event",
         "claim": "centralized >= 10x faster (median)",
         "verdict": "PASS",
-        "ratio_median": 2637.515
+        "ratio_median": 2088.098
       },
       {
         "operation": "ownership_transfer",
         "claim": "centralized >= 10x faster (median)",
         "verdict": "PASS",
-        "ratio_median": 8567.778
+        "ratio_median": 3257.797
       },
       {
         "operation": "history_query_cached",
         "claim": "equal once cached (median ratio in [0.5, 2.0])",
         "verdict": "FAIL",
-        "ratio_median": 0.035
+        "ratio_median": 0.054
       },
       {
         "operation": "history_query",
         "claim": "reported, no pre-registered verdict",
         "verdict": "(outside band)",
-        "ratio_median": 478.191
+        "ratio_median": 781.401
       },
       {
         "operation": "history_query_cached_validated",
         "claim": "reported, no pre-registered verdict",
         "verdict": "(outside band)",
-        "ratio_median": 63.152
+        "ratio_median": 113.823
       },
       {
         "operation": "history_query_cached vs centralized unserialised (post-hoc diagnostic)",
         "claim": "post-hoc diagnostic, no verdict",
         "verdict": "(outside band)",
-        "ratio_median": 7.899
+        "ratio_median": 9.544
       }
     ]
   },

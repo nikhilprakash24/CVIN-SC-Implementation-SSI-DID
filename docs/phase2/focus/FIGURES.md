@@ -32,12 +32,12 @@ Register #33 (committed 2026-10-04 re-run; D60). Conditions: centralized registr
 
 | Operation | centralized (ms) | MOBI-VID-V2 on chain (ms) |
 |---|---:|---:|
-| birth | 0.0042 | 33.8389 |
-| lifecycle event | 0.0096 | 25.3808 |
-| ownership transfer | 0.003 | 25.4163 |
-| history query | 0.3705 | 177.165 |
-| history query cached | n/a | 0.013 |
-| history query cached validated | n/a | 23.3973 |
+| birth | 0.0086 | 40.7422 |
+| lifecycle event | 0.0092 | 19.2063 |
+| ownership transfer | 0.0051 | 16.7646 |
+| history query | 0.1799 | 140.54 |
+| history query cached | n/a | 0.0097 |
+| history query cached validated | n/a | 20.4717 |
 
 ## F3-1 Direct and relayed writes (`figures/f3_write_paths.svg`)
 Register #50, #34.

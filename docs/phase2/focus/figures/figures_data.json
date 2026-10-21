@@ -118,26 +118,26 @@
   "preregistered_fail": "history query cached vs the database's history query: 'equal once cached' band [0.5, 2] FAILED (ratio 0.041)",
   "operations": {
    "birth": {
-    "centralized_registry": 0.0042,
-    "mobi_vid_v2": 33.8389
+    "centralized_registry": 0.0086,
+    "mobi_vid_v2": 40.7422
    },
    "lifecycle_event": {
-    "centralized_registry": 0.0096,
-    "mobi_vid_v2": 25.3808
+    "centralized_registry": 0.0092,
+    "mobi_vid_v2": 19.2063
    },
    "ownership_transfer": {
-    "centralized_registry": 0.003,
-    "mobi_vid_v2": 25.4163
+    "centralized_registry": 0.0051,
+    "mobi_vid_v2": 16.7646
    },
    "history_query": {
-    "centralized_registry": 0.3705,
-    "mobi_vid_v2": 177.1653
+    "centralized_registry": 0.1799,
+    "mobi_vid_v2": 140.5401
    },
    "history_query_cached": {
-    "mobi_vid_v2": 0.013
+    "mobi_vid_v2": 0.0097
    },
    "history_query_cached_validated": {
-    "mobi_vid_v2": 23.3973
+    "mobi_vid_v2": 20.4717
    }
   }
  },

@@ -145,13 +145,13 @@
 
 | Experiment | Pre-registered claim | Verdict | Measured |
 |---|---|---|---|
-| M4 lifecycle parity: birth | centralized >= 10x faster (median) | PASS | ratio 8,141.206 |
-| M4 lifecycle parity: lifecycle_event | centralized >= 10x faster (median) | PASS | ratio 2,637.515 |
-| M4 lifecycle parity: ownership_transfer | centralized >= 10x faster (median) | PASS | ratio 8,567.778 |
-| M4 lifecycle parity: history_query_cached | equal once cached (median ratio in [0.5, 2.0]) | FAIL | ratio 0.035 |
-| M4 lifecycle parity: history_query | reported, no pre-registered verdict | (outside band) | ratio 478.191 |
-| M4 lifecycle parity: history_query_cached_validated | reported, no pre-registered verdict | (outside band) | ratio 63.152 |
-| M4 lifecycle parity: history_query_cached vs centralized unserialised (post-hoc diagnostic) | post-hoc diagnostic, no verdict | (outside band) | ratio 7.899 |
+| M4 lifecycle parity: birth | centralized >= 10x faster (median) | PASS | ratio 4,732.234 |
+| M4 lifecycle parity: lifecycle_event | centralized >= 10x faster (median) | PASS | ratio 2,088.098 |
+| M4 lifecycle parity: ownership_transfer | centralized >= 10x faster (median) | PASS | ratio 3,257.797 |
+| M4 lifecycle parity: history_query_cached | equal once cached (median ratio in [0.5, 2.0]) | FAIL | ratio 0.054 |
+| M4 lifecycle parity: history_query | reported, no pre-registered verdict | (outside band) | ratio 781.401 |
+| M4 lifecycle parity: history_query_cached_validated | reported, no pre-registered verdict | (outside band) | ratio 113.823 |
+| M4 lifecycle parity: history_query_cached vs centralized unserialised (post-hoc diagnostic) | post-hoc diagnostic, no verdict | (outside band) | ratio 9.544 |
 | M5 pseudonym pool: gas | ≈ 1,444,380 gas per epoch (±10 %) | FAIL | 1,113,456, 1,096,368, 1,096,368 |
 | M5 pseudonym pool: linkability | delegate pool fully linkable from chain data | PASS | linkable |
 *Failed and out-of-band verdicts are shown, not hidden.*
