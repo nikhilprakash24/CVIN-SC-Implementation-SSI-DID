@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>V2V Identity Replay</title>
+<meta name="description" content="Replays a JSONL event trace from cv2x-testbed/sumo/sumo_identity_integration.py --trace: vehicles by identity layer, every signed broadcast, cold/warm/rejected verifications, safety and attack events.">
+<style>
+  :root {
+    --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --lane: #f1f0eb; --ssi: #2a78d6; --pki: #c99228;
+    --cold: #0b0b0b; --warm: #9a9890; --fail: #d03b3b; --spray: #ff3d00;
+    --good: #0ca30c; --panel: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --surface: #121210; --ink: #f2f1ec; --ink2: #c3c2b7; --muted: #898781;
+      --grid: #2a2a27; --lane: #1c1c19; --cold: #f2f1ec; --warm: #6d6c66; --panel: #1a1a18;
+    }
+  }
+  :root[data-theme="dark"] {
+    --surface: #121210; --ink: #f2f1ec; --ink2: #c3c2b7; --muted: #898781;
+    --grid: #2a2a27; --lane: #1c1c19; --cold: #f2f1ec; --warm: #6d6c66; --panel: #1a1a18;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--surface); color: var(--ink);
+         font: 14px/1.45 "DejaVu Sans", system-ui, sans-serif; }
+  header { padding: 14px 16px 6px; border-bottom: 1px solid var(--grid); }
+  h1 { margin: 0; font: 700 20px/1.1 "DejaVu Sans Mono", ui-monospace, monospace;
+       letter-spacing: 0.04em; text-transform: uppercase; }
+  header p { margin: 4px 0 0; color: var(--ink2); font-size: 13px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
+         padding: 10px 16px; border-bottom: 1px solid var(--grid); }
+  button, input[type=file], select { font: inherit; }
+  button { background: var(--ink); color: var(--surface); border: 0; padding: 6px 12px;
+           border-radius: 4px; cursor: pointer; }
+  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+  input[type=range] { width: min(420px, 60vw); }
+  .hud { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+         gap: 8px; padding: 10px 16px; }
+  .tile { background: var(--panel); border: 1px solid var(--grid); border-radius: 6px;
+          padding: 8px 10px; }
+  .tile b { display: block; font-size: 20px; font-family: "DejaVu Sans Mono", monospace; }
+  .tile span { color: var(--muted); font-size: 12px; }
+  main { padding: 8px 16px 16px; }
+  canvas { width: 100%; height: auto; display: block; background: var(--surface);
+           border: 1px solid var(--grid); border-radius: 6px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--ink2);
+            font-size: 12.5px; padding: 8px 0; }
+  .sw { display: inline-block; width: 14px; height: 10px; vertical-align: middle;
+        margin-right: 5px; border: 1px solid var(--ink); }
+  .ln { display: inline-block; width: 22px; height: 0; vertical-align: middle; margin-right: 5px; }
+  #card { background: var(--panel); border: 1px solid var(--grid); border-radius: 6px;
+          padding: 10px 12px; margin-top: 10px; font-family: "DejaVu Sans Mono", monospace;
+          font-size: 12.5px; white-space: pre-wrap; word-break: break-all; }
+  #log { max-height: 180px; overflow: auto; font-family: "DejaVu Sans Mono", monospace;
+         font-size: 12px; color: var(--ink2); margin-top: 10px; }
+  .stamp { color: var(--spray); font-weight: 700; }
+  footer { padding: 10px 16px 20px; color: var(--muted); font-size: 12px; }
+  @media (max-width: 640px) { .hud { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<header>
+  <h1>V2V identity replay</h1>
+  <p>Every vehicle signs each 10 Hz basic safety message; every receiver verifies it.
+     Blue = SSI / MOBI VID (W3C credential + secp256k1), ochre = PKI (X.509 + ECDSA).
+     A thick link is a first contact (full credential verification); a thin one is a cached-peer signature check; red is a rejection.</p>
+</header>
+<div class="bar">
+  <input type="file" id="file" accept=".jsonl,.json,.txt">
+  <button id="play">Play</button>
+  <button class="ghost" id="stepb">Step</button>
+  <label>speed <select id="speed"><option>0.25</option><option>0.5</option><option selected>1</option><option>2</option><option>5</option></select>×</label>
+  <input type="range" id="scrub" min="0" max="0" value="0">
+  <span id="tlabel" style="font-family:monospace">t = 0.0 s</span>
+  <label><input type="checkbox" id="follow"> follow selected</label>
+</div>
+<div class="hud">
+  <div class="tile"><b id="h_veh">–</b><span>vehicles on road (SSI / PKI)</span></div>
+  <div class="tile"><b id="h_tx">–</b><span>signed broadcasts so far</span></div>
+  <div class="tile"><b id="h_rx">–</b><span>verifications so far</span></div>
+  <div class="tile"><b id="h_cold">–</b><span>cold (first contact)</span></div>
+  <div class="tile"><b id="h_fail">–</b><span>rejected</span></div>
+  <div class="tile"><b id="h_lat">–</b><span>last step: median warm / max cold, ms</span></div>
+</div>
+<main>
+  <canvas id="c" width="1600" height="520"></canvas>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--ssi)"></i>SSI / MOBI VID vehicle</span>
+    <span><i class="sw" style="background:var(--pki)"></i>PKI vehicle</span>
+    <span><i class="ln" style="border-top:3px solid var(--cold)"></i>cold: full credential verify</span>
+    <span><i class="ln" style="border-top:1px solid var(--warm)"></i>warm: signature check</span>
+    <span><i class="ln" style="border-top:2px dashed var(--fail)"></i>rejected</span>
+    <span><i class="ln" style="border-top:2px solid var(--spray)"></i>FCW / EEBL emergency broadcast</span>
+    <span>click a vehicle for its identity card</span>
+  </div>
+  <div id="card">No trace loaded. Choose a .jsonl written by <code>sumo_identity_integration.py --trace</code>, or open this page with <code>?trace=../traces/NAME.jsonl</code> when served over HTTP.</div>
+  <div id="log"></div>
+</main>
+<footer id="prov">—</footer>
+<script id="embedded-trace" type="application/x-ndjson"></script>
+<script>
+(function () {
+  const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const $ = (id) => document.getElementById(id);
+  const canvas = $('c'), ctx = canvas.getContext('2d');
+
+  // ---------------- state
+  let meta = null, enroll = {}, snaps = [], txByStep = new Map(), safety = [], attacks = [], summary = null;
+  let idx = 0, playing = false, selected = null, timer = null;
+  let cum = { tx: 0, rx: 0, cold: 0, fail: 0 }, cumUpTo = -1;
+
+  function reset() {
+    meta = null; enroll = {}; snaps = []; txByStep = new Map(); safety = []; attacks = []; summary = null;
+    idx = 0; playing = false; selected = null; cum = { tx: 0, rx: 0, cold: 0, fail: 0 }; cumUpTo = -1;
+    $('log').textContent = '';
+  }
+
+  function parse(text) {
+    reset();
+    const lines = text.split('\n');
+    let order = [];
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      let e; try { e = JSON.parse(line); } catch { continue; }
+      switch (e.ev) {
+        case 'meta': meta = e; break;
+        case 'enroll': enroll[e.vehicle] = e; break;
+        case 'snap': snaps.push(e); break;
+        case 'tx': { const k = e.t.toFixed(3); if (!txByStep.has(k)) txByStep.set(k, []); txByStep.get(k).push(e); break; }
+        case 'safety': safety.push(e); break;
+        case 'attack': attacks.push(e); break;
+        case 'summary': summary = e; break;
+      }
+    }
+    if (!meta || !snaps.length) { $('card').textContent = 'That file has no meta/snap events; is it a trace?'; return; }
+    $('scrub').max = snaps.length - 1; $('scrub').value = 0;
+    $('prov').textContent = `trace: mode ${meta.mode} · seed ${meta.seed} · ${meta.duration_s} s · ${meta.bsm_rate_hz} Hz BSM · ${meta.neighbor_radius_m} m radius · ≤${meta.max_neighbors} rx/broadcast · generated ${meta.generated_at}` +
+      (summary ? ` · attack tests: ${Object.values(summary.attack_tests).filter(Boolean).length}/${Object.keys(summary.attack_tests).length} rejected` : '');
+    $('card').textContent = `Loaded ${snaps.length} snapshots, ${Object.keys(enroll).length} enrolled vehicles, ${[...txByStep.values()].reduce((a, b) => a + b.length, 0)} broadcasts.`;
+    draw();
+  }
+
+  // ---------------- geometry
+  function frameBox(snap) {
+    // In simulate mode the road is 5 km x 7 m: use a schematic lane-row layout.
+    // In SUMO mode use real x/y with a square aspect around the vehicles' bounding box.
+    const vs = snap.v;
+    if (meta.mode === 'simulate') {
+      const lanes = [...new Set(vs.map(v => v[5]))].sort();
+      return { schematic: true, lanes, xmin: 0, xmax: meta.road.length_m };
+    }
+    let xmin = 1e9, xmax = -1e9, ymin = 1e9, ymax = -1e9;
+    for (const v of vs) { xmin = Math.min(xmin, v[1]); xmax = Math.max(xmax, v[1]); ymin = Math.min(ymin, v[2]); ymax = Math.max(ymax, v[2]); }
+    if (!vs.length) { xmin = 0; xmax = 5000; ymin = 0; ymax = 1000; }
+    const pad = 250; xmin -= pad; xmax += pad; ymin -= pad; ymax += pad;
+    if (selected && $('follow').checked) {
+      const s = vs.find(v => v[0] === selected);
+      if (s) { xmin = s[1] - 600; xmax = s[1] + 600; ymin = s[2] - 200; ymax = s[2] + 200; }
+    }
+    return { schematic: false, xmin, xmax, ymin, ymax };
+  }
+
+  function project(box, x, y, lane) {
+    const W = canvas.width, H = canvas.height, m = 40;
+    if (box.schematic) {
+      const row = box.lanes.indexOf(lane);
+      const rows = box.lanes.length;
+      const px = m + (x - box.xmin) / (box.xmax - box.xmin) * (W - 2 * m);
+      const py = H - m - (row + 0.5) * (H - 2 * m) / rows;
+      return [px, py];
+    }
+    const sx = (W - 2 * m) / (box.xmax - box.xmin), sy = (H - 2 * m) / (box.ymax - box.ymin);
+    const s = Math.min(sx, sy);
+    const cx = (box.xmin + box.xmax) / 2, cy = (box.ymin + box.ymax) / 2;
+    return [W / 2 + (x - cx) * s, H / 2 - (y - cy) * s];
+  }
+
+  // ---------------- drawing
+  function draw() {
+    if (!meta) return;
+    const snap = snaps[idx];
+    const box = frameBox(snap);
+    const W = canvas.width, H = canvas.height;
+    ctx.fillStyle = css('--surface'); ctx.fillRect(0, 0, W, H);
+    const pos = {};
+    for (const v of snap.v) pos[v[0]] = { p: project(box, v[1], v[2], v[5]), x: v[1], y: v[2], spd: v[3], lane: v[5] };
+
+    if (box.schematic) {
+      const rows = box.lanes.length;
+      ctx.fillStyle = css('--lane');
+      for (let r = 0; r < rows; r++) {
+        const y = H - 40 - (r + 0.5) * (H - 80) / rows;
+        ctx.fillRect(40, y - 16, W - 80, 32);
+        ctx.fillStyle = css('--muted'); ctx.font = '11px DejaVu Sans Mono, monospace';
+        ctx.fillText(box.lanes[r], 44, y - 20); ctx.fillStyle = css('--lane');
+      }
+      ctx.strokeStyle = css('--grid'); ctx.fillStyle = css('--muted'); ctx.font = '11px DejaVu Sans, sans-serif';
+      for (let km = 0; km <= box.xmax; km += 1000) {
+        const [px] = project(box, km, 0, box.lanes[0]);
+        ctx.beginPath(); ctx.moveTo(px, 30); ctx.lineTo(px, H - 30); ctx.stroke();
+        ctx.fillText(`${km / 1000} km`, px + 3, H - 10);
+      }
+    } else {
+      // scale bar, 500 m
+      const [x0, y0] = project(box, box.xmin + 100, box.ymin + 100), [x1] = project(box, box.xmin + 600, box.ymin + 100);
+      ctx.strokeStyle = css('--ink2'); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x0, H - 20); ctx.lineTo(x1, H - 20); ctx.stroke();
+      ctx.fillStyle = css('--ink2'); ctx.font = '11px DejaVu Sans, sans-serif'; ctx.fillText('500 m', x0, H - 26);
+    }
+
+    // range ring for the selected vehicle
+    if (selected && pos[selected]) {
+      const s = pos[selected];
+      const [rx] = project(box, s.x + meta.neighbor_radius_m, s.y, s.lane);
+      const r = Math.abs(rx - s.p[0]);
+      ctx.strokeStyle = css('--spray'); ctx.setLineDash([4, 4]); ctx.lineWidth = 1;
+      if (box.schematic) { ctx.beginPath(); ctx.moveTo(s.p[0] - r, 30); ctx.lineTo(s.p[0] - r, H - 30); ctx.moveTo(s.p[0] + r, 30); ctx.lineTo(s.p[0] + r, H - 30); ctx.stroke(); }
+      else { ctx.beginPath(); ctx.arc(s.p[0], s.p[1], r, 0, Math.PI * 2); ctx.stroke(); }
+      ctx.setLineDash([]);
+    }
+
+    // links of this step
+    const txs = txByStep.get(snap.t.toFixed(3)) || [];
+    let warmL = [], coldMax = 0;
+    for (const e of txs) {
+      const s = pos[e.sender]; if (!s) continue;
+      for (const [rid, ok, cold, lat] of e.rx) {
+        const r = pos[rid]; if (!r) continue;
+        if (!ok) { ctx.strokeStyle = css('--fail'); ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]); }
+        else if (e.emergency) { ctx.strokeStyle = css('--spray'); ctx.lineWidth = 2.2; ctx.setLineDash([]); }
+        else if (cold) { ctx.strokeStyle = css('--cold'); ctx.lineWidth = 2.2; ctx.setLineDash([]); coldMax = Math.max(coldMax, lat); }
+        else { ctx.strokeStyle = css('--warm'); ctx.lineWidth = 0.6; ctx.setLineDash([]); warmL.push(lat); }
+        ctx.globalAlpha = (!ok || cold || e.emergency) ? 0.95 : 0.5;
+        ctx.beginPath(); ctx.moveTo(s.p[0], s.p[1]); ctx.lineTo(r.p[0], r.p[1]); ctx.stroke();
+      }
+    }
+    ctx.globalAlpha = 1; ctx.setLineDash([]);
+
+    // vehicles
+    for (const [vid, v] of Object.entries(pos)) {
+      const id = enroll[vid];
+      ctx.fillStyle = id && id.identity === 'MOBI_VID' ? css('--ssi') : css('--pki');
+      ctx.strokeStyle = css('--ink'); ctx.lineWidth = vid === selected ? 2.5 : 0.6;
+      ctx.beginPath(); ctx.roundRect(v.p[0] - 9, v.p[1] - 5, 18, 10, 2); ctx.fill(); ctx.stroke();
+    }
+    // emergency broadcasters
+    for (const e of txs) if (e.emergency && pos[e.sender]) {
+      const p = pos[e.sender].p; ctx.strokeStyle = css('--spray'); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(p[0], p[1], 14, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = css('--spray'); ctx.font = 'bold 11px DejaVu Sans Mono, monospace'; ctx.fillText(e.type, p[0] + 16, p[1] - 10);
+    }
+
+    // HUD
+    accumulate();
+    const nS = snap.v.filter(v => enroll[v[0]] && enroll[v[0]].identity === 'MOBI_VID').length;
+    $('h_veh').textContent = `${snap.v.length} (${nS} / ${snap.v.length - nS})`;
+    $('h_tx').textContent = cum.tx; $('h_rx').textContent = cum.rx; $('h_cold').textContent = cum.cold; $('h_fail').textContent = cum.fail;
+    warmL.sort((a, b) => a - b);
+    $('h_lat').textContent = `${warmL.length ? warmL[warmL.length >> 1].toFixed(3) : '–'} / ${coldMax ? coldMax.toFixed(3) : '–'}`;
+    $('tlabel').textContent = `t = ${snap.t.toFixed(1)} s`;
+    $('scrub').value = idx;
+    logEvents(snap.t);
+    if (selected) card(selected);
+  }
+
+  function accumulate() {
+    if (cumUpTo > idx) { cum = { tx: 0, rx: 0, cold: 0, fail: 0 }; cumUpTo = -1; }
+    for (let i = cumUpTo + 1; i <= idx; i++) {
+      for (const e of txByStep.get(snaps[i].t.toFixed(3)) || []) {
+        cum.tx++; for (const [, ok, cold] of e.rx) { cum.rx++; if (!ok) cum.fail++; else if (cold) cum.cold++; }
+      }
+    }
+    cumUpTo = idx;
+  }
+
+  let logged = new Set();
+  function logEvents(t) {
+    const log = $('log');
+    for (const e of safety) if (Math.abs(e.t - t) < 1e-6 && !logged.has(e)) {
+      logged.add(e);
+      const line = e.app === 'FCW' ? `t=${e.t.toFixed(1)}s FCW ${e.vehicle} → ${e.target} TTC ${e.ttc_s}s gap ${e.gap_m}m, ${e.warned} receivers verified` : `t=${e.t.toFixed(1)}s EEBL ${e.vehicle} hard brake, ${e.warned} receivers verified`;
+      log.insertAdjacentHTML('afterbegin', `<div><span class="stamp">${e.app}</span> ${line}</div>`);
+    }
+    if (idx === snaps.length - 1) for (const a of attacks) if (!logged.has(a)) {
+      logged.add(a); log.insertAdjacentHTML('afterbegin', `<div><span class="stamp">ATTACK</span> ${a.name.replace(/_/g, ' ')}: ${a.rejected ? 'REJECTED' : 'ACCEPTED'}</div>`);
+    }
+  }
+
+  function card(vid) {
+    const e = enroll[vid]; if (!e) return;
+    const s = snaps[idx].v.find(v => v[0] === vid);
+    $('card').textContent =
+      `${vid}  ${e.identity === 'MOBI_VID' ? 'SSI / MOBI VID' : 'PKI (X.509 pseudonym cert)'}\n` +
+      `VIN  ${e.vin}   ${e.make} ${e.model} ${e.year}\n` +
+      (e.did ? `DID  ${e.did}\n` : `cert issued by centralized CA, rotates every 100 messages\n`) +
+      (s ? `pos  x=${s[1].toFixed(1)} m  y=${s[2].toFixed(1)} m  speed ${s[3].toFixed(1)} m/s  lane ${s[5]}` : 'not on road at this instant');
+  }
+
+  // ---------------- controls
+  function tick() {
+    if (!playing) return;
+    idx = Math.min(snaps.length - 1, idx + 1);
+    draw();
+    if (idx >= snaps.length - 1) { playing = false; $('play').textContent = 'Play'; return; }
+    timer = setTimeout(tick, meta.step_s * meta.snapshot_every * 1000 / parseFloat($('speed').value));
+  }
+  $('play').onclick = () => { if (!meta) return; playing = !playing; $('play').textContent = playing ? 'Pause' : 'Play'; if (playing) { if (idx >= snaps.length - 1) idx = 0; tick(); } else clearTimeout(timer); };
+  $('stepb').onclick = () => { if (!meta) return; idx = Math.min(snaps.length - 1, idx + 1); draw(); };
+  $('scrub').oninput = (ev) => { idx = parseInt(ev.target.value, 10); draw(); };
+  $('follow').onchange = draw;
+  $('file').onchange = (ev) => { const f = ev.target.files[0]; if (!f) return; f.text().then(parse); };
+  canvas.onclick = (ev) => {
+    if (!meta) return;
+    const r = canvas.getBoundingClientRect();
+    const x = (ev.clientX - r.left) * canvas.width / r.width, y = (ev.clientY - r.top) * canvas.height / r.height;
+    const snap = snaps[idx], box = frameBox(snap);
+    let best = null, bd = 400;
+    for (const v of snap.v) { const p = project(box, v[1], v[2], v[5]); const d = (p[0] - x) ** 2 + (p[1] - y) ** 2; if (d < bd) { bd = d; best = v[0]; } }
+    selected = best; draw();
+  };
+  window.addEventListener('keydown', (ev) => { if (ev.key === ' ') { ev.preventDefault(); $('play').click(); } if (ev.key === 'ArrowRight') $('stepb').click(); });
+
+  // ---------------- load: embedded, ?trace=, or file picker
+  const emb = $('embedded-trace').textContent;
+  if (emb && emb.trim()) parse(emb);
+  else {
+    const q = new URLSearchParams(location.search).get('trace');
+    if (q) fetch(q).then(r => r.text()).then(parse).catch(() => { $('card').textContent = `Could not fetch ${q}; use the file picker.`; });
+  }
+})();
+</script>
+</body>
+</html>

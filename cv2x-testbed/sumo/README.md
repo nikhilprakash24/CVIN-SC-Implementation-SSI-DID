@@ -45,9 +45,40 @@ verified at receive**; all reported latencies are measured with
 ## Files
 
 - `sumo_identity_integration.py` — integration + measurement harness
-- `highway_intersection.net.xml`, `routes.rou.xml`, `simulation.sumocfg` —
-  SUMO network/route configuration (used only when SUMO is installed)
+- `highway_intersection.net.xml` — SUMO network, **generated** by
+  `netconvert -c net_src/netconvert.cfg` from `net_src/*.nod.xml` and
+  `net_src/*.edg.xml` (do not hand-edit; regenerate). Until 2026-10 the
+  committed file was hand-written and did not load in SUMO, so every earlier
+  run was in fact `--simulate` mode.
+- `routes.rou.xml`, `simulation.sumocfg` — routes (sorted by departure time, as
+  SUMO requires) and run configuration
+- `gui_settings.xml` — SUMO-GUI scheme for unattended screenshot runs
+- `viz/render_trace.py` — figures F1–F6 from an event trace
 - `results/v2v_latency.json` — machine-readable results of the last run
+
+## Event trace, figures and replay (visual layer)
+
+`--trace PATH` writes a JSON-Lines event trace (positions, every signed
+broadcast and its receivers with cold/warm/rejected and latency, safety and
+attack events; schema in `docs/visual/TRACE_SCHEMA.md`). Tracing changes what
+is *recorded*, not what is *measured*. Figures and the interactive replay are
+drawn only from traces:
+
+```bash
+# trace a run (point --results away from the result of record)
+python3 sumo_identity_integration.py --simulate --duration 30 --vehicles 30 \
+    --results /tmp/v2v.json --trace ../../docs/visual/traces/sim_30v_30s_seed42.jsonl
+# figures
+python3 viz/render_trace.py ../../docs/visual/traces/sim_30v_30s_seed42.jsonl --t 0 15 --focus veh_001
+# interactive replay: open docs/visual/replay/replay.html and pick the trace
+# real SUMO over TraCI (pip install eclipse-sumo), headless GUI frames
+xvfb-run -a -s "-screen 0 1600x900x24" python3 sumo_identity_integration.py --gui \
+    --duration 45 --screenshot-dir ../../docs/visual/sumo_frames --screenshot-every 50 \
+    --gui-zoom 1500 --gui-track platoon_leader --results /tmp/v2v_gui.json
+```
+
+Plan and shot list: `docs/visual/VISUAL_PLAN.md`; phased prompts:
+`docs/visual/VISUAL_PHASES_PROMPTS.md`.
 
 ## Usage
 
@@ -59,7 +90,9 @@ python3 sumo_identity_integration.py --simulate --duration 60
 python3 sumo_identity_integration.py --duration 60
 python3 sumo_identity_integration.py --gui
 
-# Options: --vehicles N (simulate mode), --seed N
+# Options: --vehicles N (simulate mode), --seed N, --results PATH,
+#          --trace PATH [--trace-every N], and with --gui:
+#          --screenshot-dir DIR [--screenshot-every N] [--gui-zoom PCT] [--gui-track VEHICLE]
 ```
 
 A default 60 s `--simulate` run broadcasts BSMs from every vehicle at 10 Hz

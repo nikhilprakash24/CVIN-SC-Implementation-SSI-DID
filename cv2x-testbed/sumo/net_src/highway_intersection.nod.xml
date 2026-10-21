@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Plain-XML node definition. Build the network with:
+     netconvert -c net_src/netconvert.cfg   (writes ../highway_intersection.net.xml) -->
+<nodes>
+    <node id="start_west"   x="0.00"    y="500.00"  type="priority"/>
+    <node id="intersection" x="2500.00" y="500.00"  type="traffic_light"/>
+    <node id="end_east"     x="5000.00" y="500.00"  type="priority"/>
+    <node id="start_north"  x="2500.00" y="1000.00" type="priority"/>
+    <node id="end_south"    x="2500.00" y="0.00"    type="priority"/>
+</nodes>

@@ -58,11 +58,34 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 # ---------------------------------------------------------------------------
 # Optional SUMO libraries
 # ---------------------------------------------------------------------------
-try:
-    import traci  # noqa: F401
-    SUMO_AVAILABLE = True
-except ImportError:
-    SUMO_AVAILABLE = False
+def _import_traci():
+    """Import traci; fall back to $SUMO_HOME/tools or the eclipse-sumo wheel."""
+    try:
+        import traci  # noqa: F401
+        return traci
+    except ImportError:
+        pass
+    candidates = []
+    if os.environ.get("SUMO_HOME"):
+        candidates.append(Path(os.environ["SUMO_HOME"]) / "tools")
+    try:
+        import sumo as _sumo_pkg  # eclipse-sumo wheel
+        candidates.append(Path(_sumo_pkg.__file__).parent / "tools")
+    except ImportError:
+        pass
+    for tools in candidates:
+        if (tools / "traci").is_dir():
+            sys.path.append(str(tools))
+            try:
+                import traci  # noqa: F401
+                return traci
+            except ImportError:
+                continue
+    return None
+
+
+traci = _import_traci()
+SUMO_AVAILABLE = traci is not None
 
 # ---------------------------------------------------------------------------
 # Real crypto / identity dependencies (REQUIRED — no simulated fallback)
@@ -445,6 +468,39 @@ def summarize(samples: List[float]) -> Optional[Dict[str, float]]:
 
 
 # ===========================================================================
+# Event trace (optional; --trace PATH). One JSON object per line.
+# ===========================================================================
+
+class TraceWriter:
+    """Append-only JSONL event trace for replay and figure generation.
+
+    Off by default. When enabled it records what happened (who signed, who
+    received, cold/warm/failed, measured latency) without touching the
+    measured quantities themselves: every latency is still taken with
+    time.perf_counter around the cryptographic call. Tracing adds wall-clock
+    time, not identity-verification time. Schema: docs/visual/TRACE_SCHEMA.md.
+    """
+
+    def __init__(self, path: Path, snapshot_every: int = 1):
+        self.path = Path(path)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._f = open(self.path, "w")
+        self.snapshot_every = max(1, int(snapshot_every))
+        self.count = 0
+
+    def event(self, kind: str, **fields):
+        rec = {"ev": kind}
+        rec.update(fields)
+        self._f.write(json.dumps(rec, separators=(",", ":")) + "\n")
+        self.count += 1
+
+    def close(self):
+        if self._f:
+            self._f.close()
+            self._f = None
+
+
+# ===========================================================================
 # Mock mobility (used only in --simulate mode; SUMO provides real mobility)
 # ===========================================================================
 
@@ -489,8 +545,21 @@ class SUMOIdentityIntegration:
 
     def __init__(self, simulation_mode=False, use_gui=False,
                  num_vehicles=50, seed=42,
-                 results_path: Optional[Path] = None):
+                 results_path: Optional[Path] = None,
+                 trace_path: Optional[Path] = None,
+                 trace_every: int = 1,
+                 screenshot_dir: Optional[Path] = None,
+                 screenshot_every: int = 10,
+                 gui_zoom: float = 300.0,
+                 gui_track: Optional[str] = None):
         self.simulation_mode = simulation_mode or not SUMO_AVAILABLE
+        self.seed = seed
+        self.trace: Optional[TraceWriter] = (
+            TraceWriter(trace_path, trace_every) if trace_path else None)
+        self.screenshot_dir = Path(screenshot_dir) if screenshot_dir else None
+        self.screenshot_every = max(1, int(screenshot_every))
+        self.gui_zoom = float(gui_zoom)
+        self.gui_track = gui_track
         self.use_gui = use_gui
         self.num_vehicles = num_vehicles
         self.rng = random.Random(seed)
@@ -546,10 +615,25 @@ class SUMOIdentityIntegration:
             "--step-length", str(STEP_LENGTH_S),
             "--collision.action", "warn", "--no-warnings",
         ]
+        if self.use_gui:
+            # Thesis view (background, lane ink, vehicle exaggeration) and
+            # unattended operation so Xvfb/headless screenshot runs work.
+            settings = self.sumo_dir / "gui_settings.xml"
+            if settings.exists():
+                sumo_cmd += ["--gui-settings-file", str(settings)]
+            sumo_cmd += ["--start", "--quit-on-end",
+                         "--window-size", "1600,900"]
         try:
             traci.start(sumo_cmd)
             print(f"SUMO started ({sumo_binary})")
             self.running = True
+            if self.use_gui:
+                try:  # thesis view: grey roads, framed on the intersection
+                    traci.gui.setSchema("View #0", "cvin-thesis")
+                    traci.gui.setOffset("View #0", 2500.0, 500.0)
+                    traci.gui.setZoom("View #0", self.gui_zoom)
+                except Exception as e:
+                    print(f"  GUI view setup skipped: {e}")
         except Exception as e:
             print(f"Failed to start SUMO: {e} — falling back to simulation mode")
             self.simulation_mode = True
@@ -600,6 +684,22 @@ class SUMOIdentityIntegration:
             vehicle_id=vehicle_id, vin=vin, identity_type=identity_type,
             make=make, model=model, year=year, did=did)
         self.vehicles[vehicle_id] = identity
+        if not self.simulation_mode and self.use_gui:
+            # Paint the identity layer onto the SUMO-GUI view:
+            # SSI/MOBI VID = blue, PKI = ochre (docs/visual/VISUAL_PLAN.md §4).
+            try:
+                rgba = (42, 120, 214, 255) if identity_type == "MOBI_VID" \
+                    else (201, 146, 40, 255)
+                traci.vehicle.setColor(vehicle_id, rgba)
+                if self.gui_track and vehicle_id == self.gui_track:
+                    traci.gui.trackVehicle("View #0", vehicle_id)
+            except Exception:
+                pass
+        if self.trace:
+            self.trace.event("enroll", t=round(self._sim_now, 3),
+                             vehicle=vehicle_id, identity=identity_type,
+                             did=did, vin=vin, make=make, model=model,
+                             year=year, sumo_type=sumo_type)
         return identity
 
     def _generate_vin(self, make: str, year: int, vehicle_id: str) -> str:
@@ -684,6 +784,7 @@ class SUMOIdentityIntegration:
         self.metrics.messages_sent += 1
 
         verified_count = 0
+        rx_log = [] if self.trace else None
         for receiver_id in self._neighbors(vehicle_id):
             ok, latency_ms, cold = layer.verify(receiver_id, package)
             self.metrics.messages_delivered += 1
@@ -695,6 +796,15 @@ class SUMOIdentityIntegration:
             else:
                 pop.failed += 1
                 self.metrics.verification_failures += 1
+            if rx_log is not None:
+                rx_log.append([receiver_id, bool(ok), bool(cold),
+                               round(latency_ms, 4)])
+        if self.trace:
+            self.trace.event("tx", t=round(sim_time, 3), seq=payload["seq"],
+                             sender=vehicle_id, type=message_type,
+                             emergency=bool(emergency),
+                             pop="ssi" if identity.identity_type == "MOBI_VID" else "pki",
+                             sign_ms=round(sign_ms, 4), rx=rx_log)
         return verified_count
 
     # ------------------------------------------------------------------
@@ -717,8 +827,14 @@ class SUMOIdentityIntegration:
                 continue
             ttc = dx / closing
             if ttc < 3.0:
-                self.broadcast(vehicle_id, sim_time, "FCW", emergency=True)
+                warned = self.broadcast(vehicle_id, sim_time, "FCW",
+                                        emergency=True)
                 self.metrics.safety_events_detected += 1
+                if self.trace:
+                    self.trace.event("safety", t=round(sim_time, 3),
+                                     app="FCW", vehicle=vehicle_id,
+                                     target=other_id, ttc_s=round(ttc, 2),
+                                     gap_m=round(dx, 1), warned=warned)
                 return (f"FCW: {vehicle_id} -> {other_id} "
                         f"TTC {ttc:.1f}s (gap {dx:.0f}m)")
         return None
@@ -733,6 +849,9 @@ class SUMOIdentityIntegration:
         warned = self.broadcast(vehicle_id, sim_time, "EEBL", emergency=True)
         self.metrics.safety_events_detected += 1
         self.metrics.eebl_warnings_delivered += warned
+        if self.trace:
+            self.trace.event("safety", t=round(sim_time, 3), app="EEBL",
+                             vehicle=vehicle_id, warned=warned)
         print(f"  EEBL: {vehicle_id} hard braking at t={sim_time:.1f}s "
               f"— {warned} neighbors verified the warning")
 
@@ -830,6 +949,10 @@ class SUMOIdentityIntegration:
             self.metrics.verification_failures += 1
             self.metrics.ssi.failed += 1
         print(f"  Uncredentialed sender rejected:   {not ok}")
+        if self.trace:
+            for name, rejected in self.attack_results.items():
+                self.trace.event("attack", t=round(sim_time, 3), name=name,
+                                 rejected=bool(rejected))
 
     # ------------------------------------------------------------------
     # Simulation loop
@@ -850,6 +973,22 @@ class SUMOIdentityIntegration:
               f"<= {MAX_NEIGHBORS} nearest receivers per broadcast\n")
 
         self.start_sumo()
+        if self.trace:
+            self.trace.event(
+                "meta", generated_at=datetime.now(timezone.utc).isoformat(),
+                mode="simulate" if self.simulation_mode else "sumo",
+                seed=self.seed, duration_s=duration_seconds,
+                step_s=STEP_LENGTH_S, bsm_rate_hz=BSM_RATE_HZ,
+                neighbor_radius_m=NEIGHBOR_RADIUS_M,
+                max_neighbors=MAX_NEIGHBORS,
+                budgets={"v2v_ms": V2V_BUDGET_MS,
+                         "sig_check_ms": SIG_CHECK_TARGET_MS},
+                road={"length_m": MockMobility.HIGHWAY_LENGTH_M, "lanes": 3,
+                      "lane_y": [500.0, 503.5, 507.0]}
+                if self.simulation_mode else {"source": "sumo_net"},
+                snapshot_every=self.trace.snapshot_every)
+        if self.screenshot_dir and not self.simulation_mode and self.use_gui:
+            self.screenshot_dir.mkdir(parents=True, exist_ok=True)
         wall_start = time.time()
         total_steps = int(duration_seconds / STEP_LENGTH_S)
         sim_time = 0.0
@@ -882,6 +1021,24 @@ class SUMOIdentityIntegration:
                     state = self.get_vehicle_state(vehicle_id)
                     if state is not None:
                         self.vehicle_states[vehicle_id] = state
+
+                if self.trace and step % self.trace.snapshot_every == 0:
+                    self.trace.event(
+                        "snap", t=round(sim_time, 3), step=step,
+                        v=[[vid, round(st.position[0], 2),
+                            round(st.position[1], 2), round(st.speed, 2),
+                            round(st.heading, 1), st.lane_id]
+                           for vid, st in self.vehicle_states.items()
+                           if vid in vehicle_ids])
+                if (self.screenshot_dir and not self.simulation_mode
+                        and self.use_gui and step % self.screenshot_every == 0):
+                    try:  # SUMO-GUI frame capture (docs/visual/VISUAL_PLAN.md)
+                        traci.gui.screenshot(
+                            "View #0",
+                            str(self.screenshot_dir / f"frame_{step:05d}.png"),
+                            1600, 900)
+                    except Exception as e:
+                        print(f"  screenshot failed at step {step}: {e}")
 
                 # Periodic BSM broadcast: EVERY vehicle, EVERY 100ms step
                 for vehicle_id in vehicle_ids:
@@ -919,6 +1076,11 @@ class SUMOIdentityIntegration:
         results = self.build_results(duration_seconds, wall_elapsed)
         self.print_statistics(results)
         self.write_results(results)
+        if self.trace:
+            self.trace.event("summary", **results)
+            self.trace.close()
+            print(f"Trace written to {self.trace.path} "
+                  f"({self.trace.count} events)")
 
     # ------------------------------------------------------------------
     # Results / statistics
@@ -1090,6 +1252,22 @@ def main():
                         help="Vehicle count in --simulate mode (default: 50)")
     parser.add_argument("--seed", type=int, default=42,
                         help="Random seed for mock mobility (default: 42)")
+    parser.add_argument("--results", type=Path, default=None,
+                        help="Results JSON path (default: results/v2v_latency.json)")
+    parser.add_argument("--trace", type=Path, default=None,
+                        help="Write a JSONL event trace (positions, every "
+                             "signed broadcast and its receivers, safety and "
+                             "attack events) for replay/figures")
+    parser.add_argument("--trace-every", type=int, default=1,
+                        help="Position snapshot every N steps (default: 1)")
+    parser.add_argument("--screenshot-dir", type=Path, default=None,
+                        help="With --gui: save SUMO-GUI frames here")
+    parser.add_argument("--screenshot-every", type=int, default=10,
+                        help="With --gui: frame every N steps (default: 10)")
+    parser.add_argument("--gui-zoom", type=float, default=300.0,
+                        help="With --gui: SUMO zoom percent (100 = whole net)")
+    parser.add_argument("--gui-track", default=None,
+                        help="With --gui: keep the view centred on this vehicle id")
     args = parser.parse_args()
 
     integration = SUMOIdentityIntegration(
@@ -1097,6 +1275,13 @@ def main():
         use_gui=args.gui,
         num_vehicles=args.vehicles,
         seed=args.seed,
+        results_path=args.results,
+        trace_path=args.trace,
+        trace_every=args.trace_every,
+        screenshot_dir=args.screenshot_dir,
+        screenshot_every=args.screenshot_every,
+        gui_zoom=args.gui_zoom,
+        gui_track=args.gui_track,
     )
     integration.run_simulation(duration_seconds=args.duration)
 

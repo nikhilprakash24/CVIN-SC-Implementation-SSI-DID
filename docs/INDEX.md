@@ -31,6 +31,7 @@ provenance and must not be cited in chapters.
 | How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-10-04.md` | the single file to read first when picking the work up (supersedes `HANDBACK_2026-09-30.md`) |
 | How is a substrate measured operation by operation (CRUD and beyond), and what did it show? | `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md` (method: 18-op catalogue, scenarios, falsifiers) + `HANDOFF-DATA-COLLECTION-FRAMEWORK.md` (results and hypothesis verdicts) | harness in `1_blockchain-identity/benchmarks/`; numbers via register #29–#31 only |
 | What did the code-level review find, and what was fixed? | `docs/REVIEW_02_CODEBASE.md` (findings K/H/S/T/Q), `docs/PLAN_REVIEW_02.md`, `docs/review02/PASS*_*.md` (per-stream changes), `docs/AFTER_ACTION_REPORT_03.md` | review 2, 2026-10-03; complements `AUDIT_01` (claims) and `RESEARCH_AUDIT` (validity) |
+| How is the simulation shown (figures, replay, SUMO frames), and what may a picture claim? | `docs/visual/VISUAL_PLAN.md` (plan, shot list, style, illustration prompts) + `docs/visual/VISUAL_PHASES_PROMPTS.md` (phases to run) + `docs/visual/TRACE_SCHEMA.md` | every figure is regenerated from a trace in `docs/visual/traces/` by `cv2x-testbed/sumo/viz/render_trace.py` |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 
