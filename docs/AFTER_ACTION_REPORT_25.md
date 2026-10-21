@@ -43,7 +43,9 @@ deeply with the recent work (passes 21 to 24).
   check passes, including the progress appendix after regeneration.
 
 ## 3. Closing
-The pass delivered P10 and R. CI result on the closing commit: recorded in the "Report 25 closed" commit.
+The pass delivered P10 and R. **CI 8 of 8 green on the closing commit `7bb683e`** (Smart Contract Tests run
+39537270105, W3C SSI Compliance Tests 39537270177, Performance Benchmarks 39537270106), read over the public
+Actions API from this session.
 
 **No chapter was edited.** The map holds 36 sentences ready to paste and a sixteen-item drift table; WM-2 D1 applies
 them once D-1 to D-15 are decided (the decision sheet's section A). Five of the sixteen drift items are

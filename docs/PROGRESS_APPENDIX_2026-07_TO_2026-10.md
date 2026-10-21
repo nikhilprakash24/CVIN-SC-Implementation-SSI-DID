@@ -286,10 +286,18 @@
 | `b7ea6f4` | 2026-10-20 | Report 24 closed: CI 8/8 green on 46f8d1f |
 | `a9b03c2` | 2026-10-20 | Report 20 closed: CI 8/8 green on 914dcb2 |
 
-## report 25 (2026-10-21 to 2026-10-21, 1 commits)
+## report 26 (2026-10-20 to 2026-10-20, 2 commits)
 
 | Commit | Date | Subject |
 |---|---|---|
-| `d1a7cbf` | 2026-10-21 | After-action report 25 opened: TDP runbook phase 10, thesis adaptation map onto chapter 3 |
+| `972f7ae` | 2026-10-20 | Chapter 2 draft sections 2.4a (revocation freshness) and 2.6 (the IDTx positioned), from the two Phase 2 briefs' fetched sources; report 26 … |
+| `73cba2d` | 2026-10-20 | Chapter 6 draft section 6.8: the identity-dependent transaction, what it is and what it is not (examiner question 12); report 26 log |
 
-180 commits in 22 groups.
+## report 25 (2026-10-21 to 2026-10-21, 2 commits)
+
+| Commit | Date | Subject |
+|---|---|---|
+| `af774c2` | 2026-10-21 | After-action report 25 opened: TDP runbook phase 10, thesis adaptation map onto chapter 3 |
+| `7bb683e` | 2026-10-21 | TDP runbook phase 10: thesis adaptation map onto chapter 3 (TDP-010), state per requirement, drift table, outline v2; records; progress appe… |
+
+183 commits in 23 groups.
