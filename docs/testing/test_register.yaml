@@ -2795,7 +2795,7 @@ tests:
   class: G
   evidence: E3
   verdict: measured
-  value: 180105
+  value: 180127
   location: 1_blockchain-identity/test/L1-identity-mechanisms
   source: sandbox/grand/report/L1-asymmetry.json
 - id: TC-mobi-vid-U2-F
@@ -2855,7 +2855,7 @@ tests:
   class: G
   evidence: E3
   verdict: measured
-  value: 180105
+  value: 180127
   location: 1_blockchain-identity/test/L1-identity-mechanisms
   source: sandbox/grand/report/L1-asymmetry.json
 - id: TC-mobi-vid-U5-F

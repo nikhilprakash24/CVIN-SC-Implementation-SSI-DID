@@ -117,7 +117,7 @@ d.run(async () => {
   await d.reverts('attest-unauthorised', 'MOBIVIDRegistryV2.attestEvent', async () => reg.connect(signers[12]).attestEvent(accident, vehicle, await signers[12].signMessage(ethers.getBytes(digest(vehicle, accident)))), 'Not authorized to attest', 'a valid signature by an address with no role is refused');
   await d.reverts('attest-nonexistent', 'MOBIVIDRegistryV2.attestEvent', () => reg.connect(police).attestEvent(ethers.id('nope'), vehicle, policeSig), 'Event does not exist', 'eventId must exist for that vehicle');
   await d.reverts('attest-malformed', 'MOBIVIDRegistryV2.attestEvent', () => reg.connect(police).attestEvent(accident, vehicle, '0x1234'), 'ECDSAInvalidSignatureLength', 'OZ ECDSA rejects malformed signatures with a custom error');
-  await d.tx('attest-same-party-twice', 'MOBIVIDRegistryV2.attestEvent', reg.connect(police).attestEvent(accident, vehicle, policeSig), 'OBSERVATION: the same attester can attest the same event repeatedly with the same signature (no per-attester dedup; the signature has no nonce)');
+  await d.reverts('attest-same-party-twice', 'MOBIVIDRegistryV2.attestEvent', () => reg.connect(police).attestEvent(accident, vehicle, policeSig), 'Already attested by this attester', 'H-A (clone lineage, merged 2026-10-21): one attestation per (event, attester), so a resubmitted signature cannot inflate the count; before H-A this step was an OBSERVATION that it could');
 
   // ---- issuer revocation ----
   const r2 = await d.tx('revoke-issuer', 'MOBIVIDRegistryV2.revokeIssuerAuthorization', reg.connect(authority).revokeIssuerAuthorization(insurer.address), 'authority revokes the insurer -> IssuerAuthorizationRevoked');

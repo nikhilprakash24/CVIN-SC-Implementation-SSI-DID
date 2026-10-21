@@ -50,15 +50,15 @@ Source: `sandbox/grand/report/demos.json` (1752 steps). Rules: a step with gas i
 | erc-725xy | 48 | 29 | 24 | 0 | 24 | 0 |
 | erc-735 | 54 | 38 | 35 | 5 | 15 | 2 |
 | lsp8 | 35 | 31 | 33 | 8 | 36 | 108 |
-| mobi-vid | 78 | 54 | 78 | 20 | 46 | 198 |
-| **all** | **594** | **393** | **369** | **160** | **236** | **700** |
+| mobi-vid | 77 | 54 | 79 | 20 | 46 | 199 |
+| **all** | **593** | **393** | **370** | **160** | **236** | **701** |
 
 ### Cross-tabulation: the grand report's flag against the rule class (academic review AR-34)
 
 | Flag in the grand report | write (A, mined) | read (A, view call) | expected revert (A) | local computation (no chain contact) | unclassified | total |
 |---|---:|---:|---:|---:|---:|---:|
-| mined | 594 | 0 | 0 | 0 | 0 | 594 |
+| mined | 593 | 0 | 0 | 0 | 0 | 593 |
 | on-chain, no gas | 0 | 215 | 131 | 28 | 84 | 458 |
-| flag: off-chain | 0 | 178 | 238 | 132 | 152 | 700 |
+| flag: off-chain | 0 | 178 | 239 | 132 | 152 | 701 |
 
 A signing step that serves a relayed write is classed here as local computation; it belongs to the write it serves, which the rules cannot see (a limit of rule-based classification; F3 plan step F3-S3 retires it).

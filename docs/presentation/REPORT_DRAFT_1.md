@@ -1,6 +1,6 @@
 # Self-Sovereign Identity for Connected Vehicles — Results, Work and Implementation
 
-**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `af8a006` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
+**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `6d1af2e` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
 
 > Scope of every number: smart-contract gas is exact `receipt.gasUsed` on a local Hardhat chain (condition M1); latency is in-process cryptography with simulated mobility and no radio (condition M0). Nothing here was measured on a public network or a real road.
 
@@ -14,7 +14,7 @@
 | Do the identities meet W3C DID / VC? | internal checker 94.3 % (41 pass, 1 partial, 2 fail of 44); external DID suite 335/336 | #4, #24 |
 | Are the identity contracts attack-resistant? | 43 of 43 applicable attack cells defended (11 not applicable), strict harness | #28 |
 | Can infrastructure (RSUs, controllers) use the same identity layer? | I1 outside band, not falsified (SPaT/BSM warm ratio 1.226), I2 PASS (15 registered checks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
-| How large is the test and evidence base? | 537 Hardhat tests, 331 Python-layer tests, 92 feature demos (1,752 steps); 36 verified register rows | grand report |
+| How large is the test and evidence base? | 559 Hardhat tests, 365 Python-layer tests, 92 feature demos (1,752 steps); 36 verified register rows | grand report |
 
 ## 2. Research questions and hypotheses
 
@@ -53,7 +53,7 @@
 | ERC-1155 | 2,871,435 | 107,729 | 51,199 | — | 80,131 | 33,049 | 86,298 |
 | ERC-4337 | 456,294 | 759,088 | 49,343 | 96,173 | 47,557 | 25,429 | 28,539 |
 | LSP8 | 1,670,271 | 152,644 | 55,133 | — | — | 42,116 | 80,568 |
-| MOBI-VID-V2 | 4,225,285 | 299,143 | 307,210 | — | 35,321 | 75,382 | 200,089 |
+| MOBI-VID-V2 | 4,309,419 | 299,143 | 307,210 | — | 35,321 | 75,382 | 200,111 |
 | CVIN-Combined | 1,531,487 | 52,216 | 35,116 | — | 291,977 | 73,248 | 51,747 |
 *Exact gas, condition M1 (`4_comparison-framework/results/gas_benchmark.json`). — = operation not offered by the standard.*
 
@@ -84,7 +84,7 @@
 | ERC-735 | 295,242 | 295,277 | 295,289 (native) | 5/5 |
 | ERC-1155 | 107,729 | 80,131 | 63,031 (emulated) | 3/5 |
 | CVIN-Combined | 51,766 | 34,690 | 336,896 (native) | 5/5 |
-| MOBI-VID-V2 | 299,143 | 307,210 | 192,749 (native) | 5/5 |
+| MOBI-VID-V2 | 299,143 | 307,210 | 215,428 (native) | 5/5 |
 *`4_comparison-framework/results/mobi_vid_backends.json`.*
 
 ### 3.4 Security (register #28)
@@ -244,8 +244,8 @@ flowchart LR
 
 | Layer | What it contains | How it is tested |
 |---|---|---|
-| Contracts | ERC-1056, ERC-721, ERC-725, ERC-725xy, ERC-735, ERC-1155, ERC-4337, LSP8, CVIN-Combined; MOBI VID V2 profile | 537 Hardhat tests (L1 mechanisms, L2 system, security harness) |
-| W3C SSI layer | VC issuance and verification, DID resolution, MOBI VID I/II | Python layers (331 tests: L3, L4 and the SSI-layer suites); external DID suite 335/336 |
+| Contracts | ERC-1056, ERC-721, ERC-725, ERC-725xy, ERC-735, ERC-1155, ERC-4337, LSP8, CVIN-Combined; MOBI VID V2 profile | 559 Hardhat tests (L1 mechanisms, L2 system, security harness) |
+| W3C SSI layer | VC issuance and verification, DID resolution, MOBI VID I/II | Python layers (365 tests: L3, L4 and the SSI-layer suites); external DID suite 335/336 |
 | V2X testbed | identity providers, message-path harness, infrastructure layer, trace and renderers | seeded 30-run statistics; no-change gates; 31 infrastructure tests |
 | Comparison and sandbox | producers of the results of record; per-option sandboxes with adapters and demos | grand runner; 92 demos, 1,752 steps |
 | Documents | claim register, defect log, crux register, test register, dashboard, stale-figure check | regenerated and compared in CI |

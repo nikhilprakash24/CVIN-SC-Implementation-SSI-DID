@@ -49,7 +49,7 @@
     "source": {
       "path": "4_comparison-framework/results/gas_benchmark.json"
     },
-    "measured": "2026-10-09T02:27:39.007Z",
+    "measured": "2026-10-21T03:15:18.910Z",
     "condition": "M1",
     "operations": [
       "deployRegistry",
@@ -134,13 +134,13 @@
         "transferOwnership": 80568
       },
       "MOBI-VID-V2": {
-        "deployRegistry": 4225285,
+        "deployRegistry": 4309419,
         "createIdentity": 299143,
         "updateAttribute": 307210,
         "updateAttributeVia4337": null,
         "addDelegateOrClaim": 35321,
         "revoke": 75382,
-        "transferOwnership": 200089
+        "transferOwnership": 200111
       },
       "CVIN-Combined": {
         "deployRegistry": 1531487,
@@ -293,7 +293,7 @@
           "native": true
         },
         "thirdPartyAttestation": {
-          "gas": 192749,
+          "gas": 215428,
           "native": true
         },
         "fidelity": "5/5"
@@ -767,8 +767,8 @@
     "source": {
       "path": "sandbox/grand/report/GRAND_REPORT.md"
     },
-    "generated": "2026-10-15T04:15:44Z",
-    "commit": "af8a006",
+    "generated": "2026-10-21T03:28:09Z",
+    "commit": "6d1af2e",
     "stages": {
       "smoke": {
         "ok": true,
@@ -780,15 +780,15 @@
       },
       "L1+L2": {
         "ok": true,
-        "result": "{'passing': 537, 'failing': 0}"
+        "result": "{'passing': 559, 'failing': 0}"
       },
       "L3+L4": {
         "ok": true,
-        "result": "{'passed': 331}"
+        "result": "{'passed': 365}"
       },
       "demos": {
         "ok": true,
-        "result": "{'demos': 92, 'steps': 1752, 'transactions_mined': 594, 'onchain_no_gas': 458, 'offchain': 700, 'flagged': 62, 'failures': []}"
+        "result": "{'demos': 92, 'steps': 1752, 'transactions_mined': 593, 'onchain_no_gas': 458, 'offchain': 701, 'flagged': 62, 'failures': []}"
       }
     }
   },
