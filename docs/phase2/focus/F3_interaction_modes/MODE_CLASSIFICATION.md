@@ -19,6 +19,8 @@
 | `V1_issuer_key_anchor` | A | 8 of 10 |
 | `V3_anchor_status` | A | 10 of 10 |
 | `V5_revoke_credential` | A | 10 of 10 |
+| `P1_create_presentation` | A | 7 of 10 |
+| `X1_execute_call` | A | 2 of 10 |
 
 Every harness write is Mode A except `U5_meta_tx`: ERC-1056 signed operations sent by a relayer and ERC-4337 UserOperations sent by a bundler (B-submit; gas in register #50). No write in Phase 1 is Mode C.
 

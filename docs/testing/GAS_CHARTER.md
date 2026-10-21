@@ -17,12 +17,12 @@ Every gas figure quoted in the thesis or the register is in exactly one class, a
 
 ## 2. The metrics harness's varying cells (run of record `7a9a996`)
 
-Of **110** transaction cells (36 iterations each: 1 exact + 5 warm-up + 30 samples), **27** vary in total gas. The harness's own `gasDeterministic` flag tracks **execution** gas only (its comment: total gas "may differ by a few units through calldata zero-byte pricing"), so it marks 14 cells; the other 13 vary in calldata only. The harness tables quote the **mode**; `crud.json` stores each cell's `gasUsedRange`. Causes, computed from every iteration in `raw.jsonl`:
+Of **119** transaction cells (36 iterations each: 1 exact + 5 warm-up + 30 samples), **33** vary in total gas. The harness's own `gasDeterministic` flag tracks **execution** gas only (its comment: total gas "may differ by a few units through calldata zero-byte pricing"), so it marks 15 cells; the other 18 vary in calldata only. The harness tables quote the **mode**; `crud.json` stores each cell's `gasUsedRange`. Causes, computed from every iteration in `raw.jsonl`:
 
 | Cause | Cells |
 |---|---:|
-| calldata zero bytes | 24 |
-| execution path differs | 6 |
+| calldata zero bytes | 30 |
+| execution path differs | 7 |
 | value-dependent opcode cost | 4 |
 | first-call state | 4 |
 
@@ -30,9 +30,13 @@ Of **110** transaction cells (36 iterations each: 1 exact + 5 warm-up + 30 sampl
 |---|---|---:|---:|---:|---:|---:|---|---|---|
 | cvin | `C1_create_identity` | 271,402 | 271,352 | 271,402 | 26 | 8 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |
 | cvin | `C2_create_with_attributes` | 1,015,730 | 1,015,666 | 1,015,730 | 52 | 16 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |
+| cvin | `P1_create_presentation` | 50,992 | 50,980 | 50,992 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
 | cvin | `V3_anchor_status` | 294,195 | 294,145 | 294,195 | 26 | 8 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |
 | cvin | `V5_revoke_credential` | 93,498 | 93,488 | 93,498 | 2 | 0 | calldata zero bytes; value-dependent opcode cost (same EVM steps) | execution varies | G-mode |
+| erc1056 | `P1_create_presentation` | 34,206 | 34,194 | 34,206 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
 | erc1056 | `U5_meta_tx` | 62,646 | 62,634 | 62,646 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
+| erc1056w | `P1_create_presentation` | 45,257 | 45,245 | 45,257 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
+| erc4337 | `P1_create_presentation` | 71,764 | 71,752 | 71,764 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
 | erc4337 | `U5_meta_tx` | 141,767 | 141,731 | 141,767 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
 | erc4337 | `V1_issuer_key_anchor` | 49,151 | 49,139 | 49,151 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
 | erc721 | `C1_create_identity` | 402,567 | 399,767 | 402,567 | 2800 | 0 | first-call state (same storage writes; a slot already warm or set) | execution varies | G-first-call |
@@ -40,9 +44,11 @@ Of **110** transaction cells (36 iterations each: 1 exact + 5 warm-up + 30 sampl
 | erc721 | `U1_rotate_controller` | 179,470 | 176,670 | 179,470 | 2800 | 0 | first-call state (same storage writes; a slot already warm or set) | execution varies | G-first-call |
 | erc725 | `C1_create_identity` | 656,480 | 656,468 | 656,480 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
 | erc725 | `C2_create_with_attributes` | 1,496,440 | 1,496,404 | 1,496,452 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
+| erc725xy | `P1_create_presentation` | 72,369 | 72,357 | 72,369 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
 | erc725xy | `V1_issuer_key_anchor` | 49,745 | 49,721 | 49,745 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
 | erc735 | `C2_create_with_attributes` | 2,558,484 | 2,558,460 | 2,558,509 | 25 | 8 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |
 | erc735 | `D2_revoke_attribute` | 96,611 | 96,601 | 96,611 | 2 | 0 | calldata zero bytes; value-dependent opcode cost (same EVM steps) | execution varies | G-mode |
+| erc735 | `P1_create_presentation` | 294,868 | 294,844 | 294,893 | 25 | 8 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |
 | erc735 | `U3_set_attribute` | 318,054 | 318,005 | 318,054 | 25 | 8 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |
 | erc735 | `V3_anchor_status` | 345,920 | 345,908 | 345,945 | 25 | 8 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |
 | erc735 | `V5_revoke_credential` | 92,273 | 92,264 | 92,273 | 3 | 0 | calldata zero bytes; value-dependent opcode cost (same EVM steps) | execution varies | G-mode |

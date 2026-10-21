@@ -15,5 +15,7 @@
 | V1_issuer_key_anchor | 55,143 | 55,143 | 422,713 | 119,852 | n/a | 51,281 | 49,745 | n/a | 49,151 | 55,208 |
 | V3_anchor_status | 33,918 | 33,918 | 142,909 | 119,996 | 345,920 | 80,131 | 49,805 | 54,893 | 49,211 | 294,195 |
 | V5_revoke_credential | 33,470 | 33,470 | 125,821 | 43,388 | 92,273 | 33,049 | 27,322 | 32,231 | 26,809 | 93,498 |
+| P1_create_presentation | 34,206 | 45,257 | n/a | 119,996 | 294,868 | n/a | 72,369 | n/a | 71,764 | 50,992 |
+| X1_execute_call | n/a | n/a | n/a | n/a | n/a | n/a | 39,328 | n/a | 39,242 | n/a |
 
-_Run 2026-10-09T02-09-36Z_7a9a996 · commit 7a9a996 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-21T03-28-59Z_a9e2a28 · commit a9e2a28 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_

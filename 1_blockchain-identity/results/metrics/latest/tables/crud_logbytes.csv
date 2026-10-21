@@ -12,3 +12,5 @@ D3_deactivate_identity,256,256,96,96,96,352,96,352,96,256
 V1_issuer_key_anchor,192,192,416,128,n/a,128,160,n/a,160,192
 V3_anchor_status,256,256,256,128,1056,352,160,352,160,704
 V5_revoke_credential,256,256,256,64,480,352,128,288,128,352
+P1_create_presentation,256,320,n/a,128,960,n/a,160,n/a,160,256
+X1_execute_call,n/a,n/a,n/a,n/a,n/a,n/a,256,n/a,320,n/a
