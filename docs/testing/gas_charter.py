@@ -52,9 +52,10 @@ ROWS = {
     42: ("G-history", "gas moved by the 2026-10-04 defect fixes"),
     43: ("G-history", "gas moved by the pass-06 fixes"),
     47: ("G-range", "I4 over declared seeds 1–30; seed 1 exact (WM-2 B1)"),
+    39: ("G-mode", "metrics harness over HTTP-RPC: gas identical to the in-process run of record (#29, #34, #35); modes as there"),
     49: ("G-mode", "metrics harness storage and log counts; gas column inherits §2"),
     50: ("G-mode", "metrics harness: ERC-1056 U5 varies 62,634–62,646 (calldata only); U3 exact"),
-    53: ("G-mode", "metrics harness, clone-lineage run 9bdf451: P1 and X1 cells are modes; re-run due on the merged tree (lineage merge, PR #3)"),
+    53: ("G-mode", "metrics harness: P1 and X1 cells are modes; re-run on the merged tree, run 2026-10-21T03-28-59Z_a9e2a28"),
 }
 
 

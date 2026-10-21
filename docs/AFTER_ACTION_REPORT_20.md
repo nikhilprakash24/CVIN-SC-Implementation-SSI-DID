@@ -53,14 +53,15 @@ clone lineage's code was written against the pre-lineage-merge contracts, which 
 | MOBI backend sweep (H4) | `mobi_vid_backend_sweep.js` + table | attestEvent 192,749 → **215,428** (+22,679, H-A); nothing else moved |
 | Gas determinism (30 runs) | `run_gas_stats.py --runs 30` | 30 runs, every cell byte-identical (`gas_benchmark_stats.json`) |
 | Metrics harness (#29–#31, #34–#36, #49–#51, #53) | `npm run metrics` + `metrics:analyze` | run `2026-10-21T03-28-59Z_a9e2a28`, clean: all 130 earlier per-operation gas cells unchanged; P1 and X1 added (as the clone lineage measured them, except ERC-735 P1 294,868, +240 from D25); dominance re-derived: cost-only and all-six frontiers unchanged, CVIN-Combined additionally dominated by the ERC-1056 wrapper on cost + read path through a run-dependent latency axis (#36) |
-| M4 parity (#33) | `experiment_lifecycle_parity.py --deploy` | **not re-run** (needs the testbed on a live node; #33 marked re-run due) |
+| M4 parity (#33) | `experiment_lifecycle_parity.py --deploy` | re-run later the same day on a local Hardhat 2.28.6 node (`deef3a1`, clean): verdicts unchanged (writes PASS ×3, cached history FAIL, ratio 0.054); lifecycle-event gas unchanged; testbed deploy 5,135,625 → **5,360,720** |
+| HTTP-RPC condition (#39) | `npm run metrics` with `--network localhost` | run `2026-10-21T09-02-58Z_bd55af2`, clean: gas identical to the in-process run on every common cell; latency ≈2–2.5× in-process; #39 **U → V** |
 
 ## 5. Checks
 Hardhat 559 passing / 34 pending; Phase 2 12; layer 5 contracts 8; Python 427 with a node (0 skipped); sandbox suites
 365; layer 5 49; resolver 109; every CI document check current; citations 0 unresolved.
 
 ## 6. Not done, and the author's decisions
-- **Not re-run:** M4 parity (#33) and the HTTP-RPC condition (#39). Both rows say so.
+- **Re-runs completed after the first close:** M4 parity (#33) and the HTTP-RPC condition (#39) were re-run on the merged tree the same day (§4); nothing from the merge remains due. The #33 re-run first left the dashboard, presentation report and Phase 2 focus figures stale, which CI caught on `09e06ec`; regenerated in `3922c4f`.
 - **A harness run was discarded.** The first post-merge harness run overlapped a full Hardhat test run on the same
   host, which can perturb its latency columns; it was stopped and its output deleted, and the harness was re-run alone.
 - **Two more fixes found by CI after the first push:** the feature-asymmetry matrix (the merged contract gained

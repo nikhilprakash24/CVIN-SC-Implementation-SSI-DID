@@ -6,10 +6,9 @@
     },
     "rows": 54,
     "by_status": {
-      "V": 36,
+      "V": 37,
       "S": 10,
-      "E": 7,
-      "U": 1
+      "E": 7
     }
   },
   "constants": {
@@ -1329,8 +1328,8 @@
         },
         {
           "row": 39,
-          "status": "U",
-          "claim": "HTTP-RPC condition, all ten columns (N=30), on the pre-merge contracts: every gas table byte-identical to the in-process run of the same contracts (`0eef6af`, now S); latency ≈2–2.5× the in-process figures (U3 tx median …"
+          "status": "V",
+          "claim": "HTTP-RPC condition, all ten columns (N=30), on the merged contracts (re-run 2026-10-21, PR #3): every gas value identical to the in-process run of record (`2026-10-21T03-28-59Z_a9e2a28`) on all common cells (crud 131, li…"
         }
       ],
       "state": "partial"
@@ -1817,8 +1816,8 @@
     },
     "39": {
       "row": 39,
-      "status": "U",
-      "claim": "HTTP-RPC condition, all ten columns (N=30), on the pre-merge contracts: every gas table byte-identical to the in-process run of the same contracts (`0eef6af`, now S); latency ≈2–2.5× the in-process figures (U3 tx median …",
+      "status": "V",
+      "claim": "HTTP-RPC condition, all ten columns (N=30), on the merged contracts (re-run 2026-10-21, PR #3): every gas value identical to the in-process run of record (`2026-10-21T03-28-59Z_a9e2a28`) on all common cells (crud 131, li…",
       "tag": "M1-H/HTTP"
     },
     "40": {

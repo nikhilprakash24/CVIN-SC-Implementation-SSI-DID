@@ -7,7 +7,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | Crux | State | Hypotheses | Evidence rows (status) | Open gaps |
 |---|---|---|---|---|
 | C1 CAV identity substrate | **partial** | H1, H5 | #25 (V), #26 (V), #34 (V), #35 (V), #36 (V), #42 (V), #43 (V) | 2 |
-| C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (U) | 2 |
+| C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (V) | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **partial** | — | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V) | 5 |
 | C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S) | 3 |
 | C5 W3C conformance | **partial** | H2 | #4 (V), #24 (V) | 2 |
@@ -55,7 +55,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | #27 | V | V2V SSI verify warm 0.153 ms [0.151, 0.154] (median of 30 seeded-run medians, 95 % bootstrap CI; p95 of run medians 0.158), cold 0.399 [0.381, 0.411]; PKI warm 0.094 [0.093, 0.095], cold 0.220 [0.218, 0.223]; 1,650,318 v… |
 | #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_… |
 | #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu… |
-| #39 | U | HTTP-RPC condition, all ten columns (N=30), on the pre-merge contracts: every gas table byte-identical to the in-process run of the same contracts (`0eef6af`, now S); latency ≈2–2.5× the in-process figures (U3 tx median … |
+| #39 | V | HTTP-RPC condition, all ten columns (N=30), on the merged contracts (re-run 2026-10-21, PR #3): every gas value identical to the in-process run of record (`2026-10-21T03-28-59Z_a9e2a28`) on all common cells (crud 131, li… |
 
 **Open gaps:**
 - Mobility is simulated (no SUMO run); radio, MAC and channel are out of scope.
