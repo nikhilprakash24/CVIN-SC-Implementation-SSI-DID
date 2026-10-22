@@ -292,3 +292,12 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/AFTER_ACTION_REPORT_25.md` | plan, log, closing | standing rule |
 | `docs/tdp/TDP-010_THESIS_ADAPTATION_MAP.md` | requirements onto chapter 3; drift table; outline v2 | the author's request |
 | `docs/tdp/README.md`, `TDP-RUNBOOK.md`, `TDP-PLAN.md`; handback section 16 | records | records |
+
+## Pass 27 — TDP runbook phases 8 and 9 (2026-10-22)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_27.md` | plan, log, closing | standing rule |
+| `docs/tdp/requirements.yaml` (`tests`), `make_vcrm.py`, TDP-005 section 3 | requirement-to-test trace with its guard | phase 8 |
+| `docs/tdp/check_icd.py`; `probe_tdp_checks.sh`; `.github/workflows/test-contracts.yml` | the ICD gate, its probe, its CI line | phase 9 |
+| `docs/tdp/TDP-003_INTERFACE_CONTROL_DOCUMENT.md` | IF-04 as built after C1; two shorthand tokens reworded | held by the gate |
+| `docs/tdp/make_blueprints.py`, `drawings/` | corrected test path; document-check list regenerated | records |

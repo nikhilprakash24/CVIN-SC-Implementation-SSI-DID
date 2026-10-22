@@ -90,7 +90,50 @@ Register at generation: E 7, S 10, U 1, V 34 (52 rows).
 
 V rows cited by no requirement: #1, #2, #3, #22, #29, #42, #43. A V row no requirement cites is evidence without a stated purpose; TDP-PLAN phase 3 decides whether to add a requirement or leave the row as supporting data.
 
-## 3. Limits carried
+## 3. Requirement-to-test trace (phase 8)
+
+A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path is the producing script or the record for a measurement the register has no entry for (N-15, A7). The build fails on an unknown id or a missing path.
+
+| Req | Method | Tests and producers |
+|---|---|---|
+| SYS-01 | Inspection | `TC-cvin-combined-C1-F`, `TC-erc-1056-uport-C1-F`, `TC-erc-1056-vehicle-C1-F`, `TC-erc-1155-C1-F`, `TC-erc-4337-C1-F`, `TC-erc-721-C1-F`, `TC-erc-725-C1-F`, `TC-erc-725xy-C1-F`, `TC-erc-735-C1-F`, `TC-lsp8-C1-F`, `TC-mobi-vid-C1-F`, `sandbox/grand/smoke.js` |
+| SYS-02 | Inspection | `docs/testing/check_docs_numbers.py` |
+| SYS-03 | Inspection | `docs/MEASUREMENT_CONDITIONS.md` |
+| PRF-01 | Test | `1_blockchain-identity/scripts/benchmark_gas.js`, `4_comparison-framework/performance-metrics/run_gas_stats.py` |
+| PRF-02 | Analysis | `1_blockchain-identity/scripts/benchmark_gas.js` |
+| PRF-03 | Test | `1_blockchain-identity/benchmarks/run.js` |
+| PRF-04 | Analysis | `1_blockchain-identity/scripts/benchmark_scaling.js` |
+| PRF-05 | Test | `1_blockchain-identity/benchmarks/run.js` |
+| PRF-07 | Test | `1_blockchain-identity/benchmarks/run.js` |
+| PRF-06 | Analysis | `1_blockchain-identity/analysis/analysis.js` |
+| SEC-01 | Test | `TC-cvin-combined-identityHijack-A`, `TC-erc-1056-uport-identityHijack-A`, `TC-erc-1155-identityHijack-A`, `TC-erc-4337-identityHijack-A`, `TC-erc-721-identityHijack-A`, `TC-erc-725-identityHijack-A`, `TC-erc-735-identityHijack-A`, `TC-lsp8-identityHijack-A`, `TC-mobi-vid-identityHijack-A`, `1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js` |
+| SEC-02 | Test | `cv2x-testbed/tests/test_t9_freshness.py`, `sandbox/py-suites/L3-ssi/test_infrastructure_v3.py` |
+| SEC-03 | Test | `cv2x-testbed/tests/test_freshness_k.py`, `cv2x-testbed/sumo/run_infra_stats.py` |
+| SEC-04 | Test | `cv2x-testbed/tests/test_d51_chain_time.py` |
+| SEC-05 | Test | `1_blockchain-identity/test/L2-identity-system/per-option/MOBIVID/attestEventRegression.test.js` |
+| SEC-06 | Inspection | `cv2x-testbed/scripts/test_vin_encryption.py` |
+| SEC-07 | Test | `1_blockchain-identity/scripts/experiment_pseudonym_pool.js`, `1_blockchain-identity/test/L2-identity-system/per-option/ERC1056/PseudonymPool.test.js` |
+| STD-01 | Test | `cv2x-testbed/scripts/w3c_compliance_checker.py` |
+| STD-02 | Test | `docs/conformance/W3C_DID_TEST_SUITE.md` |
+| STD-03 | Demonstration | `1_blockchain-identity/scripts/mobi_vid_backend_sweep.js` |
+| STD-04 | Test | `cv2x-testbed/scripts/experiment_lifecycle_parity.py`, `cv2x-testbed/tests/test_lifecycle_parity.py` |
+| RTV-01 | Test | `cv2x-testbed/sumo/run_v2v_stats.py` |
+| RTV-02 | Test | `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py` |
+| RTV-03 | Test | `cv2x-testbed/scripts/experiment_freshness_k.py`, `cv2x-testbed/tests/test_freshness_k_probe.py` |
+| RTV-04 | Test | `cv2x-testbed/scripts/experiment_pki_vs_erc1056.py` |
+| INF-01 | Test | `cv2x-testbed/sumo/run_infra_stats.py` |
+| INF-02 | Test | `cv2x-testbed/sumo/run_infra_stats.py`, `sandbox/py-suites/L3-ssi/test_infrastructure_v3.py` |
+| INF-03 | Test | `cv2x-testbed/sumo/run_infra_stats.py` |
+| INF-04 | Test | `1_blockchain-identity/scripts/infrastructure_gas.js` |
+| INF-05 | Test | `cv2x-testbed/sumo/run_infra_stats.py` |
+| EVD-01 | Inspection | `docs/testing/probe_run_identity.sh` |
+| EVD-02 | Test | `tools/run_identity/test_promote.py` |
+| EVD-03 | Inspection | `docs/design/INFRASTRUCTURE_PREREG.md` |
+| EVD-04 | Inspection | `docs/tdp/probe_tdp_checks.sh` |
+| EVD-05 | Demonstration | `docs/tdp/probe_tdp_checks.sh` |
+| EVD-06 | Test | `sandbox/grand/run.py`, `docs/testing/check_test_counts.py` |
+
+## 4. Limits carried
 
 | Req | Declared limit |
 |---|---|

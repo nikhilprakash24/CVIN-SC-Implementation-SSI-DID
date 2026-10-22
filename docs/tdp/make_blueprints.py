@@ -623,7 +623,7 @@ def dwg_006():
     ]
     bom = [("threat model", "docs/THREAT_MODEL.md"), ("revert harness", "1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js"),
            ("attack results", "4_comparison-framework/security-analysis/results/attack_results.json"), ("threat matrix", "4_comparison-framework/security-analysis/results/security_matrix.json"),
-           ("attestEvent regression", "1_blockchain-identity/test/MOBIVID/attestEventRegression.test.js"), ("freshness/replay tests", "cv2x-testbed/tests/test_t9_freshness.py")]
+           ("attestEvent regression", "1_blockchain-identity/test/L2-identity-system/per-option/MOBIVID/attestEventRegression.test.js"), ("freshness/replay tests", "cv2x-testbed/tests/test_t9_freshness.py")]
     frame(sh, "DWG-006", "THREAT ENVELOPE — ADVERSARIES, GOALS, LENSES", 6, notes, bom, ["THREAT_MODEL.md", "attack_results.json"])
     return sh.render()
 

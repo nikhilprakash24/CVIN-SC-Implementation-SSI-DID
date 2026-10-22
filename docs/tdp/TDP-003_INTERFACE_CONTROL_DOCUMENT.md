@@ -1,7 +1,7 @@
 # TDP-003 — Interface Control Document
 
 **Author:** Nikhil Prakash (MASc, UBC ECE)
-**Written:** 2026-10-15 (after-action report 20). **Revision:** A.
+**Written:** 2026-10-15 (after-action report 20). **Revision:** A; IF-04 and section 7 wording revised 2026-10-22 (report 27, held by `check_icd.py`).
 **Binds:** `docs/STYLE_AND_RIGOUR_GUIDE.md`; `docs/tdp/README.md` (TDP-000). **Supersedes:** nothing.
 **Format:** MIL-STD-498 interface design description, reduced to what a software testbed has: for each interface,
 the two sides, the direction, the data carried with its fields, the implementation that defines it, and the test or
@@ -84,8 +84,11 @@ Verifier checks, each reported by name in `VerificationResult` (`vc_verifier.py`
 
 Resolver: `DIDResolver.resolve(did) -> DIDResolutionResult` with `didDocument`, `didResolutionMetadata`
 (`contentType` absent on `resolve()`, present on `resolveRepresentation()` per DID Core 7.1.2) and
-`didDocumentMetadata`; methods `did:ethr`, `did:nft`, `did:key`, `did:mobi`. Until WM-2 C1 the `did:ethr` document
-is synthesised from the identifier and reads no chain state (chapter 4 section 4.1 caveat; report 21 in progress).
+`didDocumentMetadata`; methods `did:ethr`, `did:nft`, `did:key`, `did:mobi`. Since WM-2 C1 (report 21, commit 7ae268a) the
+`did:ethr` document is read from the ERC-1056 registry when the resolver is given a provider and the registry address
+(owner, delegates, attributes, chain-time validity, deactivation including `DIDRevoked`); without a provider it returns
+the default document, stated as not read from a chain (C1-d1). The external suite and the internal checker resolve
+without a provider, so #4 and #24 did not move; a chain-backed suite run is deferred (N-24).
 
 ## 5. IF-05, IF-06 Signed message packages
 
@@ -117,8 +120,8 @@ I3) or the chain (`--refresh-mode full|probe`, #32, #37).
 sorted scope paths, 12 hex). The JS helper writes the same fields from the same `scopes.json`. Rule 1.1.6: a run with
 `code_dirty` true is discarded and the discard written down.
 
-**Producer entry (`producers.json`):** `inputs` (files or directories whose change changes the result, or an
-`@input_set`), `results` (the tracked destinations), with the shared `search` paths and `exclude` globs. Resolved
+**Producer entry (`producers.json`):** `inputs` (files or directories whose change changes the result, or a reference to an
+entry of `input_sets`, written `@hardhat`), `results` (the tracked destinations), with the shared `search` paths and `exclude` globs. Resolved
 by `stamp.py --write` into `scopes.json`.
 
 **Result file header (`environment`), as written by the freshness experiment:** `date_utc`, `git_commit`,
@@ -132,7 +135,7 @@ since N-14.
 `Status`; the status letter is the bold marker at the start of the status cell and nothing else is parsed as it.
 
 **Option manifest:** `option`, `slug`, `kind`, `contracts`, `provider`, `benchmark_key`, `experiments`,
-`benchmark_ops`, `families[]` each with `name`, `stance` (`measured-in-comparison`, `implemented`,
+`benchmark_ops`, `families` (a list) each with `name`, `stance` (`measured-in-comparison`, `implemented`,
 `not-applicable`), `functions`, `measured`, `reason`, `reviewed`.
 
 ## 8. Planned interfaces (sketch, not built)

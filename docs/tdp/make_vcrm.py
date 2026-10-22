@@ -83,11 +83,20 @@ def open_items():
     return defects, steps
 
 
+def test_register_ids():
+    return {t["id"] for t in yaml.safe_load((ROOT / "docs/testing/test_register.yaml").read_text())["tests"]}
+
+
 def ci_text():
     return "\n".join(p.read_text() for p in sorted(WORKFLOWS.glob("*.yml")))
 
 
+TEST_IDS = set()
+
+
 def evaluate(reqs, reg, snap, ci):
+    global TEST_IDS
+    TEST_IDS = test_register_ids()
     defects, steps = open_items()
     out = []
     for r in reqs:
@@ -128,6 +137,15 @@ def evaluate(reqs, reg, snap, ci):
         if not rows and r["method"] in ("T", "A") and not problems:
             # a test/analysis requirement with no register row is held by its files and CI only; say so
             status = "VERIFIED" if files and not missing_files else "OPEN"
+        tests = r.get("tests", [])
+        if r["method"] in ("T",) and not tests:
+            raise SystemExit(f"{r['id']}: a test-method requirement names no test or producing script (phase 8)")
+        for t in tests:
+            if t.startswith("TC-"):
+                if t not in TEST_IDS:
+                    raise SystemExit(f"{r['id']}: test id {t} is not in docs/testing/test_register.yaml")
+            elif not (ROOT / t).exists():
+                raise SystemExit(f"{r['id']}: test path {t} does not exist")
         pending = []
         for item in r.get("pending", []):
             if item in defects:
@@ -272,7 +290,13 @@ def vcrm(ev, groups, reg):
     s += ("\nV rows cited by no requirement: " + (", ".join(f"#{n}" for n in unused) if unused else "none") +
           ". A V row no requirement cites is evidence without a stated purpose; TDP-PLAN phase 3 decides whether to add "
           "a requirement or leave the row as supporting data.\n")
-    s += "\n## 3. Limits carried\n\n"
+    s += "\n## 3. Requirement-to-test trace (phase 8)\n\n"
+    s += ("A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path is the producing script or the "
+          "record for a measurement the register has no entry for (N-15, A7). The build fails on an unknown id or a missing path.\n\n")
+    s += "| Req | Method | Tests and producers |\n|---|---|---|\n"
+    for r in ev:
+        s += f"| {r['id']} | {METHODS[r['method']]} | {', '.join('`' + t + '`' for t in r.get('tests', [])) or '—'} |\n"
+    s += "\n## 4. Limits carried\n\n"
     s += "| Req | Declared limit |\n|---|---|\n"
     for r in ev:
         s += f"| {r['id']} | {r['limit']} |\n"

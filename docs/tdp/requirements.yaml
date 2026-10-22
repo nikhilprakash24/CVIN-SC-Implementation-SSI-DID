@@ -17,6 +17,8 @@
 #   verdict_from          optional snapshot path whose text is reported verbatim (a pre-registered verdict as it fell)
 #   files                 tracked files that must exist (inspection evidence)
 #   ci                    text that must appear in a workflow under .github/workflows (inspection evidence)
+#   tests                 test-register ids (docs/testing/test_register.yaml) or, for a measurement, the producing
+#                         script or record by repository path; the generator fails on an unknown id or missing path (phase 8)
 #   limit                 the declared limit of the evidence, copied from the register's own caveats (never softened)
 groups:
   SYS: System and scope
@@ -35,6 +37,7 @@ requirements:
     method: I
     evidence_rows: [25, 34]
     files: [1_blockchain-identity/benchmarks/adapters/IdentityAdapter.js, sandbox/grand/manifest.yaml]
+    tests: [TC-cvin-combined-C1-F, TC-erc-1056-uport-C1-F, TC-erc-1056-vehicle-C1-F, TC-erc-1155-C1-F, TC-erc-4337-C1-F, TC-erc-721-C1-F, TC-erc-725-C1-F, TC-erc-725xy-C1-F, TC-erc-735-C1-F, TC-lsp8-C1-F, TC-mobi-vid-C1-F, sandbox/grand/smoke.js]
     limit: Minimal representative implementations of ERC-4337 and LSP8 (chapter 4 caveats); "excl. n/a" totals are not comparable with full totals (#35).
   - id: SYS-02
     title: One evidence register for every number
@@ -44,6 +47,7 @@ requirements:
     evidence_rows: []
     files: [docs/MEASUREMENT_CONDITIONS.md, docs/testing/check_docs_numbers.py, docs/testing/stale_numbers.yaml]
     ci: docs/testing/check_docs_numbers.py
+    tests: [docs/testing/check_docs_numbers.py]
     limit: The checker scans tracked Markdown only; HTML and SVG outputs are held by their generators' --check instead.
   - id: SYS-03
     title: Declared conditions per measurement
@@ -52,6 +56,7 @@ requirements:
     method: I
     evidence_rows: [25, 27, 34]
     files: [docs/MEASUREMENT_CONDITIONS.md]
+    tests: [docs/MEASUREMENT_CONDITIONS.md]
     limit: No M2 (public testnet) measurement exists on the trunk (N-11).
 
   - id: PRF-01
@@ -63,6 +68,7 @@ requirements:
     threshold: {path: gas.determinism.all_deterministic, op: "==", value: true, label: "30/30 runs byte-identical"}
     files: [1_blockchain-identity/scripts/benchmark_gas.js, 4_comparison-framework/results/gas_benchmark.json]
     ci: Check determinism against committed results
+    tests: [1_blockchain-identity/scripts/benchmark_gas.js, 4_comparison-framework/performance-metrics/run_gas_stats.py]
     limit: M1 only (local Hardhat, cancun); operation definitions differ per standard and are declared per row.
   - id: PRF-02
     title: Create-identity ratio stated under its definition
@@ -70,6 +76,7 @@ requirements:
     derived_from: H1 (creation half); register #6
     method: A
     evidence_rows: [6, 25]
+    tests: [1_blockchain-identity/scripts/benchmark_gas.js]
     limit: H1's update and lifetime halves are not supported (#35); the split verdict is the one to report.
   - id: PRF-03
     title: Lifecycle gas over seventeen events
@@ -79,6 +86,7 @@ requirements:
     evidence_rows: [30, 35]
     files: [1_blockchain-identity/benchmarks/run.js, 1_blockchain-identity/results/metrics/latest/meta.json]
     pending: [A6]
+    tests: [1_blockchain-identity/benchmarks/run.js]
     limit: Run of record 2026-10-09T02-09-36Z_7a9a996; the harness flag that marks measured-code dirtiness is inert until A6 (D33, N-19).
   - id: PRF-04
     title: Lifetime cost model with sensitivity band
@@ -87,6 +95,7 @@ requirements:
     method: A
     evidence_rows: [26]
     files: [4_comparison-framework/results/scaling_lifetime.json]
+    tests: [1_blockchain-identity/scripts/benchmark_scaling.js]
     limit: A model over an assumed profile, not a measurement of a fleet.
   - id: PRF-05
     title: On-chain footprint and read cost against history
@@ -94,6 +103,7 @@ requirements:
     derived_from: RQ1 (storage locus); Phase 2 focus F1
     method: T
     evidence_rows: [31, 49, 51]
+    tests: [1_blockchain-identity/benchmarks/run.js]
     limit: SSTORE opcodes counted, not net slots; per-identity contract code not counted (#49).
   - id: PRF-07
     title: Relayed and account-abstracted write cost
@@ -101,6 +111,7 @@ requirements:
     derived_from: Phase 2 focus F3 (interaction modes); register #50
     method: T
     evidence_rows: [34, 50]
+    tests: [1_blockchain-identity/benchmarks/run.js]
     limit: Gas only; who pays and who is trusted are not measured; the ERC-1056 signed digest omits the chain id (D52).
   - id: PRF-06
     title: Dominance analysis on declared criteria
@@ -109,6 +120,7 @@ requirements:
     method: A
     evidence_rows: [36]
     files: [1_blockchain-identity/analysis/analysis.js]
+    tests: [1_blockchain-identity/analysis/analysis.js]
     limit: The O(1) on-chain credential check is a design property assigned per adapter, not a measurement; CVIN-Combined is dominated by ERC-4337 on all six criteria (#36).
 
   - id: SEC-01
@@ -119,6 +131,7 @@ requirements:
     evidence_rows: [28]
     threshold: {path: security.total.DEFENDED, op: "==", value: 43, label: "43 applicable cells DEFENDED"}
     files: [1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js]
+    tests: [TC-cvin-combined-identityHijack-A, TC-erc-1056-uport-identityHijack-A, TC-erc-1155-identityHijack-A, TC-erc-4337-identityHijack-A, TC-erc-721-identityHijack-A, TC-erc-725-identityHijack-A, TC-erc-735-identityHijack-A, TC-lsp8-identityHijack-A, TC-mobi-vid-identityHijack-A, 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js]
     limit: 11 cells are declared not applicable; the on-chain script accepts any revert, so "43/43" refers to the strict harness only (#28).
   - id: SEC-02
     title: Signed generation time, freshness window and replay cache
@@ -127,6 +140,7 @@ requirements:
     method: T
     evidence_rows: [21, 45]
     files: [cv2x-testbed/identity/freshness.py, cv2x-testbed/tests/test_t9_freshness.py]
+    tests: [cv2x-testbed/tests/test_t9_freshness.py, sandbox/py-suites/L3-ssi/test_infrastructure_v3.py]
     limit: A fresh message relayed inside the window to a receiver that never heard it is not detected (#45); ERC-1056 signed operations do not bind the chain id (D52, G3 narrowed).
   - id: SEC-03
     title: Revocation staleness bounded by the re-check cadence
@@ -135,6 +149,7 @@ requirements:
     method: T
     evidence_rows: [32, 37, 46]
     threshold: {path: infrastructure.I3.per_k.25.verdict, op: "==", value: PASS, label: "I3 at k=25 PASS (bound 24)"}
+    tests: [cv2x-testbed/tests/test_freshness_k.py, cv2x-testbed/sumo/run_infra_stats.py]
     limit: A message count, not a time; the verifier cache does not expire; the registry is in-process for I3 (#46).
   - id: SEC-04
     title: Revoked key under clock skew
@@ -144,6 +159,7 @@ requirements:
     evidence_rows: [32, 37]
     files: [cv2x-testbed/tests/test_d51_chain_time.py]
     pending: [A3b]
+    tests: [cv2x-testbed/tests/test_d51_chain_time.py]
     limit: Rows #32 and #37 were measured before the fix and hold under the old clock assumption until the A3b re-run (plan WM-2 A3b).
   - id: SEC-05
     title: Attestation authority
@@ -152,6 +168,7 @@ requirements:
     method: T
     evidence_rows: [28]
     pending: []
+    tests: [1_blockchain-identity/test/L2-identity-system/per-option/MOBIVID/attestEventRegression.test.js]
     limit: The signature check is in place; since WM-2 C2 (report 22) the attester must also be the vehicle's owner or its veriKey delegate, once per event (D54 fixed); the role list is still granted registry-wide.
   - id: SEC-06
     title: VIN confidentiality on chain
@@ -161,6 +178,7 @@ requirements:
     evidence_rows: [28]
     files: [1_blockchain-identity/contracts/MOBI/MOBIVIDRegistry.sol, cv2x-testbed/scripts/test_vin_encryption.py]
     pending: [D64]
+    tests: [cv2x-testbed/scripts/test_vin_encryption.py]
     limit: The cv2x testbed derives a vehicle identity from an unsalted VIN hash (D64, open); the matrix row is structural, not a measurement of linkability.
   - id: SEC-07
     title: Pseudonym pool observability
@@ -170,6 +188,7 @@ requirements:
     evidence_rows: [38]
     verdict_from: pseudonyms.gas_verdict
     pending: [A3b]
+    tests: [1_blockchain-identity/scripts/experiment_pseudonym_pool.js, 1_blockchain-identity/test/L2-identity-system/per-option/ERC1056/PseudonymPool.test.js]
     limit: Chain-layer linkability only; radio, timing and position linkability are out of scope (SC-02).
 
   - id: STD-01
@@ -182,6 +201,7 @@ requirements:
     files: [cv2x-testbed/scripts/w3c_compliance_checker.py]
     ci: Gate on compliance floor
     pending: []
+    tests: [cv2x-testbed/scripts/w3c_compliance_checker.py]
     limit: Self-scored and structural; the DID Core checks test a synthesised document (C5 gap). WM-2 C1 (report 21) made did:ethr resolution read the chain when given a provider, but the checker resolves without one, so its documents are still synthesised.
   - id: STD-02
     title: External DID test suite
@@ -191,6 +211,7 @@ requirements:
     evidence_rows: [24]
     threshold: {path: conformance.runs.default.passed, op: "==", value: 335, label: "335 of 336 generated tests"}
     files: [docs/conformance/W3C_DID_TEST_SUITE.md]
+    tests: [docs/conformance/W3C_DID_TEST_SUITE.md]
     limit: The denominator is 336 generated tests, not 441; DID-URL dereferencing is not run.
   - id: STD-03
     title: MOBI-VID-inspired lifecycle on several backends
@@ -199,6 +220,7 @@ requirements:
     method: D
     evidence_rows: [30, 33]
     files: [4_comparison-framework/results/mobi_vid_backends.json, docs/MOBI_VID_CHECKLIST.md]
+    tests: [1_blockchain-identity/scripts/mobi_vid_backend_sweep.js]
     limit: 2 of 8 VID I MUSTs met; the profile is "MOBI-VID-inspired, checked against the public texts" (SC-14a).
   - id: STD-04
     title: Database parity for lifecycle writes
@@ -207,6 +229,7 @@ requirements:
     method: T
     evidence_rows: [33]
     verdict_from: lifecycle_parity.verdicts.3.verdict
+    tests: [cv2x-testbed/scripts/experiment_lifecycle_parity.py, cv2x-testbed/tests/test_lifecycle_parity.py]
     limit: Writes PASS (at least 10x); "equal once cached" FAIL (ratio set by the baseline's serialisation); the baseline is a lower bound.
 
   - id: RTV-01
@@ -218,6 +241,7 @@ requirements:
     threshold: {path: v2v.per_population.ssi.warm.median, op: "<=", value: 0.5, label: "SSI warm verify median <= 0.5 ms"}
     files: [cv2x-testbed/sumo/run_v2v_stats.py]
     pending: [A3b]
+    tests: [cv2x-testbed/sumo/run_v2v_stats.py]
     limit: M0, mock mobility, one host; the pre-merge measurement is scheduled for a trunk re-run (A3b).
   - id: RTV-02
     title: Uncached chain read at message time reported
@@ -225,6 +249,7 @@ requirements:
     derived_from: H3 (second half); RQ4; A.2 questions 1 and 2
     method: T
     evidence_rows: [21]
+    tests: [cv2x-testbed/scripts/experiment_pki_vs_erc1056.py]
     limit: The ERC-1056 column is the cv2x registry, not EthereumDIDRegistry (K-5); the PKI baseline is in-process, a lower bound on deployed PKI.
   - id: RTV-03
     title: Freshness-k curve with both refresh modes
@@ -233,6 +258,7 @@ requirements:
     method: T
     evidence_rows: [32, 37, 52]
     files: [cv2x-testbed/scripts/experiment_freshness_k.py]
+    tests: [cv2x-testbed/scripts/experiment_freshness_k.py, cv2x-testbed/tests/test_freshness_k_probe.py]
     limit: The knee is the most host-sensitive figure; no finite k reached P*(0.5)=100 on #37's host; the thesis defends no k as "fitting" (D-12 withdrawn).
   - id: RTV-04
     title: Signed message size
@@ -240,6 +266,7 @@ requirements:
     derived_from: A.2 question 4 (bounded to message size); RQ4
     method: T
     evidence_rows: [23]
+    tests: [cv2x-testbed/scripts/experiment_pki_vs_erc1056.py]
     limit: Bytes only; no channel model, so no airtime or loss figure follows from it.
 
   - id: INF-01
@@ -249,6 +276,7 @@ requirements:
     method: T
     evidence_rows: [44]
     verdict_from: infrastructure.I1.verdict
+    tests: [cv2x-testbed/sumo/run_infra_stats.py]
     limit: The ratio moved outside its band on verifier v3 and the cause is not isolated (different host builds); not falsified.
   - id: INF-02
     title: Registered attacks rejected for their reasons (I2)
@@ -258,6 +286,7 @@ requirements:
     evidence_rows: [45]
     threshold: {path: infrastructure.I2.runs_all_as_expected, op: "==", value: 30, label: "30/30 runs, all 15 checks as expected"}
     files: [sandbox/py-suites/L3-ssi/test_infrastructure_v3.py]
+    tests: [cv2x-testbed/sumo/run_infra_stats.py, sandbox/py-suites/L3-ssi/test_infrastructure_v3.py]
     limit: Not covered - a fresh message relayed to a receiver that never saw it within the 1 s window.
   - id: INF-03
     title: Revoked roadside unit trusted for at most k minus 1 messages (I3)
@@ -266,6 +295,7 @@ requirements:
     method: T
     evidence_rows: [46]
     verdict_from: infrastructure.I3.verdict
+    tests: [cv2x-testbed/sumo/run_infra_stats.py]
     limit: In-process registry; message count, not time; no cache expiry.
   - id: INF-04
     title: Roadside unit identity cost on chain (I4)
@@ -274,6 +304,7 @@ requirements:
     method: T
     evidence_rows: [47]
     files: [1_blockchain-identity/scripts/infrastructure_gas.js]
+    tests: [1_blockchain-identity/scripts/infrastructure_gas.js]
     limit: Per-credential issuance costs no gas in this design and is not measured.
   - id: INF-05
     title: Back-haul operation cost (I5)
@@ -281,6 +312,7 @@ requirements:
     derived_from: pre-registered I5 (amendment A3)
     method: T
     evidence_rows: [48]
+    tests: [cv2x-testbed/sumo/run_infra_stats.py]
     limit: The harness does not chain the SPaT to the controller update; queuing, network and tail are excluded.
 
   - id: EVD-01
@@ -292,6 +324,7 @@ requirements:
     files: [tools/run_identity/stamp.py, tools/run_identity/producers.json, tools/run_identity/scopes.json]
     ci: Probe that the run-identity flags fire
     pending: [A6]
+    tests: [docs/testing/probe_run_identity.sh]
     limit: The metrics harness switches to the shared helper at A6; until then its own flag is inert (D33).
   - id: EVD-02
     title: Promotion only from a clean run
@@ -300,6 +333,7 @@ requirements:
     method: T
     evidence_rows: []
     files: [tools/run_identity/promote.py, tools/run_identity/test_promote.py]
+    tests: [tools/run_identity/test_promote.py]
     limit: A run at an earlier commit cannot pass the promote step and is copied with a manifest as a declared deviation (report 19).
   - id: EVD-03
     title: Pre-registration before any run, amendments dated
@@ -308,6 +342,7 @@ requirements:
     method: I
     evidence_rows: [44, 45, 46, 47, 48, 33, 38]
     files: [docs/design/INFRASTRUCTURE_PREREG.md, docs/PLAN_MOBI_SUMO.md]
+    tests: [docs/design/INFRASTRUCTURE_PREREG.md]
     limit: Amendments A1-A3 were post hoc and are marked so.
   - id: EVD-04
     title: Generated documents regenerated and checked
@@ -317,6 +352,7 @@ requirements:
     evidence_rows: []
     files: [docs/figures/make_dashboard_data.py, docs/testing/build_register.py, docs/testing/gas_charter.py, docs/figures/make_result_cards.py]
     ci: make_dashboard_data.py --check
+    tests: [docs/tdp/probe_tdp_checks.sh]
     limit: The contribution record depends on git history and is regenerated at each pass's close, not checked in CI.
   - id: EVD-05
     title: Every guard shown to fire
@@ -326,6 +362,7 @@ requirements:
     evidence_rows: []
     files: [docs/testing/probe_run_identity.sh, tools/run_identity/test_promote.py, docs/tdp/probe_tdp_checks.sh]
     ci: probe_tdp_checks.sh
+    tests: [docs/tdp/probe_tdp_checks.sh]
     limit: A probe proves the guard can trip, not that it trips on every fault class.
   - id: EVD-06
     title: Full suite with no skips
@@ -335,4 +372,5 @@ requirements:
     evidence_rows: []
     files: [sandbox/grand/run.py, docs/testing/check_test_counts.py]
     ci: fail on any skip
+    tests: [sandbox/grand/run.py, docs/testing/check_test_counts.py]
     limit: Three MOBI demo steps hash block.timestamp and are declared timestamp-dependent (B1).

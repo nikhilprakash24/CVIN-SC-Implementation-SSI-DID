@@ -4,8 +4,8 @@
 **Written:** 2026-10-15 (after-action report 20). **Revision:** A.
 **Purpose:** the same plan as `TDP-PLAN.md`, cut into phases that a later session can run one at a time with no
 memory of this one. Each phase states what it reads, what it may write, its gate command and its stop condition.
-Phases 0 to 7 record what pass 20 executed (so a session can re-run or audit one); phase 10 was executed in pass 25;
-phases 8, 9, 11 and 12 remain. A prompt is text to paste; the words in angle brackets are filled in by the
+Phases 0 to 7 record what pass 20 executed (so a session can re-run or audit one); phase 10 was executed in pass 25 and
+phases 8 and 9 in pass 27; phases 11 and 12 remain. A prompt is text to paste; the words in angle brackets are filled in by the
 person running it.
 
 ## How to run a phase
@@ -139,7 +139,7 @@ and reason named in TDP-003 exists in the source at HEAD.
 
 ## Follow-on phases (not executed in this pass)
 
-## Phase 8 — Requirement-to-test trace
+## Phase 8 — Requirement-to-test trace (executed 2026-10-22, after-action report 27)
 
 **Reads:** `docs/testing/test_register.yaml`, `docs/tdp/requirements.yaml`. **Writes:** a `tests` field per
 requirement (test-register ids); `make_vcrm.py` extended to print and check them. **Gate:** `make_vcrm.py --check`
@@ -153,7 +153,7 @@ experiment script that exists.
 > not exist. Show the new check firing on a fake id, record it in the after-action report, regenerate, commit as
 > "TDP phase 8: requirement-to-test trace", and stop.
 
-## Phase 9 — Interface tests as the ICD's gate
+## Phase 9 — Interface tests as the ICD's gate (executed 2026-10-22, after-action report 27; `docs/tdp/check_icd.py`)
 
 **Reads:** TDP-003, the source files it names. **Writes:** `docs/tdp/check_icd.py` with `--check`; a CI line.
 **Gate:** the check fails when a listed field or method is absent from the source. **Stop:** TDP-003 is held by a
