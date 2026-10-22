@@ -61,7 +61,7 @@
 <text x="800.0" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
 <text x="800.0" y="990" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
 <text x="28" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" letter-spacing="2">CVIN-SSI PROGRAMME</text>
-<text x="1572" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="end" letter-spacing="2">BP-205  REV A</text>
+<text x="1572" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="end" letter-spacing="2">BP-205  REV B</text>
 <text x="560" y="150" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">DETAIL A — attestEvent BEFORE AND AFTER (the gap and the barrier)</text>
 <line x1="560" y1="155" x2="1112.5" y2="155" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
 <rect x="560" y="168" width="440" height="120" rx="0" fill="none" stroke="#ff7b7b" stroke-width="1.6" opacity="1.0"/>
@@ -77,7 +77,7 @@
 <text x="1050" y="222" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="start" font-weight="normal" opacity="1.0">signer  = ecrecover(EIP191(digest), v, r, s)</text>
 <text x="1050" y="236" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="start" font-weight="normal" opacity="1.0">require(signer == attester &amp;&amp; isAuthorized(attester))  ⑥</text>
 <text x="1050" y="250" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="start" font-weight="normal" opacity="1.0">forged → revert · replayed on another vehicle/chain/registry → revert</text>
-<text x="1510" y="280" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="end" font-weight="normal" opacity="1.0">192,718 gas #28</text>
+<text x="1510" y="280" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="end" font-weight="normal" opacity="1.0">192,718 July · 192,671 now #28</text>
 <line x1="1000" y1="228" x2="1040" y2="228" stroke="#ffd166" stroke-width="1.6" opacity="1.0"/>
 <polygon points="1033.6558454907436,230.9583278321849 1040,228 1033.6558454907436,225.0416721678151" fill="#ffd166" stroke="#ffd166" stroke-width="1.4"/>
 <text x="560" y="310" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">DETAIL B — ONE LIFECYCLE EVENT, ISSUED AND ATTESTED (SV-10c excerpt)</text>
@@ -135,7 +135,7 @@
 <text x="566" y="728" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">REGISTRATION / DECOMMISSION</text>
 <text x="886" y="728" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">GOVERNMENT_DMV, DEALER</text>
 <line x1="880" y1="594" x2="880" y2="734" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
-<rect x="46" y="46" width="400" height="200" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.4" opacity="0.95"/>
+<rect x="46" y="46" width="400" height="214" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.4" opacity="0.95"/>
 <text x="54" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">GENERAL NOTES</text>
 <line x1="46" y1="66" x2="446" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
 <text x="54" y="80" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">1. 11 event types × 9 issuer roles (NONE + 8); the contract</text>
@@ -147,10 +147,11 @@
 <text x="54" y="164" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   now recovers the signer over a domain-separated digest</text>
 <text x="54" y="178" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   and requires signer == attester; forged and replayed</text>
 <text x="54" y="192" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   attestations revert.</text>
-<text x="54" y="206" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">3. Cost of the fix is reported as evidence, not hidden:</text>
-<text x="54" y="220" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   121,110 → 192,718 gas (#28). The MOBI Replay security</text>
-<text x="54" y="234" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   cell now passes.</text>
-<rect x="1134" y="46" width="420" height="56" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<text x="54" y="206" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">3. Cost of the fix is reported as evidence: 121,110 →</text>
+<text x="54" y="220" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   192,718 gas on the July build; 192,671 receipt gas</text>
+<text x="54" y="234" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   (169,295 execution) on the current build (#28). The MOBI</text>
+<text x="54" y="248" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   Replay cell now passes.</text>
+<rect x="1134" y="46" width="420" height="74" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
 <text x="1142" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">REVISIONS</text>
 <line x1="1134" y1="66" x2="1554" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
 <text x="1142" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">REV</text>
@@ -159,8 +160,11 @@
 <text x="1142" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">A</text>
 <text x="1184" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">INITIAL RELEASE</text>
 <text x="1464" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-15</text>
-<line x1="1178" y1="66" x2="1178" y2="102" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
-<line x1="1458" y1="66" x2="1458" y2="102" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1142" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">B</text>
+<text x="1184" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">P1 NUMBER AUDIT (AUDIT_REV_B.md)</text>
+<text x="1464" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-22</text>
+<line x1="1178" y1="66" x2="1178" y2="120" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<line x1="1458" y1="66" x2="1458" y2="120" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
 <rect x="46" y="762" width="820" height="192" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.6" opacity="0.96"/>
 <text x="54" y="776" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">PARTS LIST</text>
 <line x1="46" y1="782" x2="866" y2="782" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
@@ -208,7 +212,7 @@
 <text x="1342" y="861" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">BP-205</text>
 <text x="1042" y="878" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">TITLE</text>
 <text x="1042" y="894" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#f2f6ff" text-anchor="start" font-weight="bold" opacity="1.0">MOBI VID II LIFECYCLE EVENT AND ON-CHAIN ATTESTATION</text>
-<text x="1042" y="908" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">Detail of recordLifecycleEvent / attestEvent and the found-and-fixed signature gap (121,1…</text>
+<text x="1042" y="908" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">Detail of recordLifecycleEvent / attestEvent and the found-and-fixed signature gap (#28)</text>
 <text x="1040" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DRAWN</text>
 <text x="1040" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">N. PRAKASH</text>
 <line x1="1144" y1="914" x2="1144" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>

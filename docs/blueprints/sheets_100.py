@@ -97,7 +97,7 @@ def bp102():
                      (5, "SLOAD", "2,100 cold / 100 warm; the read path a verifier pays"),
                      (6, "CREATE (deploy)", "32,000 + 200/code byte; contract-per-identity standards pay it per vehicle"),
                      (7, "CALL / STATICCALL", "external call; ERC-4337 EntryPoint indirection = +46,830 gas/op (#25)"),
-                     (8, "ecrecover precompile", "3,000 gas; attestEvent fix moved 121,110 → 192,718 (#28)"),
+                     (8, "ecrecover precompile", "3,000 gas; attestEvent fix 121,110 → 192,718 (July); 192,671 current build (#28)"),
                      (9, "msg.sender / block.timestamp", "authorization and TTL inputs; zero cost"),
                      (10, "tx intrinsic", "21,000 gas base per transaction; txCount matters (U4 on ERC-1056 = 2 tx)")],
               parts_width=700,
@@ -105,8 +105,8 @@ def bp102():
                     "1_blockchain-identity/benchmarks/lib/MetricsCollector.js"])
     # a transaction anatomy drawing
     x, y = 560, 150
-    s.section_label(x, y, "DETAIL A — ANATOMY OF ONE REGISTRY TRANSACTION (setAttribute on ERC-1056, 35,512 gas, descriptive)")
-    segs = [("intrinsic 21,000", 21000, 10), ("calldata", 1500, 4), ("auth: SLOAD owner", 2100, 5), ("LOG3 event", 3000, 3), ("SSTORE changed", 2900, 2), ("exec / memory", 5012, 9)]
+    s.section_label(x, y, "DETAIL A — ANATOMY OF ONE REGISTRY TRANSACTION (setAttribute on ERC-1056, 35,494 gas #25; split is illustrative, E)")
+    segs = [("intrinsic 21,000", 21000, 10), ("calldata", 1500, 4), ("auth: SLOAD owner", 2100, 5), ("LOG3 event", 3000, 3), ("SSTORE changed", 2900, 2), ("exec / memory", 4994, 9)]
     total = sum(g for _, g, _ in segs)
     xx = x
     width = 860
@@ -118,7 +118,7 @@ def bp102():
             s.text(xx + wseg / 2, y + 58, f"{g:,}", size=10, anchor="middle", mono=True, color=ACCENT)
         s.balloon(n, xx + wseg / 2, y + 84, r=10)
         xx += wseg
-    s.dim(x, y + 110, x + width, y + 110, "35,512 gas (CAPABILITIES.md descriptive; result of record is register #25/#29)")
+    s.dim(x, y + 110, x + width, y + 110, "35,494 gas total (#25, gas_benchmark.json updateAttribute); segment split = E")
     # cost classes
     cx, cy = 560, 300
     s.section_label(cx, cy, "DETAIL B — WHY THE SUBSTRATES SPREAD 32× (BP-501): WHICH PRIMITIVE EACH DESIGN PAYS AT CREATE")
@@ -158,7 +158,7 @@ def bp103():
                      (10, "block.timestamp", "validTo = now + validity for ④ and ⑦")],
               parts_width=640,
               refs=["1_blockchain-identity/contracts/ERC1056/EthereumDIDRegistry.sol", "CVINVehicleDIDRegistry.sol (VIN wrapper: createVehicleDID, 78,068 gas #25)",
-                    "create 52,594 · setAttribute 35,512 · addDelegate 54,853 · changeOwner 51,764 (#25 / descriptive)"])
+                    "create 52,594 · setAttribute 35,494 · addDelegate 54,831 · changeOwner 51,754 (all #25)"])
     # engine block: storage on left, functions middle, events right
     x, y = 480, 150
     s.section_label(x, y, "SECTION A-A — STORAGE")
@@ -200,7 +200,7 @@ def bp103():
         s.text(px + 8, ly + 38, b, size=11, mono=True, weight="bold"); s.text(px + 8, ly + 54, f"{e} · {p}", size=9, mono=True, color=LINE_SOFT)
         s.arrow(px - 40 if i else bx + 120, ly + 42, px, ly + 42, head=7)
         px += 240
-    s.text(lx, ly + 90, "Resolver cost: hops = number of changes; eth_getLogs per hop. Measured read path at h=50 exceeds the J2945/1 budget over HTTP RPC (#38) — hence the cache on BP-302.", size=10, color=ACCENT, mono=True)
+    s.text(lx, ly + 90, "Resolver cost: hops = number of changes; eth_getLogs per hop. Measured read path at h=50: 203 ms median over HTTP RPC, over the J2945/1 budget (#39) — hence the cache on BP-302.", size=10, color=ACCENT, mono=True)
     # signed envelope
     sx, sy = 480, 560
     s.section_label(sx, sy, "DETAIL C — SIGNED (META-TX) ENVELOPE, ERC-1056 REFERENCE PATTERN")

@@ -6,7 +6,7 @@ from sheets_100 import CREATE_GAS
 def bp501():
     s = Sheet("BP-501", "Gas ladder — create-identity cost", "Instrument panel: one representative createIdentity transaction per substrate, register #25 (M1, cancun, N=30, CI width 0)",
               notes=["Operation definitions differ by design (bare createIdentity vs VIN-bound mintVehicle); the reconciliation is in MEASUREMENT_CONDITIONS #6/#25: ~10× bare, ≈7× when the VIN is bound on both sides (createVehicleDID 78,068).",
-                     "Over a full MOBI VID lifecycle (#30) the minimal registry is cheapest by 2.6× (vs ERC-721) and 3.0× (vs ERC-725), not 10×; H1's restatement is the author's framing decision.",
+                     "Over a full MOBI VID lifecycle (#30) the minimal registry is cheapest by 2.57× (vs ERC-721) and 3.00× (vs ERC-725), not 10×; H1's restatement is the author's framing decision.",
                      "ERC-4337 EntryPoint and LSP8 are minimal representatives (lower bounds). MOBI-VID-V2 is an application profile. Fiat is a parameter and is not drawn."],
               refs=["4_comparison-framework/results/gas_benchmark.json · gas_comparison.tex/.csv (#25)", "docs/MEASUREMENT_CONDITIONS.md #6, #25, #30, #31 · 1_blockchain-identity/scripts/benchmark_gas.js"],
               notes_width=1060)
@@ -32,7 +32,7 @@ def bp501():
     dx, dy = 120, ay + 50
     s.section_label(dx, dy, "RATIO DIALS (the H1 claim, four honest ways)")
     dials = [("32.2×", "spread, cheapest → dearest", "52,216 → 1,680,816"), ("≈10×", "ERC-1056 bare vs ERC-721 VIN-bound", "52,594 vs 542,378"), ("≈7×", "VIN bound on both sides", "78,068 vs 542,378"),
-             ("2.6× / 3.0×", "lifetime, vs ERC-721 / ERC-725", "#30, 17-event sequence"), ("+46,830", "ERC-4337 EntryPoint per routed op", "96,228 vs 49,366 direct")]
+             ("2.57× / 3.00×", "lifetime, vs ERC-721 / ERC-725", "#30, 17-event sequence"), ("+46,830", "ERC-4337 EntryPoint per routed op", "96,173 vs 49,343 direct")]
     for i, (big, lab, sub) in enumerate(dials):
         cx = dx + 110 + i * 250
         s.circle(cx, dy + 70, 48, sw=2.0)
@@ -61,12 +61,12 @@ def bp502():
     # P* table
     tx, ty = 120, 325
     s.section_label(tx, ty, "MEASURED POSITION — PER-NEIGHBOUR COST t AND SATURATION P*(f)")
-    rows = [("PKI, cert in message (M0)", "0.321 / 0.366", "77", "155", "311", "viable, dense"),
-            ("ERC-1056 uncached, 4 RPC per msg (k = 1)", "10.946 / 16.153", "2", "4", "9", "not viable"),
-            ("ERC-1056 refresh every k = 25", "0.425 / 0.764 (amort. 0.850)", "29", "58", "117", "marginal → viable"),
-            ("ERC-1056 cached, k = ∞ (off-chain verify)", "0.428 / 0.631", "58", "116", "233", "viable, dense"),
+    rows = [("PKI verify, n=50 (#21, M0)", "0.253 / 0.329", "98", "197", "395", "viable, dense"),
+            ("ERC-1056 k = 1 uncached (#32)", "mean 11.76 · med 10.95", "2", "4", "8", "not viable"),
+            ("ERC-1056 refresh every k = 25 (#32)", "mean 0.85 · med 0.43", "29", "58", "117", "marginal"),
+            ("ERC-1056 cached, k = ∞ (#32)", "mean 0.453 · med 0.428", "55", "110", "220", "viable, dense"),
             ("SSI warm VC verify, V2V sim (#27)", "0.153 [0.151, 0.154]", "163", "326", "653", "viable; ≈600× under 100 ms")]
-    s.table(tx, ty + 14, [("DESIGN / CONDITION", 330), ("t median / p95 (ms)", 230), ("P*(.25)", 70), ("P*(.5)", 70), ("P*(1)", 70), ("VERDICT", 200)], rows, size=10, lh=22,
+    s.table(tx, ty + 14, [("DESIGN / CONDITION", 330), ("t (ms); P* uses the mean", 230), ("P*(.25)", 70), ("P*(.5)", 70), ("P*(1)", 70), ("VERDICT", 200)], rows, size=10, lh=22,
             cell_colors=lambda ri, ci, v: (WARN if "not" in v else OK if "viable" in v else None) if ci == 5 else None)
     # curve t_eff(k)
     cx, cy, cw, ch = 120, 520, 620, 240
@@ -92,7 +92,7 @@ def bp502():
     # right commentary
     rx, ry = 800, 520
     s.section_label(rx, ry - 12, "VERDICT ON H3")
-    s.lines(rx, ry + 14, ["Reading the chain at message time fails even sparse traffic (P* = 4).", "Fully off-chain verification is within a small factor of PKI", "(0.43 vs 0.32 ms): the substrate is not the bottleneck once the",
+    s.lines(rx, ry + 14, ["Reading the chain at message time fails even sparse traffic (P* = 4).", "Fully off-chain verification is within a small factor of PKI", "(0.45 vs 0.25 ms): the substrate is not the bottleneck once the",
                           "chain is off the hot path.", "", "The engineering question is freshness: how stale may a cached", "key / revocation be? k trades P* against a bounded staleness —",
                           "at 10 Hz and k = 146 a revocation can lag ≤ 14.5 s.", "", "Caveats: no radio / MAC / PHY; mobility simulated; single core;", "P* is an extrapolation beyond the tested P ≤ 80 (#26)."], size=11, lh=16)
     return s

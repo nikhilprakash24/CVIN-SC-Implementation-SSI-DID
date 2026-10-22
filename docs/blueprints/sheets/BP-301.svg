@@ -61,7 +61,7 @@
 <text x="800.0" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
 <text x="800.0" y="990" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
 <text x="28" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" letter-spacing="2">CVIN-SSI PROGRAMME</text>
-<text x="1572" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="end" letter-spacing="2">BP-301  REV A</text>
+<text x="1572" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="end" letter-spacing="2">BP-301  REV B</text>
 <rect x="95.0" y="215" width="170" height="40" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
 <text x="180" y="233" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">MANUFACTURER</text>
 <text x="180" y="248" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">issuer key (did:ethr)</text>
@@ -129,13 +129,14 @@
 <rect x="696.0" y="419" width="8" height="70" rx="0" fill="#071d41" stroke="#ffd166" stroke-width="1.2" opacity="1.0"/>
 <text x="100" y="844" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">Trust boundary: messages 5–7 and 11 cross into the ledger (L2–L3, the inherited guarantee).</text>
 <text x="100" y="860" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">Messages 1–4, 8–10 and 12 are the application&#x27;s own (L5–L6, the measured guarantee).</text>
-<rect x="46" y="46" width="1060" height="74" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.4" opacity="0.95"/>
+<rect x="46" y="46" width="1060" height="88" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.4" opacity="0.95"/>
 <text x="54" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">GENERAL NOTES</text>
 <line x1="46" y1="66" x2="1106" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
 <text x="54" y="80" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">1. Every message is numbered; solid = on-chain transaction or trusted call, dashed = off-chain / untrusted transport.</text>
-<text x="54" y="94" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2. Pass/fail in the use-case suite is computed: a forged or replayed birth certificate fails at message 11 (12/12 use cases, #22).</text>
-<text x="54" y="108" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">3. Birth registration on Hardhat: 16.9 ms median (M1, descriptive); gas 299,143 MOBI-VID-V2 (#25); on CVIN-Combined the same semantic costs 52,216 + claim.</text>
-<rect x="1134" y="46" width="420" height="56" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<text x="54" y="94" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2. Pass/fail in the use-case suite is computed: a forged or replayed birth certificate fails at message 12 (12/12 use cases; test_use_cases.py, no register</text>
+<text x="54" y="108" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   row).</text>
+<text x="54" y="122" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">3. MOBI-VID-V2 birth: 14.13 ms median (#33, M4 parity harness); gas 299,143 (#25 definition; #33 measures 398,298 under its own definition, never mix).</text>
+<rect x="1134" y="46" width="420" height="74" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
 <text x="1142" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">REVISIONS</text>
 <line x1="1134" y1="66" x2="1554" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
 <text x="1142" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">REV</text>
@@ -144,8 +145,11 @@
 <text x="1142" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">A</text>
 <text x="1184" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">INITIAL RELEASE</text>
 <text x="1464" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-15</text>
-<line x1="1178" y1="66" x2="1178" y2="102" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
-<line x1="1458" y1="66" x2="1458" y2="102" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1142" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">B</text>
+<text x="1184" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">P1 NUMBER AUDIT (AUDIT_REV_B.md)</text>
+<text x="1464" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-22</text>
+<line x1="1178" y1="66" x2="1178" y2="120" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<line x1="1458" y1="66" x2="1458" y2="120" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
 
 <rect x="1034" y="782" width="520" height="48" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="0.95"/>
 <text x="1042" y="795" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="1">REFERENCE DOCUMENTS / SOURCE OF TRUTH</text>

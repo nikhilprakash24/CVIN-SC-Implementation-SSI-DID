@@ -4,9 +4,9 @@ from bplib import *  # noqa: F401,F403
 
 def bp201():
     s = Sheet("BP-201", "DID resolution assembly", "Schematic: did:ethr identifier → event-log walk → W3C DID Core document; four methods, one resolver",
-              notes=["Resolution is offline/local for the address-bearing methods; caching amortises repeats. In-process M0 resolve: 0.009 ms (descriptive, resolution_latency_M0.json).",
-                     "Over HTTP RPC (M1-H/HTTP) resolve costs 2–2.5× the in-process latency; at history h = 50 the ERC-1056 walk exceeds the J2945/1 budget (#38) — the reason BP-302 caches.",
-                     "External W3C DID test suite: 336/441 after review 02 (#24); internal checker 94.3% (#23). Documents carry @context, verificationMethod (EcdsaSecp256k1VerificationKey2019, blockchainAccountId) and the relationships."],
+              notes=["Resolution is offline/local for the address-bearing methods; caching amortises repeats. In-process M0 cold resolve: 0.0089 ms median (docs/figures/resolution_latency_M0.json; no register row).",
+                     "Over HTTP RPC (M1-H/HTTP) resolve costs 2–2.5× the in-process latency; at history h = 50 the ERC-1056 walk takes 203 ms median, over the J2945/1 budget (#39) — the reason BP-302 caches.",
+                     "External W3C DID test suite: 335/336 generated tests (#24; never compare with the old /441 denominator); internal checker 94.3% (#4). Documents carry @context, verificationMethod (EcdsaSecp256k1VerificationKey2019, blockchainAccountId) and the relationships."],
               parts=[(1, "DIDResolver.resolve(did)", "entry; returns DIDResolutionResult {didDocument, didResolutionMetadata, didDocumentMetadata}"),
                      (2, "method dispatch", "did:ethr → ERC-1056 · did:nft → ERC-721 · did:key → ERC-725 · did:mobi → MOBI VID"),
                      (3, "changed[did] read", "1 SLOAD / eth_call: head of the linked list (BP-103 ②)"),
@@ -74,7 +74,7 @@ def bp202():
                      (8, "disclosures", "envelope side-car: (claim, salt) pairs the holder may reveal")],
               parts_width=760,
               refs=["2_w3c-ssi-layer/verifiable-credentials/vc_issuer.py, vc_holder.py, vc_verifier.py, vc_schemas.py", "tests/test_vc_layer.py (28), test_review02_negative.py, test_s3_key_binding.py",
-                    "cv2x-testbed/scripts/w3c_compliance_checker.py — 94.3% (44 checks: 41 PASS, 1 PARTIAL, 2 FAIL) #23"])
+                    "cv2x-testbed/scripts/w3c_compliance_checker.py — 94.3% (44 checks: 41 PASS, 1 PARTIAL, 2 FAIL) #4"])
     # structure (left of centre)
     x, y = 560, 150
     s.section_label(x, y, "STRUCTURE — THE SIGNED ENVELOPE")
@@ -210,10 +210,10 @@ def bp204():
 
 
 def bp205():
-    s = Sheet("BP-205", "MOBI VID II lifecycle event and on-chain attestation", "Detail of recordLifecycleEvent / attestEvent and the found-and-fixed signature gap (121,110 → 192,718 gas)",
+    s = Sheet("BP-205", "MOBI VID II lifecycle event and on-chain attestation", "Detail of recordLifecycleEvent / attestEvent and the found-and-fixed signature gap (#28)",
               notes=["11 event types × 9 issuer roles (NONE + 8); the contract gates which role may record which type (allowedIssuers). Types with a schema are issued strict; the rest are still signed and verifiable.",
                      "Found-and-fixed (review 02): attestEvent stored a signature but never verified it (a G2/G3 violation). It now recovers the signer over a domain-separated digest and requires signer == attester; forged and replayed attestations revert.",
-                     "Cost of the fix is reported as evidence, not hidden: 121,110 → 192,718 gas (#28). The MOBI Replay security cell now passes."],
+                     "Cost of the fix is reported as evidence: 121,110 → 192,718 gas on the July build; 192,671 receipt gas (169,295 execution) on the current build (#28). The MOBI Replay cell now passes."],
               parts=[(1, "EventType enum", "MAINTENANCE REPAIR ACCIDENT RECALL INSPECTION MODIFICATION THEFT_REPORT RECOVERY INSURANCE_CLAIM REGISTRATION DECOMMISSION"),
                      (2, "IssuerRole enum", "MANUFACTURER DEALER SERVICE_CENTER INSPECTION_STATION GOVERNMENT_DMV INSURANCE_COMPANY POLICE OWNER"),
                      (3, "LifecycleEvent struct", "eventId, type, issuer, timestamp, dataHash (= keccak of the event VC), odometer…"),
@@ -236,7 +236,7 @@ def bp205():
     s.rect(x + 480, y + 18, 480, 120, sw=1.8, stroke=OK, fill=GROUND_DK)
     s.text(x + 490, y + 38, "AFTER (fixed; G2 + G3)", size=12, weight="bold", color=OK)
     s.lines(x + 490, y + 58, ["digest = keccak256(address(this), block.chainid, vehicle, eventId)  ⑤", "signer  = ecrecover(EIP191(digest), v, r, s)", "require(signer == attester && isAuthorized(attester))  ⑥", "forged → revert · replayed on another vehicle/chain/registry → revert"], size=9, lh=14, mono=True, color=OK)
-    s.text(x + 950, y + 130, "192,718 gas #28", size=10, anchor="end", mono=True, color=ACCENT)
+    s.text(x + 950, y + 130, "192,718 July · 192,671 now #28", size=10, anchor="end", mono=True, color=ACCENT)
     s.arrow(x + 440, y + 78, x + 480, y + 78, head=7, stroke=ACCENT)
     # sequence mini
     sx, sy = 560, 310

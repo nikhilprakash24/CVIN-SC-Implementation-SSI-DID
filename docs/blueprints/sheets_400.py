@@ -193,8 +193,8 @@ def bp403():
                           "  theft-resistant: ERC-1155 (soulbound)", "  VIN privacy: MOBI VID (hash + encrypt)", "", "Selection is a requirements-driven move", "along this frontier, not a winner (H5)."], size=11, lh=16)
     s.rect(fx, fy + 330, 520, 70, sw=1.4, stroke=ACCENT)
     s.text(fx + 10, fy + 352, "Found-and-fixed, reported as evidence:", size=11, weight="bold", color=ACCENT)
-    s.text(fx + 10, fy + 370, "MOBI attestEvent accepted unverified signatures (G2/G3). Fixed with", size=10, mono=True)
-    s.text(fx + 10, fy + 386, "domain-separated ecrecover; 121,110 → 192,718 gas; Replay cell now passes.", size=10, mono=True)
+    s.text(fx + 10, fy + 370, "MOBI attestEvent accepted unverified signatures (G2/G3). Fixed with ecrecover;", size=10, mono=True)
+    s.text(fx + 10, fy + 386, "121,110 → 192,718 gas (July), 192,671 current build (#28). Replay passes.", size=10, mono=True)
     return s
 
 

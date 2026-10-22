@@ -11,6 +11,9 @@ Engineering-drawing views of the vehicle-identity system, from the primitives up
 | `PLAN_3_LIBERTY.md` | Beyond the set: data-bound figures, the primitives atlas, executable sequences |
 | `SECURITY_GUARANTEE_INHERITANCE.md` | Why an identity record inherits the ledger's security, and where that stops |
 | `INTEGRATION.md` | Where each sheet goes in the thesis, the docs and the defence |
+| `AUDIT_REV_B.md` | P1 number audit: 17 corrections, Rev A → Rev B |
+
+The complementary exploratory set, which Claude initiated and the author did not direct, is kept apart in `docs/figures/x_series/`.
 
 ## Regenerate
 

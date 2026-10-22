@@ -36,6 +36,7 @@ DRAWN = "N. PRAKASH"
 CHECKED = "MEASUREMENT_CONDITIONS.md"
 APPROVED = "—"
 DATE = "2026-10-15"
+DATE_B = "2026-10-22"
 
 
 def esc(s: str) -> str:
@@ -49,11 +50,11 @@ class Sheet:
     subtitle: str = ""
     sheet_no: int = 1
     sheet_of: int = 1
-    rev: str = "A"
+    rev: str = "B"
     scale: str = "NTS"
     notes: List[str] = field(default_factory=list)
     notes_width: int = 400
-    revisions: List[Tuple[str, str, str]] = field(default_factory=lambda: [("A", "INITIAL RELEASE", DATE)])
+    revisions: List[Tuple[str, str, str]] = field(default_factory=lambda: [("A", "INITIAL RELEASE", DATE), ("B", "P1 NUMBER AUDIT (AUDIT_REV_B.md)", DATE_B)])
     parts: List[Tuple[int, str, str]] = field(default_factory=list)  # (balloon, name, spec)
     parts_title: str = "PARTS LIST"
     parts_pos: Tuple[int, int] = (0, 0)  # 0,0 = auto (lower-left)
