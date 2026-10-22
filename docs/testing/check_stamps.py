@@ -39,7 +39,7 @@ CLASSES = {
     "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json": ("history", "a diff between two runs of record, each stamped or registered; not a measurement"),
     "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json": ("history", "same"),
     "4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json": ("history", "same"),
-    "4_comparison-framework/results/sensitivity.json": ("stamp producer", "1_blockchain-identity/scripts/benchmark_scaling.js (July run; re-run due)"),
+    "4_comparison-framework/results/sensitivity.json": ("stamp producer", "no producer in the tree (optimizer sweep, July run); WM-2 A3 gap, pass 22"),
     "cv2x-testbed/sumo/results/v2v_latency.json": ("single run", "default output of one harness run; the results of record are v2v_latency_stats.json"),
     "cv2x-testbed/results/freshness_k_samehost.json": ("derived", "summary of the 12 stamped same-host replicates in freshness_k_samehost/ (#54, clone lineage #42); all_git_clean recorded"),
     "5_zkp-agent-identity/results/learning_curve.json": ("derived", "written by attacks/train_responder.py; deterministic, reproduced byte for byte by bench/run_all.sh before each run of record (AAR 19)"),

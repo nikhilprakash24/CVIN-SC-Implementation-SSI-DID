@@ -20,7 +20,7 @@
 | `4_comparison-framework/results/scaling_lifetime.json` | 2026-10-09T02:27:41.957Z | d0cc19c | False (hand check) | True | yes | 0.8.24 | hand check: same |
 | `4_comparison-framework/results/scaling_marginal.json` | 2026-10-09T02:27:41.933Z | d0cc19c | False (hand check) | True | yes | 0.8.24 | hand check: same |
 | `4_comparison-framework/results/scaling_verify.json` | 2026-10-04T09:22:18+00:0 | d78e344a79705286bf7572a0 | False (from any) | False | yes | 3.11.15 |  |
-| `4_comparison-framework/results/sensitivity.json` | 2026-07-24T03:18:28.250Z | MISSING | MISSING | MISSING | MISSING | 0.8.24 | stamp producer: 1_blockchain-identity/scripts/benchmark_scaling.js (July run; re-run due) |
+| `4_comparison-framework/results/sensitivity.json` | 2026-07-24T03:18:28.250Z | MISSING | MISSING | MISSING | MISSING | 0.8.24 | stamp producer: no producer in the tree (optimizer sweep, July run); WM-2 A3 gap, pass 22 |
 | `4_comparison-framework/results/w3c_compliance.json` | 2026-10-22T22:27:29.0553 | b8d5ba06ce6d6086935b6651 | False (inert) | MISSING | no | 3.13.16 |  |
 | `4_comparison-framework/security-analysis/results/attack_results.json` | 2026-10-22T22:28:15.544Z | 036b6e4 | False | False | no | 0.8.24 |  |
 | `4_comparison-framework/security-analysis/results/onchain_security.json` | 2026-10-22T22:27:32.282Z | b8d5ba0 | False | True | no | 0.8.24 | hand check: same |
