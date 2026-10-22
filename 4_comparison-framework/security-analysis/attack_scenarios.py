@@ -473,7 +473,8 @@ def _run_stamp():
     """The shared run stamp (WM-2 A3; scope registered in A2): commit, code_dirty, tree_dirty, scope, scope_sha."""
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(HERE)), "tools", "run_identity"))
     from stamp import stamp
-    return stamp(__file__)
+    import platform
+    return {**stamp(__file__), "python_version": platform.python_version()}
 
 
 def main():
