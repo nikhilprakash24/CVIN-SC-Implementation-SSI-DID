@@ -160,6 +160,7 @@
 - **First step.** A literature and tooling survey (circuit size, proving and verifying time for the three properties) before any circuit is written.
 - **Kill criterion.** If verification cannot fit the budget on vehicle-class hardware per the literature, keep it as an off-hot-path (registration-time) proof only.
 - **Needs:** nothing · **needed by:** nothing
+- **Status 2026-10-22.** First step done and exceeded: tooling chosen and a circuit built and measured (register #56-#58). Kill criterion triggered for per-message use only, as anticipated: verify 18.42 ms off chain fits registration and session budgets, not per-message ones. See SC-12 reopened and SC-23 in docs/SCOPE_CHANGES.md.
 
 ### I-10 — Selective-disclosure vehicle credentials (SD-JWT VC, BBS signatures) on the hot path
 *Track P · rank 9 · total 3.80*
@@ -171,6 +172,7 @@
 - **First step.** A disclosure-needs table per message type (BSM, SPaT, MAP) written from the existing message schemas, then one SD-JWT VC prototype measured with the richness driver.
 - **Kill criterion.** If no message type needs selective disclosure on the hot path, the idea moves to registration and service-access flows.
 - **Needs:** nothing · **needed by:** nothing
+- **Status 2026-10-22.** Partly addressed: threshold proofs over committed attributes (register #59, #61) give predicate disclosure without a credential format. The SD-JWT VC / BBS hot-path measurement is still open.
 
 ### I-11 — Linkability beyond the ledger (timing, position and pseudonym-change attacks)
 *Track P · rank 15 · total 3.50*

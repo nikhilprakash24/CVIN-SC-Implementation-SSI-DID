@@ -1,5 +1,9 @@
 # After-Action Report 06 — The Remaining High-Severity Defects and the Conformance Follow-up
 
+> **Lineage merge note (2026-10-21, PR #3).** A different pass on the `claude/clone-cvin-id-scs-…` lineage was also
+> numbered 06; it is `docs/AFTER_ACTION_REPORT_06_CLONE_LINEAGE.md` on the merged trunk.
+
+
 **Author:** Nikhil Prakash (MASc, UBC ECE)
 **Opened:** 2026-10-04, after Report 05 closed; updated per step; closed at the end
 **Trunk at start:** `a764387`, clean, CI green

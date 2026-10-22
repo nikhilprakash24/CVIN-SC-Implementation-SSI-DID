@@ -15,6 +15,11 @@
  *                  "UNEXPECTED-REVERT", and an error that is not an EVM revert
  *                  at all (TypeError, ABI/argument error) is "FAILED-TO-RUN";
  *                  neither counts as defended.
+ *                  The revert must also ORIGINATE in the named target
+ *                  contract (`expected.target`, required): an identical
+ *                  revert bubbled up from another contract is
+ *                  "UNEXPECTED-REVERT" (review 02 Pass 3 Low; see
+ *                  revertOriginOf for the method and its limits).
  *   "VULNERABLE" — the malicious transaction was mined successfully (the attack
  *                  achieved its effect; a real finding to surface).
  *   "N/A"        — the attack is not applicable to this standard's identity
@@ -190,22 +195,193 @@ function matchesExpected(decoded, expected) {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Revert origin (review 02 Pass 3 Low): which contract's code produced the
+// revert. matchesExpected() alone compares the revert DATA, so a defense in
+// contract A "proved" a revert that actually came from contract B and was
+// bubbled up unchanged (A.call(B) + `revert(add(ret,32), mload(ret))`, or a
+// high-level call that re-raises) whenever both carry the same reason.
+//
+// Method: attempt() records the transaction the thunk sent (the last
+// eth_estimateGas / eth_sendTransaction / eth_call request: ethers estimates
+// before sending, and an attack reverts there, before mining), then
+// re-executes exactly that request with `debug_traceCall` against the
+// "pending" block (the context eth_estimateGas used) and walks the opcode
+// trace (originFromStructLogs):
+//   * every CALL / CALLCODE / DELEGATECALL / STATICCALL whose next step is one
+//     level deeper opens a frame whose CODE address is the call's address
+//     argument (for DELEGATECALL: the library/implementation whose code runs);
+//     CREATE/CREATE2 frames are "create";
+//   * a REVERT in a frame originates in that frame's code UNLESS the frame's
+//     most recent child call reverted with byte-identical data, in which case
+//     the frame is forwarding it and the origin is the child's origin
+//     (recursively). A child that halted exceptionally (INVALID, out of gas)
+//     counts as reverting with empty data in the child's code;
+//   * the top frame's revert origin is compared with the target address.
+// The replay must reproduce the observed revert data byte for byte; if it
+// does not (or no request was captured, or tracing fails) the origin is
+// "unverifiable" and the attack is UNEXPECTED-REVERT, never DEFENDED.
+//
+// Limits: (1) a frame that catches a child's revert and then reverts with
+// byte-identical data of its own making is attributed to the child (the data
+// cannot tell the two apart); this can make a target check fail, not pass
+// wrongly, when the target is the outer frame. (2) The replay runs on the
+// pending-block state at the time of the call; a thunk that sends several
+// requests is replayed only for its LAST one. (3) A mined-and-reverted
+// transaction (explicit gasLimit) is replayed on the post-block state, which
+// differs only in the sender nonce; the byte-identical check guards against a
+// divergence. (4) The origin is a CODE address: a target behind a proxy must
+// be named by its implementation address. No contract in this suite uses one.
+// ---------------------------------------------------------------------------
+
+const TX_METHODS = new Set(["eth_estimateGas", "eth_sendTransaction", "eth_call"]);
+const CALL_OPS = new Set(["CALL", "CALLCODE", "DELEGATECALL", "STATICCALL"]);
+const CREATE_OPS = new Set(["CREATE", "CREATE2"]);
+const END_OPS = new Set(["RETURN", "STOP", "SELFDESTRUCT", "REVERT"]);
+
+function hreProvider() {
+  // Lazily: decodeRevert() & co. are usable without a Hardhat runtime.
+  return require("hardhat").network.provider;
+}
+
+/** Run `fn` while recording the last transaction-like request it sends. */
+async function captureLastTx(fn) {
+  const provider = hreProvider();
+  const box = { tx: null };
+  const origSend = provider.send;
+  const origRequest = provider.request;
+  const note = (method, params) => {
+    if (TX_METHODS.has(method) && Array.isArray(params) && params[0] && typeof params[0] === "object") {
+      box.tx = { ...params[0] };
+    }
+  };
+  provider.send = function (method, params) {
+    note(method, params);
+    return origSend.call(this, method, params);
+  };
+  provider.request = function (args) {
+    if (args) note(args.method, args.params);
+    return origRequest.call(this, args);
+  };
+  try {
+    return await fn();
+  } catch (err) {
+    if (err && typeof err === "object") err.__capturedTx = box.tx;
+    throw err;
+  } finally {
+    provider.send = origSend;
+    provider.request = origRequest;
+  }
+}
+
+function wordToAddress(word) {
+  return ethers.getAddress("0x" + word.slice(-40));
+}
+
+function memorySlice(memory, offsetHex, sizeHex) {
+  const offset = Number(BigInt("0x" + offsetHex.replace(/^0x/, "")));
+  const size = Number(BigInt("0x" + sizeHex.replace(/^0x/, "")));
+  if (size === 0) return "0x";
+  const hex = (memory || []).map((w) => w.replace(/^0x/, "")).join("");
+  // memory is listed up to the words touched; anything past it reads as zero
+  return "0x" + hex.slice(offset * 2, (offset + size) * 2).padEnd(size * 2, "0");
+}
+
+/**
+ * Pure: the code address whose REVERT produced the top-level revert, from a
+ * debug_trace structLogs array (with memory), or null if the top frame did
+ * not revert. `to` is the transaction's target.
+ */
+function originFromStructLogs(structLogs, to) {
+  const frames = [{ code: ethers.getAddress(to), lastChild: null, result: null }];
+  for (let i = 0; i < structLogs.length; i++) {
+    const log = structLogs[i];
+    const next = structLogs[i + 1];
+    const frame = frames[frames.length - 1];
+    if (log.op === "REVERT") {
+      const st = log.stack;
+      const data = memorySlice(log.memory, st[st.length - 1], st[st.length - 2]);
+      const origin =
+        frame.lastChild && frame.lastChild.data === data ? frame.lastChild.origin : frame.code;
+      frame.result = { data, origin };
+    }
+    if (CALL_OPS.has(log.op) || CREATE_OPS.has(log.op)) {
+      if (next && next.depth === log.depth + 1) {
+        const code = CALL_OPS.has(log.op) ? wordToAddress(log.stack[log.stack.length - 2]) : "create";
+        frames.push({ code, lastChild: null, result: null });
+      } else {
+        frame.lastChild = null; // no code ran (EOA / precompile): nothing to forward
+      }
+      continue;
+    }
+    // Frame(s) ending: the next step is shallower than this one.
+    let depth = log.depth;
+    const nextDepth = next ? next.depth : 0;
+    while (depth > nextDepth && frames.length > 0) {
+      const ended = frames.pop();
+      let res = ended.result;
+      if (!res && !(depth === log.depth && END_OPS.has(log.op))) {
+        res = { data: "0x", origin: ended.code }; // exceptional halt
+      }
+      if (frames.length === 0) return res ? res.origin : null;
+      frames[frames.length - 1].lastChild = res; // null: the child succeeded
+      depth -= 1;
+    }
+  }
+  const top = frames[0];
+  return top && top.result ? top.result.origin : null;
+}
+
+/** Re-execute `tx` with debug_traceCall: {origin, data} of its revert, or {error}. */
+async function revertOriginOf(tx) {
+  if (!tx || !tx.to) return { error: "no transaction captured" };
+  const call = {};
+  for (const k of ["from", "to", "data", "value", "gas", "gasPrice"]) {
+    if (tx[k] !== undefined && tx[k] !== null) call[k] = tx[k];
+  }
+  if (call.data === undefined && tx.input !== undefined) call.data = tx.input;
+  let trace;
+  try {
+    trace = await hreProvider().request({
+      method: "debug_traceCall",
+      params: [call, "pending", { enableMemory: true, disableStorage: true }],
+    });
+  } catch (e) {
+    return { error: `debug_traceCall failed: ${reasonOf(e)}` };
+  }
+  if (!trace || !trace.failed) return { error: "replay did not revert" };
+  const rv = trace.returnValue || "";
+  const data = rv.startsWith("0x") ? rv : "0x" + rv;
+  return { origin: originFromStructLogs(trace.structLogs || [], call.to), data };
+}
+
+async function addressOf(target) {
+  if (typeof target === "string") return ethers.getAddress(target);
+  if (target && typeof target.getAddress === "function") return ethers.getAddress(await target.getAddress());
+  throw new Error("attempt(): expected.target must be a contract or an address");
+}
+
 /**
  * Execute a malicious transaction and classify the outcome against the revert
  * the defense is expected to produce.
  *
  * @param {() => Promise<any>} txThunk a thunk returning a tx-sending promise
  * @param {{reason?: string, customError?: string, args?: any[], panic?: number|bigint,
- *          iface?: import("ethers").Interface}} expected
+ *          iface?: import("ethers").Interface, target: any}} expected
  *        the revert that proves the NAMED defense fired: an Error(string)
  *        reason, a custom error name (decoded with `iface`, optionally with
- *        exact args), or a panic code.
- * @returns {Promise<{outcome: string, revertReason: string|null, expectedRevert: string}>}
+ *        exact args), or a panic code; and `target` (required), the contract
+ *        (or address) whose code must have produced that revert.
+ * @returns {Promise<{outcome: string, revertReason: string|null, expectedRevert: string,
+ *                    revertOrigin: string|null}>}
  *   outcome:
- *     "DEFENDED"          the tx reverted with exactly the expected reason/error;
+ *     "DEFENDED"          the tx reverted with exactly the expected reason/error,
+ *                         and the revert originated in `target`'s code;
  *     "VULNERABLE"        the tx was mined;
- *     "UNEXPECTED-REVERT" it reverted, but for another reason (the named
- *                         defense was not what stopped it);
+ *     "UNEXPECTED-REVERT" it reverted, but for another reason, or with the
+ *                         expected reason bubbled up from another contract,
+ *                         or from an origin that could not be verified (the
+ *                         named defense was not shown to be what stopped it);
  *     "FAILED-TO-RUN"     the attack never reached the EVM as a revert
  *                         (TypeError, ethers ABI/argument error, provider error).
  */
@@ -214,12 +390,18 @@ async function attempt(txThunk, expected) {
   if (!expectedRevert) {
     throw new Error("attempt(): every attack must name its expected revert");
   }
+  if (!expected.target) {
+    throw new Error("attempt(): every attack must name the target contract of its expected revert");
+  }
+  const targetAddress = await addressOf(expected.target);
   try {
-    const tx = await txThunk();
-    if (tx && typeof tx.wait === "function") {
-      await tx.wait();
-    }
-    return { outcome: "VULNERABLE", revertReason: null, expectedRevert };
+    await captureLastTx(async () => {
+      const tx = await txThunk();
+      if (tx && typeof tx.wait === "function") {
+        await tx.wait();
+      }
+    });
+    return { outcome: "VULNERABLE", revertReason: null, expectedRevert, revertOrigin: null };
   } catch (err) {
     const data = revertDataOf(err);
     if (data === null) {
@@ -227,13 +409,27 @@ async function attempt(txThunk, expected) {
         outcome: "FAILED-TO-RUN",
         revertReason: `${(err && err.constructor && err.constructor.name) || "Error"}: ${reasonOf(err)}`,
         expectedRevert,
+        revertOrigin: null,
       };
     }
     const decoded = decodeRevert(data, expected.iface ? [expected.iface] : []);
+    if (!matchesExpected(decoded, expected)) {
+      return { outcome: "UNEXPECTED-REVERT", revertReason: decoded.text, expectedRevert, revertOrigin: null };
+    }
+    const traced = await revertOriginOf(err.__capturedTx);
+    let revertOrigin;
+    if (traced.error) {
+      revertOrigin = `unverifiable (${traced.error})`;
+    } else if (traced.data.toLowerCase() !== data.toLowerCase()) {
+      revertOrigin = "unverifiable (replay produced different revert data)";
+    } else {
+      revertOrigin = traced.origin;
+    }
     return {
-      outcome: matchesExpected(decoded, expected) ? "DEFENDED" : "UNEXPECTED-REVERT",
+      outcome: revertOrigin === targetAddress ? "DEFENDED" : "UNEXPECTED-REVERT",
       revertReason: decoded.text,
       expectedRevert,
+      revertOrigin,
     };
   }
 }
@@ -297,5 +493,6 @@ module.exports = {
   reasonOf,
   revertDataOf,
   decodeRevert,
+  originFromStructLogs,
   writeMatrix,
 };

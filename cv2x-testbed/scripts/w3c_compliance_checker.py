@@ -77,6 +77,14 @@ def parse_zulu(value: str) -> datetime:
     return datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
 
 
+def _run_stamp():
+    """The shared run stamp (WM-2 A3; scope registered in A2): commit, code_dirty, tree_dirty, scope, scope_sha."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools" / "run_identity"))
+    from stamp import stamp
+    import platform
+    return {**stamp(__file__), "python_version": platform.python_version()}
+
+
 @dataclass
 class ComplianceCheck:
     """Single compliance check with its executed outcome."""
@@ -993,6 +1001,7 @@ class W3CComplianceChecker:
         """Export executed results to JSON."""
         report = {
             "timestamp": datetime.now().isoformat(),
+            "run": _run_stamp(),
             "methodology": (
                 "All non-qualitative checks execute the DID resolver and VC "
                 "stack and record observed outcomes. SSI principles are "
@@ -1023,11 +1032,15 @@ class W3CComplianceChecker:
 
 
 def main() -> int:
-    """Run the executable compliance checker."""
+    """Run the executable compliance checker.
+
+    An optional argument names the report path; the result of record is
+    4_comparison-framework/results/w3c_compliance.json (register #4).
+    """
     checker = W3CComplianceChecker()
     checker.run_all_checks()
     checker.print_summary()
-    checker.export_results()
+    checker.export_results(*sys.argv[1:2])
 
     score = checker.get_overall_compliance()
     if score >= 90:

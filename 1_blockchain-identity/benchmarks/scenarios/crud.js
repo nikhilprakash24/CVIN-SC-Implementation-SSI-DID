@@ -70,6 +70,20 @@ async function run(ctx) {
       return { fn: () => adapter.revokeCredential(h, c, iss) };
     });
 
+    // ---- basic-set functions added 2026-10-15 (docs/BASIC_ID_SET_EXTENSION.md §4) ----
+    // P1: holder anchors a presentation hash (unique per iteration, zero-byte-free).
+    await tx("P1_create_presentation", async (i) => { const h = await setupIdentity(); return { fn: () => adapter.createPresentation(h, credHash(ctx, adapterId, "P1", i)) }; });
+    // X1: the identity performs one external call. The target is deployed once and
+    // pre-warmed (setValue(7)) so every iteration overwrites a non-zero slot.
+    let target = null, xData = null;
+    if (adapter.supports("X1_execute_call")) {
+      const T = await ctx.ethers.getContractFactory("CVINExecuteTarget", actors.deployer);
+      target = await T.deploy(); await target.waitForDeployment();
+      await (await target.setValue(7)).wait();
+      xData = target.interface.encodeFunctionData("setValue", [7]);
+    }
+    await tx("X1_execute_call", async () => { const h = await setupIdentity(); return { fn: () => adapter.executeCall(h, target.target ?? target.address, xData) }; });
+
     // ---- reads on one identity with realistic state (own issuer: V6 is independent of N) ----
     const h = await setupIdentity();
     const k = freshKey(ctx);

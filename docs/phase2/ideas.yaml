@@ -118,6 +118,8 @@ ideas:
     first_step: "A literature and tooling survey (circuit size, proving and verifying time for the three properties) before any circuit is written."
     kill: "If verification cannot fit the budget on vehicle-class hardware per the literature, keep it as an off-hot-path (registration-time) proof only."
     depends: []
+    status:
+      - ["2026-10-22", "First step done and exceeded: tooling chosen and a circuit built and measured (register #56-#58). Kill criterion triggered for per-message use only, as anticipated: verify 18.42 ms off chain fits registration and session budgets, not per-message ones. See SC-12 reopened and SC-23 in docs/SCOPE_CHANGES.md."]
     scores: {value: 3, novelty: 5, feasibility: 2, reuse: 2, risk: 4}
   - id: I-10
     track: P
@@ -130,6 +132,8 @@ ideas:
     kill: "If no message type needs selective disclosure on the hot path, the idea moves to registration and service-access flows."
     depends: []
     scores: {value: 4, novelty: 3, feasibility: 4, reuse: 4, risk: 2}
+    status:
+      - ["2026-10-22", "Partly addressed: threshold proofs over committed attributes (register #59, #61) give predicate disclosure without a credential format. The SD-JWT VC / BBS hot-path measurement is still open."]
   - id: I-11
     track: P
     title: "Linkability beyond the ledger (timing, position and pseudonym-change attacks)"

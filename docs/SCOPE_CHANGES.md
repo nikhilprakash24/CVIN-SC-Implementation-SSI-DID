@@ -50,6 +50,9 @@ it.
 
 | SC-13 correction | 2026-10-14 | SC-13 says "measured (register #30)"; the parity result is register **#33** (`cv2x-testbed/results/lifecycle_parity.*`). Its chapter-5 placement is still owed: chapters 5 and 6 do not yet cite #33 | **Correction** (defect D62; past entries are not edited) | — | after-action report 16 (scope reconciliation) | WM-2 D1 adds the #33 sentence to chapter 5 |
 
+| SC-12 reopened | 2026-10-22 (built 2026-10-15, Plan 1) | The ZK proof-of-VIN tier deferred by SC-12 | **Reopened and built as a measured prototype** (author decision, Plan 3 defaults) | ZK-VIN Groth16 circuit (3,498 constraints) with an on-chain gate; prove 398.6 ms, verify 18.42 ms off chain, admission 301,163 gas. Production gap: the trusted-setup ceremony (the committed setup is single-party and insecure). SC-12's own row is not edited | `docs/zkp/REPORT_A_ZKP_INTEGRATION.md` §3–§4; register #56–#58 | ch. 4 §4.x ZK-VIN tier; ch. 5 RQ5; ch. 7 keeps the ceremony as future work |
+| SC-23 | 2026-10-22 (built 2026-10-15) | Layer 5: zero-knowledge identity and the agent wrapper (RQ5, H6) | **Added to scope, bounded** (author decision, Plan 3 defaults) | Sigma-protocol primitives, ZK-VIN, the Steward custodian (policy kernel, leakage budget, learned responder, delegation credential) and the seeded narrowing attack. Out: a multi-party ceremony, BBS/SD-JWT on the hot path (I-10), a live red team, people as subjects (hand times are estimates). Pre-registered Z-E1..Z-E7 with amendments A1, A2 | `docs/zkp/PLAN_1_ZKP_AND_AGENT_IDENTITY.md`; register #56–#62 | ch. 1 RQ5/H6; ch. 2–7 per `docs/zkp/THESIS_INTEGRATION_MAP.md` §1 |
+
 SC-15…SC-20 were proposed by the review-2 lineage's MOBI checklist (§7, 2026-10-04, as P-1…P-6) and added here at the merge of 2026-10-06; the ones marked *Decision pending* are the author's.
 
 Add entries above the notes as decisions are made. Do not edit past entries;

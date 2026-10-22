@@ -1,0 +1,101 @@
+{
+ "condition": "MEASURED counts (exact) priced at cited human rates (status E)",
+ "run": {
+  "commit": "e780d40",
+  "code_clean": true,
+  "tree_clean": true,
+  "host": {
+   "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
+   "machine": "x86_64",
+   "cpus": 4,
+   "processor": "x86_64"
+  },
+  "python": "3.13.16",
+  "at": "2026-10-15T05:32:58+00:00",
+  "seed_env": null
+ },
+ "rates_E": {
+  "sha256_round_s": 1005,
+  "word_op_s": 38.65384615384615,
+  "field_mul_s": 7730.7692307692305,
+  "char_error": 0.006,
+  "sources": [
+   "SHIRRIFF2014",
+   "PANKO-BASIC",
+   "FIPS180-4"
+  ]
+ },
+ "measured": {
+  "zkvin_wires": 3505,
+  "zkvin_constraints": 3498,
+  "groth16_domain": 4096,
+  "field_mul_counts": {
+   "Schnorr verification (one signature-sized proof)": 7268,
+   "6-bit threshold proof, prove (model year >= t)": 92243,
+   "6-bit threshold proof, verify": 92623
+  },
+  "characters_to_copy": {
+   "owner private key (hex)": 64,
+   "agent private key (hex)": 64,
+   "commitment salt (field element, decimal)": 77,
+   "Ethereum address (hex)": 40,
+   "ZK-VIN Groth16 proof (JSON as produced)": 743,
+   "ZK-VIN public signals (decimal)": 416,
+   "6-bit threshold proof (sigma protocol, hex)": 3148
+  }
+ },
+ "estimated_E": {
+  "field_mul_counts_E": {
+   "ZK-VIN Groth16 proof, prove (E: textbook algorithm)": 115952640,
+   "ZK-VIN Groth16 proof, verify (E: four pairings)": 60000
+  },
+  "time_by_hand": {
+   "Schnorr verification (one signature-sized proof)": {
+    "hours": 15607.564102564102,
+    "working_days_8h": 1950.9455128205127,
+    "working_years_2000h": 7.803782051282051
+   },
+   "6-bit threshold proof, prove (model year >= t)": {
+    "hours": 198085.9294871795,
+    "working_days_8h": 24760.741185897437,
+    "working_years_2000h": 99.04296474358975
+   },
+   "6-bit threshold proof, verify": {
+    "hours": 198901.95512820513,
+    "working_days_8h": 24862.74439102564,
+    "working_years_2000h": 99.45097756410256
+   },
+   "ZK-VIN Groth16 proof, prove (E: textbook algorithm)": {
+    "hours": 249000861.53846154,
+    "working_days_8h": 31125107.692307692,
+    "working_years_2000h": 124500.43076923076
+   },
+   "ZK-VIN Groth16 proof, verify (E: four pairings)": {
+    "hours": 128846.15384615384,
+    "working_days_8h": 16105.76923076923,
+    "working_years_2000h": 64.42307692307692
+   }
+  },
+  "sha256_one_compression_by_hand": {
+   "hours": 17.866666666666667,
+   "working_days_8h": 2.2333333333333334,
+   "working_years_2000h": 0.008933333333333333
+  },
+  "p_copy_without_error": {
+   "owner private key (hex)": 0.680344066359634,
+   "agent private key (hex)": 0.680344066359634,
+   "commitment salt (field element, decimal)": 0.6291462300663593,
+   "Ethereum address (hex)": 0.7860594187607106,
+   "ZK-VIN Groth16 proof (JSON as produced)": 0.011430983745645903,
+   "ZK-VIN public signals (decimal)": 0.08179672380703767,
+   "6-bit threshold proof (sigma protocol, hex)": 5.9202232307030545e-09
+  },
+  "p_one_presentation_copied_without_error": 0.00040022085599902705
+ },
+ "agent_measured_M0": {
+  "threshold_prove_ms": 64.2188275,
+  "threshold_verify_ms": 68.81903600000001,
+  "groth16_prove_ms": 398.5985885,
+  "groth16_verify_ms": 18.419023
+ }
+}

@@ -381,6 +381,215 @@ purpose-built registry as the maximal-fidelity reference (§6.6). All five
 hypotheses (H1–H5) are supported by these interpretations, subject to the
 scoping threats to validity recapped above.
 
+
+---
+
+## 6.8 The Identity-Dependent Transaction, What It Is and What It Is Not
+
+*Merged on 2026-10-22 from the companion draft of 2026-10-20. Answers examiner question 12 of the scope
+reconciliation (`docs/phase2/SCOPE_RECONCILIATION.md` §4). Citation keys `[A-*]` are those of Chapter 2, Section 2.9.*
+
+### 6.8.1 Why a name was needed
+Across the nine standards and the testbed, the same shape recurred without a name: a transaction whose admissibility
+or effect depends on the state of an identity it names, a vehicle, an issuer, a road-side unit, where that state has
+a lifecycle of its own and can change between the moment it is read and the moment the transaction takes effect.
+Chapter 2 (§2.7) gives the definition this thesis adopted and positions it against prior work. This section says what
+the definition does to the thesis's own evidence, and where its claim stops.
+
+### 6.8.2 What it is not: three nearby things
+**It is not access control.** A contract's `onlyOwner` or role modifier gates on the caller [A-T01]; the definition
+excludes sender authentication. Attribute-based access control already evaluates attributes of the object as well as
+the subject [A-S05], so "the predicate is about the identity the transaction names" is not, by itself, a new idea. The
+IDTx differs from ABAC in what a ledger adds to the predicate: where the identity's state is held and how it is
+encoded (the storage locus), when the predicate is evaluated relative to inclusion in a block, and how stale the
+state may be when it is used. None of those is a dimension of ABAC's policy model; each is priced or bounded in this
+thesis.
+
+**It is not new as a mechanism.** ERC-3643 transfers execute only if the *receiver* holds the required claims from
+trusted issuers, checked inside `transfer`, `transferFrom`, `mint` and `forcedTransfer` [A-S09]. Under the
+definition a T-REX transfer is an IDTx, and the standard is at Final status. The guarded transaction of Luu et al.,
+a transaction that carries a guard on current state and is dropped if the guard fails, is the same mechanism in
+general form [A-S01]. The thesis does not claim the mechanism. What ERC-3643 does not do is frame the check by
+locus, evaluation point or freshness, or measure it against alternatives on one lifecycle.
+
+**It is not the testbed's message verification.** A verifier accepting or rejecting a V2V message depends on the
+sender's identity state in the same way, but no transaction is involved. The definition calls that an
+identity-dependent decision. It shares the freshness dimension (§6.8.5) and nothing else, and most of what Phase 1
+measured about freshness is about decisions, not transactions (#32, #37, #46).
+
+### 6.8.3 How many there are in this thesis
+Applying the definition to every gate in the Phase 1 code gave a smaller count than the first draft of the Phase 2
+analysis had claimed: of 26 gates inventoried, **4** are identity-dependent transactions, 14 are identity
+administration or sender authentication, 1 is an enabling view, 5 are off-chain decisions and 2 depend on no identity
+state at all (`docs/phase2/focus/F1_onchain_storage_idtx/ANALYSIS.md` §4.2, corrected under the academic review,
+`docs/phase2/reviews/DISPOSITIONS_F1-F3.md` AR-3). The four: the MOBI birth registration, whose admissibility depends
+on VIN uniqueness against every other registered identity; the ERC-735 and CVIN-Combined `addClaim`, whose
+admissibility depends on the issuer's authorisation and revocation status; and the ERC-721 profile's `payToll`, a
+payment whose admissibility depends on the named vehicle's current owner.
+
+A fifth was added by this thesis's own hardening, after that count was made. Since the D54 fix, a MOBI attestation
+is admissible only if the attester is the named vehicle's current owner or holds its owner's unexpired `veriKey`
+delegation, checked on chain (`docs/DEFECT_LOG.md` D54; after-action report 22). That check is an IDTx of the
+ownership-and-delegate kind at locus L0, and it cost 29,333 gas of execution per attestation to add (#28: execution gas 169,361 → 198,694). It is the clearest instance in the thesis of the trade the taxonomy is about: a consent dependency on a
+named identity, paid for in storage reads and one storage write.
+
+That true IDTx are few is itself a finding. The mechanism that gives a ledger-held identity its value is used, in
+this code base and in the standards it implements, mostly for administration and authentication. The dependencies
+that matter for a vehicle, whether a sender is still trusted at the moment its message arrives, sit off chain as
+decisions, where the cost of reading the ledger is paid per check and bounded by a cache.
+
+### 6.8.4 What the taxonomy's axes cost, from the thesis's own measurements
+The taxonomy has three axes (dependency kind; storage locus with encoding; evaluation point). The thesis measured the
+locus axis across the nine standards without having named it:
+
+- **Plaintext state (L0)** is contract-readable and costs storage. ERC-735, which keeps claims in structs, pays 149
+  new storage slots over the 17-event lifecycle where the event-log ERC-1056 pays 8 (#49), and is the most expensive
+  of the nine to live with (#35), while its document reads back in a constant 3 RPC calls at any history depth
+  (#51). Struct-keeping standards buy contract-readable state and constant-call reads with storage.
+- **Event logs (L1)** are the cheapest to write and cannot be depended on by a contract at all: ERC-1056's own
+  standard keeps attributes in events "exclusively for off-chain use" [A-S06], and reading them back grows linearly
+  in history, 112 RPC calls and 87 KB at depth 50 (#31, #51). A contract that needs an L1 fact needs a carried proof,
+  which `eth_getProof` gives for storage but not for logs [A-S10].
+- **A registered commitment (L3)**, the salted VIN hash, gates by equality only; it proves nothing about what it
+  commits to, and the testbed's unsalted variant of it is defect D64, to be fixed after the defence with a uniqueness
+  mechanism designed first (dispositions AR-13).
+- **A carried attestation (L4)** moves the dependency's trust to the issuer, which is the oracle problem with the
+  issuer as oracle [A-S12]; the ERC-735 and CVIN-Combined claims live here.
+
+On the evaluation-point axis, the thesis priced admission-time evaluation once: an ERC-4337 operation through the
+EntryPoint costs +46,830 gas over the direct call (#25), and the standard's own validation-scope rules restrict what a
+validation may read of another identity's state [A-S07, A-S08].
+
+### 6.8.5 Freshness, the axis the ledger makes unavoidable
+A dependency on identity state is a dependency on a moving target. Between the read and the use, the identity's owner
+can change or its key can be revoked, and whoever orders the block decides which happens first: the
+transaction-ordering dependence of Luu et al. [A-S01], seen in the wild as front-running [A-S02, A-S03], and in
+software as the time-of-check-to-time-of-use flaw [A-S04]. The thesis measured the off-chain half of this window in
+message units: a verifier that re-reads every k messages accepts at most k − 1 from a revoked sender, which held in
+280 of 280 trials (#37) and in every pre-registered run of the infrastructure experiment (#46); and it showed that the
+absolute cost of a re-read, and so the k at which the latency budget is met, is a property of the host, by re-running
+two configurations on one machine (#52). The on-chain half, the exposure window of a transaction that depends on
+identity state, this thesis does not measure; it is Phase 2 experiment E-F1-3.
+
+### 6.8.6 What the thesis claims, stated narrowly
+1. One definition, which separates a dependency on a named identity from sender authentication and identity
+   administration, and names the off-chain counterpart. No fetched source names or defines the concept; the search was
+   open-web only and is a negative result, not proof of absence (`docs/phase2/briefs/I-24_IDTX.md` §3.4).
+2. A classification of this thesis's own gates under it, with the count above.
+3. The measured cost of each storage locus on one lifecycle across nine standards (#49, #51, #31, #35), and of one
+   admission-time path (#25), gathered under the taxonomy's axes for the first time in this work.
+4. The freshness bound for the off-chain case, as it fell (#37, #46, #52).
+
+The thesis does not claim the guard mechanism, a general theory of IDTx cost, or any on-chain exposure measurement.
+Whether the taxonomy earns a paper depends on E-F1-2 and E-F1-3, after the defence (scope decision D-7).
+
+---
+
+## 6.9 On-Chain Reality, SSI as a Spectrum, and the Agent Wrapper
+
+*Added 2026-10-22 for RQ5 and H6. Sources: `docs/zkp/REPORT_B_ZKP_AND_IDENTITY.md` §9;
+`docs/zkp/REPORT_C_AGENT_WRAPPED_IDENTITY.md` §9–§11; results in §5.10 (register #56–#62).*
+
+Section 5.10 showed that zero-knowledge vehicle identity is affordable at registration and session time and that a
+bounded custodian can hold a narrowing attack to its budget at a cost in honest service. This section asks what those
+results mean once identity touches a ledger, how far the build is self-sovereign, and what wrapping an identity in an
+agent gains and risks.
+
+### 6.9.1 Five facts of on-chain reality
+
+**Permanence against erasure.** A ledger is built not to forget, and data-protection guidance advises keeping personal
+data off chain with only commitments or hashes on it [@EDPB-2025; @CNIL2018]. The build follows that advice: the chain
+holds VIN commitments, never VINs. Erasure is still only partial, because the commitment remains; what the owner can
+do is destroy the salt, after which the commitment can no longer be opened.
+
+**A hash of a small space is not secret.** The brute-force result (§5.10.3; register #60) turns a textbook warning into
+a measured one. A VIN whose only unknown is its serial is reversed in seconds on one core. Hashing is therefore not a
+privacy mechanism for VINs; a random salt is the minimum, and a hiding commitment with a proof of its contents is what
+the ZK-VIN tier adds.
+
+**A commitment proves equality, not knowledge.** Before layer 5, a contract could compare a submitted value with a
+stored commitment, which reveals the value, but could not check that a caller knows what the commitment holds (AR-5).
+`ZkVinGate` closes that gap at 301,163 gas per admission (register #58), the price of making knowledge, rather than a
+signature, the dependency of an identity-dependent transaction.
+
+**Zero knowledge proves what was committed, not what is true.** If an issuer commits the wrong model year, ZK-VIN
+proves the wrong model year faithfully [@ZKGATEWAY2026]. Trust in the manufacturer's birth record, MOBI VID I, does not
+go away; zero knowledge narrows what is disclosed, not whom one must trust about the data.
+
+**Zero knowledge per proof is not privacy per session.** This is the finding with the widest reach. Every answer in
+the narrowing attack is a valid zero-knowledge proof, yet the sequence recovers the model year exactly (Z-E5, register
+#61). The result is old in another field: Denning's tracker defeated query-size restrictions on statistical databases
+[@DENNING1979], Dinur and Nissim showed that many answers reconstruct a database [@DINUR2003], and Kenthapadi, Mishra
+and Nissim showed that refusals leak unless the decision to refuse is simulatable [@KENTHAPADI2005]. What the thesis
+adds is the measurement against predicate credentials of its own stack, and the observation that a per-verifier rule
+fails to the Sybil split. Privacy over a session needs memory of every answer given to everyone. That requirement is
+what leads to the custodian.
+
+### 6.9.2 SSI as a spectrum, not a binary
+
+Report C argues that a self-sovereign system must first be a competent identity-management system, and then extend
+towards strict SSI as far as each use case allows. Three tables in Report C (generated from one data file,
+`5_zkp-agent-identity/figures/ssi_tables.json`) make the argument checkable. They are summarised here.
+
+- **Table C-1, baseline identity-management functions** (after ISO/IEC 24760-1 and NIST SP 800-63-4
+  [@ISO24760, partial; @NIST-800-63-4]). Identifier assignment, enrolment, authentication, attribute assertion,
+  authorisation, maintenance, delegation, revocation, audit and interoperability are built across layers 1–5. Two are
+  partial: **recovery** (ERC-4337 accounts were measured, but no recovery flow was evaluated) and **de-registration
+  and erasure** (the decommission event exists, but commitments remain on chain).
+- **Table C-2, strict SSI properties** (after Allen [@ALLEN2016]). Existence, control, access, transparency,
+  persistence, portability, interoperability, consent and minimisation each have a strict mode in the build. Two do
+  not yet: **protection** is partial because `ZkVinGate` names the identity it admits, and an anonymity set is still to
+  be built; and **decentralised trust** is optional, because a permissioned ledger or database is allowed where
+  decentralisation buys nothing (Phase 2 focus F2). The setup ceremony limits transparency in the current prototype.
+- **Table C-3, use cases.** For each case it records what goes on chain, what stays with the agent, which properties
+  are realised and which are constrained. A V2V safety broadcast puts nothing on chain per message and cannot use a
+  per-message proof (proving takes 398.6 ms against a ~100 ms budget; register #57) or wait for consent. A session at a
+  roadside unit, an insurance quote or a toll uses ZK-VIN at session start, with scoped nullifiers keeping operators
+  unlinkable. A sale is public by design, since provenance is its purpose. A recall or lawful inquiry yields protection
+  to a lawful order, and the agent logs the disclosure. At end of life the salt is destroyed.
+
+The conclusion drawn from the three tables is that where a property is partial, the reason is a constraint of the use
+case, of physics, of law or of cost, not a decision to keep control. Nothing in the build forces a compromise that a
+strict deployment would reject: keys can be held only by the owner and the owner's agent, every rule can require
+consent, every disclosure can be a predicate proof, and the agent can run locally. The two places where strict mode is
+incomplete, protection at the gate and setup trust, are named to-dos, not design limits.
+
+### 6.9.3 The agent wrapper: why, benefits and risks
+
+The manual-burden counts (§5.10.5; register #62) settle why a custodian is needed. No person verifies a Schnorr proof
+or copies a 1,300-character presentation reliably by hand, and the narrowing attack shows that the custodian must also
+remember across verifiers and adapt. Those are the properties of an agent. The results then say what kind of agent:
+one in which a deterministic kernel holds the bound and any learned or language component works inside it. The
+post-hoc insider run (A2) is the sharpest evidence, since the learner without the kernel's budget was broken outright
+by an accredited adversary (register #61).
+
+The wrapper also inverts the dominant data economy, in which the person is a source of raw material [@ZUBOFF2019].
+With an owner-signed policy, the person's software discloses for the person, by rule, minimally and with a record.
+That inversion is not automatic: an agent run by a platform could become a more efficient collector. The safeguards
+are the ones built and tested here.
+
+| Benefit | What it means in this build | Evidence |
+|---|---|---|
+| Security | secrets never leave the vault; proofs bound to verifier and nonce; injection cannot cause a disclosure | Steward tests (§4.8.4) |
+| Availability | proofs at machine speed | register #57, #59 |
+| Customisability | rules in controlled English, compiled and signed; only the owner can loosen them | compiler tests |
+| Sovereignty | the owner signs the policy and can revoke the agent | delegation tests |
+| Privacy over time | the total disclosed is capped across all verifiers | register #61 |
+| Accountability | every decision in a tamper-evident, anchorable log | audit test |
+
+| Risk | Mitigation in this build | Residual |
+|---|---|---|
+| Agent compromise | vault isolation; revocable delegation; audit | a compromised host compromises the vault |
+| Model error or injection | model never on the decision path; schema; narrowing-only adoption | the grammar covers a limited set of sentences |
+| Over-refusal | coarsening; learned responder | honest service below 90 % on some runs (Z-E6) |
+| Vendor dependency | open code; local operation; standard DIDs and VCs | the burden of self-hosting |
+| Opacity | signed policy; a reason on every refusal; audit | owners must still read their policy |
+
+Finally, the custodian is itself an identity. To be trusted by verifiers and stopped by its owner, the Steward needs a
+DID, a delegation credential, revocation and an audit trail, which is the stack the thesis built for vehicles. Work on
+AI-agent identity reaches the same requirements from the other side [@CHAN2024-IDS; @SOUTH2025; @OIDF2025]. The stack
+built for vehicles serves the agent unchanged, which is the point taken up in the closing of Chapter 7.
+
 ---
 
 *Working draft. Every interpretive claim is traceable to a numbered finding in

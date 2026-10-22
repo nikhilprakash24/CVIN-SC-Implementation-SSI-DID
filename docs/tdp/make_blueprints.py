@@ -238,7 +238,7 @@ INTERFACES = {"P0": "MobilitySource", "P1": "Channel", "P2": "LedgerTarget", "P3
 def dwg_001():
     sh = Sheet()
     t = SNAP["tests"]["stages"]
-    reg = SNAP["register"]["by_status"]
+    reg = {s: 0 for s in "VSEUB"} | SNAP["register"]["by_status"]  # a status with no rows is absent from the snapshot
     producers = len(json.loads((ROOT / "tools/run_identity/producers.json").read_text())["producers"])
     jobs = ci_jobs()
     sh.text(44, 104, "SIDE ELEVATION — the seven planes of the testbed, Phase 1 code per plane; a plane depends only on the planes below it and on P5", 10.5, color=DIM)
@@ -499,7 +499,7 @@ def dwg_004():
 def dwg_005():
     sh = Sheet()
     producers = json.loads((ROOT / "tools/run_identity/producers.json").read_text())["producers"]
-    reg = SNAP["register"]["by_status"]
+    reg = {s: 0 for s in "VSEUB"} | SNAP["register"]["by_status"]  # a status with no rows is absent from the snapshot
     jobs = ci_jobs()
     checks = ci_document_checks()
     sh.text(44, 104, "PROCESS LINE — how a number travels from a producer to a document, and the inspection station at every transfer", 10.5, color=DIM)

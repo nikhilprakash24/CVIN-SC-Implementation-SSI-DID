@@ -49,6 +49,9 @@ const CRED_HASH = ethers.keccak256(ethers.toUtf8Bytes("signed-event-vc"));
 // 65-byte signature, attester already authorized (gasUsed minus the 21,000
 // base and the calldata bytes). Measured 2026-10-04 on solc 0.8.24, viaIR,
 // optimizer 200, evm cancun, Hardhat 2.28.6.
+// Superseded design (clone lineage, review-02 H-A, merged into the trunk 2026-10-21 and replaced at the
+// three-lineage merge of 2026-10-22, Plan 5): OWNER-role scope check plus a duplicate guard, pinned 192,040
+// on its bytecode (191,974 on the clone lineage's own). W's owner-or-delegate rule implies H-A's.
 const PINNED_EXECUTION_GAS = 198_694n; // re-pinned 2026-10-17 for WM-2 C2 (D54: owner-or-delegate check, one attestation per attester): +29,333; was 169_361, re-pinned 2026-10-06 on the merged bytecode (anchorVehicleKey + K-3/K-4 moved the dispatch by +66); was 169_295 on the review-2 tree
 
 const TX_BASE_GAS = 21_000n;

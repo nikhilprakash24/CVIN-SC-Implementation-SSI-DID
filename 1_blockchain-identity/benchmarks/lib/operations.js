@@ -21,6 +21,9 @@ const OPERATIONS = [
   { id: "V3_anchor_status",            cls: "CREATE", kind: "tx",   core: true,  semantic: "Anchor credential status on-chain" },
   { id: "V5_revoke_credential",        cls: "DELETE", kind: "tx",   core: true,  semantic: "Revoke credential" },
   { id: "V6_status_check",             cls: "READ",   kind: "read", core: true,  semantic: "Is credential revoked?" },
+  // Basic digital-ID set (IMinimalSSI) functions without a prior catalogue op (docs/BASIC_ID_SET_EXTENSION.md §4)
+  { id: "P1_create_presentation",      cls: "PRESENT", kind: "tx",  core: true,  semantic: "Holder anchors a presentation (hash + nonce) — F8 createPresentation" },
+  { id: "X1_execute_call",             cls: "EXECUTE", kind: "tx",  core: true,  semantic: "Identity performs one external call — Set A execute (agent proxy)" },
 ];
 
 const byId = Object.fromEntries(OPERATIONS.map((o) => [o.id, o]));

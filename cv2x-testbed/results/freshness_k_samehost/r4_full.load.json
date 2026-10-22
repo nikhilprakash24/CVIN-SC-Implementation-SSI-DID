@@ -1,0 +1,114 @@
+{
+ "replicate": 4,
+ "mode": "full",
+ "order_index": 4,
+ "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+ "start_utc": "2026-10-15T05:21:13Z",
+ "loadavg_start": "1.22 1.38 1.10 4/245 8106",
+ "load1_start": 1.22,
+ "end_utc": "2026-10-15T05:21:40Z",
+ "loadavg_end": "2.00 1.57 1.18 2/218 8224",
+ "load1_end": 2.0,
+ "sample_interval_s": 2,
+ "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+ "foreign_cpu_mean": 1.8607692307692305,
+ "foreign_cpu_max": 2.17,
+ "own_cpu_mean": 0.9184615384615384,
+ "load1_max_sampled": 1.99,
+ "load1_mean_sampled": 1.785384615384615,
+ "n_samples": 13,
+ "exit_code": 0,
+ "samples": [
+  {
+   "t": "2026-10-15T05:21:15Z",
+   "loadavg": "1.22 1.38 1.10 3/252 8129",
+   "load1": 1.22,
+   "foreign_cpu": 2.17,
+   "own_cpu": 1.0
+  },
+  {
+   "t": "2026-10-15T05:21:17Z",
+   "loadavg": "1.53 1.44 1.12 5/252 8130",
+   "load1": 1.53,
+   "foreign_cpu": 1.91,
+   "own_cpu": 0.89
+  },
+  {
+   "t": "2026-10-15T05:21:19Z",
+   "loadavg": "1.53 1.44 1.12 5/253 8154",
+   "load1": 1.53,
+   "foreign_cpu": 2.06,
+   "own_cpu": 0.92
+  },
+  {
+   "t": "2026-10-15T05:21:21Z",
+   "loadavg": "1.72 1.48 1.14 4/255 8162",
+   "load1": 1.72,
+   "foreign_cpu": 1.93,
+   "own_cpu": 0.89
+  },
+  {
+   "t": "2026-10-15T05:21:23Z",
+   "loadavg": "1.72 1.48 1.14 4/255 8162",
+   "load1": 1.72,
+   "foreign_cpu": 1.97,
+   "own_cpu": 0.93
+  },
+  {
+   "t": "2026-10-15T05:21:25Z",
+   "loadavg": "1.72 1.48 1.14 4/255 8162",
+   "load1": 1.72,
+   "foreign_cpu": 1.83,
+   "own_cpu": 0.89
+  },
+  {
+   "t": "2026-10-15T05:21:27Z",
+   "loadavg": "1.91 1.53 1.16 4/255 8164",
+   "load1": 1.91,
+   "foreign_cpu": 1.88,
+   "own_cpu": 0.86
+  },
+  {
+   "t": "2026-10-15T05:21:29Z",
+   "loadavg": "1.91 1.53 1.16 4/254 8164",
+   "load1": 1.91,
+   "foreign_cpu": 1.87,
+   "own_cpu": 0.89
+  },
+  {
+   "t": "2026-10-15T05:21:31Z",
+   "loadavg": "1.99 1.55 1.17 5/255 8177",
+   "load1": 1.99,
+   "foreign_cpu": 2.06,
+   "own_cpu": 0.92
+  },
+  {
+   "t": "2026-10-15T05:21:33Z",
+   "loadavg": "1.99 1.55 1.17 4/256 8178",
+   "load1": 1.99,
+   "foreign_cpu": 2.0,
+   "own_cpu": 0.93
+  },
+  {
+   "t": "2026-10-15T05:21:35Z",
+   "loadavg": "1.99 1.55 1.17 4/224 8214",
+   "load1": 1.99,
+   "foreign_cpu": 2.04,
+   "own_cpu": 0.89
+  },
+  {
+   "t": "2026-10-15T05:21:37Z",
+   "loadavg": "1.99 1.56 1.17 3/221 8220",
+   "load1": 1.99,
+   "foreign_cpu": 1.27,
+   "own_cpu": 0.99
+  },
+  {
+   "t": "2026-10-15T05:21:39Z",
+   "loadavg": "1.99 1.56 1.17 3/221 8220",
+   "load1": 1.99,
+   "foreign_cpu": 1.2,
+   "own_cpu": 0.94
+  }
+ ]
+}

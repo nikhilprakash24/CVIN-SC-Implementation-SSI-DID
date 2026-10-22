@@ -25,9 +25,10 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 GLOBS = ["4_comparison-framework/results/*.json", "4_comparison-framework/security-analysis/results/*.json",
          "cv2x-testbed/results/*.json", "cv2x-testbed/sumo/results/*.json",
-         "1_blockchain-identity/results/metrics/latest/meta.json", "1_blockchain-identity/results/metrics-rpc/latest/meta.json"]
+         "1_blockchain-identity/results/metrics/latest/meta.json", "1_blockchain-identity/results/metrics-rpc/latest/meta.json",
+         "5_zkp-agent-identity/results/*.json"]
 KEYS = {
-    "date": ["date", "date_utc", "generated_at", "generatedAt", "timestamp", "generated"],
+    "date": ["date", "date_utc", "generated_at", "generatedAt", "timestamp", "generated", "at"],
     "commit": ["commit", "git_commit", "gitCommit", "baseline_commit"],
     "toolchain": ["solcVersion", "solc", "solc_version", "hardhat", "hardhat_version", "python_version", "python", "cryptography_version", "node", "node_version", "ozVersion", "libraries", "condition"],
 }
@@ -38,12 +39,10 @@ CLASSES = {
     "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json": ("history", "a diff between two runs of record, each stamped or registered; not a measurement"),
     "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json": ("history", "same"),
     "4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json": ("history", "same"),
-    "4_comparison-framework/results/gas_benchmark_stats.json": ("stamp producer", "4_comparison-framework/performance-metrics/run_gas_stats.py"),
-    "4_comparison-framework/results/sensitivity.json": ("stamp producer", "1_blockchain-identity/scripts/benchmark_scaling.js (July run; re-run due)"),
-    "4_comparison-framework/results/w3c_compliance.json": ("stamp producer", "cv2x-testbed/scripts/w3c_compliance_checker.py"),
-    "4_comparison-framework/security-analysis/results/attack_results.json": ("stamp producer", "1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js (writes to runs/ since WM-2 A4; stamped on its next promoted run)"),
-    "4_comparison-framework/security-analysis/results/security_matrix.json": ("stamp producer", "4_comparison-framework/security-analysis/attack_scenarios.py"),
+    "4_comparison-framework/results/sensitivity.json": ("stamp producer", "no producer in the tree (optimizer sweep, July run); WM-2 A3 gap, pass 31"),
     "cv2x-testbed/sumo/results/v2v_latency.json": ("single run", "default output of one harness run; the results of record are v2v_latency_stats.json"),
+    "cv2x-testbed/results/freshness_k_samehost.json": ("derived", "summary of the 12 stamped same-host replicates in freshness_k_samehost/ (#55, clone lineage #42); all_git_clean recorded"),
+    "5_zkp-agent-identity/results/learning_curve.json": ("derived", "written by attacks/train_responder.py; deterministic, reproduced byte for byte by bench/run_all.sh before each run of record (AAR 19)"),
 }
 # (The first I3 and I4 runs at 1e690c3 were hand-checked too; they were replaced by the runs at f1f9e37,
 # whose flags are live. Record: after-action report 11 R3.)
@@ -199,6 +198,8 @@ AGGREGATES = {
     "4_comparison-framework/results/infrastructure_gas_runs/run_*.json": "I4 repeated 30 times (#47)",
     "4_comparison-framework/results/scaling_verify_repeats/*.json": "scaling-verify repeats (#26)",
     "cv2x-testbed/results/freshness_k_c3/c3_*.json": "WM-2 C3: #32 and #37 configurations on one host, 2 replicates each (#52)",
+    "cv2x-testbed/results/freshness_k_samehost/r*_full.json": "same-host freshness-k, full-refresh replicates (#55)",
+    "cv2x-testbed/results/freshness_k_samehost/r*_probe.json": "same-host freshness-k, probe-refresh replicates (#55)",
 }
 # Tracked result JSON that is not stamped on its own, by class (pattern -> class, reason).
 COVERED = [
@@ -208,6 +209,7 @@ COVERED = [
     ("cv2x-testbed/sumo/results/figures/*.json", "derived", "down-sampled trace for the dashboard"),
     ("cv2x-testbed/results/archive-2026-10-03/*.json", "history", "archived pre-merge results"),
     ("cv2x-testbed/results/freshness_k_c3/manifest.json", "derived", "order, commits and sha256 of the six C3 runs (report 19)"),
+    ("cv2x-testbed/results/freshness_k_samehost/*.load.json", "derived", "host-load log beside each stamped same-host replicate (#55)"),
     ("docs/conformance/reports/**/*.json", "external tool output", "jest reports of the W3C DID test suite, dated by directory (#24)"),
     ("docs/conformance/reports/*.json", "external tool output", "W3C DID test-suite run summaries, dated by file name (#24)"),
 ]

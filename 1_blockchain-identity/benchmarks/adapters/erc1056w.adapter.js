@@ -72,6 +72,11 @@ class ERC1056WrapperAdapter extends ERC1056Adapter {
     return { txs: [tx] };
   }
   async metaTxSetAttribute() { this.notSupported("U5_meta_tx"); }
+  async createPresentation(h, presHash) {
+    const key = this.ethers.keccak256(this.ethers.concat([this.ethers.toUtf8Bytes("did/vp/"), presHash]));
+    const tx = await this._wrap(h.controller).setServiceEndpoint(h.did, key, presHash, 300);
+    return { txs: [tx] };
+  }
 
   async prepareThroughputSenders(senders) {
     const out = [];

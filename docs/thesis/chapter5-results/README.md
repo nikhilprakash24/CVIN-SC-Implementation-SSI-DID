@@ -721,6 +721,131 @@ Sepolia dry-run, §5.2 provenance note). Together these establish that the headl
 figures and their ranking are compiler- and calldata-robust — closing the
 construct/internal-validity concern (`RESEARCH_AUDIT.md` §4.1, §4.8).
 
+
+---
+
+## 5.10 RQ5 — Zero-Knowledge Vehicle Identity (H6)
+
+**Provenance**: `5_zkp-agent-identity/results/zkvin_bench.json`, `gas_zk.json`, `sigma_bench.json`,
+`vin_bruteforce.json`, `attacks.json` (all at code `978988e`, producing code clean) and `manual_burden.json` (at
+`e780d40`, values identical); register #56–#62. Method and pre-registration: §3.9. Implementation: §4.8.
+*Added 2026-10-22.*
+
+**Answer first.** Zero-knowledge vehicle identity is feasible at registration and session time and not per V2V
+message. Six of the seven pre-registered expectations pass. **Z-E6 fails**: the Steward held the leakage bound on every
+run, but its honest service fell below the 90 % floor on 25 of 60 runs. H6 is therefore **partly supported**.
+
+### 5.10.1 Proving and verification cost (M0)
+
+| Quantity | Value | Register |
+|---|---|---|
+| Circuit | 3,498 constraints (1,667 non-linear, 1,831 linear); 3,505 wires; 6 public, 27 private inputs; 1 public output | #56 |
+| Prove, median (N=10) | **398.6 ms** (min 360.2, max 431.5) | #57 |
+| Verify off chain, median (N=30) | **18.42 ms** (min 15.45, max 26.59) | #57 |
+| Proof size | 256 B as calldata (725 B as JSON); 7 public signals | #57 |
+
+Verification at 18.42 ms fits inside the ~100 ms V2V budget used for RQ4, so Z-E1 passes; proving at 398.6 ms is far
+under the 10 s bound of Z-E2, and the 256-byte proof is under the 1 KiB bound of Z-E4. The comparison that matters for
+placement is with the warm SSI verification of §5.4, 0.153 ms (register #27). A ZK-VIN verification costs over a
+hundred times that, and a proof takes about four times the whole V2V budget to produce. ZK-VIN therefore belongs at
+registration or session start, not inside a 10 Hz safety broadcast. Timings are host-dependent; the insecure setup
+(§4.8.2) does not change them.
+
+The sigma primitives are cheaper and smaller but prove less (register #59, M0, pure-Python reference code). A Schnorr
+proof verifies in a median 4.476 ms and a 6-bit threshold proof ("model year ≥ t" on a Pedersen commitment) in a median
+68.819 ms; the exact operation counts behind them are 7,268 and 92,623 field multiplications (register #62).
+
+### 5.10.2 Gas (M1)
+
+| Operation | Gas | Register |
+|---|---:|---|
+| Anchor a VIN commitment | 51,558 | #58 |
+| **`ZkVinGate.admit` with on-chain Groth16 verification** | **301,163** | #58 |
+| `verifyProof` (view, `eth_estimateGas`, includes the 21,000 base) | 256,038 | #58 |
+| Deploy Groth16 verifier / deploy gate | 500,396 / 529,395 | #58 |
+| Schnorr proof of key knowledge (transaction) | 28,775 | #58 |
+| Deploy Schnorr verifier | 211,332 | #58 |
+
+Admission costs 301,163 gas, under the 350,000 bound of Z-E3, so Z-E3 passes. Receipt gas is exact; the two view
+figures are estimates from the node. Anchoring a commitment costs about as much as creating an ERC-1056 identity
+(§5.2). Verifying a zero-knowledge predicate on chain costs about six times that; a Schnorr proof of key knowledge
+costs about a tenth of an admission but proves only possession of a key.
+
+### 5.10.3 Why a hash is not enough: the brute-force result (M0)
+
+An unsalted SHA-256 of a VIN whose only unknown is the 6-digit serial is reversed by full enumeration of 10⁶
+candidates in **3.58 s** on one core, at 279,587 hashes per second (register #60). Z-E7 passes by three orders of
+magnitude. If the vehicle-descriptor characters are unknown too, the measured rate extrapolates to about 1,620
+core-days on this host, or about 0.49 h on one GPU at a published rate; both figures are **estimates** (status E,
+register #60). The result is the concrete reason the privacy tier needs a hiding commitment with a random salt, and why
+Phase 1's salted VIN hashes were the right choice.
+
+### 5.10.4 The narrowing attack and its defences (Sim)
+
+Each ZK-VIN or threshold proof reveals one bit. An adaptive verifier that bisects on the model year learns it exactly
+from individually zero-knowledge answers, and spreading the questions over fresh identities defeats any per-verifier
+limit. Table 5.10 gives the results over seeds 1–30 per cell, under the parameters fixed by amendment A1; the insider
+column is the post-hoc variant of amendment A2 (register #61).
+
+**Table 5.10. Adversary bits about the model year (of 5): mean / max · exact recoveries out of 30; honest service in
+the single variant, mean (minimum).**
+
+| Defence | Single | Sybil | Insider (post hoc, A2) | Honest service |
+|---|---|---|---|---|
+| None | 5.00 / 5.00 · 30 | 5.00 / 5.00 · 30 | 5.00 / 5.00 · 30 | 100.0 % (100.0) |
+| Static cap (2 per verifier) | 2.00 / 2.00 · 0 | **5.00 / 5.00 · 30** | 2.00 / 2.00 · 0 | 41.2 % (32.5) |
+| Global budget only | 1.93 / 3.00 · 0 | 1.93 / 3.00 · 0 | 1.93 / 3.00 · 0 | 90.3 % (75.0) |
+| Steward, fixed responder | 2.48 / 2.68 · 0 | 2.48 / 2.68 · 0 | 2.48 / 2.68 · 0 | 84.0 % (72.5) |
+| **Steward, learned responder** | 0.00 / 0.00 · 0 | 0.23 / 1.00 · 0 | 2.45 / 3.00 · 0 | 88.3 % (70.0) |
+| Learner without kernel budget | 0.00 / 0.00 · 0 | 0.00 / 0.00 · 0 | **5.00 / 5.00 · 30** | 97.7 % (95.0) |
+
+Five readings follow.
+
+1. **The attack is real.** Undefended, the model year is recovered exactly within 5 queries on 30 of 30 seeds, so Z-E5
+   passes.
+2. **A per-identity rule fails.** The static cap holds one identity to 2.0 bits and loses completely to the Sybil
+   split (5.0 bits, 30 of 30 exact), while refusing many repeat honest customers.
+3. **The kernel's budget is what bounds leakage.** Every configuration with the global budget held ≤ 3.0 bits on
+   every seed of every variant, including the insider. The learner without the budget looks best in A1's variants
+   only because A1's adversary never holds an accreditation; the post-hoc insider recovers the model year exactly on
+   30 of 30 seeds against it. This is P4 as a number: the learner proposes, the kernel disposes.
+4. **Learning buys service, not safety.** The learned responder raises mean honest service over the fixed one
+   (88.3 % against 84.0 %) and lowers leakage in A1's variants; it does not move the bound.
+5. **The bound costs honest service.** Because the budget assumes that all verifiers may collude, honest answers spend
+   it too. The Steward's service fell below 90 % on 25 of the 60 pre-registered runs (minimum 70.0 %), so **Z-E6
+   fails**. A global budget alone bounds leakage as well as the Steward does, at slightly higher mean service. The
+   claim of this section is that comparison, not a rate of attack in the field.
+
+Prompt injection, proof replay and cross-verifier linkage were tested as unit and contract tests, not simulated
+(§4.8.4): no injected request produced a disclosure, replayed proofs failed, and nullifiers in two scopes differed.
+
+### 5.10.5 Manual burden (counts V, times E)
+
+The counts are measured; the times are estimates priced at cited human rates (§3.9.4; register #62). Verifying one
+Schnorr proof takes 7,268 field multiplications, which at the rates used is about 7.8 working years by hand (E)
+against 4.5 ms for the software. One ZK-VIN proof is estimated at about 124,500 working years by hand (E) against
+398.6 ms measured. Copying one full ZK-VIN presentation (proof, signals, salt and key, 1,300 characters) without a
+single error has an estimated probability of 0.04 % (E). The kill criterion of P2, one presentation by hand in a
+working day, is missed by orders of magnitude even under rates chosen to favour the person.
+
+### 5.10.6 Verdicts
+
+| Id | Result | Verdict | Register |
+|---|---|---|---|
+| Z-E1 | verify median 18.42 ms < 100 ms | **PASS** | #57 |
+| Z-E2 | prove median 398.6 ms < 10 s | **PASS** | #57 |
+| Z-E3 | `admit` 301,163 gas < 350,000 | **PASS** | #58 |
+| Z-E4 | proof 256 B < 1,024 B | **PASS** | #57 |
+| Z-E5 | exact recovery on 30/30 seeds, ≤ 5 queries | **PASS** | #61 |
+| Z-E6 | leakage ≤ 3.0 bits on all runs; service < 90 % on 25/60 (minimum 70.0 %) | **FAIL** | #61 |
+| Z-E7 | 10⁶ candidates in 3.58 s < 1 h | **PASS** | #60 |
+
+**H6 — partly supported.** Feasibility at registration and session time is supported (Z-E1–Z-E4), and so is the need
+for a custodian that remembers every disclosure to everyone (Z-E5, the Sybil result, and the manual-burden counts).
+The pre-registered service level of the bounded custodian was not met (Z-E6). The failure is reported as it fell;
+the post-hoc insider result (A2) explains why the budget, not the learner, must carry the bound, but it does not change
+any pre-registered verdict.
+
 ---
 
 *Draft generated from committed measurement artifacts. Regenerate all

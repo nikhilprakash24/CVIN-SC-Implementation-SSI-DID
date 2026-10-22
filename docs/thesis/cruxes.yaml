@@ -51,12 +51,12 @@ cruxes:
     question: How quickly does a verifier stop trusting a revoked vehicle key, and at what latency cost?
     hypotheses: [H3]
     thrusts: [3, 5]
-    claim: A cached verifier honours a revoked key for at most k-1 further messages; the k that meets the neighbour-saturation target depends on the host and on the refresh mode.
-    evidence_rows: [32, 37, 40]
+    claim: A cached verifier honours a revoked key for at most k-1 further messages. Measured on one host in alternating blocks (#55), the one-call probe refresh is 3.2x cheaper on chain than a full refresh and serves more neighbours at every finite k; neither mode reaches the neighbour-saturation target, so any k must be quoted with its t_local.
+    evidence_rows: [32, 37, 40, 55]
     defects: [D21]
     artefacts: [cv2x-testbed/results/freshness_k.json, cv2x-testbed/results/freshness_k_probe.json]
     gaps:
-      - "Open high defect D51: the ERC-1056 provider accepts a revoked key when the verifier's clock is more than 900 s behind the chain; #32 and #37 hold under that clock assumption until fixed (WM-2)."
+      - "D51 (revoked key accepted under a lagging verifier clock) was fixed in WM-2 C0 (2026-10-14); #32 and #37 keep their clock-assumption note until their A3b re-runs. Residual D63 (probe path, test chains only) is low."
       - The RSU analogue (#46) counts messages from a revoked RSU under an in-process registry; it bounds the re-check cadence, not the latency cost, so it is not counted as C4 evidence.
       - Choose the k the thesis defends (review-2 decisions 10 and 14).
     examiner: Is k-1 messages of revocation staleness at 10 Hz acceptable for a safety system?
@@ -71,7 +71,7 @@ cruxes:
     artefacts: [4_comparison-framework/results/w3c_compliance.json, docs/conformance/W3C_DID_TEST_SUITE.md]
     gaps:
       - The DID Core checks test a synthesised document; label them structural (review-2 decision 2).
-      - The resolver builds did:ethr documents from the identifier, not from chain state.
+      - The executable checker (#4) still scores offline-synthesised documents; the resolver now also reads chain state (H-R, merged 2026-10-21) and the external suite passes 311/311 on that on-chain set (#24), but the checker itself has not been switched (WM-2 C1 gap).
     examiner: Does conformance of the document shape say anything about the chain state behind it?
   - id: C6
     title: MOBI VID lifecycle

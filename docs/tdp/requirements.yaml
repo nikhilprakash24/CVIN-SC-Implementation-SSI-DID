@@ -87,7 +87,7 @@ requirements:
     files: [1_blockchain-identity/benchmarks/run.js, 1_blockchain-identity/results/metrics/latest/meta.json]
     pending: [A6]
     tests: [1_blockchain-identity/benchmarks/run.js]
-    limit: Run of record 2026-10-09T02-09-36Z_7a9a996; the harness flag that marks measured-code dirtiness is inert until A6 (D33, N-19).
+    limit: Run of record 2026-10-21T03-28-59Z_a9e2a28 (re-run on the merged tree; was 2026-10-09T02-09-36Z_7a9a996); the harness flag that marks measured-code dirtiness is inert until A6 (D33, N-19).
   - id: PRF-04
     title: Lifetime cost model with sensitivity band
     shall: A fifteen-year lifetime cost model shall rank substrates with a declared sensitivity band on recurring event frequency.

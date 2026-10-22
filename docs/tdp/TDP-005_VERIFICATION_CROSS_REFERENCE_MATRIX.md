@@ -13,7 +13,7 @@
 | PARTIAL | 6 | some evidence V; at least one row non-V, a threshold unmet, an item missing, or a named trunk item still open |
 | OPEN | 0 | no V evidence |
 
-Register at generation: E 7, S 10, U 1, V 34 (52 rows).
+Register at generation: E 7, S 10, V 45 (62 rows).
 
 ## 1. Matrix
 
@@ -88,7 +88,7 @@ Register at generation: E 7, S 10, U 1, V 34 (52 rows).
 | #51 | V | PRF-05 |
 | #52 | V | RTV-03 |
 
-V rows cited by no requirement: #1, #2, #3, #22, #29, #42, #43. A V row no requirement cites is evidence without a stated purpose; TDP-PLAN phase 3 decides whether to add a requirement or leave the row as supporting data.
+V rows cited by no requirement: #1, #2, #3, #22, #29, #39, #42, #43, #53, #54, #55, #56, #57, #58, #59, #60, #61, #62. A V row no requirement cites is evidence without a stated purpose; TDP-PLAN phase 3 decides whether to add a requirement or leave the row as supporting data.
 
 ## 3. Requirement-to-test trace (phase 8)
 
@@ -142,7 +142,7 @@ A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path 
 | SYS-03 | No M2 (public testnet) measurement exists on the trunk (N-11). |
 | PRF-01 | M1 only (local Hardhat, cancun); operation definitions differ per standard and are declared per row. |
 | PRF-02 | H1's update and lifetime halves are not supported (#35); the split verdict is the one to report. |
-| PRF-03 | Run of record 2026-10-09T02-09-36Z_7a9a996; the harness flag that marks measured-code dirtiness is inert until A6 (D33, N-19). |
+| PRF-03 | Run of record 2026-10-21T03-28-59Z_a9e2a28 (re-run on the merged tree; was 2026-10-09T02-09-36Z_7a9a996); the harness flag that marks measured-code dirtiness is inert until A6 (D33, N-19). |
 | PRF-04 | A model over an assumed profile, not a measurement of a fleet. |
 | PRF-05 | SSTORE opcodes counted, not net slots; per-identity contract code not counted (#49). |
 | PRF-07 | Gas only; who pays and who is trusted are not measured; the ERC-1056 signed digest omits the chain id (D52). |

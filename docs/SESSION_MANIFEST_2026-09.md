@@ -301,3 +301,8 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `docs/tdp/check_icd.py`; `probe_tdp_checks.sh`; `.github/workflows/test-contracts.yml` | the ICD gate, its probe, its CI line | phase 9 |
 | `docs/tdp/TDP-003_INTERFACE_CONTROL_DOCUMENT.md` | IF-04 as built after C1; two shorthand tokens reworded | held by the gate |
 | `docs/tdp/make_blueprints.py`, `drawings/` | corrected test path; document-check list regenerated | records |
+## Pass 28 — Plan 1: ZKP and the agent-wrapped identity (2026-10-15)
+Outputs: `docs/zkp/` (plans 1 and 2 with phased prompts; reports A, B, C; sources; integration map; citation checker);
+`5_zkp-agent-identity/` (zkid, ZK-VIN circuit and artefacts, ZkVinGate, Schnorr verifier, the Steward, attacks, bench,
+figures, demo, tests, mutation probe); `1_blockchain-identity/hardhat.zkp.config.js`; `.github/workflows/zkp-layer5.yml`;
+README section. Report: `docs/AFTER_ACTION_REPORT_28.md`.

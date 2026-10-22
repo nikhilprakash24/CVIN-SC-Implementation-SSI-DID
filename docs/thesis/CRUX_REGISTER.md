@@ -7,9 +7,9 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | Crux | State | Hypotheses | Evidence rows (status) | Open gaps |
 |---|---|---|---|---|
 | C1 CAV identity substrate | **partial** | H1, H5 | #25 (V), #26 (V), #34 (V), #35 (V), #36 (V), #42 (V), #43 (V) | 2 |
-| C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (U) | 2 |
+| C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (V) | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **partial** | — | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V) | 5 |
-| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S) | 3 |
+| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S), #55 (V) | 3 |
 | C5 W3C conformance | **partial** | H2 | #4 (V), #24 (V) | 2 |
 | C6 MOBI VID lifecycle | **partial** | H4 | #30 (V), #33 (V), #41 (S) | 1 |
 | C7 Privacy and linkability | **partial** | — | #38 (V) | 1 |
@@ -55,7 +55,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | #27 | V | V2V SSI verify warm 0.153 ms [0.151, 0.154] (median of 30 seeded-run medians, 95 % bootstrap CI; p95 of run medians 0.158), cold 0.399 [0.381, 0.411]; PKI warm 0.094 [0.093, 0.095], cold 0.220 [0.218, 0.223]; 1,650,318 v… |
 | #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_… |
 | #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu… |
-| #39 | U | HTTP-RPC condition, all ten columns (N=30), on the pre-merge contracts: every gas table byte-identical to the in-process run of the same contracts (`0eef6af`, now S); latency ≈2–2.5× the in-process figures (U3 tx median … |
+| #39 | V | HTTP-RPC condition, all ten columns (N=30), on the merged contracts (re-run 2026-10-21, PR #3): every gas value identical to the in-process run of record (`2026-10-21T03-28-59Z_a9e2a28`) on all common cells (crud 131, li… |
 
 **Open gaps:**
 - Mobility is simulated (no SUMO run); radio, MAC and channel are out of scope.
@@ -96,7 +96,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 **Question.** How quickly does a verifier stop trusting a revoked vehicle key, and at what latency cost?
 
-**Claim.** A cached verifier honours a revoked key for at most k-1 further messages; the k that meets the neighbour-saturation target depends on the host and on the refresh mode.
+**Claim.** A cached verifier honours a revoked key for at most k-1 further messages. Measured on one host in alternating blocks (#55), the one-call probe refresh is 3.2x cheaper on chain than a full refresh and serves more neighbours at every finite k; neither mode reaches the neighbour-saturation target, so any k must be quoted with its t_local.
 
 **Thrusts:** 3, 5 · **Hypotheses:** H3 · **Defects bearing on it:** D21
 
@@ -105,9 +105,10 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_… |
 | #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu… |
 | #40 | S | (sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=… |
+| #55 | V | (clone lineage, was #42) Freshness-k, same host, both refresh modes (12 replicates in alternating blocks, fresh node each; clean pool by foreign-CPU load; one replicate excluded for overlapping another experiment): t_loc… |
 
 **Open gaps:**
-- Open high defect D51: the ERC-1056 provider accepts a revoked key when the verifier's clock is more than 900 s behind the chain; #32 and #37 hold under that clock assumption until fixed (WM-2).
+- D51 (revoked key accepted under a lagging verifier clock) was fixed in WM-2 C0 (2026-10-14); #32 and #37 keep their clock-assumption note until their A3b re-runs. Residual D63 (probe path, test chains only) is low.
 - The RSU analogue (#46) counts messages from a revoked RSU under an in-process registry; it bounds the re-check cadence, not the latency cost, so it is not counted as C4 evidence.
 - Choose the k the thesis defends (review-2 decisions 10 and 14).
 
@@ -130,7 +131,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 **Open gaps:**
 - The DID Core checks test a synthesised document; label them structural (review-2 decision 2).
-- The resolver builds did:ethr documents from the identifier, not from chain state.
+- The executable checker (#4) still scores offline-synthesised documents; the resolver now also reads chain state (H-R, merged 2026-10-21) and the external suite passes 311/311 on that on-chain set (#24), but the checker itself has not been switched (WM-2 C1 gap).
 
 **The examiner will ask:** Does conformance of the document shape say anything about the chain state behind it?
 

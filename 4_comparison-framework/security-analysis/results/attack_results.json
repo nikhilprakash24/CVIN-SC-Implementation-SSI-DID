@@ -513,7 +513,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-07-19T21:10:16.411Z",
+    "date": "2026-10-22T22:58:46.917Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "attackLabels": {
@@ -551,6 +551,15 @@
       "CVIN-Combined": "contracts/CVINCombined/CVINCombinedIdentity.sol:CVINCombinedIdentity"
     },
     "notes": "Each cell is the REAL observed outcome of executing a concrete attack transaction on a fresh Hardhat network: DEFENDED = the malicious tx reverted with the expected revert reason / custom error of the named defense (expectedRevert; revertReason is decoded from the raw revert data); UNEXPECTED-REVERT = it reverted for another reason; FAILED-TO-RUN = the attack threw a non-revert error (TypeError, ABI error) and never executed; VULNERABLE = it was mined; N/A = the attack does not apply to the standard's identity model. Most cells also carry a differential 'control' (the same operation by the authorized party) that must PASS, proving the revert is due to access control / signature verification, not an unrelated failure. Attacks parallel the gas benchmark's lifecycle operation set (create/update/delegate-or-claim/revoke/transfer) plus a cross-cutting signatureReplay attack.",
+    "commit": "2051159",
+    "commitFull": "205115991a560bd6d1b3dfb117d71d3374c00edf",
+    "dirty": false,
+    "dirtyAnyFile": true,
+    "scope": "1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js",
+    "scopeFiles": 8,
+    "scopeSha": "3daea49aa50b",
+    "node": "v22.22.0",
+    "hardhat": "2.28.6",
     "attacks": [
       "unauthorizedIssuance",
       "unauthorizedAttributeWrite",

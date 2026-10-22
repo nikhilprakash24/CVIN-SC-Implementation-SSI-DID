@@ -36,6 +36,7 @@ GROUPS = [
     ("security", "Security", "Attacks injected and how they were refused."),
     ("w3c", "Standards conformance", "W3C DID and VC conformance."),
     ("mobi", "MOBI lifecycle and privacy", "The pre-registered MOBI experiments."),
+    ("zk", "Zero-knowledge identity and the agent wrapper", "Layer 5: the ZK-VIN circuit, its costs, and the narrowing attack."),
 ]
 
 # row: (group, title, headline, caption, verdict or None)
@@ -49,6 +50,7 @@ CARDS = {
     29: ("cost", "Harness create, three substrates", "76,830 / 402,567 / 656,480", "C1 gas, ERC-1056 / 721 / 725, mode of the cell's iterations", None),
     34: ("cost", "Heaviest create in the harness", "1,757,881", "ERC-735 C1 gas; ERC-1056 76,830; CVIN-Combined 271,402", None),
     47: ("cost", "RSU key anchor (I4)", "52,582–52,606", "gas over declared seeds 1–30, mode 52,606; creating the RSU identity costs 0", "reported, no verdict"),
+    54: ("cost", "Holder-written presentation, ERC-1056 (P1)", "34,206", "gas for createPresentation; unchanged on the merged tree (run 2026-10-21T03-28-59Z_a9e2a28)", None),
     50: ("cost", "Relayed write overhead", "+27,622", "gas: ERC-1056 relayed U5 62,646 against direct U3 35,024; ERC-4337 +47,116", None),
     26: ("lifetime", "Cheapest over a vehicle's life", "1,450,146", "gas, ERC-1056 over 15 years; marginal cost O(1) in history", None),
     30: ("lifetime", "MOBI lifecycle, ERC-1056 cheapest", "2.58× / 3.00×", "17 events: 1,050,809 / 2,706,685 / 3,155,103 gas (ERC-1056 / 721 / 725)", None),
@@ -66,13 +68,23 @@ CARDS = {
     48: ("verify", "Crypto on the controller to vehicle path (I5)", "0.900 ms", "95 % CI [0.889, 0.935]; the sum of four operations, not a path latency", "reported, no verdict"),
     32: ("fresh", "Freshness knee, full refresh", "k ≈ 146", "for P*(0.5) = 100; at most 0 / 4 / 24 messages accepted after a revocation at k = 1 / 5 / 25", None),
     37: ("fresh", "One-call probe refresh", "2.76 / 2.89 ms", "against 14.38 / 10.28 ms for a full refresh; no finite k reaches P*(0.5) = 100 on this host", None),
+    39: ("cost", "R3 resolve at h = 50 over HTTP-RPC, ERC-1056", "162.5 / 168.2", "median / p95 ms; ERC-1155 4.7 / 5.7 on the merged contracts; gas identical to the in-process run", None),
     52: ("fresh", "#32 against #37 on one host (C3)", "attributed to the host", "full-refresh t_chain 7.57 / 7.91 ms (#32 code) and 6.94 / 8.15 ms (#37 code); here the probe reaches P*(0.5) ≥ 100 at k = 25", "decision rule committed before the runs"),
+    55: ("fresh", "Probe refresh on the same host", "5.85 ms", "chain time for one RPC against 18.80 ms for a full refresh (4 RPCs); no knee in either mode", None),
     46: ("fresh", "Revoked RSU in a verifier's cache (I3)", "k − 1", "the most SPaT accepted after revocation: 0, 4, 24 at k = 1, 5, 25, over N=30 runs", "PASS"),
     28: ("security", "Attacks defended", "43/43", "each reverted with its documented reason; attestEvent fixed path 198,694 execution gas since the owner-or-delegate check (WM-2 C2)", None),
     45: ("security", "SPaT attacks rejected (I2)", "30/30", "runs: each of 15 registered checks rejected for its expected reason; 0 legitimate SPaT rejected of 138,895", "PASS"),
     4: ("w3c", "W3C compliance, internal checker", "94.3%", "44 executed checks: 41 PASS, 1 PARTIAL, 2 FAIL; self-scored", None),
+    53: ("w3c", "Basic digital-ID set A, full coverage", "11/11", "operations supported by ERC-1056 pure, ERC-725, ERC-4337 and CVIN-Combined; a derivation from the capability flags", None),
     24: ("w3c", "External W3C DID test suite", "335/336", "generated tests; resolution 193/194; not comparable with 336/441", None),
     33: ("mobi", "M4 lifecycle parity", "≈1,850–5,930×", "MOBI writes against the centralized baseline; cached history ratio 0.072", "writes ≥10×: PASS ×3; equal once cached: FAIL"),
+    56: ("zk", "ZK-VIN circuit", "3,498 constraints", "1,667 non-linear, 1,831 linear; 3,505 wires; circom 2.2.2", None),
+    57: ("zk", "ZK-VIN proof, prove and verify", "prove median 398.6 ms", "verify median 18.42 ms; proof 256 B as calldata; insecure single-party setup", "Z-E1, Z-E2, Z-E4 PASS"),
+    58: ("zk", "ZK-VIN admission on chain", "301,163", "gas for admit with on-chain Groth16 verification; anchor 51,558; Schnorr proof of knowledge 28,775", "Z-E3 PASS"),
+    59: ("zk", "Sigma-protocol primitives", "exact group-operation counts", "Schnorr, Pedersen, Chaum–Pedersen, OR, range and threshold proofs; pure-Python reference code", None),
+    60: ("zk", "Unsalted VIN hash reversed", "3.58 s", "10⁶ candidates at 279,587 hashes/s on one core; extrapolations are estimates", "Z-E7 PASS"),
+    61: ("zk", "Twenty-questions attack against the Steward", "≤ 3.0 bits", "adversary leakage on all runs; honest service below 90 % on 25/60 (minimum 70.0 %); undefended: exact within 5 queries", "Z-E5 PASS; Z-E6 FAIL"),
+    62: ("zk", "Manual burden of ZK identity", "92,623", "field multiplications to verify one 6-bit threshold proof by hand; counts exact, hand times estimated", None),
     38: ("mobi", "M5 pseudonym pool, per epoch", "1,096,368", "gas for 20 addDelegate per 5-min epoch, 0.76× the pre-registered ≈1.44 M; one query links 60/60 pseudonyms", "gas FAIL; linkability PASS (fully linkable)"),
 }
 

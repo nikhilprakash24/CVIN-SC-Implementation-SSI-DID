@@ -75,7 +75,7 @@ from eth_account import Account
 from eth_account.messages import encode_defunct
 
 from identity.centralized_provider import CentralizedIdentityProvider
-from identity.freshness import FreshnessPolicy, signed_bytes
+from identity.freshness import DEFAULT_REPLAY_CACHE_SIZE, FreshnessPolicy, signed_bytes
 from identity.w3c_verifiable_credentials import (
     CredentialIssuer,
     CredentialVerifier,
@@ -131,19 +131,53 @@ def _pki_payload_bytes(signed: Dict[str, Any]) -> bytes:
     return signed_bytes(signed["message"], signed.get("timestamp"))
 
 
-def _bsm_freshness(clock=None) -> FreshnessPolicy:
+def _bsm_freshness(clock=None,
+                   replay_cache_size: int = DEFAULT_REPLAY_CACHE_SIZE) -> FreshnessPolicy:
     """
-    Freshness window for the BSM's own signed `timestamp` (review 02, T-9).
+    Freshness window AND replay cache for the BSM's own signed `timestamp`
+    (review 02, T-9; replay cache added for the Pass 3 Low).
 
     In this module a BSM's `timestamp` is SIMULATION time (seconds), so the
     integration passes a clock that returns the current simulation time. A
     layer constructed without a clock compares against the wall clock
-    (time.time()). Same default window as the cv2x providers
-    (identity/freshness.py: 1.0 s past, 0.1 s future). No replay cache here:
-    the warm path re-verifies cached peers and a duplicate inside the window
-    is accepted (limitation; the cv2x providers have the cache).
+    (time.time()). Same policy object and default window as the cv2x
+    providers (identity/freshness.py: 1.0 s past, 0.1 s future, bounded
+    replay cache ON). One policy serves every receiver of a layer; its replay
+    key is (receiver, sender) plus sha256(signed payload), i.e. each receiver
+    rejects a packet it already accepted, while the other receivers of the
+    same broadcast still accept it once (see replay_cache_size_for).
     """
-    return FreshnessPolicy(replay_cache=False, clock=clock)
+    return FreshnessPolicy(replay_cache=True, replay_cache_size=replay_cache_size,
+                           clock=clock)
+
+
+# Messages a vehicle can send per simulated second: a BSM every step plus at
+# most one FCW per second (EEBL every 15 s is inside the margin).
+MSGS_PER_VEHICLE_PER_S = BSM_RATE_HZ + 1
+REPLAY_CACHE_MARGIN = 2
+
+
+def replay_cache_size_for(num_vehicles: int) -> int:
+    """
+    Replay-cache entries the simulation can hold live at once.
+
+    A layer's cache stores one entry per ACCEPTED (receiver, message) pair
+    and keeps it for the freshness window (max_age_s + max_future_s = 1.1 s
+    of simulation time). Each message is delivered to at most MAX_NEIGHBORS
+    receivers, so the live set is bounded by
+
+        num_vehicles x MSGS_PER_VEHICLE_PER_S x MAX_NEIGHBORS x 1.1 s
+        = num_vehicles x 11 x 8 x 1.1 = 96.8 entries per vehicle,
+
+    times a margin of 2 (~194 per vehicle: 9,680 for 50 vehicles). The size
+    never goes below the providers' default (65,536), which therefore covers
+    up to ~338 vehicles; `evicted_live` in the results must stay 0.
+    """
+    window = FreshnessPolicy().max_age_s + FreshnessPolicy().max_future_s
+    # round() first: 1.0 + 0.1 is 1.1000000000000001 in binary floating point
+    need = math.ceil(round(REPLAY_CACHE_MARGIN * num_vehicles * MSGS_PER_VEHICLE_PER_S
+                           * MAX_NEIGHBORS * window, 6))
+    return max(DEFAULT_REPLAY_CACHE_SIZE, need)
 
 
 def _ssi_payload_bytes(message: Dict[str, Any]) -> bytes:
@@ -174,9 +208,9 @@ def _cert_validity_window(cert) -> Tuple[datetime, datetime]:
 class PKIIdentityLayer:
     """IEEE 1609.2-style PKI: pseudonym certificates + ECDSA P-256."""
 
-    def __init__(self, clock=None):
+    def __init__(self, clock=None, replay_cache_size: int = DEFAULT_REPLAY_CACHE_SIZE):
         self.provider = CentralizedIdentityProvider(ca_name="V2X-CA-CVIN")
-        self.freshness = _bsm_freshness(clock)
+        self.freshness = _bsm_freshness(clock, replay_cache_size)
         self.ca_public_key = self.provider.ca_certificate.public_key()
         # Per-receiver cache: receiver_id -> {cert_fingerprint: public_key}
         self._cert_cache: Dict[str, Dict[str, Any]] = {}
@@ -196,7 +230,10 @@ class PKIIdentityLayer:
         Verify at the receiver. Returns (ok, latency_ms, cold).
 
         Every message: the BSM's signed `timestamp` must be inside the
-        freshness window of `now` (default: the layer's clock), T-9.
+        freshness window of `now` (default: the layer's clock), T-9, and
+        this receiver must not have accepted the same signed payload from
+        the same certificate before (replay cache; recorded only after the
+        signature verified).
 
         cold  = first contact with this pseudonym certificate: full chain
                 validation (CA signature, validity window, CRL) + message
@@ -210,11 +247,13 @@ class PKIIdentityLayer:
             cert_pem: str = signed["certificate"]
             signature = bytes.fromhex(signed["signature"])
             payload = _pki_payload_bytes(signed)
-            reason = self.freshness.check(
-                signed["message"].get("timestamp"), cert_pem, payload, now=now)
+            fingerprint = hashlib.sha256(cert_pem.encode()).hexdigest()
+            timestamp = signed["message"].get("timestamp")
+            replay_key = f"{receiver_id}|{fingerprint}"
+            check_now = now
+            reason = self.freshness.check(timestamp, replay_key, payload, now=check_now)
             if reason is not None:
                 raise ValueError(reason)
-            fingerprint = hashlib.sha256(cert_pem.encode()).hexdigest()
 
             cold = fingerprint not in cache
             if cold:
@@ -239,6 +278,7 @@ class PKIIdentityLayer:
 
             # 4. Message signature (every message)
             public_key.verify(signature, payload, ec.ECDSA(hashes.SHA256()))
+            self.freshness.accept(replay_key, payload, timestamp, now=check_now)
             if cold:
                 cache[fingerprint] = public_key
             ok = True
@@ -251,8 +291,8 @@ class PKIIdentityLayer:
 class SSIIdentityLayer:
     """did:ethr + W3C Verifiable Credentials (canonical VC layer)."""
 
-    def __init__(self, clock=None):
-        self.freshness = _bsm_freshness(clock)
+    def __init__(self, clock=None, replay_cache_size: int = DEFAULT_REPLAY_CACHE_SIZE):
+        self.freshness = _bsm_freshness(clock, replay_cache_size)
         issuer_account = Account.create()
         self.issuer = CredentialIssuer(
             f"did:ethr:0x1:{issuer_account.address}",
@@ -314,7 +354,9 @@ class SSIIdentityLayer:
         Every message: the BSM's signed `timestamp` (inside the EIP-191
         signed payload) must be inside the freshness window of `now`
         (default: the layer's clock), T-9. Before review 02 it was signed
-        but never compared with any clock.
+        but never compared with any clock. This receiver must not have
+        accepted the same signed payload from the same DID before (replay
+        cache; recorded only after the message verified).
 
         cold  = first contact with this DID: full VC verification (issuer
                 signature recovery, trusted-issuer check, validity window,
@@ -328,11 +370,14 @@ class SSIIdentityLayer:
         sender_did = package.get("sender_did", "")
         cold = sender_did not in cache
         try:
-            if self.freshness.check(package["message"].get("timestamp"),
-                                    sender_did, b"", now=now) is not None:
+            message = package["message"]
+            timestamp = message.get("timestamp")
+            payload = _ssi_payload_bytes(message)
+            replay_key = f"{receiver_id}|{sender_did}"
+            if self.freshness.check(timestamp, replay_key, payload, now=now) is not None:
                 return False, (time.perf_counter() - t0) * 1000.0, cold
             recovered = Account.recover_message(
-                _ssi_signable(package["message"]),
+                encode_defunct(hashlib.sha256(payload).digest()),
                 signature=package["signature"],
             )
             if not cold:
@@ -351,6 +396,8 @@ class SSIIdentityLayer:
                                 and recovered.lower() == did_address.lower()):
                             cache[sender_did] = recovered
                             ok = True
+            if ok:
+                self.freshness.accept(replay_key, payload, timestamp, now=now)
         except Exception:
             ok = False
         return ok, (time.perf_counter() - t0) * 1000.0, cold
@@ -512,8 +559,13 @@ class SUMOIdentityIntegration:
         # Identity layers (REAL crypto). Both check the BSM's signed
         # timestamp (simulation time) against the simulation clock (T-9).
         self._sim_now = 0.0
-        self.pki = PKIIdentityLayer(clock=lambda: self._sim_now)
-        self.ssi = SSIIdentityLayer(clock=lambda: self._sim_now)
+        # Replay cache ON in both layers, sized for this run's message rate x
+        # freshness window (replay_cache_size_for).
+        self.replay_cache_size = replay_cache_size_for(num_vehicles)
+        self.pki = PKIIdentityLayer(clock=lambda: self._sim_now,
+                                    replay_cache_size=self.replay_cache_size)
+        self.ssi = SSIIdentityLayer(clock=lambda: self._sim_now,
+                                    replay_cache_size=self.replay_cache_size)
 
         # Optional provenance registry for the MOBI VID population
         self.registry = None
@@ -984,6 +1036,24 @@ class SUMOIdentityIntegration:
                 stats.failed += 1
             print(f"  Stale {name.upper()} BSM rejected:           {not ok}")
 
+        # 2c. Replayed messages (replay cache): a genuine, fresh BSM accepted
+        #     once by a receiver, then delivered to it again -> rejected.
+        for name, population, layer, stats in (
+                ("pki", pki_vehicles, self.pki, self.metrics.pki),
+                ("ssi", ssi_vehicles, self.ssi, self.metrics.ssi)):
+            if not population:
+                continue
+            vid = population[0].vehicle_id
+            payload = self._build_bsm(vid, "BSM", sim_time, False)
+            package, _ = layer.sign(vid, payload)
+            first, _, _ = layer.verify("attack_probe_rx", package)
+            again, _, _ = layer.verify("attack_probe_rx", package)
+            self.attack_results[f"replay_{name}_rejected"] = bool(first and not again)
+            if not again:
+                self.metrics.verification_failures += 1
+                stats.failed += 1
+            print(f"  Replayed {name.upper()} BSM rejected:        {first and not again}")
+
         # 3. Unknown / uncredentialed sender (valid key, no credential)
         rogue = Account.create()
         rogue_did = f"did:ethr:0x1:{rogue.address}"
@@ -1171,6 +1241,14 @@ class SUMOIdentityIntegration:
             "eebl_warnings_delivered": m.eebl_warnings_delivered,
             "attack_tests": self.attack_results,
             **({"infrastructure": self._infra_results()} if self.infra is not None else {}),
+            "freshness": {
+                **self.pki.freshness.describe(),
+                "replay_key": "(receiver, sender) + sha256(signed payload)",
+                "pki_rejected_replay": self.pki.freshness.rejected_replay,
+                "ssi_rejected_replay": self.ssi.freshness.rejected_replay,
+                "pki_evicted_live": self.pki.freshness.evicted_live,
+                "ssi_evicted_live": self.ssi.freshness.evicted_live,
+            },
             "budgets": {
                 "v2v_budget_ms": V2V_BUDGET_MS,
                 "signature_check_target_ms": SIG_CHECK_TARGET_MS,

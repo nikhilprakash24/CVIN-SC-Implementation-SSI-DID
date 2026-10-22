@@ -1097,3 +1097,93 @@ number; D27 can be closed on the trunk by this record.
 
 The 2026-10-03 / 2026-10-04 / 2026-10-04b report directories are kept
 unchanged.
+
+## 13. Re-run 2026-10-15 (stream H-R): on-chain resolver; offline and on-chain sets
+
+*Lineage merge note (2026-10-21, PR #3): this section was §10 on the clone lineage; it is §13 on the merged trunk. It was measured on that lineage's resolver; the merged resolver combines it with §12's.*
+
+**Status: measured.** The resolver gained an on-chain mode (`d902864`,
+on top of `f61b3c3`): did:ethr from an ERC-1056 registry and
+did:mobi:<salted VIN hash> through the MOBI VID registry. The offline mode
+stays the default and now labels its results with the non-standard
+resolution-metadata property `cvinResolutionMode: "offline-synthesized"`.
+Two implementation sets were run and are reported **separately**. The suite
+was not changed, and neither was `generate_implementations.py`.
+
+### 10.1 Conditions
+
+| Item | 2026-10-04b | 2026-10-15 |
+|---|---|---|
+| Suite | `w3c/did-test-suite` @ `939b31d` | same commit, fresh clone (`/tmp/did-test-suite-hr`), `npm install` at the root (lerna bootstrap) |
+| Runtime | Node v22.22.0 / npm 10.9.4, jest 26.6.3, Python 3.11.15 | same |
+| Offline inputs | `generate_implementations.py` @ `4eef1c2` | same script, unchanged. Diff of the six files against 10-04b: timestamps, plus `cvinResolutionMode: "offline-synthesized"` in each success's `didResolutionMetadata` |
+| On-chain inputs | – | new `generate_implementations_onchain.py`, which reuses `method_file` / `resolver_file` from the unchanged generator. Hardhat node on port 8560 (chain 31337); it deploys `EthereumDIDRegistry` and `MOBIVIDRegistryV2` and writes the state listed in the script header. Files: `implementations-onchain/onchain-cvin-*.json`; the addresses used are in `onchain-setup.json` |
+| Runner | `suite-run/run-cvin-cli.js cvin` / `control` | same modes, unchanged; a new `onchain` mode registers the `onchain-cvin-*` files |
+| Control | 347/347 | **347/347** |
+
+Raw output:
+
+* offline set: `reports/jest-cvin/cvin-cli-<suite>-2026-10-15.{json,txt}`,
+  `reports/jest-control/control-cli-<suite>-2026-10-15.json`,
+  `reports/did-spec-test-run-2026-10-15.json` and
+  `reports/did-implementation-report-2026-10-15.html`;
+* on-chain set: `reports/jest-onchain/onchain-cli-<suite>-2026-10-15.{json,txt}`.
+
+### 10.2 Offline set (the register #24 instrument)
+
+| Suite | 10-04b | 10-15 |
+|---|---|---|
+| Identifier | 3/3 | 3/3 |
+| Core properties | 88/88 | 88/88 |
+| Production | 48/48 | 48/48 |
+| Consumption | 3/3 | 3/3 |
+| DID Resolution | 193/194 | **193/194** |
+| **Total** | **335/336** | **335/336** |
+
+Tests were matched by ancestor path, title and occurrence. Between 10-04b and
+10-15 there are 335 passed → passed, 1 failed → failed (R5′) and no other
+transitions. The inventory is identical, so the suite does not penalise the
+extra `cvinResolutionMode` string property: `expectConformantMetadataStructure`
+only requires an infra map. The offline did:mobi vector is still the legacy
+`did:mobi:<VIN>` placeholder (see 10.4).
+
+### 10.3 On-chain set (separate; not comparable with 10.2)
+
+| Suite | Tests | Passed |
+|---|---|---|
+| Identifier | 2 | 2 |
+| Core properties | 59 | 59 |
+| Production | 32 | 32 |
+| Consumption | 2 | 2 |
+| DID Resolution | 216 | 216 (ethr 117/117, mobi 99/99) |
+| **Total** | **311** | **311** |
+
+The on-chain set has no nft method. It adds executions that the offline
+resolver cannot produce:
+
+* `notFoundErrorOutcome`: a did:ethr on chain 0x1, and a did:mobi whose VIN
+  hash is not registered;
+* `deactivatedOutcome`: a did:ethr after `changeOwner(identity, 0x0)`, and a
+  did:mobi whose vehicle was revoked with `revokeIdentity`.
+
+The suite generated and passed its notFound and deactivated tests for both
+methods. These tests are not generated for the offline set. The 311 tests
+and the 336 tests are different inventories. Do not add them up, and do not
+compare the two percentages.
+
+### 10.4 What the offline did:mobi vector still measures
+
+The offline resolver still resolves `did:mobi:5YJ3E1EA0PF123456`, the VIN in
+the DID, with placeholder key material. It is labelled
+`offline-synthesized`. Removing it was measured and not committed (scratch
+experiment): the internal checker would fall to **84.1 %**, below the
+93.0 % floor. The causes:
+
+* the 3.1, 5.1.1, 5.4, 7.1.2 and 7.1.3 checks resolve `did:mobi:<VIN>` and
+  require a document;
+* the unchanged generator asserts that this vector resolves successfully,
+  and would abort.
+
+The decision is left to the author (`docs/review02/FOLLOWUP_HR.md`). In
+on-chain mode a raw VIN is rejected with `invalidDid`, and the VIN is not
+echoed.

@@ -83,6 +83,10 @@ It is the unwritten literature review (chapter 2), which IDTx makes more urgent,
 | Pending author decisions | SC-05, SC-06, SC-17, SC-18, SC-20 | they block the freeze of chapters 3 and 4 |
 | Added | SC-21 (infrastructure, bounded) | crux C3 exists because of it |
 
+> **Appended 2026-10-22 (Plan 3).** SC-12 has left the deferred group: it was reopened and built ("SC-12 reopened" in
+> `docs/SCOPE_CHANGES.md`), and layer 5 was added to scope as SC-23 (RQ5, H6; register #56–#62). The table above is
+> as written on its date.
+
 ### 1.3 Which were the first and second attempts
 
 The statements S0 to S4 were missions: briefs for what to build, not claims to defend.

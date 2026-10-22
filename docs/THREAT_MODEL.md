@@ -91,7 +91,7 @@ defect D54; WM-2 C2, after-action report 22):* the signature is the attester's o
 before C2 any role-holder could attest any vehicle's event, and the same attester could attest twice. Since C2 the
 attester must also be the vehicle's current owner or hold its owner's unexpired `veriKey` delegation (stored on
 chain, `validDelegate`), and may attest an event once. G4 is met for attestations within that rule; the role list
-itself is still granted registry-wide by the authority.
+itself is still granted registry-wide by the authority. (The clone lineage's narrower H-A rule, merged on the trunk on 2026-10-21, was replaced by this design at the merge of 2026-10-22.)
 
 ## 6. Out of scope (stated, not hidden)
 
