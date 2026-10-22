@@ -9,4 +9,4 @@
 | **Admitted** (all mapped Set A + B ops present) | no | no | no | no | no | no | no | no | yes | no |
 | Extension ops beyond the basic set | R2 U4 U5 | R2 U4 | R2 U4 | U4 | U4 | R2 U4 | U4 | R2 U4 | U4 U5 | U4 |
 
-_Run 2026-10-15T05-07-33Z_9bdf451 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
+_Run 2026-10-21T03-28-59Z_a9e2a28 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_

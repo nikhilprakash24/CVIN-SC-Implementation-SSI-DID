@@ -1,0 +1,32 @@
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+(node:7475) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS suites/did-identifier/did-identifier.spec.js
+  suites/did-identifier
+    IMPLEMENTATION ::did:example::Example DID Method::DID Working Group::
+      3.x Identifier - did:example - Example DID Method - DID Working Group
+        3.1 DID Syntax
+          did:example:123
+            ✓ 3.1 DID Syntax - All DIDs MUST conform to the DID Syntax ABNF Rules. (2 ms)
+        3.2 DID URL Syntax
+          hl
+            ✓ 3.2.1 DID Parameters - hl - If present, the associated value MUST be an ASCII string.
+          service
+            ✓ 3.2.1 DID Parameters - service - If present, the associated value MUST be an ASCII string. (1 ms)
+          relativeRef
+            ✓ 3.2.1 DID Parameters - relativeRef - If present, the associated value MUST be an ASCII string and MUST use percent-encoding for certain characters as specified in RFC3986 Section 2.1.
+          versionId
+            ✓ 3.2.1 DID Parameters - versionId - If present, the associated value MUST be an ASCII string. (1 ms)
+          versionTime
+            ✓ 3.2.1 DID Parameters - versionTime - If present, the associated value MUST be an ASCII string which is a valid XML datetime value, as defined in section 3.3.7 of W3C XML Schema Definition Language (XSD) 1.1 Part 2: Datatypes [XMLSCHEMA11-2]. This datetime value MUST be normalized to UTC 00:00:00 and without sub-second decimal precision. For example: 2020-12-20T19:17:47Z.
+
+Test Suites: 1 passed, 1 total
+Tests:       6 passed, 6 total
+Snapshots:   0 total
+Time:        0.931 s, estimated 1 s
+Ran all test suites matching /suites\/did-identifier/i.
+Test results written to: report/tmp/control-cli-did-identifier.json

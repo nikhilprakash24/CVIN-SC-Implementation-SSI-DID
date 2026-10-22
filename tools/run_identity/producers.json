@@ -1,0 +1,44 @@
+{
+  "_doc": [
+    "Producers of record and the inputs they read that are not imported code (WM-2 step A2, defect D49).",
+    "Hand-maintained. tools/run_identity/stamp.py --write resolves each producer's import closure (Python",
+    "import statements, JS relative require calls) and writes tools/run_identity/scopes.json; both stamp",
+    "helpers read only that file. Paths are relative to the repository root. 'inputs' are files or",
+    "directories (contracts, compiled artifacts, toolchain config) whose change also changes the result;",
+    "'search' are the directories the producer's process puts on sys.path (the union is used for every",
+    "Python producer, because sys.path edits are process-wide); 'external' are top-level module names",
+    "that share a name with a repository file but are third-party."
+  ],
+  "exclude": ["**/results/**", "**/__pycache__/**", "**/*.pyc"],
+  "input_sets": {
+    "hardhat": ["1_blockchain-identity/contracts", "1_blockchain-identity/hardhat.config.js",
+                "1_blockchain-identity/package.json", "1_blockchain-identity/package-lock.json", "cv2x-testbed/contracts"],
+    "testbed-chain": ["cv2x-testbed/contracts", "cv2x-testbed/artifacts/contracts", "cv2x-testbed/hardhat.config.js",
+                      "cv2x-testbed/package.json", "cv2x-testbed/package-lock.json"]
+  },
+  "search": ["tools/run_identity", "cv2x-testbed", "cv2x-testbed/scripts", "cv2x-testbed/sumo",
+             "2_w3c-ssi-layer/verifiable-credentials", "2_w3c-ssi-layer/did-resolution", "2_w3c-ssi-layer/mobi-vid"],
+  "external": [],
+  "producers": {
+    "1_blockchain-identity/scripts/benchmark_gas.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/results/gas_benchmark"]},
+    "1_blockchain-identity/scripts/benchmark_scaling.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/results/scaling_lifetime", "4_comparison-framework/results/scaling_marginal", "4_comparison-framework/results/sensitivity"]},
+    "1_blockchain-identity/scripts/experiment_pseudonym_pool.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/results/pseudonym_pool"]},
+    "1_blockchain-identity/scripts/infrastructure_gas.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/results/infrastructure_gas"]},
+    "1_blockchain-identity/scripts/mobi_vid_backend_sweep.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/results/mobi_vid_backends"]},
+    "1_blockchain-identity/scripts/security_scenarios.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/security-analysis/results/onchain_security"]},
+    "1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js": {"inputs": ["@hardhat"], "results": ["4_comparison-framework/security-analysis/results/attack_results"]},
+    "1_blockchain-identity/benchmarks/run.js": {"inputs": ["@hardhat"], "results": ["1_blockchain-identity/results/metrics/", "1_blockchain-identity/results/metrics-rpc/"]},
+    "cv2x-testbed/sumo/sumo_identity_integration.py": {"inputs": ["@testbed-chain"], "results": ["cv2x-testbed/sumo/results/v2v_latency.json"]},
+    "cv2x-testbed/sumo/run_v2v_stats.py": {"inputs": ["@testbed-chain", "cv2x-testbed/sumo/sumo_identity_integration.py"], "results": ["cv2x-testbed/sumo/results/v2v_latency_stats"]},
+    "cv2x-testbed/sumo/run_infra_stats.py": {"inputs": ["@testbed-chain"], "results": ["cv2x-testbed/sumo/results/infrastructure_"]},
+    "cv2x-testbed/sumo/run_verify_scaling.py": {"inputs": [], "results": ["4_comparison-framework/results/scaling_verify"]},
+    "cv2x-testbed/sumo/render_trace.py": {"inputs": [], "results": ["cv2x-testbed/sumo/results/figures/"]},
+    "cv2x-testbed/scripts/experiment_pki_vs_erc1056.py": {"inputs": ["@testbed-chain"], "results": ["cv2x-testbed/results/pki_vs_erc1056"]},
+    "cv2x-testbed/scripts/experiment_freshness_k.py": {"inputs": ["@testbed-chain"], "results": ["cv2x-testbed/results/freshness_k"]},
+    "cv2x-testbed/scripts/experiment_lifecycle_parity.py": {"inputs": ["@testbed-chain"], "results": ["cv2x-testbed/results/lifecycle_parity"]},
+    "cv2x-testbed/scripts/w3c_compliance_checker.py": {"inputs": [], "results": ["4_comparison-framework/results/w3c_compliance"]},
+    "4_comparison-framework/performance-metrics/run_verify_richness.py": {"inputs": [], "results": ["4_comparison-framework/results/scaling_verify"]},
+    "4_comparison-framework/performance-metrics/run_gas_stats.py": {"inputs": ["@hardhat", "1_blockchain-identity/scripts/benchmark_gas.js"], "results": ["4_comparison-framework/results/gas_benchmark_stats"]},
+    "4_comparison-framework/security-analysis/attack_scenarios.py": {"inputs": ["@hardhat", "1_blockchain-identity/scripts/security_scenarios.js", "1_blockchain-identity/test/L2-identity-system/security"], "results": ["4_comparison-framework/security-analysis/results/security_matrix"]}
+  }
+}

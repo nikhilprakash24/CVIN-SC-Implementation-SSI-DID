@@ -31,3 +31,11 @@ cv2x-testbed/cache/
 # Claude Code agent worktrees (local only)
 .claude/worktrees/
 1_blockchain-identity/results/metrics-rpc/runs/
+
+# Run directories (WM-2 A4): producers write here; tools/run_identity/promote.py copies a clean run to the
+# tracked result path. Never tracked.
+/runs/
+
+# Phase 2 prototype build output (1_blockchain-identity/hardhat.phase2.config.js)
+phase2/idtx/cache/
+phase2/idtx/artifacts/

@@ -1,10 +1,10 @@
 Criterion,erc1056,erc1056w,erc721,erc725,erc735,erc1155,erc725xy,lsp8,erc4337,cvin
-Lifetime gas ↓,1050787,1025381,2701239,3155103,5369010,1150981,2956507,1505258,2221290,2533978
-Zero→nonzero SSTOREs ↓,8,9,92,83,145,18,38,42,37,81
+Lifetime gas ↓,1050809,1025469,2706685,3155103,5797549,1261575,2956507,1508413,2221290,2559537
+Zero→nonzero SSTOREs ↓,8,9,92,83,149,21,38,42,37,81
 R3 RPC calls at h=50 ↓,112,55,7,61,3,3,2,3,61,107
-R3 median ms after lifecycle ↓,17.168,15.614,6.962,14.387,10.461,2.71,4.302,5.062,9.478,15.919
+R3 median ms after lifecycle ↓,15.401,10.936,6.405,14.219,9.937,2.598,4.218,3.775,7.548,13.544
 Core ops supported ↑,18,17,16,17,13,14,15,13,18,17
 O(1) on-chain credential check (view) ↑,no,no,yes,yes,yes,yes,yes,yes,yes,yes
 "**Dominated by** (cost axes: lifetime, SSTOREs)",—,—,"ERC-1056, ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337, CVIN-Combined","ERC-1056, ERC-1056 (wrapper), ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined","ERC-1056, ERC-1056 (wrapper), ERC-721, ERC-725, ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined","ERC-1056, ERC-1056 (wrapper)","ERC-1056, ERC-1056 (wrapper), ERC-1155, ERC-4337","ERC-1056, ERC-1056 (wrapper), ERC-1155","ERC-1056, ERC-1056 (wrapper), ERC-1155","ERC-1056, ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337"
-**Dominated by** (cost + read path),—,—,"ERC-1155, LSP8","ERC-1155, ERC-725xy, LSP8, ERC-4337","ERC-1155, ERC-725xy, LSP8",—,—,ERC-1155,ERC-1155,"ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337"
+**Dominated by** (cost + read path),—,—,"ERC-1155, LSP8","ERC-1056 (wrapper), ERC-1155, ERC-725xy, LSP8, ERC-4337","ERC-1155, ERC-725xy, LSP8",—,—,ERC-1155,ERC-1155,"ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337"
 **Dominated by** (all six criteria),—,—,—,ERC-4337,"ERC-1155, ERC-725xy, LSP8",—,—,ERC-1155,—,ERC-4337

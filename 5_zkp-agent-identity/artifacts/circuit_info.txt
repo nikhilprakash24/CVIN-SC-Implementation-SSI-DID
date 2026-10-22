@@ -1,0 +1,7 @@
+non-linear constraints: 1667
+linear constraints: 1831
+public inputs: 6
+private inputs: 27
+public outputs: 1
+wires: 3505
+circom compiler 2.2.2

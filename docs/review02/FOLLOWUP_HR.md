@@ -1,5 +1,8 @@
 # Stream H-R: on-chain DID resolution (did:ethr, did:mobi)
 
+> *Lineage merge note (2026-10-21, PR #3): register rows from the clone lineage were renumbered on the merged trunk (the optional on-chain resolve-latency row proposed here as #40 was never entered; the clone lineage's #40 is #52).*
+
+
 **Date:** 2026-10-15. **Base:** `ffb71b0`.
 **Full suite write-up:** `docs/conformance/W3C_DID_TEST_SUITE.md` section 10.
 **Scope:** AAR-06 row H-R. Make `_resolve_ethr` read the ERC-1056 registry

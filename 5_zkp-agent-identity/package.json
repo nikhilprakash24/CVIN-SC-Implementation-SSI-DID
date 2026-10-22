@@ -1,0 +1,16 @@
+{
+  "name": "cvin-zkp-agent-identity",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Layer 5: zero-knowledge proofs for vehicle identity (ZK-VIN) and the agent-wrapped identity (the Steward)",
+  "license": "MIT",
+  "scripts": {
+    "build:circuit": "bash circuits/build_circuit.sh",
+    "prove": "node scripts/prove_and_verify.js"
+  },
+  "dependencies": {
+    "circomlib": "2.0.5",
+    "circomlibjs": "0.1.7",
+    "snarkjs": "0.7.6"
+  }
+}

@@ -342,7 +342,8 @@ _ERC1056_ABI = [
     {"type": "event", "name": "DIDRevoked", "anonymous": False,
      "inputs": [
          {"name": "identity", "type": "address", "indexed": True},
-         {"name": "revokedAt", "type": "uint256", "indexed": False}]},
+         {"name": "revokedAt", "type": "uint256", "indexed": False},
+         {"name": "previousChange", "type": "uint256", "indexed": False}]},
 ]
 _ERC1056_EVENT_SIGS = {
     "DIDOwnerChanged": "DIDOwnerChanged(address,address,uint256)",
@@ -350,7 +351,9 @@ _ERC1056_EVENT_SIGS = {
         "DIDDelegateChanged(address,bytes32,address,uint256,uint256)",
     "DIDAttributeChanged":
         "DIDAttributeChanged(address,bytes32,bytes,uint256,uint256)",
-    "DIDRevoked": "DIDRevoked(address,uint256)",
+    # Three arguments since defect D21 (cv2x lineage): the event links back to the previous change.
+    # The clone lineage resolver decoded the two-argument form; fixed at the lineage merge (PR #3).
+    "DIDRevoked": "DIDRevoked(address,uint256,uint256)",
 }
 _MOBI_ABI = [
     {"type": "function", "name": "lookupByVINHash", "stateMutability": "view",

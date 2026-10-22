@@ -1,0 +1,33 @@
+seed  1: SPaT warm 0.1741 ms, BSM warm 0.1434 ms, ratio 1.214, attacks rejected True
+seed  2: SPaT warm 0.1793 ms, BSM warm 0.1441 ms, ratio 1.244, attacks rejected True
+seed  3: SPaT warm 0.1761 ms, BSM warm 0.1434 ms, ratio 1.228, attacks rejected True
+seed  4: SPaT warm 0.1766 ms, BSM warm 0.1449 ms, ratio 1.219, attacks rejected True
+seed  5: SPaT warm 0.1984 ms, BSM warm 0.1622 ms, ratio 1.223, attacks rejected True
+seed  6: SPaT warm 0.1732 ms, BSM warm 0.1417 ms, ratio 1.222, attacks rejected True
+seed  7: SPaT warm 0.1729 ms, BSM warm 0.1422 ms, ratio 1.216, attacks rejected True
+seed  8: SPaT warm 0.1788 ms, BSM warm 0.1474 ms, ratio 1.213, attacks rejected True
+seed  9: SPaT warm 0.2000 ms, BSM warm 0.1592 ms, ratio 1.256, attacks rejected True
+seed 10: SPaT warm 0.1821 ms, BSM warm 0.1464 ms, ratio 1.244, attacks rejected True
+seed 11: SPaT warm 0.1792 ms, BSM warm 0.1433 ms, ratio 1.251, attacks rejected True
+seed 12: SPaT warm 0.1925 ms, BSM warm 0.1581 ms, ratio 1.218, attacks rejected True
+seed 13: SPaT warm 0.1742 ms, BSM warm 0.1428 ms, ratio 1.220, attacks rejected True
+seed 14: SPaT warm 0.1903 ms, BSM warm 0.1564 ms, ratio 1.217, attacks rejected True
+seed 15: SPaT warm 0.2358 ms, BSM warm 0.1893 ms, ratio 1.246, attacks rejected True
+seed 16: SPaT warm 0.2150 ms, BSM warm 0.1743 ms, ratio 1.234, attacks rejected True
+seed 17: SPaT warm 0.1933 ms, BSM warm 0.1614 ms, ratio 1.198, attacks rejected True
+seed 18: SPaT warm 0.1836 ms, BSM warm 0.1464 ms, ratio 1.254, attacks rejected True
+seed 19: SPaT warm 0.1954 ms, BSM warm 0.1587 ms, ratio 1.231, attacks rejected True
+seed 20: SPaT warm 0.1846 ms, BSM warm 0.1492 ms, ratio 1.237, attacks rejected True
+seed 21: SPaT warm 0.1870 ms, BSM warm 0.1535 ms, ratio 1.218, attacks rejected True
+seed 22: SPaT warm 0.1919 ms, BSM warm 0.1537 ms, ratio 1.249, attacks rejected True
+seed 23: SPaT warm 0.1803 ms, BSM warm 0.1455 ms, ratio 1.239, attacks rejected True
+seed 24: SPaT warm 0.1842 ms, BSM warm 0.1504 ms, ratio 1.225, attacks rejected True
+seed 25: SPaT warm 0.1886 ms, BSM warm 0.1548 ms, ratio 1.218, attacks rejected True
+seed 26: SPaT warm 0.1801 ms, BSM warm 0.1485 ms, ratio 1.213, attacks rejected True
+seed 27: SPaT warm 0.1838 ms, BSM warm 0.1488 ms, ratio 1.235, attacks rejected True
+seed 28: SPaT warm 0.1839 ms, BSM warm 0.1483 ms, ratio 1.240, attacks rejected True
+seed 29: SPaT warm 0.1846 ms, BSM warm 0.1509 ms, ratio 1.223, attacks rejected True
+seed 30: SPaT warm 0.2456 ms, BSM warm 0.1963 ms, ratio 1.251, attacks rejected True
+
+I1 ratio median 1.226 [1.21933, 1.23822] -> outside band, not falsified; I2 PASS []; I5 back-haul 0.900 ms
+i1 rc=0

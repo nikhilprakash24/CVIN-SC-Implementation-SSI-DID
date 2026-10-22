@@ -25,4 +25,4 @@
 | **Core ops supported** | 18/19 | 17/19 | 16/19 | 17/19 | 13/19 | 14/19 | 15/19 | 13/19 | 18/19 | 17/19 |
 | Missing primitives | X1 | U5 D2 X1 | U5 D2 P1 X1 | R2 U5 X1 | R2 R4 U2 U5 D1 V1 X1 | R4 U2 U5 D1 P1 X1 | R2 R4 U2 U5 D1 | R4 U2 U5 D1 V1 P1 X1 | R2 | R2 U5 X1 |
 
-_Run 2026-10-15T05-07-33Z_9bdf451 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
+_Run 2026-10-21T03-28-59Z_a9e2a28 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_

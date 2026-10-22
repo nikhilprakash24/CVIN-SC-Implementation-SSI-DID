@@ -1,6 +1,6 @@
 # Follow-up stream F-C: security matrix, S-1 theft cell, register #1/#2, M3
 
-**Input:** `docs/AFTER_ACTION_REPORT_04.md` (stream F-C), `docs/review02/PASS2_REREVIEW.md`
+**Input:** `docs/review02/AAR_REVIEW2_04.md` (stream F-C), `docs/review02/PASS2_REREVIEW.md`
 (R2-L2, R2-L5), `docs/review02/PASS2_K.md`, register rows #1, #2, #19 and #28, and
 `docs/PLAN_MOBI_SUMO.md` M3.
 **Base:** `d2e6a58`. **Toolchain:** Hardhat 2.28.6 (lockfile), solc 0.8.24, viaIR, optimizer 200,

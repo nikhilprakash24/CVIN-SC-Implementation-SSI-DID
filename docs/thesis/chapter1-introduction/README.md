@@ -193,7 +193,10 @@ nine base standards.
 
 - **H1 (Performance).** Minimal-state standards (e.g. ERC-1056) are at least
   **10× cheaper** than rich-state standards (e.g. ERC-725/735) on gas for
-  identity creation and update, trading away on-chain expressiveness.
+  identity creation and update, trading away on-chain expressiveness. *As tested
+  (Chapter 5), the ≥10× holds for creation only; on update the ratio is 3.4× over
+  ERC-721 and 3.9× over ERC-725 (register #25), so the update half of H1 is not
+  supported.*
 - **H2 (Compliance).** At least **90%** aggregate W3C compliance is achievable
   through a resolution/translation layer, with residual gaps confined to
   specific properties requiring off-chain augmentation.
@@ -239,7 +242,7 @@ tested artifact and quantified in Chapter 5:
    Credentials stack (issuer, holder wallet, and a multi-stage offline
    verifier, with selective disclosure and revocation) lift on-chain identities
    to W3C conformance. An executable, CI-gated compliance checker measures
-   **93.2%** aggregate compliance against DID Core v1.0 and VC Data Model v2.0
+   **94.3%** aggregate compliance against DID Core v1.0 and VC Data Model v2.0
    (Chapter 5, RQ3).
 
 3. **Evidence that blockchain identity is viable for real-time V2V.** Real
@@ -268,9 +271,9 @@ tested artifact and quantified in Chapter 5:
 6. **A reproducible, open testbed.** The comparison rests on an open,
    re-runnable testbed: nine standards plus the MOBI VID profile, a four-method
    DID resolver, the VC stack, twelve end-to-end lifecycle use cases with real
-   cryptographic verification, and a simulated V2V harness — backed by roughly
-   **295 automated tests** (217 Hardhat contract tests, 28 VC, 32 MOBI VID, 6
-   VIN-cipher, and 12/12 lifecycle use cases) with every reported number
+   cryptographic verification, and a simulated V2V harness — backed by the
+   **automated test suites** (Hardhat contract tests, VC, MOBI VID, VIN-cipher,
+   and 12/12 lifecycle use cases; current totals in `sandbox/grand/report/GRAND_REPORT.md`) with every reported number
    traceable to a committed artifact and a documented command (Chapters 3–5).
 
 ---

@@ -1,5 +1,8 @@
 # Follow-up stream H-K: freshness-k, full vs probe refresh, same host back to back
 
+> *Lineage merge note (2026-10-21, PR #3): register rows from the clone lineage were renumbered on the merged trunk (the same-host freshness-k row proposed here as #40 was entered as #42 and is #54).*
+
+
 **Date:** 2026-10-15 · **Author:** Nikhil Prakash
 **Input:** `docs/AFTER_ACTION_REPORT_06.md` (stream H-K); `docs/review02/FOLLOWUP_FD.md` §3 (register #32);
 `docs/review02/FOLLOWUP_GK.md` §3 (register #37); `docs/LATENCY_BUDGET.md` §4 and its two notes.
@@ -165,8 +168,8 @@ Recomputed by the summarizer from their files, with the same definitions:
 | #32 | 2.10 GHz | full | 0.428 | 10.52 | 4 / 21 / 58 / 110 | k ≈ 146 |
 | #37 r1 / r2 | 2.80 GHz shared | full | 0.529 / 0.516 | 14.38 / 10.28 | 3 / 13 / 40 / 77; 4 / 18 / 50 / 80 | not reached |
 | #37 r1 / r2 | 2.80 GHz shared | probe | 0.540 / 0.490 | 2.76 / 2.89 | 13 / 40 / 71 / 78; 12 / 31 / 63 / 87 | not reached / ≈279 |
-| **#40 clean** | 2.80 GHz shared, same host back to back | full | **0.699** | **18.80** | **2 / 10 / 34 / 60** | **not reached** |
-| **#40 clean** | same | probe | **0.629** | **5.85** | **6 / 25 / 54 / 70** | **not reached** |
+| **#54 clean** | 2.80 GHz shared, same host back to back | full | **0.699** | **18.80** | **2 / 10 / 34 / 60** | **not reached** |
+| **#54 clean** | same | probe | **0.629** | **5.85** | **6 / 25 / 54 / 70** | **not reached** |
 
 **What holds (#37 confirmed on one host, interleaved):**
 - **No finite k reaches P\*(0.5) = 100 in either mode.** t_local is above 0.5 ms in every one of the 12 replicates.
@@ -197,7 +200,7 @@ Recomputed by the summarizer from their files, with the same definitions:
 
 ## 7. Proposed register row and LATENCY_BUDGET §4 text (session to apply)
 
-**#40 (new): Freshness-k, full vs probe refresh, same host back to back (stream H-K).**
+**#54 (new): Freshness-k, full vs probe refresh, same host back to back (stream H-K).**
 - **Claim:** 12 interleaved replicates (ABBA, 6 per mode), each on a fresh Hardhat node, n = 250 per k. Headline =
   clean pool (foreign CPU ≤ 0.5): full r7, r10, r11; probe r5, r8, r9, r12.
   - **full:** t_local **0.699**, t_chain **18.80 ms** (4 RPCs).
@@ -235,8 +238,8 @@ Recomputed by the summarizer from their files, with the same definitions:
 
 **LATENCY_BUDGET §4: replace the "Update (register #37)" paragraph with:**
 
-> **Update (registers #37, #40).** A one-call probe refresh cuts t_chain by ≈3× (one RPC instead of four) and keeps
-> the k − 1 staleness bound. A same-host, back-to-back comparison of both modes (#40: 12 interleaved replicates, each
+> **Update (registers #37, #54).** A one-call probe refresh cuts t_chain by ≈3× (one RPC instead of four) and keeps
+> the k − 1 staleness bound. A same-host, back-to-back comparison of both modes (#54: 12 interleaved replicates, each
 > on a fresh node) gives:
 >
 > - **P\*(0.5), probe vs full:** 6 vs 2 at k = 1, 25 vs 10 at k = 5, 54 vs 34 at k = 25, 70 vs 60 at k = ∞;

@@ -1,0 +1,117 @@
+option: 'Baseline: centralized registry (in-process)'
+slug: baseline-centralized
+kind: off-chain
+contracts: []
+provider: cv2x-testbed/identity/centralized_vehicle_registry.py
+benchmark_key: null
+experiments:
+- '#21'
+- '#30'
+benchmark_ops: {}
+families:
+- name: Identity creation (explicit)
+  stance: measured-in-comparison
+  functions:
+  - get_birth_certificate
+  - register_vehicle_birth
+  measured:
+  - register_vehicle_birth
+  reason: 'measured via #21, #30'
+  reviewed: false
+- name: Ownership / controller change
+  stance: measured-in-comparison
+  functions:
+  - transfer_ownership
+  measured:
+  - transfer_ownership
+  reason: 'measured via #21, #30'
+  reviewed: false
+- name: Key / delegate management
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Attributes / data store
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Claims / credentials
+  stance: implemented
+  functions:
+  - authorize_issuer
+  - get_birth_certificate
+  - revoke_issuer
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Revocation / status
+  stance: implemented
+  functions:
+  - revoke_issuer
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Lifecycle events / history
+  stance: measured-in-comparison
+  functions:
+  - detect_odometer_fraud
+  - get_events_by_type
+  - get_odometer_history
+  - get_vehicle_history
+  - record_lifecycle_event
+  measured:
+  - get_vehicle_history
+  - record_lifecycle_event
+  reason: 'measured via #21, #30'
+  reviewed: false
+- name: Authorisation / roles
+  stance: implemented
+  functions:
+  - authorize_issuer
+  - revoke_issuer
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: VIN linkage
+  stance: implemented
+  functions:
+  - get_vehicle_by_vin
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: DID / resolution helpers
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: implemented
+  functions: []
+  reason: 'in-process baseline: creation is a local record, no transaction'
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+surface:
+  functions: 0
+  events: 0
+  provider_methods: 15

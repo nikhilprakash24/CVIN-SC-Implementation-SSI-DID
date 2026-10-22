@@ -217,7 +217,8 @@ def test_onchain_full_mode_k1_unchanged(registry):
         msg = signer.sign_message(vid, make_bsm(next(_seq)))
         counter.reset()
         assert verifier.verify_message(msg)[0] is True
-        assert [m for m in counter.methods if m != 'eth_chainId'] == ['eth_call', 'eth_getLogs']
+        # + eth_getBlockByNumber since WM-2 C0: key validity is decided in chain time (D51)
+        assert [m for m in counter.methods if m != 'eth_chainId'] == ['eth_call', 'eth_getLogs', 'eth_getBlockByNumber']
 
 
 @pytest.mark.parametrize('k,m_pre', [(1, 1), (1, 3), (3, 1), (3, 2), (5, 5)])

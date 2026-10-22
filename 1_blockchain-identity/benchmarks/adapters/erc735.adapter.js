@@ -68,6 +68,8 @@ class ERC735Adapter extends IdentityAdapter {
     );
     const m = this.actors.manufacturer;
     const sig = await this._sign(m, result.address, TOPIC.MANUFACTURER_CERT, data);
+    // D25a (merged 2026-10-06): a non-owner issuer must be authorised for the topic by the holder's owner first
+    txs.push(await result.id.connect(owner).authorizeIssuer(m.address, TOPIC.MANUFACTURER_CERT));
     txs.push(await result.id.connect(owner).addClaim(TOPIC.MANUFACTURER_CERT, ECDSA_SCHEME, m.address, sig, data, v.metadataURI));
     return { txs, result };
   }
@@ -147,8 +149,13 @@ class ERC735Adapter extends IdentityAdapter {
     const topic = BigInt(credHash);
     const data = this.ethers.getBytes(credHash);
     const sig = await this._sign(issuer, h.address, topic, data);
-    const tx = await h.id.connect(h.controller).addClaim(topic, ECDSA_SCHEME, issuer.address, sig, data, "");
-    return { txs: [tx] };
+    const txs = [];
+    // D25a (merged 2026-10-06): the owner authorises the issuer for this credential's topic (one extra tx on this option)
+    if (issuer.address.toLowerCase() !== (await h.id.owner()).toLowerCase()) {
+      txs.push(await h.id.connect(h.controller).authorizeIssuer(issuer.address, topic));
+    }
+    txs.push(await h.id.connect(h.controller).addClaim(topic, ECDSA_SCHEME, issuer.address, sig, data, ""));
+    return { txs };
   }
   async revokeCredential(h, credHash, issuerArg) {
     const issuer = this._issuer(issuerArg);

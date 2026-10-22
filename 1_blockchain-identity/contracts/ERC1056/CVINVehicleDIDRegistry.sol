@@ -69,6 +69,17 @@ contract CVINVehicleDIDRegistry {
     bytes32 public constant DELEGATE_VERIKEY = keccak256("veriKey");
     bytes32 public constant DELEGATE_SIGAUTH = keccak256("sigAuth");
 
+    /**
+     * @dev Validity (seconds) used for the "permanent" birth attributes written
+     *      by setVehicleAttributes. EthereumDIDRegistry.setAttribute computes
+     *      `block.timestamp + validity` under Solidity 0.8 checked arithmetic,
+     *      so the former `type(uint256).max` overflowed (panic 0x11) and the
+     *      eight-attribute birth record was unreachable (defect D18). 100 years
+     *      is effectively permanent for a vehicle lifecycle and never overflows.
+     *      Same constant as MOBIVIDRegistry.PERMANENT_ATTRIBUTE_VALIDITY.
+     */
+    uint256 public constant PERMANENT_ATTRIBUTE_VALIDITY = 100 * 365 days;
+
     // ============ Events ============
 
     event VehicleDIDCreated(

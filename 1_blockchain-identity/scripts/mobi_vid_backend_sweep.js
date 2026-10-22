@@ -44,6 +44,7 @@
  * Run:  npx hardhat run scripts/mobi_vid_backend_sweep.js
  */
 
+const { runStamp } = require("./lib/run_stamp");
 const fs = require("fs");
 const path = require("path");
 const { ethers } = require("hardhat");
@@ -200,6 +201,12 @@ async function sweepERC735(signers) {
   const manufacturer = new ethers.Wallet(MANU_KEY);
   const inspector = new ethers.Wallet(INSPECTOR_KEY);
   const insurer = new ethers.Wallet(SECOND_ISSUER_KEY);
+
+  // Since the D25 fix (2026-10-04) addClaim accepts only issuers the holder's owner has
+  // authorised for the topic (the owner itself is exempt). Authorisation is setup, not counted.
+  for (const [w, topic] of [[manufacturer, MANUFACTURER_CERT], [inspector, INSPECTION], [insurer, INSURANCE]]) {
+    await (await holder.authorizeIssuer(w.address, topic)).wait();
+  }
 
   // 1. Birth attestation (VID I) -> manufacturer birth-certificate claim.
   const birthData = ethers.toUtf8Bytes(`birth:${VIN}`);
@@ -463,6 +470,7 @@ async function main() {
     metadata: {
       title: "MOBI VID cross-backend realization (H4)",
       solcVersion: "0.8.24",
+    ...runStamp(__filename),
       solcSettings: { optimizer: { enabled: true, runs: 200 }, viaIR: true },
       ozVersion: "5.0.2",
       date: new Date().toISOString(),

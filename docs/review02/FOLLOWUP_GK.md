@@ -3,7 +3,7 @@
 # Follow-up stream G-K: one-call freshness-k refresh and M5 pseudonym pool
 
 **Date:** 2026-10-04 · **Author:** Nikhil Prakash
-**Input:** `docs/AFTER_ACTION_REPORT_05.md` (stream G-K); `docs/review02/FOLLOWUP_FD.md` §3 (register #32);
+**Input:** `docs/review02/AAR_REVIEW2_05.md` (stream G-K); `docs/review02/FOLLOWUP_FD.md` §3 (register #32);
 `docs/LATENCY_BUDGET.md` §4 and its 2026-10-04 note; `docs/PLAN_MOBI_SUMO.md` M5 and §A.2;
 `docs/REVIEW_CV2X_TESTBED_LINEAGE.md` §5 item 4; `docs/MEASUREMENT_CONDITIONS.md` §1 rules, rows #2, #22 (K-5), #32.
 **Base:** `f73e81e`. Local commits, not pushed. The shared docs (register, README, handoffs, index,

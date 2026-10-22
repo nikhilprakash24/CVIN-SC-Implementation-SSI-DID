@@ -49,6 +49,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { execFileSync } = require("child_process");
+const { runStamp } = require("./lib/run_stamp");
 const { ethers, network } = require("hardhat");
 
 const POOL = 20;
@@ -334,7 +335,8 @@ function gitInfo() {
   try {
     const commit = execFileSync("git", ["rev-parse", "--short", "HEAD"], { cwd: repo }).toString().trim();
     const dirty = execFileSync("git", ["status", "--porcelain"], { cwd: repo }).toString().trim().length > 0;
-    return { git_commit: commit, git_dirty: dirty };
+    // git_dirty is whole-tree; the stamp's `dirty` covers this producer's scope only (WM-2 A2, D49)
+    return { git_commit: commit, git_dirty: dirty, ...runStamp(__filename) };
   } catch (e) {
     return { git_commit: null, git_dirty: null };
   }

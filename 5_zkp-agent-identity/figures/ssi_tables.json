@@ -1,0 +1,32 @@
+{
+ "note": "Data for Report C tables C-1 and C-2 and figure 11. 'Status' is what this repository builds and tests; 'Partial' says what is missing. Written 2026-10-15.",
+ "table_a_title": "C-1. Baseline functions of an identity and identity-management system (after ISO/IEC 24760-1 and NIST SP 800-63-4)",
+ "table_a": [
+  {"function": "Identifier assignment", "requirement": "unique, persistent identifier per entity", "cvin": "DIDs (did:ethr, did:nft, did:key, did:mobi); ERC-1056 and eight other standards", "status": "Built"},
+  {"function": "Enrolment and proofing", "requirement": "bind the identifier to a real entity by an accountable party", "cvin": "MOBI VID I birth certificate issued by the manufacturer, anchored on chain", "status": "Built"},
+  {"function": "Authentication", "requirement": "prove control of the identifier", "cvin": "ECDSA (EIP-191) proofs; Schnorr proof of key knowledge on and off chain (layer 5)", "status": "Built"},
+  {"function": "Attribute assertion", "requirement": "issue and verify claims about the entity", "cvin": "W3C VC 2.0 issuer/holder/verifier, 10 automotive schemas", "status": "Built"},
+  {"function": "Authorisation", "requirement": "decide access from identity state", "cvin": "IDTx executor (Phase 2 F1); ZkVinGate; Steward kernel", "status": "Built (prototype)"},
+  {"function": "Maintenance", "requirement": "update attributes, keys and lifecycle state", "cvin": "MOBI VID II, 11 lifecycle event types; ERC-1056 owner change and delegates", "status": "Built"},
+  {"function": "Delegation", "requirement": "let another party act within limits", "cvin": "ERC-1056 delegates with validity; Steward delegation credential (scope, policy hash, expiry)", "status": "Built"},
+  {"function": "Revocation and suspension", "requirement": "withdraw a credential or key promptly", "cvin": "revocation registry; delegate expiry; freshness-k bound (register #32, #37)", "status": "Built"},
+  {"function": "Recovery", "requirement": "regain control after key loss", "cvin": "ERC-4337 accounts measured; no recovery flow evaluated", "status": "Partial"},
+  {"function": "Audit and accountability", "requirement": "record who did what, verifiably", "cvin": "on-chain events; Steward hash-chained log with an anchorable Merkle root", "status": "Built"},
+  {"function": "De-registration and erasure", "requirement": "end an identity; erase personal data", "cvin": "VID II decommission event; only commitments and hashes on chain, so off-chain erasure removes the link", "status": "Partial"},
+  {"function": "Interoperability", "requirement": "others can resolve and verify", "cvin": "W3C DID resolution, 4 methods; external DID suite 335/336 (register #24)", "status": "Built"}
+ ],
+ "table_b_title": "C-2. The SSI extension: strict self-sovereign properties (after Allen 2016), and what this build offers by default and on request",
+ "table_b": [
+  {"property": "Existence", "strict": "the identity exists independently of any issuer", "default": "vehicle DID controlled by the owner's key", "strict_mode": "Yes", "constraint": "regulators still require a manufacturer-issued birth record"},
+  {"property": "Control", "strict": "the holder controls identifier and keys", "default": "owner key; agent acts under a revocable delegation", "strict_mode": "Yes", "constraint": "key loss without recovery is permanent"},
+  {"property": "Access", "strict": "the holder can see all data about them", "default": "Steward vault and audit log", "strict_mode": "Yes", "constraint": "data held by verifiers is outside the holder's view"},
+  {"property": "Transparency", "strict": "open systems and algorithms", "default": "open-source contracts, circuits and agent", "strict_mode": "Yes", "constraint": "the Groth16 setup here is single-party"},
+  {"property": "Persistence", "strict": "long-lived identity", "default": "chain-anchored DID", "strict_mode": "Yes", "constraint": "persistence conflicts with erasure; keep only commitments on chain"},
+  {"property": "Portability", "strict": "not tied to one provider", "default": "MOBI VID on five backends (H4)", "strict_mode": "Yes", "constraint": "migration cost differs by backend"},
+  {"property": "Interoperability", "strict": "usable across systems", "default": "W3C DID and VC", "strict_mode": "Yes", "constraint": "automotive profiles still maturing"},
+  {"property": "Consent", "strict": "disclosure only with the holder's agreement", "default": "owner-signed policy; per-rule consent", "strict_mode": "Yes", "constraint": "safety broadcasts (BSM) cannot wait for consent"},
+  {"property": "Minimisation", "strict": "disclose the least needed", "default": "SD digests; ZK predicates; leakage budget and coarsening", "strict_mode": "Yes", "constraint": "budgets cost honest service (Z-E6)"},
+  {"property": "Protection", "strict": "the holder's rights win over the network's", "default": "no PII on chain; scoped nullifiers", "strict_mode": "Partial", "constraint": "ZkVinGate names the identity; an anonymity set is to-do"},
+  {"property": "Decentralised trust", "strict": "no single operator can deny or rewrite identity", "default": "public-chain anchoring", "strict_mode": "Optional", "constraint": "a permissioned ledger or database substrate is allowed where decentralisation buys nothing (F2)"}
+ ]
+}

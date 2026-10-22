@@ -1,0 +1,130 @@
+option: LSP8
+slug: lsp8
+kind: on-chain
+contracts:
+- 1_blockchain-identity/contracts/LSP8/CVINVehicleLSP8.sol
+provider: null
+benchmark_key: LSP8
+experiments: []
+benchmark_ops:
+  deployRegistry: Single shared LSP8 collection contract; deployer becomes the issuing authority (contract owner).
+  createIdentity: 'mintVehicle (authority-only): mints bytes32 tokenId = keccak256(VIN) and stores the VIN in the
+    per-token LSP2-style data store.'
+  updateAttribute: 'setDataForTokenId: writes a per-token ERC-725Y-style data key (TokenIdDataChanged + DataChanged
+    events).'
+  addDelegateOrClaim: 'Not supported by this representative LSP8 implementation: operator authorization (authorizeOperator)
+    is not implemented, and LSP8 has no native claim model - attestations live in per-token data keys (covered by
+    updateAttribute).'
+  transferOwnership: LSP8 5-arg transfer(from, to, tokenId, force=true, data) by the token owner. force=true skips
+    LSP1 universal-receiver probing (hooks omitted in this implementation).
+  revoke: 'revokeVehicle (issuing authority or token owner): burns the token (Transfer to zero + VehicleRevoked);
+    tokenId ceases to exist.'
+families:
+- name: Identity creation (explicit)
+  stance: measured-in-comparison
+  functions:
+  - VehicleMinted
+  - mintVehicle
+  measured:
+  - mintVehicle
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Ownership / controller change
+  stance: implemented
+  functions:
+  - OwnershipTransferred
+  - owner
+  - tokenOwnerOf
+  - transferOwnership
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Key / delegate management
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Attributes / data store
+  stance: implemented
+  functions:
+  - getDataBatchForTokenIds
+  - getDataForTokenId
+  - setDataBatchForTokenIds
+  - setDataForTokenId
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Claims / credentials
+  stance: implemented
+  functions:
+  - DATA_KEY_INSPECTION
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Revocation / status
+  stance: measured-in-comparison
+  functions:
+  - VehicleRevoked
+  - revokeVehicle
+  measured:
+  - revokeVehicle
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Lifecycle events / history
+  stance: implemented
+  functions:
+  - DataChanged
+  - TokenIdDataChanged
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Authorisation / roles
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: implemented
+  functions:
+  - balanceOf
+  - totalSupply
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: VIN linkage
+  stance: implemented
+  functions:
+  - DATA_KEY_VIN
+  - tokenIdForVIN
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: DID / resolution helpers
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: not-applicable
+  functions: []
+  reason: creation requires a transaction (mint or deployment) — auto; review
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+surface:
+  functions: 21
+  events: 6
+  provider_methods: 0

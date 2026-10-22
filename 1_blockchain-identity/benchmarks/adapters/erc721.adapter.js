@@ -121,7 +121,7 @@ class ERC721Adapter extends IdentityAdapter {
 
   // Issuer identity is itself an NFT; the issuer's key is ownerOf(issuerToken).
   async anchorIssuerKey(issuer, key) {
-    const vin = "ISS" + key.address.slice(2, 16).toUpperCase(); // 17 chars, unique per key
+    const vin = "ESS" + key.address.slice(2, 16).toUpperCase(); // 17 chars, unique per key; no I/O/Q (D13 VIN alphabet, merged 2026-10-06)
     const tx = await this._nft(this.actors.manufacturer).mintVehicle(key.address, vin, "issuer", "", 0, "", "");
     const tokenId = await this._tokenIdFromReceipt(tx);
     this.issuerHandles.set(issuer.address, { tokenId, controller: key });

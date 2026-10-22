@@ -48,7 +48,7 @@ security axis is not a single scalar that gas can be traded against, but several
 independent capabilities, each concentrated in a different standard:
 
 - **Recovery is the sharpest single differentiator (§5.6).** Only ERC-4337
-  offers genuine on-chain key recovery: a guardian can rotate the owner key and
+  offers genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open): a guardian can rotate the owner key and
   the identity address survives a key compromise. For every other standard, a
   compromised owner key is *permanent identity loss* (ERC-1155 and LSP8 offer a
   weaker issuer-mediated re-binding). For a vehicle expected to live 15–20 years
@@ -81,7 +81,7 @@ The security analysis also produced a *method* finding worth carrying into the
 discussion: the `attestEvent` signature-verification gap that the threat-matrix
 lens surfaced and the thesis then fixed (attestations now `ecrecover` against a
 domain-separated digest; forged and replayed signatures revert; §5.6). The cost
-of the fix — attestEvent rising from 121,110 to 192,718 gas — is the
+of the fix — attestEvent rising from 121,110 to 192,718 gas (192,749 on the 2026-10-04 re-execution) — is the
 security/performance trade-off made concrete *within a single operation*: the
 extra ~72k gas buys on-chain signature verification that the original code
 omitted. That a source-reading lens caught what a passing revert-suite could
@@ -150,8 +150,8 @@ implementation, rather than to specification-reading or vendor claims.
 
 The V2V latency result (§5.4) answers the question that most directly gates
 deployment: *can a blockchain-rooted identity be verified fast enough for
-safety-critical V2V messaging?* The measured warm-verify median of 0.165 ms and
-cold (full-credential) median of 0.400 ms, against the ~100 ms end-to-end V2V
+safety-critical V2V messaging?* The measured warm-verify median of 0.153 ms and
+cold (full-credential) median of 0.399 ms, against the ~100 ms end-to-end V2V
 safety budget, give a margin of roughly two-and-a-half to three orders of
 magnitude. The interpretation matters more than the numbers.
 
@@ -171,7 +171,7 @@ does more than pass a threshold; it discriminates between a viable and a
 non-viable integration pattern.
 
 **The SSI-vs-PKI comparison, correctly sized.** SSI warm verification costs
-about 1.6× the IEEE 1609.2 PKI baseline per message (0.165 ms vs 0.102 ms), and
+about 1.6× the IEEE 1609.2 PKI baseline per message (0.153 ms vs 0.094 ms), and
 the N=30 confidence intervals are non-overlapping, so the difference is real
 rather than noise (§5.4). But at the safety timescale both are immaterial: a
 1.6× multiplier on a sub-millisecond operation is not a barrier when the budget
@@ -179,7 +179,7 @@ is 100 ms. The honest reading is that blockchain-rooted identity introduces *no
 latency obstacle* to V2V safety messaging, while offering the richer trust and
 revocation semantics of the SSI stack that the PKI baseline lacks. The integrity
 result reinforces this: across 1.65M verifications the only failures were
-exactly the 90 injected attacks (3 per run × 30 runs), caught with zero false
+exactly the 150 injected attacks (5 per run × 30 runs; register #27), caught with zero false
 positives and zero false negatives — the verification path is both fast and
 correct.
 
@@ -199,24 +199,26 @@ and the caveat is a scoping statement, not a weakness concealed.
 
 ## 6.4 W3C Compliance and Interoperability (H2)
 
-The 93.2% aggregate compliance figure (§5.5) is best read not as a grade but as
+The 94.3% aggregate compliance figure (§5.5) is best read not as a grade but as
 a *structural* claim about interoperability: blockchain-rooted identities can be
 lifted into W3C DID Core v1.0 and VC Data Model v2.0 conformance through a
-resolution/issuance layer, and the residual gap is confined to two specific,
-documented places rather than diffused across the model.
+resolution/issuance layer, and the residual gap is confined to three documented items (two deliberate
+deviations and one PARTIAL check) rather than diffused across the model.
 
-**What 93.2% means.** The score decomposes into DID Core 93.3% (13/15 checks)
-and VC Data Model 93.1% (27/29 checks). Critically, the ~7% shortfall is *not*
-a scatter of partial failures across the data model — it is exactly **two
+**What 94.3% means.** The score decomposes into DID Core 14/15 checks passing
+with one PARTIAL, and VC Data Model 93.1% (27/29 checks) (register #4). Critically,
+the ~6% shortfall is *not* a scatter of partial failures across the data model.
+Apart from that one PARTIAL DID Core check, it is exactly **two
 deviations**, both deliberate and both documented as failures rather than
 hidden: (1) proof canonicalization uses deterministic sorted-key JSON rather
 than URDNA2015 RDF canonicalization, and (2) the cryptosuite
 (`eip191-secp256k1-recovery-2024`) is thesis-defined — Ethereum-native and
 offline-verifiable — rather than a W3C-registered suite. Everything else in the
-executable checklist passes. The interpretation is that there is **no structural
+executable checklist passes, except the one PARTIAL. The interpretation is that there is **no structural
 incompatibility** between blockchain identity and the W3C SSI data model; the
-gap is entirely in *canonicalization and cryptosuite registration*, both of
-which are additive, non-breaking changes.
+two failures are entirely in *canonicalization and cryptosuite registration*, both of
+which are additive, non-breaking changes; the PARTIAL is the `did:mobi`
+placeholder key (register #4).
 
 **What it means for real-world interoperability.** The two deviations are of a
 specific, benign kind. Adopting URDNA2015 and registering (or swapping to) a
@@ -228,8 +230,8 @@ shaped for interoperation with the broader W3C ecosystem, and the path to full
 conformance is a bounded, well-understood engineering task rather than an open
 research problem. The honest counterpoint, which the thesis states, is that
 until those two changes are made the credentials are *not* byte-for-byte
-interoperable with verifiers that demand URDNA2015 or a registered suite; 93.2%
-is a real, measured 93.2%, not a rounded-up 100%. Relative to prior work
+interoperable with verifiers that demand URDNA2015 or a registered suite; 94.3%
+is a real, measured 94.3%, not a rounded-up 100%. Relative to prior work
 surveyed in Chapter 2, the contribution is that compliance here is *executable
 and measured* (a checker that runs against the real VC layer and DID resolver),
 not asserted from a specification-conformance narrative.
@@ -245,8 +247,8 @@ it is Pareto-optimal rather than merely cheap.
 
 **The mechanism: pay the cheap price on the common path, the claim price only
 on demand.** The hybrid's identity-lifecycle operations are statistically
-indistinguishable from the cheapest standard in the study — create 52,178
-(vs ERC-1056's 52,612), update and transfer likewise at ERC-1056 cost (§5.3) —
+indistinguishable from the cheapest standard in the study — create 52,216
+(vs ERC-1056's 52,594), update and transfer likewise at ERC-1056 cost (§5.3) —
 because for those operations it *is* an event-log identity. It only pays the
 expensive on-chain-claim price (~290k gas for `addClaim`) when a verifiable
 on-chain claim is actually required. The common path (which dominates the

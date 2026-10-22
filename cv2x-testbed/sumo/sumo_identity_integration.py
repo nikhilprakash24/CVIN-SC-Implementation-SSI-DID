@@ -35,7 +35,7 @@ Usage:
     python3 sumo_identity_integration.py             # with SUMO installed
     python3 sumo_identity_integration.py --gui       # with SUMO GUI
 
-Results are written to results/v2v_latency.json.
+Results are written to results/v2v_latency.json (override with --results PATH).
 """
 
 import sys
@@ -46,6 +46,7 @@ import random
 import math
 import hashlib
 import argparse
+import gzip
 import statistics
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Any
@@ -89,6 +90,8 @@ try:
 except Exception:
     REGISTRY_AVAILABLE = False
 
+from infrastructure_layer import InfrastructureLayer  # noqa: E402  (same directory)
+
 # V2V performance targets (SAE J2945/1-derived thesis budget)
 V2V_BUDGET_MS = 100.0          # end-to-end identity verification budget
 SIG_CHECK_TARGET_MS = 10.0     # per-message signature-check target
@@ -97,6 +100,29 @@ BSM_RATE_HZ = 10               # SAE J2735 BSM broadcast rate
 STEP_LENGTH_S = 0.1            # simulation step = 100 ms
 NEIGHBOR_RADIUS_M = 300.0      # DSRC/C-V2X plausible reception range
 MAX_NEIGHBORS = 8              # cap receivers per broadcast (runtime sanity)
+
+# Infrastructure (only with --rsu; pre-registration docs/design/INFRASTRUCTURE_PREREG.md)
+RSU_POSITIONS = [(625.0, 510.0), (1875.0, 510.0), (3125.0, 510.0), (4375.0, 510.0)]
+CONTROLLER_UPDATE_EVERY_STEPS = 10   # signal-state update, 1 s
+TMC_PLAN_EVERY_STEPS = 50            # timing plan, 5 s
+SPAT_CYCLE_S = (30.0, 4.0, 26.0)     # green, yellow, red
+
+
+class TraceWriter:
+    """JSON Lines trace (schema cvin-v2v-trace/1, docs/PLAN_SUMO_VISUALISATION.md §3).
+    Written outside every timed section, so recording does not change what is measured."""
+
+    def __init__(self, path: Path, header: Dict[str, Any]):
+        self.path = Path(path)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._f = gzip.open(self.path, "wt") if self.path.suffix == ".gz" else open(self.path, "w")
+        self.write(dict(type="header", schema="cvin-v2v-trace/1", **header))
+
+    def write(self, event: Dict[str, Any]):
+        self._f.write(json.dumps(event, separators=(",", ":")) + "\n")
+
+    def close(self):
+        self._f.close()
 
 
 def _pki_payload_bytes(signed: Dict[str, Any]) -> bytes:
@@ -422,6 +448,9 @@ class Metrics:
     eebl_warnings_delivered: int = 0
     pki: PopulationStats = field(default_factory=PopulationStats)
     ssi: PopulationStats = field(default_factory=PopulationStats)
+    spat: PopulationStats = field(default_factory=PopulationStats)      # V2I (RSU -> vehicle)
+    i2i_ctrl: PopulationStats = field(default_factory=PopulationStats)  # controller -> RSU
+    i2i_tmc: PopulationStats = field(default_factory=PopulationStats)   # TMC -> controller
 
 
 def summarize(samples: List[float]) -> Optional[Dict[str, float]]:
@@ -481,6 +510,29 @@ class MockMobility:
         return list(self.states.keys())
 
 
+def _environment() -> Dict[str, Any]:
+    import platform
+    import subprocess
+    def _git(*a):
+        try:
+            return subprocess.check_output(["git", *a], cwd=str(Path(__file__).parent), text=True,
+                                           stderr=subprocess.DEVNULL).strip()
+        except Exception:
+            return None
+    try:
+        import cryptography
+        crypto_v = cryptography.__version__
+    except Exception:
+        crypto_v = None
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools" / "run_identity"))
+    from stamp import stamp as _stamp  # one run stamp, per-producer scope (WM-2 A2, D49)
+    st = _stamp(__file__)
+    return {"git_commit": _git("rev-parse", "--short", "HEAD"),
+            "code_dirty": st["code_dirty"], "scope": st["scope"], "scope_sha": st["scope_sha"],
+            "python": platform.python_version(), "cryptography": crypto_v, "platform": platform.platform()}
+
+
 # ===========================================================================
 # Main integration
 # ===========================================================================
@@ -489,7 +541,10 @@ class SUMOIdentityIntegration:
 
     def __init__(self, simulation_mode=False, use_gui=False,
                  num_vehicles=50, seed=42,
-                 results_path: Optional[Path] = None):
+                 results_path: Optional[Path] = None,
+                 rsu: bool = False, refresh_k: Optional[int] = None,
+                 revoke_rsu_at: Optional[float] = None,
+                 trace_path: Optional[Path] = None):
         self.simulation_mode = simulation_mode or not SUMO_AVAILABLE
         self.use_gui = use_gui
         self.num_vehicles = num_vehicles
@@ -529,6 +584,34 @@ class SUMOIdentityIntegration:
         self.metrics = Metrics()
         self.attack_results: Dict[str, bool] = {}
         self._seq = 0
+        self.seed = seed
+
+        # Infrastructure (off by default; --rsu)
+        self.rsu_enabled = rsu
+        self.refresh_k = refresh_k
+        self.revoke_rsu_at = revoke_rsu_at
+        self.infra: Optional[InfrastructureLayer] = None
+        self.rsu_ids: List[str] = []
+        self._revoked_at_step: Optional[int] = None
+        self.after_revocation: Dict[str, int] = {}   # receiver -> SPaT from the revoked RSU accepted
+        self.revocation_receivers: set = set()
+        if rsu:
+            self.infra = InfrastructureLayer(clock=lambda: self._sim_now, refresh_every=refresh_k)
+            self.infra.enroll("tmc", "tmc", ["TimingPlan"])
+            for i, pos in enumerate(RSU_POSITIONS, start=1):
+                self.infra.enroll(f"rsu_{i}", "rsu", ["SPaT", "MAP"], position=pos,
+                                  extra={"intersectionId": f"int_{i}"})
+                self.infra.enroll(f"ctrl_{i}", "controller", ["SignalStateUpdate"], position=pos,
+                                  extra={"intersectionId": f"int_{i}"})
+                self.rsu_ids.append(f"rsu_{i}")
+            # attack fixtures (I2): an RSU credentialed for MAP only, one from an untrusted authority
+            self.infra.enroll("rsu_maponly", "rsu", ["MAP"])
+            self.infra.enroll("rsu_rogue", "rsu", ["SPaT", "MAP"], issuer=self.infra.rogue_authority)
+
+        self.attack_reasons: Dict[str, Dict[str, Any]] = {}
+        self._cached_at_revocation: Optional[int] = None
+        self.trace: Optional[TraceWriter] = None
+        self._trace_path = trace_path
 
     # ------------------------------------------------------------------
     # SUMO lifecycle
@@ -682,6 +765,10 @@ class SUMOIdentityIntegration:
         pop.sign_ms.append(sign_ms)
         pop.sent += 1
         self.metrics.messages_sent += 1
+        msg_id = f"m{payload['seq']}"
+        if self.trace:
+            self.trace.write({"type": "tx", "t": payload["timestamp"], "msg": msg_id, "from": vehicle_id,
+                              "kind": message_type, "attack": None, "sign_ms": round(sign_ms, 4)})
 
         verified_count = 0
         for receiver_id in self._neighbors(vehicle_id):
@@ -695,7 +782,161 @@ class SUMOIdentityIntegration:
             else:
                 pop.failed += 1
                 self.metrics.verification_failures += 1
+            if self.trace:
+                self.trace.write({"type": "rx", "t": payload["timestamp"], "msg": msg_id, "to": receiver_id,
+                                  "path": "cold" if cold else "warm", "ok": ok,
+                                  "reason": None if ok else "rejected", "verify_ms": round(latency_ms, 4)})
         return verified_count
+
+    # ------------------------------------------------------------------
+    # Infrastructure message path (only with --rsu)
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _signal_phase(sim_time: float, offset: float) -> Tuple[str, float]:
+        g, y, r = SPAT_CYCLE_S
+        t = (sim_time + offset) % (g + y + r)
+        if t < g:
+            return "GREEN", g - t
+        if t < g + y:
+            return "YELLOW", g + y - t
+        return "RED", g + y + r - t
+
+    def _vehicles_near(self, position: Tuple[float, float]) -> List[str]:
+        cands = []
+        for vid, st in self.vehicle_states.items():
+            d = math.dist(position, st.position)
+            if d <= NEIGHBOR_RADIUS_M:
+                cands.append((d, vid))
+        cands.sort()
+        return [vid for _, vid in cands[:MAX_NEIGHBORS]]
+
+    def _infra_send(self, sender: str, receivers: List[str], message: Dict[str, Any],
+                    stats: PopulationStats) -> int:
+        package, sign_ms = self.infra.sign(sender, message)
+        stats.sign_ms.append(sign_ms)
+        stats.sent += 1
+        self._seq += 1
+        msg_id = f"i{self._seq}"
+        if self.trace:
+            self.trace.write({"type": "tx", "t": message["timestamp"], "msg": msg_id, "from": sender,
+                              "kind": message["msg_type"], "attack": None, "sign_ms": round(sign_ms, 4)})
+        n_ok = 0
+        for rx in receivers:
+            ok, latency_ms, cold, reason = self.infra.verify(rx, package)
+            if ok:
+                (stats.cold_ms if cold else stats.warm_ms).append(latency_ms)
+                stats.verified += 1
+                n_ok += 1
+                if (sender == "rsu_1" and self._revoked_at_step is not None):
+                    self.after_revocation[rx] = self.after_revocation.get(rx, 0) + 1
+            else:
+                stats.failed += 1
+            if sender == "rsu_1" and self._revoked_at_step is not None:
+                self.revocation_receivers.add(rx)
+            if self.trace:
+                self.trace.write({"type": "rx", "t": message["timestamp"], "msg": msg_id, "to": rx,
+                                  "path": "cold" if cold else "warm", "ok": ok, "reason": reason,
+                                  "verify_ms": round(latency_ms, 4)})
+        return n_ok
+
+    def infrastructure_step(self, step: int, sim_time: float):
+        if self.revoke_rsu_at is not None and self._revoked_at_step is None and sim_time >= self.revoke_rsu_at:
+            self.infra.revoke("rsu_1")
+            self._revoked_at_step = step
+            did = self.infra.stations["rsu_1"]["did"]
+            # receivers that trusted rsu_1 from cache at the moment of revocation (the I3 population)
+            self._cached_at_revocation = sum(1 for rx, c in self.infra._cache.items() if did in c and not rx.startswith("probe_"))
+            if self.trace:
+                self.trace.write({"type": "revoke", "t": round(sim_time, 3), "station": "rsu_1"})
+        t = round(sim_time, 3)
+        if step % TMC_PLAN_EVERY_STEPS == 0:
+            for i in range(1, len(self.rsu_ids) + 1):
+                self._infra_send("tmc", [f"ctrl_{i}"], {"msg_type": "TimingPlan", "plan": "weekday-am",
+                                 "cycle_s": sum(SPAT_CYCLE_S), "timestamp": t}, self.metrics.i2i_tmc)
+        for i, rsu_id in enumerate(self.rsu_ids, start=1):
+            phase, ttc = self._signal_phase(sim_time, offset=7.0 * i)
+            if step % CONTROLLER_UPDATE_EVERY_STEPS == 0:
+                self._infra_send(f"ctrl_{i}", [rsu_id], {"msg_type": "SignalStateUpdate", "intersection": f"int_{i}",
+                                 "phase": phase, "time_to_change_s": round(ttc, 1), "timestamp": t}, self.metrics.i2i_ctrl)
+            pos = RSU_POSITIONS[i - 1]
+            self._infra_send(rsu_id, self._vehicles_near(pos), {"msg_type": "SPaT", "rsu": rsu_id,
+                             "intersection": f"int_{i}", "phase": phase, "time_to_change_s": round(ttc, 1),
+                             "timestamp": t}, self.metrics.spat)
+
+    # Pre-registered I2 checks (INFRASTRUCTURE_PREREG.md §2 and amendment A4): name -> expected reason.
+    I2_EXPECTED = {
+        "i2a_unsigned_spat": "unsigned", "i2b_wrong_key_spat": "wrong_key", "i2c_map_only_rsu_spat": "not_permitted",
+        "i2d_vehicle_signed_spat": "credential_invalid", "i2e_untrusted_authority_rsu": "credential_invalid",
+        "i2f_stale_spat": "stale", "i2g_forged_controller_update": "wrong_key", "i2h_cross_intersection_spat": "binding",
+        "i2i_replayed_spat": "replay", "i2j_future_spat": "future", "i2b_w_wrong_key_spat_warm": "wrong_key",
+        "i2c_w_not_permitted_warm": "not_permitted", "i2f_w_stale_spat_warm": "stale",
+        # amendment A6 (verifier v3): binding fails closed (D38); size and depth bounded (D37)
+        "i2k_spat_without_rsu_field": "binding", "i2l_deeply_nested_spat": "malformed",
+    }
+    I2_WARM = ("i2b_w_wrong_key_spat_warm", "i2c_w_not_permitted_warm", "i2f_w_stale_spat_warm")
+
+    def run_infrastructure_attacks(self, sim_time: float):
+        """Pre-registered I2 checks (a)-(j) against first-contact receivers and (b, c, f) against a receiver
+        that has already cached the signer; each must be rejected with its expected reason (amendment A4)."""
+        from infrastructure_layer import signable
+        t = round(sim_time, 3)
+        msg = {"msg_type": "SPaT", "rsu": "rsu_2", "intersection": "int_2", "phase": "GREEN",
+               "time_to_change_s": 20.0, "timestamp": t}
+        got = {}
+
+        def forge(package, message):
+            package["signature"] = Account.sign_message(signable(message), Account.create().key).signature.hex()
+            return package
+
+        p, _ = self.infra.sign("rsu_2", msg); p["signature"] = ""
+        got["i2a_unsigned_spat"] = self.infra.verify("probe_a", p)
+        got["i2b_wrong_key_spat"] = self.infra.verify("probe_b", forge(self.infra.sign("rsu_2", msg)[0], msg))
+        got["i2c_map_only_rsu_spat"] = self.infra.verify("probe_c", self.infra.sign("rsu_maponly", dict(msg, rsu="rsu_maponly"))[0])
+        ssi_vehicles = [v for v in self.vehicles.values() if v.identity_type == "MOBI_VID"]
+        if ssi_vehicles:
+            w = self.ssi.wallets[ssi_vehicles[0].vehicle_id]
+            vm = dict(msg, rsu=ssi_vehicles[0].vehicle_id)
+            p = {"message": vm, "sender_did": w["did"], "credential": w["credential"],
+                 "signature": Account.sign_message(signable(vm), w["account"].key).signature.hex()}
+            got["i2d_vehicle_signed_spat"] = self.infra.verify("probe_d", p)
+        got["i2e_untrusted_authority_rsu"] = self.infra.verify("probe_e", self.infra.sign("rsu_rogue", dict(msg, rsu="rsu_rogue"))[0])
+        got["i2f_stale_spat"] = self.infra.verify("probe_f", self.infra.sign("rsu_2", dict(msg, timestamp=round(sim_time - 5.0, 3)))[0])
+        cm = {"msg_type": "SignalStateUpdate", "intersection": "int_2", "phase": "GREEN", "time_to_change_s": 60.0, "timestamp": t}
+        got["i2g_forged_controller_update"] = self.infra.verify("probe_g", forge(self.infra.sign("ctrl_2", cm)[0], cm))
+        got["i2h_cross_intersection_spat"] = self.infra.verify("probe_h", self.infra.sign("rsu_2", dict(msg, intersection="int_3", phase="RED"))[0])
+        legit, _ = self.infra.sign("rsu_2", dict(msg, seq="replay-probe"))
+        if self.infra.verify("probe_i", legit)[0]:                       # captured after a genuine reception
+            got["i2i_replayed_spat"] = self.infra.verify("probe_i", legit)
+        got["i2j_future_spat"] = self.infra.verify("probe_j", self.infra.sign("rsu_2", dict(msg, timestamp=round(sim_time + 0.5, 3)))[0])
+        no_rsu = {k: v for k, v in msg.items() if k != "rsu"}
+        got["i2k_spat_without_rsu_field"] = self.infra.verify("probe_k", self.infra.sign("rsu_2", no_rsu)[0])
+        deep = "leaf"
+        for _ in range(200):
+            deep = {"n": deep}
+        got["i2l_deeply_nested_spat"] = self.infra.verify("probe_l", self.infra.sign("rsu_2", dict(msg, payload=deep))[0])
+        # warm receiver: first a genuine SPaT and a genuine MAP from rsu_2, so rsu_2 is cached
+        self.infra.verify("probe_w", self.infra.sign("rsu_2", dict(msg, seq="warm-1"))[0])
+        self.infra.verify("probe_w", self.infra.sign("rsu_2", dict(msg, msg_type="MAP", seq="warm-2"))[0])
+        wm = dict(msg, seq="warm-b")
+        got["i2b_w_wrong_key_spat_warm"] = self.infra.verify("probe_w", forge(self.infra.sign("rsu_2", wm)[0], wm))
+        got["i2c_w_not_permitted_warm"] = self.infra.verify("probe_w", self.infra.sign("rsu_2", dict(msg, msg_type="TimingPlan", seq="warm-c"))[0])
+        got["i2f_w_stale_spat_warm"] = self.infra.verify("probe_w", self.infra.sign("rsu_2", dict(msg, timestamp=round(sim_time - 5.0, 3), seq="warm-f"))[0])
+
+        results = {}
+        for name, expected in self.I2_EXPECTED.items():
+            if name not in got:
+                self.attack_reasons[name] = {"expected": expected, "reason": "not run", "cold": None}
+                continue
+            ok, _ms, cold, reason = got[name]
+            passed = (not ok) and reason == expected
+            results[name] = passed
+            self.attack_reasons[name] = {"expected": expected, "reason": reason, "cold": cold}
+            print(f"  {name:32s}: {'rejected' if not ok else 'ACCEPTED'} ({reason}; expected {expected}) -> {passed}")
+            if self.trace:
+                self.trace.write({"type": "attack", "t": t, "id": name, "rejected": not ok, "reason": reason,
+                                  "expected": expected, "cold": cold})
+        self.attack_results.update(results)
 
     # ------------------------------------------------------------------
     # Safety applications (ride on the verified message flow)
@@ -850,6 +1091,16 @@ class SUMOIdentityIntegration:
               f"<= {MAX_NEIGHBORS} nearest receivers per broadcast\n")
 
         self.start_sumo()
+        if self._trace_path is not None:
+            self.trace = TraceWriter(self._trace_path, {
+                "mobility": "mock" if self.simulation_mode else "traci", "seed": self.seed,
+                "step_ms": int(STEP_LENGTH_S * 1000), "vehicles": self.num_vehicles,
+                "radius_m": NEIGHBOR_RADIUS_M, "max_receivers": MAX_NEIGHBORS,
+                "rsu": self.rsu_enabled, "refresh_k": self.refresh_k, "revoke_rsu_at": self.revoke_rsu_at,
+                "net": "mock 5 km 3-lane highway" if self.simulation_mode else str(self.sumo_cfg.name),
+                "rsus": [{"id": f"rsu_{i}", "x": p[0], "y": p[1]} for i, p in enumerate(RSU_POSITIONS, 1)] if self.rsu_enabled else [],
+                "environment": _environment(),
+                "caveat": "no radio channel, no MAC: in-process delivery to the 8 nearest within 300 m"})
         wall_start = time.time()
         total_steps = int(duration_seconds / STEP_LENGTH_S)
         sim_time = 0.0
@@ -883,9 +1134,19 @@ class SUMOIdentityIntegration:
                     if state is not None:
                         self.vehicle_states[vehicle_id] = state
 
+                if self.trace:
+                    self.trace.write({"type": "step", "t": round(sim_time, 3), "vehicles": [
+                        {"id": vid, "x": round(st.position[0], 1), "y": round(st.position[1], 1),
+                         "speed": round(st.speed, 2), "pop": "ssi" if self.vehicles[vid].identity_type == "MOBI_VID" else "pki"}
+                        for vid, st in self.vehicle_states.items() if vid in self.vehicles]})
+
                 # Periodic BSM broadcast: EVERY vehicle, EVERY 100ms step
                 for vehicle_id in vehicle_ids:
                     self.broadcast(vehicle_id, sim_time, "BSM")
+
+                # Infrastructure messages (only with --rsu)
+                if self.infra is not None:
+                    self.infrastructure_step(step, sim_time)
 
                 # Safety applications once per second, over ALL vehicles
                 if step % BSM_RATE_HZ == 0:
@@ -915,6 +1176,11 @@ class SUMOIdentityIntegration:
             self.stop_sumo()
 
         self.run_attack_tests(sim_time)
+        if self.infra is not None:
+            print("\nInfrastructure attack tests (I2):")
+            self.run_infrastructure_attacks(sim_time)
+        if self.trace:
+            self.trace.close()
         wall_elapsed = time.time() - wall_start
         results = self.build_results(duration_seconds, wall_elapsed)
         self.print_statistics(results)
@@ -974,6 +1240,7 @@ class SUMOIdentityIntegration:
             "safety_events_detected": m.safety_events_detected,
             "eebl_warnings_delivered": m.eebl_warnings_delivered,
             "attack_tests": self.attack_results,
+            **({"infrastructure": self._infra_results()} if self.infra is not None else {}),
             "freshness": {
                 **self.pki.freshness.describe(),
                 "replay_key": "(receiver, sender) + sha256(signed payload)",
@@ -997,6 +1264,27 @@ class SUMOIdentityIntegration:
                         "no channel loss, no MAC-layer latency)",
             },
         }
+
+    def _infra_results(self) -> Dict[str, Any]:
+        m = self.metrics
+
+        def block(pop: PopulationStats) -> Dict[str, Any]:
+            return {"sign_ms": summarize(pop.sign_ms), "cold_ms": summarize(pop.cold_ms),
+                    "warm_ms": summarize(pop.warm_ms), "sent": pop.sent, "verified": pop.verified,
+                    "rejected": pop.failed}
+
+        out = {"rsus": len(self.rsu_ids), "refresh_k": self.refresh_k, "spat": block(m.spat),
+               "i2i_controller_to_rsu": block(m.i2i_ctrl), "i2i_tmc_to_controller": block(m.i2i_tmc),
+               "i2_reasons": self.attack_reasons}
+        if self.revoke_rsu_at is not None:
+            counts = [self.after_revocation.get(r, 0) for r in sorted(self.revocation_receivers)]
+            out["revocation"] = {"revoked_station": "rsu_1", "revoke_at_s": self.revoke_rsu_at,
+                                 "revoked_at_step": self._revoked_at_step,
+                                 "receivers_after_revocation": len(self.revocation_receivers),
+                                 "cached_at_revocation": self._cached_at_revocation,
+                                 "max_accepted_after_revocation": max(counts) if counts else 0,
+                                 "total_accepted_after_revocation": sum(counts)}
+        return out
 
     @staticmethod
     def _fmt(stats: Optional[Dict], key: str = "p95_ms") -> str:
@@ -1090,13 +1378,39 @@ def main():
                         help="Vehicle count in --simulate mode (default: 50)")
     parser.add_argument("--seed", type=int, default=42,
                         help="Random seed for mock mobility (default: 42)")
+    parser.add_argument("--results", type=Path, default=None,
+                        help="Where to write the results JSON "
+                             "(default: results/v2v_latency.json next to this script)")
+    parser.add_argument("--rsu", action="store_true",
+                        help="Add roadside units, signal controllers and a TMC with DIDs; SPaT (V2I) and "
+                             "I2I messages; pre-registered I2 attacks (docs/design/INFRASTRUCTURE_PREREG.md)")
+    parser.add_argument("--refresh-k", default="inf",
+                        help="Revocation re-check every k-th message from a cached infrastructure signer "
+                             "(integer, or 'inf' = never; default inf)")
+    parser.add_argument("--revoke-rsu-at", type=float, default=None,
+                        help="Revoke rsu_1's credential at this simulated time (I3)")
+    parser.add_argument("--trace", type=Path, default=None,
+                        help="Write a JSON Lines trace (.gz to compress); off by default")
     args = parser.parse_args()
+    if str(args.refresh_k).lower() in ("inf", "none"):
+        refresh_k = None
+    else:
+        # D39: a positive integer, or inf; anything else is a parser error, not a traceback
+        try:
+            refresh_k = int(args.refresh_k)
+        except ValueError:
+            parser.error(f"--refresh-k must be a positive integer or inf, not {args.refresh_k!r}")
+        if refresh_k < 1:
+            parser.error("--refresh-k must be >= 1, or inf (0 used to mean inf silently; review finding B-F7)")
 
     integration = SUMOIdentityIntegration(
         simulation_mode=args.simulate,
         use_gui=args.gui,
         num_vehicles=args.vehicles,
         seed=args.seed,
+        results_path=args.results,
+        rsu=args.rsu, refresh_k=refresh_k, revoke_rsu_at=args.revoke_rsu_at,
+        trace_path=args.trace,
     )
     integration.run_simulation(duration_seconds=args.duration)
 

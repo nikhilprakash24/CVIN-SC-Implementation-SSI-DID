@@ -116,6 +116,23 @@ contract CVINCombinedIdentity {
         uint256 previousChange
     );
 
+    /**
+     * @dev ERC-1056-style change marker for the ERC-735 side. addClaim and
+     *      removeClaim advance `changed[identity]`, so without an event that
+     *      carries `previousChange` the did:ethr pointer walk
+     *      (changed -> previousChange -> ... -> 0) was cut at every claim
+     *      operation (defect D22). Emitted alongside ClaimAdded / ClaimRemoved
+     *      with previousChange = the `changed` value before this operation;
+     *      `removed` distinguishes the two.
+     */
+    event DIDClaimChanged(
+        address indexed identity,
+        bytes32 claimId,
+        uint256 topic,
+        bool removed,
+        uint256 previousChange
+    );
+
     // ERC-735-style
     event ClaimAdded(
         bytes32 indexed claimId,
@@ -272,9 +289,12 @@ contract CVINCombinedIdentity {
         });
 
         emit ClaimAdded(claimId, identity, topic, scheme, issuer, signature, data, uri);
-        // changed[] is deliberately NOT advanced (REVIEW_02 K-6): it is the
-        // ERC-1056 DID-event chain head, and ClaimAdded carries no
-        // previousChange. Claim history is indexed by its own events.
+        // changed[] is deliberately NOT advanced (REVIEW_02 K-6): it is the ERC-1056
+        // DID-event chain head and claims are not DID-document state. The claim history
+        // stays indexable through DIDClaimChanged (defect D22); its last argument is the
+        // chain head at the time of the claim, for correlation, not a pointer the
+        // resolver walk follows (merge decision M-A, 2026-10-06).
+        emit DIDClaimChanged(identity, claimId, topic, false, changed[identity]);
     }
 
     /// @notice Remove a claim (identity owner or the claim's issuer).
@@ -338,6 +358,7 @@ contract CVINCombinedIdentity {
         delete _claims[identity][claimId];
 
         emit ClaimRemoved(claimId, identity, topic, issuer);
+        emit DIDClaimChanged(identity, claimId, topic, true, changed[identity]);
     }
 
     /// @notice O(1) claim lookup for on-chain verifiers.

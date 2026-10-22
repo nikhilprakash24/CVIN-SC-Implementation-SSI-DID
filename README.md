@@ -5,7 +5,7 @@
 [![UBC](https://img.shields.io/badge/Institution-UBC-blue.svg)](https://www.ubc.ca/)
 [![Thesis](https://img.shields.io/badge/Type-MASc%20Thesis-green.svg)](https://www.ubc.ca/)
 
-> **Status:** v0.8.0 ("Rigor & Ground-Truth Hardening"), working toward 0.9.0. **820 automated tests green** (391 Hardhat incl. 43 strictly-asserted attack scenarios and nine-adapter harness conformance + 417 Python across the VC layer, DID resolver, MOBI VID and the cv2x testbed + 12/12 lifecycle use cases), all run in CI with no skips. **W3C compliance 94.3%** (executable checker, internal and self-scored; CI floor 93.0%). Review 02 (2026-10-03/04, `docs/REVIEW_02_CODEBASE.md`) fixed all 3 Critical and 15 of 16 High findings (including three found by its own re-reviews) (the remaining one, restating H1, is the author's decision); numbers below follow its re-runs. All implementation phases built and tested; remaining work is public-testnet (Sepolia) validation, optional real-SUMO, and thesis writing.
+> **Status:** v0.8.0 ("Rigor & Ground-Truth Hardening"), working toward 0.9.0. **All automated suites green** (the Hardhat suite incl. 43 strictly-asserted attack scenarios and nine-adapter harness conformance, the Python suites across the VC layer, DID resolver, MOBI VID and the cv2x testbed, and 12/12 lifecycle use cases; current totals in `sandbox/grand/report/GRAND_REPORT.md`), all run in CI with no skips. **W3C compliance 94.3%** (executable checker, internal and self-scored; CI floor 94.0%). Review 02 (2026-10-03/04, `docs/REVIEW_02_CODEBASE.md`) fixed all 3 Critical and 15 of 16 High findings (including three found by its own re-reviews) (the remaining one, restating H1, is the author's decision); numbers below follow its re-runs. All implementation phases built and tested; remaining work is public-testnet (Sepolia) validation, optional real-SUMO, and thesis writing.
 
 ---
 
@@ -32,13 +32,43 @@
 
 ### Hypotheses
 
-- **H1** — Minimal identity standards (e.g. ERC-1056) are substantially cheaper to create than heavyweight account standards. **SUPPORTED** — the ratio depends on the operation definition: ~10× against ERC-721/725 when ERC-1056 creation is the bare `createIdentity` (52,594 gas, evm cancun) and ERC-721 creation is VIN-bound `mintVehicle` (542,378); **≈7×** when both sides bind the VIN (`createVehicleDID` 78,068). See `docs/MEASUREMENT_CONDITIONS.md` #6/#25. **Over a full MOBI VID lifecycle** (metrics harness, register #30) ERC-1056 is cheapest by **2.6× (ERC-721) and 3.0× (ERC-725)**, not 10×; restating H1 accordingly is pending the author's framing decision.
-- **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (94.3% measured, internal checker; external W3C DID suite 328/441, register #24).**
+- **H1** — Minimal identity standards (e.g. ERC-1056) are substantially cheaper to create than heavyweight account standards. **SUPPORTED** — the ratio depends on the operation definition: ~10× against ERC-721/725 when ERC-1056 creation is the bare `createIdentity` (52,594 gas, evm cancun) and ERC-721 creation is VIN-bound `mintVehicle` (545,101); **≈7×** when both sides bind the VIN (`createVehicleDID` 78,068). See `docs/MEASUREMENT_CONDITIONS.md` #6/#25. **Over a full MOBI VID lifecycle** (metrics harness, register #30) ERC-1056 is cheapest by **2.6× (ERC-721) and 3.0× (ERC-725)**, not 10×; restating H1 accordingly is pending the author's framing decision.
+- **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (94.3% measured, internal checker; external W3C DID test suite 335/336 — 336 generated tests on three recorded resolver outputs; DID-URL dereferencing not run; register #24).**
 - **H3** — Off-chain credential verification meets the real-time V2V latency budget (100 ms). **SUPPORTED (0.153 ms warm, cached/off-chain verify; register #27. Uncached ERC-1056 verify is 9.7 ms; see the freshness-k frontier, #32).**
 - **H4** — MOBI VID generalizes across identity backends. **SUPPORTED** (5-backend realization sweep; birth + lifecycle native on all, multi-party attestation native on claim-capable backends — a documented fidelity gradient).
 - **H5** — A hybrid design can sit on the security/performance frontier. **SUPPORTED (CVIN-Combined).**
 
 Overarching hypothesis: lightweight blockchain identity standards can provide sufficient security and W3C compliance for vehicle identity management while maintaining performance suitable for real-time V2V safety applications, offering a viable alternative to centralized PKI systems.
+
+---
+
+## 🔐 Layer 5 — Zero-Knowledge Proofs and the Agent-Wrapped Identity (2026-10-15)
+
+**Identity for machines; machines for identity.** A vehicle proves that its manufacturer is authorised, its model year
+meets a threshold and its region matches, against a commitment anchored on chain, **without revealing its VIN**
+(ZK-VIN, Groth16: prove 399 ms, verify 18.4 ms off chain, M0; verified on chain inside an identity-dependent
+transaction for **301,163 gas**, M1). Operating such proofs by hand is not tedious but infeasible (one ZK-VIN proof
+≈ 124,500 working years of hand computation, status E), so an agent, **the Steward**, wraps the identity: it turns the
+owner's plain-English rules into a signed policy, computes the proofs, refuses everything else, survives prompt
+injection, holds a twenty-questions attack (single, Sybil and accredited-insider variants) to **≤ 3.0 bits on 90/90
+runs**, and presents its own DID and delegation credential. Six of seven pre-registered expectations passed;
+**Z-E6 failed** (honest service fell below 90 % on 25 of 60 runs). Research code; the Groth16 keys come from an
+insecure single-party setup.
+
+| | |
+|:---:|:---:|
+| ![ZK pipeline](5_zkp-agent-identity/figures/fig01_zk_pipeline.png) | ![Circuit](5_zkp-agent-identity/figures/fig03_zkvin_circuit.png) |
+| ZK-VIN from statement to on-chain decision | What the circuit constrains, and what stays private |
+| ![Agent](5_zkp-agent-identity/figures/fig05_agent_architecture.png) | ![Manual vs agent](5_zkp-agent-identity/figures/fig07_manual_vs_agent.png) |
+| The Steward: the model proposes, the kernel disposes | The same cryptography by hand and by the agent |
+| ![Attack](5_zkp-agent-identity/figures/fig08_attack_leakage.png) | ![Loop](5_zkp-agent-identity/figures/fig12_full_circle.png) |
+| The twenty-questions attack under six defences | The closed loop |
+| ![Hex wall](5_zkp-agent-identity/figures/fig06_hex_wall.png) | ![SSI tables](5_zkp-agent-identity/figures/fig11_ssi_tables.png) |
+| One proof, as a person would have to copy it | An identity-management system first, SSI by extension |
+
+Read: [`docs/zkp/README.md`](docs/zkp/README.md) (index) · [Report A: build and verdicts](docs/zkp/REPORT_A_ZKP_INTEGRATION.md)
+· [Report B: the ZKP paper](docs/zkp/REPORT_B_ZKP_AND_IDENTITY.md) · [Report C: the agent-wrapped identity](docs/zkp/REPORT_C_AGENT_WRAPPED_IDENTITY.md)
+· [Thesis integration map](docs/zkp/THESIS_INTEGRATION_MAP.md) · Run: `cd 5_zkp-agent-identity && python3 demos/full_circle_demo.py`.
 
 ---
 
@@ -50,7 +80,7 @@ CVIN-SC-Implementation-SSI-DID/
 ├── 1_blockchain-identity/              # Hardhat project — 9 standards + MOBI VID
 │   ├── contracts/                      # CVINCombined, ERC1056, ERC1155, ERC4337,
 │   │                                   #   ERC721, ERC725, ERC725xy, ERC735, LSP8, MOBI
-│   ├── test/                           # 391 contract tests (per-standard + security/ + harness conformance)
+│   ├── test/                           # contract tests (per-standard + security/ + harness conformance; count in the grand report)
 │   ├── scripts/                        # benchmark_gas.js, validate_sepolia.js, deploy, security
 │   └── SEPOLIA_VALIDATION.md           # public-testnet validation harness (not yet run)
 │
@@ -68,6 +98,9 @@ CVIN-SC-Implementation-SSI-DID/
 │   ├── sumo/                           # V2V simulation (real ECDSA + real VC verify)
 │   ├── protocols/                      # protocol stack
 │   └── contracts/                      # testbed contracts
+│
+├── 5_zkp-agent-identity/              # Layer 5: zkid primitives, ZK-VIN circuit, ZkVinGate, the Steward agent,
+│                                       #   attacks, figures (docs/zkp/ for plans and reports)
 │
 ├── 4_comparison-framework/             # Comparative analysis (real data)
 │   ├── performance-metrics/            # gas/latency table + stats generators
@@ -90,7 +123,7 @@ CVIN-SC-Implementation-SSI-DID/
 All 9 standards implemented as Hardhat contracts and benchmarked on-chain (hardhat-local).
 
 - ✅ Smart contracts for all 9 standards + MOBI VID
-- ✅ 391-test Hardhat suite (per-standard + `test/security/` + harness conformance)
+- ✅ Hardhat suite (current count: `sandbox/grand/report/GRAND_REPORT.md`) (per-standard + `test/L2-identity-system/security/` + harness conformance)
 - ✅ Gas benchmark (`scripts/benchmark_gas.js`), N=30 deterministic runs
 - ✅ Sepolia validation harness authored (`scripts/validate_sepolia.js`) — run pending
 
@@ -98,7 +131,7 @@ All 9 standards implemented as Hardhat contracts and benchmarked on-chain (hardh
 - ✅ W3C DID resolver — 4 methods (`did:ethr`, `did:nft`, `did:key`, `did:mobi`)
 - ✅ Verifiable Credentials — issuer, holder wallet, verifier (6-stage offline pipeline), 10 automotive schemas, selective disclosure (SD-JWT-style salted digests), revocation registry, EIP-191 secp256k1 Data Integrity proofs (28 tests)
 - ✅ MOBI VID I (birth certificate: W3C VC + on-chain content-hash anchoring) and VID II (11 lifecycle event types with on-chain `attestEvent` ecrecover verification and AES-256-GCM VIN encryption) — 32 tests
-- ✅ Compliance checker (executable) — **94.3% measured**, CI floor 93.0%
+- ✅ Compliance checker (executable) — **94.3% measured** (internal structural self-score), CI floor 94.0%
 
 ### Phase 3 — CV2X Testbed Integration (✅ Complete)
 - ✅ 12 end-to-end lifecycle use cases with REAL cryptographic verification (forged/replayed credentials fail; pass/fail is computed, not hardcoded) — 12/12
@@ -128,17 +161,17 @@ All numbers below are measured from the repository; each has a row in `docs/MEAS
 |---|---:|
 | CVIN-Combined | 52,216 |
 | ERC-1056 | 52,594 |
-| ERC-1155 | 103,913 |
-| LSP8 | 149,615 |
+| ERC-1155 | 107,729 |
+| LSP8 | 152,644 |
 | MOBI-VID-V2 | 299,143 |
 | ERC-725 | 519,384 |
-| ERC-721 | 542,378 |
+| ERC-721 | 545,101 |
 | ERC-4337 | 759,088 |
-| ERC-735 | 1,535,776 |
+| ERC-735 | 1,757,881 |
 | ERC-725xy | 1,680,816 |
 
-*Condition M1: solc 0.8.24, optimizer 200 + viaIR, evm `cancun`, OpenZeppelin 5.0.2, Hardhat local; re-executed 2026-10-04 after the review-02 contract fixes (`4_comparison-framework/results/gas_benchmark.json`); ERC-735/CVIN-Combined/LSP8/ERC-1155/MOBI cells moved with security fixes, ERC-1056/721/725/725xy/4337 did not. The July 2026 run under the default EVM target was 1–2.8% higher on every cell with identical ratios; see `docs/MEASUREMENT_CONDITIONS.md` #25.*
-**Key finding:** ~32× spread across standards; ERC-1056 is ~10× cheaper than ERC-721/ERC-725 under this table's operation definitions (bare `createIdentity` vs VIN-bound `mintVehicle`), ≈7× when the VIN is bound on both sides (**H1 supported**; definitions and the reconciliation with the bare-mint figure of 102,804 are in `docs/MEASUREMENT_CONDITIONS.md` #6/#25). The ERC-4337 EntryPoint indirection adds +46,830 gas/op. MOBI VID V2 is measured alongside as an application profile, not as one of the 9 base standards.
+*Condition M1: solc 0.8.24, optimizer 200 + viaIR, evm `cancun`, OpenZeppelin 5.0.2, Hardhat local; re-executed 2026-10-04 after the defect fixes (`4_comparison-framework/results/gas_benchmark.json`; cells moved by the fixes are listed in `gas_moved_by_defect_fixes_2026-10-04.json` and `…_pass06.json`). See `docs/MEASUREMENT_CONDITIONS.md` #25, #31, #32.*
+**Key finding:** ~34× create spread across standards (CVIN-Combined 52,216 to ERC-735 1,757,881); ERC-1056 is ~10× cheaper than ERC-721/ERC-725 under this table's operation definitions (bare `createIdentity` vs VIN-bound `mintVehicle`), ≈7× when the VIN is bound on both sides (**H1 supported**; definitions and the reconciliation with the bare-mint figure of 102,804 are in `docs/MEASUREMENT_CONDITIONS.md` #6/#25). The ERC-4337 EntryPoint indirection adds +46,830 gas/op. MOBI VID V2 is measured alongside as an application profile, not as one of the 9 base standards.
 
 ### V2V latency (RQ4 / H3) — N=30 seeded runs, median [95% CI], ms
 
@@ -148,14 +181,28 @@ All numbers below are measured from the repository; each has a row in `docs/MEAS
 | SSI, cold (full VC verify) | 0.399 [0.381, 0.411] |
 | PKI baseline, warm | 0.094 [0.093, 0.095] |
 
-1.65M verifications; 90 failures = exactly the 3 injected attacks × 30 runs. **H3 supported** — roughly a 600× margin to the 100 ms V2V budget. *Caveat: excludes radio/MAC/network-stack latency; mobility is simulated (no SUMO binary required).*
+1.65M verifications; 150 failures = exactly the 5 injected attacks × 30 runs. **H3 supported** (verification-step scope): about 650 times inside the 100 ms V2V budget. *Caveat: excludes radio/MAC/network-stack latency; mobility is simulated (no SUMO binary required).*
+
+### Infrastructure messaging (thrust 3, crux C3) — pre-registered I1–I5, N=30
+
+Roadside units (RSUs), signal controllers and a traffic-management centre are `did:ethr` identities with road-authority credentials; RSUs sign SPaT, controllers and the TMC sign infrastructure-to-infrastructure messages (`docs/design/`, register #44–#48, chapter 5 §5.4.1).
+
+| Experiment | Result | Verdict |
+|---|---|---|
+| I1 warm SPaT vs warm BSM verify (ratio), verifier v3 | 1.226 [1.219, 1.238] (was 1.096 on verifier v2; host differs, cause not isolated) | outside band (0.80–1.20), not falsified (> 2.0) |
+| I2 registered checks (12 attacks, 3 warm variants) rejected for the expected reason | 15 of 15, in 30/30 runs, warm variants verified warm | PASS |
+| I3 SPaT accepted from a revoked RSU by a cached verifier | ≤ k − 1 messages (0 / 4 / 24 for k = 1 / 5 / 25); a conformance check of the re-check cadence, a count not a time | PASS |
+| I4 RSU identity gas, range over declared seeds 1–30 (key anchor; hand to authority) | 52,582–52,606; 51,742–51,754 (seed 1: 52,606; 51,754) | reported |
+| I5 operation costs on the controller → RSU → vehicle path | 0.900 ms (a sum of operation costs, not a path latency) | reported |
+
+*An adversarial review found two holes in the first verifier (SPaT for another intersection; replay inside the window); both were fixed and every experiment re-run (`docs/AFTER_ACTION_REPORT_11.md`). Mock mobility, no radio, in-process back-haul and revocation registry.*
 
 ### Security (RQ2 / H5) — two complementary lenses
 
-- **Lens 1 (test suite, `1_blockchain-identity/test/security/`)**: 54 Mocha attack scenarios; **43/43 applicable cells DEFENDED**; CI-gated.
+- **Lens 1 (test suite, `1_blockchain-identity/test/L2-identity-system/security/`)**: 54 attack cells (43 executed, 11 not applicable); **43/43 applicable cells DEFENDED**, each with the documented revert reason asserted (the strict harness; the on-chain script `scripts/security_scenarios.js` accepts any revert); CI-gated.
 - **Lens 2 (analysis)**: threat matrix adding Sybil economics, recovery availability, and on-chain PII leakage.
 
-Findings: no standard dominates (a security/performance frontier — **H5**); only ERC-4337 offers genuine on-chain key recovery; ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that both hashes and encrypts the VIN. A MOBI `attestEvent` signature-verification gap was found **and fixed** (121k → 193k gas; forged/replayed attestations now revert).
+Findings: no standard dominates (a security/performance frontier — **H5**); only ERC-4337 offers genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open); ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that both hashes and encrypts the VIN. A MOBI `attestEvent` signature-verification gap was found **and fixed** (121k → 193k gas; forged/replayed attestations now revert).
 
 ### W3C compliance (RQ3 / H2)
 
@@ -166,7 +213,7 @@ Findings: no standard dominates (a security/performance frontier — **H5**); on
 | Hypothesis | Status |
 |---|---|
 | H1 — minimal standards substantially cheaper to create (~10× bare, ≈7× VIN-bound) | ✅ Supported |
-| H2 — ≥90% W3C compliance | ✅ Supported (94.3%) |
+| H2 — ≥90% W3C compliance | ✅ Supported in a narrow sense (94.3% internal structural self-score; 335/336 external DID suite on three recorded documents) |
 | H3 — off-chain verify meets V2V budget | ✅ Supported (0.153 ms warm, cached; uncached on-chain verify needs freshness-k caching, #32) |
 | H4 — MOBI VID across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
 | H5 — hybrid on the frontier | ✅ Supported (CVIN-Combined) |
@@ -190,7 +237,7 @@ ERC-1056, ERC-721, ERC-725, **ERC-725xy** (full ERC-725X+Y account; added in v0.
 - Python packages: `web3`, `eth-account`, `cryptography`, `pytest`, `coincurve`
 - SUMO binary is **not** required — the V2V study runs in `--simulate` mode (real SUMO is optional/future)
 
-### Smart-contract tests (391 passing)
+### Smart-contract tests (current count: `sandbox/grand/report/GRAND_REPORT.md`)
 
 ```bash
 cd 1_blockchain-identity
@@ -241,7 +288,7 @@ python3 cv2x-testbed/sumo/run_v2v_stats.py
 
 ## ⚠️ Scope & Honesty Caveats
 
-- **Gas is Hardhat-local and deterministic.** A public-testnet (Sepolia) validation harness exists (`1_blockchain-identity/scripts/validate_sepolia.js`, `1_blockchain-identity/SEPOLIA_VALIDATION.md`) but the real run requires an RPC URL and a funded test key and has **not yet been executed**.
+- **Gas is Hardhat-local and deterministic for fixed inputs** (random keys or addresses move it by multiples of 12 gas; register #47). A public-testnet (Sepolia) validation harness exists (`1_blockchain-identity/scripts/validate_sepolia.js`, `1_blockchain-identity/SEPOLIA_VALIDATION.md`) but the real run requires an RPC URL and a funded test key and has **not yet been executed**.
 - **V2V latency excludes the network stack** (radio/MAC/PHY); mobility is **simulated** — no SUMO binary is invoked.
 - **ERC-4337 EntryPoint and LSP8 are minimal representative implementations**; their gas figures are lower bounds.
 - **VIN-cipher key distribution / HSM custody** is out of scope for the testbed.
