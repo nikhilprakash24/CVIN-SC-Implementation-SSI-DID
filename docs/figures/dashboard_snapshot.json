@@ -48,7 +48,7 @@
     "source": {
       "path": "4_comparison-framework/results/gas_benchmark.json"
     },
-    "measured": "2026-10-17T23:45:49.656Z",
+    "measured": "2026-10-22T23:16:49.669Z",
     "condition": "M1",
     "operations": [
       "deployRegistry",
@@ -292,7 +292,7 @@
           "native": true
         },
         "thirdPartyAttestation": {
-          "gas": 222082,
+          "gas": 222058,
           "native": true
         },
         "fidelity": "5/5"

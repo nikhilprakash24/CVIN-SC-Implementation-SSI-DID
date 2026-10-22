@@ -84,7 +84,7 @@
 | ERC-735 | 295,242 | 295,277 | 295,289 (native) | 5/5 |
 | ERC-1155 | 107,729 | 80,131 | 63,031 (emulated) | 3/5 |
 | CVIN-Combined | 51,766 | 34,690 | 336,896 (native) | 5/5 |
-| MOBI-VID-V2 | 299,165 | 307,254 | 222,082 (native) | 5/5 |
+| MOBI-VID-V2 | 299,165 | 307,254 | 222,058 (native) | 5/5 |
 *`4_comparison-framework/results/mobi_vid_backends.json`.*
 
 ### 3.4 Security (register #28)
