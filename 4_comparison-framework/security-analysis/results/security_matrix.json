@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "CVIN Thrust 5 \u2014 V2X security-comparison matrix (executed attack suite)",
-    "generated": "2026-10-22T22:25:46Z",
+    "generated": "2026-10-22T22:27:32Z",
     "categories": [
       "impersonation",
       "replay",
@@ -32,8 +32,8 @@
       "on-chain": {
         "layer": "on-chain",
         "solcVersion": "0.8.24",
-        "commit": "db19ff2",
-        "commitFull": "db19ff202f702328de505d8aa9c688ac042b7606",
+        "commit": "b8d5ba0",
+        "commitFull": "b8d5ba06ce6d6086935b6651d3913b61827e49d2",
         "dirty": false,
         "dirtyAnyFile": true,
         "scope": "1_blockchain-identity/scripts/security_scenarios.js",
@@ -44,7 +44,7 @@
         "ozVersion": "5.0.2",
         "network": "hardhat-local",
         "chainId": 31337,
-        "date": "2026-10-22T22:25:45.962Z",
+        "date": "2026-10-22T22:27:32.282Z",
         "categories": [
           "impersonation",
           "replay",
@@ -425,7 +425,7 @@
       "impersonation": {
         "outcome": "DEFENDED",
         "mechanism": "issuer signature recovered via secp256k1 and matched against the address embedded in the issuer DID (or a trusted-issuer registry)",
-        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0x05d30f44602b332c4303063d3ed447cc3a1a78a4 does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0x79ff0f4c5f23df470d319d2489913bc2c0ca818e does not match issuer did:ethr:0x1:0xb8418A435bD2C8aD44f11C1d26ecA8Fae6cac5aa']).",
+        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0xdea0c102cf58a73e6b55c97a50e93c642dc21f32 does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0x9d327bc1fc240db6d098e8747f36d524df6e9a9d does not match issuer did:ethr:0x1:0x0E62C478a1706209E5c6601C8306C21ebC434b04']).",
         "method": "executed"
       },
       "replay": {
@@ -437,21 +437,21 @@
       "identity_theft": {
         "outcome": "DEFENDED",
         "mechanism": "holder binding: the VP must be signed by the key controlling the holder DID (VP proof), and the VP holder must be the credential subject (review 02 S-1); a stolen credential is unusable without the subject's key, under the subject's DID or the thief's own",
-        "evidence": "(a) thief claiming the victim's holder DID but signing with its own key: presentation rejected (errors: ['[vp_signature] presentation signed by 0xd31447d67f18da9d90399f91750b981bcb585d2b, not holder did:ethr:0x1:0x72a72f03f1FAF6e4fe360fc74416E32dCcD530De']). (b) thief presenting the victim's credential under its OWN did:ethr, VP signed by the thief (a valid VP proof): presentation rejected (errors: [\"[holder_binding] presentation holder did:ethr:0x1:0x7c41500a8fC3bF2d80BF695053541B06cE850141 is not the credential subject ['did:ethr:0x1:0x72a72f03f1FAF6e4fe360fc74416E32dCcD530De']\"]). A copied/stolen credential cannot be replayed by a third party.",
+        "evidence": "(a) thief claiming the victim's holder DID but signing with its own key: presentation rejected (errors: ['[vp_signature] presentation signed by 0xdcfc10df4401ba9b9f987aeca8b9ed64bc2d7ca6, not holder did:ethr:0x1:0x727b12A4d2ca8D702843A06678C0A8Ab5dF270F7']). (b) thief presenting the victim's credential under its OWN did:ethr, VP signed by the thief (a valid VP proof): presentation rejected (errors: [\"[holder_binding] presentation holder did:ethr:0x1:0xC75715310fdc466F18bdecc0Fa6ef6B04D008Ca3 is not the credential subject ['did:ethr:0x1:0x727b12A4d2ca8D702843A06678C0A8Ab5dF270F7']\"]). A copied/stolen credential cannot be replayed by a third party.",
         "method": "executed",
         "variants": {
           "same_did_wrong_key": {
             "rejected": true,
             "errors": [
-              "[vp_signature] presentation signed by 0xd31447d67f18da9d90399f91750b981bcb585d2b, not holder did:ethr:0x1:0x72a72f03f1FAF6e4fe360fc74416E32dCcD530De"
+              "[vp_signature] presentation signed by 0xdcfc10df4401ba9b9f987aeca8b9ed64bc2d7ca6, not holder did:ethr:0x1:0x727b12A4d2ca8D702843A06678C0A8Ab5dF270F7"
             ]
           },
           "own_did": {
             "rejected": true,
-            "thief_did": "did:ethr:0x1:0x7c41500a8fC3bF2d80BF695053541B06cE850141",
+            "thief_did": "did:ethr:0x1:0xC75715310fdc466F18bdecc0Fa6ef6B04D008Ca3",
             "vp_proof_valid": true,
             "errors": [
-              "[holder_binding] presentation holder did:ethr:0x1:0x7c41500a8fC3bF2d80BF695053541B06cE850141 is not the credential subject ['did:ethr:0x1:0x72a72f03f1FAF6e4fe360fc74416E32dCcD530De']"
+              "[holder_binding] presentation holder did:ethr:0x1:0xC75715310fdc466F18bdecc0Fa6ef6B04D008Ca3 is not the credential subject ['did:ethr:0x1:0x727b12A4d2ca8D702843A06678C0A8Ab5dF270F7']"
             ]
           }
         }
@@ -477,11 +477,12 @@
     }
   },
   "run": {
-    "commit": "db19ff202f702328de505d8aa9c688ac042b7606",
+    "commit": "b8d5ba06ce6d6086935b6651d3913b61827e49d2",
     "code_dirty": false,
     "tree_dirty": true,
     "scope": "4_comparison-framework/security-analysis/attack_scenarios.py",
     "scope_files": 15,
-    "scope_sha": "e2a50582960c"
+    "scope_sha": "e2a50582960c",
+    "python_version": "3.13.16"
   }
 }

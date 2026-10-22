@@ -32,7 +32,7 @@
 | C1 CAV identity substrate | partial | 7 | 2 |
 | C2 Secure V2V messaging | partial | 5 | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | partial | 5 | 5 |
-| C4 Revocation freshness | partial | 2 | 3 |
+| C4 Revocation freshness | partial | 3 | 3 |
 | C5 W3C conformance | partial | 2 | 2 |
 | C6 MOBI VID lifecycle | partial | 2 | 1 |
 | C7 Privacy and linkability | partial | 1 | 1 |

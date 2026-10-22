@@ -56,5 +56,5 @@ F: Source register (`SOURCES.md`)
 
 ---
 
-**Status:** 6/7 chapters drafted; Chapter 2 is the one gap (citation set needed).
+**Status:** 7/7 chapters drafted (2026-10-22: chapter 2 from verified sources, six `[SOURCE NEEDED]` markers left; layer-5 sections added to chapters 3–7 as first drafts).
 Chapters 3–7 and §5.* are grounded in the measured artifacts in `SOURCES.md` §6.
