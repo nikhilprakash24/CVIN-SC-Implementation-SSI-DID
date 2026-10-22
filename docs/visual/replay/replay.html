@@ -75,6 +75,7 @@
   <input type="range" id="scrub" min="0" max="0" value="0">
   <span id="tlabel" style="font-family:monospace">t = 0.0 s</span>
   <label><input type="checkbox" id="follow"> follow selected</label>
+  <span style="color:var(--muted);font-size:12px">space: play/pause · →: step · click: identity card</span>
 </div>
 <div class="hud">
   <div class="tile"><b id="h_veh">–</b><span>vehicles on road (SSI / PKI)</span></div>
@@ -109,11 +110,11 @@
   // ---------------- state
   let meta = null, enroll = {}, snaps = [], txByStep = new Map(), safety = [], attacks = [], summary = null;
   let idx = 0, playing = false, selected = null, timer = null;
-  let cum = { tx: 0, rx: 0, cold: 0, fail: 0 }, cumUpTo = -1;
+  let cum = { tx: 0, rx: 0, cold: 0, fail: 0 };
 
   function reset() {
     meta = null; enroll = {}; snaps = []; txByStep = new Map(); safety = []; attacks = []; summary = null;
-    idx = 0; playing = false; selected = null; cum = { tx: 0, rx: 0, cold: 0, fail: 0 }; cumUpTo = -1;
+    idx = 0; playing = false; selected = null; cum = { tx: 0, rx: 0, cold: 0, fail: 0 }; cumKeys = null; cumRows = null; logged = new Set();
     $('log').textContent = '';
   }
 
@@ -265,20 +266,32 @@
     if (selected) card(selected);
   }
 
-  function accumulate() {
-    if (cumUpTo > idx) { cum = { tx: 0, rx: 0, cold: 0, fail: 0 }; cumUpTo = -1; }
-    for (let i = cumUpTo + 1; i <= idx; i++) {
-      for (const e of txByStep.get(snaps[i].t.toFixed(3)) || []) {
-        cum.tx++; for (const [, ok, cold] of e.rx) { cum.rx++; if (!ok) cum.fail++; else if (cold) cum.cold++; }
+  // Cumulative counters over EVERY broadcast with t <= now (exact even when
+  // snapshots are thinned): prefix sums over the sorted step keys.
+  let cumKeys = null, cumRows = null;
+  function buildCum() {
+    cumKeys = [...txByStep.keys()].map(Number).sort((a, b) => a - b);
+    cumRows = []; let c = { tx: 0, rx: 0, cold: 0, fail: 0 };
+    for (const k of cumKeys) {
+      for (const e of txByStep.get(k.toFixed(3))) {
+        c.tx++; for (const [, ok, cold] of e.rx) { c.rx++; if (!ok) c.fail++; else if (cold) c.cold++; }
       }
+      cumRows.push({ ...c });
     }
-    cumUpTo = idx;
+  }
+  function accumulate() {
+    if (!cumKeys) buildCum();
+    const t = snaps[idx].t + 1e-9;
+    let lo = 0, hi = cumKeys.length - 1, ans = -1;
+    while (lo <= hi) { const m = (lo + hi) >> 1; if (cumKeys[m] <= t) { ans = m; lo = m + 1; } else hi = m - 1; }
+    cum = ans < 0 ? { tx: 0, rx: 0, cold: 0, fail: 0 } : cumRows[ans];
   }
 
   let logged = new Set();
   function logEvents(t) {
     const log = $('log');
-    for (const e of safety) if (Math.abs(e.t - t) < 1e-6 && !logged.has(e)) {
+    const t0 = idx > 0 ? snaps[idx - 1].t : -1;
+    for (const e of safety) if (e.t > t0 - 1e-9 && e.t <= t + 1e-9 && !logged.has(e)) {
       logged.add(e);
       const line = e.app === 'FCW' ? `t=${e.t.toFixed(1)}s FCW ${e.vehicle} → ${e.target} TTC ${e.ttc_s}s gap ${e.gap_m}m, ${e.warned} receivers verified` : `t=${e.t.toFixed(1)}s EEBL ${e.vehicle} hard brake, ${e.warned} receivers verified`;
       log.insertAdjacentHTML('afterbegin', `<div><span class="stamp">${e.app}</span> ${line}</div>`);
@@ -295,7 +308,17 @@
       `${vid}  ${e.identity === 'MOBI_VID' ? 'SSI / MOBI VID' : 'PKI (X.509 pseudonym cert)'}\n` +
       `VIN  ${e.vin}   ${e.make} ${e.model} ${e.year}\n` +
       (e.did ? `DID  ${e.did}\n` : `cert issued by centralized CA, rotates every 100 messages\n`) +
-      (s ? `pos  x=${s[1].toFixed(1)} m  y=${s[2].toFixed(1)} m  speed ${s[3].toFixed(1)} m/s  lane ${s[5]}` : 'not on road at this instant');
+      (s ? `pos  x=${s[1].toFixed(1)} m  y=${s[2].toFixed(1)} m  speed ${s[3].toFixed(1)} m/s  lane ${s[5]}` : 'not on road at this instant') +
+      '\n' + receiverStats(vid);
+  }
+
+  function receiverStats(vid) {
+    // As a receiver, up to now: peers fully verified (cold), warm checks, rejections.
+    const t = snaps[idx].t + 1e-9; const peers = new Set(); let cold = 0, warm = 0, fail = 0;
+    for (const [k, list] of txByStep) { if (Number(k) > t) continue;
+      for (const e of list) for (const [rid, ok, c] of e.rx) if (rid === vid) {
+        if (!ok) fail++; else if (c) { cold++; peers.add(e.sender); } else warm++; } }
+    return `as receiver so far: ${peers.size} peers fully verified (${cold} cold), ${warm} warm checks, ${fail} rejected`;
   }
 
   // ---------------- controls

@@ -136,7 +136,15 @@ def main():
     ap.add_argument("--out", default=str(DEFAULT_OUT), help="stats output path")
     ap.add_argument("--boot", type=int, default=10000, help="bootstrap resamples")
     ap.add_argument("--log-dir", default=None, help="per-run stdout log directory")
+    ap.add_argument("--trace-dir", default=None,
+                    help="also write a per-seed event trace (seed_NNN.jsonl) and "
+                         "per-seed results (seed_NNN.json) here; children then do "
+                         "not touch results/v2v_latency.json "
+                         "(docs/visual/TRACE_SCHEMA.md)")
     args = ap.parse_args()
+    trace_dir = Path(args.trace_dir).resolve() if args.trace_dir else None
+    if trace_dir:
+        trace_dir.mkdir(parents=True, exist_ok=True)
 
     seeds = list(range(1, args.runs + 1))
     log_dir = Path(args.log_dir) if args.log_dir else None
@@ -157,6 +165,11 @@ def main():
                "--duration", str(args.duration),
                "--vehicles", str(args.vehicles),
                "--seed", str(seed)]
+        run_json = PER_RUN_JSON
+        if trace_dir:
+            run_json = trace_dir / f"seed_{seed:03d}.json"
+            cmd += ["--results", str(run_json),
+                    "--trace", str(trace_dir / f"seed_{seed:03d}.jsonl")]
         proc = subprocess.run(cmd, cwd=str(SUMO_DIR),
                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                               text=True)
@@ -168,7 +181,7 @@ def main():
             print(f"[seed {seed:2d}] FAILED exit={proc.returncode}")
             continue
         try:
-            res = json.loads(PER_RUN_JSON.read_text())
+            res = json.loads(run_json.read_text())
         except Exception as e:  # noqa: BLE001
             failed_runs.append({"seed": seed, "reason": f"json:{e}"})
             print(f"[seed {seed:2d}] FAILED reading result json: {e}")
