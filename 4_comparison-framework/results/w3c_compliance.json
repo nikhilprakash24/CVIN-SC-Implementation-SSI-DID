@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-10-22T22:27:29.055354",
+  "timestamp": "2026-10-22T22:58:40.949774",
   "run": {
-    "commit": "b8d5ba06ce6d6086935b6651d3913b61827e49d2",
+    "commit": "205115991a560bd6d1b3dfb117d71d3374c00edf",
     "code_dirty": false,
-    "tree_dirty": true,
+    "tree_dirty": false,
     "scope": "cv2x-testbed/scripts/w3c_compliance_checker.py",
     "scope_files": 7,
     "scope_sha": "1e5a88100ae4",
@@ -136,7 +136,7 @@
       "section": "Identifiers",
       "requirement": "Credential 'id', when present, MUST be a URL/URI",
       "status": "PASS",
-      "notes": "credential id is a URI: urn:uuid:9d7d11cc-5946-4731-bd81-ea434ac3fd92"
+      "notes": "credential id is a URI: urn:uuid:2ebfbdf0-834d-4a16-93f5-4bb0978b2553"
     },
     {
       "spec": "VC Data Model v2.0",
@@ -150,7 +150,7 @@
       "section": "Issuer",
       "requirement": "'issuer' MUST be present and be a URI (DID) identifying the issuer",
       "status": "PASS",
-      "notes": "issuer = did:ethr:0x1:0xce686bA809650683303e5119F849aaa67fA74A5D"
+      "notes": "issuer = did:ethr:0x1:0x8AC02eB9e67A49c50f0B03576241f2864eE6b8Bb"
     },
     {
       "spec": "VC Data Model v2.0",
@@ -164,7 +164,7 @@
       "section": "Validity Period",
       "requirement": "'validFrom'/'validUntil' MUST be valid XML-Schema dateTime values (v2 renames issuanceDate)",
       "status": "PASS",
-      "notes": "validFrom=2026-10-22T22:27:29Z, validUntil=2027-10-22T22:27:29Z, both XML-Schema dateTime"
+      "notes": "validFrom=2026-10-22T22:58:40Z, validUntil=2027-10-22T22:58:40Z, both XML-Schema dateTime"
     },
     {
       "spec": "VC Data Model v2.0",
@@ -192,14 +192,14 @@
       "section": "Securing Mechanisms",
       "requirement": "Proof MUST be cryptographically bound to the issuer's key (recoverable signature)",
       "status": "PASS",
-      "notes": "secp256k1 recovery yields the issuer address 0xce686bA809650683303e5119F849aaa67fA74A5D (offline, no chain round-trip)"
+      "notes": "secp256k1 recovery yields the issuer address 0x8AC02eB9e67A49c50f0B03576241f2864eE6b8Bb (offline, no chain round-trip)"
     },
     {
       "spec": "VC Data Model v2.0",
       "section": "Verification",
       "requirement": "A well-formed, freshly issued credential MUST verify end-to-end",
       "status": "PASS",
-      "notes": "verify_credential => valid, sub-checks ['disclosure', 'proof', 'revocation', 'schema', 'signature', 'structure', 'temporal'] all true (0.28 ms)"
+      "notes": "verify_credential => valid, sub-checks ['disclosure', 'proof', 'revocation', 'schema', 'signature', 'structure', 'temporal'] all true (0.30 ms)"
     },
     {
       "spec": "VC Data Model v2.0",

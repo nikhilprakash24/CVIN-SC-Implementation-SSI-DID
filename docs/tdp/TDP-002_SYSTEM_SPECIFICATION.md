@@ -72,7 +72,7 @@ Convention. "Shall" marks a requirement. The threshold values are the ones the t
 
 - Derived from: RQ1; H1 (lifetime half); H4
 - Verification: Test; register #30, #35
-- Limit: Run of record 2026-10-09T02-09-36Z_7a9a996; the harness flag that marks measured-code dirtiness is inert until A6 (D33, N-19).
+- Limit: Run of record 2026-10-21T03-28-59Z_a9e2a28 (re-run on the merged tree; was 2026-10-09T02-09-36Z_7a9a996); the harness flag that marks measured-code dirtiness is inert until A6 (D33, N-19).
 
 **PRF-04 Lifetime cost model with sensitivity band.** A fifteen-year lifetime cost model shall rank substrates with a declared sensitivity band on recurring event frequency.
 

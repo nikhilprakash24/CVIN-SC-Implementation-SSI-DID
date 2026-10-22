@@ -6,8 +6,8 @@
 <rect x="60" y="120" width="900" height="76" stroke="#7cc9ff" fill="none" stroke-width="1.4" rx="0"/>
 <text x="70" y="138" font-size="10" text-anchor="start" fill="#7cc9ff" font-weight="bold">MANIFOLD A — IdentityAdapter (JS): one declared operation catalogue; a substrate without a primitive throws NotSupported, never emulates</text>
 <text x="70" y="156" font-size="9" text-anchor="start" fill="#e3ecf9" font-weight="normal">deploy createIdentity createIdentityWithAttributes resolveOwner resolveByVin resolveDocument verifyDelegate rotateController addDelegate setAttribute</text>
-<text x="70" y="169" font-size="9" text-anchor="start" fill="#e3ecf9" font-weight="normal">transferVehicle metaTxSetAttribute revokeDelegate rotateDelegate revokeAttribute deactivate prepareIssuer anchorIssuerKey anchorStatus</text>
-<text x="70" y="182" font-size="9" text-anchor="start" fill="#e3ecf9" font-weight="normal">revokeCredential statusCheck prepareThroughputSenders throughputOp</text>
+<text x="70" y="169" font-size="9" text-anchor="start" fill="#e3ecf9" font-weight="normal">transferVehicle metaTxSetAttribute revokeDelegate rotateDelegate revokeAttribute deactivate createPresentation executeCall prepareIssuer</text>
+<text x="70" y="182" font-size="9" text-anchor="start" fill="#e3ecf9" font-weight="normal">anchorIssuerKey anchorStatus revokeCredential statusCheck prepareThroughputSenders throughputOp</text>
 <ellipse cx="111.0" cy="232" rx="41.0" ry="10" stroke="#e3ecf9" fill="#0f2d5c" stroke-width="1.3"/>
 <line x1="70" y1="232" x2="70" y2="532" stroke="#e3ecf9" stroke-width="1.3"/>
 <line x1="152" y1="232" x2="152" y2="532" stroke="#e3ecf9" stroke-width="1.3"/>

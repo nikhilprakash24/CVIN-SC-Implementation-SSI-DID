@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "CVIN Thrust 5 \u2014 V2X security-comparison matrix (executed attack suite)",
-    "generated": "2026-10-22T22:27:32Z",
+    "generated": "2026-10-22T22:58:44Z",
     "categories": [
       "impersonation",
       "replay",
@@ -32,8 +32,8 @@
       "on-chain": {
         "layer": "on-chain",
         "solcVersion": "0.8.24",
-        "commit": "b8d5ba0",
-        "commitFull": "b8d5ba06ce6d6086935b6651d3913b61827e49d2",
+        "commit": "2051159",
+        "commitFull": "205115991a560bd6d1b3dfb117d71d3374c00edf",
         "dirty": false,
         "dirtyAnyFile": true,
         "scope": "1_blockchain-identity/scripts/security_scenarios.js",
@@ -44,7 +44,7 @@
         "ozVersion": "5.0.2",
         "network": "hardhat-local",
         "chainId": 31337,
-        "date": "2026-10-22T22:27:32.282Z",
+        "date": "2026-10-22T22:58:43.977Z",
         "categories": [
           "impersonation",
           "replay",
@@ -363,9 +363,9 @@
       "sybil": {
         "outcome": "DEFENDED",
         "mechanism": "identity creation gated by onlyAuthorizedManufacturer AND VIN-hash uniqueness (exact createIdentity gas: matrix cost_proxy_gas)",
-        "evidence": "attacker registerVehicleBirth reverted: \"VM Exception while processing transaction: reverted with reason string 'Only authorized manufacturers can register vehicles'\". Strongest Sybil resistance: manufacturer authorisation + unique-VIN enforcement. createIdentity gas (Sybil-cost proxy) = 299,143.",
+        "evidence": "attacker registerVehicleBirth reverted: \"VM Exception while processing transaction: reverted with reason string 'Only authorized manufacturers can register vehicles'\". Strongest Sybil resistance: manufacturer authorisation + unique-VIN enforcement. createIdentity gas (Sybil-cost proxy) = 299,165.",
         "method": "executed",
-        "cost_proxy_gas": 299143
+        "cost_proxy_gas": 299165
       },
       "recovery": {
         "outcome": "VULNERABLE",
@@ -425,7 +425,7 @@
       "impersonation": {
         "outcome": "DEFENDED",
         "mechanism": "issuer signature recovered via secp256k1 and matched against the address embedded in the issuer DID (or a trusted-issuer registry)",
-        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0xdea0c102cf58a73e6b55c97a50e93c642dc21f32 does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0x9d327bc1fc240db6d098e8747f36d524df6e9a9d does not match issuer did:ethr:0x1:0x0E62C478a1706209E5c6601C8306C21ebC434b04']).",
+        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0xdb950459e7d358dd5ed38069836640dadffc4e16 does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0x5408c2562228db7bbab7fc9035094785eed46a5e does not match issuer did:ethr:0x1:0x1e8323F1e49861f26B7a124b5508399dF6B29CE5']).",
         "method": "executed"
       },
       "replay": {
@@ -437,21 +437,21 @@
       "identity_theft": {
         "outcome": "DEFENDED",
         "mechanism": "holder binding: the VP must be signed by the key controlling the holder DID (VP proof), and the VP holder must be the credential subject (review 02 S-1); a stolen credential is unusable without the subject's key, under the subject's DID or the thief's own",
-        "evidence": "(a) thief claiming the victim's holder DID but signing with its own key: presentation rejected (errors: ['[vp_signature] presentation signed by 0xdcfc10df4401ba9b9f987aeca8b9ed64bc2d7ca6, not holder did:ethr:0x1:0x727b12A4d2ca8D702843A06678C0A8Ab5dF270F7']). (b) thief presenting the victim's credential under its OWN did:ethr, VP signed by the thief (a valid VP proof): presentation rejected (errors: [\"[holder_binding] presentation holder did:ethr:0x1:0xC75715310fdc466F18bdecc0Fa6ef6B04D008Ca3 is not the credential subject ['did:ethr:0x1:0x727b12A4d2ca8D702843A06678C0A8Ab5dF270F7']\"]). A copied/stolen credential cannot be replayed by a third party.",
+        "evidence": "(a) thief claiming the victim's holder DID but signing with its own key: presentation rejected (errors: ['[vp_signature] presentation signed by 0xaae12e804ccaeaee422e755b6b07ed311f6257ab, not holder did:ethr:0x1:0x087c6f5d20693F01656a40441226fDe5D6117930']). (b) thief presenting the victim's credential under its OWN did:ethr, VP signed by the thief (a valid VP proof): presentation rejected (errors: [\"[holder_binding] presentation holder did:ethr:0x1:0xb6bfF2912650Cb2a0382F37C3F12D0567F140674 is not the credential subject ['did:ethr:0x1:0x087c6f5d20693F01656a40441226fDe5D6117930']\"]). A copied/stolen credential cannot be replayed by a third party.",
         "method": "executed",
         "variants": {
           "same_did_wrong_key": {
             "rejected": true,
             "errors": [
-              "[vp_signature] presentation signed by 0xdcfc10df4401ba9b9f987aeca8b9ed64bc2d7ca6, not holder did:ethr:0x1:0x727b12A4d2ca8D702843A06678C0A8Ab5dF270F7"
+              "[vp_signature] presentation signed by 0xaae12e804ccaeaee422e755b6b07ed311f6257ab, not holder did:ethr:0x1:0x087c6f5d20693F01656a40441226fDe5D6117930"
             ]
           },
           "own_did": {
             "rejected": true,
-            "thief_did": "did:ethr:0x1:0xC75715310fdc466F18bdecc0Fa6ef6B04D008Ca3",
+            "thief_did": "did:ethr:0x1:0xb6bfF2912650Cb2a0382F37C3F12D0567F140674",
             "vp_proof_valid": true,
             "errors": [
-              "[holder_binding] presentation holder did:ethr:0x1:0xC75715310fdc466F18bdecc0Fa6ef6B04D008Ca3 is not the credential subject ['did:ethr:0x1:0x727b12A4d2ca8D702843A06678C0A8Ab5dF270F7']"
+              "[holder_binding] presentation holder did:ethr:0x1:0xb6bfF2912650Cb2a0382F37C3F12D0567F140674 is not the credential subject ['did:ethr:0x1:0x087c6f5d20693F01656a40441226fDe5D6117930']"
             ]
           }
         }
@@ -477,7 +477,7 @@
     }
   },
   "run": {
-    "commit": "b8d5ba06ce6d6086935b6651d3913b61827e49d2",
+    "commit": "205115991a560bd6d1b3dfb117d71d3374c00edf",
     "code_dirty": false,
     "tree_dirty": true,
     "scope": "4_comparison-framework/security-analysis/attack_scenarios.py",

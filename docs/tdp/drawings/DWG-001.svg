@@ -71,8 +71,8 @@
 <text x="144" y="720" font-size="9" text-anchor="start" fill="#93a9cb" font-weight="normal">interface (Phase 2 sketch): MobilitySource — reference implementation = the Phase 1 code above</text>
 <circle cx="942" cy="680" r="9" stroke="#7cc9ff" fill="#0f2d5c" stroke-width="1.4"/>
 <text x="942" y="683.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">7</text>
-<text x="144" y="286" font-size="9.5" text-anchor="start" fill="#ffb454" font-weight="normal">register 52 rows: V 34 · S 10 · E 7 · U 1   |   producers of record 20   |   CI jobs 8</text>
-<text x="144" y="196" font-size="9.5" text-anchor="start" fill="#ffb454" font-weight="normal">suites at the last grand run: L1 {'passing': 99, 'failing': 0}  L1+L2 {'passing': 541, 'failing': 0}  L3+L4 {'passed': 342}</text>
+<text x="144" y="286" font-size="9.5" text-anchor="start" fill="#ffb454" font-weight="normal">register 62 rows: V 45 · S 10 · E 7 · U 0   |   producers of record 20   |   CI jobs 11</text>
+<text x="144" y="196" font-size="9.5" text-anchor="start" fill="#ffb454" font-weight="normal">suites at the last grand run: L1 {'passing': 99, 'failing': 0}  L1+L2 {'passing': 562, 'failing': 0}  L3+L4 {'passed': 376}</text>
 <line x1="46" y1="122" x2="46" y2="746" stroke="#93a9cb" stroke-width="0.8"/>
 <line x1="42" y1="122" x2="50" y2="122" stroke="#93a9cb" stroke-width="0.8"/>
 <line x1="42" y1="746" x2="50" y2="746" stroke="#93a9cb" stroke-width="0.8"/>
