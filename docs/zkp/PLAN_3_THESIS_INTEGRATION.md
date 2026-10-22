@@ -16,13 +16,13 @@ lineage merge touched neither layer 5 nor the VC layer it imports. So the rows d
 
 ## Steps
 1. Register §1: add the condition tag **Sim** (seeded in-process simulation).
-2. Register: rows **#55–#61** for Z1–Z7, each with tag, source, commit and status.
+2. Register: rows **#56–#62** for Z1–Z7, each with tag, source, commit and status.
 3. Generated documents: result cards for the new V rows, gas classes for the gas-bearing row, then every `--check`.
 4. Thesis scaffolding: RQ5 and H6 in `docs/thesis/README.md` and chapter 1; pointers in chapters 2–7 per the map §1.
 5. Scope and ideas: SC-12 reopened in `docs/phase2/SCOPE_RECONCILIATION.md`; I-09 and I-10 status in
    `docs/phase2/IDEA_REGISTER.md`.
 6. `THESIS_INTEGRATION_MAP.md`: status changes from "proposals only" to "adopted on the defaults", with row numbers.
-7. After-action report 21 and a handback addendum.
+7. After-action report 30 and a handback addendum.
 
 ## Not in scope
 Chapter prose (Plan 2, W-4, drives it); any new measurement.

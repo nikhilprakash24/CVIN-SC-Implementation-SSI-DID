@@ -323,6 +323,44 @@ contract MOBIVIDRegistry is ERC1056Registry {
     /// @dev vehicle identity => a verification key has been anchored on-chain
     mapping(address => bool) public vehicleKeyAnchored;
 
+    // ============ DELEGATIONS (WM-2 C2, defect D54) ============
+    // The MOBI registry stores delegations, as the canonical ERC-1056 registry does:
+    // identity => delegateType => delegate => validTo. The ERC1056Registry base (the
+    // testbed's vehicle profile) stays event-only; only this registry, whose
+    // attestEvent must check a vehicle owner's consent, keeps them in storage.
+    mapping(address => mapping(bytes32 => mapping(address => uint))) public delegates;
+
+    function addDelegate(
+        address identity,
+        address actor,
+        bytes32 delegateType,
+        address delegate,
+        uint validity
+    ) internal override {
+        super.addDelegate(identity, actor, delegateType, delegate, validity);
+        delegates[identity][delegateType][delegate] = block.timestamp + validity;
+    }
+
+    function revokeDelegate(
+        address identity,
+        address actor,
+        bytes32 delegateType,
+        address delegate
+    ) internal override {
+        super.revokeDelegate(identity, actor, delegateType, delegate);
+        delegates[identity][delegateType][delegate] = block.timestamp;
+    }
+
+    /// @dev True while `delegate` holds an unexpired delegation of `delegateType`
+    ///      for `identity`, and the identity is not revoked.
+    function validDelegate(
+        address identity,
+        bytes32 delegateType,
+        address delegate
+    ) public view returns (bool) {
+        return !revoked[identity] && delegates[identity][delegateType][delegate] > block.timestamp;
+    }
+
     event VehicleKeyAnchored(
         address indexed vehicleIdentity,
         bytes32 indexed keyHash,

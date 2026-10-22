@@ -138,7 +138,7 @@ contract ERC1056Registry {
         bytes32 delegateType,
         address delegate,
         uint validity
-    ) internal onlyOwner(identity, actor) notRevoked(identity) {
+    ) internal virtual onlyOwner(identity, actor) notRevoked(identity) {
         uint validTo = block.timestamp + validity;
 
         emit DIDDelegateChanged(
@@ -169,7 +169,7 @@ contract ERC1056Registry {
         address actor,
         bytes32 delegateType,
         address delegate
-    ) internal onlyOwner(identity, actor) notRevoked(identity) {
+    ) internal virtual onlyOwner(identity, actor) notRevoked(identity) {
         emit DIDDelegateChanged(
             identity,
             delegateType,

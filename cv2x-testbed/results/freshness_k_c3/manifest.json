@@ -1,0 +1,89 @@
+{
+ "step": "WM-2 C3 (report 19 \u00a71a)",
+ "order": [
+  "c3_r1_k32_full",
+  "c3_r1_k37_full",
+  "c3_r1_k37_probe",
+  "c3_r2_k37_probe",
+  "c3_r2_k37_full",
+  "c3_r2_k32_full"
+ ],
+ "deviation": "runs of earlier commits cannot pass promote.py (stamp commit must be HEAD); copied from runs/c3 with these hashes, as for the C0 runs",
+ "runs": {
+  "c3_r1_k32_full": {
+   "code_commit": "8216507",
+   "git_dirty": false,
+   "date_utc": "2026-10-15T05:00:00+00:00",
+   "cpu": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+   "client": "HardhatNetwork/2.28.6/@nomicfoundation/edr/0.3.8"
+  },
+  "c3_r1_k37_full": {
+   "code_commit": "f660402",
+   "git_dirty": false,
+   "date_utc": "2026-10-15T05:00:15+00:00",
+   "cpu": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+   "client": "HardhatNetwork/2.28.6/@nomicfoundation/edr/0.3.8"
+  },
+  "c3_r1_k37_probe": {
+   "code_commit": "f660402",
+   "git_dirty": false,
+   "date_utc": "2026-10-15T05:00:32+00:00",
+   "cpu": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+   "client": "HardhatNetwork/2.28.6/@nomicfoundation/edr/0.3.8"
+  },
+  "c3_r2_k32_full": {
+   "code_commit": "8216507",
+   "git_dirty": false,
+   "date_utc": "2026-10-15T05:01:19+00:00",
+   "cpu": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+   "client": "HardhatNetwork/2.28.6/@nomicfoundation/edr/0.3.8"
+  },
+  "c3_r2_k37_full": {
+   "code_commit": "f660402",
+   "git_dirty": false,
+   "date_utc": "2026-10-15T05:01:02+00:00",
+   "cpu": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+   "client": "HardhatNetwork/2.28.6/@nomicfoundation/edr/0.3.8"
+  },
+  "c3_r2_k37_probe": {
+   "code_commit": "f660402",
+   "git_dirty": false,
+   "date_utc": "2026-10-15T05:00:47+00:00",
+   "cpu": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+   "client": "HardhatNetwork/2.28.6/@nomicfoundation/edr/0.3.8"
+  }
+ },
+ "sha256": {
+  "c3_r1_k32_full.csv": "226e9db0626055566b32bbd7303578d92f08b62557b9f679c007409e3168d56f",
+  "c3_r1_k32_full.json": "5e1b154c5e1a314d4300af0b4ad82ed9a99976193fc2a224042343369f0f3d3c",
+  "c3_r1_k32_full.log.txt": "2c3dc86cb38570638b0bd9b068ecc21364a0e9efd44a585813213497ade020c1",
+  "c3_r1_k32_full.md": "459a1536bc901f52b100866a3cb707b4dd2c0e77dccf708b5f056c12af654d73",
+  "c3_r1_k32_full.png": "7e5dedd8259adfa83b9016424efa827e8030007fe8f6301c6ab7811442ea6451",
+  "c3_r1_k37_full.csv": "a9a15da38f667c1c3410183dee2c82c4cfbc4a25d9c21571a1bcf451d5470e35",
+  "c3_r1_k37_full.json": "a713096e00849232a18fa0b849f023a6e9de4048a103202b27003c4f7e8b878c",
+  "c3_r1_k37_full.log.txt": "d3f7b709e1e8e9b30c76c3fadb4c5d86e5e62166360193802b4eb476a303a125",
+  "c3_r1_k37_full.md": "0188714736214826b52b16cfe8170337eccef226b9e51c726b5d99a5beaf9c85",
+  "c3_r1_k37_full.png": "3d4da6710dc2a7df4b31949030f6468ef94ed871abb304322ecb82053931f8a4",
+  "c3_r1_k37_probe.csv": "522ce4e9ee73edd39c6aa49f640280439714614f73caf6f07d30544d9d8a4d4d",
+  "c3_r1_k37_probe.json": "775dd3997c212129acf9c69c50f056007609874c8a405159c845aeafd170ada3",
+  "c3_r1_k37_probe.log.txt": "214eb67889cb3ccdf18150c9d88f2e2fdef2acf15a2109e6d94f9fea264a751f",
+  "c3_r1_k37_probe.md": "7b5d8cf8798923bf552543b7dd2c2304e1cec5edcf00e7ec66afe1bbf2e505f8",
+  "c3_r1_k37_probe.png": "cd0b5d934dd60a7cb8a4322cb00b57769473c4ed6bb5a0ddeff7a77ffed32409",
+  "c3_r2_k32_full.csv": "cc57c9206276ab0c45652085f26cf1593beb4a099ca085aea09023db6aa1c74e",
+  "c3_r2_k32_full.json": "12868506ee1f15ae94a0ea5d2affc342b933b5274da288f6cd70fc3cd2cb3f07",
+  "c3_r2_k32_full.log.txt": "ccb45517e1f0dc3a93aec678e4ad9e2bd6e911fca182f1458c243738a38cd23b",
+  "c3_r2_k32_full.md": "4e8e235cc384e05333fb10cbea6bc7f3332c13f5ee7a1d99ba7776a424c65b91",
+  "c3_r2_k32_full.png": "afee7cd22516ba72e4e8bc5abd8818c7400284bfb0699bfc96d2999da0ec4407",
+  "c3_r2_k37_full.csv": "775adb63693b0a04453c9d4f389e513a7188a7ac449987d78328dbddd8d4aee3",
+  "c3_r2_k37_full.json": "4d6ca7a092b111cbc9fb0841ffbefc13957c38bee267a065b305751a123109e0",
+  "c3_r2_k37_full.log.txt": "dd92f6598870a38edd2123e042dcb20a8220451f54750dec0074964eca3eb67f",
+  "c3_r2_k37_full.md": "5180e00ddd6abce9a39188e5f3d4ccc8eb1f2a615d7bda461e5dab71892966a4",
+  "c3_r2_k37_full.png": "18b56689d9a0817e977cc3b5a5a9af7ed01a1b26221489d640f300a9838c9a4a",
+  "c3_r2_k37_probe.csv": "67f714bfdd746e547eea9b3ea814313fc652415cb217aeed394564340483cc29",
+  "c3_r2_k37_probe.json": "c7bc630834849134da27b34814e9fc6645e1b13beb58c7d1515dd9c772e6ba9b",
+  "c3_r2_k37_probe.log.txt": "53a657f39978dd73de95702fbb42292289fd01f9e3dbc537477433588452082c",
+  "c3_r2_k37_probe.md": "c51c41a3cd6fbe6ff79cd1d5ae2eb77765216588e3df4b824784fd2d11abe8b8",
+  "c3_r2_k37_probe.png": "bf9985fc5f516b33b93273875385043a4045ba244a5c72fe46d293d058ba9281",
+  "host.txt": "96cc57c759edd57e59b734b2d4af1fdb8ceffb1a373db6c374fc0bdede2cde93"
+ }
+}

@@ -93,7 +93,7 @@ Of **119** transaction cells (36 iterations each: 1 exact + 5 warm-up + 30 sampl
 | #47 | G-range | I4 over declared seeds 1–30; seed 1 exact (WM-2 B1) |
 | #49 | G-mode | metrics harness storage and log counts; gas column inherits §2 |
 | #50 | G-mode | metrics harness: ERC-1056 U5 varies 62,634–62,646 (calldata only); U3 exact |
-| #53 | G-mode | metrics harness: P1 and X1 cells are modes; re-run on the merged tree, run 2026-10-21T03-28-59Z_a9e2a28 |
-| #57 | G-exact | layer 5 measure_gas.js: fixed proof and signers, receipt gas; view rows are eth_estimateGas |
+| #54 | G-mode | metrics harness: P1 and X1 cells are modes; re-run on the merged tree, run 2026-10-21T03-28-59Z_a9e2a28 |
+| #58 | G-exact | layer 5 measure_gas.js: fixed proof and signers, receipt gas; view rows are eth_estimateGas |
 
 23 rows classified; every V row whose claim mentions gas (21) has a class.

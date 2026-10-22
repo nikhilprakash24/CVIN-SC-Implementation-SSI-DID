@@ -220,7 +220,7 @@ nine base standards.
   Zero-knowledge vehicle identity is feasible at registration and session time
   but not per V2V message, and its safe operation requires a bounded, adaptive
   custodian whose own trust rests on the same decentralised identity stack.
-  Its measurable part is the pre-registered set Z-E1..Z-E7 (register #55–#61).
+  Its measurable part is the pre-registered set Z-E1..Z-E7 (register #56–#62).
 
 **Preview of findings (see Chapter 5).** The thesis finds **all five
 hypotheses supported**. The extension hypothesis H6 is **partly supported**: feasibility and

@@ -1,75 +1,97 @@
-# After-Action Report 19 — Zero-Knowledge Proofs and the Agent-Wrapped Identity (Plan 1)
+# After-Action Report 19 — Contribution Record and WM-2 C3 (Freshness Rows on One Host)
 
 **Author:** Nikhil Prakash (MASc, UBC ECE)
 **Opened:** 2026-10-15, after report 18 closed at `b7997f8` (CI 8/8 green on `aba1d7c`); closed at the end of this pass
-**Brief (the author, 2026-10-15):** continue the `cv2x-testbed-setup` line by planning and executing a full integration
-of zero-knowledge proofs (primitives, a worked identity example, tests, quantitative and qualitative properties, a
-standalone paper with a literature review, algorithm breakdowns and flowcharts, a build report); prove that ZK identity
-needs a permanent software custodian shaped like an AI agent wrapping the identity, and that the agent needs the
-identity system the thesis built; demonstrate a new attack vector and the system adapting; show the SSI spectrum with
-two tables; write a second plan (the full-circle writing series) to be run in another chat, with phased prompts for both.
+**Brief (the author, 2026-10-15):** continue; also produce a GitHub contribution visual to show the professors the
+work, without embellishment, showing the good work in the best honest light.
 
 ## 1. Plan
-`docs/zkp/PLAN_1_ZKP_AND_AGENT_IDENTITY.md` (work packages WP0–WP10, propositions P1–P6, pre-registered expectations
-Z-E1..Z-E7). Phased prompts: `docs/zkp/PLAN_1_PHASED_PROMPTS.md`. The writing series: `docs/zkp/PLAN_2_*.md`, not
-executed here.
+| Step | Work | Owner | Gate |
+|---|---|---|---|
+| CR | Contribution record: a page generated from the git history and committed evidence. A contribution calendar (commits per day), what the commits touched (by area), milestones (tags, merged pull requests, closed after-action reports), and what the work produced (tests, demos, register rows, defects, CI jobs, pre-registered verdicts), each figure with its source | orchestrator; visualisation engineer; technical writer | every figure is computed from git or a committed file; the page states its scope (which branches, which identities, what a commit count does and does not measure); published as a private page |
+| C3 | WM-2 C3: #32 and #37 back to back on one host (design in §1a) | orchestrator; V2X specialist; measurement methodologist | the decision rule in §1a written and committed before the first run; the host-dependence note in #37 replaced by a measured comparison |
+| R | Records, grand run last, CI | orchestrator | CI green on the closing commit |
+
+### 1a. C3 design (written before any run)
+- **Question.** #32 (full refresh, `t_chain` 10.52 ms) and #37 (full refresh 14.38 / 10.28 ms in replicates r1 / r2;
+  probe 2.76 / 2.89 ms) were measured on different hosts and different code. #37 says "never mix with #32". C3 asks
+  how much of the difference is the host.
+- **Code.** Each row is re-run at its own code: #32 at `8216507` (`--deploy`, default full refresh); #37 at
+  `f660402` (`--deploy --refresh-mode full --rotation` and `--deploy --refresh-mode probe --rotation`). The D51
+  provider fix (`7d08dce`) is not used: measuring it is A3b. Each run is in a clean worktree at that commit.
+- **Host and order.** This container, alone, nothing else running. A fresh Hardhat node per run. Replicate 1 in the
+  order #32, #37-full, #37-probe; replicate 2 in the reverse order. Default `n = 250`, `ks = 1,5,25,inf`.
+- **Decision rule.** Let s be the spread of `t_chain` (full refresh) between the two replicates of the same
+  configuration on this host. If #32-code and #37-code full-refresh `t_chain` differ on this host by no more than
+  s, the register's difference between #32 and #37 is attributed to the host; otherwise to the code (or both),
+  and the size of each is stated. The probe-versus-full ordering of P*(0.5) per k is reported as it falls.
+- **Recording.** Outputs go to `runs/` first. The promote step requires the stamp's commit to be HEAD, which a run of
+  an earlier commit cannot meet, so, as for the C0 runs, the outputs are copied to a C3 results directory with their
+  commit, hashes and run logs, as a declared deviation. The rows' runs of record are not replaced: C3 adds a
+  comparison, and #32 and #37 gain a note.
 
 ## 2. Execution log
-- 2026-10-15 — branch fast-forwarded from `fa6188e` to `b7997f8` (the designated branch had no commits of its own; no
-  merge). Plans written and pushed before WP1 (rule 1.3.5). Report opened.
-- **WP1 sources.** Two research passes produced 205 entries (164 verified, 41 partial), merged into
-  `docs/zkp/SOURCES_ZKP.md`; one source (Alshiekh et al., shielding) added during writing and verified.
-  `docs/zkp/check_citations.py` resolves every `[@KEY]`: 316 citations, 0 unresolved. It was seen to fire on a real
-  defect (a soft hyphen inside a key in Report C), fixed.
-- **WP2 `zkid`.** secp256k1, Keccak-256, transcripts, Schnorr, Pedersen, Chaum–Pedersen, CDS OR, range and threshold
-  proofs, Merkle, nullifiers. 24 tests, including extraction and simulation; cross-checked against libsecp256k1 and
-  Ethereum's Keccak. Gate: green on first run.
-- **WP3 ZK-VIN.** circom 2.2.2 built from source (cargo). 3,498 constraints. Single-party setup with fixed entropy
-  (reproducible, insecure; stated on every artefact). Honest proof verifies; five false statements fail.
-- **WP4 on chain.** `ZkVinGate` (IDTx with a knowledge-of-opening dependency, closes AR-5) and a Schnorr ecrecover
-  verifier; 8 Hardhat tests against Phase 1's unmodified ERC-1056 registry. A trial gas run on a dirty tree was
-  discarded (rule 1.1.6).
-- **WP5 Steward.** policy, compiler (grammar; optional language-model backend never on the decision path), kernel,
-  simulatable leakage audit, learner, vault, audit log, delegation via the Phase 1 VC layer, agent. Defects found and
-  fixed before commit: an operator-precedence error in the delegation issuer check; `issue_delegation` returned the
-  issuer's wrapper instead of the credential; a weak test (`test_refusals_are_value_independent`) replaced by an exact
-  one.
-- **WP6 attacks.** Parameters fixed before the first run (Plan amendment A1). The first run, a wiring check on a dirty
-  tree, showed that A1's adversary never holds an accreditation, so a learner alone looked strongest. A post-hoc
-  *insider* variant was added and reported separately (amendment A2); Z-E5/Z-E6 definitions untouched; the learner was
-  not retrained.
-- **WP7 runs of record** at `978988e`, `code_clean` true, by `bench/run_all.sh` (the responder's retraining reproduced
-  the committed table byte for byte). Trial result files had been committed in `9d26c2a` and `978988e` before the run of
-  record and were overwritten by it (`learning_curve.json` reproduced identically). After a comment-only citation-key fix in `bench/vin_bruteforce.py` and
-  `bench/manual_burden.py`, only `manual_burden.json` was re-run (at `e780d40`, values identical); the other files keep
-  `978988e` because no producing statement changed (`git diff 978988e` shows comments and labels only).
-- **Verdicts.** Z-E1, Z-E2, Z-E3, Z-E4, Z-E5, Z-E7 PASS. **Z-E6 FAIL**: the leakage bound held on 60/60 runs, honest
-  service fell below 90 % on 25/60 (minimum 70.0 %). P1, P2 (E), P4, P6 supported; P3 partly; P5 supported with a cost.
-- **WP8 figures.** 12 figures by `figures/make_figures.py`, palette validated (one contrast warning, relieved by
-  direct labels and shape coding), every figure rendered and inspected; six layout faults fixed, and figure 9's
-  right axis widened to 80–100 % because a 0.13-point range exaggerated a negligible change. `--check` and a test that
-  it fires.
-- **WP9 documents.** Report A (build and verdicts), Report B (the paper, ≈ 9,250 words), Report C (the argument,
-  ≈ 5,200 words), thesis integration map, layer README, docs index, root README gallery, a deterministic demo with a
-  committed transcript.
-- **WP10 CI.** `.github/workflows/zkp-layer5.yml`: Python tests with no skips, mutation probe (5 mutants, all caught
-  locally), figures and citations checks, demo, ZK-VIN artefact manifest and prove/verify, layer 5 Hardhat tests.
-  Existing dashboard and register checks re-run locally after the README edit: current.
+- 2026-10-15 — report opened.
+- **C3, runs.** Six runs, 05:00–05:01 UTC, on this container (Xeon 2.30 GHz × 4, Hardhat 2.28.6), each in a clean
+  worktree at its row's code (`git_dirty` false in all six), a fresh node per run, in the declared order. Each run took
+  8–12 s. Nothing else ran on the host; I wrote source files in the meantime and ran nothing heavy.
+- **C3, result, under the rule in §1a.**
+  - Full-refresh `t_chain`: #32 code 7.57 / 7.91 ms (r1 / r2), spread 0.34 ms; #37 code 6.94 / 8.15 ms, spread
+    1.21 ms. The means differ by 0.20 ms, within either spread, so the difference between #32 (10.52 ms) and #37
+    (14.38 / 10.28 ms) in the register is **attributed to the host**.
+  - The rule did not say which spread to use when the two configurations have different ones. In replicate 1 alone the
+    codes differ by 0.63 ms, more than the smaller spread. I report that rather than choose the reading that
+    passes most cleanly.
+  - P*(0.5) at k = 1 / 5 / 25 / ∞: full 5–6 / 23–28 / 65–80 / 127–149; probe 15–17 / 56–58 / 111–121 / 145–149. The
+    probe beats the full refresh at every finite k, as in #37.
+  - On this host `t_local` is 0.33 ms, so the probe reaches P*(0.5) ≥ 100 at k = 25. #37's host, with `t_local`
+    0.49–0.54 ms, did not reach it at any finite k. The knee depends on 0.5 − `t_local`, so it is the most
+    host-sensitive figure in both rows.
+  - Staleness equals its prediction in 30 of 30 k-rows (revocation and rotation, k = 1, 5, 25).
+- **C3, records.** The outputs are in `cv2x-testbed/results/freshness_k_c3/`, with a manifest of order, commits and
+  sha256, copied from `runs/c3` as declared. `check_stamps.py` aggregates the six runs (complete stamps, 6 of 6) and
+  classes the manifest. Its coverage guard fired on the new files before that, as it should. New row **#52**; #32
+  and #37 have a dated note; the result cards have a card for #52; plan C3 is marked done. One slip was caught before
+  commit: my note first gave the knee as k ≈ 44–49; the four runs give 40–49.
+- **CR, contribution record.** `docs/figures/make_contribution_record.py` and `contribution_template.html` write
+  `docs/figures/contribution_record.html`: a contribution calendar (commits per day, fixed bins 1–4, 5–14, 15–29,
+  30+), month totals with a table view, milestones (release tags, merged pull requests, report openings), what the
+  work produced (eight tiles, each naming its source file), the pre-registered verdicts as they fell, and commits by
+  area. Published privately: https://claude.ai/artifact/6kumQ7cg1tHRjiQJy7MmAp.
+  - **Scope decisions, each stated on the page.**
+    - 9 commits on one branch belong to an unrelated planning project and are left out.
+    - The repository's creation commit (`0ab45bb`, 2023-11-07) is counted in the totals but falls before the
+      calendar, which starts in November 2025.
+    - The identities are reported as git has them: 369 the author's, 23 an AI coding assistant's (the first
+      implementation commits of 2025-11-10 among them), 1 the organisation account's.
+    - No line counts, because generated result files would dominate them. A commit count measures activity, not
+      effort. The December–May gap is shown as it is.
+  - **Corrections before publishing.**
+    - Three tile labels claimed more than the records show. One said every report had closed with a CI result,
+      which the early reports do not have. One gave the Python layers a vaguer name. One called the 99 cells
+      "tests across nine standards", when they are 11 adapters × 9 mechanisms, including declared n/a cells.
+    - A verdict chip overflowed at phone width.
+  - The page depends on the git history, so it is regenerated at each pass's close rather than checked in CI.
+- **Records.** Handback §11 and the session manifest (`c4b35ce`). The result cards were republished with card #52.
+- **Grand run (last), at `c4b35ce`.** ALL OK: smoke 11 adapters, L1 99, Hardhat 537, Python layers 331, 92 demos /
+  1,752 steps (594 mined transactions). The only gas changes are the timestamp-dependent MOBI demo totals (±12 gas),
+  as in pass 18. The dashboard, presentation report, result cards and contribution record were regenerated
+  afterwards, and all ten document checks pass.
 
-## 3. Decisions taken by default (the author may overturn)
-| Decision | Default taken | Alternative |
-|---|---|---|
-| Base branch | fast-forward onto `claude/cv2x-testbed-setup-…` as the brief said "continue this work" | start from the designated branch's old base |
-| Placement | new layer `5_zkp-agent-identity/`, docs in `docs/zkp/` | under `phase2/` |
-| Proof system | Groth16 (smallest proofs, cheapest on chain) with an honest insecure dev setup | PLONK/Halo 2 (to-do) |
-| Re-run scope after the comment fix | re-run the one deterministic consumer, keep timings of record | re-time everything and re-edit every report |
-| Register | rows proposed in `THESIS_INTEGRATION_MAP.md` §3, not added | add as V now |
-| Commit attribution | authored as the author with no AI trailers (guide rule 1.3.1) | session trailers |
+## 3. Closing
+The pass delivered every step of §1. **CI 8 of 8 green on `9975a2e`.**
 
-## 4. Not done
-Plan 1 to-dos 6–12 (BBS+, PLONK/Halo 2, recursion, on-vehicle timing, live language-model red team, multi-party
-ceremony, EUDI mapping); no live model call; Plan 2 (the writing series) is for other chats; CI for the new workflow is
-not yet observed on GitHub at the time of writing.
+**C3 is done.** On one host, at each row's own code, the code difference between #32 and #37 is within the
+replicate spread, so their difference in the register is the host's. That holds under the rule committed before the
+runs. In replicate 1 alone the codes differed by more than the smaller spread, and that is reported. The comparison
+also shows why "no finite k reaches P*(0.5) = 100" in #37 is a property of its host: on a host with `t_local` near
+0.33 ms, the probe refresh reaches it at k = 25.
 
-## 5. Closed
-2026-10-15, at the commit that adds this section. Handback addendum: `docs/HANDBACK_2026-10-14.md` §11.
+**The contribution record** shows the history at its real size and scope. It leaves out an unrelated branch and
+names the repository's creation commit. It reports the assistant's commits rather than hiding them, gives no line
+counts, and ties every evidence figure to its source file. I corrected three tile labels before publishing because
+they claimed more than the records show.
+
+**Next:**
+- WM-2 C1.
+- The author's decisions P2-D7 to P2-D10, D-1 to D-15, and N-23 remain open.

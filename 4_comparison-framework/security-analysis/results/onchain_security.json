@@ -2,8 +2,8 @@
   "metadata": {
     "layer": "on-chain",
     "solcVersion": "0.8.24",
-    "commit": "b8d5ba0",
-    "commitFull": "b8d5ba06ce6d6086935b6651d3913b61827e49d2",
+    "commit": "2051159",
+    "commitFull": "205115991a560bd6d1b3dfb117d71d3374c00edf",
     "dirty": false,
     "dirtyAnyFile": true,
     "scope": "1_blockchain-identity/scripts/security_scenarios.js",
@@ -14,7 +14,7 @@
     "ozVersion": "5.0.2",
     "network": "hardhat-local",
     "chainId": 31337,
-    "date": "2026-10-22T22:27:32.282Z",
+    "date": "2026-10-22T22:58:43.977Z",
     "categories": [
       "impersonation",
       "replay",

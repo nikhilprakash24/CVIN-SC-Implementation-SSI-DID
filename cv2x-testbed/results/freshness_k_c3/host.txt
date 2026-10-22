@@ -1,0 +1,4 @@
+CPU(s):                                  4
+Model name:                              Intel(R) Xeon(R) Processor @ 2.30GHz
+4
+Python 3.11.15

@@ -74,7 +74,7 @@ Exact `receipt.gasUsed` per standard for an identical operation set. "—"
 | ERC-1056 | 52,594 | 35,494 | 54,831 | 35,046 | 51,754 |
 | ERC-1155 | 107,729 | 51,199 | 80,131 | 33,049 | 86,298 |
 | LSP8 | 152,644 | 55,133 | — | 42,116 | 80,568 |
-| MOBI-VID-V2 | 299,143 | 307,210 | 35,321 | 75,382 | 200,089 |
+| MOBI-VID-V2 | 299,165 | 307,254 | 57,667 | 75,404 | 200,155 |
 | ERC-725 | 519,384 | 137,096 | 119,996 | 43,388 | 28,390 |
 | ERC-721 | 545,101 | 119,737 | 48,302 | 27,677 | 174,670 |
 | ERC-4337 | 759,088 | 49,343 | 47,557 | 25,429 | 28,539 |
@@ -164,7 +164,7 @@ realization):
 | ERC-735 | 295,242 | 295,277 | 295,289 | 5/5 |
 | ERC-1155 | 107,729 | 80,131 | 63,031 † | 3/5 |
 | CVIN-Combined | **51,766** | **34,690** | 336,896 | **5/5** |
-| MOBI-VID-V2 | 299,143 | 307,210 | 192,749 | 5/5 |
+| MOBI-VID-V2 | 299,165 | 307,254 | 222,082 | 5/5 |
 
 **Fidelity matrix** — native support for each of the five MOBI VID concepts
 (✓ native, ✗ not native / off-chain only):
@@ -202,7 +202,7 @@ linkage to a specific prior event.
    event-log backends own the cheapest birth
    and lifecycle writes (CVIN-Combined 51,766 / 34,690; ERC-1056 51,944 /
    34,928) — roughly **6–9× cheaper** than the purpose-built MOBI-VID-V2
-   registry (299,143 / 307,210), which pays for dedicated on-chain structs
+   registry (299,165 / 307,254), which pays for dedicated on-chain structs
    (typed events, odometer, jurisdiction, verified flag, VIN-hash index).
 
 3. **Claim-based standards are the faithful way to get attestation.** Only
@@ -210,8 +210,8 @@ linkage to a specific prior event.
    CVIN-Combined) or a purpose-built attestation (MOBI-VID-V2) reach 5/5;
    they are exactly the backends that natively support both multi-party
    attestation and verifiable on-chain claims. A subtlety the raw score
-   hides: the **purpose-built `attestEvent` (192,749) is actually the
-   cheapest native attestation**, undercutting the generic claim structs of
+   hides: the **purpose-built `attestEvent` (222,082, with the owner-or-delegate
+   check of WM-2 C2) is still the cheapest native attestation**, undercutting the generic claim structs of
    ERC-735 (295,289) and CVIN-Combined (336,896) because it stores a compact
    attestation record (signature + role + timestamp) rather than a full
    claim struct with topic/scheme/data/URI strings.
@@ -514,8 +514,9 @@ Security profile per standard (analysis lens; ✓ defended, ◐ partial,
    eventId, EIP-191, OZ ECDSA low-s) and reverts on mismatch. A
    before/after test (`test/MOBIVID/MOBIVIDRegistry.test.js`) confirms a
    valid attestation succeeds while forged, wrong-key, and replayed
-   signatures revert. Cost: attestEvent rose from **121,110 → 192,749
-   gas** (the added `ecrecover` + storing a real 65-byte signature) — the
+   signatures revert. Cost: attestEvent rose from **121,110 → 192,749 → 222,082
+   gas** (the added `ecrecover` + storing a real 65-byte signature;
+   then WM-2 C2's owner-or-delegate check and one attestation per attester) — the
    security/performance trade-off made concrete. This flipped the MOBI
    `Replay` cell from ◐ to ✓ in the matrix above.
 
@@ -601,7 +602,7 @@ fix added) and CVIN-Combined (claim array + change pointer); ×3 for MOBI-VID-V2
 | ERC-1155 | `issueCredential` | 42,816 | O(1) |
 | ERC-735 | `addClaim` | 281,379 | O(1) |
 | CVIN-Combined | `addClaim` | 274,987 | O(1) |
-| MOBI-VID-V2 | `recordLifecycleEvent` | 255,910 | O(1) |
+| MOBI-VID-V2 | `recordLifecycleEvent` | 255,954 | O(1) |
 
 This is a **null result, and an important one**: the a-priori concern that
 claim-storing or event-storing substrates would degrade to O(n) as a vehicle's history
@@ -623,7 +624,7 @@ work, not fiat.**
 | 1 | ERC-1056 | 1,450,146 | 0.75–2.15 M |
 | 2 | ERC-1155 | 1,865,183 | 0.99–2.74 M |
 | 3 | CVIN-Combined | 9,831,477 | 4.94–14.72 M |
-| 4 | MOBI-VID-V2 | 9,856,260 | 5.08–14.63 M |
+| 4 | MOBI-VID-V2 | 9,858,020 | 5.08–14.64 M |
 | 5 | ERC-735 | 11,692,092 | 6.72–16.66 M |
 
 **The ranking reverses §5.2.** CVIN-Combined, the *cheapest* substrate to *create* an
@@ -660,9 +661,9 @@ dominates *y* iff gas(*x*) ≤ gas(*y*) and fidelity(*x*) ≥ fidelity(*y*) with
 one strict. At creation, CVIN-Combined = (52,216 gas, 5/5) is **non-dominated**: it is
 the unique point attaining full fidelity at near-minimal cost — ERC-1056 (52,594, 3/5)
 is neither cheaper *and* higher-fidelity, and every other 5/5 substrate (ERC-735 1.60 M,
-MOBI-VID-V2 299,143) is strictly dominated *by* it. At lifetime scope, among all
+MOBI-VID-V2 299,165) is strictly dominated *by* it. At lifetime scope, among all
 full-fidelity substrates CVIN-Combined at *f*=1 (9.84 M) is the cheapest — it dominates
-ERC-735 (11.44 M) and MOBI-VID-V2 (9.85 M); it is incomparable to ERC-1056 (1.45 M, but
+ERC-735 (11.44 M) and MOBI-VID-V2 (9.86 M); it is incomparable to ERC-1056 (1.45 M, but
 only 3/5). As *f* varies in [0,1], CVIN-Combined **traces the efficient frontier itself**
 between the cheap-lower-fidelity corner and the full-fidelity corner. So the rigorous H5
 statement is not "cheapest" but: **CVIN-Combined is Pareto-non-dominated on the
@@ -727,7 +728,7 @@ construct/internal-validity concern (`RESEARCH_AUDIT.md` §4.1, §4.8).
 
 **Provenance**: `5_zkp-agent-identity/results/zkvin_bench.json`, `gas_zk.json`, `sigma_bench.json`,
 `vin_bruteforce.json`, `attacks.json` (all at code `978988e`, producing code clean) and `manual_burden.json` (at
-`e780d40`, values identical); register #55–#61. Method and pre-registration: §3.9. Implementation: §4.8.
+`e780d40`, values identical); register #56–#62. Method and pre-registration: §3.9. Implementation: §4.8.
 *Added 2026-10-22.*
 
 **Answer first.** Zero-knowledge vehicle identity is feasible at registration and session time and not per V2V
@@ -738,10 +739,10 @@ run, but its honest service fell below the 90 % floor on 25 of 60 runs. H6 is th
 
 | Quantity | Value | Register |
 |---|---|---|
-| Circuit | 3,498 constraints (1,667 non-linear, 1,831 linear); 3,505 wires; 6 public, 27 private inputs; 1 public output | #55 |
-| Prove, median (N=10) | **398.6 ms** (min 360.2, max 431.5) | #56 |
-| Verify off chain, median (N=30) | **18.42 ms** (min 15.45, max 26.59) | #56 |
-| Proof size | 256 B as calldata (725 B as JSON); 7 public signals | #56 |
+| Circuit | 3,498 constraints (1,667 non-linear, 1,831 linear); 3,505 wires; 6 public, 27 private inputs; 1 public output | #56 |
+| Prove, median (N=10) | **398.6 ms** (min 360.2, max 431.5) | #57 |
+| Verify off chain, median (N=30) | **18.42 ms** (min 15.45, max 26.59) | #57 |
+| Proof size | 256 B as calldata (725 B as JSON); 7 public signals | #57 |
 
 Verification at 18.42 ms fits inside the ~100 ms V2V budget used for RQ4, so Z-E1 passes; proving at 398.6 ms is far
 under the 10 s bound of Z-E2, and the 256-byte proof is under the 1 KiB bound of Z-E4. The comparison that matters for
@@ -750,20 +751,20 @@ hundred times that, and a proof takes about four times the whole V2V budget to p
 registration or session start, not inside a 10 Hz safety broadcast. Timings are host-dependent; the insecure setup
 (§4.8.2) does not change them.
 
-The sigma primitives are cheaper and smaller but prove less (register #58, M0, pure-Python reference code). A Schnorr
+The sigma primitives are cheaper and smaller but prove less (register #59, M0, pure-Python reference code). A Schnorr
 proof verifies in a median 4.476 ms and a 6-bit threshold proof ("model year ≥ t" on a Pedersen commitment) in a median
-68.819 ms; the exact operation counts behind them are 7,268 and 92,623 field multiplications (register #61).
+68.819 ms; the exact operation counts behind them are 7,268 and 92,623 field multiplications (register #62).
 
 ### 5.10.2 Gas (M1)
 
 | Operation | Gas | Register |
 |---|---:|---|
-| Anchor a VIN commitment | 51,558 | #57 |
-| **`ZkVinGate.admit` with on-chain Groth16 verification** | **301,163** | #57 |
-| `verifyProof` (view, `eth_estimateGas`, includes the 21,000 base) | 256,038 | #57 |
-| Deploy Groth16 verifier / deploy gate | 500,396 / 529,395 | #57 |
-| Schnorr proof of key knowledge (transaction) | 28,775 | #57 |
-| Deploy Schnorr verifier | 211,332 | #57 |
+| Anchor a VIN commitment | 51,558 | #58 |
+| **`ZkVinGate.admit` with on-chain Groth16 verification** | **301,163** | #58 |
+| `verifyProof` (view, `eth_estimateGas`, includes the 21,000 base) | 256,038 | #58 |
+| Deploy Groth16 verifier / deploy gate | 500,396 / 529,395 | #58 |
+| Schnorr proof of key knowledge (transaction) | 28,775 | #58 |
+| Deploy Schnorr verifier | 211,332 | #58 |
 
 Admission costs 301,163 gas, under the 350,000 bound of Z-E3, so Z-E3 passes. Receipt gas is exact; the two view
 figures are estimates from the node. Anchoring a commitment costs about as much as creating an ERC-1056 identity
@@ -773,10 +774,10 @@ costs about a tenth of an admission but proves only possession of a key.
 ### 5.10.3 Why a hash is not enough: the brute-force result (M0)
 
 An unsalted SHA-256 of a VIN whose only unknown is the 6-digit serial is reversed by full enumeration of 10⁶
-candidates in **3.58 s** on one core, at 279,587 hashes per second (register #59). Z-E7 passes by three orders of
+candidates in **3.58 s** on one core, at 279,587 hashes per second (register #60). Z-E7 passes by three orders of
 magnitude. If the vehicle-descriptor characters are unknown too, the measured rate extrapolates to about 1,620
 core-days on this host, or about 0.49 h on one GPU at a published rate; both figures are **estimates** (status E,
-register #59). The result is the concrete reason the privacy tier needs a hiding commitment with a random salt, and why
+register #60). The result is the concrete reason the privacy tier needs a hiding commitment with a random salt, and why
 Phase 1's salted VIN hashes were the right choice.
 
 ### 5.10.4 The narrowing attack and its defences (Sim)
@@ -784,7 +785,7 @@ Phase 1's salted VIN hashes were the right choice.
 Each ZK-VIN or threshold proof reveals one bit. An adaptive verifier that bisects on the model year learns it exactly
 from individually zero-knowledge answers, and spreading the questions over fresh identities defeats any per-verifier
 limit. Table 5.10 gives the results over seeds 1–30 per cell, under the parameters fixed by amendment A1; the insider
-column is the post-hoc variant of amendment A2 (register #60).
+column is the post-hoc variant of amendment A2 (register #61).
 
 **Table 5.10. Adversary bits about the model year (of 5): mean / max · exact recoveries out of 30; honest service in
 the single variant, mean (minimum).**
@@ -820,7 +821,7 @@ Prompt injection, proof replay and cross-verifier linkage were tested as unit an
 
 ### 5.10.5 Manual burden (counts V, times E)
 
-The counts are measured; the times are estimates priced at cited human rates (§3.9.4; register #61). Verifying one
+The counts are measured; the times are estimates priced at cited human rates (§3.9.4; register #62). Verifying one
 Schnorr proof takes 7,268 field multiplications, which at the rates used is about 7.8 working years by hand (E)
 against 4.5 ms for the software. One ZK-VIN proof is estimated at about 124,500 working years by hand (E) against
 398.6 ms measured. Copying one full ZK-VIN presentation (proof, signals, salt and key, 1,300 characters) without a
@@ -831,13 +832,13 @@ working day, is missed by orders of magnitude even under rates chosen to favour 
 
 | Id | Result | Verdict | Register |
 |---|---|---|---|
-| Z-E1 | verify median 18.42 ms < 100 ms | **PASS** | #56 |
-| Z-E2 | prove median 398.6 ms < 10 s | **PASS** | #56 |
-| Z-E3 | `admit` 301,163 gas < 350,000 | **PASS** | #57 |
-| Z-E4 | proof 256 B < 1,024 B | **PASS** | #56 |
-| Z-E5 | exact recovery on 30/30 seeds, ≤ 5 queries | **PASS** | #60 |
-| Z-E6 | leakage ≤ 3.0 bits on all runs; service < 90 % on 25/60 (minimum 70.0 %) | **FAIL** | #60 |
-| Z-E7 | 10⁶ candidates in 3.58 s < 1 h | **PASS** | #59 |
+| Z-E1 | verify median 18.42 ms < 100 ms | **PASS** | #57 |
+| Z-E2 | prove median 398.6 ms < 10 s | **PASS** | #57 |
+| Z-E3 | `admit` 301,163 gas < 350,000 | **PASS** | #58 |
+| Z-E4 | proof 256 B < 1,024 B | **PASS** | #57 |
+| Z-E5 | exact recovery on 30/30 seeds, ≤ 5 queries | **PASS** | #61 |
+| Z-E6 | leakage ≤ 3.0 bits on all runs; service < 90 % on 25/60 (minimum 70.0 %) | **FAIL** | #61 |
+| Z-E7 | 10⁶ candidates in 3.58 s < 1 h | **PASS** | #60 |
 
 **H6 — partly supported.** Feasibility at registration and session time is supported (Z-E1–Z-E4), and so is the need
 for a custodian that remembers every disclosure to everyone (Z-E5, the Sybil result, and the manual-burden counts).

@@ -597,16 +597,16 @@ L 601.2 248.190125
 " style="fill: none; stroke: #e4e3df; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_15">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="233.076632" y="55.47931" transform="rotate(-0 233.076632 55.47931)">0.0086</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="210.529527" y="55.47931" transform="rotate(-0 210.529527 55.47931)">0.0041</text>
    </g>
    <g id="text_16">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="235.129355" y="92.532486" transform="rotate(-0 235.129355 92.532486)">0.0092</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="225.020139" y="92.532486" transform="rotate(-0 225.020139 92.532486)">0.0066</text>
    </g>
    <g id="text_17">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="217.172549" y="129.585662" transform="rotate(-0 217.172549 129.585662)">0.0051</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="201.021724" y="129.585662" transform="rotate(-0 201.021724 129.585662)">0.003</text>
    </g>
    <g id="text_18">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="325.625093" y="166.638838" transform="rotate(-0 325.625093 166.638838)">0.1799</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="308.413799" y="166.638838" transform="rotate(-0 308.413799 166.638838)">0.1022</text>
    </g>
    <g id="PathCollection_1">
     <defs>
@@ -623,29 +623,29 @@ z
 " style="stroke: #2a78d6"/>
     </defs>
     <g clip-path="url(#p1e5fd912d5)">
-     <use xlink:href="#m4ace3cd436" x="225.091005" y="53.66095" style="fill: #2a78d6; stroke: #2a78d6"/>
-     <use xlink:href="#m4ace3cd436" x="227.143727" y="90.714126" style="fill: #2a78d6; stroke: #2a78d6"/>
-     <use xlink:href="#m4ace3cd436" x="209.186922" y="127.767303" style="fill: #2a78d6; stroke: #2a78d6"/>
-     <use xlink:href="#m4ace3cd436" x="317.639466" y="164.820479" style="fill: #2a78d6; stroke: #2a78d6"/>
+     <use xlink:href="#m4ace3cd436" x="202.5439" y="53.66095" style="fill: #2a78d6; stroke: #2a78d6"/>
+     <use xlink:href="#m4ace3cd436" x="217.034512" y="90.714126" style="fill: #2a78d6; stroke: #2a78d6"/>
+     <use xlink:href="#m4ace3cd436" x="193.036097" y="127.767303" style="fill: #2a78d6; stroke: #2a78d6"/>
+     <use xlink:href="#m4ace3cd436" x="300.428172" y="164.820479" style="fill: #2a78d6; stroke: #2a78d6"/>
     </g>
    </g>
    <g id="text_19">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="490.674284" y="55.47931" transform="rotate(-0 490.674284 55.47931)">40.7422</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="484.30672" y="55.47931" transform="rotate(-0 484.30672 55.47931)">33.0513</text>
    </g>
    <g id="text_20">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="467.784735" y="92.532486" transform="rotate(-0 467.784735 92.532486)">19.2063</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="460.714193" y="92.532486" transform="rotate(-0 460.714193 92.532486)">15.225</text>
    </g>
    <g id="text_21">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="463.646227" y="129.585662" transform="rotate(-0 463.646227 129.585662)">16.7646</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="458.366486" y="129.585662" transform="rotate(-0 458.366486 129.585662)">14.0948</text>
    </g>
    <g id="text_22">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="528.36246" y="166.638838" transform="rotate(-0 528.36246 166.638838)">140.54</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="521.371412" y="166.638838" transform="rotate(-0 521.371412 166.638838)">111.699</text>
    </g>
    <g id="text_23">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="236.740163" y="203.692014" transform="rotate(-0 236.740163 203.692014)">0.0097</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="227.668519" y="203.692014" transform="rotate(-0 227.668519 203.692014)">0.0072</text>
    </g>
    <g id="text_24">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="469.726781" y="240.74519" transform="rotate(-0 469.726781 240.74519)">20.4717</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="461.116748" y="240.74519" transform="rotate(-0 461.116748 240.74519)">15.4277</text>
    </g>
    <g id="PathCollection_2">
     <defs>
@@ -657,12 +657,12 @@ z
 " style="stroke: #eb6834"/>
     </defs>
     <g clip-path="url(#p1e5fd912d5)">
-     <use xlink:href="#m7fc3e31ee9" x="482.688656" y="53.66095" style="fill: #eb6834; stroke: #eb6834"/>
-     <use xlink:href="#m7fc3e31ee9" x="459.799107" y="90.714126" style="fill: #eb6834; stroke: #eb6834"/>
-     <use xlink:href="#m7fc3e31ee9" x="455.6606" y="127.767303" style="fill: #eb6834; stroke: #eb6834"/>
-     <use xlink:href="#m7fc3e31ee9" x="520.376833" y="164.820479" style="fill: #eb6834; stroke: #eb6834"/>
-     <use xlink:href="#m7fc3e31ee9" x="228.754536" y="201.873655" style="fill: #eb6834; stroke: #eb6834"/>
-     <use xlink:href="#m7fc3e31ee9" x="461.741154" y="238.926831" style="fill: #eb6834; stroke: #eb6834"/>
+     <use xlink:href="#m7fc3e31ee9" x="476.321093" y="53.66095" style="fill: #eb6834; stroke: #eb6834"/>
+     <use xlink:href="#m7fc3e31ee9" x="452.728566" y="90.714126" style="fill: #eb6834; stroke: #eb6834"/>
+     <use xlink:href="#m7fc3e31ee9" x="450.380859" y="127.767303" style="fill: #eb6834; stroke: #eb6834"/>
+     <use xlink:href="#m7fc3e31ee9" x="513.385785" y="164.820479" style="fill: #eb6834; stroke: #eb6834"/>
+     <use xlink:href="#m7fc3e31ee9" x="219.682892" y="201.873655" style="fill: #eb6834; stroke: #eb6834"/>
+     <use xlink:href="#m7fc3e31ee9" x="453.131121" y="238.926831" style="fill: #eb6834; stroke: #eb6834"/>
     </g>
    </g>
    <g id="text_25">

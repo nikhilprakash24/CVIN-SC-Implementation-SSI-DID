@@ -97,6 +97,10 @@ d.run(async () => {
   const accident = eventIds.ACCIDENT;
   const digest = (v, id) => ethers.solidityPackedKeccak256(['address', 'uint256', 'address', 'bytes32'], [regAddr, chainId, v, id]);
   const policeSig = await police.signMessage(ethers.getBytes(digest(vehicle, accident)));
+  await d.reverts('attest-without-consent', 'MOBIVIDRegistryV2.attestEvent', async () => reg.connect(police).attestEvent(accident, vehicle, policeSig), "Attester is not the vehicle's owner or delegate", 'a role-holder (POLICE) with a valid signature is refused until the owner consents (WM-2 C2, D54; before C2 any role-holder could attest any vehicle)');
+  for (const [name, who] of [['police', police], ['dmv', dmv], ['dealer', dealer]]) {
+    await d.tx(`owner-delegates-${name}`, 'MOBIVIDRegistryV2.addDelegate', reg.connect(owner).addDelegate(vehicle, ethers.encodeBytes32String('veriKey'), who.address, 86400n), `the owner consents to ${name} attesting: a veriKey delegation (WM-2 C2)`);
+  }
   d.offchain('attester-signs', 'off-chain EIP-191 sign', 'police signs keccak256(abi.encodePacked(registry, chainId, vehicle, eventId)) under the "\\x19Ethereum Signed Message:\\n32" envelope — domain-separated against other registries, chains, vehicles and events');
   const r1 = await d.tx('attest-event', 'MOBIVIDRegistryV2.attestEvent', reg.connect(police).attestEvent(accident, vehicle, policeSig),
     'MEASURED (attestEvent): ECDSA.recover(toEthSignedMessageHash(digest), sig) must equal msg.sender; attestation {attester, role, signature, timestamp} stored -> EventAttested');
@@ -116,8 +120,8 @@ d.run(async () => {
   await d.reverts('attest-signature-for-other-event', 'MOBIVIDRegistryV2.attestEvent', () => reg.connect(dealer).attestEvent(accident, vehicle, dealerSigWrongEvent), 'Invalid attestation signature', 'a signature over another eventId does not transfer (eventId is in the digest)');
   await d.reverts('attest-unauthorised', 'MOBIVIDRegistryV2.attestEvent', async () => reg.connect(signers[12]).attestEvent(accident, vehicle, await signers[12].signMessage(ethers.getBytes(digest(vehicle, accident)))), 'Not authorized to attest', 'a valid signature by an address with no role is refused');
   await d.reverts('attest-nonexistent', 'MOBIVIDRegistryV2.attestEvent', () => reg.connect(police).attestEvent(ethers.id('nope'), vehicle, policeSig), 'Event does not exist', 'eventId must exist for that vehicle');
-  await d.reverts('attest-malformed', 'MOBIVIDRegistryV2.attestEvent', () => reg.connect(police).attestEvent(accident, vehicle, '0x1234'), 'ECDSAInvalidSignatureLength', 'OZ ECDSA rejects malformed signatures with a custom error');
-  await d.reverts('attest-same-party-twice', 'MOBIVIDRegistryV2.attestEvent', () => reg.connect(police).attestEvent(accident, vehicle, policeSig), 'Already attested by this attester', 'H-A (clone lineage, merged 2026-10-21): one attestation per (event, attester), so a resubmitted signature cannot inflate the count; before H-A this step was an OBSERVATION that it could');
+  await d.reverts('attest-malformed', 'MOBIVIDRegistryV2.attestEvent', () => reg.connect(dealer).attestEvent(accident, vehicle, '0x1234'), 'ECDSAInvalidSignatureLength', 'OZ ECDSA rejects malformed signatures with a custom error');
+  await d.reverts('attest-same-party-twice', 'MOBIVIDRegistryV2.attestEvent', () => reg.connect(police).attestEvent(accident, vehicle, policeSig), 'Already attested', 'one attestation per attester per event (WM-2 C2, D54; before C2 the same attester could repeat it)');
 
   // ---- issuer revocation ----
   const r2 = await d.tx('revoke-issuer', 'MOBIVIDRegistryV2.revokeIssuerAuthorization', reg.connect(authority).revokeIssuerAuthorization(insurer.address), 'authority revokes the insurer -> IssuerAuthorizationRevoked');

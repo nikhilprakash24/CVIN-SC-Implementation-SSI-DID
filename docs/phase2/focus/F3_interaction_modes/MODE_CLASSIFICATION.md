@@ -38,7 +38,7 @@ B-serve (a provider or indexer answers) was never measured: every read went to a
 
 ## 3. Demo steps, classified by rule (grand runner log)
 
-Source: `sandbox/grand/report/demos.json` (1752 steps). Rules: a step with gas is a mined write; a note or step naming a revert is an expected revert; a view-style function name is a read; a signing, credential, hashing or proof function is local computation (no chain contact). Rule-based and approximate: `unclassified` is reported, not hidden.
+Source: `sandbox/grand/report/demos.json` (1758 steps). Rules: a step with gas is a mined write; a note or step naming a revert is an expected revert; a view-style function name is a read; a signing, credential, hashing or proof function is local computation (no chain contact). Rule-based and approximate: `unclassified` is reported, not hidden.
 
 | Option | write (A, mined) | read (A, view call) | expected revert (A) | local computation (no chain contact) | unclassified | flag-based off-chain (D61) |
 |---|---:|---:|---:|---:|---:|---:|
@@ -52,15 +52,15 @@ Source: `sandbox/grand/report/demos.json` (1752 steps). Rules: a step with gas i
 | erc-725xy | 48 | 29 | 24 | 0 | 24 | 0 |
 | erc-735 | 54 | 38 | 35 | 5 | 15 | 2 |
 | lsp8 | 35 | 31 | 33 | 8 | 36 | 108 |
-| mobi-vid | 77 | 54 | 79 | 20 | 46 | 199 |
-| **all** | **593** | **393** | **370** | **160** | **236** | **701** |
+| mobi-vid | 81 | 55 | 80 | 20 | 46 | 201 |
+| **all** | **597** | **394** | **371** | **160** | **236** | **703** |
 
 ### Cross-tabulation: the grand report's flag against the rule class (academic review AR-34)
 
 | Flag in the grand report | write (A, mined) | read (A, view call) | expected revert (A) | local computation (no chain contact) | unclassified | total |
 |---|---:|---:|---:|---:|---:|---:|
-| mined | 593 | 0 | 0 | 0 | 0 | 593 |
+| mined | 597 | 0 | 0 | 0 | 0 | 597 |
 | on-chain, no gas | 0 | 215 | 131 | 28 | 84 | 458 |
-| flag: off-chain | 0 | 178 | 239 | 132 | 152 | 701 |
+| flag: off-chain | 0 | 179 | 240 | 132 | 152 | 703 |
 
 A signing step that serves a relayed write is classed here as local computation; it belongs to the write it serves, which the rules cannot see (a limit of rule-based classification; F3 plan step F3-S3 retires it).

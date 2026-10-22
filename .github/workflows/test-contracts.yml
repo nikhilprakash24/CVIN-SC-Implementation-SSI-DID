@@ -96,6 +96,16 @@ jobs:
         python3 docs/phase2/focus/F3_interaction_modes/classify_modes.py --check
         python3 docs/testing/gas_charter.py --check
         python3 docs/figures/make_result_cards.py --check
+        python3 docs/tdp/make_vcrm.py --check
+        python3 docs/tdp/make_fmeca.py --check
+        python3 docs/tdp/make_blueprints.py --check
+        python3 docs/tdp/check_icd.py --check
+
+    - name: Probe that the TDP document checks fire (after-action report 20; guide rule 1.3.11)
+      # Each TDP generator's --check must fail on a tampered output and pass again after restore.
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: bash docs/tdp/probe_tdp_checks.sh
 
     - name: Run tests
       shell: bash

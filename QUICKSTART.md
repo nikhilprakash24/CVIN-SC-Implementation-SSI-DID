@@ -177,7 +177,7 @@ npx hardhat run scripts/benchmark_gas.js
 === Gas benchmark summary (gasUsed) ===
 operation	ERC-1056	ERC-721	ERC-725	ERC-725xy	ERC-735	ERC-1155	ERC-4337	LSP8	MOBI-VID-V2	CVIN-Combined
 ...
-createIdentity	52594	545101	519384	1680816	1757881	107729	759088	152644	299143	52216
+createIdentity	52594	545101	519384	1680816	1757881	107729	759088	152644	299165	52216
 ...
 Results written to .../4_comparison-framework/results/gas_benchmark.json
 ```

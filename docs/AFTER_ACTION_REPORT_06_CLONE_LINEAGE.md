@@ -3,7 +3,7 @@
 > **Lineage merge note (2026-10-21, PR #3).** This report was `docs/AFTER_ACTION_REPORT_06.md` on the
 > `claude/clone-cvin-id-scs-…` lineage. The `cv2x-testbed-setup` lineage had already used number 06 for a different
 > pass (`docs/AFTER_ACTION_REPORT_06.md`), so on the merged trunk this one lives here. Its register rows #40–#42 are
-> renumbered #52–#54 (`docs/MEASUREMENT_CONDITIONS.md`, merge note). The text below is unchanged.
+> renumbered #53–#55 (`docs/MEASUREMENT_CONDITIONS.md`, merge note). The text below is unchanged.
 
 
 **Opened:** before the pass ran. **Status:** CLOSED 2026-10-15; results are in `docs/HANDBACK_2026-10-04.md` §4.

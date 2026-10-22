@@ -6,9 +6,9 @@
 listed with the default this session would take. Plan 2 (`PLAN_2_FULL_CIRCLE_WRITING.md`, piece W-4) develops the
 chapter plan in prose.
 
-> **Adopted 2026-10-22 on the defaults (Plan 3, `PLAN_3_THESIS_INTEGRATION.md`; after-action report 21).** RQ5 and H6
-> are in `docs/thesis/README.md` and chapter 1 as an extension; rows Z1–Z7 are register **#55–#61** (Z1 → #55 …
-> Z7 → #61), V, with Z5's extrapolations and Z7's hand times E; condition tag **Sim** added for Z6; SC-12 reopened
+> **Adopted 2026-10-22 on the defaults (Plan 3, `PLAN_3_THESIS_INTEGRATION.md`; after-action report 30).** RQ5 and H6
+> are in `docs/thesis/README.md` and chapter 1 as an extension; rows Z1–Z7 are register **#56–#62** (Z1 → #56 …
+> Z7 → #62), V, with Z5's extrapolations and Z7's hand times E; condition tag **Sim** added for Z6; SC-12 reopened
 > and SC-23 added in `docs/SCOPE_CHANGES.md`; I-09 and I-10 status appended in the idea register; the chapter
 > sections in §1 are listed in `docs/thesis/SCAFFOLD.md` as ▫️ (prose still owed, Plan 2 W-4). The text below is
 > kept as proposed.

@@ -1,78 +1,111 @@
-# After-Action Report 20 — Merging the Clone Lineage into the ZKP Branch (PR #3)
+# After-Action Report 20 — Technical Data Package (parallel document set, engineering register)
 
 **Author:** Nikhil Prakash (MASc, UBC ECE)
-**Opened and closed:** 2026-10-21. **Brief (the author):** "continue but resolve the conflicts to merge" PR #3
-(head `claude/zkp-ai-identity-research-n5uho9`, base `claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt`).
-**Binds:** `docs/STYLE_AND_RIGOUR_GUIDE.md`, in particular rule 1.3.6 (read another branch and write down its relation
-before merging) and rules 1.1.4–1.1.6 (results re-executed on the code they describe, from a clean tree).
+**Opened:** 2026-10-15, after report 19 closed at `c4b35ce`; closed at the end of this pass
+**Brief (the author, 2026-10-15):** a parallel pass on this branch, on a different assistant configuration from
+passes 8–19. Produce a second set of documents beside the thesis documents, written to the standard, style and
+directness of a defence-research programme: a specification and blueprint register for the testbed, with diagrams,
+sources and roots, in a cold engineering tone that the thesis can later adapt. Deliver the plan, execute it, and
+deliver the plan a second time as phases with prompts that can be run one at a time in another session. Take time.
 
-## 1. The relation between the two lineages (rule 1.3.6)
+## 1. Plan
+| Step | Work | Owner | Gate |
+|---|---|---|---|
+| T0 | Open this report; commit it first (guide 1.3.3) | orchestrator | committed before any other file |
+| T1 | `docs/tdp/TDP-PLAN.md`: the plan for the Technical Data Package (TDP), with its document tree, numbering, the standards each document follows, and what each document may and may not contain | orchestrator; thesis methodologist | every document in the tree names its governing standard and its data sources |
+| T2 | `docs/tdp/TDP-RUNBOOK.md`: the same plan as phases, each with a self-contained prompt, the files it reads, the files it may write, its gate command and its stop condition, so that any later session can execute one phase without this one's context | orchestrator | each prompt names its inputs, outputs and gate; no prompt depends on an unrecorded decision |
+| T3 | `docs/tdp/requirements.yaml` + `docs/tdp/make_vcrm.py` → `TDP-002` (system specification, MIL-STD-961E section order) and `TDP-005` (verification cross-reference matrix). Every requirement is a shall-statement traced to a research question, hypothesis, pre-registration or threat goal already on the trunk; verification status is read from the claim register (`docs/MEASUREMENT_CONDITIONS.md`), never typed | orchestrator; measurement methodologist | `make_vcrm.py --check` passes; a tampered matrix fails it (probe); every evidence row cited exists in the register; a requirement citing a non-V row is marked not verified |
+| T4 | `docs/tdp/make_blueprints.py` → `docs/tdp/drawings/DWG-00n.svg` (six drawings: general arrangement, substrate assembly, verification engine, freshness governor, evidence line, threat envelope) with title block, revision block, notes and bill of materials; every number on a drawing read from `docs/figures/dashboard_snapshot.json`, `tools/run_identity/producers.json` or `docs/thesis/cruxes.yaml` | orchestrator; visualisation engineer | `--check` passes; drawings carry no hand-typed measurement; each component names its source file |
+| T5 | `docs/tdp/make_fmeca.py` → `TDP-006` failure-mode, effects and criticality worksheet (MIL-STD-1629A worksheet columns), generated from `docs/DEFECT_LOG.md` and `docs/THREAT_MODEL.md` | orchestrator; security specialist | `--check` passes; every defect row in the log appears once; severities copied, never re-rated |
+| T6 | Hand-written documents: `TDP-000` index and conventions; `TDP-001` programme summary (the Heilmeier Catechism answered from the evidence; technology readiness per subsystem on the DoD scale, with the reason for each level); `TDP-003` interface control document; `TDP-007` test and evaluation master plan; `TDP-008` configuration baseline; `TDP-009` risk register (DoD five-by-five) | orchestrator; specialists per document | every number has a V register row; `check_docs_numbers.py` clean; each document states who wrote it, when, what binds it and what it supersedes |
+| T7 | CI: the three new `--check` commands added to the document step; one tamper probe in CI shown to fail; records (INDEX row, handback addendum, session manifest); commit and push; close this report | orchestrator; CI engineer | all document checks pass locally; CI result recorded here if readable from the session, else stated as unread |
 
-Both lineages left `fa6188e`. The **cv2x lineage** (this branch: `cv2x-testbed-setup` plus Plan 1) carries 131
-commits: the sandbox and suites, the lineage merge of 2026-10-06 (sandbox contracts D7, D8, D11b, D13, D18, D21, D22,
-D25), WM-1 and WM-2, infrastructure messaging (I1–I5), Phase 2 (F1–F3) and layer 5. The **clone lineage** carries 45:
-the review-02 follow-up streams **H-A** (attestEvent: OWNER-role scope and one attestation per attester), **H-K**
-(same-host freshness-k, full against probe refresh), **H-L** (Pass 3 Lows: revocation reason, revert origin in the
-security harness, SUMO replay cache) and **H-R** (on-chain did:ethr and did:mobi resolution), the basic digital-ID set
-framing with two new harness operations (P1 createPresentation, X1 execute), and its own after-action report 06.
+**Scope.** This pass changes no contract, script, test, result file or register row. It adds a document set and its
+generators under `docs/tdp/` and the CI lines that check them. The grand runner is therefore not re-run (nothing it
+measures changed); the document checks are run in full.
 
-Neither lineage contains the other's work; both numbered new register rows from #40 and both opened a report 06. The
-clone lineage's code was written against the pre-lineage-merge contracts, which matters in three places (§3).
-
-## 2. Conflicts (81 files) and resolutions
-
-| Group | Files | Resolution |
+**Defaults taken by the orchestrator (the author may overturn any).**
+| # | Decision | Default |
 |---|---|---|
-| Generated results and compiled artifacts | 73 | cv2x side provisionally, then regenerated on the merged tree (§4) |
-| SUMO integration result dict | 1 | both keys kept |
-| Security scenario (ERC-1155 hijack) | 1 | cv2x D7 reason, with the H-L harness's mandatory `target` |
-| attestEvent regression pin | 1 | measured on the merged bytecode: **192,040** = 169,361 (cv2x dispatch +66) + 22,679 (H-A) |
-| Claim register | 1 | cv2x rows kept; clone #40–#42 → **#52–#54**; clone notes on #4, #24, #25, #33 appended; #28 rewritten; merge note with the re-run list |
-| Two reports numbered 06 | 1 (add/add) | clone report moved to `AFTER_ACTION_REPORT_06_CLONE_LINEAGE.md`; notes in both |
-| Handback next-session list | 1 | clone list (it executed the cv2x list's items); note |
-| W3C suite document | 1 | both sections; clone §10 is §13 here |
-| README | 1 | cv2x wording (counts from the grand report) |
+| T-a | Name and home of the document set | "Technical Data Package", `docs/tdp/`, document ids `TDP-nnn`, drawing ids `DWG-nnn` |
+| T-b | Governing standards (format only; no claim of certification) | MIL-STD-961E (specification sections), MIL-STD-498 (document kinds), MIL-STD-31000B with ASME Y14.100 (drawing conventions), MIL-STD-1629A (FMECA worksheet), DoD TRA Guidebook (TRL scale), DoD RIO Guide (risk matrix), DARPA Heilmeier Catechism (programme summary) |
+| T-c | Register discipline carried over unchanged | a number appears only with a V row; generated documents are never edited by hand; every guard is shown to fire |
+| T-d | Tone | declarative, present tense, no hedging adverbs, no rhetorical questions; the thesis adapts, this set does not |
 
-## 3. What the suites found after the textual merge
+## 2. Execution log
+- 2026-10-15 — report opened.
+- **T0.** Report committed first (`854bf3b`); the push was refused because the parallel pass had landed its grand-run
+  commit, so the report was rebased onto it (`ac0dbb9`). Two sessions share the branch for the rest of this pass;
+  every push is preceded by a fetch and rebase, and the generated-document checks are re-run after each rebase.
+- **T3, requirements and matrix.** `docs/tdp/requirements.yaml` holds 36 shall-statements in seven groups (SYS, PRF,
+  SEC, STD, RTV, INF, EVD), each traced to an RQ, a hypothesis, a pre-registration, a threat goal or a rigour rule,
+  each ending with the register's own caveat. `make_vcrm.py` computes the status of each from the register (through
+  the dashboard's own parser), the snapshot (thresholds and pre-registered verdicts), the tree (inspection files) and
+  the workflows (CI steps). First build: 34 VERIFIED, 0 PARTIAL, 1 OPEN. That was wrong in a way the rule allowed:
+  SEC-04 (revoked key under clock skew) read VERIFIED on #32 and #37 although both await the A3b re-run, and SEC-05
+  read VERIFIED on #28 although D54 is open. A `pending` field was added; it caps status at PARTIAL and the build
+  fails if a pending defect is later marked fixed or a pending WM-2 step marked done (shown to fire by naming a fixed
+  defect). Eight requirements carried pending items (A3b, A6, C1, C2, D54, D64); the parallel pass removed C1 from STD-01
+  when WM-2 C1 landed, because the guard asked for it (`7e43ea0`). Close of pass: 29 VERIFIED, 7 PARTIAL, 0 OPEN. Seven V rows are cited by no requirement (#1, #2, #3, #22, #29, #42, #43); they are supporting data and are
+  listed as such in TDP-005 section 2 and TDP-PLAN section 4.
+- **T5, worksheet.** `make_fmeca.py` parses every defect row (66) with the same rules as the dashboard, so the
+  severity-by-status counts are cross-checked against the snapshot and the build fails on a disagreement. The
+  worksheet carries the log's letter and a declared translation to the MIL-STD-1629A class beside it; no rate or
+  criticality number is computed. Ten rows had no path in the Where column ("same", a chapter, a statement); the
+  plane rule in the generator classifies them and leaves none unclassified. The worksheet quotes a defect whose text
+  contains a superseded test count; it is a verbatim record like the defect log it quotes, and is added to the
+  stale-figure checker's history globs for that reason (the hand-written TDP documents stay scanned).
+- **T4, drawings.** `make_blueprints.py` writes six sheets; every number is read from the snapshot, the PKI result
+  file, `producers.json`, the workflows, the threat model's goal table, or source constants (the verifier's depth and
+  value limits, the freshness window and cache size, the rejection reasons, the adapter and provider method names).
+  Rendered to PNG with the installed headless Chromium and inspected at 1400 x 990. Four layout defects found and
+  fixed before commit: station body text overflowing the 108 px boxes on sheets 3 and 5 (sheet 5 re-laid as two rows
+  of four; sheet 3 texts shortened), the adapter operation list running into the bill of materials on sheet 2
+  (wrapped), notes colliding with the title block (wrapped at 150 characters), and the title block's two columns
+  overlapping. Two content corrections: ERC-725xy is not in the security harness and read "0 defended / 0 n/a"
+  (now "not in harness"); the grand-run commit printed on sheet 1 would have changed every pass for no change in
+  content (removed; the counts remain). After the CI workflow gained the TDP checks, `make_blueprints.py --check`
+  failed on the clean tree because sheet 5 reads the document-check list from the workflow; that is the check
+  firing as designed, and the sheet was regenerated (12 document checks listed).
+- **T6, hand-written documents.** TDP-000 (index, conventions, sources), TDP-001 (the eight Heilmeier questions
+  answered from V rows; readiness levels per plane with the reason each next level is withheld; the full-circle
+  statement in one paragraph; what is not claimed), TDP-003 (thirteen interfaces with fields copied from source),
+  TDP-004 (drawing index, the machine in one paragraph, eleven design decisions with their measured consequence),
+  TDP-007 (test architecture with counts, evaluation framework, pre-registration protocol, resources, exams,
+  limits), TDP-008 (configuration items, runs of record with identities, toolchain pins including the two pins that
+  disagree with the runs of record, build and change control), TDP-009 (thirteen risks on the five-by-five scale with
+  triggers, four issues). The stale-figure checker is clean over all of them.
+- **T1, T2.** `TDP-PLAN.md` (objective, principles, work breakdown with status, six findings made while building, what
+  the plan does not do) and `TDP-RUNBOOK.md` (phases 0 to 7 recording what this pass executed so each can be re-run
+  or audited; phases 8 to 12 as follow-on work; each with reads, writes, gate, stop condition and a self-contained
+  prompt under a standing preamble).
+- **T7, CI and probe.** The three `--check` commands are added to the document step of `test-contracts.yml`, and
+  `docs/tdp/probe_tdp_checks.sh` runs as its own step: for each generator it tampers the output, expects `--check` to
+  exit 1, restores, and expects 0. Run locally: all three probes pass. All fourteen document and stamp checks pass
+  locally after regeneration. Records: INDEX row, handback section 12 with four gotchas, session manifest pass 20.
+- **Interaction with the parallel pass (report 21).** Its grand run turned CI red on my first push (the worksheet
+  quoted a superseded test count); it applied the same exemption I had made locally, regenerated DWG-001 after its
+  grand run, and removed C1 from STD-01's pending list when the matrix guard asked for it. The rebase of this pass's
+  closing commit conflicted on the handback, the manifest, the matrix and sheet 1; the shared files keep both
+  passes' sections (handback section 12 is pass 21's, section 13 this pass's), and the generated ones were rebuilt
+  after the rebase. Every document check passed on the rebased tree.
+- **Not done, by scope.** No grand run (nothing it measures changed; the pass adds documents, generators and CI lines
+  only). The CI result of the closing commit could not be read from this session (no GitHub API access); it is to be
+  read by the author or the next session and recorded in the closing commit of this report.
 
-1. **On-chain did:mobi resolution of a revoked identity failed.** The clone lineage's resolver decoded
-   `DIDRevoked(address,uint256)`; the merged contract emits the D21 three-argument form (it links back to the previous
-   change). The topic filter found no event in the revocation block. Fixed in `did_resolver.py`; the resolver suites
-   pass (109).
-2. **Stamp coverage.** The same-host freshness replicates and summary (clone) and the layer-5 results (cv2x, pass 19)
-   were not declared to `check_stamps.py`. Declared; 209 tracked result files, 0 uncovered. The layer-5 gap predates
-   the merge and would have failed CI on this branch alone.
-3. **Generated documents.** Rows #52–#54 needed a gas class (#53) and result cards; card #28's caption carried the old
-   pin. Added and regenerated; every CI `--check` current.
+## 3. Closing
+The pass delivered every step of section 1. **CI 8 of 8 green on the closing commit `914dcb2`** (Smart Contract
+Tests run 38688011214, W3C SSI Compliance Tests 38688011299, Performance Benchmarks 38688011225), read over the
+public Actions API from this session after the push. Closed 2026-10-20; passes 21 to 24 landed on the branch in
+between and kept the three TDP checks green (report 21 section 2 records the one red they caused and fixed).
 
-## 4. Re-execution on the merged tree
+**The package stands on the register and adds nothing to it.** 36 requirements, 29 verified by V rows with nothing
+pending and 7 partial with their blocking item named; 66 defects on a worksheet whose counts equal the snapshot's;
+six drawings whose every number has a file behind it; nine hand-written documents whose every number has a row.
 
-| Result | Producer | Outcome |
-|---|---|---|
-| Nine-standard gas table (#25) | `benchmark_gas.js` + `generate_tables.py` | 2 of 55 cells moved, both MOBI-VID-V2: deploy 4,225,285 → **4,309,419**, transfer 200,089 → **200,111** |
-| MOBI backend sweep (H4) | `mobi_vid_backend_sweep.js` + table | attestEvent 192,749 → **215,428** (+22,679, H-A); nothing else moved |
-| Gas determinism (30 runs) | `run_gas_stats.py --runs 30` | 30 runs, every cell byte-identical (`gas_benchmark_stats.json`) |
-| Metrics harness (#29–#31, #34–#36, #49–#51, #53) | `npm run metrics` + `metrics:analyze` | run `2026-10-21T03-28-59Z_a9e2a28`, clean: all 130 earlier per-operation gas cells unchanged; P1 and X1 added (as the clone lineage measured them, except ERC-735 P1 294,868, +240 from D25); dominance re-derived: cost-only and all-six frontiers unchanged, CVIN-Combined additionally dominated by the ERC-1056 wrapper on cost + read path through a run-dependent latency axis (#36) |
-| M4 parity (#33) | `experiment_lifecycle_parity.py --deploy` | re-run later the same day on a local Hardhat 2.28.6 node (`deef3a1`, clean): verdicts unchanged (writes PASS ×3, cached history FAIL, ratio 0.054); lifecycle-event gas unchanged; testbed deploy 5,135,625 → **5,360,720** |
-| HTTP-RPC condition (#39) | `npm run metrics` with `--network localhost` | run `2026-10-21T09-02-58Z_bd55af2`, clean: gas identical to the in-process run on every common cell; latency ≈2–2.5× in-process; #39 **U → V** |
+**What the author decides** (defaults T-a to T-d in section 1 stand until overturned): whether the package name and
+home stay; whether the thesis adapts TDP-002's shall-statements as chapter 3's commitments (runbook phase 10 maps
+them); whether to open the external review of the package (phase 11).
 
-## 5. Checks
-Hardhat 559 passing / 34 pending; Phase 2 12; layer 5 contracts 8; Python 427 with a node (0 skipped); sandbox suites
-365; layer 5 49; resolver 109; every CI document check current; citations 0 unresolved.
-
-## 6. Not done, and the author's decisions
-- **Re-runs completed after the first close:** M4 parity (#33) and the HTTP-RPC condition (#39) were re-run on the merged tree the same day (§4); nothing from the merge remains due. The #33 re-run first left the dashboard, presentation report and Phase 2 focus figures stale, which CI caught on `09e06ec`; regenerated in `3922c4f`.
-- **A harness run was discarded.** The first post-merge harness run overlapped a full Hardhat test run on the same
-  host, which can perturb its latency columns; it was stopped and its output deleted, and the harness was re-run alone.
-- **Two more fixes found by CI after the first push:** the feature-asymmetry matrix (the merged contract gained
-  `hasAttested`) and the testbed's compiled MOBIVIDRegistryV2 artifact (taken provisionally from the cv2x side) were
-  stale; both regenerated. Running the rest of that CI job locally also found the grand report's test count (537 against
-  559), the claims demo asserting the pre-H-A duplicate attestation as an observation (now a revert), two superseded
-  figures in the clone lineage's basic-set document, and the `1.096` stale-number pattern matching inside an arXiv id
-  (anchored; shown to fire on the real value and not on the id).
-- **Defect D54 narrowed, not closed.** H-A scopes OWNER-role attesters and stops duplicates; organisational roles keep
-  registry-wide scope by design. Whether that meets threat-model goal G4 is the author's decision (default: accept as
-  designed, keep D54 open on that point).
-- **Register numbering.** Clone #40–#42 are #52–#54; the generated freshness summary still prints "#40" (its producer
-  is unchanged); the register's merge note is the mapping. Default: leave the producer as is.
-- **CI:** all 22 checks green on `a9e2a28`.
+**Next:** runbook phase 1 after C1 lands (requirements maintenance), phase 5 at every regeneration, phases 8 to 12
+when the author chooses. Phase 1 of WM-2 continues in report 21.

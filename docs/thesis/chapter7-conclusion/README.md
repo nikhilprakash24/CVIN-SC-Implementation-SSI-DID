@@ -111,13 +111,13 @@ exclude radio/MAC/network-stack latency; mobility is simulated (§5.4).
 **RQ5 — Zero-knowledge privacy and its operation** *(extension, added 2026-10-22).* *Can zero-knowledge proofs
 provide the deferred VIN privacy tier and identity-dependent knowledge checks within the budgets used for RQ1 and
 RQ4, and what does operating them safely require?* Yes for registration and session time, no per V2V message. The
-ZK-VIN proof (3,498 constraints) is produced in a median 398.6 ms and verified in 18.42 ms off chain (register #55,
-#56, M0), and admission through `ZkVinGate` costs 301,163 gas (register #57, M1). Verification fits the ~100 ms V2V
+ZK-VIN proof (3,498 constraints) is produced in a median 398.6 ms and verified in 18.42 ms off chain (register #56,
+#57, M0), and admission through `ZkVinGate` costs 301,163 gas (register #58, M1). Verification fits the ~100 ms V2V
 budget, but proving does not, so the proof belongs at session start. An unsalted VIN hash is reversed in 3.58 s
-(register #59), which is why the tier needs a hiding commitment. Operating it safely requires a custodian that
+(register #60), which is why the tier needs a hiding commitment. Operating it safely requires a custodian that
 remembers every disclosure to every verifier, enforces an owner-signed policy, and keeps any learned or language
 component inside a deterministic kernel; the bounded Steward held the narrowing attack to ≤ 3.0 bits on every run but
-missed its honest-service floor (register #60; §5.10).
+missed its honest-service floor (register #61; §5.10).
 
 ---
 
@@ -148,7 +148,7 @@ their verdicts.
 
 | # | Hypothesis | Verdict | Evidence (one line) |
 |---|---|---|---|
-| **H6** | Zero-knowledge vehicle identity is feasible at registration and session time but not per V2V message, and its safe operation requires a bounded, adaptive custodian | **Partly supported** | Six of seven pre-registered expectations pass (Z-E1–Z-E5, Z-E7); Z-E6 fails: leakage ≤ 3.0 bits on all runs, honest service < 90 % on 25 of 60 (register #55–#61; §5.10). |
+| **H6** | Zero-knowledge vehicle identity is feasible at registration and session time but not per V2V message, and its safe operation requires a bounded, adaptive custodian | **Partly supported** | Six of seven pre-registered expectations pass (Z-E1–Z-E5, Z-E7); Z-E6 fails: leakage ≤ 3.0 bits on all runs, honest service < 90 % on 25 of 60 (register #56–#62; §5.10). |
 
 ---
 
@@ -221,7 +221,7 @@ generality of the absolute-cost and end-to-end-latency statements.
   with scripted verifiers. The results claim the shape of the comparison, not a rate of attack in the field, and the
   insider variant was added post hoc (amendment A2).
 - **Hand times are estimated.** The manual-burden operation and character counts are measured, but the hand times and
-  error probabilities are priced from cited rates (status E, register #61); one rate comes from a partially verified
+  error probabilities are priced from cited rates (status E, register #62); one rate comes from a partially verified
   source.
 - **Pure-Python primitives.** The `zkid` sigma protocols are readable reference code, neither constant time nor
   optimised, so their timings bound nothing about a production library. No live language-model call was made, and no
@@ -259,7 +259,7 @@ Ordered from smallest lift (confirmation) to largest (new research):
 *Addition 2026-10-22: future work opened by layer 5 (§4.8, §5.10).*
 
 7. **An anonymity set at the gate.** `ZkVinGate` names the identity it admits; proving membership in a set of
-   anchored commitments instead would complete the protection property of Table C-2 (§6.8.2).
+   anchored commitments instead would complete the protection property of Table C-2 (§6.9.2).
 8. **A multi-party setup ceremony.** Replace the fixed-entropy setup with a multi-party ceremony, the one step
    between the prototype and production keys.
 9. **BBS and SD-JWT on the hot path.** Measure BBS signatures and SD-JWT selective disclosure on the same host and

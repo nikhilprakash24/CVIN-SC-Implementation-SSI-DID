@@ -2,7 +2,7 @@
 
 **Author:** Nikhil Prakash (MASc, UBC ECE)
 **Written:** 2026-10-15, before execution (style guide rule 1.3.5: a plan the author asked for is delivered before
-execution starts). Executed in the same session; the execution record is `docs/AFTER_ACTION_REPORT_19.md`.
+execution starts). Executed in the same session; the execution record is `docs/AFTER_ACTION_REPORT_28.md`.
 **Branch:** continues `claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy` at `b7997f8` (fast-forwarded; no merge).
 **Supersedes:** nothing. **Extends:** idea I-09 (zero-knowledge VIN tier), idea I-10 (selective disclosure), scope
 change SC-12 (ZK tier deferred), focus F1's open gap AR-5 ("a knowledge-of-opening dependency would disclose the
@@ -72,7 +72,7 @@ because it sits on top of all of them). Documents in `docs/zkp/`. Hardhat config
 
 | WP | Work | Output | Gate |
 |---|---|---|---|
-| WP0 | Plans and after-action report 19 opened | this file, `PLAN_1_PHASED_PROMPTS.md`, `PLAN_2_*.md`, `AFTER_ACTION_REPORT_19.md` | committed and pushed before WP1 |
+| WP0 | Plans and after-action report 28 opened | this file, `PLAN_1_PHASED_PROMPTS.md`, `PLAN_2_*.md`, `AFTER_ACTION_REPORT_28.md` | committed and pushed before WP1 |
 | WP1 | Sources: a verified bibliography for ZKP history, identity, privacy, SSI, data economy, agent identity, hand-computation and error rates | `docs/zkp/SOURCES_ZKP.md` | every cited item has a reachable URL or DOI and a one-line note of what it supports |
 | WP2 | **Primitives library `zkid`** (pure Python, readable, secp256k1): transcript and Fiat–Shamir, SHA-256/Keccak commitments, Pedersen commitments with a nothing-up-my-sleeve generator, Schnorr proof of knowledge, Chaum–Pedersen equality, CDS OR proofs, bit and range proofs, threshold proofs, Merkle trees, scoped nullifiers | `5_zkp-agent-identity/zkid/` | pytest: completeness, soundness (tampered and replayed proofs rejected), **special soundness by extraction** (two accepting transcripts with one commitment yield the witness) and **honest-verifier zero knowledge by simulation** (simulated transcripts accepted without the witness, distribution checks) |
 | WP3 | **ZK-VIN circuit** (circom 2, circomlib Poseidon, comparators, Merkle inclusion), local Groth16 setup, proving and verification | `5_zkp-agent-identity/circuits/`, build script, committed artefacts with SHA-256 manifest | a valid witness proves and verifies; each false statement (wrong manufacturer, low model year, wrong region, wrong salt) fails witness generation |

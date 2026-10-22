@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="990" viewBox="0 0 1400 990" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e3ecf9"/></marker><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#ffb454" stroke-width="1"/></pattern></defs>
+<rect width="1400" height="990" fill="#0f2d5c"/>
+<text x="44" y="104" font-size="10.5" text-anchor="start" fill="#93a9cb" font-weight="normal">PROCESS FLOW — the message verification engine: eight stations in series; every rejection leaves by the exhaust with a named reason</text>
+<rect x="50" y="130" width="108" height="100" stroke="#7cc9ff" fill="none" stroke-width="1.2" rx="0"/>
+<text x="58" y="145" font-size="10" text-anchor="start" fill="#7cc9ff" font-weight="bold">S1 INTAKE</text>
+<line x1="50" y1="151" x2="158" y2="151" stroke="#7cc9ff" stroke-width="0.8"/>
+<text x="58" y="165.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">package = {message,</text>
+<text x="58" y="177.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> sender_did, signature,</text>
+<text x="58" y="190.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> credential,</text>
+<text x="58" y="202.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> identity_type}</text>
+<circle cx="148" cy="220" r="9" stroke="#7cc9ff" fill="#0f2d5c" stroke-width="1.4"/>
+<text x="148" y="223.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">1</text>
+<line x1="158" y1="180.0" x2="164" y2="180.0" stroke="#e3ecf9" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="164" y="130" width="108" height="100" stroke="#e3ecf9" fill="none" stroke-width="1.2" rx="0"/>
+<text x="172" y="145" font-size="10" text-anchor="start" fill="#e3ecf9" font-weight="bold">S2 LIMITS</text>
+<line x1="164" y1="151" x2="272" y2="151" stroke="#e3ecf9" stroke-width="0.8"/>
+<text x="172" y="165.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">depth &lt;= 32</text>
+<text x="172" y="177.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">values &lt;= 5000</text>
+<text x="172" y="190.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">walked, no recursion</text>
+<text x="172" y="202.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">(D37)</text>
+<circle cx="262" cy="220" r="9" stroke="#7cc9ff" fill="#0f2d5c" stroke-width="1.4"/>
+<text x="262" y="223.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">2</text>
+<line x1="272" y1="180.0" x2="278" y2="180.0" stroke="#e3ecf9" stroke-width="1.6" marker-end="url(#arrow)"/>
+<line x1="218.0" y1="230" x2="218.0" y2="258" stroke="#ffb454" stroke-width="1.2" marker-end="url(#arrow)"/>
+<text x="168" y="272" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">malformed</text>
+<rect x="278" y="130" width="108" height="100" stroke="#e3ecf9" fill="none" stroke-width="1.2" rx="0"/>
+<text x="286" y="145" font-size="10" text-anchor="start" fill="#e3ecf9" font-weight="bold">S3 FRESHNESS</text>
+<line x1="278" y1="151" x2="386" y2="151" stroke="#e3ecf9" stroke-width="0.8"/>
+<text x="286" y="165.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">signed generation</text>
+<text x="286" y="177.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> time (T-9)</text>
+<text x="286" y="190.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">max age 1.0 s</text>
+<text x="286" y="202.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">max future 0.1 s</text>
+<circle cx="376" cy="220" r="9" stroke="#7cc9ff" fill="#0f2d5c" stroke-width="1.4"/>
+<text x="376" y="223.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">3</text>
+<line x1="386" y1="180.0" x2="392" y2="180.0" stroke="#e3ecf9" stroke-width="1.6" marker-end="url(#arrow)"/>
+<line x1="332.0" y1="230" x2="332.0" y2="258" stroke="#ffb454" stroke-width="1.2" marker-end="url(#arrow)"/>
+<text x="282" y="272" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">stale</text>
+<text x="282" y="283" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">future</text>
+<rect x="392" y="130" width="108" height="100" stroke="#e3ecf9" fill="none" stroke-width="1.2" rx="0"/>
+<text x="400" y="145" font-size="10" text-anchor="start" fill="#e3ecf9" font-weight="bold">S4 REPLAY</text>
+<line x1="392" y1="151" x2="500" y2="151" stroke="#e3ecf9" stroke-width="0.8"/>
+<text x="400" y="165.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">key = (receiver,</text>
+<text x="400" y="177.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> sender, sha256 of</text>
+<text x="400" y="190.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> signed bytes)</text>
+<text x="400" y="202.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">cache 65,536 (D29)</text>
+<circle cx="490" cy="220" r="9" stroke="#7cc9ff" fill="#0f2d5c" stroke-width="1.4"/>
+<text x="490" y="223.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">4</text>
+<line x1="500" y1="180.0" x2="506" y2="180.0" stroke="#e3ecf9" stroke-width="1.6" marker-end="url(#arrow)"/>
+<line x1="446.0" y1="230" x2="446.0" y2="258" stroke="#ffb454" stroke-width="1.2" marker-end="url(#arrow)"/>
+<text x="396" y="272" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">replay</text>
+<rect x="506" y="130" width="108" height="100" stroke="#e3ecf9" fill="none" stroke-width="1.2" rx="0"/>
+<text x="514" y="145" font-size="10" text-anchor="start" fill="#e3ecf9" font-weight="bold">S5 SIGNATURE</text>
+<line x1="506" y1="151" x2="614" y2="151" stroke="#e3ecf9" stroke-width="0.8"/>
+<text x="514" y="165.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">EIP-191 secp256k1</text>
+<text x="514" y="177.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">recover address</text>
+<text x="514" y="190.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">DID = network +</text>
+<text x="514" y="202.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> address (D41)</text>
+<circle cx="604" cy="220" r="9" stroke="#7cc9ff" fill="#0f2d5c" stroke-width="1.4"/>
+<text x="604" y="223.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">5</text>
+<line x1="614" y1="180.0" x2="620" y2="180.0" stroke="#e3ecf9" stroke-width="1.6" marker-end="url(#arrow)"/>
+<line x1="560.0" y1="230" x2="560.0" y2="258" stroke="#ffb454" stroke-width="1.2" marker-end="url(#arrow)"/>
+<text x="510" y="272" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">unsigned</text>
+<text x="510" y="283" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">wrong_key</text>
+<rect x="620" y="130" width="108" height="100" stroke="#e3ecf9" fill="none" stroke-width="1.2" rx="0"/>
+<text x="628" y="145" font-size="10" text-anchor="start" fill="#e3ecf9" font-weight="bold">S6 KEY SOURCE</text>
+<line x1="620" y1="151" x2="728" y2="151" stroke="#e3ecf9" stroke-width="0.8"/>
+<text x="628" y="165.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">WARM: cached addr.</text>
+<text x="628" y="177.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">COLD: verify cred.:</text>
+<text x="628" y="190.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> trusted issuer,</text>
+<text x="628" y="202.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> validUntil, revoked</text>
+<circle cx="718" cy="220" r="9" stroke="#7cc9ff" fill="#0f2d5c" stroke-width="1.4"/>
+<text x="718" y="223.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">6</text>
+<line x1="728" y1="180.0" x2="734" y2="180.0" stroke="#e3ecf9" stroke-width="1.6" marker-end="url(#arrow)"/>
+<line x1="674.0" y1="230" x2="674.0" y2="258" stroke="#ffb454" stroke-width="1.2" marker-end="url(#arrow)"/>
+<text x="624" y="272" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">no_credential</text>
+<text x="624" y="283" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">credential_invalid</text>
+<text x="624" y="294" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">subject_mismatch</text>
+<text x="624" y="305" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">revoked</text>
+<text x="624" y="316" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">expired</text>
+<rect x="734" y="130" width="108" height="100" stroke="#e3ecf9" fill="none" stroke-width="1.2" rx="0"/>
+<text x="742" y="145" font-size="10" text-anchor="start" fill="#e3ecf9" font-weight="bold">S7 AUTHORITY</text>
+<line x1="734" y1="151" x2="842" y2="151" stroke="#e3ecf9" stroke-width="0.8"/>
+<text x="742" y="165.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">permitted msg type</text>
+<text x="742" y="177.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">field binding:</text>
+<text x="742" y="190.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> intersection, rsu</text>
+<text x="742" y="202.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">(D28, D38)</text>
+<circle cx="832" cy="220" r="9" stroke="#7cc9ff" fill="#0f2d5c" stroke-width="1.4"/>
+<text x="832" y="223.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">7</text>
+<line x1="842" y1="180.0" x2="848" y2="180.0" stroke="#e3ecf9" stroke-width="1.6" marker-end="url(#arrow)"/>
+<line x1="788.0" y1="230" x2="788.0" y2="258" stroke="#ffb454" stroke-width="1.2" marker-end="url(#arrow)"/>
+<text x="738" y="272" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">not_permitted</text>
+<text x="738" y="283" font-size="8.5" text-anchor="start" fill="#ffb454" font-weight="normal">binding</text>
+<rect x="848" y="130" width="108" height="100" stroke="#7cc9ff" fill="none" stroke-width="1.2" rx="0"/>
+<text x="856" y="145" font-size="10" text-anchor="start" fill="#7cc9ff" font-weight="bold">S8 OUTPUT</text>
+<line x1="848" y1="151" x2="956" y2="151" stroke="#7cc9ff" stroke-width="0.8"/>
+<text x="856" y="165.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">(ok, latency_ms,</text>
+<text x="856" y="177.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal"> cold, reason)</text>
+<text x="856" y="190.0" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">trust decision</text>
+<text x="856" y="202.5" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">per message</text>
+<circle cx="946" cy="220" r="9" stroke="#7cc9ff" fill="#0f2d5c" stroke-width="1.4"/>
+<text x="946" y="223.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">8</text>
+<line x1="50" y1="340" x2="956" y2="340" stroke="#ffb454" stroke-width="1.4"/>
+<text x="50" y="354" font-size="9" text-anchor="start" fill="#ffb454" font-weight="normal">EXHAUST — rejection reasons as named in the code (10):</text>
+<text x="50" y="367" font-size="9" text-anchor="start" fill="#ffb454" font-weight="normal">unsigned, revoked, wrong_key, expired, not_permitted, binding, no_credential, credential_invalid, subject_mismatch, malformed</text>
+<text x="50" y="382" font-size="9" text-anchor="start" fill="#93a9cb" font-weight="normal">register #45: each of 15 registered checks rejected for its expected reason in 30/30 runs; 0 legitimate SPaT rejected of 138,895</text>
+<text x="50" y="430" font-size="10.5" text-anchor="start" fill="#e3ecf9" font-weight="bold">TIMING — per-message verification cost (medians), log scale; the budget marks are the ones the latency budget declares</text>
+<line x1="60" y1="580" x2="940" y2="580" stroke="#e3ecf9" stroke-width="1"/>
+<line x1="133.54302727385755" y1="580" x2="133.54302727385755" y2="586" stroke="#e3ecf9" stroke-width="1"/>
+<text x="133.54302727385755" y="598" font-size="8.5" text-anchor="middle" fill="#93a9cb" font-weight="normal">0.1 ms</text>
+<line x1="304.30464848409497" y1="580" x2="304.30464848409497" y2="586" stroke="#e3ecf9" stroke-width="1"/>
+<text x="304.30464848409497" y="598" font-size="8.5" text-anchor="middle" fill="#93a9cb" font-weight="normal">0.5 ms</text>
+<line x1="377.8476757579525" y1="580" x2="377.8476757579525" y2="586" stroke="#e3ecf9" stroke-width="1"/>
+<text x="377.8476757579525" y="598" font-size="8.5" text-anchor="middle" fill="#93a9cb" font-weight="normal">1 ms</text>
+<line x1="548.6092969681899" y1="580" x2="548.6092969681899" y2="586" stroke="#e3ecf9" stroke-width="1"/>
+<text x="548.6092969681899" y="598" font-size="8.5" text-anchor="middle" fill="#93a9cb" font-weight="normal">5 ms</text>
+<line x1="622.1523242420475" y1="580" x2="622.1523242420475" y2="586" stroke="#e3ecf9" stroke-width="1"/>
+<text x="622.1523242420475" y="598" font-size="8.5" text-anchor="middle" fill="#93a9cb" font-weight="normal">10 ms</text>
+<line x1="792.9139454522849" y1="580" x2="792.9139454522849" y2="586" stroke="#e3ecf9" stroke-width="1"/>
+<text x="792.9139454522849" y="598" font-size="8.5" text-anchor="middle" fill="#93a9cb" font-weight="normal">50 ms</text>
+<line x1="866.4569727261425" y1="580" x2="866.4569727261425" y2="586" stroke="#e3ecf9" stroke-width="1"/>
+<text x="866.4569727261425" y="598" font-size="8.5" text-anchor="middle" fill="#93a9cb" font-weight="normal">100 ms</text>
+<rect x="60" y="452" width="172.0008210082945" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
+<text x="238.0008210082945" y="462" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.253 ms  PKI verify (in-process, CA sig + CRL)  [#21]</text>
+<rect x="60" y="472" width="118.52521860909292" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
+<text x="184.52521860909292" y="482" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.153 ms  SSI BSM verify WARM (cached key)  [#27]</text>
+<rect x="60" y="492" width="138.26808008532137" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
+<text x="204.26808008532137" y="502" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.184 ms  SPaT verify WARM (verifier v3)  [#44]</text>
+<rect x="60" y="512" width="220.39008749034576" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
+<text x="286.39008749034576" y="522" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.399 ms  SSI BSM verify COLD (credential verify)  [#27]</text>
+<rect x="60" y="532" width="238.4371699901659" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
+<text x="304.4371699901659" y="542" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.473 ms  SPaT verify COLD  [#44]</text>
+<rect x="60" y="552" width="558.4123710519237" height="12" stroke="#ffb454" fill="#ffb454" stroke-width="0.8" rx="0"/>
+<text x="624.4123710519237" y="562" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">9.654 ms  ERC-1056 verify UNCACHED (4 RPC, local node)  [#21]</text>
+<line x1="304.30464848409497" y1="446" x2="304.30464848409497" y2="580" stroke="#ffb454" stroke-width="1" stroke-dasharray="5,4"/>
+<text x="308.30464848409497" y="444" font-size="8" text-anchor="start" fill="#ffb454" font-weight="normal">0.5 ms: 100 neighbours in half the interval (P*(0.5)=100)</text>
+<line x1="866.4569727261425" y1="446" x2="866.4569727261425" y2="580" stroke="#ffb454" stroke-width="1" stroke-dasharray="5,4"/>
+<text x="870.4569727261425" y="444" font-size="8" text-anchor="start" fill="#ffb454" font-weight="normal">100 ms: BSM interval (SAE J2945/1, 10 Hz)</text>
+<text x="50" y="620" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">Bars are medians from different runs and hosts (register conditions); they are placed on one scale for orientation only. Within-run comparisons are the ones the register makes (guide 1.1.7).</text>
+<rect x="14" y="14" width="1372" height="962" stroke="#e3ecf9" fill="none" stroke-width="2" rx="0"/>
+<rect x="30" y="30" width="1340" height="930" stroke="#e3ecf9" fill="none" stroke-width="0.8" rx="0"/>
+<line x1="30.0" y1="14" x2="30.0" y2="30" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="30.0" y1="960" x2="30.0" y2="976" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="113.75" y="26" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">1</text>
+<text x="113.75" y="972" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">1</text>
+<line x1="197.5" y1="14" x2="197.5" y2="30" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="197.5" y1="960" x2="197.5" y2="976" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="281.25" y="26" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">2</text>
+<text x="281.25" y="972" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">2</text>
+<line x1="365.0" y1="14" x2="365.0" y2="30" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="365.0" y1="960" x2="365.0" y2="976" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="448.75" y="26" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">3</text>
+<text x="448.75" y="972" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">3</text>
+<line x1="532.5" y1="14" x2="532.5" y2="30" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="532.5" y1="960" x2="532.5" y2="976" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="616.25" y="26" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">4</text>
+<text x="616.25" y="972" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">4</text>
+<line x1="700.0" y1="14" x2="700.0" y2="30" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="700.0" y1="960" x2="700.0" y2="976" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="783.75" y="26" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">5</text>
+<text x="783.75" y="972" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">5</text>
+<line x1="867.5" y1="14" x2="867.5" y2="30" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="867.5" y1="960" x2="867.5" y2="976" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="951.25" y="26" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">6</text>
+<text x="951.25" y="972" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">6</text>
+<line x1="1035.0" y1="14" x2="1035.0" y2="30" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="1035.0" y1="960" x2="1035.0" y2="976" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="1118.75" y="26" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">7</text>
+<text x="1118.75" y="972" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">7</text>
+<line x1="1202.5" y1="14" x2="1202.5" y2="30" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="1202.5" y1="960" x2="1202.5" y2="976" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="1286.25" y="26" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">8</text>
+<text x="1286.25" y="972" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">8</text>
+<line x1="14" y1="30.0" x2="30" y2="30.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="1370" y1="30.0" x2="1386" y2="30.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="22" y="110.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">A</text>
+<text x="1378" y="110.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">A</text>
+<line x1="14" y1="185.0" x2="30" y2="185.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="1370" y1="185.0" x2="1386" y2="185.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="22" y="265.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">B</text>
+<text x="1378" y="265.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">B</text>
+<line x1="14" y1="340.0" x2="30" y2="340.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="1370" y1="340.0" x2="1386" y2="340.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="22" y="420.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">C</text>
+<text x="1378" y="420.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">C</text>
+<line x1="14" y1="495.0" x2="30" y2="495.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="1370" y1="495.0" x2="1386" y2="495.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="22" y="575.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">D</text>
+<text x="1378" y="575.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">D</text>
+<line x1="14" y1="650.0" x2="30" y2="650.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="1370" y1="650.0" x2="1386" y2="650.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="22" y="730.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">E</text>
+<text x="1378" y="730.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">E</text>
+<line x1="14" y1="805.0" x2="30" y2="805.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<line x1="1370" y1="805.0" x2="1386" y2="805.0" stroke="#e3ecf9" stroke-width="0.6"/>
+<text x="22" y="885.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">F</text>
+<text x="1378" y="885.5" font-size="9" text-anchor="middle" fill="#93a9cb" font-weight="normal">F</text>
+<text x="700.0" y="48" font-size="10" text-anchor="middle" fill="#93a9cb" font-weight="normal">UNCLASSIFIED // OPEN SOURCE (MIT) // RESEARCH TESTBED // NOT FOR PRODUCTION USE</text>
+<text x="700.0" y="948" font-size="10" text-anchor="middle" fill="#93a9cb" font-weight="normal">UNCLASSIFIED // OPEN SOURCE (MIT)</text>
+<text x="44" y="78" font-size="17" text-anchor="start" fill="#e3ecf9" font-weight="bold">DWG-003  VERIFICATION ENGINE — EIGHT-STATION PROCESS FLOW</text>
+<rect x="1010" y="56" width="346" height="48" stroke="#e3ecf9" fill="none" stroke-width="1" rx="0"/>
+<line x1="1010" y1="72" x2="1356" y2="72" stroke="#e3ecf9" stroke-width="0.8"/>
+<text x="1016" y="68" font-size="9.5" text-anchor="start" fill="#93a9cb" font-weight="normal">REV   DATE         DESCRIPTION                 REF</text>
+<text x="1016" y="86" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">A     2026-10-15   initial issue               AAR-20</text>
+<text x="1016" y="99" font-size="9.5" text-anchor="start" fill="#93a9cb" font-weight="normal">—     —            —                           —</text>
+<text x="44" y="798" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="bold">NOTES</text>
+<text x="44" y="814.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">1. Station order follows InfrastructureLayer.verify (cv2x-testbed/sumo/infrastructure_layer.py) and FreshnessPolicy</text>
+<text x="44" y="826.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">   (cv2x-testbed/identity/freshness.py); the V2V SSI layer runs S1, S3-S6, S8.</text>
+<text x="44" y="839.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">2. Limits (depth, values, window, cache) are read from the source constants at build time; a change in code changes this sheet and fails --check until</text>
+<text x="44" y="851.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">   regenerated.</text>
+<text x="44" y="864.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">3. S6 cold path verifies the attached credential through the canonical VC layer (2_w3c-ssi-layer/verifiable-credentials) against the trusted-issuer</text>
+<text x="44" y="876.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">   list; warm path uses the cached signing address.</text>
+<text x="44" y="889.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">4. Residual, by design: a fresh message relayed within the window to a receiver that never heard it passes S4 (register #45 'not covered').</text>
+<text x="44" y="901.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">5. Timing bars: #21 host 2.10 GHz Xeon (PKI, ERC-1056 uncached, n=50); #27 mock mobility, 30 seeded runs; #44 verifier v3, 30 runs. No radio or</text>
+<text x="44" y="914.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">   channel time is included anywhere.</text>
+<text x="1000" y="118" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="bold">BILL OF MATERIALS (balloon → item)</text>
+<rect x="1000" y="126" width="356" height="232" stroke="#e3ecf9" fill="none" stroke-width="0.8" rx="0"/>
+<text x="1006" y="138" font-size="9.5" text-anchor="start" fill="#93a9cb" font-weight="normal">NO  ITEM                      SOURCE</text>
+<text x="1006" y="154" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">1   verify(), stations        </text>
+<text x="1006" y="165" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    cv2x-testbed/sumo/infrastructure_layer.py</text>
+<text x="1006" y="180" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">2   FreshnessPolicy           </text>
+<text x="1006" y="191" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    cv2x-testbed/identity/freshness.py</text>
+<text x="1006" y="206" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">3   SSIIdentityLayer          </text>
+<text x="1006" y="217" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    cv2x-testbed/sumo/sumo_identity_integration.py</text>
+<text x="1006" y="232" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">4   CredentialVerifier        </text>
+<text x="1006" y="243" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    2_w3c-ssi-layer/verifiable-credentials/vc_verifier.p</text>
+<text x="1006" y="258" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">5   I2 checks (15)            </text>
+<text x="1006" y="269" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    docs/design/INFRASTRUCTURE_PREREG.md</text>
+<text x="1006" y="284" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">6   v3 tests (26)             </text>
+<text x="1006" y="295" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    sandbox/py-suites/L3-ssi/test_infrastructure_v3.py</text>
+<text x="1006" y="310" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">7   PKI baseline              </text>
+<text x="1006" y="321" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    cv2x-testbed/identity/standard/pki_identity.py</text>
+<text x="1006" y="336" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">8   timing data               </text>
+<text x="1006" y="347" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    cv2x-testbed/results/pki_vs_erc1056.json</text>
+<rect x="960" y="822" width="396" height="134" stroke="#e3ecf9" fill="none" stroke-width="1.6" rx="0"/>
+<line x1="960" y1="866" x2="1356" y2="866" stroke="#e3ecf9" stroke-width="0.8"/>
+<line x1="960" y1="910" x2="1356" y2="910" stroke="#e3ecf9" stroke-width="0.8"/>
+<line x1="1158" y1="866" x2="1158" y2="956" stroke="#e3ecf9" stroke-width="0.8"/>
+<text x="968" y="836" font-size="9.5" text-anchor="start" fill="#93a9cb" font-weight="normal">CVIN-SC VEHICLE IDENTITY TESTBED — TECHNICAL DATA PACKAGE</text>
+<text x="968" y="854" font-size="12" text-anchor="start" fill="#e3ecf9" font-weight="bold">VERIFICATION ENGINE — EIGHT-STATION PROCESS FLOW</text>
+<text x="968" y="880" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">DRAWING NO.</text>
+<text x="968" y="898" font-size="14" text-anchor="start" fill="#7cc9ff" font-weight="bold">DWG-003</text>
+<text x="1166" y="880" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">SHEET        REV      SCALE</text>
+<text x="1166" y="898" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="normal">3 OF 6       A        NTS</text>
+<text x="968" y="923" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">DRAWN  make_blueprints.py</text>
+<text x="968" y="935" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">CHECKED  CI (--check, byte for byte)</text>
+<text x="968" y="947" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">ISSUE 2026-10-15  N. Prakash, UBC ECE</text>
+<text x="1166" y="923" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">SOURCE DATA</text>
+<text x="1166" y="935" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">dashboard_snapshot.json</text>
+<text x="1166" y="947" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">pki_vs_erc1056.json</text>
+</svg>

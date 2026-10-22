@@ -24,12 +24,12 @@ d.run(async () => {
   const YEAR = 365n * 24n * 3600n;
   d.offchain('setup', 'MOBIVIDRegistryV2.registerVehicleBirth', `vehicle ${vehicle.slice(0, 10)}… owned by ${owner.address.slice(0, 10)}…`);
 
-  assert.equal(reg.interface.hasFunction('validDelegate(address,bytes32,address)'), false);
-  d.offchain('no-valid-delegate-view', 'MOBIVIDRegistryV2 (ABI)', 'OBSERVATION: the canonical ERC-1056 validDelegate(identity,type,delegate) view is NOT implemented; delegate validity exists only in logs');
+  assert.equal(reg.interface.hasFunction('validDelegate(address,bytes32,address)'), true);
+  d.offchain('valid-delegate-view', 'MOBIVIDRegistryV2 (ABI)', 'FIXED (WM-2 C2, D54): delegations are stored as the canonical ERC-1056 registry stores them, and validDelegate(identity,type,delegate) is implemented; before C2 delegate validity existed only in logs, so no contract could check it');
   await d.view('changed-before', 'MOBIVIDRegistryV2.changed', reg.changed(vehicle), 'block of the last change (set by the birth) — the ERC-1056 linked-list head for log replay', (v) => assert.ok(v > 0n));
   await d.reverts('add-delegate-unauthorised', 'MOBIVIDRegistryV2.addDelegate', () => reg.connect(stranger).addDelegate(vehicle, SIG_AUTH, stranger.address, YEAR), 'Only owner can perform this action', 'owner-only');
   const r1 = await d.tx('add-delegate-sigauth', 'MOBIVIDRegistryV2.addDelegate', reg.connect(owner).addDelegate(vehicle, SIG_AUTH, telematicsKey.address, YEAR),
-    'MEASURED (addDelegateOrClaim): telematics unit key authorised as sigAuth for 1 year -> DIDDelegateChanged(identity, type, delegate, validTo, previousChange); nothing stored but `changed`');
+    'MEASURED (addDelegateOrClaim): telematics unit key authorised as sigAuth for 1 year -> DIDDelegateChanged(identity, type, delegate, validTo, previousChange); stores delegates[identity][type][delegate] = validTo (since WM-2 C2) and `changed`');
   const e1 = eventArgs(reg, r1, 'DIDDelegateChanged'); assert.equal(e1.delegate, telematicsKey.address); assert.equal(e1.delegateType, SIG_AUTH);
   const t1 = (await ethers.provider.getBlock(r1.blockNumber)).timestamp;
   assert.equal(e1.validTo, BigInt(t1) + YEAR);
@@ -39,7 +39,7 @@ d.run(async () => {
   await d.reverts('revoke-delegate-unauthorised', 'MOBIVIDRegistryV2.revokeDelegate', () => reg.connect(telematicsKey).revokeDelegate(vehicle, VERI_KEY, backupKey.address), 'Only owner can perform this action', 'a delegate cannot revoke other delegates (no capabilityDelegation)');
   const r2 = await d.tx('revoke-delegate', 'MOBIVIDRegistryV2.revokeDelegate', reg.connect(owner).revokeDelegate(vehicle, VERI_KEY, backupKey.address), 'MEASURED-adjacent: revocation = DIDDelegateChanged with validTo = now (the same event shape; "revoked" is just "expired")');
   const e2 = eventArgs(reg, r2, 'DIDDelegateChanged'); assert.equal(e2.validTo, BigInt((await ethers.provider.getBlock(r2.blockNumber)).timestamp));
-  await d.tx('revoke-never-added', 'MOBIVIDRegistryV2.revokeDelegate', reg.connect(owner).revokeDelegate(vehicle, SIG_AUTH, owner.address), 'OBSERVATION: revoking a delegate that was never added succeeds (event-only, no state to check)');
+  await d.tx('revoke-never-added', 'MOBIVIDRegistryV2.revokeDelegate', reg.connect(owner).revokeDelegate(vehicle, SIG_AUTH, owner.address), 'OBSERVATION: revoking a delegate that was never added succeeds (it records validTo = now for a delegation that never existed)');
 
   const now = BigInt((await ethers.provider.getBlock('latest')).timestamp);
   const logs = await reg.queryFilter(reg.filters.DIDDelegateChanged(vehicle), 0, 'latest');
@@ -47,6 +47,7 @@ d.run(async () => {
   for (const l of logs) latest.set(`${l.args.delegateType}:${l.args.delegate}`, l.args.validTo);
   const valid = [...latest.entries()].filter(([, v]) => v > now).map(([k]) => k.split(':')[1]);
   assert.deepEqual(valid, [telematicsKey.address]);
+  await d.view('valid-delegate-stored', 'MOBIVIDRegistryV2.validDelegate', Promise.all([reg.validDelegate(vehicle, SIG_AUTH, telematicsKey.address), reg.validDelegate(vehicle, VERI_KEY, backupKey.address), reg.validDelegate(vehicle, SIG_AUTH, stranger.address)]), 'MEASURED (view): the stored state agrees with the log replay: telematics valid, backup revoked, 1-second delegation expired (WM-2 C2)', (v) => assert.deepEqual(v, [true, false, false]));
   d.offchain('replay-delegates', 'MOBIVIDRegistryV2.DIDDelegateChanged (logs)', `${logs.length} delegate events; latest validTo per (type, delegate) wins: currently valid = [telematics sigAuth]; backup revoked, 1-second one expired — this replay IS the verifier's "is this key authorised" check`);
 
   // ---- D11b: anchoring the vehicle's verification key on-chain (FIXED 2026-10-04) ----

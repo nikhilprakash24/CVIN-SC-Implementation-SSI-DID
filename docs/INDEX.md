@@ -48,6 +48,7 @@ provenance and must not be cited in chapters.
 | How is the work cut into milestones, and what did each one do? | `docs/milestones/README.md`, `docs/milestones/WM-1_REPORT.md` | work milestones (WM-n, commit ranges, audited) inside overall milestones (version tags) |
 | What defects were found, and what is their status? | `docs/DEFECT_LOG.md` | D1–D36; §C open items with the decision each needs; §F the WM-1 review's findings |
 | What was designed and pre-registered for infrastructure messaging, and what was built? | `docs/design/INFRASTRUCTURE_MESSAGING.md` (§7 as built), `docs/design/INFRASTRUCTURE_PREREG.md` (amendments A1–A4) | register #44–#48 |
+| What is the testbed as an engineering technical data package (specification, verification matrix, blueprints, failure-mode worksheet, interface control, test plan, baseline, risk register), in the register of a programme office rather than a thesis? | `docs/tdp/README.md` (TDP-000) and the documents it indexes; generated ones are CI-checked | after-action report 20; a second reading of the same evidence, adding no number; `docs/tdp/TDP-RUNBOOK.md` carries the phases a later session runs one at a time |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 
