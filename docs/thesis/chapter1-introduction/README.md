@@ -188,6 +188,11 @@ nine base standards.
 - **RQ4 — Real-time feasibility.** Can identity establishment plus credential
   verification fit inside the latency envelope of safety-critical V2V
   applications (~100 ms end-to-end)?
+- **RQ5 — Zero-knowledge privacy and its operation** *(extension, adopted
+  2026-10-22; `docs/zkp/THESIS_INTEGRATION_MAP.md`).* Can zero-knowledge proofs
+  provide the deferred VIN privacy tier and identity-dependent knowledge checks
+  within the budgets used for RQ1 and RQ4, and what does operating them safely
+  require?
 
 ### Hypotheses
 
@@ -211,9 +216,16 @@ nine base standards.
 - **H5 (Security frontier).** **No single standard dominates**; the standards
   occupy a security/performance Pareto frontier, and a hybrid (ERC-1056
   identity + ERC-735 claims) sits on that frontier.
+- **H6 (Zero-knowledge vehicle identity)** *(extension, with RQ5).*
+  Zero-knowledge vehicle identity is feasible at registration and session time
+  but not per V2V message, and its safe operation requires a bounded, adaptive
+  custodian whose own trust rests on the same decentralised identity stack.
+  Its measurable part is the pre-registered set Z-E1..Z-E7 (register #55–#61).
 
 **Preview of findings (see Chapter 5).** The thesis finds **all five
-hypotheses supported**. H1, H2, H3, and H5 are supported outright; H4 is
+hypotheses supported**. The extension hypothesis H6 is **partly supported**: feasibility and
+the custodian's necessity hold (six of seven expectations pass), but the bounded
+custodian misses its pre-registered honest-service level (Z-E6 FAIL). H1, H2, H3, and H5 are supported outright; H4 is
 supported with a documented *fidelity gradient* — the identity and lifecycle
 operations port natively to every backend measured, while native on-chain
 multi-party attestation is available only on the claim-capable and

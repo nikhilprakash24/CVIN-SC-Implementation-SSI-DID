@@ -144,8 +144,9 @@ def render(doc):
               f"- **Builds on.** " + ", ".join(f"`{f}`" for f in i["builds_on"]),
               f"- **First step.** {i['first_step']}",
               f"- **Kill criterion.** {i['kill']}",
-              f"- **Needs:** {', '.join(i.get('depends', [])) or 'nothing'} · **needed by:** {', '.join(used_by.get(i['id'], [])) or 'nothing'}",
-              ""]
+              f"- **Needs:** {', '.join(i.get('depends', [])) or 'nothing'} · **needed by:** {', '.join(used_by.get(i['id'], [])) or 'nothing'}"]
+        L += [f"- **Status {d}.** {t}" for d, t in i.get("status", [])]  # dated, appended; never edited
+        L += [""]
     return "\n".join(L).rstrip() + "\n"
 
 

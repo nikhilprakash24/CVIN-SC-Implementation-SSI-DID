@@ -4,9 +4,9 @@
     "source": {
       "path": "docs/MEASUREMENT_CONDITIONS.md"
     },
-    "rows": 54,
+    "rows": 61,
     "by_status": {
-      "V": 37,
+      "V": 44,
       "S": 10,
       "E": 7
     }
@@ -1909,6 +1909,48 @@
       "status": "V",
       "claim": "(clone lineage, was #42) Freshness-k, same host, both refresh modes (12 replicates in alternating blocks, fresh node each; clean pool by foreign-CPU load; one replicate excluded for overlapping another experiment): t_loc…",
       "tag": "M0/M1, Hardhat 2.28.6, chain 31337, automine; Intel Xeon 2.80 GHz × 4, shared"
+    },
+    "55": {
+      "row": 55,
+      "status": "V",
+      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z1) ZK-VIN Groth16 circuit size: 3,498 constraints (1,667 non-linear, 1,831 linear), 3,505 wires, 6 public and 27 private inputs, 1 public outpu…",
+      "tag": "—"
+    },
+    "56": {
+      "row": 56,
+      "status": "V",
+      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z2) ZK-VIN proving and verification time: prove median 398.6 ms (N=10; min 360.2, max 431.5), verify median 18.42 ms (N=30; min 15.45, max 26.59…",
+      "tag": "M0 (snarkjs 0.7.6, node v22.22.0, 2.80 GHz Xeon, one warm-up discarded)"
+    },
+    "57": {
+      "row": 57,
+      "status": "V",
+      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z3) ZK-VIN on chain: `ZkVinGate.admit` with on-chain Groth16 verification 301,163 gas; anchor commitment 51,558; `verifyProof` view estimate 256…",
+      "tag": "M1 (Hardhat 2.28.6, solc 0.8.24, optimizer 200 + viaIR, cancun)"
+    },
+    "58": {
+      "row": 58,
+      "status": "V",
+      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z4) zkid sigma-protocol primitives: per-operation timings and exact group-operation counts (Schnorr, Pedersen, Chaum–Pedersen, CDS OR, range/thr…",
+      "tag": "M0 (CPython, N=30 after one discarded warm-up; counts exact)"
+    },
+    "59": {
+      "row": 59,
+      "status": "V",
+      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z5) An unsalted SHA-256 of a VIN with only the 6-digit serial unknown is reversed by enumeration in 3.58 s (10⁶ candidates, 279,587 hashes/s, on…",
+      "tag": "M0 (CPython hashlib, one core; full space enumerated)"
+    },
+    "60": {
+      "row": 60,
+      "status": "V",
+      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z6) Predicate-narrowing (\"twenty questions\") attack and defences, seeds 1–30 per cell: undefended, the model year is recovered exactly within 5 …",
+      "tag": "Sim"
+    },
+    "61": {
+      "row": 61,
+      "status": "V",
+      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z7) Manual-burden inventory of operating the ZK identity by hand: operation and value counts measured exactly from the code (e.g. 7,268 field mu…",
+      "tag": "M0 (counts) / — (times)"
     }
   }
 }
