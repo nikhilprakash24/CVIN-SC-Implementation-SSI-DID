@@ -81,7 +81,7 @@ The security analysis also produced a *method* finding worth carrying into the
 discussion: the `attestEvent` signature-verification gap that the threat-matrix
 lens surfaced and the thesis then fixed (attestations now `ecrecover` against a
 domain-separated digest; forged and replayed signatures revert; §5.6). The cost
-of the fix — attestEvent rising from 121,110 to 192,718 gas (192,749 on the 2026-10-04 re-execution) — is the
+of the fix — attestEvent rising from 121,110 to 192,718 gas (192,749 on the 2026-10-04 re-execution → 222,082 since WM-2 C2 added the owner-or-delegate check) — is the
 security/performance trade-off made concrete *within a single operation*: the
 extra ~72k gas buys on-chain signature verification that the original code
 omitted. That a source-reading lens caught what a passing revert-suite could
@@ -387,7 +387,7 @@ scoping threats to validity recapped above.
 ## 6.8 On-Chain Reality, SSI as a Spectrum, and the Agent Wrapper
 
 *Added 2026-10-22 for RQ5 and H6. Sources: `docs/zkp/REPORT_B_ZKP_AND_IDENTITY.md` §9;
-`docs/zkp/REPORT_C_AGENT_WRAPPED_IDENTITY.md` §9–§11; results in §5.10 (register #55–#61).*
+`docs/zkp/REPORT_C_AGENT_WRAPPED_IDENTITY.md` §9–§11; results in §5.10 (register #56–#62).*
 
 Section 5.10 showed that zero-knowledge vehicle identity is affordable at registration and session time and that a
 bounded custodian can hold a narrowing attack to its budget at a cost in honest service. This section asks what those
@@ -401,14 +401,14 @@ data off chain with only commitments or hashes on it [@EDPB-2025; @CNIL2018]. Th
 holds VIN commitments, never VINs. Erasure is still only partial, because the commitment remains; what the owner can
 do is destroy the salt, after which the commitment can no longer be opened.
 
-**A hash of a small space is not secret.** The brute-force result (§5.10.3; register #59) turns a textbook warning into
+**A hash of a small space is not secret.** The brute-force result (§5.10.3; register #60) turns a textbook warning into
 a measured one. A VIN whose only unknown is its serial is reversed in seconds on one core. Hashing is therefore not a
 privacy mechanism for VINs; a random salt is the minimum, and a hiding commitment with a proof of its contents is what
 the ZK-VIN tier adds.
 
 **A commitment proves equality, not knowledge.** Before layer 5, a contract could compare a submitted value with a
 stored commitment, which reveals the value, but could not check that a caller knows what the commitment holds (AR-5).
-`ZkVinGate` closes that gap at 301,163 gas per admission (register #57), the price of making knowledge, rather than a
+`ZkVinGate` closes that gap at 301,163 gas per admission (register #58), the price of making knowledge, rather than a
 signature, the dependency of an identity-dependent transaction.
 
 **Zero knowledge proves what was committed, not what is true.** If an issuer commits the wrong model year, ZK-VIN
@@ -417,7 +417,7 @@ go away; zero knowledge narrows what is disclosed, not whom one must trust about
 
 **Zero knowledge per proof is not privacy per session.** This is the finding with the widest reach. Every answer in
 the narrowing attack is a valid zero-knowledge proof, yet the sequence recovers the model year exactly (Z-E5, register
-#60). The result is old in another field: Denning's tracker defeated query-size restrictions on statistical databases
+#61). The result is old in another field: Denning's tracker defeated query-size restrictions on statistical databases
 [@DENNING1979], Dinur and Nissim showed that many answers reconstruct a database [@DINUR2003], and Kenthapadi, Mishra
 and Nissim showed that refusals leak unless the decision to refuse is simulatable [@KENTHAPADI2005]. What the thesis
 adds is the measurement against predicate credentials of its own stack, and the observation that a per-verifier rule
@@ -442,7 +442,7 @@ towards strict SSI as far as each use case allows. Three tables in Report C (gen
   decentralisation buys nothing (Phase 2 focus F2). The setup ceremony limits transparency in the current prototype.
 - **Table C-3, use cases.** For each case it records what goes on chain, what stays with the agent, which properties
   are realised and which are constrained. A V2V safety broadcast puts nothing on chain per message and cannot use a
-  per-message proof (proving takes 398.6 ms against a ~100 ms budget; register #56) or wait for consent. A session at a
+  per-message proof (proving takes 398.6 ms against a ~100 ms budget; register #57) or wait for consent. A session at a
   roadside unit, an insurance quote or a toll uses ZK-VIN at session start, with scoped nullifiers keeping operators
   unlinkable. A sale is public by design, since provenance is its purpose. A recall or lawful inquiry yields protection
   to a lawful order, and the agent logs the disclosure. At end of life the salt is destroyed.
@@ -455,12 +455,12 @@ incomplete, protection at the gate and setup trust, are named to-dos, not design
 
 ### 6.8.3 The agent wrapper: why, benefits and risks
 
-The manual-burden counts (§5.10.5; register #61) settle why a custodian is needed. No person verifies a Schnorr proof
+The manual-burden counts (§5.10.5; register #62) settle why a custodian is needed. No person verifies a Schnorr proof
 or copies a 1,300-character presentation reliably by hand, and the narrowing attack shows that the custodian must also
 remember across verifiers and adapt. Those are the properties of an agent. The results then say what kind of agent:
 one in which a deterministic kernel holds the bound and any learned or language component works inside it. The
 post-hoc insider run (A2) is the sharpest evidence, since the learner without the kernel's budget was broken outright
-by an accredited adversary (register #60).
+by an accredited adversary (register #61).
 
 The wrapper also inverts the dominant data economy, in which the person is a source of raw material [@ZUBOFF2019].
 With an owner-signed policy, the person's software discloses for the person, by rule, minimally and with a record.
@@ -470,10 +470,10 @@ are the ones built and tested here.
 | Benefit | What it means in this build | Evidence |
 |---|---|---|
 | Security | secrets never leave the vault; proofs bound to verifier and nonce; injection cannot cause a disclosure | Steward tests (§4.8.4) |
-| Availability | proofs at machine speed | register #56, #58 |
+| Availability | proofs at machine speed | register #57, #59 |
 | Customisability | rules in controlled English, compiled and signed; only the owner can loosen them | compiler tests |
 | Sovereignty | the owner signs the policy and can revoke the agent | delegation tests |
-| Privacy over time | the total disclosed is capped across all verifiers | register #60 |
+| Privacy over time | the total disclosed is capped across all verifiers | register #61 |
 | Accountability | every decision in a tamper-evident, anchorable log | audit test |
 
 | Risk | Mitigation in this build | Residual |

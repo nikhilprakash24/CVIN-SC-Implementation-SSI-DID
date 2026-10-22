@@ -38,7 +38,7 @@ Legend: ✍️ written · ▫️ stub · 📊 backed by measured data (`SOURCES.
 ## Ch. 5 — Results (`chapter5-results/`) — ✍️📊
 5.1 Setup 📊 · 5.2 RQ1 gas (H1) 📊 · 5.3 CVIN-Combined (H5) 📊 ·
 5.3.1 H4 multi-backend 📊 · 5.4 RQ4 V2V (H3) 📊 · 5.5 RQ3 compliance (H2) 📊 ·
-5.6 RQ2 security 📊 · 5.7 Hypotheses summary 📊 · 5.8 Threats 📊 · 5.10 RQ5 ZK costs and the attack (H6) ✍️📊 (#55–#61)
+5.6 RQ2 security 📊 · 5.7 Hypotheses summary 📊 · 5.8 Threats 📊 · 5.10 RQ5 ZK costs and the attack (H6) ✍️📊 (#56–#62)
 
 ## Ch. 6 — Discussion (`chapter6-discussion/`) — ✍️
 6.1 Security/performance/fidelity frontier ✍️ · 6.2 Which-standard-when ✍️ ·

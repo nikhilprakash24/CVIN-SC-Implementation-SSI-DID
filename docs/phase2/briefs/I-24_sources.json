@@ -1,0 +1,128 @@
+[
+  {
+    "id": "S01",
+    "citation": "Loi Luu, Duc-Hiep Chu, Hrishi Olickel, Prateek Saxena, Aquinas Hobor. Making Smart Contracts Smarter. ACM CCS 2016 (CCS'16, Vienna, Austria). DOI 10.1145/2976749.2978309.",
+    "url": "https://www.comp.nus.edu.sg/~prateeks/papers/Oyente.pdf",
+    "quote": "A transaction T now additionally specifies a guard condition g; the current state σ needs to satisfy g for the execution of T to go through. If g is not satisfied, the transaction is simply dropped by the new rule TX-stale.",
+    "used_for": "TOD definition; guarded transactions as prior art for the re-check at fulfil (brief §3.1, §6)"
+  },
+  {
+    "id": "S02",
+    "citation": "Philip Daian, Steven Goldfeder, Tyler Kell, Yunqi Li, Xueyuan Zhao, Iddo Bentov, Lorenz Breidenbach, Ari Juels. Flash Boys 2.0: Frontrunning, Transaction Reordering, and Consensus Instability in Decentralized Exchanges. arXiv:1904.05234, 2019.",
+    "url": "https://arxiv.org/abs/1904.05234",
+    "quote": "Our work highlights the large, complex risks created by transaction-ordering dependencies in smart contracts and the ways in which traditional forms of financial-market exploitation are adapting to and penetrating blockchain economies.",
+    "used_for": "ordering race between an identity change and a dependent transaction (brief §3.1)"
+  },
+  {
+    "id": "S03",
+    "citation": "Shayan Eskandari, Seyedehmahsa Moosavi, Jeremy Clark. SoK: Transparent Dishonesty: front-running attacks on Blockchain. FC: International Conference on Financial Cryptography 2019 (arXiv:1902.05164).",
+    "url": "https://arxiv.org/abs/1902.05164",
+    "quote": "We consider front-running to be a course of action where an entity benefits from prior access to privileged market information about upcoming transactions and trades.",
+    "used_for": "front-running definition and mitigation categories (brief §3.1)"
+  },
+  {
+    "id": "S04",
+    "citation": "Matt Bishop, Michael Dilger. Checking for Race Conditions in File Accesses. Computing Systems 9(2), pp. 131-152, Spring 1996.",
+    "url": "https://nob.cs.ucdavis.edu/bishop/papers/1996-compsys/racecond.pdf",
+    "quote": "A TOCTTOU flaw occurs when a program checks for a particular characteristic of an object, and then takes some action that assumes the characteristic still holds when in fact it does not.",
+    "used_for": "origin of the TOCTOU term (brief §3.1)"
+  },
+  {
+    "id": "S05",
+    "citation": "Vincent Hu, David Ferraiolo, Richard Kuhn, Adam Schnitzer, Kenneth Sandlin, Robert Miller, Karen Scarfone. Guide to Attribute Based Access Control (ABAC) Definition and Considerations. NIST SP 800-162, January 2014 (includes updates as of 08-02-2019).",
+    "url": "https://csrc.nist.gov/pubs/sp/800/162/upd2/final",
+    "quote": "ABAC is a logical access control methodology where authorization to perform a set of operations is determined by evaluating attributes associated with the subject, object, requested operations, and, in some cases, environment conditions against policy, rules, or relationships that describe the allowable operations for a given set of attributes.",
+    "used_for": "ABAC includes object attributes, so named-identity versus caller is not a distinction from ABAC (brief §3.2, §6)"
+  },
+  {
+    "id": "S06",
+    "citation": "Pelle Braendgaard, Joel Torstensson. ERC-1056: Ethereum Lightweight Identity. Ethereum Improvement Proposals, Standards Track ERC, status Stagnant, created 2018-05-03.",
+    "url": "https://eips.ethereum.org/EIPS/eip-1056",
+    "quote": "Contract Events are a useful feature for storing data from smart contracts exclusively for off-chain use.",
+    "used_for": "L1 locus: attributes in events are not a contract-readable dependency (brief §3.2, §6)"
+  },
+  {
+    "id": "S07",
+    "citation": "Vitalik Buterin, Yoav Weiss, Dror Tirosh, Shahaf Nacson, Alex Forshtat, Kristof Gazso, Tjaden Hess. ERC-4337: Account Abstraction Using Alt Mempool. Ethereum Improvement Proposals, Standards Track ERC, status Final, created 2021-09-29.",
+    "url": "https://eips.ethereum.org/EIPS/eip-4337",
+    "quote": "In contrast, UserOperation validation rely on EVM state (calls to validateUserOp, validatePaymasterUserOp), can be changed by other UserOperations (or normal Ethereum transactions). Therefore, we introduce simulation as a new mechanism to check its validity.",
+    "used_for": "admission-time evaluation point and its staleness (brief §3.2)"
+  },
+  {
+    "id": "S08",
+    "citation": "Yoav Weiss, Dror Tirosh, Alex Forshtat, Shahaf Nacson. ERC-7562: Account Abstraction Validation Scope Rules. Ethereum Improvement Proposals, Standards Track ERC, status Review, created 2023-09-01.",
+    "url": "https://eips.ethereum.org/EIPS/eip-7562",
+    "quote": "With contract-based accounts, a UserOperation’s validity may depend on mutable state. Other transactions can invalidate a previously valid UserOperation, necessitating a second validation before block inclusion.",
+    "used_for": "admission-time staleness; storage-access rules STO-010 to STO-033 constrain the admission cell (brief §3.2, §6)"
+  },
+  {
+    "id": "S09",
+    "citation": "Joachim Lebrun, Tony Malghem, Kevin Thizy, Luc Falempin, Adam Boudjemaa. ERC-3643: T-REX - Token for Regulated EXchanges. Ethereum Improvement Proposals, Standards Track ERC, status Final, created 2021-07-09.",
+    "url": "https://eips.ethereum.org/EIPS/eip-3643",
+    "quote": "The isVerified function is called from within the transfer functions transfer, transferFrom, mint and forcedTransfer to instruct the Identity Registry to check if the receiver is a valid investor, i.e. if his wallet address is in the Identity Registry of the token, and if the Identity contract linked to his wallet contains the claims (see Claim Holder) required in the Claim Topics Registry and if these claims are signed by an authorized Claim Issuer as required in the Trusted Issuers Registry.",
+    "used_for": "closest prior art: a transfer whose admissibility depends on the named receiver's identity claims (brief §3.2, §6)"
+  },
+  {
+    "id": "S10",
+    "citation": "Simon Jentzsch, Christoph Jentzsch. EIP-1186: RPC-Method to get Merkle Proofs - eth_getProof. Ethereum Improvement Proposals, Standards Track Interface, status Stagnant, created 2018-06-24.",
+    "url": "https://eips.ethereum.org/EIPS/eip-1186",
+    "quote": "This EIP suggests an additional RPC-Method, which creates Merkle Proofs for Accounts and Storage Values. Combined with a stateRoot (from the blockheader) it enables offline verification of any account or storage-value.",
+    "used_for": "proof form for L0 dependencies; covers storage, not logs (brief §3.3)"
+  },
+  {
+    "id": "S11",
+    "citation": "Vitalik Buterin, Tomasz Stanczak, Guillaume Ballet, Gajinder Singh, Tanishq Jasoria, Ignacio Hagopian, Jochem Brouwer, Sina Mahmoodi. EIP-2935: Serve historical block hashes from state. Ethereum Improvement Proposals, Standards Track Core, status Final, created 2020-09-03.",
+    "url": "https://eips.ethereum.org/EIPS/eip-2935",
+    "quote": "Store last HISTORY_SERVE_WINDOW historical block hashes in the storage of a system contract as part of the block processing logic.",
+    "used_for": "how far back a carried proof can be checked against a block hash; HISTORY_SERVE_WINDOW 8191 from the same page's parameter table (brief §3.3)"
+  },
+  {
+    "id": "S12",
+    "citation": "Shayan Eskandari, Mehdi Salehi, Wanyun Catherine Gu, Jeremy Clark. SoK: Oracles from the Ground Truth to Market Manipulation. 3rd ACM Conference on Advances in Financial Technologies (AFT '21), 2021 (arXiv:2106.00667).",
+    "url": "https://arxiv.org/abs/2106.00667",
+    "quote": "One fundamental limitation of blockchain-based smart contracts is that they execute in a closed environment. Thus, they only have access to data and functionality that is already on the blockchain, or is fed into the blockchain.",
+    "used_for": "the L4 locus as the oracle problem (brief §3.3)"
+  },
+  {
+    "id": "S13",
+    "citation": "Jonathan Heiss, Robert Muth, Frank Pallas, Stefan Tai. Non-Disclosing Credential On-chaining for Blockchain-based Decentralized Applications. arXiv:2209.09584, 2022.",
+    "url": "https://arxiv.org/abs/2209.09584",
+    "quote": "In this paper, we propose a novel credential on-chaining system that ensures blockchain-based transparency while preserving pseudonymity. We present a general model compliant to the W3C verifiable credential recommendation and demonstrate how it can be applied to solve existing problems that require computational identity-related attribute verification.",
+    "used_for": "prior work for a knowledge dependency verified on chain with zkSNARKs (brief §3.3)"
+  },
+  {
+    "id": "S14",
+    "citation": "Montassar Naghmouchi, Hella Kaffel, Maryline Laurent. An automatized Identity and Access Management system for IoT combining Self-Sovereign Identity and smart contracts. arXiv:2201.00231, 2022 (extended version of a paper in FPS 2021).",
+    "url": "https://arxiv.org/pdf/2201.00231",
+    "quote": "The smart contract reads data from Hyperledger Indy Blockchain to verify signatures of both issuer and holder.",
+    "used_for": "closest vehicle-domain prior work: a contract verifier with a cross-ledger dependency (brief §3.3)"
+  },
+  {
+    "id": "S15",
+    "citation": "Dave Longley, Manu Sporny, Orie Steele (authors); Manu Sporny, Dave Longley, Mike Prorock, Mahmoud Alkhraishi (editors). Bitstring Status List v1.0. W3C Recommendation, 15 May 2025.",
+    "url": "https://www.w3.org/TR/vc-bitstring-status-list/",
+    "quote": "The ttl is an OPTIONAL property that indicates the \"time to live\" in milliseconds before a refresh SHOULD be attempted.",
+    "used_for": "credential status freshness bounded in time (brief §3.3)"
+  },
+  {
+    "id": "T01",
+    "citation": "OpenZeppelin. Access Control, OpenZeppelin Contracts 5.x documentation.",
+    "url": "https://docs.openzeppelin.com/contracts/5.x/access-control",
+    "quote": "OpenZeppelin Contracts provides AccessControl for implementing role-based access control.",
+    "used_for": "caller-role access control as the baseline; optional control arm (brief §3.5, §4, §7.3)"
+  },
+  {
+    "id": "T02",
+    "citation": "Nomic Foundation. Mining Modes, Hardhat Network documentation (page last updated 8/13/2025).",
+    "url": "https://hardhat.org/hardhat-network/docs/explanation/mining-modes",
+    "quote": "Hardhat Network can be configured to automine blocks, immediately upon receiving each transaction, or it can be configured for interval mining, where a new block is mined periodically, incorporating as many pending transactions as possible.",
+    "used_for": "automine for E-F1-1 and E-F1-2; interval mining for E-F1-3 (brief §4)"
+  },
+  {
+    "id": "T03",
+    "citation": "Trail of Bits. slither-analyzer 0.11.6, PyPI package metadata.",
+    "url": "https://pypi.org/pypi/slither-analyzer/json",
+    "quote": "Slither is a Solidity and Vyper static analysis framework written in Python 3.",
+    "used_for": "static analysis tooling and its version (brief §4)"
+  }
+]

@@ -163,7 +163,7 @@ All numbers below are measured from the repository; each has a row in `docs/MEAS
 | ERC-1056 | 52,594 |
 | ERC-1155 | 107,729 |
 | LSP8 | 152,644 |
-| MOBI-VID-V2 | 299,143 |
+| MOBI-VID-V2 | 299,165 |
 | ERC-725 | 519,384 |
 | ERC-721 | 545,101 |
 | ERC-4337 | 759,088 |

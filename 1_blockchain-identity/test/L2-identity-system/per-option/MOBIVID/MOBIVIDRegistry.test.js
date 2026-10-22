@@ -357,6 +357,11 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       vehicle.address, VIN_HASH, "encrypted:VIN", BIRTH_CERT_HASH,
       firstOwner.address, BIRTH_ATTRS
     );
+    // WM-2 C2 (D54): attesters need the owner's consent, as veriKey delegations.
+    for (const att of [dmv, inspection]) {
+      await registry.connect(firstOwner).addDelegate(
+        vehicle.address, ethers.encodeBytes32String("veriKey"), att.address, 86400);
+    }
 
     return { registry, authority, manufacturer, firstOwner, serviceCenter,
              police, dmv, inspection, vehicle, outsider };
@@ -590,10 +595,8 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       const eventId = extractEventId(registry, await tx.wait());
       const chainId = (await ethers.provider.getNetwork()).chainId;
 
-      // (1) A valid signature by the attester (dmv) is accepted.
-      const validSig = await attestationSignature(registry, chainId, vehicle.address, eventId, dmv);
-      await expect(registry.connect(dmv).attestEvent(eventId, vehicle.address, validSig))
-        .to.emit(registry, "EventAttested");
+      // (1) is last: since WM-2 C2 a second attestation by dmv would revert
+      //     "Already attested" before its signature is checked.
 
       // (2) Garbage bytes (the previous placeholder style) now revert
       //     (OZ ECDSA: ECDSAInvalidSignatureLength).
@@ -617,6 +620,11 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       await expect(
         registry.connect(dmv).attestEvent(eventId, vehicle.address, replay)
       ).to.be.revertedWith("Invalid attestation signature");
+
+      // (1) A valid signature by the attester (dmv) is accepted.
+      const validSig = await attestationSignature(registry, chainId, vehicle.address, eventId, dmv);
+      await expect(registry.connect(dmv).attestEvent(eventId, vehicle.address, validSig))
+        .to.emit(registry, "EventAttested");
 
       // Only the single valid attestation from (1) was recorded.
       const attestations = await registry.getEventAttestations(eventId);
@@ -646,8 +654,13 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
     });
   });
 
-  describe("H-A: OWNER-role attestations are limited to the vehicle's current owner", function () {
-    const NOT_OWNER = "OWNER role: not the current owner of this vehicle";
+  // Written for the clone lineage's H-A rule (OWNER-role attester must be the owner; organisational roles
+  // registry-wide). Since the three-lineage merge of 2026-10-22 (Plan 5) the contract carries the cv2x
+  // workspace's WM-2 C2 rule instead: every attester must be the vehicle's owner or its owner's veriKey
+  // delegate, once per event. Cases that still hold keep their assertion with the new revert string; the
+  // two that encoded H-A's design choice are rewritten to the C2 rule and say so.
+  describe("H-A cases under the WM-2 C2 rule: attesters are limited to the vehicle's owner and delegates", function () {
+    const NOT_OWNER = "Attester is not the vehicle's owner or delegate";
 
     // Vehicle A (fixture vehicle) is owned by firstOwner; vehicle B by ownerB.
     // Both owners and a later buyer hold the OWNER role. A service centre
@@ -705,7 +718,7 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       expect(atts[0].attester).to.equal(f.buyer.address);
     });
 
-    it("an ERC-1056 delegate of B does not gain attestation rights (no on-chain delegate record)", async function () {
+    it("a sigAuth delegate of B gains no attestation right (only a veriKey delegation counts, WM-2 C2)", async function () {
       const f = await loadFixture(attestFixture);
       await f.registry.authorizeIssuer(f.delegateB.address, IssuerRole.OWNER);
       await f.registry.connect(f.ownerB).addDelegate(
@@ -722,15 +735,20 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
         .to.be.revertedWith("Not authorized to attest");
     });
 
-    it("organisational roles keep registry-wide attestation scope (DMV and inspection on B)", async function () {
+    it("organisational roles need the owner's veriKey delegation (was: registry-wide under H-A)", async function () {
       const f = await loadFixture(attestFixture);
+      const VERI_KEY = ethers.encodeBytes32String("veriKey");
+      await f.registry.connect(f.ownerB).addDelegate(f.vehicleB.address, VERI_KEY, f.inspection.address, 86400);
+      // DMV holds a role but no delegation from B's owner: refused; the delegated inspector is accepted.
+      await expect(f.attest(f.dmv, f.vehicleB.address, f.eventB)).to.be.revertedWith(NOT_OWNER);
+      await f.registry.connect(f.ownerB).addDelegate(f.vehicleB.address, VERI_KEY, f.dmv.address, 86400);
       await expect(f.attest(f.dmv, f.vehicleB.address, f.eventB)).to.emit(f.registry, "EventAttested");
       await expect(f.attest(f.inspection, f.vehicleB.address, f.eventB)).to.emit(f.registry, "EventAttested");
       expect((await f.registry.getEventAttestations(f.eventB)).length).to.equal(2);
     });
   });
 
-  describe("H-A: one attestation per (event, attester)", function () {
+  describe("H-A / WM-2 C2: one attestation per (event, attester)", function () {
     async function dupFixture() {
       const f = await deployV2Fixture();
       const eventId = extractEventId(f.registry, await (await f.registry.connect(f.serviceCenter)
@@ -748,7 +766,7 @@ describe("MOBI VID Registry V2 (lifecycle events)", function () {
       await f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, s);
       expect(await f.registry.hasAttested(f.eventId, f.dmv.address)).to.equal(true);
       await expect(f.registry.connect(f.dmv).attestEvent(f.eventId, f.vehicle.address, s))
-        .to.be.revertedWith("Already attested by this attester");
+        .to.be.revertedWith("Already attested");
       expect((await f.registry.getEventAttestations(f.eventId)).length).to.equal(1);
     });
 

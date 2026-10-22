@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T03:24:53.689Z",
+  "generatedAt": "2026-10-22T22:53:55.997Z",
   "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
   "options": [
     "cvin-combined",
@@ -157,7 +157,7 @@
       "option": "mobi-vid",
       "mechanism": "create",
       "outcome": "ok",
-      "gasUsed": "276873",
+      "gasUsed": "276895",
       "reason": null,
       "note": "registerVehicleBirth (VID I); identity address derived from VIN; birthAttributes empty; explicit; resolved as did:ethr:0x7a69:0x25c6b4a345466f8ffcac093a977d437e2f0d4a1d"
     },
@@ -245,7 +245,7 @@
       "option": "mobi-vid",
       "mechanism": "controller-change",
       "outcome": "ok",
-      "gasUsed": "180127",
+      "gasUsed": "180171",
       "reason": null,
       "note": "transferVehicleOwnership (K-3: changeOwner reverts for born vehicles); appends an OwnershipTransfer record + ERC-1056 DIDOwnerChanged; new controller address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },
@@ -333,7 +333,7 @@
       "option": "mobi-vid",
       "mechanism": "key-or-delegate",
       "outcome": "ok",
-      "gasUsed": "35309",
+      "gasUsed": "57655",
       "reason": null,
       "note": "ERC-1056 addDelegate (event-only); key address (0x90F79bf6EB2c4f870365E785982E1f101E93b906)"
     },
@@ -421,7 +421,7 @@
       "option": "mobi-vid",
       "mechanism": "attribute",
       "outcome": "ok",
-      "gasUsed": "37485",
+      "gasUsed": "37529",
       "reason": null,
       "note": "ERC-1056 setAttribute (event-only, 1-year validity); attribute value (https://l1.example.invalid/mobi-vid/telematics)"
     },
@@ -429,9 +429,9 @@
       "option": "cvin-combined",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "316465",
+      "gasUsed": "316477",
       "reason": null,
-      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x380054… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
+      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x67316A… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
     },
     {
       "option": "erc-1056-uport",
@@ -509,15 +509,15 @@
       "option": "mobi-vid",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "287310",
+      "gasUsed": "287354",
       "reason": null,
-      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0xb5b1aa34c2dfd1fdbe2d4a19bd2c16103f41d8eb700…)"
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x5c890e97f0854e6e5c4d425fa09760f4c02bd5d150c…)"
     },
     {
       "option": "cvin-combined",
       "mechanism": "revoke",
       "outcome": "ok",
-      "gasUsed": "70883",
+      "gasUsed": "70873",
       "reason": null,
       "note": "removeClaim (storage refund applies); prep: addClaim; document differs from pre-revoke document"
     },
@@ -597,7 +597,7 @@
       "option": "mobi-vid",
       "mechanism": "revoke",
       "outcome": "ok",
-      "gasUsed": "75382",
+      "gasUsed": "75404",
       "reason": null,
       "note": "revokeIdentity: permanent DID revocation (DIDRevoked); prep: addClaim; marker \"revoked\":true"
     },
@@ -685,7 +685,7 @@
       "option": "mobi-vid",
       "mechanism": "transfer",
       "outcome": "ok",
-      "gasUsed": "180127",
+      "gasUsed": "180171",
       "reason": null,
       "note": "transferVehicleOwnership: odometer-stamped OwnershipTransfer record + ERC-1056 changeOwner; recipient address (0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC)"
     },

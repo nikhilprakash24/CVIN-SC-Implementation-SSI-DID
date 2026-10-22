@@ -86,10 +86,12 @@ G1/G4; unauthorized attribute write → G1; unauthorized delegate/claim → G2/G
 replay → G3; unauthorized revocation → G4; identity hijack → G8. The found-and-fixed
 MOBI `attestEvent` gap (§5.6) was a **G2/G3 violation** (an attestation accepted without
 verifying the attester's signature) — the signature check is now in place with domain-separated `ecrecover`
-(EIP-191 over contract address and `block.chainid`; "EIP-155" was a mislabel). *Narrowed 2026-10-21 (defect D54, lineage merge
-PR #3, clone lineage H-A):* an OWNER-role attester must be the vehicle's current owner, and an address attests an
-event once. *Still open:* the signature is the attester's own and adds no authority, and organisational roles keep
-registry-wide scope by design, so G4 holds for owners but not for organisational attesters (WM-2 step C2).
+(EIP-191 over contract address and `block.chainid`; "EIP-155" was a mislabel). *Closed 2026-10-17 (WM-1 audit U-F10,
+defect D54; WM-2 C2, after-action report 22):* the signature is the attester's own and adds no authority, so
+before C2 any role-holder could attest any vehicle's event, and the same attester could attest twice. Since C2 the
+attester must also be the vehicle's current owner or hold its owner's unexpired `veriKey` delegation (stored on
+chain, `validDelegate`), and may attest an event once. G4 is met for attestations within that rule; the role list
+itself is still granted registry-wide by the authority. (The clone lineage's narrower H-A rule, merged on the trunk on 2026-10-21, was replaced by this design at the merge of 2026-10-22.)
 
 ## 6. Out of scope (stated, not hidden)
 

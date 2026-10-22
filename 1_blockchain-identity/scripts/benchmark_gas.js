@@ -358,6 +358,9 @@ async function benchmarkMOBIVIDV2(signers) {
 
   // Setup: authorize a second issuer (deployer as DEALER) to attest (not counted).
   await (await registry.authorizeIssuer(deployer.address, 2 /* DEALER */)).wait();
+  // Setup: the owner's consent, a veriKey delegation (WM-2 C2, D54; not counted).
+  await (await registry.connect(firstOwner).addDelegate(
+    vehicleIdentity, ethers.encodeBytes32String("veriKey"), deployer.address, 86400)).wait();
   // attestEvent now verifies the attester's signature on-chain (domain-separated
   // digest: address(this) + chainId + vehicle + eventId, EIP-191 wrapped).
   const attestChainId = (await ethers.provider.getNetwork()).chainId;

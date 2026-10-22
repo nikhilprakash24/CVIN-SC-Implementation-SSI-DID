@@ -1,6 +1,6 @@
 # The Basic Digital-ID Set and Its Extension
 
-> *Lineage merge note (2026-10-21, PR #3): register rows from the clone lineage were renumbered on the merged trunk (#40 is #52 and #41 is #53).*
+> *Lineage merge note (2026-10-21, PR #3): register rows from the clone lineage were renumbered on the merged trunk (#40 is #53 and #41 is #54).*
 
 
 **Author:** Nikhil Prakash (MASc, UBC ECE) — nikhil.prakash1995@gmail.com
@@ -87,11 +87,11 @@ This keeps the canon's gate semantics intact (admission = all twelve), makes the
 | presentation | F8 `createPresentation` | the canon's structural finding (no ERC provides it natively); the harness measures V-ops only up to status | `P1_create_presentation` — anchor a presentation nonce/hash with replay protection (the canon's O1 pattern, 62,441 gas there), realised per substrate like V3 |
 | agent proxy | Set A `execute` | ERC-725X and ERC-4337 accounts can *act*; the other substrates cannot; today only U5 touches it | `X1_execute_call` — the identity performs one external call (n/a on registries without an executor) |
 
-**Implemented 2026-10-15** as `P1_create_presentation` and `X1_execute_call` (framework §2.2c): P1 is holder-written on ERC-1056 (both modes), CVIN-Combined, ERC-735, ERC-725, ERC-725xy and ERC-4337 and n/a where the holder has no write path (ERC-721, ERC-1155, LSP8); X1 exists only where the identity is an account with an executor (ERC-725xy, ERC-4337) — ERC-725 basic's `execute` is a stub, and no registry substrate can act. The conformance gate asserts the anchor appears in R3 and that the call target sees the account as `msg.sender`. Both ops enter the L1 tables and A6 in the run of record that follows the change to the measured tree (register #53).
+**Implemented 2026-10-15** as `P1_create_presentation` and `X1_execute_call` (framework §2.2c): P1 is holder-written on ERC-1056 (both modes), CVIN-Combined, ERC-735, ERC-725, ERC-725xy and ERC-4337 and n/a where the holder has no write path (ERC-721, ERC-1155, LSP8); X1 exists only where the identity is an account with an executor (ERC-725xy, ERC-4337) — ERC-725 basic's `execute` is a stub, and no registry substrate can act. The conformance gate asserts the anchor appears in R3 and that the call target sees the account as `msg.sender`. Both ops enter the L1 tables and A6 in the run of record that follows the change to the measured tree (register #54).
 
 ## 5. Status
 
 - Mapping: **this document** (Set-level exact; F-numbers **[B1]** pending the canon archive).
 - Coverage table: `analysis_basic_set` (A6) generated from the run of record, now over all twelve basic-set functions (X1 in Set A, P1 in Set B).
-- Reconciliation: proposal in §3 for the architect; register row #52.
-- Catalogue gaps: §4 **closed** — P1 and X1 implemented and gated; measured in the run of record (register #53).
+- Reconciliation: proposal in §3 for the architect; register row #53.
+- Catalogue gaps: §4 **closed** — P1 and X1 implemented and gated; measured in the run of record (register #54).

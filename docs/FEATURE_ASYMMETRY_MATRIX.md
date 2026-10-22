@@ -21,8 +21,8 @@
 | LSP8 | `CVINVehicleLSP8` | 21 | 6 | 15 | 6 |
 | CVIN-Combined | `CVINCombinedIdentity` | 20 | 8 | 12 | 6 |
 | MOBI-VID (I+II) | `ERC1056Registry` | 17 | 8 | 9 | 4 |
-| MOBI-VID (I+II) | `MOBIVIDRegistry` | 38 | 14 | 24 | 9 |
-| MOBI-VID (I+II) | `MOBIVIDRegistryV2` | 58 | 18 | 40 | 13 |
+| MOBI-VID (I+II) | `MOBIVIDRegistry` | 40 | 14 | 26 | 9 |
+| MOBI-VID (I+II) | `MOBIVIDRegistryV2` | 60 | 18 | 42 | 13 |
 
 ## 2. Capability families × option (count of matching functions/events; the names are listed in §3)
 
@@ -30,7 +30,7 @@
 |---|---|---|---|---|---|---|---|---|---|---|
 | Identity creation (explicit) | **2** | **3** | — | **4** | **1** | **4** | **1** | **2** | — | **5** |
 | Ownership / controller change | **12** | **10** | **4** | **4** | **3** | **2** | **5** | **4** | **3** | **9** |
-| Key / delegate management | **12** | — | **4** | — | — | — | **5** | — | **5** | **3** |
+| Key / delegate management | **12** | — | **4** | — | — | — | **5** | — | **5** | **5** |
 | Attributes / data store | **9** | **11** | — | **8** | — | **4** | **4** | **4** | **3** | **5** |
 | Claims / credentials | **1** | — | — | — | **18** | **12** | — | **1** | **13** | **12** |
 | Revocation / status | **5** | **3** | — | — | **4** | **4** | — | **2** | **4** | **11** |
@@ -157,7 +157,7 @@ Heuristics (name regex, case-insensitive) — auditable:
 ### MOBI-VID (I+II)
 - **Identity creation (explicit):** `VehicleBirthRegistered`, `getVehicleBirth`, `registerVehicle`, `registerVehicleBirth`, `vehicleBirths`
 - **Ownership / controller change:** `DIDOwnerChanged`, `VehicleOwnershipTransferred`, `changeOwner`, `getOwnershipHistory`, `getOwnershipHistoryCount`, `identityOwner`, `owners`, `ownershipHistory`, `transferVehicleOwnership`
-- **Key / delegate management:** `DIDDelegateChanged`, `addDelegate`, `revokeDelegate`
+- **Key / delegate management:** `DIDDelegateChanged`, `addDelegate`, `delegates`, `revokeDelegate`, `validDelegate`
 - **Attributes / data store:** `DIDAttributeChanged`, `PERMANENT_ATTRIBUTE_VALIDITY`, `VEHICLE_KEY_ATTRIBUTE`, `revokeAttribute`, `setAttribute`
 - **Claims / credentials:** `EventAttested`, `IssuerAuthorizationRevoked`, `IssuerAuthorized`, `allowedIssuers`, `attestEvent`, `authorizeIssuer`, `authorizedIssuers`, `eventAttestations`, `getEventAttestations`, `hasAttested`, `isAuthorizedIssuer`, `revokeIssuerAuthorization`
 - **Revocation / status:** `DIDRevoked`, `IssuerAuthorizationRevoked`, `ManufacturerAuthorizationRevoked`, `isRevoked`, `revokeAttribute`, `revokeDelegate`, `revokeIdentity`, `revokeIssuerAuthorization`, `revokeManufacturerAuthorization`, `revoked`, `revokedAt`

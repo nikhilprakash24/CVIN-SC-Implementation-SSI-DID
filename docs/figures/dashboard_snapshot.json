@@ -4,11 +4,12 @@
     "source": {
       "path": "docs/MEASUREMENT_CONDITIONS.md"
     },
-    "rows": 61,
+    "rows": 52,
     "by_status": {
-      "V": 44,
+      "V": 34,
       "S": 10,
-      "E": 7
+      "E": 7,
+      "U": 1
     }
   },
   "constants": {
@@ -48,7 +49,7 @@
     "source": {
       "path": "4_comparison-framework/results/gas_benchmark.json"
     },
-    "measured": "2026-10-21T03:15:18.910Z",
+    "measured": "2026-10-17T23:45:49.656Z",
     "condition": "M1",
     "operations": [
       "deployRegistry",
@@ -133,13 +134,13 @@
         "transferOwnership": 80568
       },
       "MOBI-VID-V2": {
-        "deployRegistry": 4309419,
-        "createIdentity": 299143,
-        "updateAttribute": 307210,
+        "deployRegistry": 4370878,
+        "createIdentity": 299165,
+        "updateAttribute": 307254,
         "updateAttributeVia4337": null,
-        "addDelegateOrClaim": 35321,
-        "revoke": 75382,
-        "transferOwnership": 200111
+        "addDelegateOrClaim": 57667,
+        "revoke": 75404,
+        "transferOwnership": 200155
       },
       "CVIN-Combined": {
         "deployRegistry": 1531487,
@@ -201,9 +202,9 @@
       },
       {
         "standard": "MOBI-VID-V2",
-        "total": 9856260,
-        "low": 5077702,
-        "high": 14634819
+        "total": 9858020,
+        "low": 5078593,
+        "high": 14637448
       },
       {
         "standard": "ERC-735",
@@ -284,15 +285,15 @@
       },
       "MOBI-VID-V2": {
         "birthAttestation": {
-          "gas": 299143,
+          "gas": 299165,
           "native": true
         },
         "lifecycleEvent": {
-          "gas": 307210,
+          "gas": 307254,
           "native": true
         },
         "thirdPartyAttestation": {
-          "gas": 215428,
+          "gas": 222082,
           "native": true
         },
         "fidelity": "5/5"
@@ -543,43 +544,43 @@
         "operation": "birth",
         "claim": "centralized >= 10x faster (median)",
         "verdict": "PASS",
-        "ratio_median": 4732.234
+        "ratio_median": 4862.289
       },
       {
         "operation": "lifecycle_event",
         "claim": "centralized >= 10x faster (median)",
         "verdict": "PASS",
-        "ratio_median": 2088.098
+        "ratio_median": 1636.209
       },
       {
         "operation": "ownership_transfer",
         "claim": "centralized >= 10x faster (median)",
         "verdict": "PASS",
-        "ratio_median": 3257.797
+        "ratio_median": 6044.237
       },
       {
         "operation": "history_query_cached",
         "claim": "equal once cached (median ratio in [0.5, 2.0])",
         "verdict": "FAIL",
-        "ratio_median": 0.054
+        "ratio_median": 0.041
       },
       {
         "operation": "history_query",
         "claim": "reported, no pre-registered verdict",
         "verdict": "(outside band)",
-        "ratio_median": 781.401
+        "ratio_median": 434.831
       },
       {
         "operation": "history_query_cached_validated",
         "claim": "reported, no pre-registered verdict",
         "verdict": "(outside band)",
-        "ratio_median": 113.823
+        "ratio_median": 58.636
       },
       {
         "operation": "history_query_cached vs centralized unserialised (post-hoc diagnostic)",
         "claim": "post-hoc diagnostic, no verdict",
         "verdict": "(outside band)",
-        "ratio_median": 9.544
+        "ratio_median": 16.67
       }
     ]
   },
@@ -604,7 +605,7 @@
     "source": {
       "path": "1_blockchain-identity/results/metrics/latest/analysis.json"
     },
-    "runId": "2026-10-21T03-28-59Z_a9e2a28",
+    "runId": "2026-10-09T02-09-36Z_7a9a996",
     "dirty": false,
     "criteria": [
       "Lifetime gas",
@@ -766,8 +767,8 @@
     "source": {
       "path": "sandbox/grand/report/GRAND_REPORT.md"
     },
-    "generated": "2026-10-21T03:28:09Z",
-    "commit": "6d1af2e",
+    "generated": "2026-10-18T00:23:07Z",
+    "commit": "72a29de",
     "stages": {
       "smoke": {
         "ok": true,
@@ -779,15 +780,15 @@
       },
       "L1+L2": {
         "ok": true,
-        "result": "{'passing': 559, 'failing': 0}"
+        "result": "{'passing': 541, 'failing': 0}"
       },
       "L3+L4": {
         "ok": true,
-        "result": "{'passed': 365}"
+        "result": "{'passed': 342}"
       },
       "demos": {
         "ok": true,
-        "result": "{'demos': 92, 'steps': 1752, 'transactions_mined': 593, 'onchain_no_gas': 458, 'offchain': 701, 'flagged': 62, 'failures': []}"
+        "result": "{'demos': 92, 'steps': 1758, 'transactions_mined': 597, 'onchain_no_gas': 458, 'offchain': 703, 'flagged': 60, 'failures': []}"
       }
     }
   },
@@ -859,8 +860,8 @@
       "mobi-vid": {
         "demos": 11,
         "ok": 11,
-        "steps": 276,
-        "flagged": 17
+        "steps": 282,
+        "flagged": 15
       }
     }
   },
@@ -1142,7 +1143,7 @@
       {
         "id": "D54",
         "severity": "M",
-        "status": "open"
+        "status": "fixed"
       },
       {
         "id": "D55",
@@ -1202,11 +1203,11 @@
     ],
     "counts": {
       "H:fixed": 16,
-      "M:fixed": 16,
+      "M:fixed": 17,
       "L:fixed": 9,
       "M:partly fixed": 4,
       "L:open": 9,
-      "M:open": 10,
+      "M:open": 9,
       "H:partly fixed": 1,
       "L:partly fixed": 1
     }
@@ -1328,8 +1329,8 @@
         },
         {
           "row": 39,
-          "status": "V",
-          "claim": "HTTP-RPC condition, all ten columns (N=30), on the merged contracts (re-run 2026-10-21, PR #3): every gas value identical to the in-process run of record (`2026-10-21T03-28-59Z_a9e2a28`) on all common cells (crud 131, li…"
+          "status": "U",
+          "claim": "HTTP-RPC condition, all ten columns (N=30), on the pre-merge contracts: every gas table byte-identical to the in-process run of the same contracts (`0eef6af`, now S); latency ≈2–2.5× the in-process figures (U3 tx median …"
         }
       ],
       "state": "partial"
@@ -1392,7 +1393,7 @@
       "id": "C4",
       "title": "Revocation freshness",
       "question": "How quickly does a verifier stop trusting a revoked vehicle key, and at what latency cost?",
-      "claim": "A cached verifier honours a revoked key for at most k-1 further messages. Measured on one host in alternating blocks (#54), the one-call probe refresh is 3.2x cheaper on chain than a full refresh and serves more neighbours at every finite k; neither mode reaches the neighbour-saturation target, so any k must be quoted with its t_local.",
+      "claim": "A cached verifier honours a revoked key for at most k-1 further messages; the k that meets the neighbour-saturation target depends on the host and on the refresh mode.",
       "hypotheses": [
         "H3"
       ],
@@ -1408,7 +1409,7 @@
         "cv2x-testbed/results/freshness_k_probe.json"
       ],
       "gaps": [
-        "D51 (revoked key accepted under a lagging verifier clock) was fixed in WM-2 C0 (2026-10-14); #32 and #37 keep their clock-assumption note until their A3b re-runs. Residual D63 (probe path, test chains only) is low.",
+        "Open high defect D51: the ERC-1056 provider accepts a revoked key when the verifier's clock is more than 900 s behind the chain; #32 and #37 hold under that clock assumption until fixed (WM-2).",
         "The RSU analogue (#46) counts messages from a revoked RSU under an in-process registry; it bounds the re-check cadence, not the latency cost, so it is not counted as C4 evidence.",
         "Choose the k the thesis defends (review-2 decisions 10 and 14)."
       ],
@@ -1428,11 +1429,6 @@
           "row": 40,
           "status": "S",
           "claim": "(sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=…"
-        },
-        {
-          "row": 54,
-          "status": "V",
-          "claim": "(clone lineage, was #42) Freshness-k, same host, both refresh modes (12 replicates in alternating blocks, fresh node each; clean pool by foreign-CPU load; one replicate excluded for overlapping another experiment): t_loc…"
         }
       ],
       "state": "partial"
@@ -1458,7 +1454,7 @@
       ],
       "gaps": [
         "The DID Core checks test a synthesised document; label them structural (review-2 decision 2).",
-        "The executable checker (#4) still scores offline-synthesised documents; the resolver now also reads chain state (H-R, merged 2026-10-21) and the external suite passes 311/311 on that on-chain set (#24), but the checker itself has not been switched (WM-2 C1 gap)."
+        "The resolver builds did:ethr documents from the identifier, not from chain state."
       ],
       "examiner": "Does conformance of the document shape say anything about the chain state behind it?",
       "evidence": [
@@ -1574,7 +1570,7 @@
         {
           "row": 28,
           "status": "V",
-          "claim": "Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); on the current build the fixed pa…"
+          "claim": "Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); since WM-2 C2 (2026-10-17: the at…"
         },
         {
           "row": 42,
@@ -1756,7 +1752,7 @@
     "28": {
       "row": 28,
       "status": "V",
-      "claim": "Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); on the current build the fixed pa…",
+      "claim": "Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); since WM-2 C2 (2026-10-17: the at…",
       "tag": "M1"
     },
     "29": {
@@ -1821,8 +1817,8 @@
     },
     "39": {
       "row": 39,
-      "status": "V",
-      "claim": "HTTP-RPC condition, all ten columns (N=30), on the merged contracts (re-run 2026-10-21, PR #3): every gas value identical to the in-process run of record (`2026-10-21T03-28-59Z_a9e2a28`) on all common cells (crud 131, li…",
+      "status": "U",
+      "claim": "HTTP-RPC condition, all ten columns (N=30), on the pre-merge contracts: every gas table byte-identical to the in-process run of the same contracts (`0eef6af`, now S); latency ≈2–2.5× the in-process figures (U3 tx median …",
       "tag": "M1-H/HTTP"
     },
     "40": {
@@ -1900,62 +1896,8 @@
     "52": {
       "row": 52,
       "status": "V",
-      "claim": "(clone lineage, was #40) Basic digital-ID set coverage: the catalogue mapped onto IMinimalSSI Set A (identity/keys) and Set B (credentials); per substrate, Set A ops supported 11/11 (ERC-1056 pure, ERC-725, ERC-4337, CVI…",
-      "tag": "M1-H (derived)"
-    },
-    "53": {
-      "row": 53,
-      "status": "V",
-      "claim": "(clone lineage, was #41) Basic-set functions P1 createPresentation (F8) and X1 execute measured (run `2026-10-15T05-07-33Z_9bdf451`, measured hashes in its meta.json; all other cells byte-identical to `0eef6af`). P1 gas:…",
-      "tag": "M1-H"
-    },
-    "54": {
-      "row": 54,
-      "status": "V",
-      "claim": "(clone lineage, was #42) Freshness-k, same host, both refresh modes (12 replicates in alternating blocks, fresh node each; clean pool by foreign-CPU load; one replicate excluded for overlapping another experiment): t_loc…",
-      "tag": "M0/M1, Hardhat 2.28.6, chain 31337, automine; Intel Xeon 2.80 GHz × 4, shared"
-    },
-    "55": {
-      "row": 55,
-      "status": "V",
-      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z1) ZK-VIN Groth16 circuit size: 3,498 constraints (1,667 non-linear, 1,831 linear), 3,505 wires, 6 public and 27 private inputs, 1 public outpu…",
-      "tag": "—"
-    },
-    "56": {
-      "row": 56,
-      "status": "V",
-      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z2) ZK-VIN proving and verification time: prove median 398.6 ms (N=10; min 360.2, max 431.5), verify median 18.42 ms (N=30; min 15.45, max 26.59…",
-      "tag": "M0 (snarkjs 0.7.6, node v22.22.0, 2.80 GHz Xeon, one warm-up discarded)"
-    },
-    "57": {
-      "row": 57,
-      "status": "V",
-      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z3) ZK-VIN on chain: `ZkVinGate.admit` with on-chain Groth16 verification 301,163 gas; anchor commitment 51,558; `verifyProof` view estimate 256…",
-      "tag": "M1 (Hardhat 2.28.6, solc 0.8.24, optimizer 200 + viaIR, cancun)"
-    },
-    "58": {
-      "row": 58,
-      "status": "V",
-      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z4) zkid sigma-protocol primitives: per-operation timings and exact group-operation counts (Schnorr, Pedersen, Chaum–Pedersen, CDS OR, range/thr…",
-      "tag": "M0 (CPython, N=30 after one discarded warm-up; counts exact)"
-    },
-    "59": {
-      "row": 59,
-      "status": "V",
-      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z5) An unsalted SHA-256 of a VIN with only the 6-digit serial unknown is reversed by enumeration in 3.58 s (10⁶ candidates, 279,587 hashes/s, on…",
-      "tag": "M0 (CPython hashlib, one core; full space enumerated)"
-    },
-    "60": {
-      "row": 60,
-      "status": "V",
-      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z6) Predicate-narrowing (\"twenty questions\") attack and defences, seeds 1–30 per cell: undefended, the model year is recovered exactly within 5 …",
-      "tag": "Sim"
-    },
-    "61": {
-      "row": 61,
-      "status": "V",
-      "claim": "(Layer 5 (ZKP and agent-wrapped identity; Plan 1, Plan 3), was proposed row Z7) Manual-burden inventory of operating the ZK identity by hand: operation and value counts measured exactly from the code (e.g. 7,268 field mu…",
-      "tag": "M0 (counts) / — (times)"
+      "claim": "Freshness rows #32 and #37 re-run back to back on one host, each at its own code (#32 at `8216507`, #37 at `f660402`), fresh node per run, two replicates in opposite order (WM-2 C3, decision rule committed first in repor…",
+      "tag": "M0/M1, Hardhat 2.28.6, chain 31337, automine; Xeon 2.30 GHz × 4 (a third host)"
     }
   }
 }

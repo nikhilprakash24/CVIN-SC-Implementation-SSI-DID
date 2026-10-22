@@ -4,13 +4,17 @@
     "design": "docs/SCALING_EXPERIMENTS.md",
     "disclaimer": "This is a MODEL over an ASSUMED event profile, not a measurement. Totals integrate measured per-op gas (Experiment A steady-state append marginals + gas_benchmark.json birth/transfer costs) across the canonical profile. Gas is relative on-chain work, not fiat (RESEARCH_AUDIT.md §4.1). The profile is an assumption; the +/-50% band varies recurring event frequency.",
     "solcVersion": "0.8.24",
-    "commit": "d0cc19c",
+    "commit": "a45be79",
+    "commitFull": "a45be793240a8b39ce871c8971af2897c67e85a7",
     "dirty": false,
     "dirtyAnyFile": true,
+    "scope": "1_blockchain-identity/scripts/benchmark_scaling.js",
+    "scopeFiles": 7,
+    "scopeSha": "45991f0c2945",
     "node": "v22.22.2",
     "hardhat": "2.28.6",
     "ozVersion": "5.0.2",
-    "date": "2026-10-09T02:27:41.957Z",
+    "date": "2026-10-17T23:45:54.846Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "profile": {
@@ -47,7 +51,7 @@
     },
     {
       "name": "MOBI-VID-V2",
-      "total": 9856260
+      "total": 9858020
     },
     {
       "name": "ERC-735",
@@ -204,8 +208,8 @@
       "decomposition": {
         "birth": {
           "count": 1,
-          "unitGas": 299143,
-          "subtotalGas": 299143,
+          "unitGas": 299165,
+          "subtotalGas": 299165,
           "source": "gas_benchmark.createIdentity"
         },
         "appends": {
@@ -215,24 +219,24 @@
             "recall"
           ],
           "count": 35,
-          "unitGas": 255910,
-          "subtotalGas": 8956850,
+          "unitGas": 255954,
+          "subtotalGas": 8958390,
           "source": "Experiment A steady-state marginal of recordLifecycleEvent (mean of ops 2..50)"
         },
         "transfers": {
           "count": 3,
-          "unitGas": 200089,
-          "subtotalGas": 600267,
+          "unitGas": 200155,
+          "subtotalGas": 600465,
           "source": "gas_benchmark.transferOwnership"
         }
       },
       "distinguishesEventClasses": "yes: birth (registerVehicleBirth), lifecycle events (recordLifecycleEvent, class-independent cost), transfer (transferVehicleOwnership)",
-      "totalLifetimeGas": 9856260,
+      "totalLifetimeGas": 9858020,
       "sensitivityBand": {
         "note": "+/-50% event frequency on the recurring (append + transfer) load; birth fixed at 1.",
-        "low": 5077702,
-        "base": 9856260,
-        "high": 14634819
+        "low": 5078593,
+        "base": 9858020,
+        "high": 14637448
       }
     }
   }

@@ -509,7 +509,7 @@ The three defining properties are tested, not assumed. Completeness is an honest
 soundness is tested with an extractor that rewinds the prover and recovers the key from two accepting transcripts; the
 same extraction doubles as an attack on nonce reuse. Honest-verifier zero knowledge is tested with a simulator that
 produces accepting transcripts without the key. Each primitive also counts its field multiplications and point
-operations as it runs, which is what makes the manual-burden inventory of §3.9.4 a measurement (register #58, #61).
+operations as it runs, which is what makes the manual-burden inventory of §3.9.4 a measurement (register #59, #62).
 The code is research code: correct and tested, but not constant time and not optimised.
 
 ### 4.8.2 The ZK-VIN circuit and `ZkVinGate`
@@ -520,7 +520,7 @@ and salt that open the commitment, that the manufacturer code is in the authoris
 above the threshold, and that the region matches. The single public output is a nullifier, Poseidon(salt, scope),
 which is the same for one vehicle within one scope and unlinkable across scopes. The compiled circuit has 3,498
 constraints (1,667 non-linear, 1,831 linear), 3,505 wires, 6 public and 27 private inputs and 1 public output
-(register #55). Proofs are Groth16, generated and verified with snarkjs.
+(register #56). Proofs are Groth16, generated and verified with snarkjs.
 
 The build script runs both phases of the trusted setup with **fixed entropy**. That makes the build reproducible and
 every artefact hash-checkable in CI, and it also makes the setup **insecure**: anyone who reads the script can forge
@@ -542,7 +542,7 @@ including after an ownership transfer.
 `contracts/SchnorrEcrecoverVerifier.sol` verifies a Schnorr proof of key knowledge on chain without a pairing or a new
 precompile. It uses the known reduction of a Schnorr check to one call of Ethereum's `ecrecover`, with a matching
 prover in `zkid/schnorr_evm.py`. It proves much less than ZK-VIN, only knowledge of a key, but at a small fraction of
-the gas (register #57; §5.10).
+the gas (register #58; §5.10).
 
 ### 4.8.4 The Steward: an agent wrapper with a deterministic kernel
 

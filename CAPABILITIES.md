@@ -56,7 +56,7 @@ deterministic for fixed calldata and pre-state.
 | **ERC-1056** (lightweight DID registry) | 52,594 | 35,494 | 51,754 |
 | **ERC-1155** (multi-token, soulbound) | 107,729 | 51,199 | 86,298 |
 | **LSP8** (LUKSO NFT, *minimal repr.*) | 152,644 | 55,133 | 80,568 |
-| **MOBI-VID-V2** (application profile) | 299,143 | 307,210 | 200,089 |
+| **MOBI-VID-V2** (application profile) | 299,165 | 307,254 | 200,155 |
 | **ERC-725** (proxy account) | 519,384 | 137,096 | 28,390 |
 | **ERC-721** (vehicle NFT) | 545,101 | 119,737 | 174,670 |
 | **ERC-4337** (account abstraction, *minimal repr.*) | 759,088 | 49,343 | 28,539 |

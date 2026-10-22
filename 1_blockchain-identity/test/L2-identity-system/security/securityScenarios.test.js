@@ -1255,6 +1255,10 @@ describe("Security / MOBI-VID-V2 (MOBIVIDRegistryV2)", function () {
     const eventIds = await registry.getVehicleEvents(vehicle);
     const eventId = eventIds[0];
     await (await registry.authorizeIssuer(dealer.address, 2 /* DEALER */)).wait();
+    // WM-2 C2 (D54): a role is authority, not consent; the owner delegates the
+    // dealer (veriKey) so the control path is a consented attestation.
+    await (await registry.connect(firstOwner).addDelegate(
+      vehicle, ethers.encodeBytes32String("veriKey"), dealer.address, 86400)).wait();
     // Attacker is unauthorized: the role gate (`authorizedIssuers != NONE`)
     // reverts before the signature is ever checked, so a garbage blob is fine
     // to prove the defense here.

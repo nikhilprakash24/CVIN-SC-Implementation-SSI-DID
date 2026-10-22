@@ -1,6 +1,6 @@
 # Stream H-R: on-chain DID resolution (did:ethr, did:mobi)
 
-> *Lineage merge note (2026-10-21, PR #3): register rows from the clone lineage were renumbered on the merged trunk (the optional on-chain resolve-latency row proposed here as #40 was never entered; the clone lineage's #40 is #52).*
+> *Lineage merge note (2026-10-21, PR #3): register rows from the clone lineage were renumbered on the merged trunk (the optional on-chain resolve-latency row proposed here as #40 was never entered; the clone lineage's #40 is #53).*
 
 
 **Date:** 2026-10-15. **Base:** `ffb71b0`.

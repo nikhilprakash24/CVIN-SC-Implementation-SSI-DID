@@ -105,8 +105,7 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     // Event attestations (eventId => array of attestations)
     mapping(bytes32 => EventAttestation[]) public eventAttestations;
 
-    // One attestation per (eventId, attester), so eventAttestations[eventId]
-    // counts distinct attesters (review-02 H-A, handback decision 4)
+    // eventId => attester => attested (WM-2 C2, D54: one attestation per attester)
     mapping(bytes32 => mapping(address => bool)) public hasAttested;
 
     // Event count per vehicle
@@ -317,13 +316,6 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
      * @dev Attest to an event
      * Allows multiple parties to sign off on an event
      *
-     * Who may attest an event on vehicle V: any address holding an
-     * organisational role (MANUFACTURER, DEALER, SERVICE_CENTER,
-     * INSURANCE_COMPANY, GOVERNMENT_DMV, POLICE, INSPECTION_STATION), on any
-     * vehicle; an OWNER-role address only while it is V's current ERC-1056
-     * owner. Role-less addresses (NONE) cannot attest. Each address can
-     * attest a given event once (hasAttested).
-     *
      * The attester must sign the domain-separated attestation digest
      *
      *     keccak256(abi.encodePacked(
@@ -358,23 +350,16 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
             authorizedIssuers[msg.sender] != IssuerRole.NONE,
             "Not authorized to attest"
         );
-
-        // Review-02 H-A (handback next-session item 2): the role check alone
-        // let any OWNER-role address attest events on any vehicle. Same scope
-        // rule as recordLifecycleEvent (K-15): an OWNER-role attester must be
-        // the vehicle's current ERC-1056 owner, so a previous owner loses the
-        // right on transfer. ERC1056Registry keeps delegates only as events
-        // (no on-chain delegate mapping, K-5), so there is no delegate check.
-        // The organisational roles (manufacturer, dealer, service centre,
-        // insurer, DMV, police, inspection station) keep their registry-wide
-        // scope: they are the documented third-party co-signers of the
-        // multi-party attestation design.
-        if (authorizedIssuers[msg.sender] == IssuerRole.OWNER) {
-            require(
-                identityOwner(vehicleIdentity) == msg.sender,
-                "OWNER role: not the current owner of this vehicle"
-            );
-        }
+        // WM-2 C2 (D54): a role is authority, not consent. The attester must also
+        // be the vehicle's current owner or a valid veriKey delegate of it, and
+        // may attest an event once.
+        require(
+            msg.sender == identityOwner(vehicleIdentity) ||
+                validDelegate(vehicleIdentity, "veriKey", msg.sender),
+            "Attester is not the vehicle's owner or delegate"
+        );
+        require(!hasAttested[eventId][msg.sender], "Already attested");
+        hasAttested[eventId][msg.sender] = true;
 
         // ---- On-chain attestation signature verification (security fix) ----
         // Bind the signature to (contract, chain, vehicle, event) to stop
@@ -389,14 +374,6 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
             signature
         );
         require(recovered == msg.sender, "Invalid attestation signature");
-
-        // Review-02 H-A (handback decision 4): without this guard a
-        // role-holder could resubmit its own valid attestation and inflate
-        // the attestation count. Each attester is counted once per event.
-        // Checked after the signature, so a forged or replayed signature
-        // still reports "Invalid attestation signature".
-        require(!hasAttested[eventId][msg.sender], "Already attested by this attester");
-        hasAttested[eventId][msg.sender] = true;
 
         // Create attestation
         EventAttestation memory attestation = EventAttestation({

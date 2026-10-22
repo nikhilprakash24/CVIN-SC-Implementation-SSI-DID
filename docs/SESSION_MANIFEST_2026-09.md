@@ -232,8 +232,77 @@ discovered one commit at a time. Ordered by the pass that produced them.
 | `.github/workflows/test-contracts.yml` | both checks in the document step | CI |
 | `docs/PLAN_WM-2.md`, `docs/HANDBACK_2026-10-14.md` §10 | B2 done; next C3 | records |
 
-## Pass 19 — Plan 1: ZKP and the agent-wrapped identity (2026-10-15)
+## Pass 19 — WM-2 C3; contribution record (2026-10-15)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_19.md` | plan (C3 decision rule first), log, closing | standing rule |
+| `cv2x-testbed/results/freshness_k_c3/` | six C3 runs at `8216507` and `f660402`, with a manifest | C3 |
+| `docs/MEASUREMENT_CONDITIONS.md` #52; notes on #32 and #37; `docs/testing/check_stamps.py` aggregate | the host comparison | C3 |
+| `docs/figures/make_contribution_record.py`, `contribution_template.html`, `contribution_record.html` | the contribution calendar with sourced evidence | the author's request |
+| `docs/figures/make_result_cards.py` (card #52), `docs/PLAN_WM-2.md`, `docs/HANDBACK_2026-10-14.md` §11 | records | records |
+
+## Pass 20 — Technical Data Package (parallel pass, 2026-10-15)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_20.md` | plan T0-T7, log, closing | standing rule |
+| `docs/tdp/README.md` (TDP-000) | index, conventions, sources for the formats | the author's request: a parallel document set in the engineering register |
+| `docs/tdp/requirements.yaml`, `make_vcrm.py` → `TDP-002_SYSTEM_SPECIFICATION.md`, `TDP-005_VERIFICATION_CROSS_REFERENCE_MATRIX.md` | 36 shall-statements; statuses computed from the register, snapshot, tree and CI | T3 |
+| `docs/tdp/make_blueprints.py` → `drawings/DWG-001..006.svg`; `TDP-004_DESIGN_DESCRIPTION_AND_BLUEPRINTS.md` | six blueprint sheets with title blocks, notes and bills of materials, every number read from a file | T4 |
+| `docs/tdp/make_fmeca.py` → `TDP-006_FMECA.md` | failure-mode worksheet over every logged defect, counts cross-checked with the snapshot | T5 |
+| `docs/tdp/TDP-001_PROGRAM_SUMMARY.md`, `TDP-003_INTERFACE_CONTROL_DOCUMENT.md`, `TDP-007_TEST_AND_EVALUATION_MASTER_PLAN.md`, `TDP-008_CONFIGURATION_BASELINE.md`, `TDP-009_RISK_REGISTER.md` | hand-written documents, every number a V row | T6 |
+| `docs/tdp/TDP-PLAN.md`, `TDP-RUNBOOK.md` | the plan with status and findings; the plan as phases with prompts | T1, T2 |
+| `docs/tdp/probe_tdp_checks.sh`; `.github/workflows/test-contracts.yml`; `docs/testing/stale_numbers.yaml` | the three checks and their probe in CI; the worksheet exempted as a record | T7 |
+| `docs/INDEX.md`, `docs/HANDBACK_2026-10-14.md` section 12 | records | records |
+## Pass 21 — WM-2 C1: did:ethr resolution reads the chain (2026-10-15)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_21.md` | plan, defaults, log, closing | standing rule |
+| `2_w3c-ssi-layer/did-resolution/did_resolver.py`; `tests/test_did_resolver_chain.py`; two tests in `mobi-vid/tests/test_mobi_vid_layer.py` | the chain path and its tests (9 of 11 fail on the old code) | C1 |
+| `docs/MEASUREMENT_CONDITIONS.md` (#4, #24 notes), `docs/MOBI_VID_CHECKLIST.md` (VID-R1), `docs/MILESTONE_NEXT.md` (N-24), `docs/PLAN_WM-2.md` | records | C1 |
+| `docs/tdp/requirements.yaml` STD-01, TDP-002, TDP-005 | the one change report 20's guard asked for | coordination |
+
+## Pass 22 — WM-2 C2: attestation restricted (D54); hand-off and check brief (2026-10-17)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_22.md` | plan, defaults, log, closing | standing rule |
+| `1_blockchain-identity/contracts/MOBI/ERC1056Registry.sol`, `MOBIVIDRegistryV2.sol`; tests; scripts; Python MOBI client; MOBI demos | the fix and its callers | C2 |
+| `4_comparison-framework/results/gas_benchmark.json`, `gas_comparison.*`, `mobi_vid_backends.json`, `scaling_*.json`, `security-analysis/results/onchain_security.json` | re-runs of record at `92cc4d5` | C2 |
+| register #25, #26, #28; `docs/testing/stale_numbers.yaml`; chapters 5 and 6; README, CAPABILITIES, QUICKSTART; DEFECT_LOG D54; THREAT_MODEL G4; N-25 | records | C2 |
+| `docs/HANDOFF_2026-10-17.md`, `docs/milestones/check_passes_16-22/CHECK_BRIEF.md` | hand-off and the check brief for the other model | the author's request |
+
+## Pass 23 — Phase 2 session 3: deep-dive briefs (2026-10-20)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_23.md` | plan, log, closing | standing rule |
+| `docs/phase2/briefs/I-24_IDTX.md`, `I-24_sources.json`, `I-05_FRESHNESS.md`, `I-05_sources.json` | the two briefs with every cited source's URL and quote | session 3 |
+| `docs/phase2/sessions/SESSION_LOG.md` entry 3; `ideas.yaml` (I-24 test count) | records | session 3 |
+| `docs/milestones/check_passes_16-22/START_PROMPT.md`; `docs/planning/PROGRESS_REPORT_PLAN_2026-10-20.md` | the fresh-session prompt; the plan for the hand-over write-up | the author's requests |
+
+## Pass 24 — Lead's pass: decision sheet, pre-push guard, progress report (2026-10-20)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_24.md` | plan, log, closing | standing rule |
+| `tools/prepush_check.sh` | CI's document and copy guards, run locally before a push; probe included | pass 22's three red runs |
+| `docs/DECISION_SHEET_2026-10-20.md` | every open author decision on one page | the backlog was scattered over five files |
+| `docs/PROGRESS_REPORT_2026-07_TO_2026-10.md`, `docs/make_progress_appendix.py`, `PROGRESS_APPENDIX_2026-07_TO_2026-10.md` | the hand-over write-up, draft 1, with its generated commit appendix | the author's request |
+
+## Pass 25 — TDP runbook phase 10: thesis adaptation map (2026-10-21)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_25.md` | plan, log, closing | standing rule |
+| `docs/tdp/TDP-010_THESIS_ADAPTATION_MAP.md` | requirements onto chapter 3; drift table; outline v2 | the author's request |
+| `docs/tdp/README.md`, `TDP-RUNBOOK.md`, `TDP-PLAN.md`; handback section 16 | records | records |
+
+## Pass 27 — TDP runbook phases 8 and 9 (2026-10-22)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_27.md` | plan, log, closing | standing rule |
+| `docs/tdp/requirements.yaml` (`tests`), `make_vcrm.py`, TDP-005 section 3 | requirement-to-test trace with its guard | phase 8 |
+| `docs/tdp/check_icd.py`; `probe_tdp_checks.sh`; `.github/workflows/test-contracts.yml` | the ICD gate, its probe, its CI line | phase 9 |
+| `docs/tdp/TDP-003_INTERFACE_CONTROL_DOCUMENT.md` | IF-04 as built after C1; two shorthand tokens reworded | held by the gate |
+| `docs/tdp/make_blueprints.py`, `drawings/` | corrected test path; document-check list regenerated | records |
+## Pass 28 — Plan 1: ZKP and the agent-wrapped identity (2026-10-15)
 Outputs: `docs/zkp/` (plans 1 and 2 with phased prompts; reports A, B, C; sources; integration map; citation checker);
 `5_zkp-agent-identity/` (zkid, ZK-VIN circuit and artefacts, ZkVinGate, Schnorr verifier, the Steward, attacks, bench,
 figures, demo, tests, mutation probe); `1_blockchain-identity/hardhat.zkp.config.js`; `.github/workflows/zkp-layer5.yml`;
-README section. Report: `docs/AFTER_ACTION_REPORT_19.md`.
+README section. Report: `docs/AFTER_ACTION_REPORT_28.md`.

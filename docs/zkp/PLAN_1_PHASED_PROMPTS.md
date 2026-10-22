@@ -113,6 +113,6 @@ the first message of a new chat on this repository.
 
 ## Phase Z10 — Close (WP10)
 
-> Run the grand runner and CI. Close `docs/AFTER_ACTION_REPORT_19.md`, add a handback addendum, list outputs in the
+> Run the grand runner and CI. Close `docs/AFTER_ACTION_REPORT_28.md`, add a handback addendum, list outputs in the
 > session manifest, and list the author's open decisions with their defaults (RQ5/H6 adoption, register rows,
 > thesis placement).

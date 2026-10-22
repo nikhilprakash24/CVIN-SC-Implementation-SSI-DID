@@ -54,3 +54,25 @@ entry's "Next session" block is the brief for the next session (`docs/phase2/REA
 4. If the author adopts D-15, start chapter 2's IDTx positioning from the W1 literature.
 5. Phase 1's next step (WM-2 B1) keeps priority in a shared session.
 
+
+## Session 3 — 2026-10-20 (deep-dive briefs; after-action report 23)
+**Done.**
+- **Briefs** in `docs/phase2/briefs/`, each by a research agent and accepted after the orchestrator re-fetched a third
+  or more of its sources at origin and found each quote in the fetched text:
+  - **I-24, IDTx** (18 sources, 8 not read). Findings for the author: the mechanism is not new (ERC-3643 checks the
+    receiver's identity claims on transfer; Luu et al. 2016 proposed guarded transactions); "named identity, not
+    caller" does not separate IDTx from attribute-based access control (NIST SP 800-162); E-F1-1 alone cannot decide
+    the kill criterion, so the brief proposes tying it to E-F1-2 and E-F1-3 before the F1 plan is locked.
+  - **I-05, freshness theory** (15 entries, 7 not read; two Springer sources not re-verifiable from the container).
+    It derives the optimal policy under a capacity budget and an exposure cap (the knee itself,
+    k_min = ceil(t_chain / (B − t_local))), explains the host dependence found in #52, and states predictions P1 and
+    P2 as predictions with their inputs from V rows and one unchecked assumption (equal RPC cost after D51).
+- **Register:** I-24's first step corrected to 12 behaviour tests.
+- Items 1, 2 and 4 of session 2's list: no review finding is open beyond AR-13 (deferred by decision); the inbox is
+  empty; D-15 is not yet adopted, so chapter 2's positioning waits.
+
+**Next session (session 4).**
+1. The author's decisions on the I-24 findings (keep the paper, or IDTx as a taxonomy) and P2-D1, P2-D7 to P2-D10.
+2. If the author adopts P2-D1 with I-05: write the cost model's assumptions into F3's plan and pre-register P1.
+3. Inbox intake if files arrive; D-15 positioning if adopted.
+4. Phase 1 keeps priority: the cross-model check of passes 16–22, then WM-2 A3.

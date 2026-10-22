@@ -118,22 +118,22 @@
     },
     "MOBI-VID-V2": {
       "birthAttestation": {
-        "gasUsed": 299143,
+        "gasUsed": 299165,
         "nativeSupport": true,
         "approximate": false,
         "note": "registerVehicleBirth (MOBI VID I): purpose-built birth certificate — salted VIN hash + encrypted VIN + cert hash + first owner + manufacturer, in a dedicated on-chain struct with VIN-hash lookup index. Highest-fidelity native mapping (the reference)."
       },
       "lifecycleEvent": {
-        "gasUsed": 307210,
+        "gasUsed": 307254,
         "nativeSupport": true,
         "approximate": false,
         "note": "recordLifecycleEvent (MOBI VID II, MAINTENANCE): dedicated event struct with eventType, issuer, timestamp, odometer, dataHash, W3C-VC hash, verified flag, jurisdiction, block number + per-type counters. Highest-fidelity native mapping (11 event types, issuer-role gating)."
       },
       "thirdPartyAttestation": {
-        "gasUsed": 215428,
+        "gasUsed": 222082,
         "nativeSupport": true,
         "approximate": false,
-        "note": "attestEvent by a second authorized party (DMV): the attester's EIP-191 signature over a domain-separated digest (contract || chainId || vehicle || eventId) is ecrecover-verified on-chain (OZ ECDSA, low-s) and MUST match msg.sender; the verified attestation is appended to the event. Native, purpose-built multi-party attestation."
+        "note": "attestEvent by a second authorized party (DMV) holding the owner's veriKey delegation (WM-2 C2): the attester's EIP-191 signature over a domain-separated digest (contract || chainId || vehicle || eventId) is ecrecover-verified on-chain (OZ ECDSA, low-s) and MUST match msg.sender; the verified attestation is appended to the event. Native, purpose-built multi-party attestation."
       },
       "fidelity": {
         "birthAnchoring": true,
@@ -149,14 +149,14 @@
   "metadata": {
     "title": "MOBI VID cross-backend realization (H4)",
     "solcVersion": "0.8.24",
-    "commit": "1445b9b",
-    "commitFull": "1445b9b36e9cd99eda5c434085547f0e4f6b1ce5",
+    "commit": "a45be79",
+    "commitFull": "a45be793240a8b39ce871c8971af2897c67e85a7",
     "dirty": false,
     "dirtyAnyFile": true,
     "scope": "1_blockchain-identity/scripts/mobi_vid_backend_sweep.js",
     "scopeFiles": 7,
     "scopeSha": "b6947bd6a9a6",
-    "node": "v22.22.0",
+    "node": "v22.22.2",
     "hardhat": "2.28.6",
     "solcSettings": {
       "optimizer": {
@@ -166,7 +166,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-21T03:15:32.987Z",
+    "date": "2026-10-17T23:45:51.684Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [

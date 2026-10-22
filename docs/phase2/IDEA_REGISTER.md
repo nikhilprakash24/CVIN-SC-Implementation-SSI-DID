@@ -160,7 +160,7 @@
 - **First step.** A literature and tooling survey (circuit size, proving and verifying time for the three properties) before any circuit is written.
 - **Kill criterion.** If verification cannot fit the budget on vehicle-class hardware per the literature, keep it as an off-hot-path (registration-time) proof only.
 - **Needs:** nothing · **needed by:** nothing
-- **Status 2026-10-22.** First step done and exceeded: tooling chosen and a circuit built and measured (register #55-#57). Kill criterion triggered for per-message use only, as anticipated: verify 18.42 ms off chain fits registration and session budgets, not per-message ones. See SC-12 reopened and SC-23 in docs/SCOPE_CHANGES.md.
+- **Status 2026-10-22.** First step done and exceeded: tooling chosen and a circuit built and measured (register #56-#58). Kill criterion triggered for per-message use only, as anticipated: verify 18.42 ms off chain fits registration and session budgets, not per-message ones. See SC-12 reopened and SC-23 in docs/SCOPE_CHANGES.md.
 
 ### I-10 — Selective-disclosure vehicle credentials (SD-JWT VC, BBS signatures) on the hot path
 *Track P · rank 9 · total 3.80*
@@ -172,7 +172,7 @@
 - **First step.** A disclosure-needs table per message type (BSM, SPaT, MAP) written from the existing message schemas, then one SD-JWT VC prototype measured with the richness driver.
 - **Kill criterion.** If no message type needs selective disclosure on the hot path, the idea moves to registration and service-access flows.
 - **Needs:** nothing · **needed by:** nothing
-- **Status 2026-10-22.** Partly addressed: threshold proofs over committed attributes (register #58, #60) give predicate disclosure without a credential format. The SD-JWT VC / BBS hot-path measurement is still open.
+- **Status 2026-10-22.** Partly addressed: threshold proofs over committed attributes (register #59, #61) give predicate disclosure without a credential format. The SD-JWT VC / BBS hot-path measurement is still open.
 
 ### I-11 — Linkability beyond the ledger (timing, position and pseudonym-change attacks)
 *Track P · rank 15 · total 3.50*
@@ -324,7 +324,7 @@
 - **Why (Phase 1).** The author's coined concept; Phase 1 holds 25 implicit instances and measures the storage trade-off (#49, #35, #31) but never what a storage choice forbids.
 - **Anchors.** C1, C8, D51, D54, D64, #49, #31
 - **Builds on.** `docs/phase2/focus/F1_onchain_storage_idtx/ANALYSIS.md`, `phase2/idtx/contracts/IdtxExecutor.sol`
-- **First step.** Done: the prototype with 10 behaviour tests. Next: lock the F1 plan as a pre-registration and run E-F1-1 and E-F1-2.
+- **First step.** Done: the prototype with 12 behaviour tests (count corrected in session 3). Next: lock the F1 plan as a pre-registration and run E-F1-1 and E-F1-2.
 - **Kill criterion.** If the measured overhead and the TOCTOU result add nothing beyond access control, keep IDTx as a taxonomy in chapter 6 and drop the paper.
 - **Needs:** nothing · **needed by:** nothing
 

@@ -9,7 +9,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | C1 CAV identity substrate | **partial** | H1, H5 | #25 (V), #26 (V), #34 (V), #35 (V), #36 (V), #42 (V), #43 (V) | 2 |
 | C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (V) | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **partial** | — | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V) | 5 |
-| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S), #54 (V) | 3 |
+| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S), #55 (V) | 3 |
 | C5 W3C conformance | **partial** | H2 | #4 (V), #24 (V) | 2 |
 | C6 MOBI VID lifecycle | **partial** | H4 | #30 (V), #33 (V), #41 (S) | 1 |
 | C7 Privacy and linkability | **partial** | — | #38 (V) | 1 |
@@ -96,7 +96,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 **Question.** How quickly does a verifier stop trusting a revoked vehicle key, and at what latency cost?
 
-**Claim.** A cached verifier honours a revoked key for at most k-1 further messages. Measured on one host in alternating blocks (#54), the one-call probe refresh is 3.2x cheaper on chain than a full refresh and serves more neighbours at every finite k; neither mode reaches the neighbour-saturation target, so any k must be quoted with its t_local.
+**Claim.** A cached verifier honours a revoked key for at most k-1 further messages. Measured on one host in alternating blocks (#55), the one-call probe refresh is 3.2x cheaper on chain than a full refresh and serves more neighbours at every finite k; neither mode reaches the neighbour-saturation target, so any k must be quoted with its t_local.
 
 **Thrusts:** 3, 5 · **Hypotheses:** H3 · **Defects bearing on it:** D21
 
@@ -105,7 +105,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_… |
 | #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu… |
 | #40 | S | (sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=… |
-| #54 | V | (clone lineage, was #42) Freshness-k, same host, both refresh modes (12 replicates in alternating blocks, fresh node each; clean pool by foreign-CPU load; one replicate excluded for overlapping another experiment): t_loc… |
+| #55 | V | (clone lineage, was #42) Freshness-k, same host, both refresh modes (12 replicates in alternating blocks, fresh node each; clean pool by foreign-CPU load; one replicate excluded for overlapping another experiment): t_loc… |
 
 **Open gaps:**
 - D51 (revoked key accepted under a lagging verifier clock) was fixed in WM-2 C0 (2026-10-14); #32 and #37 keep their clock-assumption note until their A3b re-runs. Residual D63 (probe path, test chains only) is low.
@@ -187,7 +187,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 | Row | Status | Claim (from the register) |
 |---|---|---|
-| #28 | V | Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); on the current build the fixed pa… |
+| #28 | V | Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); since WM-2 C2 (2026-10-17: the at… |
 | #42 | V | (sandbox lineage, was #31; history row for the pre-merge contracts) Gas moved by the 2026-10-04 defect fixes (D13 VIN normalisation on three mint paths; D21 `revoked` check and `previousChange` on the vehicle-profile reg… |
 | #43 | V | (sandbox lineage, was #32; history row for the pre-merge contracts) Gas moved by the 2026-10-04 pass-06 fixes (D7/D8 ERC-1155: standard transfers closed, held-type bitmap, `issuerTransferIdentity`; D11b MOBI `anchorVehic… |
 

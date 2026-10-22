@@ -538,7 +538,7 @@ in place above and carried in the project risk register.
 ## 3.9 Zero-Knowledge Extension: Pre-Registration and Conditions
 
 *Added 2026-10-22 for RQ5 and H6 (layer 5). Sources: `docs/zkp/PLAN_1_ZKP_AND_AGENT_IDENTITY.md` §1.1 and
-§Amendments; `docs/zkp/REPORT_A_ZKP_INTEGRATION.md`; register #55–#61.*
+§Amendments; `docs/zkp/REPORT_A_ZKP_INTEGRATION.md`; register #56–#62.*
 
 The fifth layer asks whether zero-knowledge proofs can supply the VIN privacy tier that MOBI VID deferred (scope
 change SC-12), and what operating such proofs safely requires (RQ5). It was run as a separate extension with its own
@@ -599,19 +599,19 @@ Layer 5 uses the condition tags of §3.1.3 and the register, plus one new tag.
 
 | Tag | Meaning here | Used for |
 |---|---|---|
-| **M0** | in-process, no chain, one host (2.80 GHz Xeon, CPython, Node v22.22.0, snarkjs 0.7.6; register #56) | proving and verification time (Z-E1, Z-E2), sigma-protocol timings and operation counts (register #58), the VIN brute force (Z-E7) |
-| **M1** | Hardhat in-process EVM, exact `receipt.gasUsed` (Hardhat 2.28.6, solc 0.8.24, optimizer 200 + viaIR, cancun; register #57) | gate and verifier gas (Z-E3) |
+| **M0** | in-process, no chain, one host (2.80 GHz Xeon, CPython, Node v22.22.0, snarkjs 0.7.6; register #57) | proving and verification time (Z-E1, Z-E2), sigma-protocol timings and operation counts (register #59), the VIN brute force (Z-E7) |
+| **M1** | Hardhat in-process EVM, exact `receipt.gasUsed` (Hardhat 2.28.6, solc 0.8.24, optimizer 200 + viaIR, cancun; register #58) | gate and verifier gas (Z-E3) |
 | **Sim** | seeded simulation; every random choice drawn from a recorded seed; scripted agents, not people | the narrowing attack and its defences (Z-E5, Z-E6) |
-| **E** | estimate, not a measurement | extrapolations of the brute force beyond the measured space (register #59) and hand-execution times (register #61) |
+| **E** | estimate, not a measurement | extrapolations of the brute force beyond the measured space (register #60) and hand-execution times (register #62) |
 
 A **Sim** result claims the shape of an outcome, such as exact recovery or bits leaked against a budget. It is never a
 statement about deployed adversaries. One warm-up run is discarded before every M0 timing series. All layer-5 runs of
-record were produced at one commit with the producing code clean (register #56–#60).
+record were produced at one commit with the producing code clean (register #57–#61).
 
 ### 3.9.4 The manual-burden method: measured counts, cited rates
 
 P2 cannot be tested by asking people to compute a proof by hand. The method therefore separates two quantities and
-never mixes their status (register #61).
+never mixes their status (register #62).
 
 1. **Counts are measured.** The `zkid` primitives count every field multiplication and point operation as they run;
    the circuit's constraint and wire counts come from the compiler; the characters a person would have to copy (keys,

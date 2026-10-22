@@ -51,8 +51,8 @@ cruxes:
     question: How quickly does a verifier stop trusting a revoked vehicle key, and at what latency cost?
     hypotheses: [H3]
     thrusts: [3, 5]
-    claim: A cached verifier honours a revoked key for at most k-1 further messages. Measured on one host in alternating blocks (#54), the one-call probe refresh is 3.2x cheaper on chain than a full refresh and serves more neighbours at every finite k; neither mode reaches the neighbour-saturation target, so any k must be quoted with its t_local.
-    evidence_rows: [32, 37, 40, 54]
+    claim: A cached verifier honours a revoked key for at most k-1 further messages. Measured on one host in alternating blocks (#55), the one-call probe refresh is 3.2x cheaper on chain than a full refresh and serves more neighbours at every finite k; neither mode reaches the neighbour-saturation target, so any k must be quoted with its t_local.
+    evidence_rows: [32, 37, 40, 55]
     defects: [D21]
     artefacts: [cv2x-testbed/results/freshness_k.json, cv2x-testbed/results/freshness_k_probe.json]
     gaps:

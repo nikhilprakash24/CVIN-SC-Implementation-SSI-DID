@@ -119,7 +119,7 @@ ideas:
     kill: "If verification cannot fit the budget on vehicle-class hardware per the literature, keep it as an off-hot-path (registration-time) proof only."
     depends: []
     status:
-      - ["2026-10-22", "First step done and exceeded: tooling chosen and a circuit built and measured (register #55-#57). Kill criterion triggered for per-message use only, as anticipated: verify 18.42 ms off chain fits registration and session budgets, not per-message ones. See SC-12 reopened and SC-23 in docs/SCOPE_CHANGES.md."]
+      - ["2026-10-22", "First step done and exceeded: tooling chosen and a circuit built and measured (register #56-#58). Kill criterion triggered for per-message use only, as anticipated: verify 18.42 ms off chain fits registration and session budgets, not per-message ones. See SC-12 reopened and SC-23 in docs/SCOPE_CHANGES.md."]
     scores: {value: 3, novelty: 5, feasibility: 2, reuse: 2, risk: 4}
   - id: I-10
     track: P
@@ -133,7 +133,7 @@ ideas:
     depends: []
     scores: {value: 4, novelty: 3, feasibility: 4, reuse: 4, risk: 2}
     status:
-      - ["2026-10-22", "Partly addressed: threshold proofs over committed attributes (register #58, #60) give predicate disclosure without a credential format. The SD-JWT VC / BBS hot-path measurement is still open."]
+      - ["2026-10-22", "Partly addressed: threshold proofs over committed attributes (register #59, #61) give predicate disclosure without a credential format. The SD-JWT VC / BBS hot-path measurement is still open."]
   - id: I-11
     track: P
     title: "Linkability beyond the ledger (timing, position and pseudonym-change attacks)"
@@ -285,7 +285,7 @@ ideas:
     why: "The author's coined concept; Phase 1 holds 25 implicit instances and measures the storage trade-off (#49, #35, #31) but never what a storage choice forbids."
     anchors: [C1, C8, D51, D54, D64, "#49", "#31"]
     builds_on: [docs/phase2/focus/F1_onchain_storage_idtx/ANALYSIS.md, phase2/idtx/contracts/IdtxExecutor.sol]
-    first_step: "Done: the prototype with 10 behaviour tests. Next: lock the F1 plan as a pre-registration and run E-F1-1 and E-F1-2."
+    first_step: "Done: the prototype with 12 behaviour tests (count corrected in session 3). Next: lock the F1 plan as a pre-registration and run E-F1-1 and E-F1-2."
     kill: "If the measured overhead and the TOCTOU result add nothing beyond access control, keep IDTx as a taxonomy in chapter 6 and drop the paper."
     depends: []
     scores: {value: 5, novelty: 4, feasibility: 4, reuse: 5, risk: 2}
