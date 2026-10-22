@@ -77,14 +77,14 @@ def parse_zulu(value: str) -> datetime:
     return datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
 
 
-@dataclass
-
 def _run_stamp():
     """The shared run stamp (WM-2 A3; scope registered in A2): commit, code_dirty, tree_dirty, scope, scope_sha."""
     sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools" / "run_identity"))
     from stamp import stamp
     return stamp(__file__)
 
+
+@dataclass
 class ComplianceCheck:
     """Single compliance check with its executed outcome."""
     spec: str          # Specification name
