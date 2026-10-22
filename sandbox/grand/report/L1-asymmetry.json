@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-22T22:53:55.997Z",
+  "generatedAt": "2026-10-22T22:54:41.761Z",
   "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
   "options": [
     "cvin-combined",
@@ -429,9 +429,9 @@
       "option": "cvin-combined",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "316477",
+      "gasUsed": "316465",
       "reason": null,
-      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x67316A… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
+      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x380054… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
     },
     {
       "option": "erc-1056-uport",
@@ -511,13 +511,13 @@
       "outcome": "ok",
       "gasUsed": "287354",
       "reason": null,
-      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x5c890e97f0854e6e5c4d425fa09760f4c02bd5d150c…)"
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0xba457a711023ba056b10dbfa1a359ba8a40ad6b528d…)"
     },
     {
       "option": "cvin-combined",
       "mechanism": "revoke",
       "outcome": "ok",
-      "gasUsed": "70873",
+      "gasUsed": "70883",
       "reason": null,
       "note": "removeClaim (storage refund applies); prep: addClaim; document differs from pre-revoke document"
     },
