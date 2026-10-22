@@ -36,6 +36,7 @@ GROUPS = [
     ("security", "Security", "Attacks injected and how they were refused."),
     ("w3c", "Standards conformance", "W3C DID and VC conformance."),
     ("mobi", "MOBI lifecycle and privacy", "The pre-registered MOBI experiments."),
+    ("zk", "Zero-knowledge identity and the agent wrapper", "Layer 5: the ZK-VIN circuit, its costs, and the narrowing attack."),
 ]
 
 # row: (group, title, headline, caption, verdict or None)
@@ -76,6 +77,13 @@ CARDS = {
     52: ("w3c", "Basic digital-ID set A, full coverage", "11/11", "operations supported by ERC-1056 pure, ERC-725, ERC-4337 and CVIN-Combined; a derivation from the capability flags", None),
     24: ("w3c", "External W3C DID test suite", "335/336", "generated tests; resolution 193/194; not comparable with 336/441", None),
     33: ("mobi", "M4 lifecycle parity", "≈1,850–5,930×", "MOBI writes against the centralized baseline; cached history ratio 0.072", "writes ≥10×: PASS ×3; equal once cached: FAIL"),
+    55: ("zk", "ZK-VIN circuit", "3,498 constraints", "1,667 non-linear, 1,831 linear; 3,505 wires; circom 2.2.2", None),
+    56: ("zk", "ZK-VIN proof, prove and verify", "prove median 398.6 ms", "verify median 18.42 ms; proof 256 B as calldata; insecure single-party setup", "Z-E1, Z-E2, Z-E4 PASS"),
+    57: ("zk", "ZK-VIN admission on chain", "301,163", "gas for admit with on-chain Groth16 verification; anchor 51,558; Schnorr proof of knowledge 28,775", "Z-E3 PASS"),
+    58: ("zk", "Sigma-protocol primitives", "exact group-operation counts", "Schnorr, Pedersen, Chaum–Pedersen, OR, range and threshold proofs; pure-Python reference code", None),
+    59: ("zk", "Unsalted VIN hash reversed", "3.58 s", "10⁶ candidates at 279,587 hashes/s on one core; extrapolations are estimates", "Z-E7 PASS"),
+    60: ("zk", "Twenty-questions attack against the Steward", "≤ 3.0 bits", "adversary leakage on all runs; honest service below 90 % on 25/60 (minimum 70.0 %); undefended: exact within 5 queries", "Z-E5 PASS; Z-E6 FAIL"),
+    61: ("zk", "Manual burden of ZK identity", "92,623", "field multiplications to verify one 6-bit threshold proof by hand; counts exact, hand times estimated", None),
     38: ("mobi", "M5 pseudonym pool, per epoch", "1,096,368", "gas for 20 addDelegate per 5-min epoch, 0.76× the pre-registered ≈1.44 M; one query links 60/60 pseudonyms", "gas FAIL; linkability PASS (fully linkable)"),
 }
 

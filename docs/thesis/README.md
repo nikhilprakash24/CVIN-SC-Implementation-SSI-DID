@@ -76,6 +76,11 @@ citation set). Chapters 3–7 are grounded in the measured artifacts.
 
 **Answer (measured, H3 supported)**: Yes for the cryptographic path. SSI warm verify is 0.153 ms [0.151, 0.154] (N=30, re-executed 2026-10-04, register #27) against the ~100 ms V2V budget (~650× margin); cold full-credential verify 0.399 ms. Caveat: excludes radio/MAC/network-stack latency; mobility is simulated.
 
+### RQ5: Zero-Knowledge Privacy and Its Operation (extension, adopted 2026-10-22)
+**Question**: Can zero-knowledge proofs provide the deferred VIN privacy tier and identity-dependent knowledge checks within the budgets used for RQ1 and RQ4, and what does operating them safely require?
+
+**Answer (measured, H6 partly supported)**: feasible at registration and session time, not per V2V message. The ZK-VIN Groth16 proof (3,498 constraints) proves in a median 398.6 ms and verifies in 18.42 ms off chain (register #55–#56, M0); on-chain admission costs 301,163 gas (#57, M1), against a 0.153 ms warm V2V verify (#27). An unsalted VIN hash is reversed in 3.58 s (#59), which is why the privacy tier needs a hiding commitment, not a hash. Operating the proofs needs a custodian: a bounded agent (the Steward) holds a twenty-questions attack to ≤ 3.0 bits on every seeded run but misses its pre-registered 90 % honest-service floor (Z-E6 FAIL; #60, Sim). Sources: `docs/zkp/REPORT_A_ZKP_INTEGRATION.md`, `REPORT_C_AGENT_WRAPPED_IDENTITY.md`.
+
 ## Writing Guidelines
 
 ### Academic Standards
