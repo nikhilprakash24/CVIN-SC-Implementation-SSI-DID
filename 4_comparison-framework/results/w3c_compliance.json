@@ -1,5 +1,13 @@
 {
-  "timestamp": "2026-10-04T22:26:35.259213",
+  "timestamp": "2026-10-22T22:25:42.304108",
+  "run": {
+    "commit": "db19ff202f702328de505d8aa9c688ac042b7606",
+    "code_dirty": false,
+    "tree_dirty": false,
+    "scope": "cv2x-testbed/scripts/w3c_compliance_checker.py",
+    "scope_files": 7,
+    "scope_sha": "1e5a88100ae4"
+  },
   "methodology": "All non-qualitative checks execute the DID resolver and VC stack and record observed outcomes. SSI principles are qualitative and excluded from the score.",
   "summary": {
     "executed_checks": 44,
@@ -99,7 +107,7 @@
       "section": "7.1.2",
       "requirement": "Resolution MUST return DID resolution metadata (contentType, retrieved)",
       "status": "PASS",
-      "notes": "contentType + parseable 'retrieved' timestamp on all resolutions"
+      "notes": "contentType on resolveRepresentation() only, matching the stream; parseable 'retrieved' on all resolutions"
     },
     {
       "spec": "DID Core v1.0",
@@ -127,7 +135,7 @@
       "section": "Identifiers",
       "requirement": "Credential 'id', when present, MUST be a URL/URI",
       "status": "PASS",
-      "notes": "credential id is a URI: urn:uuid:256b4987-22d6-4d4c-87f3-d1b5e0eecd06"
+      "notes": "credential id is a URI: urn:uuid:73552c02-3501-45bd-8ea3-9acf464f3759"
     },
     {
       "spec": "VC Data Model v2.0",
@@ -141,7 +149,7 @@
       "section": "Issuer",
       "requirement": "'issuer' MUST be present and be a URI (DID) identifying the issuer",
       "status": "PASS",
-      "notes": "issuer = did:ethr:0x1:0x07A1450d6CBf4644B00F7CE645Ec47771FaC30FC"
+      "notes": "issuer = did:ethr:0x1:0xc360302C5206314f552d68510C1612513f19051a"
     },
     {
       "spec": "VC Data Model v2.0",
@@ -155,7 +163,7 @@
       "section": "Validity Period",
       "requirement": "'validFrom'/'validUntil' MUST be valid XML-Schema dateTime values (v2 renames issuanceDate)",
       "status": "PASS",
-      "notes": "validFrom=2026-10-04T22:26:35Z, validUntil=2027-10-04T22:26:35Z, both XML-Schema dateTime"
+      "notes": "validFrom=2026-10-22T22:25:42Z, validUntil=2027-10-22T22:25:42Z, both XML-Schema dateTime"
     },
     {
       "spec": "VC Data Model v2.0",
@@ -183,14 +191,14 @@
       "section": "Securing Mechanisms",
       "requirement": "Proof MUST be cryptographically bound to the issuer's key (recoverable signature)",
       "status": "PASS",
-      "notes": "secp256k1 recovery yields the issuer address 0x07A1450d6CBf4644B00F7CE645Ec47771FaC30FC (offline, no chain round-trip)"
+      "notes": "secp256k1 recovery yields the issuer address 0xc360302C5206314f552d68510C1612513f19051a (offline, no chain round-trip)"
     },
     {
       "spec": "VC Data Model v2.0",
       "section": "Verification",
       "requirement": "A well-formed, freshly issued credential MUST verify end-to-end",
       "status": "PASS",
-      "notes": "verify_credential => valid, sub-checks ['disclosure', 'revocation', 'schema', 'signature', 'structure', 'temporal'] all true (0.32 ms)"
+      "notes": "verify_credential => valid, sub-checks ['disclosure', 'proof', 'revocation', 'schema', 'signature', 'structure', 'temporal'] all true (0.31 ms)"
     },
     {
       "spec": "VC Data Model v2.0",
