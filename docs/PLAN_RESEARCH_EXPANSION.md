@@ -29,7 +29,7 @@ The catalogue holds about 35 items. They split into three tracks so that scope i
 
 - Commits are author-attributed, with no AI co-author trailers. Commit and push at every work-package boundary.
 - No test is skipped, weakened or deleted. CI fails on any Python skip.
-- A number enters a chapter only with a V-status row in `docs/MEASUREMENT_CONDITIONS.md`. Next free row: **#40**. Fetch before numbering; parallel sessions have collided before.
+- A number enters a chapter only with a V-status row in `docs/MEASUREMENT_CONDITIONS.md`. Next free row on the merged tree: **#55** (#40–#54 are taken). Fetch before numbering; parallel sessions have collided before.
 - Pre-register any new hypothesis threshold **before** building the thing it tests. Report PASS/FAIL as observed and label post-hoc explanations as post hoc.
 - Author framing decisions are listed, not taken.
 - New canonical docs get a row in `docs/INDEX.md`.
@@ -43,7 +43,7 @@ Each work package (WP) lists its inputs, deliverables and acceptance criteria. "
 | WP | Item | Deliverables | DoD |
 |---|---|---|---|
 | 0.1 | **X1 toll corridor** | Contracts, 20 Hardhat + 4 pytest tests, results JSON, docs | ✅ CLOSED in this session. Hardhat 389/23 pending, Python 362, compliance 94.3% |
-| 0.2 | X1 register rows | Proposed #40 (X1 gas: `payToll`, batch 1/10/25) and #41 (X1 gate read, M1-H/HTTP), with the condition caveat that fresh keys change calldata | Rows added with V status after a clean-tree run; or an author decision to defer |
+| 0.2 | X1 register rows | Proposed #55 (X1 gas: `payToll`, batch 1/10/25) and #56 (X1 gate read, M1-H/HTTP), with the condition caveat that fresh keys change calldata | Rows added with V status after a clean-tree run; or an author decision to defer |
 | 0.3 | P6 on-chain `_resolve_ethr` | `did_resolver.py` reads ERC-1056 logs when a provider is given; offline mode unchanged | New tests against a node; DID suite re-run; checker re-run, delta recorded |
 | 0.4 | P1 EIP-712 migration | Typed-data variants of CVIN-Combined `addClaim`, ERC-735 `addClaim`, MOBI `attestEvent`; old paths kept | New attack cell "cross-contract replay" DEFENDED on the new paths and demonstrated on the old ones; gas delta table |
 | 0.5 | P2 Bitstring Status List | `BitstringStatusListRegistry` beside the existing registry; verifier supports both | W3C structure tests; verify ms and bytes at 131,072 entries; checker delta |
@@ -131,7 +131,7 @@ Each work package (WP) lists its inputs, deliverables and acceptance criteria. "
 |---|---|---|
 | AD-1 | Which tracks to adopt (T only, T+S, all) | T plus P5 from S |
 | AD-2 | Adopt RQ5–RQ7 / H6–H8 (`WHY.md` §7)? | Adopt RQ5 + H6 (X1 already supports it); decide RQ6/RQ7 after Phase 1 |
-| AD-3 | Register #40/#41 for X1 now, or after P14 | Now, so chapters can cite X1 |
+| AD-3 | Register #55/#56 for X1 now, or after P14 | Now, so chapters can cite X1 |
 | AD-4 | Restore `docs/SCOPE_CHANGES.md` SC-01…SC-13 by appending from `d53126e` | Yes, append-only |
 | AD-5 | Add a ZK toolchain (circom, snarkjs) to CI, or keep ZK tests opt-in | Commit the verifier and keep proof generation out of CI; CI verifies committed proofs |
 | AD-6 | Live network calls (vPIC) | Never in CI; a recorded-fixture lane only |
@@ -151,3 +151,18 @@ Each work package (WP) lists its inputs, deliverables and acceptance criteria. "
 | Date | WP | Result | Commit |
 |---|---|---|---|
 | 2026-10-15 | 0.1 X1 | CLOSED. 20 Hardhat + 4 pytest. `payToll` 110.6k gas; 56.2k/ticket at batch 25; gate read ≈21–23 ms (M1-H/HTTP, one host). Findings: split-brain revocation, DID-level linkability | `1133737` |
+| 2026-10-22 | Merge + re-run | Merged the default branch (`claude/clone-cvin-id-scs-…`, incl. PR #3 layer 5) into this branch, no conflicts. Merged tree: Hardhat 579 passing / 34 pending, Python 431, layer 5 49, compliance 94.3%. X1 fix: deadlines now use chain time (a shared node is fast-forwarded by other suites; wall-clock deadlines expired every ticket). X1 re-run: 4 admitted, the same two denials, 56.2k gas/ticket at batch 25, gate read 26 ms (one run). X1 rows renumbered to proposed #55/#56 (#40–#54 are taken on the merged register) | this commit |
+
+## 9. Status against work on other branches (survey 2026-10-22)
+
+| Catalogue item | Status elsewhere | Effect on this plan |
+|---|---|---|
+| P5 unlinkable passage | Layer 5 (`5_zkp-agent-identity/`, merged) has a Groth16 verifier, nullifiers, a Merkle library and `ZkVinGate` (301,163 gas; ZK-VIN prove 398.6 ms, verify 18.42 ms; single-party setup, insecure) | WP 2.1 builds on layer 5's verifier and nullifier code instead of starting from Semaphore |
+| P6 on-chain resolution | Done on other lines: H-R (on-chain did:ethr + did:mobi; `simulation-visual-plan`) and WM-2 C1 (`cv2x-testbed-setup`). Not yet on the default branch | WP 0.3 becomes "merge or port H-R", not new work |
+| X10 robotaxi agent, M7 | Layer 5 `steward/` (agent-wrapped identity, leakage ≤3.0 bits on 90/90 runs; Z-E6 honest service ≥90% NOT met); `vid-build` ports VID to ERC-8004 | WP 6.4 composes these instead of new registries |
+| X3 / P9 VIN oracle | Layer 5 defect D64: an unsalted VIN hash reverses in 3.58 s per 10⁶ | Oracle reports must carry salted VIN hashes; add as a WP 1.3 attack cell |
+| P3, P15 | `vid-build` has SD-JWT-style digests and `PresentationAnchor.sol` | Reuse in WP 2.2 / 4.2 |
+| X4, X5 presentation | `simulation-visual-plan` has trace replay and real SUMO 1.28 + TraCI | Use for migration-curve figures |
+| P12 | Layer 5 has 5 mutants; `testing-suite-organization` has a 1,505-row test register | Extend rather than restart |
+
+Naming clash: the default branch's register #53 measures a basic-set item it also calls "X1". This plan's X1 is the toll corridor; cite it as "X1 (toll corridor)". `vid-build`'s `5_minimal-ssi-sandbox/` also clashes with `5_zkp-agent-identity/` on the layer number.

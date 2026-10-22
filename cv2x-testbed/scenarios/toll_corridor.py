@@ -161,6 +161,10 @@ class TollCorridorScenario:
         self.legacy_revenue = 0
 
     # ------------------------------------------------------------ chain I/O
+    def _chain_now(self) -> int:
+        # Chain time, not wall time: a shared node may have been fast-forwarded by other suites.
+        return self.w3.eth.get_block("latest")["timestamp"]
+
     def _send(self, acct, fn, label: Optional[str] = None):
         tx = fn.build_transaction({
             "from": acct.address, "nonce": self.w3.eth.get_transaction_count(acct.address),
@@ -233,7 +237,7 @@ class TollCorridorScenario:
         vc = env["verifiableCredential"]
         v.endorsement = {
             "subject": v.account.address, "vehicleClass": CLASS[v.vehicle_class],
-            "validUntil": int(time.time()) + 30 * 86400,
+            "validUntil": self._chain_now() + 30 * 86400,
             "credentialHash": keccak(canonicalize(vc)),
         }
         v.endorsement_sig = Account.sign_typed_data(
@@ -269,7 +273,7 @@ class TollCorridorScenario:
             return None
 
         ticket = {"identity": v.account.address, "gantry": self.gantry_key.address, "nonce": ticket_nonce,
-                  "maxFee": 10_000_000, "deadline": int(time.time()) + 600,
+                  "maxFee": 10_000_000, "deadline": self._chain_now() + 600,
                   "endorsementHash": self.corridor.functions.hashEndorsement(self._endorsement_tuple(v)).call()}
         sig = Account.sign_typed_data(v.pseudonym.key, self.domain, TICKET_TYPES, ticket).signature
         t_tuple = tuple(ticket[k["name"]] for k in TICKET_TYPES["TollTicket"])

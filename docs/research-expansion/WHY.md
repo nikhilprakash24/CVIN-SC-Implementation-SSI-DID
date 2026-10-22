@@ -159,7 +159,7 @@ The repo's culture is pre-registration with PASS/FAIL reported as observed (#33,
 - **Scope creep.** This catalogue holds about 35 items. A thesis needs perhaps 4. The plan (`../PLAN_RESEARCH_EXPANSION.md`) separates a thesis track (Phases 0–3) from side-paper and future-work tracks. Choosing the cut is the author's decision.
 - **Demo-ware.** A scenario that prints success is not evidence; the repo's own review 02 found use cases that asserted nothing. Every X scenario must carry negative tests (X1 has 14 attack cells and an off-chain/on-chain revocation pair), computed pass/fail, and a stated condition tag.
 - **Mocked legacy systems.** The oracle, the CAD system and ANPR are simulated. Results about them are architecture results, not field results, and must say so. X1 already declines to report a legacy-lane latency because there is no ANPR model.
-- **Measurement condition.** X1 latency is M1 over HTTP on one host. Gas is deterministic per input but varies by about 12 gas run to run, because fresh keys change calldata zero bytes. Those numbers need register rows with that caveat before entering a chapter (proposed #40/#41).
+- **Measurement condition.** X1 latency is M1 over HTTP on one host. Gas is deterministic per input but varies by about 12 gas run to run, because fresh keys change calldata zero bytes. Those numbers need register rows with that caveat before entering a chapter (proposed #55/#56).
 - **Novelty claims.** S31 (zero-trust DID for AVs, 2025) and S85 (DID benchmarking, 2026) are close prior art. Read both before writing "first". Use the repo's existing SC-04 rewording: "measured, domain-constrained, reproducible".
 
 ## 9. The method: how the ideas were generated (reusable)

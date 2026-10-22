@@ -43,9 +43,9 @@ Environment setup:
   pip install eth-account coincurve cryptography web3 pytest numpy
   (cd 1_blockchain-identity && npx hardhat node --port 8548 &)   # for on-chain Python tests
   mkdir -p /tmp/cv2x-art && ln -sfn "$PWD/1_blockchain-identity/artifacts/contracts/MOBI" /tmp/cv2x-art/contracts
-Baseline to keep green (as of 2026-10-15): `npx hardhat test` = 389 passing / 23 pending;
+Baseline to keep green: `npx hardhat test` = 579 passing / 34 pending (merged tree, 2026-10-22);
 `CV2X_TEST_RPC_URL=http://127.0.0.1:8548 CV2X_TEST_ARTIFACTS_DIR=/tmp/cv2x-art python -m pytest
-2_w3c-ssi-layer cv2x-testbed/tests -q` = 362 passed;
+2_w3c-ssi-layer cv2x-testbed/tests -q` = 431 passed; `python -m pytest -q 5_zkp-agent-identity` = 49 passed;
 `python cv2x-testbed/scripts/w3c_compliance_checker.py` = 94.3%.
 
 Reference implementation to imitate: scenario X1 (toll corridor):
@@ -71,7 +71,7 @@ Work package 0.2: register rows for scenario X1.
    the settleBatch gas line) and `python cv2x-testbed/scenarios/toll_corridor.py --rpc ...`.
    Run the Python scenario 30 times and report the median and 95% CI of read_ms_median,
    using the bootstrap the repo already uses in 4_comparison-framework (find it).
-2. Draft rows #40 (X1 gas: payToll; settleBatch at 1, 10, 25 per ticket; tag M1) and #41
+2. Draft rows #55 (X1 gas: payToll; settleBatch at 1, 10, 25 per ticket; tag M1) and #56
    (X1 gate read: VP verify + eth_call over HTTP; tag M1-H/HTTP; single host). Explain the
    ~12-gas run-to-run variance: fresh keys change calldata zero bytes. Show it by running
    with fixed keys, where gas becomes deterministic.

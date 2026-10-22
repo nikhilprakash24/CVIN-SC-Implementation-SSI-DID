@@ -382,7 +382,7 @@ Each is a query against existing MOBI V2 events (`get_events_by_type`).
 
 ## 5. Priority shortlist (what would most strengthen the thesis per hour)
 
-1. X1 polish and register rows. Done in code; needs author sign-off on register #40/#41.
+1. X1 polish and register rows. Done in code; needs author sign-off on register #55/#56.
 2. P6 on-chain resolution, P1 EIP-712 and P2 status list. Small, and they raise rigor across the board.
 3. X4 dual-stack migration curve. Reuses SUMO; the highest-impact transition evidence.
 4. X3 oracle + legacy bridge. The "old system meets new" story the conclusion needs.

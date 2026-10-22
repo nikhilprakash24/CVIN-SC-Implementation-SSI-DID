@@ -9,7 +9,7 @@
       "suspended-5": "vp_invalid",
       "revoked-6": "onchain_code_7"
     },
-    "read_ms_median": 21.225,
+    "read_ms_median": 26.345,
     "revenue_cusd": 12.75,
     "identifiers_exposed": {
       "ev-1": [
@@ -61,8 +61,8 @@
   },
   "reconciled_revenue_cusd": 24.25,
   "gas": {
-    "settleBatch": 296839,
-    "settle_per_ticket": 74210,
+    "settleBatch": 296875,
+    "settle_per_ticket": 74219,
     "sponsor_addDelegateSigned_total": 596700,
     "escrow_deposit_total": 402738
   }

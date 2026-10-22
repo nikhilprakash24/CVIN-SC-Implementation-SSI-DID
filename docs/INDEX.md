@@ -49,7 +49,7 @@ provenance and must not be cited in chapters.
 | What defects were found, and what is their status? | `docs/DEFECT_LOG.md` | D1–D36; §C open items with the decision each needs; §F the WM-1 review's findings |
 | What was designed and pre-registered for infrastructure messaging, and what was built? | `docs/design/INFRASTRUCTURE_MESSAGING.md` (§7 as built), `docs/design/INFRASTRUCTURE_PREREG.md` (amendments A1–A4) | register #44–#48 |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
-| What could the research become next, why, and in what order? | `docs/PLAN_RESEARCH_EXPANSION.md` (phased plan, author decisions AD-1–AD-6), `docs/research-expansion/` (`IDEAS.md` catalogue X/P/M, `WHY.md` rationale, `SOURCES.md`, `PROMPT_PACK.md` per-WP prompts) | 2026-10-15; scenario X1 (toll corridor) built: `1_blockchain-identity/contracts/Scenarios/`, `cv2x-testbed/scenarios/toll_corridor.py`; its numbers are proposed register #40/#41, not yet V |
+| What could the research become next, why, and in what order? | `docs/PLAN_RESEARCH_EXPANSION.md` (phased plan, author decisions AD-1–AD-6), `docs/research-expansion/` (`IDEAS.md` catalogue X/P/M, `WHY.md` rationale, `SOURCES.md`, `PROMPT_PACK.md` per-WP prompts) | 2026-10-15; scenario X1 (toll corridor) built: `1_blockchain-identity/contracts/Scenarios/`, `cv2x-testbed/scenarios/toll_corridor.py`; its numbers are proposed register #55/#56, not yet V |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 
 ## Historical (keep, do not cite)
