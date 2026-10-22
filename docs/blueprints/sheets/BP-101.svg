@@ -1,0 +1,266 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<title>BP-101 — Cryptographic primitive library</title>
+<defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#5c78ad" stroke-width="0.35" opacity="0.55"/></pattern><pattern id="grid2" width="200" height="200" patternUnits="userSpaceOnUse"><path d="M 200 0 L 0 0 0 200" fill="none" stroke="#5c78ad" stroke-width="0.7" opacity="0.6"/></pattern></defs>
+<rect width="1600" height="1000" fill="#0b2a5b"/>
+<rect x="46" y="46" width="1508" height="908" fill="url(#grid)"/>
+<rect x="46" y="46" width="1508" height="908" fill="url(#grid2)"/>
+<rect x="28" y="28" width="1544" height="944" fill="none" stroke="#f2f6ff" stroke-width="2.6"/>
+<rect x="46" y="46" width="1508" height="908" fill="none" stroke="#f2f6ff" stroke-width="1.2"/>
+<text x="140.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">8</text>
+<text x="140.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">8</text>
+<text x="328.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">7</text>
+<text x="328.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">7</text>
+<line x1="234.5" y1="28" x2="234.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="234.5" y1="954" x2="234.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="517.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">6</text>
+<text x="517.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">6</text>
+<line x1="423.0" y1="28" x2="423.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="423.0" y1="954" x2="423.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="705.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">5</text>
+<text x="705.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">5</text>
+<line x1="611.5" y1="28" x2="611.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="611.5" y1="954" x2="611.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="894.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">4</text>
+<text x="894.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">4</text>
+<line x1="800.0" y1="28" x2="800.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="800.0" y1="954" x2="800.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1082.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">3</text>
+<text x="1082.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">3</text>
+<line x1="988.5" y1="28" x2="988.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="988.5" y1="954" x2="988.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1271.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">2</text>
+<text x="1271.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">2</text>
+<line x1="1177.0" y1="28" x2="1177.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1177.0" y1="954" x2="1177.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1459.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">1</text>
+<text x="1459.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">1</text>
+<line x1="1365.5" y1="28" x2="1365.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1365.5" y1="954" x2="1365.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="125.66666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">A</text>
+<text x="1563" y="125.66666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">A</text>
+<text x="37" y="277.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">B</text>
+<text x="1563" y="277.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">B</text>
+<line x1="28" y1="197.33333333333334" x2="46" y2="197.33333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="197.33333333333334" x2="1572" y2="197.33333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="428.33333333333337" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">C</text>
+<text x="1563" y="428.33333333333337" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">C</text>
+<line x1="28" y1="348.6666666666667" x2="46" y2="348.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="348.6666666666667" x2="1572" y2="348.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="579.6666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">D</text>
+<text x="1563" y="579.6666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">D</text>
+<line x1="28" y1="500.0" x2="46" y2="500.0" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="500.0" x2="1572" y2="500.0" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="731.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">E</text>
+<text x="1563" y="731.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">E</text>
+<line x1="28" y1="651.3333333333334" x2="46" y2="651.3333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="651.3333333333334" x2="1572" y2="651.3333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="882.3333333333334" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">F</text>
+<text x="1563" y="882.3333333333334" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">F</text>
+<line x1="28" y1="802.6666666666667" x2="46" y2="802.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="802.6666666666667" x2="1572" y2="802.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="800.0" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
+<text x="800.0" y="990" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
+<text x="28" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" letter-spacing="2">CVIN-SSI PROGRAMME</text>
+<text x="1572" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="end" letter-spacing="2">BP-101  REV A</text>
+<circle cx="1000" cy="300" r="82" fill="none" stroke="#f2f6ff" stroke-width="2.4"/>
+<text x="1000" y="292" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">secp256k1</text>
+<text x="1000" y="312" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">(sk, pk)</text>
+<text x="1000" y="330" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">addr=keccak(pk)[12:]</text>
+<circle cx="1070" cy="230" r="13" fill="#0b2a5b" stroke="#ffd166" stroke-width="1.6"/>
+<text x="1070" y="235" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">2</text>
+<rect x="940.0" y="157.0" width="120" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="1000.0" y="180.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">keccak256</text>
+<line x1="1000.0" y1="218.0" x2="1000.0" y2="193.0" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0"/>
+<circle cx="1070.0" cy="151.0" r="11" fill="#0b2a5b" stroke="#ffd166" stroke-width="1.6"/>
+<text x="1070.0" y="156.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">1</text>
+<rect x="1121.865334794732" y="219.5" width="120" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="1181.865334794732" y="242.5" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">ECDSA sign</text>
+<line x1="1071.014083110324" y1="259.0" x2="1129.9038105676657" y2="246.5" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0"/>
+<circle cx="1251.865334794732" cy="213.5" r="11" fill="#0b2a5b" stroke="#ffd166" stroke-width="1.6"/>
+<text x="1251.865334794732" y="218.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">3</text>
+<rect x="1121.865334794732" y="344.5" width="120" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="1181.865334794732" y="367.5" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">ecrecover</text>
+<line x1="1071.014083110324" y1="341.0" x2="1129.9038105676657" y2="353.5" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0"/>
+<circle cx="1251.865334794732" cy="338.5" r="11" fill="#0b2a5b" stroke="#ffd166" stroke-width="1.6"/>
+<text x="1251.865334794732" y="343.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">4</text>
+<rect x="940.0" y="407.0" width="120" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="1000.0" y="430.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">EIP-191/155</text>
+<line x1="1000.0" y1="382.0" x2="1000.0" y2="407.0" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0"/>
+<circle cx="1070.0" cy="401.0" r="11" fill="#0b2a5b" stroke="#ffd166" stroke-width="1.6"/>
+<text x="1070.0" y="406.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">5</text>
+<rect x="758.1346652052679" y="344.5" width="120" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="818.1346652052679" y="367.5" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">nonce</text>
+<line x1="928.985916889676" y1="341.0" x2="870.0961894323342" y2="353.5" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0"/>
+<circle cx="888.1346652052679" cy="338.5" r="11" fill="#0b2a5b" stroke="#ffd166" stroke-width="1.6"/>
+<text x="888.1346652052679" y="343.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">10</text>
+<rect x="758.1346652052679" y="219.5" width="120" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="818.1346652052679" y="242.5" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">time</text>
+<line x1="928.985916889676" y1="259.0" x2="870.0961894323342" y2="246.5" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0"/>
+<circle cx="888.1346652052679" cy="213.5" r="11" fill="#0b2a5b" stroke="#ffd166" stroke-width="1.6"/>
+<text x="888.1346652052679" y="218.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">11</text>
+<text x="560" y="470" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">DETAIL A — THE ONE MECHANISM EVERY PROOF USES</text>
+<line x1="560" y1="475" x2="942.5" y2="475" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<rect x="560" y="490" width="150" height="56" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="635" y="512" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">message m</text>
+<text x="635" y="528" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">VC, BSM, claim, userOp</text>
+<line x1="710" y1="518" x2="728" y2="518" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<polygon points="721.6558454907434,520.9583278321849 728,518 721.6558454907434,515.0416721678151" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<rect x="728" y="490" width="150" height="56" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="803" y="512" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">canonical bytes</text>
+<text x="803" y="528" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">⑥ canonical JSON /</text>
+<text x="803" y="539" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">abi.encodePacked</text>
+<line x1="878" y1="518" x2="896" y2="518" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<polygon points="889.6558454907434,520.9583278321849 896,518 889.6558454907434,515.0416721678151" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<rect x="896" y="490" width="150" height="56" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="971" y="512" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">digest</text>
+<text x="971" y="528" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">① keccak256 (or ⑤</text>
+<text x="971" y="539" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">EIP-191 prefix first)</text>
+<line x1="1046" y1="518" x2="1064" y2="518" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<polygon points="1057.6558454907436,520.9583278321849 1064,518 1057.6558454907436,515.0416721678151" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<rect x="1064" y="490" width="150" height="56" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="1139" y="512" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">signature (r,s,v)</text>
+<text x="1139" y="528" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">③ sign with sk, off-</text>
+<text x="1139" y="539" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">chain</text>
+<line x1="1214" y1="518" x2="1232" y2="518" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<polygon points="1225.6558454907436,520.9583278321849 1232,518 1225.6558454907436,515.0416721678151" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<rect x="1232" y="490" width="150" height="56" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="1307" y="512" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">recovered addr</text>
+<text x="1307" y="528" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">④ ecrecover(digest, v,</text>
+<text x="1307" y="539" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">r, s)</text>
+<line x1="1382" y1="518" x2="1400" y2="518" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<polygon points="1393.6558454907436,520.9583278321849 1400,518 1393.6558454907436,515.0416721678151" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<rect x="1400" y="490" width="150" height="56" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="1475" y="512" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">compare</text>
+<text x="1475" y="528" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">== expected signer →</text>
+<text x="1475" y="539" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">accept</text>
+<text x="560" y="570" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">Identical on-chain (Solidity ecrecover, 3,000 gas) and off-chain (coincurve recovery, 0.153 ms warm verify #27).</text>
+<text x="560" y="585" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">DETAIL B — VIN PRIVACY SUB-ASSEMBLY (MOBI VID I, see BP-204)</text>
+<line x1="560" y1="590" x2="1070.0" y2="590" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<rect x="560" y="603" width="100" height="34" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<text x="610" y="625" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">VIN</text>
+<rect x="720" y="603" width="130" height="34" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<text x="785" y="625" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">salt (32 B)</text>
+<line x1="660" y1="620" x2="720" y2="620" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<polygon points="714.5621532777801,622.5357095704442 720,620 714.5621532777801,617.4642904295558" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<rect x="900" y="603" width="150" height="34" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="975" y="625" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">sha256 → vinHash</text>
+<line x1="850" y1="620" x2="900" y2="620" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<polygon points="894.5621532777801,622.5357095704442 900,620 894.5621532777801,617.4642904295558" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<circle cx="1060" cy="595" r="11" fill="#0b2a5b" stroke="#ffd166" stroke-width="1.6"/>
+<text x="1060" y="600" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">7</text>
+<rect x="720" y="655" width="130" height="34" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<text x="785" y="677" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">owner secret</text>
+<rect x="900" y="655" width="150" height="34" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="975" y="677" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">HKDF → key32</text>
+<line x1="850" y1="672" x2="900" y2="672" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<polygon points="894.5621532777801,674.5357095704442 900,672 894.5621532777801,669.4642904295558" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<circle cx="1060" cy="647" r="11" fill="#0b2a5b" stroke="#ffd166" stroke-width="1.6"/>
+<text x="1060" y="652" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">8</text>
+<rect x="1100" y="625" width="170" height="46" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="1185" y="644" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">AES-256-GCM</text>
+<text x="1185" y="660" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">AAD = vinHash</text>
+<line x1="1050" y1="620" x2="1100" y2="640" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<polygon points="1094.009347177407,640.3347816589369 1100,640 1095.8928249622168,635.6260871969127" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<line x1="1050" y1="672" x2="1100" y2="655" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<polygon points="1095.6678467743204,659.1511984328907 1100,655 1094.0353430914695,654.3497170127406" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<circle cx="1280" cy="617" r="11" fill="#0b2a5b" stroke="#ffd166" stroke-width="1.6"/>
+<text x="1280" y="622" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">9</text>
+<text x="1100" y="695" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">to chain: vinHash only  ·  never: VIN, salt, key, secret</text>
+<rect x="46" y="46" width="400" height="144" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.4" opacity="0.95"/>
+<text x="54" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">GENERAL NOTES</text>
+<line x1="46" y1="66" x2="446" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="54" y="80" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">1. The adversary is assumed unable to break any part on this</text>
+<text x="54" y="94" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   sheet (THREAT_MODEL §2). Everything above is conditional</text>
+<text x="54" y="108" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   on that.</text>
+<text x="54" y="122" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2. Parts ①–⑤ are the same parts a value transfer on the same</text>
+<text x="54" y="136" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   chain uses: a vehicle&#x27;s claim and a $2B transfer are</text>
+<text x="54" y="150" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   verified by the same ecrecover.</text>
+<text x="54" y="164" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">3. Parts ⑦–⑨ are application-layer additions (MOBI VID</text>
+<text x="54" y="178" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   privacy); they are not inherited from the ledger.</text>
+<rect x="1134" y="46" width="420" height="56" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<text x="1142" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">REVISIONS</text>
+<line x1="1134" y1="66" x2="1554" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1142" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">REV</text>
+<text x="1184" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">DESCRIPTION</text>
+<text x="1464" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">DATE</text>
+<text x="1142" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">A</text>
+<text x="1184" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">INITIAL RELEASE</text>
+<text x="1464" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-15</text>
+<line x1="1178" y1="66" x2="1178" y2="102" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<line x1="1458" y1="66" x2="1458" y2="102" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<rect x="46" y="708" width="720" height="246" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.6" opacity="0.96"/>
+<text x="54" y="722" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">PARTS LIST</text>
+<line x1="46" y1="728" x2="766" y2="728" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="54" y="744" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">NO</text>
+<text x="90" y="744" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">PART / FUNCTION</text>
+<text x="296" y="744" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">SPECIFICATION / WHERE USED</text>
+<text x="54" y="762" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">1</text>
+<text x="90" y="762" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">keccak256</text>
+<text x="296" y="762" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">EVM native hash; claim digests, contentHash, claimId, eventId</text>
+<text x="54" y="780" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">2</text>
+<text x="90" y="780" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">secp256k1 keygen</text>
+<text x="296" y="780" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">EOA = identity; coincurve / eth-account; vehicle, issuer, owner keys</text>
+<text x="54" y="798" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">3</text>
+<text x="90" y="798" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ECDSA sign (secp256k1)</text>
+<text x="296" y="798" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">off-chain; VC proof, BSM signature, meta-tx, attestations</text>
+<text x="54" y="816" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">4</text>
+<text x="90" y="816" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ecrecover</text>
+<text x="296" y="816" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">EVM precompile 0x01, 3,000 gas; on-chain signer recovery (G1, G2)</text>
+<text x="54" y="834" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">5</text>
+<text x="90" y="834" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">EIP-191 envelope + EIP-155 chain id</text>
+<text x="296" y="834" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">\x19Ethereum Signed Message; domain + chain binding (G3)</text>
+<text x="54" y="852" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">6</text>
+<text x="90" y="852" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">canonical JSON</text>
+<text x="296" y="852" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">deterministic serialisation before hashing/signing (deviation: not URDNA2015)</text>
+<text x="54" y="870" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">7</text>
+<text x="90" y="870" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">SHA-256 salted hash</text>
+<text x="296" y="870" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">vinHash = sha256(vin || &#x27;:&#x27; || salt32); only this reaches chain</text>
+<text x="54" y="888" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">8</text>
+<text x="90" y="888" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">HKDF-SHA256</text>
+<text x="296" y="888" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">32-byte AES key from per-vehicle owner secret, salted by vinSalt</text>
+<text x="54" y="906" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">9</text>
+<text x="90" y="906" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">AES-256-GCM (AEAD)</text>
+<text x="296" y="906" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">VIN ciphertext bound to on-chain vinHash via associated data</text>
+<text x="54" y="924" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">10</text>
+<text x="90" y="924" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">nonce / challenge</text>
+<text x="296" y="924" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">replay protection: registry nonce, VP challenge+domain, presentation key</text>
+<text x="54" y="942" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">11</text>
+<text x="90" y="942" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">time (block.timestamp)</text>
+<text x="296" y="942" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">delegate TTL, attribute validTo, credential temporal check</text>
+<line x1="84" y1="728" x2="84" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<line x1="290" y1="728" x2="290" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<rect x="1034" y="769" width="520" height="61" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="0.95"/>
+<text x="1042" y="782" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="1">REFERENCE DOCUMENTS / SOURCE OF TRUTH</text>
+<text x="1042" y="797" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">1_blockchain-identity/contracts/** (④ ⑤ ① in Solidity)</text>
+<text x="1042" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">2_w3c-ssi-layer/verifiable-credentials/vc_issuer.py, vc_verifier.py (② ③ ⑥ ⑩ ⑪)</text>
+<text x="1042" y="823" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">2_w3c-ssi-layer/mobi-vid/birth_certificate.py, tests/test_vin_cipher.py (⑦ ⑧ ⑨)</text>
+<rect x="1034" y="836" width="520" height="118" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="2.0" opacity="1.0"/>
+<line x1="1034" y1="866" x2="1554" y2="866" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<line x1="1034" y1="914" x2="1554" y2="914" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<line x1="1334" y1="836" x2="1334" y2="866" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="1042" y="848" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">PROGRAMME</text>
+<text x="1042" y="861" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="start" font-weight="bold" opacity="1.0">CVIN-SSI PROGRAMME</text>
+<text x="1342" y="848" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DRAWING NO.</text>
+<text x="1342" y="861" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">BP-101</text>
+<text x="1042" y="878" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">TITLE</text>
+<text x="1042" y="894" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#f2f6ff" text-anchor="start" font-weight="bold" opacity="1.0">CRYPTOGRAPHIC PRIMITIVE LIBRARY</text>
+<text x="1042" y="908" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">Exploded view and parts list — the parts every higher sheet is built from</text>
+<text x="1040" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DRAWN</text>
+<text x="1040" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">N. PRAKASH</text>
+<line x1="1144" y1="914" x2="1144" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1150" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">CHECKED</text>
+<text x="1150" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">MEASUREMENT_CONDITIONS.md</text>
+<line x1="1314" y1="914" x2="1314" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1320" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">APPROVED</text>
+<text x="1320" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">—</text>
+<line x1="1384" y1="914" x2="1384" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1390" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DATE</text>
+<text x="1390" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-15</text>
+<line x1="1464" y1="914" x2="1464" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1470" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">SCALE</text>
+<text x="1470" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">NTS</text>
+<line x1="1514" y1="914" x2="1514" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1520" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">SHEET</text>
+<text x="1520" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">3 OF 23</text>
+<line x1="1554" y1="914" x2="1554" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+</svg>

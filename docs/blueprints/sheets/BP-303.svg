@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<title>BP-303 — Sequence — ownership transfer and key rotation</title>
+<defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#5c78ad" stroke-width="0.35" opacity="0.55"/></pattern><pattern id="grid2" width="200" height="200" patternUnits="userSpaceOnUse"><path d="M 200 0 L 0 0 0 200" fill="none" stroke="#5c78ad" stroke-width="0.7" opacity="0.6"/></pattern></defs>
+<rect width="1600" height="1000" fill="#0b2a5b"/>
+<rect x="46" y="46" width="1508" height="908" fill="url(#grid)"/>
+<rect x="46" y="46" width="1508" height="908" fill="url(#grid2)"/>
+<rect x="28" y="28" width="1544" height="944" fill="none" stroke="#f2f6ff" stroke-width="2.6"/>
+<rect x="46" y="46" width="1508" height="908" fill="none" stroke="#f2f6ff" stroke-width="1.2"/>
+<text x="140.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">8</text>
+<text x="140.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">8</text>
+<text x="328.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">7</text>
+<text x="328.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">7</text>
+<line x1="234.5" y1="28" x2="234.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="234.5" y1="954" x2="234.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="517.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">6</text>
+<text x="517.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">6</text>
+<line x1="423.0" y1="28" x2="423.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="423.0" y1="954" x2="423.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="705.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">5</text>
+<text x="705.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">5</text>
+<line x1="611.5" y1="28" x2="611.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="611.5" y1="954" x2="611.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="894.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">4</text>
+<text x="894.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">4</text>
+<line x1="800.0" y1="28" x2="800.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="800.0" y1="954" x2="800.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1082.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">3</text>
+<text x="1082.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">3</text>
+<line x1="988.5" y1="28" x2="988.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="988.5" y1="954" x2="988.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1271.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">2</text>
+<text x="1271.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">2</text>
+<line x1="1177.0" y1="28" x2="1177.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1177.0" y1="954" x2="1177.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1459.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">1</text>
+<text x="1459.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">1</text>
+<line x1="1365.5" y1="28" x2="1365.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1365.5" y1="954" x2="1365.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="125.66666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">A</text>
+<text x="1563" y="125.66666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">A</text>
+<text x="37" y="277.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">B</text>
+<text x="1563" y="277.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">B</text>
+<line x1="28" y1="197.33333333333334" x2="46" y2="197.33333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="197.33333333333334" x2="1572" y2="197.33333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="428.33333333333337" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">C</text>
+<text x="1563" y="428.33333333333337" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">C</text>
+<line x1="28" y1="348.6666666666667" x2="46" y2="348.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="348.6666666666667" x2="1572" y2="348.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="579.6666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">D</text>
+<text x="1563" y="579.6666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">D</text>
+<line x1="28" y1="500.0" x2="46" y2="500.0" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="500.0" x2="1572" y2="500.0" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="731.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">E</text>
+<text x="1563" y="731.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">E</text>
+<line x1="28" y1="651.3333333333334" x2="46" y2="651.3333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="651.3333333333334" x2="1572" y2="651.3333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="882.3333333333334" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">F</text>
+<text x="1563" y="882.3333333333334" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">F</text>
+<line x1="28" y1="802.6666666666667" x2="46" y2="802.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="802.6666666666667" x2="1572" y2="802.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="800.0" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
+<text x="800.0" y="990" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
+<text x="28" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" letter-spacing="2">CVIN-SSI PROGRAMME</text>
+<text x="1572" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="end" letter-spacing="2">BP-303  REV A</text>
+<rect x="105.0" y="215" width="170" height="40" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="190" y="233" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">SELLER (owner A)</text>
+<text x="190" y="248" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">controls did</text>
+<line x1="190" y1="255" x2="190" y2="800" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0" stroke-dasharray="6,5"/>
+<rect x="365.0" y="215" width="170" height="40" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="450" y="233" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">BUYER (owner B)</text>
+<text x="450" y="248" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">new controller</text>
+<line x1="450" y1="255" x2="450" y2="800" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0" stroke-dasharray="6,5"/>
+<rect x="635.0" y="215" width="170" height="40" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="720" y="233" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">REGISTRY</text>
+<text x="720" y="248" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">ERC-1056 / wrapper</text>
+<line x1="720" y1="255" x2="720" y2="800" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0" stroke-dasharray="6,5"/>
+<rect x="875.0" y="215" width="170" height="40" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="960" y="233" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">LEDGER</text>
+<text x="960" y="248" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">L2–L3</text>
+<line x1="960" y1="255" x2="960" y2="800" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0" stroke-dasharray="6,5"/>
+<rect x="1115.0" y="215" width="170" height="40" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="1200" y="233" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">ISSUER (DMV)</text>
+<text x="1200" y="248" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">registration VC</text>
+<line x1="1200" y1="255" x2="1200" y2="800" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0" stroke-dasharray="6,5"/>
+<rect x="1355.0" y="215" width="170" height="40" rx="0" fill="none" stroke="#f2f6ff" stroke-width="1.8" opacity="1.0"/>
+<text x="1440" y="233" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" fill="#f2f6ff" text-anchor="middle" font-weight="bold" opacity="1.0">INSURER</text>
+<text x="1440" y="248" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">old policy</text>
+<line x1="1440" y1="255" x2="1440" y2="800" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0" stroke-dasharray="6,5"/>
+<line x1="190" y1="285" x2="720" y2="285" stroke="#f2f6ff" stroke-width="1.4" opacity="1.0"/>
+<polygon points="711.8432299166701,288.8035643556663 720,285 711.8432299166701,281.1964356443337" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<text x="455.0" y="279" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">1  revokeDelegate(did, veriKey, oldDeviceKey)   [D1, event 11]</text>
+<text x="455.0" y="299" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0" font-style="italic">old telematics key dies immediately (validTo = now)</text>
+<line x1="190" y1="325" x2="720" y2="325" stroke="#f2f6ff" stroke-width="1.4" opacity="1.0"/>
+<polygon points="711.8432299166701,328.8035643556663 720,325 711.8432299166701,321.1964356443337" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<text x="455.0" y="319" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">2  changeOwner(did, B)   [U1/U4, event 12]</text>
+<text x="455.0" y="339" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0" font-style="italic">onlyOwner(did, msg.sender): A == identityOwner(did)</text>
+<line x1="720" y1="365" x2="960" y2="365" stroke="#f2f6ff" stroke-width="1.4" opacity="1.0"/>
+<polygon points="951.8432299166701,368.8035643556663 960,365 951.8432299166701,361.1964356443337" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<text x="840.0" y="359" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">3  owners[did] = B; DIDOwnerChanged(did, B, prev); changed[did] = block</text>
+<line x1="190" y1="395" x2="720" y2="395" stroke="#f2f6ff" stroke-width="1.4" opacity="1.0" stroke-dasharray="6,4"/>
+<polygon points="711.8432299166701,398.8035643556663 720,395 711.8432299166701,391.1964356443337" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<text x="455.0" y="389" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">4  updateOwnershipMapping (wrapper) — 2nd tx on pure mode</text>
+<text x="455.0" y="409" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0" font-style="italic">or one tx: transferVehicleOwnership (wrapper-controlled)</text>
+<line x1="450" y1="435" x2="720" y2="435" stroke="#f2f6ff" stroke-width="1.4" opacity="1.0"/>
+<polygon points="711.8432299166701,438.8035643556663 720,435 711.8432299166701,431.1964356443337" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<text x="585.0" y="429" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">5  addDelegate(did, veriKey, newDeviceKey, ttl)   [U2, event 11]</text>
+<text x="585.0" y="449" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0" font-style="italic">now B == identityOwner; A&#x27;s call here reverts</text>
+<polyline points="1200,475 1240,475 1240,497 1206,497" fill="none" stroke="#f2f6ff" stroke-width="1.4"/>
+<polygon points="1213.250462296293,493.6190539060744 1206,497 1213.250462296293,500.3809460939256" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<text x="1248" y="491" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">6  issue RegistrationCredential VC (subject did, holder B)</text>
+<line x1="1200" y1="523" x2="720" y2="523" stroke="#f2f6ff" stroke-width="1.4" opacity="1.0"/>
+<polygon points="728.1567700833299,519.1964356443337 720,523 728.1567700833299,526.8035643556663" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<text x="960.0" y="517" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">7  V3 anchor credential status on issuer identity   [event 13]</text>
+<line x1="1440" y1="553" x2="720" y2="553" stroke="#f2f6ff" stroke-width="1.4" opacity="1.0"/>
+<polygon points="728.1567700833299,549.1964356443337 720,553 728.1567700833299,556.8035643556663" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<text x="1080.0" y="547" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="middle" font-weight="normal" opacity="1.0">8  V5 revoke old insurance credential   [event 14]</text>
+<text x="1080.0" y="567" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0" font-style="italic">issuer-only; owner cannot un-revoke (sticky on CVIN)</text>
+<polyline points="450,593 490,593 490,615 456,615" fill="none" stroke="#f2f6ff" stroke-width="1.4"/>
+<polygon points="463.2504622962932,611.6190539060744 456,615 463.2504622962932,618.3809460939256" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.4"/>
+<text x="498" y="609" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">9  holds: VC (registration), disclosures; presents on demand [BP-203]</text>
+<text x="100" y="830" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">Adversary checks drawn from BP-403: A (after 2) calling 5 → revert; replaying 2&#x27;s signature on another identity → revert (nonce/identity-bound); insurer revoking a credential it did not issue → revert.</text>
+<rect x="46" y="46" width="1060" height="116" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.4" opacity="0.95"/>
+<text x="54" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">GENERAL NOTES</text>
+<line x1="46" y1="66" x2="1106" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="54" y="80" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">1. Lifecycle events 11–15 of the MOBI VID II sequence (framework §4.4): key rotation, ownership transfer, re-registration credential, revoke old insurance,</text>
+<text x="54" y="94" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   second transfer.</text>
+<text x="54" y="108" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2. On ERC-1056 U4 is two transactions (changeOwner + updateOwnershipMapping) or one via the wrapper (transferVehicleOwnership); txCount is recorded per op</text>
+<text x="54" y="122" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   (BP-102 ⑩).</text>
+<text x="54" y="136" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">3. Authorization at every step is msg.sender == identityOwner (G1) or an issuer role (G4); the 54-scenario suite asserts the unauthorized variant of each</text>
+<text x="54" y="150" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   step reverts (BP-403).</text>
+<rect x="1134" y="46" width="420" height="56" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<text x="1142" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">REVISIONS</text>
+<line x1="1134" y1="66" x2="1554" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1142" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">REV</text>
+<text x="1184" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">DESCRIPTION</text>
+<text x="1464" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">DATE</text>
+<text x="1142" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">A</text>
+<text x="1184" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">INITIAL RELEASE</text>
+<text x="1464" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-15</text>
+<line x1="1178" y1="66" x2="1178" y2="102" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<line x1="1458" y1="66" x2="1458" y2="102" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+
+<rect x="1034" y="782" width="520" height="48" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="0.95"/>
+<text x="1042" y="795" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="1">REFERENCE DOCUMENTS / SOURCE OF TRUTH</text>
+<text x="1042" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">cv2x-testbed/scripts/test_use_cases.py — use case 3 (used-car sale), 11 (dealer-mediated)</text>
+<text x="1042" y="823" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">1_blockchain-identity/benchmarks/scenarios/lifecycle.js (events 11–15) · contracts/ERC1056/CVINVehicleDIDRegistry.sol</text>
+<rect x="1034" y="836" width="520" height="118" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="2.0" opacity="1.0"/>
+<line x1="1034" y1="866" x2="1554" y2="866" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<line x1="1034" y1="914" x2="1554" y2="914" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<line x1="1334" y1="836" x2="1334" y2="866" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="1042" y="848" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">PROGRAMME</text>
+<text x="1042" y="861" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="start" font-weight="bold" opacity="1.0">CVIN-SSI PROGRAMME</text>
+<text x="1342" y="848" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DRAWING NO.</text>
+<text x="1342" y="861" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">BP-303</text>
+<text x="1042" y="878" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">TITLE</text>
+<text x="1042" y="894" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#f2f6ff" text-anchor="start" font-weight="bold" opacity="1.0">SEQUENCE — OWNERSHIP TRANSFER AND KEY ROTATION</text>
+<text x="1042" y="908" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">SV-10c: resale (U4) with device key rotation (U2 + D1), re-registration (V3) and revocati…</text>
+<text x="1040" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DRAWN</text>
+<text x="1040" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">N. PRAKASH</text>
+<line x1="1144" y1="914" x2="1144" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1150" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">CHECKED</text>
+<text x="1150" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">MEASUREMENT_CONDITIONS.md</text>
+<line x1="1314" y1="914" x2="1314" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1320" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">APPROVED</text>
+<text x="1320" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">—</text>
+<line x1="1384" y1="914" x2="1384" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1390" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DATE</text>
+<text x="1390" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-15</text>
+<line x1="1464" y1="914" x2="1464" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1470" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">SCALE</text>
+<text x="1470" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">NTS</text>
+<line x1="1514" y1="914" x2="1514" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1520" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">SHEET</text>
+<text x="1520" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">16 OF 23</text>
+<line x1="1554" y1="914" x2="1554" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+</svg>
