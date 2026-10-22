@@ -49,9 +49,9 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 | Step | Work | Gate |
 |---|---|---|
 | C0 | **done (pass 16, report 16):** amendment A6 first; verifier v3 (D37–D41 fixed or documented, D42 gate) and the D51 provider fix, each with tests failing on the old code (26 v3 tests; 2 D51 tests); mutation script 39/39; I1–I3, I5 re-run at `7d08dce` in a clean worktree: I1 1.226, **outside band, not falsified** (as it fell); I2 PASS (15 checks); I3 PASS; register #44–#46, #48 re-stated with history. **Verifier v3** (WM-1 audit, D37–D42): bound message size and depth before canonicalising; binding claims mandatory for RSU and controller credentials and `rsu` required in SPaT; integer-only `refresh_every` and a CLI parser error; credential validity against the injected clock; DID method and chain validated; the I2 gate asserts the warm variants are warm. A dated pre-registration amendment first; then re-run I1–I3 as runs of record | each fix has a test that fails on the old code; the committed mutation script extended; I1–I3 re-run on a clean tree |
-| C1 | `_resolve_ethr` reads the chain (owner, attributes, `changed`) instead of the static document | external DID suite re-run (#24); checker (#4); moved numbers re-registered |
-| C2 | `attestEvent` restricted to the vehicle's owner and delegates (review-2 K-4 follow-up) | regression test fails on the old code; gas re-run of record for the moved cells |
-| C3 | #32 and #37 re-run back to back on one host | the host-dependence note in C4 replaced by a measured comparison |
+| C1 | **done with a gap (2026-10-22, report 22; the clone lineage's H-R, merged in PR #3):** the resolver reads chain state for did:ethr and did:mobi; external suite re-run, offline 335/336 and on-chain 311/311 (#24, separate inventories); checker #4 re-run, unchanged at 94.3 %. **Gap:** the checker still scores offline-synthesised documents (and the raw-VIN did:mobi placeholder, author decision handback item 16). `_resolve_ethr` reads the chain (owner, attributes, `changed`) instead of the static document | external DID suite re-run (#24); checker (#4); moved numbers re-registered |
+| C2 | **done with an author decision (2026-10-22, report 22; the clone lineage's H-A, merged in PR #3):** an OWNER-role attester must be the vehicle's current owner and each address attests once; regression tests fail on the old code; pin re-measured on the merged bytecode (192,040, #28); nine-standard and MOBI sweep re-run (#25). **Open:** organisational roles keep registry-wide scope by design (D54 → G4, the author's call). `attestEvent` restricted to the vehicle's owner and delegates (review-2 K-4 follow-up) | regression test fails on the old code; gas re-run of record for the moved cells |
+| C3 | **done (2026-10-22, report 22; the clone lineage's H-K, merged in PR #3):** register #54, same host, both modes in alternating blocks; crux C4 claim rewritten from the measured comparison. #32 and #37 re-run back to back on one host | the host-dependence note in C4 replaced by a measured comparison |
 
 ### D. Thesis readiness. *Owner: thesis methodology specialist.*
 | Step | Work | Gate |
@@ -98,6 +98,7 @@ No SUMO install (N-4), no Sepolia run (N-11), no new pre-registered experiment, 
 nine-standard contract set beyond C2, no chapter prose beyond the sentences D1 finds missing.
 
 ## 7. Revisions
+- 2026-10-22 (pass 22) — C3, C1 (gap: checker offline) and C2 (D54 open) recognised as done by the clone lineage merged in PR #3; A6 largely done by the merge re-runs (harness run `2026-10-21T03-28-59Z_a9e2a28`, #39 re-run `2026-10-21T09-02-58Z_bd55af2`); A3b partly (#33). Next: A3.
 - 2026-10-10 (initial) — written before the WM-1 audit.
 - 2026-10-15 (pass 18) — B2 done (report 18). Next: C3.
 - 2026-10-14 (pass 17) — B1 done (report 17). Next: B2.

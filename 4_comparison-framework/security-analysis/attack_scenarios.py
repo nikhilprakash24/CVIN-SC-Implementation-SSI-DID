@@ -468,6 +468,14 @@ def print_matrix(matrix):
 # Main
 # ---------------------------------------------------------------------------
 
+
+def _run_stamp():
+    """The shared run stamp (WM-2 A3; scope registered in A2): commit, code_dirty, tree_dirty, scope, scope_sha."""
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(HERE)), "tools", "run_identity"))
+    from stamp import stamp
+    return stamp(__file__)
+
+
 def main():
     ap = argparse.ArgumentParser(description="Thrust 5 executable security suite")
     ap.add_argument("--offchain-only", action="store_true",
@@ -486,6 +494,7 @@ def main():
 
     sybil_costs = load_sybil_costs()
     matrix = build_matrix(onchain, offchain, sybil_costs)
+    matrix["run"] = _run_stamp()
 
     matrix_path = os.path.join(RESULTS_DIR, "security_matrix.json")
     with open(matrix_path, "w") as f:
