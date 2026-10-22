@@ -40,7 +40,6 @@ CLASSES = {
     "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json": ("history", "same"),
     "4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json": ("history", "same"),
     "4_comparison-framework/results/sensitivity.json": ("stamp producer", "1_blockchain-identity/scripts/benchmark_scaling.js (July run; re-run due)"),
-    "4_comparison-framework/security-analysis/results/attack_results.json": ("stamp producer", "1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js (writes to runs/ since WM-2 A4; stamped on its next promoted run)"),
     "cv2x-testbed/sumo/results/v2v_latency.json": ("single run", "default output of one harness run; the results of record are v2v_latency_stats.json"),
     "cv2x-testbed/results/freshness_k_samehost.json": ("derived", "summary of the 12 stamped same-host replicates in freshness_k_samehost/ (#54, clone lineage #42); all_git_clean recorded"),
     "5_zkp-agent-identity/results/learning_curve.json": ("derived", "written by attacks/train_responder.py; deterministic, reproduced byte for byte by bench/run_all.sh before each run of record (AAR 19)"),

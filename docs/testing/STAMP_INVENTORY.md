@@ -4,7 +4,7 @@
 
 **Scope** (WM-2 step A1, N-21): 209 tracked result JSON files outside the lineage copies (docs/prior-survey/, docs/review02/, _research-copies/, sandbox/options/, docs/figures/). aggregated run directory: 58; covered by meta.json: 13; derived: 14; external tool output: 84; history: 2; own row: 38; uncovered: 0.
 
-28 of 38 individually listed result files carry a complete stamp.
+31 of 38 individually listed result files carry a complete stamp.
 
 | File | date | commit | dirty (code) | dirty (any) | code changed since | toolchain | class |
 |---|---|---|---|---|---|---|---|
@@ -21,10 +21,10 @@
 | `4_comparison-framework/results/scaling_marginal.json` | 2026-10-09T02:27:41.933Z | d0cc19c | False (hand check) | True | yes | 0.8.24 | hand check: same |
 | `4_comparison-framework/results/scaling_verify.json` | 2026-10-04T09:22:18+00:0 | d78e344a79705286bf7572a0 | False (from any) | False | yes | 3.11.15 |  |
 | `4_comparison-framework/results/sensitivity.json` | 2026-07-24T03:18:28.250Z | MISSING | MISSING | MISSING | MISSING | 0.8.24 | stamp producer: 1_blockchain-identity/scripts/benchmark_scaling.js (July run; re-run due) |
-| `4_comparison-framework/results/w3c_compliance.json` | 2026-10-22T22:25:42.3041 | db19ff202f702328de505d8a | False (inert) | MISSING | no | MISSING | **unclassified** |
-| `4_comparison-framework/security-analysis/results/attack_results.json` | 2026-07-19T21:10:16.411Z | MISSING | MISSING | MISSING | MISSING | 0.8.24 | stamp producer: 1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js (writes to runs/ since WM-2 A4; stamped on its next promoted run) |
-| `4_comparison-framework/security-analysis/results/onchain_security.json` | 2026-10-22T22:25:45.962Z | db19ff2 | False | True | no | 0.8.24 | hand check: same |
-| `4_comparison-framework/security-analysis/results/security_matrix.json` | 2026-10-22T22:25:46Z | db19ff202f702328de505d8a | False (inert) | MISSING | no | MISSING | **unclassified** |
+| `4_comparison-framework/results/w3c_compliance.json` | 2026-10-22T22:27:29.0553 | b8d5ba06ce6d6086935b6651 | False (inert) | MISSING | no | 3.13.16 |  |
+| `4_comparison-framework/security-analysis/results/attack_results.json` | 2026-10-22T22:28:15.544Z | 036b6e4 | False | False | no | 0.8.24 |  |
+| `4_comparison-framework/security-analysis/results/onchain_security.json` | 2026-10-22T22:27:32.282Z | b8d5ba0 | False | True | no | 0.8.24 | hand check: same |
+| `4_comparison-framework/security-analysis/results/security_matrix.json` | 2026-10-22T22:27:32Z | b8d5ba06ce6d6086935b6651 | False (inert) | MISSING | no | 3.13.16 |  |
 | `cv2x-testbed/results/freshness_k.json` | 2026-10-04T09:24:10+00:0 | 8216507 | False (from any) | False | yes | 2.28.6 |  |
 | `cv2x-testbed/results/freshness_k_probe.json` | 2026-10-04T22:12:41+00:0 | dd31d22 | False (from any) | False | yes | 3.11.15 |  |
 | `cv2x-testbed/results/freshness_k_probe_fullref.json` | 2026-10-04T22:11:47+00:0 | f660402 | False (from any) | False | yes | 3.11.15 |  |
