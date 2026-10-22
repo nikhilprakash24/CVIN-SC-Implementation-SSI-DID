@@ -15,6 +15,7 @@ class ERC721Adapter extends IdentityAdapter {
     super(opts);
     this.unsupported["U5_meta_tx"] = "no signed-operation primitive";
     this.unsupported["D2_revoke_attribute"] = "service records are append-only; no retract primitive";
+    this.unsupported["P1_create_presentation"] = "the token holder has no write path (service records are SERVICE_CENTER_ROLE)";
     this.issuerHandles = new Map();
   }
 
@@ -120,7 +121,7 @@ class ERC721Adapter extends IdentityAdapter {
 
   // Issuer identity is itself an NFT; the issuer's key is ownerOf(issuerToken).
   async anchorIssuerKey(issuer, key) {
-    const vin = "ISS" + key.address.slice(2, 16).toUpperCase(); // 17 chars, unique per key
+    const vin = "ESS" + key.address.slice(2, 16).toUpperCase(); // 17 chars, unique per key; no I/O/Q (D13 VIN alphabet, merged 2026-10-06)
     const tx = await this._nft(this.actors.manufacturer).mintVehicle(key.address, vin, "issuer", "", 0, "", "");
     const tokenId = await this._tokenIdFromReceipt(tx);
     this.issuerHandles.set(issuer.address, { tokenId, controller: key });

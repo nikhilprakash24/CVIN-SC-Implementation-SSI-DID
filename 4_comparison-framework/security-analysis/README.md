@@ -122,7 +122,7 @@ issuer signature reverts `invalid issuer signature`. Replay is **partial**: the
 signature binds `address(this)+topic+data` (blocking cross-identity replay) but
 has no nonce/expiry/chainid, so a same-identity re-anchor is accepted
 (idempotent). Plaintext VIN in `string public vin` + `VehicleIdentityCreated`
-event. Most expensive to spam (~1.54M gas/identity). No recovery.
+event. Most expensive to spam (~1.76M gas/identity; register #25). No recovery.
 
 **ERC-1155 (soulbound credentials).** Registration/issuance gated by
 `ISSUER_ROLE`. **Soulbound**: a holder-initiated `safeTransferFrom` of the birth
@@ -203,7 +203,7 @@ not key recovery).
    CVIN-Combined bind the claim to context but lack a nonce (idempotent
    re-anchor). The pure token standards have no in-contract signature to replay.
 4. **Recovery is the sharpest differentiator.** ERC-4337 is the only standard
-   with genuine on-chain key recovery (guardian). ERC-1155/LSP8 offer
+   with genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open) (guardian). ERC-1155/LSP8 offer
    issuer/authority-mediated re-binding. Everything else: a compromised owner key
    is permanent loss.
 5. **Sybil resistance tracks issuer-gating, not just gas.** The cheapest

@@ -264,9 +264,9 @@
       "outcome": "DEFENDED",
       "threat": "Elevation of Privilege (identity/ownership takeover)",
       "attack": "attacker calls safeTransferFrom to pull a victim's soulbound BIRTH_CERT identity token",
-      "defense": "ERC1155 operator-approval check (ERC1155MissingApprovalForAll). The soulbound _update guard (holder transfers require ISSUER_ROLE) is not what stops this attack: the approval check reverts first",
-      "revertReason": "ERC1155MissingApprovalForAll(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x70997970C51812dc3A010C7d01b50e0d17dc79C8)",
-      "expectedRevert": "ERC1155MissingApprovalForAll(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, 0x70997970C51812dc3A010C7d01b50e0d17dc79C8)",
+      "defense": "D7: safeTransferFrom / safeBatchTransferFrom revert for everyone (holders, operators and issuers alike); only the issuer re-binding paths move credentials. Before the fix the OZ approval check stopped this attacker while an approved issuer could still move the BIRTH_CERT without re-binding the VIN (defect D7). Was: ERC1155 operator-approval check (ERC1155MissingApprovalForAll). The soulbound _update guard (holder transfers require ISSUER_ROLE) is not what stops this attack: the approval check reverts first",
+      "revertReason": "Error(\"CVIN1155: credentials are soulbound (issuer-mediated transfer only)\")",
+      "expectedRevert": "Error(\"CVIN1155: credentials are soulbound (issuer-mediated transfer only)\")",
       "control": "PASS"
     },
     "signatureReplay": {

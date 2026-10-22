@@ -1,0 +1,210 @@
+# Superseded figures that must not be cited as current (plan 2026-10-09 P3.4; TSR R7).
+# Read by docs/testing/check_docs_numbers.py. Each entry: the superseded text (regex), the current
+# value and its register row. Patterns are matched against a normalised line (no thousands separators; `ms`/`%`
+# spaced): see check_docs_numbers.py. History markers are whole words (regular expressions).
+scope_note: every tracked *.md except the history globs (dated records, plans, reviews, generated run reports)
+history:
+- docs/AFTER_ACTION_REPORT_*.md
+- docs/HANDBACK_*.md
+- docs/SESSION_MANIFEST_*.md
+- docs/META_COMMENTARY_*.md
+- docs/PLAN_*.md
+- docs/SCOPE_CHANGES.md
+- docs/DEFECT_LOG.md
+- docs/MEASUREMENT_CONDITIONS.md
+- docs/review02/*
+- docs/reconciliation/*
+- docs/prior-survey/*
+- docs/planning/*
+- docs/conformance/reports/*
+- 1_blockchain-identity/results/*
+- 1_blockchain-identity/_research-copies/*
+- cv2x-testbed/results/*
+- 4_comparison-framework/results/*
+- sandbox/grand/report/*
+- docs/thesis/CRUX_REGISTER.md
+- CHANGELOG.md
+- MASTER_UPDATE.md
+- PROVENANCE.md
+- docs/AFTER_ACTION_REPORT.md
+- docs/AUDIT_*.md
+- docs/milestones/*
+- docs/phase2/focus/*/CAPTURE.md
+- docs/HANDOFF_*.md
+- docs/REVIEW_*.md
+- docs/RESEARCH_AUDIT.md
+- docs/DEVELOPMENT_HISTORY.md
+- docs/ORIGINAL_PROMPT_AND_DIRECTION.md
+- HANDOFF-DATA-COLLECTION-FRAMEWORK.md
+- docs/milestones/audit_WM-1/*
+- docs/milestones/review_pass11/*
+history_markers:
+- superseded
+- history
+- historical
+- <!-- history
+- \(S\)
+- goes from
+- was
+- were
+- July
+- at the merge
+- pre-merge
+- withdrawn
+entries:
+- pattern: 52558[–-]52606
+  current: 52,582–52,606 over declared seeds 1–30 (WM-2 B1)
+  row: 47
+- pattern: 35014[–-]35062
+  current: 35,038–35,062 over declared seeds 1–30 (WM-2 B1)
+  row: 47
+- pattern: (?<![\d.])1\.096(?!\d)   # anchored at the lineage merge (PR #3): matched inside arXiv 2501.09674
+  current: 1.226 [1.219, 1.238], outside band, not falsified (verifier v3, WM-2 C0)
+  row: 44
+- pattern: 0\.886 ms
+  current: 0.900 ms [0.889, 0.935] (verifier v3)
+  row: 48
+- pattern: 65[–-]71 ms
+  current: 103.177 ms median at h = 50 (D58)
+  row: 31
+- pattern: 90 injected attacks
+  current: 150 injected attacks (5 per run × 30 runs; D59)
+  row: 27
+- pattern: 93\.2 ?%
+  current: 94.3 %
+  row: 4
+- pattern: 0\.165 ms
+  current: 0.153 ms [0.151, 0.154]
+  row: 27
+- pattern: \[0\.162, ?0\.168\]
+  current: '[0.151, 0.154]'
+  row: 27
+- pattern: 0\.400 ms
+  current: 0.399 ms
+  row: 27
+- pattern: '1704992'
+  current: ERC-725xy create 1,680,816; heaviest create ERC-735 1,757,881
+  row: 25
+- pattern: '52178'
+  current: 52,216 (CVIN-Combined create)
+  row: 25
+- pattern: 52170\b
+  current: 52,216 (CVIN-Combined create)
+  row: 25
+- pattern: '46862'
+  current: 46,830
+  row: 25
+- pattern: 542429|542378
+  current: 545,101 (ERC-721 create)
+  row: 25
+- pattern: 1598928|1404108|1535776
+  current: 1,757,881 (ERC-735 create)
+  row: 25
+  note: '1,535,776 restored 2026-10-10 (audit finding A-2): its removal in pass 11 rested on register #34, which itself still carried the pre-merge harness value'
+- pattern: ~33×|~32×|32\.2×
+  current: ~34× (52,216 → 1,757,881)
+  row: 25
+- pattern: '1450824'
+  current: 1,450,146
+  row: 26
+- pattern: P\\?\* ?≈ ?772|≈ ?772 neighbou
+  current: P* ≈ 609 (extrapolated)
+  row: 26
+- pattern: 0\.130 ms/neighbou
+  current: 0.164 ms/neighbour
+  row: 26
+- pattern: 328/441|336/441
+  current: 335/336
+  row: 24
+- pattern: \b217 Hardhat|\b219 Hardhat|\b369 Hardhat|\b386 Hardhat
+  current: see sandbox/grand/report/GRAND_REPORT.md
+  row: 5
+- pattern: \b90 failures|3 injected attacks
+  current: 150 failures = 5 injected attacks × 30
+  row: 27
+- pattern: \b(217|219|369|386) passing
+  current: see sandbox/grand/report/GRAND_REPORT.md
+  row: 5
+- pattern: \b1050787\b
+  current: '1,050,809 (#30, #35)'
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b2701239\b
+  current: '2,706,685 (#30, #35)'
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b1150981\b
+  current: 1,261,575 (#35)
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b5369010\b
+  current: 5,797,549 (#35)
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b2533978\b
+  current: 2,559,537 (#35)
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b1505258\b
+  current: 1,508,413 (#35)
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b266995\b
+  current: 271,402 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b103913\b
+  current: 107,729 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b399844\b
+  current: '402,567 (#29, #34)'
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b76808\b
+  current: '76,830 (#29, #34)'
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b145662\b
+  current: 145,684 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b132515\b
+  current: 135,544 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b317814\b
+  current: 318,054 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b57147\b
+  current: 80,131 (#34)
+  row: 34
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b289788\b
+  current: 294,157 (#35)
+  row: 35
+  note: pre-merge harness value (run 0eef6af); audit finding A-1
+- pattern: \b(217|219|369|386)[ -](tests?|test suite|Hardhat tests?)\b|\b219 passing|\b60 passed
+  current: see sandbox/grand/report/GRAND_REPORT.md
+  row: 5
+  note: 'audit finding A-7: phrasings the first test-count pattern missed'
+- pattern: ~295 (automated |green )?tests
+  current: see sandbox/grand/report/GRAND_REPORT.md
+  row: 5
+- pattern: ~?1\.(40|54) ?M\b
+  current: '~1.76 M (ERC-735 create, #25)'
+  row: 25
+  note: rounded forms of superseded ERC-735 creates; audit finding A-2
+- pattern: \b(217|219|369|386)\b[^|]{0,25}\b(tests?|passing|contract tests)\b|\btested \((217|219|369)\)
+  current: see sandbox/grand/report/GRAND_REPORT.md
+  row: 5
+  note: 'audit finding T-1: count near the word, any phrasing'
+- pattern: ~?(33|32\.2) ?[×x]\b
+  current: '33.7× (52,216 to 1,757,881; #25)'
+  row: 25
+  note: 'audit finding T-17: ASCII x and no tilde'
+- pattern: \b93,2 ?%|\b93\.2 percent
+  current: 94.3 %
+  row: 4
+  note: 'audit finding T-17: decimal comma and spelled percent'

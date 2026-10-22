@@ -4,8 +4,10 @@
 so that any stopping point is a clean handoff, not an abrupt one. Updated at every
 deliverable boundary.
 
-**Last updated:** during the Consolidation & Provenance Pass (see plan in
-`/root/.claude/plans/wild-jumping-gosling.md`, mirrored below).
+**Last updated:** during the Consolidation & Provenance Pass (bundle era, July 2026).
+**Status (2026-10-03):** historical. Push has been restored and the bundle merged; the
+current entry point is `docs/HANDBACK_2026-09-30.md`, and current thinking-out-loud is
+`docs/META_COMMENTARY_2026-10.md`. Kept for provenance.
 
 ---
 

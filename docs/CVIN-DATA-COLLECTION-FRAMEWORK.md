@@ -19,6 +19,10 @@ Three design rules follow from the audit (F1–F10):
 
 ---
 
+## 0a. Relation to the basic digital-ID set
+
+This catalogue is an **extension of the programme's basic digital-ID set**, the canonical sandbox's `IMinimalSSI` F1–F12 (Set A identity/keys, Set B credentials) with its 12-test admission regime. The basic set decides *whether* a substrate implements the twelve functions; this framework keeps that decision as the conformance gate and adds exact per-function cost, lifecycle composition, read-path cost, a transport condition and breadth across ten substrates. The function-level mapping, the per-substrate coverage table (analysis A6) and the proposed reconciliation of the two compliance regimes are in `docs/BASIC_ID_SET_EXTENSION.md`; the two basic-set functions without a catalogue op yet (`execute`, F8 `createPresentation`) are scheduled there as `X1` and `P1`.
+
 ## 1. What is compared
 
 ### 1.1 Substrates (the nine standards + two baselines)
@@ -135,6 +139,15 @@ Lifecycle events whose primitive a substrate lacks (2, 11, 12 for both) are reco
 | batch | `setDataBatch` (data), none for creation | `setDataBatchForTokenIds` (data), none for mint | none | none |
 
 For `erc725xy`, `erc4337` (and `erc725` before them) the issuer's credential status lives in the issuer's own per-identity contract, deployed once as a shared cost (`prepareIssuer` deploys one per fresh issuer, unmeasured).
+
+### 2.2c Basic-set functions added to the catalogue (2026-10-15; `docs/BASIC_ID_SET_EXTENSION.md` §4)
+
+| Op ID | Basic-set function | Semantic | Realisations | n/a (and why) |
+|---|---|---|---|---|
+| `P1_create_presentation` | Set B, **F8 `createPresentation`** | the **holder** anchors a presentation hash under a nonce-unique key (replay protection by key; the canon's O1 pattern) | ERC-1056 `setAttribute(did, keccak("did/vp/"‖hash), hash, 300 s)`; wrapper `setServiceEndpoint`; CVIN event attribute; ERC-735 owner self-signed claim; ERC-725 `addKey(hash, purpose 7)`; ERC-725xy `setData`; ERC-4337 `setAttribute` | ERC-721 (holder has no write path — service records are role-gated), ERC-1155 (soulbound, issuer-minted), LSP8 (authority-only data) |
+| `X1_execute_call` | Set A **`execute`** (agent proxy) | the identity itself performs one external call (`CVINExecuteTarget.setValue`, target pre-warmed so every iteration overwrites a non-zero slot) | ERC-725xy `execute(CALL, …)`; ERC-4337 `execute(target, 0, data)` | registries (ERC-1056 both modes, CVIN, ERC-721, ERC-1155, LSP8, ERC-735: no executor); ERC-725 basic (`execute` only emits — a stub) |
+
+Both are core ops: the conformance gate asserts that the presentation hash appears in the resolved document and that the call target sees the **account** (not the owner EOA) as `msg.sender`. They run in the crud scenario only; the lifecycle sequence is unchanged so lifetime totals stay comparable with earlier runs.
 
 ### 2.3 "Beyond CRUD" — per-operation dimensions recorded for every op
 

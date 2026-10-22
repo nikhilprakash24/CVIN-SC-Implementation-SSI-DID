@@ -1,0 +1,10 @@
+<!-- Source: branch origin/sandbox-onboarding (tip 96bb269), path evidence/EVIDENCE_MANIFEST.txt, last changed in commit 91c6e1a, blob 605c790. Imported 2026-10-09 as provenance; not maintained. -->
+# EVIDENCE_MANIFEST - append-only SHA-256 register (created 2026-07-05, P1)
+7ca9ea9d8e9358b33334b318bafee515fe39e1948e4118c34b1538c7dde25698 *WO-S0_filetree_20260620-224319.txt
+59c184e6dd915bbb31af75e23901bb16f6dcf153bc1fa6589d6964ab28ef6905 *WO-S0_network_secrets_20260620-224319.txt
+857be3a0ad01a5aeb18d6e71de61d040ae920a7fb3dfd6a28c95647b041ec383 *WO-S0_pragmas_20260620-224319.txt
+88d20aa7ec8076eccb153de97a0b3b58ac3da760548abd9b7c417a81e4764307 *P1_buildIII_npmci_20260705-212116Z.log
+f712aead2ecdc45893000d5e4fc57ed8f49dbe0a17ec636459d980ec45db6d53 *P1_git_insteadof_20260705-212055Z.txt
+dab85221d756924ecb2159a7573d7852251238177634209521f1221ef1f53403 *P1_solc_vendor_20260705-211733Z.txt
+1289ef4a2f623ef86b35c28d1c0ae74d6127c582544009d8d46e7e53e6cb5202 *P1_upstream_diff_20260705-211743Z.txt
+8009616d2e9e232ee9ba3c867eb0acd1684f82c2c44783c3ec916a1f028f4ea7 *P1_v7_npmci_20260705-212122Z.log

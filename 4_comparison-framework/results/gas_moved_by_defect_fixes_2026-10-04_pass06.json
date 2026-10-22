@@ -1,0 +1,91 @@
+{
+  "generated": "2026-10-04",
+  "pass": "AFTER_ACTION_REPORT_06 (D7/D8, D9, D11b)",
+  "baseline_commit": "a764387 (results of record after pass 05)",
+  "condition": "M1: solc 0.8.24, optimizer 200 + viaIR, evm cancun, OpenZeppelin 5.0.2, Hardhat in-process",
+  "cells_total": 61,
+  "cells_moved": 10,
+  "moved": [
+    {
+      "standard": "ERC-1155",
+      "operation": "deployRegistry",
+      "before": 2380231,
+      "after": 2871435,
+      "delta": 491204,
+      "cause": "D7/D8: overridden transfer entry points, held-type bitmap, issuerTransferIdentity, credentialTypesOf, URI event (code size)"
+    },
+    {
+      "standard": "ERC-1155",
+      "operation": "createIdentity",
+      "before": 107238,
+      "after": 107729,
+      "delta": 491,
+      "cause": "D8: _update bitmap branch (BIRTH_CERT skipped; extra code path)"
+    },
+    {
+      "standard": "ERC-1155",
+      "operation": "updateAttribute",
+      "before": 49130,
+      "after": 51199,
+      "delta": 2069,
+      "cause": "D8: setTokenURI now also emits the standard URI event"
+    },
+    {
+      "standard": "ERC-1155",
+      "operation": "addDelegateOrClaim",
+      "before": 57137,
+      "after": 80131,
+      "delta": 22994,
+      "cause": "D8: first issuance of a type sets the vehicle held-type bitmap (one cold SSTORE, ~22 k) so the identity can move atomically"
+    },
+    {
+      "standard": "ERC-1155",
+      "operation": "revoke",
+      "before": 30647,
+      "after": 33049,
+      "delta": 2402,
+      "cause": "D8: bitmap cleared when the balance reaches zero"
+    },
+    {
+      "standard": "ERC-1155",
+      "operation": "transferOwnership",
+      "before": 83748,
+      "after": 86298,
+      "delta": 2550,
+      "cause": "D8: issuerTransferCredential(BIRTH_CERT) checks the recipient is unregistered and the vehicle holds nothing else"
+    },
+    {
+      "standard": "MOBI-VID-V2",
+      "operation": "deployRegistry",
+      "before": 3966355,
+      "after": 4169921,
+      "delta": 203566,
+      "cause": "D11b: anchorVehicleKey, vehicleKeyAnchored, VEHICLE_KEY_ATTRIBUTE (code size)"
+    },
+    {
+      "standard": "MOBI-VID-V2",
+      "operation": "updateAttribute",
+      "before": 306941,
+      "after": 306985,
+      "delta": 44,
+      "cause": "D11b: function-dispatch offset (+44, no logic change on this path)"
+    },
+    {
+      "standard": "MOBI-VID-V2",
+      "operation": "addDelegateOrClaim",
+      "before": 35277,
+      "after": 35321,
+      "delta": 44,
+      "cause": "D11b: function-dispatch offset (+44, no logic change on this path)"
+    },
+    {
+      "standard": "MOBI-VID-V2",
+      "operation": "transferOwnership",
+      "before": 200023,
+      "after": 200089,
+      "delta": 66,
+      "cause": "D11b: function-dispatch offset (+66, no logic change on this path)"
+    }
+  ],
+  "unchanged_note": "D9 (payToll guard) touches no benchmarked operation; the other seven standards are byte-identical to the pass-05 run."
+}

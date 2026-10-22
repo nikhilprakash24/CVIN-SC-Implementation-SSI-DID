@@ -52,7 +52,7 @@ real gas + honest fidelity (5/5 vs 3/5). **Material:** `mobi_vid_backends.*`,
 
 ### SP-5 — "V2V Verification Fits the Safety Budget" (H3)
 **Premise.** Real secp256k1/P-256 crypto, N=30 seeded runs, 1.65M verifications:
-SSI warm verify 0.165 ms [0.162, 0.168] vs a ~100 ms budget (~600× margin), attacks
+SSI warm verify 0.153 ms [0.151, 0.154] vs a ~100 ms budget (~650× margin), attacks
 caught with zero false pos/neg. **Material:** `v2v_latency_stats.json`,
 `run_v2v_stats.py`, `sumo_identity_integration.py`; Ch5 §5.4. **Why side-paper:** a
 self-contained feasibility result for the V2X community. **Overlap:** §5.4.
@@ -74,7 +74,7 @@ differential controls) with a threat matrix for what revert-tests cannot express
 
 ### SP-8 — "An Executable W3C Compliance Checker" (methodology/tools)
 **Premise.** A runnable checker that executes positive + negative checks against a
-live VC/DID layer, CI-gated ≥90%, yielding a measured 93.2% with two documented
+live VC/DID layer, CI-gated ≥90%, yielding a measured 94.3% with two documented
 deviations counted as failures — not a self-graded checklist. **Material:**
 `cv2x-testbed/scripts/w3c_compliance_checker.py`; Ch3 §3.6, Ch5 §5.5. **Why
 side-paper:** a tool/method others can adopt. **Overlap:** §5.5.

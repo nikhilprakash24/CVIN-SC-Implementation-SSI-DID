@@ -26,6 +26,7 @@
  * Run:  npx hardhat run scripts/benchmark_gas.js
  */
 
+const { runStamp } = require("./lib/run_stamp");
 const fs = require("fs");
 const path = require("path");
 const { ethers } = require("hardhat");
@@ -445,6 +446,10 @@ async function benchmarkERC735(signers) {
 
   const identityAddress = await holder.getAddress();
 
+  // D25a setup (not measured): authorise the issuers the benchmark uses.
+  await (await holder.authorizeIssuer(manufacturer.address, VIN_ATTESTATION)).wait();
+  await (await holder.authorizeIssuer(inspector.address, INSPECTION)).wait();
+
   // addDelegateOrClaim: first addClaim (issuer-signed VIN attestation, ClaimAdded).
   const dataV1 = ethers.toUtf8Bytes(`VIN:${VIN}`);
   const sigV1 = await signClaim(manufacturer, identityAddress, VIN_ATTESTATION, dataV1);
@@ -539,7 +544,7 @@ async function benchmarkERC1155(signers) {
       credential.issuerTransferCredential(vehicle.address, newVehicleAddress.address, BIRTH_CERT)
     ),
     1,
-    "issuerTransferCredential of the BIRTH_CERT: re-binds VIN + registration mappings to the new vehicle address. Credentials are soulbound - holder-initiated transfers revert by design."
+    "issuerTransferCredential of the BIRTH_CERT on a vehicle holding nothing else: re-binds VIN + registration mappings to the new vehicle address. Credentials are soulbound - the standard transfer entry points revert for everyone (D7 fix); an identity that still holds credentials moves atomically through issuerTransferIdentity (not benchmarked: its cost grows with the number of held types)."
   );
 
   return results;
@@ -857,6 +862,7 @@ async function main() {
     ...results,
     metadata: {
       solcVersion: "0.8.24",
+    ...runStamp(__filename),
       solcSettings: { optimizer: { enabled: true, runs: 200 }, viaIR: true },
       ozVersion: "5.0.2",
       date: new Date().toISOString(),

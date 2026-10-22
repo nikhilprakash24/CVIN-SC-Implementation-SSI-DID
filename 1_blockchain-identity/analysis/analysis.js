@@ -157,6 +157,27 @@ function buildAnalysis(runDir) {
     } };
   out.push(emit(runDir, "analysis_rubric_inputs", spec5, footer));
 
+  // ---- 6. Basic digital-ID set coverage (docs/BASIC_ID_SET_EXTENSION.md §2.2) ---------
+  // IMinimalSSI Set A (identity/keys: F1–F4, F9–F12) and Set B (credentials: F5–F8) mapped
+  // onto catalogue ops; `execute` and F8 createPresentation have no catalogue op yet.
+  const SET_A = ["C1_create_identity", "C2_create_with_attributes", "R1_resolve_owner", "R3_resolve_document", "U1_rotate_controller", "U2_add_delegate", "R4_verify_delegate", "D1_revoke_delegate", "U3_set_attribute", "D2_revoke_attribute", "D3_deactivate_identity", "X1_execute_call"];
+  const SET_B = ["V1_issuer_key_anchor", "V3_anchor_status", "V6_status_check", "V5_revoke_credential", "P1_create_presentation"];
+  const cov = (a, ops) => `${ops.filter((o) => supported(a, o)).length}/${ops.length}`;
+  const missing = (a, ops) => { const m = ops.filter((o) => supported(a, o) === false).map((o) => o.split("_")[0]); return m.length ? m.join(" ") : "—"; };
+  const spec6 = { title: "A6 — Basic digital-ID set (IMinimalSSI) coverage by catalogue op: Set A identity/keys incl. X1 execute, Set B credentials incl. P1 createPresentation (F8)", rowLabel: "Basic-set view", rowKeys: ["A_COV", "A_MISS", "B_COV", "B_MISS", "ADMIT", "EXTRA"], rowLabels: { A_COV: "Set A ops supported", A_MISS: "Set A missing", B_COV: "Set B ops supported", B_MISS: "Set B missing", ADMIT: "**Admitted** (all mapped Set A + B ops present)", EXTRA: "Extension ops beyond the basic set" }, colKeys: adapters, colLabels,
+    cellFn: (r, a) => {
+      switch (r) {
+        case "A_COV": return cov(a, SET_A);
+        case "A_MISS": return missing(a, SET_A);
+        case "B_COV": return cov(a, SET_B);
+        case "B_MISS": return missing(a, SET_B);
+        case "ADMIT": return [...SET_A, ...SET_B].every((o) => supported(a, o)) ? "yes" : "no";
+        case "EXTRA": return ["R2_resolve_by_vin", "U4_transfer_vehicle", "U5_meta_tx"].filter((o) => supported(a, o)).map((o) => o.split("_")[0]).join(" ") || "—";
+        default: return null;
+      }
+    } };
+  out.push(emit(runDir, "analysis_basic_set", spec6, footer));
+
   const json = { runId: meta.runId, baseline: BASELINE, criteria: crit.map(({ id, label, lower }) => ({ id, label, lower })), values: vals, dominatedBy: dom, frontier };
   fs.writeFileSync(path.join(runDir, "analysis.json"), JSON.stringify(json, null, 2));
   writeText(path.join(runDir, "ANALYSIS.md"), out.join("\n"));

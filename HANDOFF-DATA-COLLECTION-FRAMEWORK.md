@@ -1,3 +1,7 @@
+> **Dated handoff (2026-10-04).** Its tables are from the pre-merge harness run `2026-10-04T09-50-29Z_0eef6af`, now
+> superseded. Current values: `docs/MEASUREMENT_CONDITIONS.md` #29–#36 (re-stated 2026-10-10 from run
+> `2026-10-09T02-09-36Z_7a9a996`) and `1_blockchain-identity/results/metrics/latest/tables/`.
+
 # HANDBACK — Data-Collection & Comparative-Analysis Framework ("CRUD and Beyond")
 
 **Author:** Nikhil Prakash (MASc, UBC ECE) — nikhil.prakash1995@gmail.com
@@ -86,7 +90,7 @@ Gas, bytes, slot counts and RPC counts are exact, and two runs of one commit giv
 |---|---|---|
 | H1 "≥ 10× cheaper for create/update" | **Refuted as stated.** Lifetime 2.6× / 3.0×; C1 5.2× / 8.5×; U3 3.4×; ERC-1056 is *not* the minimum on U1/U4/D3 (ERC-725) or U2/D1 (ERC-721). | Restate H1 as "cheapest substrate on lifetime cost and on every CREATE/anchor op, with the fewest zero→nonzero storage writes (8 vs 83–92)"; drop the 10× figure — it holds for no op pair even in wrapper mode (§3.6: lifetime 2.6× / 3.1×, C2 2.4× / 6.4×). |
 | H1' flat in N | Supported. | keep |
-| H3 real-time | Read-side evidence now exists: on-chain resolution of an ERC-1056 identity with history costs ≈65–71 ms *in-process* — it will not fit 100 ms over a real RPC. Supports the second half of H3 (must pre-resolve). | cite `scale.md` h-axis and `resolve.md` |
+| H3 real-time | Read-side evidence now exists: on-chain resolution of an ERC-1056 identity with history (h = 50) costs 103.177 ms median, 134.283 ms p95 *in-process* (register #31, re-stated 2026-10-14, D58) — it will not fit 100 ms over a real RPC. Supports the second half of H3 (must pre-resolve). | cite `scale.md` h-axis and `resolve.md` |
 | H4 event-log cheapest for VID-II events | Supported on 12/17 events. The exceptions are the k1 add and the rotation (ERC-721), the two ownership transfers (ERC-725) and the deactivation (ERC-725). | keep, with exceptions listed |
 | H5 no single dominator | Supported already at n = 3: ERC-1056 dominates on write cost and footprint, ERC-721 dominates on read path, ERC-725 on rotation/transfer. | keep |
 
@@ -197,6 +201,10 @@ Same code (identical `meta.measured` hashes), same N = 30, but the harness talks
 | RPC calls at h = 50 | 112 | 55 | 7 | 61 | 3 | 3 | 2 | 3 | 61 | 107 |
 
 Transactions: ≈2–2.5× the in-process latency (ERC-1056 U3 8.0 → 18.1 ms median; C1 9.9 → 29.7 ms); throughput 43–98 tx/s over HTTP vs 78–202 in-process (client-bound: one HTTP round trip per queued tx).
+
+### 3.10 The catalogue as an extension of the basic digital-ID set (2026-10-15; `docs/BASIC_ID_SET_EXTENSION.md`, analysis A6, register #40)
+
+The programme's basic set is the canonical sandbox's `IMinimalSSI` F1–F12 (Set A = identity/keys F1–F4 + F9–F12; Set B = credentials F5–F8, with F8 = `createPresentation`) and its 12-test "admission = compliance" regime (one admitted baseline, O1_ERC1056). The catalogue keeps that gate and extends it with exact per-function cost, the 17-event lifecycle, the read path, the HTTP condition and ten substrates. `analysis_basic_set` (A6) reports, per substrate, the Set A / Set B catalogue ops supported and whether the substrate would be *admitted* (all mapped ops present): the two basic-set functions that had no catalogue op are now measured as **`P1_create_presentation`** (F8; holder-anchored — ERC-1056 34,206 gas, wrapper 45,257, CVIN 50,992, ERC-4337 71,764, ERC-725xy 72,369, ERC-725 119,996, ERC-735 294,628; n/a on ERC-721, ERC-1155, LSP8 where the holder has no write path) and **`X1_execute_call`** (Set A `execute`; ERC-725xy 39,328, ERC-4337 39,242; n/a on every registry and on ERC-725 basic whose `execute` is a stub). With all twelve functions mapped, **native** admission (every op a native primitive) holds for ERC-4337 alone; ERC-1056 (pure), ERC-725 and CVIN-Combined miss only X1; the wrapper and ERC-721 miss D2 and X1; the ERC-725 family lacks delegates. The canon admitted O1_ERC1056 12/12 by *pattern-realised* functions (SP-1 = anchor + credential-anchor pattern), so native admission is a stricter question than canon admission — the distinction the reconciliation asks the architect to rule on (**[B1]**). All substrates stay measured, each gap a finding. Run of record `2026-10-15T05-07-33Z_9bdf451` (register #41); every pre-existing cell is byte-identical to `0eef6af`. The document also carries the proposed B↔C compliance-regime reconciliation the onboarding stream left open for the architect. F-numbers inside Set A/B are stated only where a source gives them (the verbatim signatures are in the canon archive, not on any branch).
 
 **H3 verdict (second half), now measured:** on **localhost** HTTP — the lower bound of any RPC-mediated deployment — resolving an ERC-1056 or CVIN-Combined identity with 50 events of history takes 200+ ms median, twice the SAE J2945/1 100 ms budget, before any network latency. Resolution at V2V message time is therefore excluded for the event-log substrates *by their own read-path structure*, not by the network; keys must be pre-resolved and cached (the M0 path, register #21/#27). Storage-based substrates with 2–3 RPC calls stay under 10 ms (ERC-1155 5 ms) and would survive a ~30 ms provider round trip — a point in their favour the thesis must weigh against their cost and permission model. The wrapper's 105 ms is the artefact of §3.5.1 (transfers invisible to the registry), not a design win.
 

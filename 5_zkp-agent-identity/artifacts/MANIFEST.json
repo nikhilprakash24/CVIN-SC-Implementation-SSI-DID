@@ -1,0 +1,13 @@
+{
+  "note": "Single-party local Groth16 setup with fixed entropy: reproducible and INSECURE for production.",
+  "snarkjs": "0.7.6",
+  "circomlib": "2.0.5",
+  "files": {
+    "artifacts/zkvin.wasm": "1bf2100264432d7ba66d6ab03da1aba96b86ea9647c3f88ebf64a460b799c757",
+    "artifacts/zkvin.r1cs": "2ded04828a10ff1edb40cb755233002387ba988777ec15e820b7f6becbb83848",
+    "artifacts/zkvin_final.zkey": "82a7ec06a511e7c8e9b1495ad1219cfce9cb4d489d21c81c7a11536549f28959",
+    "artifacts/verification_key.json": "3fd1395cd32320f575fcc76fd75887d1e3ff881a45ccff5f8f0798fa24181cbb",
+    "contracts/Groth16Verifier.sol": "34679d0051016374e794a1559ce61e1f43a4432759c5b68ccdf981683081bed1",
+    "circuits/zkvin.circom": "5399e64d9261b35db468e5403549279aed65dc25133172b27b8769a1ae290b17"
+  }
+}

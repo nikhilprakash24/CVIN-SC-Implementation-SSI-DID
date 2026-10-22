@@ -56,4 +56,4 @@ in this order.
 - No open session-owned Critical or High.
 - CI green on the pushed head.
 - Every moved number has a register row with its old value and reason.
-- `HANDBACK_2026-10-03.md` and `AFTER_ACTION_REPORT_03.md` closed.
+- `HANDBACK_2026-10-03.md` and `review02/AAR_REVIEW2_03.md` closed.

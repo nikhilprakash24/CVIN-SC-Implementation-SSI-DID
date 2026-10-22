@@ -1,0 +1,14 @@
+{
+  "contract": "contracts/MOBI/MOBIVIDRegistry.sol:MOBIVIDRegistry",
+  "registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "vehicle": "0xF51acF236D982b1355C70C0EBD66563FC1674189",
+  "firstOwner": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "vinHash": "0xdeb908717b324cb4944786a6c2ea5cafd1d99fb02ee322faf99d08909fc9582d",
+  "birthCertHash": "0xf807f56031a5a1b31e9b5db02d689c8e51cd05722e6e8446c76900fcb263139e",
+  "registerTxHash": "0xcd66aeaac01e9c9d233724e593bf977da71f02821ab529b4cbd005e99c4f1a94",
+  "registerBlock": 2,
+  "chainId": "31337",
+  "chainIdHex": "0x7a69",
+  "did": "did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189"
+}

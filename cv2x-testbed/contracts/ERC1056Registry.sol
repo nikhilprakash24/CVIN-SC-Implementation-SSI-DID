@@ -15,7 +15,8 @@ pragma solidity ^0.8.0;
  * - Event-based DID document construction
  * - Delegate management for key rotation
  * - Attribute storage for metadata
- * - Revocation support
+ * - Revocation support (terminal; DIDRevoked carries previousChange so the
+ *   did:ethr change list stays walkable through the revocation)
  */
 contract ERC1056Registry {
 
@@ -42,9 +43,16 @@ contract ERC1056Registry {
         uint previousChange
     );
 
+    /**
+     * @dev Emitted once per identity by revokeIdentity. Carries `previousChange`
+     *      (the block of the previous change) like the three ERC-1056 events, so
+     *      the `changed(identity)` -> previousChange linked list that a did:ethr
+     *      resolver walks is NOT severed by revocation (defect D21).
+     */
     event DIDRevoked(
         address indexed identity,
-        uint revokedAt
+        uint revokedAt,
+        uint previousChange
     );
 
     // Storage
@@ -61,6 +69,17 @@ contract ERC1056Registry {
             actor == identityOwner(identity),
             "Only owner can perform this action"
         );
+        _;
+    }
+
+    /**
+     * @dev Revocation is terminal: every mutator (ownership, delegates,
+     *      attributes, a second revocation) reverts once the identity is
+     *      revoked, so `revokedAt` and the ownership record are frozen at
+     *      decommissioning time (defects D16 / D21).
+     */
+    modifier notRevoked(address identity) {
+        require(!revoked[identity], "Identity is revoked");
         _;
     }
 
@@ -92,8 +111,7 @@ contract ERC1056Registry {
         address identity,
         address actor,
         address newOwner
-    ) internal onlyOwner(identity, actor) {
-        require(!revoked[identity], "Identity is revoked");
+    ) internal onlyOwner(identity, actor) notRevoked(identity) {
         owners[identity] = newOwner;
         emit DIDOwnerChanged(identity, newOwner, changed[identity]);
         changed[identity] = block.number;
@@ -120,9 +138,7 @@ contract ERC1056Registry {
         bytes32 delegateType,
         address delegate,
         uint validity
-    ) internal onlyOwner(identity, actor) {
-        require(!revoked[identity], "Identity is revoked");
-
+    ) internal onlyOwner(identity, actor) notRevoked(identity) {
         uint validTo = block.timestamp + validity;
 
         emit DIDDelegateChanged(
@@ -153,8 +169,7 @@ contract ERC1056Registry {
         address actor,
         bytes32 delegateType,
         address delegate
-    ) internal onlyOwner(identity, actor) {
-        require(!revoked[identity], "Identity is revoked");
+    ) internal onlyOwner(identity, actor) notRevoked(identity) {
         emit DIDDelegateChanged(
             identity,
             delegateType,
@@ -189,9 +204,7 @@ contract ERC1056Registry {
         bytes32 name,
         bytes memory value,
         uint validity
-    ) internal onlyOwner(identity, actor) {
-        require(!revoked[identity], "Identity is revoked");
-
+    ) internal onlyOwner(identity, actor) notRevoked(identity) {
         uint validTo = block.timestamp + validity;
 
         emit DIDAttributeChanged(
@@ -222,8 +235,7 @@ contract ERC1056Registry {
         address actor,
         bytes32 name,
         bytes memory value
-    ) internal onlyOwner(identity, actor) {
-        require(!revoked[identity], "Identity is revoked");
+    ) internal onlyOwner(identity, actor) notRevoked(identity) {
         emit DIDAttributeChanged(
             identity,
             name,
@@ -245,14 +257,17 @@ contract ERC1056Registry {
 
     /**
      * @dev Revoke entire identity (for vehicle decommissioning or security).
-     *      Revocation is one-shot: a second call would overwrite revokedAt.
+     *      Terminal and single-shot: a second call reverts instead of moving
+     *      `revokedAt`, and the DIDRevoked event links back to the previous
+     *      change so the resolver's pointer walk reaches the full history.
      */
     function revokeIdentity(address identity) public onlyOwner(identity, msg.sender) {
-        require(!revoked[identity], "Identity is revoked");
+        require(!revoked[identity], "Identity already revoked");
+
         revoked[identity] = true;
         revokedAt[identity] = block.timestamp;
 
-        emit DIDRevoked(identity, block.timestamp);
+        emit DIDRevoked(identity, block.timestamp, changed[identity]);
         changed[identity] = block.number;
     }
 
@@ -291,9 +306,7 @@ contract ERC1056Registry {
     function updateVehicleKey(
         address vehicleIdentity,
         bytes calldata newPublicKey
-    ) public onlyOwner(vehicleIdentity, msg.sender) {
-        require(!revoked[vehicleIdentity], "Identity is revoked");
-
+    ) public onlyOwner(vehicleIdentity, msg.sender) notRevoked(vehicleIdentity) {
         bytes32 keyName = keccak256("did/pub/secp256k1/veriKey/base64");
 
         // Revoke old key

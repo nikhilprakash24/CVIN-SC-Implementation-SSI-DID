@@ -1,0 +1,2512 @@
+{
+  "definitions": {
+    "t_local": "median verify_message at k=inf",
+    "t_chain": "median verify at k=1 minus t_local",
+    "P*(0.5)": "floor(50 ms / mean verify) per k",
+    "knee": "t_chain / (0.5 ms - t_local): k at which the curve t_local + t_chain/k gives P*(0.5)=100; not reached when t_local >= 0.5 ms",
+    "measured_knee_tested_k": "smallest tested k whose measured P*(0.5) >= 100",
+    "pooled": "samples of all replicates of a mode concatenated per k",
+    "load_limit": 1.5
+  },
+  "order": [
+    "r1:full",
+    "r2:probe",
+    "r3:probe",
+    "r4:full",
+    "r5:probe",
+    "r6:full",
+    "r7:full",
+    "r8:probe",
+    "r9:probe",
+    "r10:full",
+    "r11:full",
+    "r12:probe"
+  ],
+  "registry_bytecode_sha256": [
+    "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812"
+  ],
+  "all_git_clean": true,
+  "clean_rule": "foreign CPU mean <= 0.5 and not in the exclusion list",
+  "excluded": {
+    "4": "overlaps the session lead's M4 run (Hardhat :8559, 05:17-05:21:35 UTC)"
+  },
+  "replicates": [
+    {
+      "replicate": 1,
+      "mode": "full",
+      "order_index": 1,
+      "run_tag": "20261015T050518Z",
+      "date_utc": "2026-10-15T05:05:18+00:00",
+      "git_commit": "331d55c",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 4.0,
+        "5": 4.0,
+        "25": 4.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 3.6438639999999998,
+      "t_chain_one_call_ms": 10.4057815,
+      "load": {
+        "replicate": 1,
+        "mode": "full",
+        "order_index": 1,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:05:16Z",
+        "loadavg_start": "1.30 0.77 0.33 1/176 1844",
+        "load1_start": 1.3,
+        "end_utc": "2026-10-15T05:05:42Z",
+        "loadavg_end": "1.68 0.90 0.39 1/178 1936",
+        "load1_end": 1.68,
+        "sample_interval_s": 5,
+        "load1_max_sampled": 1.68,
+        "load1_mean_sampled": 1.4883333333333335,
+        "n_samples": 6,
+        "exit_code": 0
+      },
+      "load1_max": 1.68,
+      "foreign_cpu_mean": null,
+      "foreign_cpu_max": null,
+      "load_exceeded": true,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.63165,
+      "t_chain_ms": 16.148649999999996,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.632 \u2265 0.5 ms; k=\u221e P*(0.5) = 75)",
+      "Pstar_inf": 75,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 17.986396799999998,
+          "median_ms": 16.780299999999997,
+          "p95_ms": 24.907839999999997,
+          "P*(0.5)": 2
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 4.172956,
+          "median_ms": 0.6883,
+          "p95_ms": 19.459725,
+          "P*(0.5)": 11
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 1.4633888000000002,
+          "median_ms": 0.6436999999999999,
+          "p95_ms": 1.3508099999999987,
+          "P*(0.5)": 34
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.6651256,
+          "median_ms": 0.63165,
+          "p95_ms": 0.9174049999999999,
+          "P*(0.5)": 75
+        }
+      },
+      "clean": false,
+      "not_clean_reasons": [
+        "no foreign-CPU measurement"
+      ]
+    },
+    {
+      "replicate": 2,
+      "mode": "probe",
+      "order_index": 2,
+      "run_tag": "20261015T050903Z",
+      "date_utc": "2026-10-15T05:09:03+00:00",
+      "git_commit": "0cf6c3a",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 0,
+        "5": 0,
+        "25": 0,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 1.0,
+        "5": 1.0,
+        "25": 1.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 4.2196795,
+      "t_chain_one_call_ms": 12.215732,
+      "load": {
+        "replicate": 2,
+        "mode": "probe",
+        "order_index": 2,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:09:02Z",
+        "loadavg_start": "1.04 1.31 0.68 1/181 2886",
+        "load1_start": 1.04,
+        "end_utc": "2026-10-15T05:09:23Z",
+        "loadavg_end": "1.54 1.40 0.72 2/209 2992",
+        "load1_end": 1.54,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 1.002,
+        "foreign_cpu_max": 2.21,
+        "own_cpu_mean": 0.9790000000000001,
+        "load1_max_sampled": 1.54,
+        "load1_mean_sampled": 1.27,
+        "n_samples": 10,
+        "exit_code": 0
+      },
+      "load1_max": 1.54,
+      "foreign_cpu_mean": 1.002,
+      "foreign_cpu_max": 2.21,
+      "load_exceeded": true,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.6391,
+      "t_chain_ms": 5.6248,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.639 \u2265 0.5 ms; k=\u221e P*(0.5) = 66)",
+      "Pstar_inf": 66,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 6.784747599999998,
+          "median_ms": 6.2639,
+          "p95_ms": 9.313954999999998,
+          "P*(0.5)": 7
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 2.1088928,
+          "median_ms": 0.8324,
+          "p95_ms": 7.537369999999999,
+          "P*(0.5)": 23
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 1.1232524,
+          "median_ms": 0.6507000000000001,
+          "p95_ms": 1.5712899999999994,
+          "P*(0.5)": 44
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.7477720000000001,
+          "median_ms": 0.6391,
+          "p95_ms": 1.1461049999999997,
+          "P*(0.5)": 66
+        }
+      },
+      "clean": false,
+      "not_clean_reasons": [
+        "foreign CPU mean 1.00 > 0.5"
+      ]
+    },
+    {
+      "replicate": 3,
+      "mode": "probe",
+      "order_index": 3,
+      "run_tag": "20261015T051041Z",
+      "date_utc": "2026-10-15T05:10:41+00:00",
+      "git_commit": "7a836dd",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 0,
+        "5": 0,
+        "25": 0,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 1.0,
+        "5": 1.0,
+        "25": 1.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 3.505324,
+      "t_chain_one_call_ms": 10.219554,
+      "load": {
+        "replicate": 3,
+        "mode": "probe",
+        "order_index": 3,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:10:40Z",
+        "loadavg_start": "0.99 1.27 0.73 2/208 3340",
+        "load1_start": 0.99,
+        "end_utc": "2026-10-15T05:10:58Z",
+        "loadavg_end": "1.76 1.43 0.79 1/182 3425",
+        "load1_end": 1.76,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 1.5555555555555556,
+        "foreign_cpu_max": 2.13,
+        "own_cpu_mean": 0.9788888888888887,
+        "load1_max_sampled": 1.76,
+        "load1_mean_sampled": 1.508888888888889,
+        "n_samples": 9,
+        "exit_code": 0
+      },
+      "load1_max": 1.76,
+      "foreign_cpu_mean": 1.5555555555555556,
+      "foreign_cpu_max": 2.13,
+      "load_exceeded": true,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.6599999999999999,
+      "t_chain_ms": 3.8920999999999992,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.660 \u2265 0.5 ms; k=\u221e P*(0.5) = 71)",
+      "Pstar_inf": 71,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 5.346382800000001,
+          "median_ms": 4.552099999999999,
+          "p95_ms": 9.00218,
+          "P*(0.5)": 9
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 1.6857588000000001,
+          "median_ms": 0.6338,
+          "p95_ms": 5.468155,
+          "P*(0.5)": 29
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 0.9013304000000001,
+          "median_ms": 0.6216999999999999,
+          "p95_ms": 1.8470749999999916,
+          "P*(0.5)": 55
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.6998984,
+          "median_ms": 0.6599999999999999,
+          "p95_ms": 0.9737649999999999,
+          "P*(0.5)": 71
+        }
+      },
+      "clean": false,
+      "not_clean_reasons": [
+        "foreign CPU mean 1.56 > 0.5"
+      ]
+    },
+    {
+      "replicate": 4,
+      "mode": "full",
+      "order_index": 4,
+      "run_tag": "20261015T052114Z",
+      "date_utc": "2026-10-15T05:21:14+00:00",
+      "git_commit": "364ad1e",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 4.0,
+        "5": 4.0,
+        "25": 4.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 4.8608175,
+      "t_chain_one_call_ms": 12.966205500000001,
+      "load": {
+        "replicate": 4,
+        "mode": "full",
+        "order_index": 4,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:21:13Z",
+        "loadavg_start": "1.22 1.38 1.10 4/245 8106",
+        "load1_start": 1.22,
+        "end_utc": "2026-10-15T05:21:40Z",
+        "loadavg_end": "2.00 1.57 1.18 2/218 8224",
+        "load1_end": 2.0,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 1.8607692307692305,
+        "foreign_cpu_max": 2.17,
+        "own_cpu_mean": 0.9184615384615384,
+        "load1_max_sampled": 1.99,
+        "load1_mean_sampled": 1.785384615384615,
+        "n_samples": 13,
+        "exit_code": 0
+      },
+      "load1_max": 2.0,
+      "foreign_cpu_mean": 1.8607692307692305,
+      "foreign_cpu_max": 2.17,
+      "load_exceeded": true,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.66435,
+      "t_chain_ms": 18.95225,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.664 \u2265 0.5 ms; k=\u221e P*(0.5) = 68)",
+      "Pstar_inf": 68,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 20.048905599999998,
+          "median_ms": 19.6166,
+          "p95_ms": 27.605184999999995,
+          "P*(0.5)": 2
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 4.9197336,
+          "median_ms": 0.98445,
+          "p95_ms": 23.02466499999998,
+          "P*(0.5)": 10
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 1.7070336,
+          "median_ms": 0.9613499999999999,
+          "p95_ms": 1.4541449999999996,
+          "P*(0.5)": 29
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.730504,
+          "median_ms": 0.66435,
+          "p95_ms": 0.9692199999999999,
+          "P*(0.5)": 68
+        }
+      },
+      "clean": false,
+      "not_clean_reasons": [
+        "overlaps the session lead's M4 run (Hardhat :8559, 05:17-05:21:35 UTC)",
+        "foreign CPU mean 1.86 > 0.5"
+      ]
+    },
+    {
+      "replicate": 5,
+      "mode": "probe",
+      "order_index": 5,
+      "run_tag": "20261015T052259Z",
+      "date_utc": "2026-10-15T05:22:59+00:00",
+      "git_commit": "a7baac0",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 0,
+        "5": 0,
+        "25": 0,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 1.0,
+        "5": 1.0,
+        "25": 1.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 4.9410415,
+      "t_chain_one_call_ms": 11.4520635,
+      "load": {
+        "replicate": 5,
+        "mode": "probe",
+        "order_index": 5,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:22:57Z",
+        "loadavg_start": "1.22 1.41 1.15 4/188 8582",
+        "load1_start": 1.22,
+        "end_utc": "2026-10-15T05:23:20Z",
+        "loadavg_end": "1.29 1.42 1.16 2/184 8660",
+        "load1_end": 1.29,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 0.26636363636363636,
+        "foreign_cpu_max": 0.45,
+        "own_cpu_mean": 0.989090909090909,
+        "load1_max_sampled": 1.35,
+        "load1_mean_sampled": 1.289090909090909,
+        "n_samples": 11,
+        "exit_code": 0
+      },
+      "load1_max": 1.35,
+      "foreign_cpu_mean": 0.26636363636363636,
+      "foreign_cpu_max": 0.45,
+      "load_exceeded": false,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.6362,
+      "t_chain_ms": 5.50365,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.636 \u2265 0.5 ms; k=\u221e P*(0.5) = 68)",
+      "Pstar_inf": 68,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 7.1818972,
+          "median_ms": 6.13985,
+          "p95_ms": 10.336269999999988,
+          "P*(0.5)": 6
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 2.0028948,
+          "median_ms": 0.6771,
+          "p95_ms": 7.202259999999999,
+          "P*(0.5)": 24
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 0.9067296,
+          "median_ms": 0.6348499999999999,
+          "p95_ms": 1.2812599999999998,
+          "P*(0.5)": 55
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.7351096,
+          "median_ms": 0.6362,
+          "p95_ms": 1.2348449999999997,
+          "P*(0.5)": 68
+        }
+      },
+      "clean": true,
+      "not_clean_reasons": []
+    },
+    {
+      "replicate": 6,
+      "mode": "full",
+      "order_index": 6,
+      "run_tag": "20261015T052352Z",
+      "date_utc": "2026-10-15T05:23:52+00:00",
+      "git_commit": "b151082",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 4.0,
+        "5": 4.0,
+        "25": 4.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 4.5181835,
+      "t_chain_one_call_ms": 12.636734,
+      "load": {
+        "replicate": 6,
+        "mode": "full",
+        "order_index": 6,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:23:50Z",
+        "loadavg_start": "1.00 1.33 1.14 1/180 8764",
+        "load1_start": 1.0,
+        "end_utc": "2026-10-15T05:24:17Z",
+        "loadavg_end": "1.41 1.39 1.16 1/181 8847",
+        "load1_end": 1.41,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 0.7084615384615385,
+        "foreign_cpu_max": 1.35,
+        "own_cpu_mean": 0.9923076923076923,
+        "load1_max_sampled": 1.45,
+        "load1_mean_sampled": 1.1830769230769231,
+        "n_samples": 13,
+        "exit_code": 0
+      },
+      "load1_max": 1.45,
+      "foreign_cpu_mean": 0.7084615384615385,
+      "foreign_cpu_max": 1.35,
+      "load_exceeded": false,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.86195,
+      "t_chain_ms": 15.237049999999996,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.862 \u2265 0.5 ms; k=\u221e P*(0.5) = 58)",
+      "Pstar_inf": 58,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 17.022320000000004,
+          "median_ms": 16.098999999999997,
+          "p95_ms": 24.43806499999999,
+          "P*(0.5)": 2
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 4.5265344,
+          "median_ms": 0.69835,
+          "p95_ms": 21.203774999999997,
+          "P*(0.5)": 11
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 1.4744092,
+          "median_ms": 0.67995,
+          "p95_ms": 1.5076649999999991,
+          "P*(0.5)": 33
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.8482332,
+          "median_ms": 0.86195,
+          "p95_ms": 1.227795,
+          "P*(0.5)": 58
+        }
+      },
+      "clean": false,
+      "not_clean_reasons": [
+        "foreign CPU mean 0.71 > 0.5"
+      ]
+    },
+    {
+      "replicate": 7,
+      "mode": "full",
+      "order_index": 7,
+      "run_tag": "20261015T052440Z",
+      "date_utc": "2026-10-15T05:24:39+00:00",
+      "git_commit": "3100e2a",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 4.0,
+        "5": 4.0,
+        "25": 4.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 4.363410999999999,
+      "t_chain_one_call_ms": 10.596752,
+      "load": {
+        "replicate": 7,
+        "mode": "full",
+        "order_index": 7,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:24:38Z",
+        "loadavg_start": "1.09 1.32 1.14 1/185 8968",
+        "load1_start": 1.09,
+        "end_utc": "2026-10-15T05:25:04Z",
+        "loadavg_end": "1.47 1.39 1.17 1/179 9017",
+        "load1_end": 1.47,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 0.21,
+        "foreign_cpu_max": 0.72,
+        "own_cpu_mean": 0.9930769230769231,
+        "load1_max_sampled": 1.52,
+        "load1_mean_sampled": 1.3092307692307694,
+        "n_samples": 13,
+        "exit_code": 0
+      },
+      "load1_max": 1.52,
+      "foreign_cpu_mean": 0.21,
+      "foreign_cpu_max": 0.72,
+      "load_exceeded": true,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.6121,
+      "t_chain_ms": 19.9344,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.612 \u2265 0.5 ms; k=\u221e P*(0.5) = 70)",
+      "Pstar_inf": 70,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 21.7808868,
+          "median_ms": 20.5465,
+          "p95_ms": 31.026334999999996,
+          "P*(0.5)": 2
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 4.293672,
+          "median_ms": 0.6914,
+          "p95_ms": 19.878609999999995,
+          "P*(0.5)": 11
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 1.3007971999999999,
+          "median_ms": 0.6213500000000001,
+          "p95_ms": 1.1423799999999984,
+          "P*(0.5)": 38
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.7071888000000002,
+          "median_ms": 0.6121,
+          "p95_ms": 1.2512699999999999,
+          "P*(0.5)": 70
+        }
+      },
+      "clean": true,
+      "not_clean_reasons": []
+    },
+    {
+      "replicate": 8,
+      "mode": "probe",
+      "order_index": 8,
+      "run_tag": "20261015T052527Z",
+      "date_utc": "2026-10-15T05:25:27+00:00",
+      "git_commit": "e3284ee",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 0,
+        "5": 0,
+        "25": 0,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 1.0,
+        "5": 1.0,
+        "25": 1.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 3.3345535,
+      "t_chain_one_call_ms": 10.223154000000001,
+      "load": {
+        "replicate": 8,
+        "mode": "probe",
+        "order_index": 8,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:25:26Z",
+        "loadavg_start": "1.12 1.31 1.15 1/179 9164",
+        "load1_start": 1.12,
+        "end_utc": "2026-10-15T05:25:47Z",
+        "loadavg_end": "1.16 1.31 1.15 1/180 9176",
+        "load1_end": 1.16,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 0.138,
+        "foreign_cpu_max": 0.17,
+        "own_cpu_mean": 0.999,
+        "load1_max_sampled": 1.18,
+        "load1_mean_sampled": 1.128,
+        "n_samples": 10,
+        "exit_code": 0
+      },
+      "load1_max": 1.18,
+      "foreign_cpu_mean": 0.138,
+      "foreign_cpu_max": 0.17,
+      "load_exceeded": false,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.60675,
+      "t_chain_ms": 5.40405,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.607 \u2265 0.5 ms; k=\u221e P*(0.5) = 74)",
+      "Pstar_inf": 74,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 6.683639599999999,
+          "median_ms": 6.0108,
+          "p95_ms": 9.21022499999999,
+          "P*(0.5)": 7
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 1.9923544,
+          "median_ms": 0.70335,
+          "p95_ms": 7.169029999999999,
+          "P*(0.5)": 25
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 0.8208708,
+          "median_ms": 0.6052500000000001,
+          "p95_ms": 0.8863299999999998,
+          "P*(0.5)": 60
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.6694488,
+          "median_ms": 0.60675,
+          "p95_ms": 1.1236249999999988,
+          "P*(0.5)": 74
+        }
+      },
+      "clean": true,
+      "not_clean_reasons": []
+    },
+    {
+      "replicate": 9,
+      "mode": "probe",
+      "order_index": 9,
+      "run_tag": "20261015T052607Z",
+      "date_utc": "2026-10-15T05:26:07+00:00",
+      "git_commit": "7f41781",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 0,
+        "5": 0,
+        "25": 0,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 1.0,
+        "5": 1.0,
+        "25": 1.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 4.681585500000001,
+      "t_chain_one_call_ms": 11.859170500000001,
+      "load": {
+        "replicate": 9,
+        "mode": "probe",
+        "order_index": 9,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:26:06Z",
+        "loadavg_start": "0.83 1.22 1.13 1/178 9243",
+        "load1_start": 0.83,
+        "end_utc": "2026-10-15T05:26:28Z",
+        "loadavg_end": "0.87 1.20 1.13 1/179 9254",
+        "load1_end": 0.87,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 0.1509090909090909,
+        "foreign_cpu_max": 0.22,
+        "own_cpu_mean": 0.9945454545454545,
+        "load1_max_sampled": 0.93,
+        "load1_mean_sampled": 0.8863636363636362,
+        "n_samples": 11,
+        "exit_code": 0
+      },
+      "load1_max": 0.93,
+      "foreign_cpu_mean": 0.1509090909090909,
+      "foreign_cpu_max": 0.22,
+      "load_exceeded": false,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.66665,
+      "t_chain_ms": 5.79075,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.667 \u2265 0.5 ms; k=\u221e P*(0.5) = 63)",
+      "Pstar_inf": 63,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 7.442356,
+          "median_ms": 6.4574,
+          "p95_ms": 11.241019999999986,
+          "P*(0.5)": 6
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 2.0217288,
+          "median_ms": 0.72195,
+          "p95_ms": 6.812044999999999,
+          "P*(0.5)": 24
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 1.0523828000000002,
+          "median_ms": 0.6539,
+          "p95_ms": 1.8917399999999884,
+          "P*(0.5)": 47
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.7890260000000001,
+          "median_ms": 0.66665,
+          "p95_ms": 1.2285949999999999,
+          "P*(0.5)": 63
+        }
+      },
+      "clean": true,
+      "not_clean_reasons": []
+    },
+    {
+      "replicate": 10,
+      "mode": "full",
+      "order_index": 10,
+      "run_tag": "20261015T052647Z",
+      "date_utc": "2026-10-15T05:26:46+00:00",
+      "git_commit": "9ede056",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 4.0,
+        "5": 4.0,
+        "25": 4.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 4.3468345,
+      "t_chain_one_call_ms": 14.118211500000001,
+      "load": {
+        "replicate": 10,
+        "mode": "full",
+        "order_index": 10,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:26:45Z",
+        "loadavg_start": "0.68 1.15 1.11 1/178 9320",
+        "load1_start": 0.68,
+        "end_utc": "2026-10-15T05:27:12Z",
+        "loadavg_end": "0.75 1.11 1.10 1/178 9333",
+        "load1_end": 0.75,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 0.15384615384615385,
+        "foreign_cpu_max": 0.24,
+        "own_cpu_mean": 0.9930769230769231,
+        "load1_max_sampled": 0.75,
+        "load1_mean_sampled": 0.6884615384615386,
+        "n_samples": 13,
+        "exit_code": 0
+      },
+      "load1_max": 0.75,
+      "foreign_cpu_mean": 0.15384615384615385,
+      "foreign_cpu_max": 0.24,
+      "load_exceeded": false,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.7142,
+      "t_chain_ms": 17.8812,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.714 \u2265 0.5 ms; k=\u221e P*(0.5) = 59)",
+      "Pstar_inf": 59,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 19.041256399999998,
+          "median_ms": 18.595399999999998,
+          "p95_ms": 24.562305,
+          "P*(0.5)": 2
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 4.8795076,
+          "median_ms": 1.0316999999999998,
+          "p95_ms": 23.627525,
+          "P*(0.5)": 10
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 1.4470524,
+          "median_ms": 0.6531,
+          "p95_ms": 1.1145949999999996,
+          "P*(0.5)": 34
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.8404984,
+          "median_ms": 0.7142,
+          "p95_ms": 1.27682,
+          "P*(0.5)": 59
+        }
+      },
+      "clean": true,
+      "not_clean_reasons": []
+    },
+    {
+      "replicate": 11,
+      "mode": "full",
+      "order_index": 11,
+      "run_tag": "20261015T052759Z",
+      "date_utc": "2026-10-15T05:27:59+00:00",
+      "git_commit": "b3d3f65",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 4.0,
+        "5": 4.0,
+        "25": 4.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 4.882702,
+      "t_chain_one_call_ms": 14.921997999999999,
+      "load": {
+        "replicate": 11,
+        "mode": "full",
+        "order_index": 11,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:27:58Z",
+        "loadavg_start": "0.43 0.97 1.05 1/177 9414",
+        "load1_start": 0.43,
+        "end_utc": "2026-10-15T05:28:26Z",
+        "loadavg_end": "0.66 0.98 1.04 1/178 9426",
+        "load1_end": 0.66,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 0.1471428571428571,
+        "foreign_cpu_max": 0.21,
+        "own_cpu_mean": 0.9814285714285715,
+        "steal_cpu_mean": 0.05500000000000001,
+        "load1_max_sampled": 0.66,
+        "load1_mean_sampled": 0.5542857142857143,
+        "n_samples": 14,
+        "exit_code": 0
+      },
+      "load1_max": 0.66,
+      "foreign_cpu_mean": 0.1471428571428571,
+      "foreign_cpu_max": 0.21,
+      "load_exceeded": false,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.9634499999999999,
+      "t_chain_ms": 18.406549999999996,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.963 \u2265 0.5 ms; k=\u221e P*(0.5) = 53)",
+      "Pstar_inf": 53,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 20.313869599999997,
+          "median_ms": 19.369999999999997,
+          "p95_ms": 28.059219999999996,
+          "P*(0.5)": 2
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 5.0201392,
+          "median_ms": 1.0492,
+          "p95_ms": 23.37555,
+          "P*(0.5)": 9
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 1.6257012,
+          "median_ms": 0.68275,
+          "p95_ms": 1.5311849999999987,
+          "P*(0.5)": 30
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.9281324,
+          "median_ms": 0.9634499999999999,
+          "p95_ms": 1.2739349999999998,
+          "P*(0.5)": 53
+        }
+      },
+      "clean": true,
+      "not_clean_reasons": []
+    },
+    {
+      "replicate": 12,
+      "mode": "probe",
+      "order_index": 12,
+      "run_tag": "20261015T052849Z",
+      "date_utc": "2026-10-15T05:28:49+00:00",
+      "git_commit": "676db30",
+      "git_dirty": false,
+      "registry_bytecode_sha256": "8ca9cfe5d607106f9b0ce09920b8d11db6aeccf66d57344ee209ec7cc9bc5812",
+      "contract_deploy_gas": 927756,
+      "refreshes_in_window": {
+        "1": 250,
+        "5": 50,
+        "25": 10,
+        "inf": 0
+      },
+      "full_resolutions_in_window": {
+        "1": 0,
+        "5": 0,
+        "25": 0,
+        "inf": 0
+      },
+      "refresh_rpc_median": {
+        "1": 1.0,
+        "5": 1.0,
+        "25": 1.0,
+        "inf": null
+      },
+      "t_chain_probe_direct_ms": 4.3404365,
+      "t_chain_one_call_ms": 12.148266,
+      "load": {
+        "replicate": 12,
+        "mode": "probe",
+        "order_index": 12,
+        "node": "fresh hardhat node :8562 (block 0) started for this replicate, killed by PID (process group)",
+        "start_utc": "2026-10-15T05:28:47Z",
+        "loadavg_start": "0.55 0.93 1.03 1/177 9494",
+        "load1_start": 0.55,
+        "end_utc": "2026-10-15T05:29:10Z",
+        "loadavg_end": "0.62 0.92 1.02 1/178 9505",
+        "load1_end": 0.62,
+        "sample_interval_s": 2,
+        "foreign_cpu_definition": "CPUs busy outside this replicate (all busy jiffies minus the hardhat node on :8562 and experiment_freshness_k.py), per 2 s sample",
+        "foreign_cpu_mean": 0.13363636363636366,
+        "foreign_cpu_max": 0.2,
+        "own_cpu_mean": 1.0072727272727275,
+        "steal_cpu_mean": 0.03636363636363637,
+        "load1_max_sampled": 0.62,
+        "load1_mean_sampled": 0.56,
+        "n_samples": 11,
+        "exit_code": 0
+      },
+      "load1_max": 0.62,
+      "foreign_cpu_mean": 0.13363636363636366,
+      "foreign_cpu_max": 0.2,
+      "load_exceeded": false,
+      "staleness": {
+        "revocation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "rotation": {
+          "1": {
+            "max": 0,
+            "bound": 0,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "5": {
+            "max": 4,
+            "bound": 4,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 5
+          },
+          "25": {
+            "max": 24,
+            "bound": 24,
+            "within_bound": true,
+            "matches_prediction": true,
+            "trials": 25
+          },
+          "inf": {
+            "max": 50,
+            "bound": null,
+            "within_bound": null,
+            "matches_prediction": null,
+            "trials": 3
+          }
+        },
+        "all_within_bound": true,
+        "all_match_prediction": true,
+        "finite_trials": 70
+      },
+      "t_local_ms": 0.62205,
+      "t_chain_ms": 6.84085,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.622 \u2265 0.5 ms; k=\u221e P*(0.5) = 75)",
+      "Pstar_inf": 75,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 7.9569088,
+          "median_ms": 7.462899999999999,
+          "p95_ms": 11.055744999999996,
+          "P*(0.5)": 6
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 1.7420191999999999,
+          "median_ms": 0.6415,
+          "p95_ms": 5.83692,
+          "P*(0.5)": 28
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 0.86423,
+          "median_ms": 0.6167,
+          "p95_ms": 1.1231649999999995,
+          "P*(0.5)": 57
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.6596672000000001,
+          "median_ms": 0.62205,
+          "p95_ms": 0.8708899999999997,
+          "P*(0.5)": 75
+        }
+      },
+      "clean": true,
+      "not_clean_reasons": []
+    }
+  ],
+  "modes": {
+    "full": {
+      "replicates": [
+        1,
+        4,
+        6,
+        7,
+        10,
+        11
+      ],
+      "pooled": {
+        "t_local_ms": 0.6761999999999999,
+        "t_chain_ms": 17.918149999999997,
+        "knee_k_analytic": null,
+        "knee_reached": false,
+        "knee_text": "not reached (t_local 0.676 \u2265 0.5 ms; k=\u221e P*(0.5) = 63)",
+        "Pstar_inf": 63,
+        "measured_knee_tested_k": null,
+        "per_k": {
+          "1": {
+            "n": 1500,
+            "mean_ms": 19.36560586666667,
+            "median_ms": 18.59435,
+            "p95_ms": 27.285195,
+            "P*(0.5)": 2
+          },
+          "5": {
+            "n": 1500,
+            "mean_ms": 4.6354238,
+            "median_ms": 0.78345,
+            "p95_ms": 21.891914999999997,
+            "P*(0.5)": 10
+          },
+          "25": {
+            "n": 1500,
+            "mean_ms": 1.5030637333333332,
+            "median_ms": 0.6663,
+            "p95_ms": 1.45162,
+            "P*(0.5)": 33
+          },
+          "inf": {
+            "n": 1500,
+            "mean_ms": 0.7866137333333333,
+            "median_ms": 0.6761999999999999,
+            "p95_ms": 1.229275,
+            "P*(0.5)": 63
+          }
+        }
+      },
+      "t_local_range_ms": [
+        0.6121,
+        0.9634499999999999
+      ],
+      "t_chain_range_ms": [
+        15.237049999999996,
+        19.9344
+      ],
+      "Pstar_range": {
+        "1": [
+          2,
+          2
+        ],
+        "5": [
+          9,
+          11
+        ],
+        "25": [
+          29,
+          38
+        ],
+        "inf": [
+          53,
+          75
+        ]
+      },
+      "staleness_all_within_bound": true,
+      "staleness_all_match_prediction": true,
+      "staleness_finite_trials": 420
+    },
+    "probe": {
+      "replicates": [
+        2,
+        3,
+        5,
+        8,
+        9,
+        12
+      ],
+      "pooled": {
+        "t_local_ms": 0.6348,
+        "t_chain_ms": 5.491099999999999,
+        "knee_k_analytic": null,
+        "knee_reached": false,
+        "knee_text": "not reached (t_local 0.635 \u2265 0.5 ms; k=\u221e P*(0.5) = 69)",
+        "Pstar_inf": 69,
+        "measured_knee_tested_k": null,
+        "per_k": {
+          "1": {
+            "n": 1500,
+            "mean_ms": 6.899322,
+            "median_ms": 6.1259,
+            "p95_ms": 10.119295,
+            "P*(0.5)": 7
+          },
+          "5": {
+            "n": 1500,
+            "mean_ms": 1.9256081333333332,
+            "median_ms": 0.68175,
+            "p95_ms": 6.7719749999999985,
+            "P*(0.5)": 25
+          },
+          "25": {
+            "n": 1500,
+            "mean_ms": 0.9447993333333332,
+            "median_ms": 0.6285499999999999,
+            "p95_ms": 1.5108849999999994,
+            "P*(0.5)": 52
+          },
+          "inf": {
+            "n": 1500,
+            "mean_ms": 0.7168203333333334,
+            "median_ms": 0.6348,
+            "p95_ms": 1.15233,
+            "P*(0.5)": 69
+          }
+        }
+      },
+      "t_local_range_ms": [
+        0.60675,
+        0.66665
+      ],
+      "t_chain_range_ms": [
+        3.8920999999999992,
+        6.84085
+      ],
+      "Pstar_range": {
+        "1": [
+          6,
+          9
+        ],
+        "5": [
+          23,
+          29
+        ],
+        "25": [
+          44,
+          60
+        ],
+        "inf": [
+          63,
+          75
+        ]
+      },
+      "staleness_all_within_bound": true,
+      "staleness_all_match_prediction": true,
+      "staleness_finite_trials": 420
+    }
+  },
+  "comparison": {
+    "t_chain_full_over_probe": 3.2631257853617672,
+    "t_local_probe_minus_full_ms": -0.04139999999999988,
+    "Pstar_probe_over_full": {
+      "1": 3.5,
+      "5": 2.5,
+      "25": 1.5757575757575757,
+      "inf": 1.0952380952380953
+    }
+  },
+  "modes_clean": {
+    "full": {
+      "replicates": [
+        7,
+        10,
+        11
+      ],
+      "pooled": {
+        "t_local_ms": 0.69875,
+        "t_chain_ms": 18.799,
+        "knee_k_analytic": null,
+        "knee_reached": false,
+        "knee_text": "not reached (t_local 0.699 \u2265 0.5 ms; k=\u221e P*(0.5) = 60)",
+        "Pstar_inf": 60,
+        "measured_knee_tested_k": null,
+        "per_k": {
+          "1": {
+            "n": 750,
+            "mean_ms": 20.378670933333332,
+            "median_ms": 19.49775,
+            "p95_ms": 28.192465,
+            "P*(0.5)": 2
+          },
+          "5": {
+            "n": 750,
+            "mean_ms": 4.731106266666667,
+            "median_ms": 0.86575,
+            "p95_ms": 22.909769999999995,
+            "P*(0.5)": 10
+          },
+          "25": {
+            "n": 750,
+            "mean_ms": 1.4578502666666666,
+            "median_ms": 0.64435,
+            "p95_ms": 1.3167649999999993,
+            "P*(0.5)": 34
+          },
+          "inf": {
+            "n": 750,
+            "mean_ms": 0.8252731999999999,
+            "median_ms": 0.69875,
+            "p95_ms": 1.2664,
+            "P*(0.5)": 60
+          }
+        }
+      },
+      "t_local_range_ms": [
+        0.6121,
+        0.9634499999999999
+      ],
+      "t_chain_range_ms": [
+        17.8812,
+        19.9344
+      ],
+      "Pstar_range": {
+        "1": [
+          2,
+          2
+        ],
+        "5": [
+          9,
+          11
+        ],
+        "25": [
+          30,
+          38
+        ],
+        "inf": [
+          53,
+          70
+        ]
+      },
+      "staleness_all_within_bound": true,
+      "staleness_all_match_prediction": true,
+      "staleness_finite_trials": 210
+    },
+    "probe": {
+      "replicates": [
+        5,
+        8,
+        9,
+        12
+      ],
+      "pooled": {
+        "t_local_ms": 0.629,
+        "t_chain_ms": 5.8451,
+        "knee_k_analytic": null,
+        "knee_reached": false,
+        "knee_text": "not reached (t_local 0.629 \u2265 0.5 ms; k=\u221e P*(0.5) = 70)",
+        "Pstar_inf": 70,
+        "measured_knee_tested_k": null,
+        "per_k": {
+          "1": {
+            "n": 1000,
+            "mean_ms": 7.3162004,
+            "median_ms": 6.4741,
+            "p95_ms": 10.680859999999996,
+            "P*(0.5)": 6
+          },
+          "5": {
+            "n": 1000,
+            "mean_ms": 1.9397493,
+            "median_ms": 0.67915,
+            "p95_ms": 6.804739999999999,
+            "P*(0.5)": 25
+          },
+          "25": {
+            "n": 1000,
+            "mean_ms": 0.9110533000000001,
+            "median_ms": 0.6244,
+            "p95_ms": 1.3894799999999992,
+            "P*(0.5)": 54
+          },
+          "inf": {
+            "n": 1000,
+            "mean_ms": 0.7133129,
+            "median_ms": 0.629,
+            "p95_ms": 1.1896449999999996,
+            "P*(0.5)": 70
+          }
+        }
+      },
+      "t_local_range_ms": [
+        0.60675,
+        0.66665
+      ],
+      "t_chain_range_ms": [
+        5.40405,
+        6.84085
+      ],
+      "Pstar_range": {
+        "1": [
+          6,
+          7
+        ],
+        "5": [
+          24,
+          28
+        ],
+        "25": [
+          47,
+          60
+        ],
+        "inf": [
+          63,
+          75
+        ]
+      },
+      "staleness_all_within_bound": true,
+      "staleness_all_match_prediction": true,
+      "staleness_finite_trials": 280
+    }
+  },
+  "comparison_clean": {
+    "t_chain_full_over_probe": 3.216198183093531,
+    "t_local_probe_minus_full_ms": -0.06974999999999998,
+    "Pstar_probe_over_full": {
+      "1": 3.0,
+      "5": 2.5,
+      "25": 1.588235294117647,
+      "inf": 1.1666666666666667
+    }
+  },
+  "references": [
+    {
+      "row": "#32",
+      "mode": "full",
+      "host": "2.10 GHz",
+      "file": "results/freshness_k.json",
+      "t_local_ms": 0.428,
+      "t_chain_ms": 10.517699999999998,
+      "knee_k_analytic": 146.07916666666662,
+      "knee_reached": true,
+      "knee_text": "k \u2248 146",
+      "Pstar_inf": 110,
+      "measured_knee_tested_k": "inf",
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 11.755668400000001,
+          "median_ms": 10.945699999999999,
+          "p95_ms": 16.152575,
+          "P*(0.5)": 4
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 2.379056,
+          "median_ms": 0.4557,
+          "p95_ms": 10.479224999999998,
+          "P*(0.5)": 21
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 0.8495272,
+          "median_ms": 0.42484999999999995,
+          "p95_ms": 0.7644599999999994,
+          "P*(0.5)": 58
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.453232,
+          "median_ms": 0.428,
+          "p95_ms": 0.6312099999999993,
+          "P*(0.5)": 110
+        }
+      }
+    },
+    {
+      "row": "#37 r1",
+      "mode": "full",
+      "host": "2.80 GHz shared",
+      "file": "results/freshness_k_probe_fullref.json",
+      "t_local_ms": 0.5287,
+      "t_chain_ms": 14.37675,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.529 \u2265 0.5 ms; k=\u221e P*(0.5) = 77)",
+      "Pstar_inf": 77,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 15.4802472,
+          "median_ms": 14.90545,
+          "p95_ms": 22.721659999999996,
+          "P*(0.5)": 3
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 3.6852571999999997,
+          "median_ms": 0.64515,
+          "p95_ms": 18.001399999999997,
+          "P*(0.5)": 13
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 1.2374608,
+          "median_ms": 0.54,
+          "p95_ms": 1.5042799999999992,
+          "P*(0.5)": 40
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.6486836,
+          "median_ms": 0.5287,
+          "p95_ms": 1.1886249999999996,
+          "P*(0.5)": 77
+        }
+      }
+    },
+    {
+      "row": "#37 r1",
+      "mode": "probe",
+      "host": "2.80 GHz shared",
+      "file": "results/freshness_k_probe.json",
+      "t_local_ms": 0.5398499999999999,
+      "t_chain_ms": 2.75795,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.540 \u2265 0.5 ms; k=\u221e P*(0.5) = 78)",
+      "Pstar_inf": 78,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 3.6477712,
+          "median_ms": 3.2978,
+          "p95_ms": 5.7687149999999985,
+          "P*(0.5)": 13
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 1.2407156,
+          "median_ms": 0.5216000000000001,
+          "p95_ms": 3.87462,
+          "P*(0.5)": 40
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 0.6999772,
+          "median_ms": 0.5217499999999999,
+          "p95_ms": 1.2596799999999888,
+          "P*(0.5)": 71
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.6385187999999999,
+          "median_ms": 0.5398499999999999,
+          "p95_ms": 0.9751449999999999,
+          "P*(0.5)": 78
+        }
+      }
+    },
+    {
+      "row": "#37 r2",
+      "mode": "probe",
+      "host": "2.80 GHz shared",
+      "file": "results/freshness_k_probe_r2.json",
+      "t_local_ms": 0.48965000000000003,
+      "t_chain_ms": 2.88805,
+      "knee_k_analytic": 279.03864734299594,
+      "knee_reached": true,
+      "knee_text": "k \u2248 279",
+      "Pstar_inf": 87,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 4.020074,
+          "median_ms": 3.3777,
+          "p95_ms": 5.566834999999999,
+          "P*(0.5)": 12
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 1.5758315999999999,
+          "median_ms": 0.5956,
+          "p95_ms": 5.653955,
+          "P*(0.5)": 31
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 0.7889799999999999,
+          "median_ms": 0.5281,
+          "p95_ms": 1.3409049999999927,
+          "P*(0.5)": 63
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.5704104,
+          "median_ms": 0.48965000000000003,
+          "p95_ms": 0.9536399999999999,
+          "P*(0.5)": 87
+        }
+      }
+    },
+    {
+      "row": "#37 r2",
+      "mode": "full",
+      "host": "2.80 GHz shared",
+      "file": "results/freshness_k_probe_fullref_r2.json",
+      "t_local_ms": 0.5156000000000001,
+      "t_chain_ms": 10.283750000000001,
+      "knee_k_analytic": null,
+      "knee_reached": false,
+      "knee_text": "not reached (t_local 0.516 \u2265 0.5 ms; k=\u221e P*(0.5) = 80)",
+      "Pstar_inf": 80,
+      "measured_knee_tested_k": null,
+      "per_k": {
+        "1": {
+          "n": 250,
+          "mean_ms": 11.402274399999998,
+          "median_ms": 10.79935,
+          "p95_ms": 14.893999999999998,
+          "P*(0.5)": 4
+        },
+        "5": {
+          "n": 250,
+          "mean_ms": 2.7046499999999996,
+          "median_ms": 0.53695,
+          "p95_ms": 11.702139999999993,
+          "P*(0.5)": 18
+        },
+        "25": {
+          "n": 250,
+          "mean_ms": 0.9854132,
+          "median_ms": 0.50905,
+          "p95_ms": 0.9442449999999998,
+          "P*(0.5)": 50
+        },
+        "inf": {
+          "n": 250,
+          "mean_ms": 0.6181343999999999,
+          "median_ms": 0.5156000000000001,
+          "p95_ms": 0.97843,
+          "P*(0.5)": 80
+        }
+      }
+    }
+  ]
+}

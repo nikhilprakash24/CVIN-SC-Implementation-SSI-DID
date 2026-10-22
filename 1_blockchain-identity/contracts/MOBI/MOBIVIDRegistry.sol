@@ -310,6 +310,75 @@ contract MOBIVIDRegistry is ERC1056Registry {
         changed[vehicleIdentity] = block.number;
     }
 
+    // ============ VEHICLE KEY ANCHORING (defect D11b) ============
+
+    /**
+     * @dev Name of the ERC-1056 attribute that carries the vehicle's secp256k1
+     *      verification key — the same name registerVehicle / updateVehicleKey
+     *      and the testbed resolvers already use, so one event walk finds the
+     *      key whichever path published it.
+     */
+    bytes32 public constant VEHICLE_KEY_ATTRIBUTE = keccak256("did/pub/secp256k1/veriKey/base64");
+
+    /// @dev vehicle identity => a verification key has been anchored on-chain
+    mapping(address => bool) public vehicleKeyAnchored;
+
+    event VehicleKeyAnchored(
+        address indexed vehicleIdentity,
+        bytes32 indexed keyHash,
+        address indexed anchoredBy,
+        uint256 validTo
+    );
+
+    /**
+     * @dev Anchor the vehicle's verification key on-chain as a DIDAttributeChanged
+     *      event with the vehicle-lifetime validity, so that a verifier holding no
+     *      off-chain registration record can still resolve the key that signs the
+     *      vehicle's V2X messages (defect D11b: before this the key was generated
+     *      off-chain after the birth and never published).
+     *
+     *      Who may anchor:
+     *      - the current identity owner, at any time (a rotation with lifetime
+     *        validity; updateVehicleKey remains the 1-year variant);
+     *      - the manufacturer that registered the birth, exactly once and only
+     *        while the vehicle has never changed hands — the birth session. After
+     *        the first sale only the owner can publish keys, so the manufacturer
+     *        holds no standing power over a vehicle it no longer controls.
+     *      The attribute is written with the identity owner as the ERC-1056 actor,
+     *      exactly as the birth attributes are, preserving the base invariant that
+     *      attributes are owner-authored.
+     */
+    function anchorVehicleKey(address vehicleIdentity, bytes calldata publicKey)
+        external
+        vehicleRegistered(vehicleIdentity)
+        notRevoked(vehicleIdentity)
+    {
+        require(
+            publicKey.length == 65 || publicKey.length == 33,
+            "Invalid secp256k1 public key length"
+        );
+        address owner = identityOwner(vehicleIdentity);
+        if (msg.sender != owner) {
+            require(
+                msg.sender == vehicleBirths[vehicleIdentity].manufacturer,
+                "Only the identity owner or the registering manufacturer"
+            );
+            require(!vehicleKeyAnchored[vehicleIdentity], "Vehicle key already anchored");
+            require(
+                ownershipHistory[vehicleIdentity].length == 0,
+                "Vehicle has changed hands: only the owner can anchor"
+            );
+        }
+        vehicleKeyAnchored[vehicleIdentity] = true;
+        setAttribute(vehicleIdentity, owner, VEHICLE_KEY_ATTRIBUTE, publicKey, PERMANENT_ATTRIBUTE_VALIDITY);
+        emit VehicleKeyAnchored(
+            vehicleIdentity,
+            keccak256(publicKey),
+            msg.sender,
+            block.timestamp + PERMANENT_ATTRIBUTE_VALIDITY
+        );
+    }
+
     // ============ VEHICLE OWNERSHIP (MOBI VID II) ============
 
     /**
@@ -476,7 +545,14 @@ contract MOBIVIDRegistry is ERC1056Registry {
     /**
      * @dev Get DID string for vehicle
      * @param vehicleIdentity Vehicle address
-     * @return DID string in format: did:ethr:0x{chainId}:0x{address}
+     * @return DID string in format: did:ethr:0x{chainId hex}:0x{40 lowercase hex}
+     *
+     * The chain id is the minimal (unpadded) lowercase hex of block.chainid
+     * with a 0x prefix, as the did:ethr method specification writes it;
+     * the address is the 0x-prefixed, zero-padded 40-hex-char form. Earlier
+     * revisions omitted the 0x on the address (defect D10), which made the
+     * string a non-conformant did:ethr identifier.
+     *      (Review-02 K-15 is the same fix, made independently on the parallel trunk.)
      *
      * Note: This is a view helper. In practice, DID resolution
      * happens off-chain by parsing events.

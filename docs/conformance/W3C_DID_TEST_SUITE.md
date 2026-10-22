@@ -13,7 +13,29 @@ not: 113 of 299 DID Resolution assertions fail, all traceable to five defects
 in `DIDResolutionMetadata` / `DIDDocumentMetadata` and in error handling. DID
 URL dereferencing could not be tested because the project has no dereferencer.
 
-**Update 2026-10-04 (section 8).** Re-run on the same suite commit after the
+**Update 2026-10-03.** The five defects were fixed in `did_resolver.py` and
+the suite was re-run on the same commit and harness: 335/336 (resolution
+193/194, the other suites unchanged at 142/142). Sections 1-5 are kept as the
+record of the 2026-09-24 run; section 7 has the re-run.
+
+**Update 2026-10-04.** The suite was run a third time with the `did:ethr`
+entry replaced by an identifier minted by the project's `MOBIVIDRegistry`
+contract on a Hardhat chain (D10 follow-up in `docs/DEFECT_LOG.md`):
+335/336, the same result and the same single failure as section 7. Section 8.
+
+**Merge note (2026-10-06).** Two lineages re-ran this suite independently in
+October 2026. Sections 7–8 below are the sandbox lineage's record; sections 9–11
+are the review-2 lineage's record (its sections 7–9, renumbered at the merge;
+their internal cross-references to "section 7/8/9" mean 9/10/11). Both end at
+335/336 on the same denominator with the same single failure.
+
+**Update 2026-10-06 (merged trunk, section 12).** After the merge commit
+`bd90004` the suite was run on the merged resolver with the default fixtures
+and with a freshly registry-minted `did:ethr`: **335/336 both**, control
+347/347, the same single R5′ failure. `blockchainAccountId` is now decimal
+CAIP-10 in every generated document (D27 closed by S-10).
+
+**Update 2026-10-04 (review-2 lineage, now section 10).** Re-run on the same suite commit after the
 review-02 S-10 resolver fix: **336/441** (was 328/441); DID Resolution
 **194/299** (was 186/299), 105 failures. R5 is cleared in the resolver (one
 residual failure is a test-vector issue, R5'); R1-R4 remain. No new failures.
@@ -57,7 +79,8 @@ python3 docs/conformance/generate_implementations.py docs/conformance/implementa
 | `implementations/cvin-resolver-mobi.json` | resolver executions: `resolve`, `resolveRepresentation`, `did:mobi:` (trailing colon, invalid per ABNF) | `resolve()` output |
 | `implementations/cvin-resolver-nft.json` | resolver executions: `resolve`, `resolveRepresentation`, `did:nft:0x1:0xabc` (missing tokenId) | `resolve()` output |
 
-Mapping rules (see the script's docstring):
+Mapping rules as of the 2026-09-24 run (the generator was updated for the
+re-run; section 7.2 lists what changed):
 
 * `didDocumentDataModel.properties` = `didDocument` minus `@context`;
   `representationSpecificEntries` = `{"@context": ...}`;
@@ -294,8 +317,252 @@ internal 75 % should not be presented as if it were an external result.
 | `reports/jest-control/control-cli-<suite>-2026-10-04.json` | control run on the section 8 harness (347/347) |
 | `reports/did-implementation-report-2026-10-04.html`, `reports/did-spec-test-run-2026-10-04.json` | suite HTML report and its sanitized input for the section 8 re-run |
 | `internal/w3c_compliance_report.json` | output of `cv2x-testbed/scripts/w3c_compliance_checker.py` for the comparison in section 5 |
+| `reports/rerun-2026-10-03/jest-cvin/cvin-cli-<suite>.json` / `.txt` | raw jest `--json` results and verbose transcripts of the re-run (section 7) |
+| `reports/rerun-2026-10-03/did-implementation-report.html`, `did-spec-test-run.latest.json` | the suite's HTML report and its sanitized input, re-run |
+| `reports/rerun-2026-10-03/internal/w3c_compliance_report.json` | output of the (now executable) internal checker after the fixes (section 7.4) |
+| `implementations-registry-did/cvin-*.json` | the six implementation files with the registry-minted `did:ethr` (section 8; `generate_implementations.py --ethr-did ...`) |
+| `reports/registry-did-2026-10-04/mint_did.js`, `mint_did.out.txt` | Hardhat script that deployed `MOBIVIDRegistry`, registered the vehicle and printed the DID, and its output |
+| `reports/registry-did-2026-10-04/jest-cvin/cvin-cli-<suite>.json` / `.txt` | raw jest `--json` results and verbose transcripts of the registry-minted run (section 8.3) |
+| `reports/registry-did-2026-10-04/did-implementation-report.html`, `did-spec-test-run.latest.json` | the suite's HTML report and its sanitized input, registry-minted run |
+| `reports/registry-did-2026-10-04/baseline-default-fixtures/jest-cvin/` | raw jest results of the default-fixture run made on the same day, clone and commit (section 8.4 baseline) |
 
-## 7. Review 02 (2026-10-03): S-10 and changes since this run
+## 7. Re-run after fixes (2026-10-03)
+
+### 7.1 What was changed in `did_resolver.py`
+
+All five root causes of section 4 were addressed in
+`2_w3c-ssi-layer/did-resolution/did_resolver.py`; nothing else in the
+resolver's public API changed (`resolve(did)` still returns a
+`DIDResolutionResult` with `.didDocument` / `.didResolutionMetadata` /
+`.didDocumentMetadata` and `to_dict()`, the cache and `create_did()` are
+unchanged).
+
+| Root cause | Fix |
+|---|---|
+| R1 `error` / `errorMessage` always present | `DIDResolutionMetadata.to_dict()` emits only populated properties. Failures are raised internally as `DIDResolutionError(code, message)` and turned into a result with a single-keyword `error` (`invalidDid`, `methodNotSupported`, `representationNotSupported`, `internalError`), `didDocument: null` and empty `didDocumentMetadata`. |
+| R2 `contentType` on `resolve()` | `DIDResolutionResult.to_dict()` drops `contentType` unless the result came from the new `resolve_representation(did, accept=None)` (alias `resolveRepresentation`), which serialises the document (`didDocumentStream`, `json.dumps` of the data model) and sets `contentType: application/did+ld+json`; any other `accept` is `representationNotSupported` with an empty stream. The in-process attribute `didResolutionMetadata.contentType` is kept on successful `resolve()` results (the internal checker reads it) but is never serialised for `resolve()`. |
+| R3 null-placeholder document metadata | `DIDDocumentMetadata.to_dict()` omits `None`, empty `equivalentId` and `deactivated == False`, so an untouched instance serialises to `{}`; successful results carry `created` (and `versionId` for `did:ethr`) only. No `canonicalId` is emitted. |
+| R4 timestamp format | `created` and `retrieved` are produced by `xml_datetime_now()` -> `YYYY-MM-DDTHH:MM:SSZ` (UTC, no sub-seconds). |
+| R5 no syntax validation | `_parse_did` matches the DID Core 3.1 ABNF (`did:` + `[a-z0-9]+` method-name + `method-specific-id = *( *idchar ":" ) 1*idchar`, `idchar = ALPHA / DIGIT / "." / "-" / "_" / pct-encoded`) before dispatch: non-matching input (`did:ethr_0x1234`, `did:mobi:`, `not-a-did`, DID URLs with `#`/`?`/`/`) is `invalidDid`; a valid DID with an unimplemented method (`did:web:...`, `did:example:...`) is `methodNotSupported`. Method-specific rules (`did:nft` needs chainId:contract:tokenId, `did:mobi` a single VIN segment, `did:ethr`/`did:key` one or two segments) are also reported as `invalidDid`. |
+
+### 7.2 Generator and run
+
+`generate_implementations.py` now records the `resolveRepresentation`
+executions and the method files' per-content-type block from
+`resolve_representation()` (stream + `contentType`), and the `resolve`
+executions from `resolve()`; the success check tests for the *absence* of
+`error`. The three DIDs, the four error inputs and the ten executions are the
+same as on 2026-09-24. Suite commit, Node/jest versions, registration and
+runner are unchanged (sections 1, 2.2, 2.3); Python 3.11.15.
+
+### 7.3 Results
+
+Per suite (jest-CLI run, `reports/rerun-2026-10-03/jest-cvin/cvin-cli-<suite>.json`):
+
+| DID Core section / suite | Tests | Passed | Failed | 2026-09-24 (passed/tests) |
+|---|---|---|---|---|
+| 3.1 Identifier syntax (`did-identifier`) | 3 | 3 | 0 | 3/3 |
+| 5.x Core properties + 7.3 metadata structure (`did-core-properties`) | 88 | 88 | 0 | 88/88 |
+| 6.1 / 6.3.1 Production (`did-production`) | 48 | 48 | 0 | 48/48 |
+| 6.3.2 Consumption (`did-consumption`) | 3 | 3 | 0 | 3/3 |
+| 7.1 DID Resolution (`did-resolution`) | 194 | 193 | 1 | 186/299 |
+| 7.2 DID URL Dereferencing | - | - | - | not run (no dereferencer, unchanged) |
+| **Total** | **336** | **335** | **1** | **328/441** | <!-- history: earlier-run column -->
+
+Per implementation, DID Resolution suite:
+
+| Resolver file | Executions | Tests | Passed | Failed | 2026-09-24 |
+|---|---|---|---|---|---|
+| `cvin-resolver-ethr.json` | 4 | 78 | 78 | 0 | 77/119 |
+| `cvin-resolver-mobi.json` | 3 | 58 | 58 | 0 | 52/90 |
+| `cvin-resolver-nft.json` | 3 | 58 | 57 | 1 | 57/90 |
+
+The number of resolution tests fell from 299 to 194 because the suite
+registers several `it()` blocks only when the corresponding key is present
+in the recorded output (`error` -> "single keyword" test; `contentType` ->
+two media-type tests; each `didDocumentMetadata` property -> its format
+test). On 2026-09-24 every execution carried `error`, `contentType` and all
+eight metadata keys, so every one of those tests was instantiated (and most
+failed); now they are instantiated only where the key legitimately appears.
+The 17 normative statements that failed in section 4 all pass wherever they
+are now evaluated: the "if the resolution is successful ..." tests that were
+previously skipped because `error` was always present (section 3, last
+paragraph) are now actually exercised and pass.
+
+### 7.4 Remaining failure
+
+One test fails, in `cvin-resolver-nft.json`, execution `did:nft:0x1:0xabc`
+(registered as `invalidDidErrorOutcome`):
+
+| Test (DID Core 7.1.2) | Assertion |
+|---|---|
+| invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax. | `expect(did).not.toBeValidDid()` - received `"did:nft:0x1:0xabc"` |
+
+The resolver's output for this input is conformant (`error: "invalidDid"`,
+`didDocument: null`, `didDocumentMetadata: {}`; the first two assertions of
+the same test pass). The suite's third assertion requires the *input* to
+violate the generic 3.1 ABNF, and `did:nft:0x1:0xabc` does not: it violates
+only the `did:nft` method rule (missing tokenId). DID Core 7.1.2 defines
+`invalidDid` as "does not conform to valid syntax" and the DID Resolution
+specification applies it to method-specific syntax as well, so the resolver
+keeps reporting `invalidDid` for this case. This is a mismatch between the
+registered vector and the suite's narrower test, not a resolver defect; the
+vector was kept so that the executions are identical to the 2026-09-24 run.
+(Replacing it with an input that is invalid under the generic ABNF, for
+example the trailing-colon form `did:nft:0x1:0xabc:`, would remove the
+failure; the generic-ABNF path is already covered by `did:ethr_0x1234` and
+`did:mobi:`, both of which pass.)
+
+No other failures remain: R1-R5 produce zero failures.
+
+### 7.5 Project checks after the fixes
+
+| Check | Before | After |
+|---|---|---|
+| `cv2x-testbed/scripts/w3c_compliance_checker.py` (executable score) | 93.2 % (40 PASS / 2 FAIL / 2 PARTIAL of 44) | <!-- history: before/after table of 2026-10-03 --> **94.3 %** (41 PASS / 2 FAIL / 1 PARTIAL of 44); DID Core 14/15 (96.7 %). The 7.1.2 "unsupported method -> `methodNotSupported`" item moved from PARTIAL to PASS. Remaining PARTIAL: `did:mobi` placeholder key material; remaining FAILs: the two documented VC deviations (canonicalization, cryptosuite). Report: `reports/rerun-2026-10-03/internal/w3c_compliance_report.json`. |
+| `python -m pytest 2_w3c-ssi-layer -q` | 60 passed | 60 passed | <!-- history: before/after table of 2026-10-03 -->
+| `docs/conformance/generate_implementations.py` | - | regenerates the six `implementations/cvin-*.json` files from the fixed resolver (the registered inputs of section 7.3) |
+
+The internal checker's 7.1.2 metadata item still reads
+`didResolutionMetadata.contentType` on `resolve()` results; it passes because
+the attribute is kept in-process (section 7.1, R2) even though it is no
+longer serialised for `resolve()`.
+
+## 8. Re-run on a registry-minted did:ethr (2026-10-04)
+
+Sections 1-7 register `did:ethr:0x1:0x1234567890abcdef1234567890abcdef12345678`,
+a static fixture in `generate_implementations.py`; no contract was involved
+in producing it. Defect D10 (`docs/DEFECT_LOG.md`: `MOBIVIDRegistry.getVehicleDID`
+emitted the address without `0x`, fixed in `65a143f`) left one follow-up:
+run the suite on a `did:ethr` that the registry contract actually mints. This
+section records that run.
+
+### 8.1 The identifier
+
+| Item | Value |
+|---|---|
+| DID | `did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375` |
+| Produced by | `1_blockchain-identity/contracts/MOBI/MOBIVIDRegistry.sol:MOBIVIDRegistry.getVehicleDID(vehicle)` |
+| Repository commit | `d941ad5` (`git rev-parse --short HEAD`; the contract is unchanged since `65a143f`) |
+| Chain | Hardhat in-process network, `chainId` 31337 = `0x7a69` (`hardhat.config.js`) |
+| Script | `reports/registry-did-2026-10-04/mint_did.js`, run with `npx hardhat run` from `1_blockchain-identity`; output in `mint_did.out.txt` |
+
+The script deploys `MOBIVIDRegistry` (deployer `0xf39F...2266` is auto-authorised
+as manufacturer by the constructor), draws a fresh vehicle address with
+`ethers.Wallet.createRandom()` (`0x2244C598F83916430028A1B3C438C640ca0e0375`),
+calls `registerVehicleBirth(vehicle, keccak256("1HGBH41JXMN109186:salt"),
+"enc:vin", keccak256("cert"), deployer, "0x")` (tx `0xa721fc...bfb8`, block 2,
+registry at `0x5FbD...0aa3`) and then `getVehicleDID(vehicle)`. The contract
+returns the chain id as minimal lowercase hex and the address as 0x-prefixed,
+zero-padded, lowercase 40-hex, which is the string above.
+
+### 8.2 Generator and run
+
+`generate_implementations.py` gained an optional `--ethr-did <did>` flag
+(environment variable `CVIN_ETHR_DID`) that replaces the did:ethr identifier
+in `METHODS` before generation; the did:ethr error cases (`did:ethr_0x1234`,
+`did:web:example.com`) and the did:mobi / did:nft entries are unchanged.
+Without the flag the output is the same as before: the default set was
+regenerated into a scratch directory and compared with the committed
+`implementations/cvin-*.json`; the only differences are the per-run
+`created` / `retrieved` timestamps. The committed default files were not
+touched.
+
+```bash
+python3 docs/conformance/generate_implementations.py \
+    docs/conformance/implementations-registry-did \
+    --ethr-did did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375
+```
+
+The resolver resolves the minted DID without error (`did:ethr` with an
+explicit chain id is parsed as `<chainId>:<address>`); the recorded
+`resolve` / `resolveRepresentation` outputs carry `id`, `controller`,
+`verificationMethod[0].id` / `.controller` equal to the minted DID,
+`blockchainAccountId: "eip155:0x7a69:0x2244...0375"`, `created` and
+`versionId: "1"`.
+
+Suite: a fresh clone of `w3c/did-test-suite` at the same commit
+`939b31d07d5b1699340ac0702ec0fa46ffcdef0a` (still the head of `main`),
+`npm install` (lerna bootstrap), Node v22.22.2, npm 10.9.7, jest 26.6.3,
+jest-did-matcher 0.0.1, Python 3.11.15. The six files from
+`implementations-registry-did/` were copied to `suites/implementations/`
+under the same names, registered with `suite-run/default.js-registration.diff`
+(applies cleanly, 5 files, 15 insertions) and run with
+`node run-cvin-cli.js cvin` (section 2.3), then `cli-to-report.js` and
+`report/generate-report.js` for the HTML report. Before that, on the same
+clone, the default `implementations/cvin-*.json` were run the same way as a
+baseline for this commit (`reports/registry-did-2026-10-04/baseline-default-fixtures/`).
+
+### 8.3 Results
+
+Per suite (jest-CLI run, `reports/registry-did-2026-10-04/jest-cvin/cvin-cli-<suite>.json`):
+
+| DID Core section / suite | Tests | Passed | Failed | 2026-10-03, section 7.3 (passed/tests) |
+|---|---|---|---|---|
+| 3.1 Identifier syntax (`did-identifier`) | 3 | 3 | 0 | 3/3 |
+| 5.x Core properties + 7.3 metadata structure (`did-core-properties`) | 88 | 88 | 0 | 88/88 |
+| 6.1 / 6.3.1 Production (`did-production`) | 48 | 48 | 0 | 48/48 |
+| 6.3.2 Consumption (`did-consumption`) | 3 | 3 | 0 | 3/3 |
+| 7.1 DID Resolution (`did-resolution`) | 194 | 193 | 1 | 193/194 |
+| 7.2 DID URL Dereferencing | - | - | - | not run (no dereferencer, unchanged) |
+| **Total** | **336** | **335** | **1** | **335/336** |
+
+Per implementation, DID Resolution suite:
+
+| Resolver file | Executions | Tests | Passed | Failed | 2026-10-03 |
+|---|---|---|---|---|---|
+| `cvin-resolver-ethr.json` (minted DID) | 4 | 78 | 78 | 0 | 78/78 |
+| `cvin-resolver-mobi.json` | 3 | 58 | 58 | 0 | 58/58 |
+| `cvin-resolver-nft.json` | 3 | 58 | 57 | 1 | 57/58 |
+
+Baseline on the same day, clone and commit with the default fixtures:
+3/3, 88/88, 48/48, 3/3, 193/194 = **335/336**, identical to section 7.3.
+
+### 8.4 Diff against section 7.3
+
+* Totals, per-suite counts and per-resolver counts are identical:
+  335/336 in both runs, 78/78 for the did:ethr resolver file in both.
+* 87 assertions carry the DID in their title (1 identifier, 29
+  core-properties, 16 production, 1 consumption, 40 resolution). In the
+  2026-10-03 results every one of them names the static fixture; in this run
+  every one of them names
+  `did:ethr:0x7a69:0x2244c598f83916430028a1b3c438c640ca0e0375` and none
+  names the fixture. All 87 pass.
+* The one failure is the same assertion as in section 7.4:
+  `cvin-resolver-nft.json`, execution `did:nft:0x1:0xabc`,
+  "7.1.2 DID Resolution Metadata - invalidDid - The DID supplied to the DID
+  resolution function does not conform to valid syntax",
+  `expect(did).not.toBeValidDid()` on `"did:nft:0x1:0xabc"`. It does not
+  involve did:ethr. The explanation in section 7.4 stands: the input is a
+  valid generic DID that only violates the did:nft method rule, and the
+  resolver's `invalidDid` outcome for it is kept.
+
+### 8.5 What the result covers
+
+The suite checks the identifier's syntax (3.1 ABNF, which does not
+distinguish `0x1` from `0x7a69` or a padded from an unpadded address beyond
+`idchar`), the DID document the resolver builds for it, its JSON-LD
+representation and the resolution metadata. For the registry-minted
+identifier all of that passes, so the string `getVehicleDID` produces after
+the D10 fix is a conformant did:ethr identifier as far as the W3C suite can
+tell, and the resolver produces a conformant document for it.
+
+Two things the run does not establish, stated so that the number is not
+read as more than it is:
+
+* The document is still constructed by `did_resolver.py` from the identifier
+  alone (section 5, last paragraph). The on-chain birth record (owner,
+  `vinHash`, the ERC-1056 attribute) is not read and does not appear in the
+  resolved document; the contract supplied the identifier, not the document.
+* `blockchainAccountId` is emitted as `eip155:0x7a69:...` (hex chain id).
+  The did:ethr method specification and CAIP-10 write the chain id in
+  decimal (`eip155:31337:...`). The suite's 5.2.1 checks examine only
+  `publicKeyJwk`, `publicKeyMultibase` and `publicKeyBase58`, so this value
+  is not tested; it is a resolver detail outside the suite's reach and is
+  recorded here, not fixed.
+
+
+## 9. Review 02 (2026-10-03): S-10 and changes since this run
 
 **Status: the external suite was NOT re-run.** It needs a clone of
 `w3c/did-test-suite` plus its npm install, and neither is available offline in
@@ -355,14 +622,14 @@ section 8 the committed inputs did not match the 2026-09-24 reports. The exact
 inputs of the 2026-09-24 run are recoverable with
 `git show ed62314:docs/conformance/implementations/<file>`.
 
-## 8. Re-run 2026-10-04 (review 02 follow-up F-B): resolver after S-10
+## 10. Re-run 2026-10-04 (review 02 follow-up F-B): resolver after S-10
 
 **Status: measured.** The suite was re-run against the current resolver
 (`did_resolver.py` as of `bd18057`, "S-10: resolver returns cache copies and
 correct DID error codes"; repository tree `d2e6a58`). Neither the resolver nor
 the suite was changed for this run.
 
-### 8.1 Conditions (identical procedure to sections 2-3)
+### 10.1 Conditions (identical procedure to sections 2-3)
 
 | Item | 2026-09-24 run | 2026-10-04 re-run |
 |---|---|---|
@@ -385,7 +652,7 @@ Raw output: `reports/jest-cvin/cvin-cli-<suite>-2026-10-04.{json,txt}`,
 with `cli-to-report.js` + `report/generate-report.js`). The 2026-09-24 files
 are kept unchanged next to them.
 
-### 8.2 Totals and per suite (old → new)
+### 10.2 Totals and per suite (old → new)
 
 | DID Core section / suite | Tests | Passed 09-24 | Passed 10-04 | Failed 09-24 | Failed 10-04 |
 |---|---|---|---|---|---|
@@ -406,7 +673,7 @@ Per resolver (DID Resolution suite):
 
 Distinct failing normative statements: 17 → 15.
 
-### 8.3 The eight tests that changed (all failed → passed; none passed → failed)
+### 10.3 The eight tests that changed (all failed → passed; none passed → failed)
 
 | Resolver | Execution | Test | Why it now passes |
 |---|---|---|---|
@@ -419,7 +686,7 @@ Distinct failing normative statements: 17 → 15.
 | mobi | `did:mobi:` | 7.1.2 "The value of this property [error] MUST be a single keyword ASCII string" | `"invalidDid"` instead of `null` (was counted under R1) |
 | mobi | `did:mobi:` | 7.1.3 canonicalId "MUST be produced by … the same DID Method" | no longer evaluated against a document whose `canonicalId` is `null` (was counted under R3) |
 
-### 8.4 Root causes, updated
+### 10.4 Root causes, updated
 
 Counts are failures in the 2026-10-04 run; line numbers refer to
 `2_w3c-ssi-layer/did-resolution/did_resolver.py` at `bd18057`.
@@ -452,7 +719,7 @@ because changing the test inputs would change what is measured.
 **No new failures.** No test that passed on 2026-09-24 fails now, and no new
 failure message appears in any suite.
 
-### 8.5 Did the section 7 prediction hold?
+### 10.5 Did the section 7 prediction hold?
 
 | Prediction (section 7) | Outcome |
 |---|---|
@@ -461,7 +728,7 @@ failure message appears in any suite.
 | "A re-run may also *add* failures" (guarded tests firing on error results carrying `contentType` and the 8-key metadata) | **Did not happen.** Because of R1, the suite already treated *every* execution, including the old `did:mobi:` "success", as unsuccessful (`hasOwnProperty('error')` is true for `error: null`), so the error-guarded tests were already firing on all 10 executions in the old run. There was nothing left to newly trigger. |
 | "The 142/142 on identifiers and documents is not expected to change" | **Held.** 142/142. The CAIP-10 decimal chain-id change is not examined by any suite test (`blockchainAccountId` is not checked), so it moved no number. |
 
-Net: **328/441 → 336/441** (74.4 % → 76.2 %); DID Resolution **186/299 →
+<!-- history: an earlier run's arithmetic; current totals in register #24 --> Net: **328/441 → 336/441** (74.4 % → 76.2 %); DID Resolution **186/299 →
 194/299**; ethr 77 → 79/119, mobi 52 → 58/90, nft 57 → 57/90. 104 of the
 105 remaining failures come from R1-R4 in the metadata dataclasses
 (`DIDResolutionMetadata`, `DIDDocumentMetadata`) and the timestamp format;
@@ -469,14 +736,14 @@ the remaining one is the R5′ test vector. What a fix of R1-R4 would score is
 not predicted here: removing `error: null` changes which guarded tests the
 suite evaluates, so it has to be measured.
 
-## 9. Re-run 2026-10-04b (stream G-R): resolver after the R1-R4 fix
+## 11. Re-run 2026-10-04b (stream G-R): resolver after the R1-R4 fix
 
 **Status: measured.** The suite was re-run after R1-R4 were fixed in the
 resolver (`fa5e373`, plus the message-only change `93f4331`). The suite and
 the runner were not changed. The generator needed a small adaptation (9.1),
 because the unchanged script cannot run against the fixed resolver.
 
-### 9.1 What changed in the resolver, and the one change to the generator
+### 11.1 What changed in the resolver, and the one change to the generator
 
 | Root cause | Fix (`2_w3c-ssi-layer/did-resolution/did_resolver.py` @ `93f4331`) |
 |---|---|
@@ -506,7 +773,7 @@ The DIDs, the error vectors (including the R5′ vector `did:nft:0x1:0xabc`),
 the outcome mapping and the file layout are unchanged. Every value in the
 input files is still taken unchanged from the resolver.
 
-### 9.2 Conditions
+### 11.2 Conditions
 
 The procedure is the one in section 8.1, with these differences:
 
@@ -522,7 +789,7 @@ The procedure is the one in section 8.1, with these differences:
 Node v22.22.0 / npm 10.9.4, jest 26.6.3, Python 3.11.15. Control (WG
 example) **347/347**. The 09-24 and 10-04 files are kept unchanged.
 
-### 9.3 Results (10-04 → 10-04b)
+### 11.3 Results (10-04 → 10-04b)
 
 | Suite | 10-04 passed / tests | 10-04b passed / tests |
 |---|---|---|
@@ -580,7 +847,7 @@ The 37 passing tests that are no longer generated:
 
 None of them is lost coverage of a property the resolver emits.
 
-### 9.4 Root causes (10-04 → 10-04b)
+### 11.4 Root causes (10-04 → 10-04b)
 
 | Root cause | 10-04 failures | failed → passed | failed → not generated | 10-04b failures |
 |---|---|---|---|---|
@@ -598,7 +865,7 @@ The remaining failure is the
 `expect(did).not.toBeValidDid()` fails because the vector is a valid generic
 DID. The vector was left as it is.
 
-### 9.5 Internal checker (register #4)
+### 11.5 Internal checker (register #4)
 
 `python3 cv2x-testbed/scripts/w3c_compliance_checker.py`:
 
@@ -615,3 +882,308 @@ adapts the check to the new contract: `contentType` must be absent from
 `resolve_representation()`, whose stream must parse to the resolved DID. The
 check slot, its weight and the scoring are unchanged. The 7.1.3 `created`
 check still passes (`datetime.fromisoformat` accepts `Z` on Python 3.11).
+
+## 12. Re-run on the merged trunk (2026-10-06)
+
+**Status: measured.** Plan step S7 of `docs/PLAN_MERGE_LINEAGES.md`. Sections
+7–8 (sandbox lineage) and 9–11 (review-2 lineage) each report 335/336, but on
+two different resolvers, two different generators and two different trees.
+The merge commit `bd90004` took the review-2 resolver (decimal CAIP-10 chain
+id, cache TTL, the R1–R4 metadata fixes) and the review-2 generator (without
+the sandbox lineage's `--ethr-did` flag). This section records the suite run
+on that merged state, with the default fixtures and with a `did:ethr` minted
+by the merged `MOBIVIDRegistry`, so that the number quoted for the trunk was
+measured on the trunk.
+
+### 12.1 What is under test
+
+| Item | Value |
+|---|---|
+| Repository commit | `bd90004` (merge of the review-2 lineage `fa6188e` into the sandbox lineage `2b7836d`); working tree otherwise unchanged for this run (no resolver or contract edits) |
+| Resolver | `2_w3c-ssi-layer/did-resolution/did_resolver.py`, byte-identical to the review-2 parent (`fa6188e`; last change `93f4331`, "G-R: methodNotSupported message names the method") |
+| Contract | `1_blockchain-identity/contracts/MOBI/MOBIVIDRegistry.sol` as merged (differs from both parents: +28 lines vs `2b7836d`, +77/−1 vs `fa6188e`, both sides' additions kept); `getVehicleDID` unchanged since K-15 / D10 |
+| Suite | `w3c/did-test-suite` @ `939b31d07d5b1699340ac0702ec0fa46ffcdef0a`, still the head of `main` on 2026-10-06; fresh depth-1 clone into the session scratchpad, `npm install` (lerna bootstrap) |
+| Runtime | Node v22.22.2, npm 10.9.7, jest 26.6.3, jest-did-matcher 0.0.1 (from the lockfile), Python 3.11.15, Hardhat 2.28.6 |
+| Registration / runner | `suite-run/default.js-registration.diff` (applies cleanly: 5 files, 15 insertions), `suite-run/run-cvin-cli.js cvin` / `control`, `suite-run/cli-to-report.js` + `report/generate-report.js`; all unchanged |
+| Run date | 2026-10-06 (UTC) |
+
+### 12.2 Generator: the `--ethr-did` flag ported onto the merged script
+
+The merged `generate_implementations.py` is the review-2 version (section
+11.1: success assertion on an *absent* `error`, `resolveRepresentation` and
+the method file's representation taken from `resolve_representation()`). It
+had no way to register a non-fixture `did:ethr`. The sandbox lineage's
+`--ethr-did <did>` / `CVIN_ETHR_DID` option (section 8.2; `git show
+pre-merge/sandbox:docs/conformance/generate_implementations.py`) was ported
+onto it: an `argparse` front end with an optional positional `output_dir`
+(default `docs/conformance/implementations`, as before) and `--ethr-did`,
+which must start with `did:ethr:` and replaces `METHODS["ethr"]["did"]`
+before generation. The error-case inputs (`did:ethr_0x1234`,
+`did:web:example.com`, `did:mobi:`, `did:nft:0x1:0xabc`), the did:mobi /
+did:nft entries, the mapping and the file layout are untouched.
+
+Check that the default output did not change: the script was run without the
+flag into a scratch directory and compared with the committed
+`implementations/cvin-*.json` (generated by the review-2 lineage on its own
+tree). All six files are **identical except the `created` / `retrieved`
+timestamps** (2, 2, 2, 5, 4, 4 timestamp values per file). The committed
+`implementations/` were then regenerated in place from the merged resolver;
+`git diff` shows 19 changed lines, every one a timestamp (nothing else in
+the merged tree changes the resolver's output, which is expected since the
+resolver is byte-identical to the review-2 parent).
+
+### 12.3 The registry-minted identifier
+
+| Item | Value |
+|---|---|
+| DID | `did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189` |
+| Produced by | `MOBIVIDRegistry.getVehicleDID(vehicle)` on the merged contract |
+| Chain | Hardhat in-process network, `chainId` 31337 = `0x7a69` |
+| Script | `reports/merged-2026-10-06/registry-did/mint_did.js` (the section 8 script, unchanged, `cmp`-identical to `reports/registry-did-2026-10-04/mint_did.js`), run as `cd 1_blockchain-identity && npx hardhat run ../docs/conformance/reports/registry-did-2026-10-04/mint_did.js`; output in `mint_did.out.txt` |
+| Registry / deployer | `0x5FbD…0aa3` / `0xf39F…2266` (deterministic first deployment of the default Hardhat account) |
+| Vehicle | `0xF51acF236D982b1355C70C0EBD66563FC1674189` (`ethers.Wallet.createRandom()`), `registerVehicleBirth` tx `0xcd66ae…1a94`, block 2 |
+
+The identifier differs from the section 8 one only in the vehicle address
+(a fresh random wallet each time). The contract still returns the chain id
+as minimal lowercase hex and the address as 0x-prefixed lowercase 40-hex.
+
+```bash
+python3 docs/conformance/generate_implementations.py \
+    docs/conformance/implementations-registry-did \
+    --ethr-did did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189
+```
+
+This overwrote the 2026-10-04 set in `implementations-registry-did/`. The
+diff to the 2026-10-04 set is exactly three kinds of change:
+
+1. the identifier (9 occurrences in each of `cvin-did-ethr.json` and
+   `cvin-resolver-ethr.json`; the old `0x2244…0375` DID appears nowhere);
+2. **`blockchainAccountId` chain reference in decimal**: `eip155:0x7a69:…` →
+   `eip155:31337:…` in the did:ethr document and `eip155:0x1:0xabc` →
+   `eip155:1:0xabc` in the did:nft document (the 2026-10-04 set was generated
+   by the sandbox resolver, which still wrote the hex form, section 8.5);
+3. the `created` / `retrieved` timestamps.
+
+Metadata (`created`, `versionId: "1"`, `retrieved`, `contentType` on the
+`resolveRepresentation` execution only, the four error executions) is
+otherwise identical to the 2026-10-04 set.
+
+### 12.4 Results
+
+Both CVIN runs were made on the same clone, one after the other: first the
+default `implementations/cvin-*.json`, then the six
+`implementations-registry-did/cvin-*.json` copied over them under the same
+names (`node run-cvin-cli.js cvin` each time; `default.js` restored between
+runs); then `node run-cvin-cli.js control`.
+
+Default fixtures (`reports/merged-2026-10-06/default/jest-cvin/cvin-cli-<suite>.json`):
+
+| DID Core section / suite | Tests | Passed | Failed | Section 11.3 (10-04b) | Section 8.3 baseline |
+|---|---|---|---|---|---|
+| 3.1 Identifier syntax (`did-identifier`) | 3 | 3 | 0 | 3/3 | 3/3 |
+| 5.x Core properties + 7.3 metadata structure (`did-core-properties`) | 88 | 88 | 0 | 88/88 | 88/88 |
+| 6.1 / 6.3.1 Production (`did-production`) | 48 | 48 | 0 | 48/48 | 48/48 |
+| 6.3.2 Consumption (`did-consumption`) | 3 | 3 | 0 | 3/3 | 3/3 |
+| 7.1 DID Resolution (`did-resolution`) | 194 | 193 | 1 | 193/194 | 193/194 |
+| 7.2 DID URL Dereferencing | - | - | - | not run (no dereferencer, unchanged) | - |
+| **Total** | **336** | **335** | **1** | **335/336** | **335/336** |
+
+Registry-minted `did:ethr` (`reports/merged-2026-10-06/registry-did/jest-cvin/cvin-cli-<suite>.json`):
+
+| DID Core section / suite | Tests | Passed | Failed | Section 8.3 (10-04, minted DID) |
+|---|---|---|---|---|
+| 3.1 Identifier syntax (`did-identifier`) | 3 | 3 | 0 | 3/3 |
+| 5.x Core properties + 7.3 metadata structure (`did-core-properties`) | 88 | 88 | 0 | 88/88 |
+| 6.1 / 6.3.1 Production (`did-production`) | 48 | 48 | 0 | 48/48 |
+| 6.3.2 Consumption (`did-consumption`) | 3 | 3 | 0 | 3/3 |
+| 7.1 DID Resolution (`did-resolution`) | 194 | 193 | 1 | 193/194 |
+| 7.2 DID URL Dereferencing | - | - | - | not run |
+| **Total** | **336** | **335** | **1** | **335/336** |
+
+Per implementation, DID Resolution suite (identical in both runs):
+
+| Resolver file | Executions | Tests | Passed | Failed | Sections 8.3 / 11.3 |
+|---|---|---|---|---|---|
+| `cvin-resolver-ethr.json` (fixture, resp. minted DID) | 4 | 78 | 78 | 0 | 78/78 |
+| `cvin-resolver-mobi.json` | 3 | 58 | 58 | 0 | 58/58 |
+| `cvin-resolver-nft.json` | 3 | 58 | 57 | 1 | 57/58 |
+
+Control (WG example implementation, same clone and harness,
+`reports/merged-2026-10-06/control/jest-control/`): identifier 6/6, core
+properties 58/58, production 106/106, consumption 42/42, resolution 135/135 =
+**347/347**, as in sections 3, 10.1 and 11.2.
+
+### 12.5 Comparison with sections 8 and 11
+
+The comparison is test by test on the raw jest output: each test is keyed by
+its ancestor path, title and status, with the did:ethr identifier (fixture,
+2026-10-04 minted, 2026-10-06 minted) masked so that runs on different
+identifiers can be matched.
+
+| Pair | Common (path, title, status) | Only in first | Only in second |
+|---|---|---|---|
+| merged default vs section 11.3 (10-04b, review-2 resolver on its own tree) | 336 | 0 | 0 |
+| merged default vs section 8.3 baseline (sandbox resolver, default fixtures) | 336 | 0 | 0 |
+| merged registry-minted vs section 8.3 (sandbox resolver, 2026-10-04 minted DID) | 336 | 0 | 0 |
+| merged registry-minted vs merged default | 336 | 0 | 0 |
+
+So the merged trunk's inventory and outcome are the same 336 tests with the
+same 335 passes as both lineages reported, and the registry-minted run
+differs from the default run in nothing but the identifier. 87 tests carry
+the did:ethr identifier in their ancestor path (identifier 1,
+core-properties 29, production 16, consumption 1, resolution 40, the same
+count as section 8.4); in the registry run all 87 name
+`did:ethr:0x7a69:0xf51acf236d982b1355c70c0ebd66563fc1674189`, none names
+the fixture or the 2026-10-04 identifier, and all 87 pass.
+
+Both lineages' 335/336 figures therefore describe the same measurement, and
+it holds on the merged state. Nothing in the merge (the contract additions
+from both sides, the sandbox-side documents, the review-2 resolver) moved a
+single assertion.
+
+### 12.6 The remaining failure
+
+One test fails, in both runs, and it is the one from sections 7.4, 8.4, 10.4
+(R5′) and 11.4:
+
+| Resolver file | Execution | Test (DID Core 7.1.2) | Assertion |
+|---|---|---|---|
+| `cvin-resolver-nft.json` | `did:nft:0x1:0xabc` (`invalidDidErrorOutcome`) | invalidDid - The DID supplied to the DID resolution function does not conform to valid syntax. | `expect(did).not.toBeValidDid()` - received `"did:nft:0x1:0xabc"` |
+
+The resolver's output for this input is conformant (`error: "invalidDid"`,
+`didDocument: null`, `didDocumentMetadata: {}`; the test's other assertions
+pass). The suite's assertion requires the *input* to violate the generic
+DID Core 3.1 ABNF, and `did:nft:0x1:0xabc` does not; it violates only the
+`did:nft` method rule (missing tokenId). It is a test-vector issue, not a
+resolver defect, and the vector is kept so that the executions stay
+comparable with every earlier run. Both lineages reached the same
+conclusion independently (sections 7.4 and 10.4); the merged trunk inherits
+it. The resolver was not changed for this run.
+
+### 12.7 `blockchainAccountId` on the merged trunk
+
+Section 8.5 recorded that the sandbox resolver emitted
+`eip155:0x7a69:…` (hex chain id) and the sandbox lineage logged it as D27;
+the review-2 lineage fixed the same thing in S-10 (section 9, "decimal, as
+CAIP-2/10 require"). The merge took the review-2 resolver, so the generated
+documents now carry the decimal form:
+
+| Set | File | `blockchainAccountId` |
+|---|---|---|
+| `implementations/` | `cvin-did-ethr.json`, `cvin-resolver-ethr.json` | `eip155:1:0x1234567890abcdef1234567890abcdef12345678` |
+| `implementations/` | `cvin-did-nft.json`, `cvin-resolver-nft.json` | `eip155:1:0xabc` |
+| `implementations-registry-did/` | `cvin-did-ethr.json`, `cvin-resolver-ethr.json` | **`eip155:31337:0xf51acf236d982b1355c70c0ebd66563fc1674189`** |
+| `implementations-registry-did/` | `cvin-did-nft.json`, `cvin-resolver-nft.json` | `eip155:1:0xabc` |
+
+The DID itself keeps the did:ethr method's hex chain id
+(`did:ethr:0x7a69:…`), which is what the method specification prescribes
+for the identifier; only the CAIP-10 account string is decimal. As before,
+the suite does not examine this value (section 8.5, 10.5), so it moves no
+number; D27 can be closed on the trunk by this record.
+
+### 12.8 Files of this run
+
+| Path | Description |
+|---|---|
+| `generate_implementations.py` | merged (review-2) generator with the ported `--ethr-did` / `CVIN_ETHR_DID` option (12.2) |
+| `implementations/cvin-*.json` | regenerated in place from the merged resolver on 2026-10-06; timestamps are the only change from the review-2 files |
+| `implementations-registry-did/cvin-*.json` | regenerated with the 2026-10-06 minted DID (12.3); replaces the 2026-10-04 set |
+| `reports/merged-2026-10-06/default/jest-cvin/cvin-cli-<suite>.{json,txt}` | raw jest `--json` results and verbose transcripts, default fixtures |
+| `reports/merged-2026-10-06/default/did-implementation-report.html`, `did-spec-test-run.latest.json` | suite HTML report and its sanitized input, default fixtures |
+| `reports/merged-2026-10-06/registry-did/jest-cvin/cvin-cli-<suite>.{json,txt}` | raw jest results and transcripts, registry-minted did:ethr |
+| `reports/merged-2026-10-06/registry-did/did-implementation-report.html`, `did-spec-test-run.latest.json` | suite HTML report and its sanitized input, registry-minted run |
+| `reports/merged-2026-10-06/registry-did/mint_did.js`, `mint_did.out.txt` | the Hardhat mint script (copy of the section 8 one) and its output for this run |
+| `reports/merged-2026-10-06/control/jest-control/control-cli-<suite>.{json,txt}` | control run (WG example implementation, 347/347) on the same clone |
+
+The 2026-10-03 / 2026-10-04 / 2026-10-04b report directories are kept
+unchanged.
+
+## 13. Re-run 2026-10-15 (stream H-R): on-chain resolver; offline and on-chain sets
+
+*Lineage merge note (2026-10-21, PR #3): this section was §10 on the clone lineage; it is §13 on the merged trunk. It was measured on that lineage's resolver; the merged resolver combines it with §12's.*
+
+**Status: measured.** The resolver gained an on-chain mode (`d902864`,
+on top of `f61b3c3`): did:ethr from an ERC-1056 registry and
+did:mobi:<salted VIN hash> through the MOBI VID registry. The offline mode
+stays the default and now labels its results with the non-standard
+resolution-metadata property `cvinResolutionMode: "offline-synthesized"`.
+Two implementation sets were run and are reported **separately**. The suite
+was not changed, and neither was `generate_implementations.py`.
+
+### 10.1 Conditions
+
+| Item | 2026-10-04b | 2026-10-15 |
+|---|---|---|
+| Suite | `w3c/did-test-suite` @ `939b31d` | same commit, fresh clone (`/tmp/did-test-suite-hr`), `npm install` at the root (lerna bootstrap) |
+| Runtime | Node v22.22.0 / npm 10.9.4, jest 26.6.3, Python 3.11.15 | same |
+| Offline inputs | `generate_implementations.py` @ `4eef1c2` | same script, unchanged. Diff of the six files against 10-04b: timestamps, plus `cvinResolutionMode: "offline-synthesized"` in each success's `didResolutionMetadata` |
+| On-chain inputs | – | new `generate_implementations_onchain.py`, which reuses `method_file` / `resolver_file` from the unchanged generator. Hardhat node on port 8560 (chain 31337); it deploys `EthereumDIDRegistry` and `MOBIVIDRegistryV2` and writes the state listed in the script header. Files: `implementations-onchain/onchain-cvin-*.json`; the addresses used are in `onchain-setup.json` |
+| Runner | `suite-run/run-cvin-cli.js cvin` / `control` | same modes, unchanged; a new `onchain` mode registers the `onchain-cvin-*` files |
+| Control | 347/347 | **347/347** |
+
+Raw output:
+
+* offline set: `reports/jest-cvin/cvin-cli-<suite>-2026-10-15.{json,txt}`,
+  `reports/jest-control/control-cli-<suite>-2026-10-15.json`,
+  `reports/did-spec-test-run-2026-10-15.json` and
+  `reports/did-implementation-report-2026-10-15.html`;
+* on-chain set: `reports/jest-onchain/onchain-cli-<suite>-2026-10-15.{json,txt}`.
+
+### 10.2 Offline set (the register #24 instrument)
+
+| Suite | 10-04b | 10-15 |
+|---|---|---|
+| Identifier | 3/3 | 3/3 |
+| Core properties | 88/88 | 88/88 |
+| Production | 48/48 | 48/48 |
+| Consumption | 3/3 | 3/3 |
+| DID Resolution | 193/194 | **193/194** |
+| **Total** | **335/336** | **335/336** |
+
+Tests were matched by ancestor path, title and occurrence. Between 10-04b and
+10-15 there are 335 passed → passed, 1 failed → failed (R5′) and no other
+transitions. The inventory is identical, so the suite does not penalise the
+extra `cvinResolutionMode` string property: `expectConformantMetadataStructure`
+only requires an infra map. The offline did:mobi vector is still the legacy
+`did:mobi:<VIN>` placeholder (see 10.4).
+
+### 10.3 On-chain set (separate; not comparable with 10.2)
+
+| Suite | Tests | Passed |
+|---|---|---|
+| Identifier | 2 | 2 |
+| Core properties | 59 | 59 |
+| Production | 32 | 32 |
+| Consumption | 2 | 2 |
+| DID Resolution | 216 | 216 (ethr 117/117, mobi 99/99) |
+| **Total** | **311** | **311** |
+
+The on-chain set has no nft method. It adds executions that the offline
+resolver cannot produce:
+
+* `notFoundErrorOutcome`: a did:ethr on chain 0x1, and a did:mobi whose VIN
+  hash is not registered;
+* `deactivatedOutcome`: a did:ethr after `changeOwner(identity, 0x0)`, and a
+  did:mobi whose vehicle was revoked with `revokeIdentity`.
+
+The suite generated and passed its notFound and deactivated tests for both
+methods. These tests are not generated for the offline set. The 311 tests
+and the 336 tests are different inventories. Do not add them up, and do not
+compare the two percentages.
+
+### 10.4 What the offline did:mobi vector still measures
+
+The offline resolver still resolves `did:mobi:5YJ3E1EA0PF123456`, the VIN in
+the DID, with placeholder key material. It is labelled
+`offline-synthesized`. Removing it was measured and not committed (scratch
+experiment): the internal checker would fall to **84.1 %**, below the
+93.0 % floor. The causes:
+
+* the 3.1, 5.1.1, 5.4, 7.1.2 and 7.1.3 checks resolve `did:mobi:<VIN>` and
+  require a document;
+* the unchanged generator asserts that this vector resolves successfully,
+  and would abort.
+
+The decision is left to the author (`docs/review02/FOLLOWUP_HR.md`). In
+on-chain mode a raw VIN is rejected with `invalidDid`, and the VIN is not
+echoed.

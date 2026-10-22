@@ -326,7 +326,7 @@ covers what the other cannot.
 ### 3.5.1 Lens 1 — executable revert suite
 
 The first lens is an **executable attack suite** of Mocha scenarios
-(`test/security/securityScenarios.test.js`). Each scenario deploys the real
+(`test/L2-identity-system/security/securityScenarios.test.js`). Each scenario deploys the real
 contract on the in-process EVM, stands up a legitimate victim identity, then
 fires a concrete **adversarial transaction** and asserts that it **reverts**
 (is DEFENDED). Crucially, every offensive assertion is paired with a
@@ -385,7 +385,7 @@ the same matrix so the on-chain and off-chain surfaces are compared side by
 side.
 
 **Provenance**: Lens 1 —
-`1_blockchain-identity/test/security/securityScenarios.test.js` (+ its
+`1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js` (+ its
 `attackHarness`), run under `npx hardhat test`; Lens 2 orchestrator —
 `4_comparison-framework/security-analysis/attack_scenarios.py` (which invokes
 the on-chain `scripts/security_scenarios.js`) →

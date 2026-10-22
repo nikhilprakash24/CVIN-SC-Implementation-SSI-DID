@@ -24,7 +24,12 @@ class IdentityAdapter {
     this.dataset = dataset;
     this.payloads = payloads;
     this.contracts = {};
-    this.unsupported = {}; // opId -> reason
+    // opId -> reason. The two basic-set functions below are n/a unless an adapter
+    // deletes the entry and implements the method (docs/BASIC_ID_SET_EXTENSION.md §4).
+    this.unsupported = {
+      P1_create_presentation: "no holder-writable anchor on this substrate",
+      X1_execute_call: "no executor: the identity cannot perform calls",
+    };
   }
 
   supports(opId) { return !this.unsupported[opId]; }
@@ -59,6 +64,11 @@ class IdentityAdapter {
   }
   async revokeAttribute(handle, name) { throw new Error("D2"); }
   async deactivate(handle) { throw new Error("D3"); }
+
+  /** P1 — the HOLDER anchors a presentation hash under a nonce-unique key (replay protection by key). */
+  async createPresentation(handle, presHash) { this.notSupported("P1_create_presentation"); }
+  /** X1 — the identity itself performs `data` on `target` (agent-proxy execute). */
+  async executeCall(handle, target, data) { this.notSupported("X1_execute_call"); }
 
   // Credential layer. `issuer` defaults to actors.issuer; the crud scenario passes a
   // fresh issuer per iteration so cells do not depend on N (review 02, H-1).

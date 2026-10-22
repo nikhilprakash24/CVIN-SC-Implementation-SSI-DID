@@ -18,6 +18,7 @@ Features:
 - Real blockchain integration
 """
 
+import os
 import time
 import json
 import hashlib
@@ -95,6 +96,9 @@ class MOBIVIDProvider(IdentityProvider):
         self.vehicles = {}  # vehicle_id -> vehicle data
         self.birth_certificates = {}  # vehicleIdentity -> VehicleBirth
         self.did_cache = {}  # DID -> resolved document (TTL cache)
+        # D11b: keys resolved from the chain for vehicles this provider did not register
+        # (vehicle identity -> {'public_key', 'valid_to', 'hops', 'resolved_at'}).
+        self.resolved_keys = {}
 
         # VIN encryption key custody.
         #
@@ -123,18 +127,42 @@ class MOBIVIDProvider(IdentityProvider):
         self.metrics.single_point_of_failure = False
         self.metrics.availability_percentage = 99.0
 
-    def _load_contract(self, address: str):
-        """Load MOBIVIDRegistry contract"""
+    # Hardhat artifact of the registry, compiled from cv2x-testbed/contracts (which CI keeps
+    # byte-identical to 1_blockchain-identity/contracts/MOBI). Resolved relative to this
+    # file so the provider works whatever the current directory is.
+    _ARTIFACT_PATH = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        'artifacts', 'contracts', 'MOBIVIDRegistry.sol', 'MOBIVIDRegistry.json')
+
+    @classmethod
+    def _load_artifact(cls) -> Optional[Dict]:
+        try:
+            with open(cls._ARTIFACT_PATH, 'r') as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return None
+
+    def _contract_abi(self) -> list:
+        """ABI source order: an explicit contracts/MOBIVIDRegistry_abi.json in the current
+        directory, then the compiled Hardhat artifact, then the inline bootstrap ABI.
+        (Found while fixing D11b: the inline ABI lacked isRevoked / lastChanged / the
+        DID events, so verification against an attached contract could never succeed
+        through it. The artifact is the authoritative ABI.)"""
         try:
             with open('contracts/MOBIVIDRegistry_abi.json', 'r') as f:
-                abi = json.load(f)
+                return json.load(f)
         except FileNotFoundError:
-            # Use inline ABI for bootstrapping
-            abi = self._get_inline_abi()
+            pass
+        artifact = self._load_artifact()
+        if artifact and artifact.get('abi'):
+            return artifact['abi']
+        return self._get_inline_abi()
 
+    def _load_contract(self, address: str):
+        """Load MOBIVIDRegistry contract"""
         self.contract = self.w3.eth.contract(
             address=Web3.to_checksum_address(address),
-            abi=abi
+            abi=self._contract_abi()
         )
 
     def _get_inline_abi(self) -> list:
@@ -368,6 +396,14 @@ class MOBIVIDProvider(IdentityProvider):
         # Register on blockchain
         first_owner_checksum = Web3.to_checksum_address(first_owner_address)
 
+        # Generate the vehicle's signing key pair BEFORE the birth so the key can be
+        # anchored on-chain in the same registration session (defect D11b).
+        private_key = ec.generate_private_key(ec.SECP256K1(), default_backend())
+        public_key_bytes = private_key.public_key().public_bytes(
+            encoding=serialization.Encoding.X962,
+            format=serialization.PublicFormat.UncompressedPoint
+        )
+
         try:
             # Build transaction
             transaction = self.contract.functions.registerVehicleBirth(
@@ -404,6 +440,13 @@ class MOBIVIDProvider(IdentityProvider):
         except Exception as e:
             raise RuntimeError(f"Failed to register vehicle birth: {str(e)}")
 
+        # D11b: anchor the vehicle's verification key on-chain as the ERC-1056 attribute
+        # did/pub/secp256k1/veriKey/base64 (vehicle-lifetime validity). The provider's
+        # account is the registering manufacturer, which the registry allows to anchor
+        # exactly once, before any ownership transfer. A verifier that holds no local
+        # registration record resolves this attribute (see verify_message).
+        key_anchor_receipt = self._anchor_vehicle_key(vehicle_identity_addr, public_key_bytes)
+
         # Store locally
         self.vehicles[vehicle_identity] = {
             'vin': vin,
@@ -413,17 +456,11 @@ class MOBIVIDProvider(IdentityProvider):
             'first_owner': first_owner_address,
             'current_owner': first_owner_address,
             'registered_at': int(time.time()),
-            'tx_hash': receipt['transactionHash'].hex()
+            'tx_hash': receipt['transactionHash'].hex(),
+            'key_anchor_tx': key_anchor_receipt['transactionHash'].hex(),
+            'key_anchor_block': key_anchor_receipt['blockNumber'],
+            'key_anchored': True,
         }
-
-        # Generate key pair for vehicle
-        private_key = ec.generate_private_key(ec.SECP256K1(), default_backend())
-        public_key = private_key.public_key()
-
-        public_key_bytes = public_key.public_bytes(
-            encoding=serialization.Encoding.X962,
-            format=serialization.PublicFormat.UncompressedPoint
-        )
 
         self.vehicles[vehicle_identity]['private_key'] = private_key
         self.vehicles[vehicle_identity]['public_key'] = public_key_bytes.hex()
@@ -442,7 +479,8 @@ class MOBIVIDProvider(IdentityProvider):
                 "year": vehicle_data.get("year", 0),
                 "birth_cert_hash": birth_cert_hash.hex(),
                 "blockchain_tx": receipt['transactionHash'].hex(),
-                "block_number": receipt['blockNumber']
+                "block_number": receipt['blockNumber'],
+                "key_anchor_tx": key_anchor_receipt['transactionHash'].hex(),
             },
             signature="",  # Self-signed
             issuer=self.account.address,
@@ -456,6 +494,84 @@ class MOBIVIDProvider(IdentityProvider):
         self.metrics.registration_time_ms = registration_time
 
         return credential
+
+    def _anchor_vehicle_key(self, vehicle_identity_addr: str, public_key_bytes: bytes) -> Dict:
+        """Publish the vehicle's verification key on-chain (MOBIVIDRegistry.anchorVehicleKey)."""
+        try:
+            transaction = self.contract.functions.anchorVehicleKey(
+                vehicle_identity_addr,
+                public_key_bytes
+            ).build_transaction({
+                'from': self.account.address,
+                'nonce': self.w3.eth.get_transaction_count(self.account.address),
+                'gas': 200000,
+                'gasPrice': self.w3.eth.gas_price
+            })
+            signed = self.account.sign_transaction(transaction)
+            tx_hash = self.w3.eth.send_raw_transaction(signed.raw_transaction)
+            receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash)
+        except Exception as e:
+            raise RuntimeError(f"Failed to anchor vehicle key: {str(e)}")
+        gas_used = receipt['gasUsed']
+        self.metrics.gas_used += gas_used
+        self.metrics.registration_cost += float(self.w3.from_wei(gas_used * transaction['gasPrice'], 'ether'))
+        return receipt
+
+    # ERC-1056 events that carry previousChange; the key attribute name shared with
+    # registerVehicle / updateVehicleKey and the testbed resolvers.
+    KEY_ATTRIBUTE_NAME = bytes(Web3.keccak(text="did/pub/secp256k1/veriKey/base64"))
+    _CHANGE_EVENTS = ('DIDOwnerChanged', 'DIDDelegateChanged', 'DIDAttributeChanged', 'DIDRevoked')
+
+    def _resolve_key_on_chain(self, vehicle_identity: str, max_hops: int = 64) -> Optional[Dict]:
+        """
+        D11b: resolve the vehicle's verification key from the chain alone, by walking
+        the ERC-1056 changed() linked list backwards from lastChanged(identity) and
+        returning the newest still-valid did/pub/secp256k1/veriKey/base64 attribute.
+        Returns {'public_key', 'valid_to', 'hops'} or None when no key is anchored.
+        """
+        if self.contract is None:
+            return None
+        vehicle_identity = vehicle_identity.lower()
+        checksum = Web3.to_checksum_address(vehicle_identity)
+        identity_topic = '0x' + checksum[2:].lower().rjust(64, '0')
+        events = {}
+        for name in self._CHANGE_EVENTS:
+            ev = getattr(self.contract.events, name)()
+            events[ev.topic] = ev
+        now = int(time.time())
+        block = int(self.contract.functions.lastChanged(checksum).call())
+        hops = 0
+        while block > 0 and hops < max_hops:
+            hops += 1
+            logs = self.w3.eth.get_logs({
+                'address': self.contract.address,
+                'fromBlock': block,
+                'toBlock': block,
+                'topics': [None, identity_topic],
+            })
+            previous_change = None
+            found = None
+            for raw in logs:
+                event = events.get(Web3.to_hex(raw['topics'][0]))
+                if event is None:
+                    continue
+                args = event.process_log(raw)['args']
+                if 'previousChange' in args:
+                    prev = int(args['previousChange'])
+                    previous_change = prev if previous_change is None else min(previous_change, prev)
+                if (event.event_name == 'DIDAttributeChanged'
+                        and bytes(args['name']) == self.KEY_ATTRIBUTE_NAME
+                        and int(args['validTo']) > now):
+                    found = {'public_key': bytes(args['value']).hex(),
+                             'valid_to': int(args['validTo']), 'hops': hops}
+            if found is not None:
+                found['resolved_at'] = now
+                self.resolved_keys[vehicle_identity] = found
+                return found
+            if previous_change is None or previous_change >= block:
+                break
+            block = previous_change
+        return None
 
     def _generate_vehicle_identity(self, vin: str) -> str:
         """Generate deterministic vehicle identity address from VIN"""
@@ -584,6 +700,52 @@ class MOBIVIDProvider(IdentityProvider):
                 return None
         return record['public_key']
 
+    def _registered_key_for(self, signed_message: Dict) -> Optional[str]:
+        """
+        Resolve the verification key for the sender named in the message
+        (`vehicle_identity`, else `vehicle_did`) and reject revoked or unknown
+        identities. Never taken from the message itself (D11 / review-2 T-4).
+
+        Order: the local registration record (case-insensitive identity match;
+        a locally revoked record rejects) → the on-chain revoked flag when a
+        contract is attached → when no local record exists, the key anchored
+        on-chain at registration (D11b: `anchorVehicleKey`, walked from
+        `lastChanged`, cached in `resolved_keys`). Returns hex or None (reject).
+        """
+        sender = signed_message.get('vehicle_identity') or signed_message.get('vehicle_did')
+        if not isinstance(sender, str):
+            return None
+        if sender.startswith('did:'):
+            identity = sender.split(':')[-1]
+        elif sender.lower().startswith('0x'):
+            identity = sender
+        else:
+            return None
+        identity = identity.lower()
+
+        record = None
+        for known, data in (getattr(self, 'vehicles', None) or {}).items():
+            if known.lower() == identity and isinstance(data, dict):
+                record = data
+                break
+        if record is not None and record.get('revoked', False):
+            return None
+
+        contract = getattr(self, 'contract', None)
+        if contract is not None:
+            if contract.functions.isRevoked(Web3.to_checksum_address(identity)).call():
+                return None
+
+        if record is not None and record.get('public_key'):
+            return record['public_key']
+
+        # No local record: the authoritative key is the attribute anchored on-chain.
+        cache = getattr(self, 'resolved_keys', None)
+        if cache is None:
+            cache = self.resolved_keys = {}
+        resolved = cache.get(identity) or (self._resolve_key_on_chain(identity) if contract is not None else None)
+        return resolved['public_key'] if resolved else None
+
     def verify_message(self, signed_message: Dict) -> Tuple[bool, IdentityMetrics]:
         """
         Verify a signed V2X message against the sender's REGISTERED key.
@@ -598,14 +760,22 @@ class MOBIVIDProvider(IdentityProvider):
             message = signed_message['message']
             signature_hex = signed_message['signature']
 
+            # Defect D11 (docs/DEFECT_LOG.md, fixed 2026-10-04): the verifier used to
+            # reconstruct the key from the message itself, so an impostor signing with
+            # its own key under a vehicle's DID passed. The authoritative key is the one
+            # bound to the vehicle at registration; a key carried in the message is
+            # accepted only if it equals the registered one. Unknown or revoked vehicles
+            # are rejected. Since D11b the key is anchored on-chain at registration and a
+            # verifier without the local record resolves it from the DIDAttributeChanged walk.
             public_key_hex = self._registered_key_for(signed_message)
             if public_key_hex is None:
-                raise ValueError("sender not registered, or revoked")
-            claimed = signed_message.get('public_key')
-            if claimed is not None and str(claimed).lower() != public_key_hex.lower():
-                raise ValueError("message key does not match the registered key")
+                raise ValueError("sender not registered, revoked, or no anchored key")
+            embedded = signed_message.get('public_key')
+            if embedded is not None and str(embedded).lower() != public_key_hex.lower():
+                raise ValueError("embedded public key does not match the registered key")
 
-            # Reconstruct public key
+            # Reconstruct the registered public key
+            public_key_bytes = bytes.fromhex(public_key_hex)
             public_key = ec.EllipticCurvePublicKey.from_encoded_point(
                 ec.SECP256K1(),
                 bytes.fromhex(public_key_hex)
@@ -798,14 +968,17 @@ class MOBIVIDProvider(IdentityProvider):
             with open('contracts/MOBIVIDRegistry_bytecode.txt', 'r') as f:
                 bytecode = f.read().strip()
         except FileNotFoundError:
-            raise FileNotFoundError(
-                "Contract bytecode not found. Please compile contract first:\n"
-                "  npx hardhat compile"
-            )
+            artifact = self._load_artifact()
+            if not artifact or not artifact.get('bytecode'):
+                raise FileNotFoundError(
+                    "Contract bytecode not found. Please compile contract first:\n"
+                    "  cd cv2x-testbed && npx hardhat compile"
+                )
+            bytecode = artifact['bytecode']
 
         # Create contract
         Contract = self.w3.eth.contract(
-            abi=self._get_inline_abi(),
+            abi=self._contract_abi(),
             bytecode=bytecode
         )
 

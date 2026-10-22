@@ -1,7 +1,7 @@
 "use strict";
 const { IdentityAdapter } = require("./IdentityAdapter");
 
-const PURPOSE = { MANAGEMENT: 1, ACTION: 2, CLAIM: 3, ATTRIBUTE: 4, VIN: 5, STATUS: 6 };
+const PURPOSE = { MANAGEMENT: 1, ACTION: 2, CLAIM: 3, ATTRIBUTE: 4, VIN: 5, STATUS: 6, PRESENTATION: 7 };
 const KEYTYPE_ECDSA = 1;
 
 /**
@@ -20,6 +20,12 @@ class ERC725Adapter extends IdentityAdapter {
     this.unsupported["U5_meta_tx"] = "no signed-operation primitive";
     this.vinIndex = new Map();
     this.issuerContracts = new Map();
+    delete this.unsupported.P1_create_presentation;
+    this.unsupported.X1_execute_call = "execute() in CVIN_DID_ERC725 only emits Executed; it performs no call (stub)";
+  }
+  async createPresentation(h, presHash) {
+    const tx = await h.id.connect(h.controller).addKey(presHash, PURPOSE.PRESENTATION, KEYTYPE_ECDSA);
+    return { txs: [tx] };
   }
 
   async deploy() {

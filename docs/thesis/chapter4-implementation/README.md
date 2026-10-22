@@ -35,7 +35,7 @@ internals.
 each standard realizes a vehicle identity on the EVM and exposes the
 primitives (registries, tokens, accounts, claims) that everything above
 depends on. Layer 2 lifts those on-chain identities to W3C conformance —
-the DID resolver turns an on-chain address or token into a DID Document,
+the DID resolver turns an on-chain address or token into a DID Document (it synthesises the document from the identifier and reads no chain state, so rotation, deactivation and revocation are not visible to it; WM-1 audit U-F5, to be changed in WM-2 step C1),
 and the Verifiable Credentials stack issues and verifies credentials whose
 signing keys are the *same* keys that control the Layer-1 identities, so
 that off-chain verification needs no chain round-trip. Layer 3 embeds
@@ -61,7 +61,7 @@ records the chapter-to-code mapping without moving files.
   Contracts **5.0.2**, ethers v6, hardhat-toolbox; Node 18. Contract tests
   and the gas benchmark run on the in-process Hardhat network
   (`chainId 31337`).
-- **Python 3.11** (`2_w3c-ssi-layer/requirements.txt`): `web3` (v7),
+- **Python 3.11** (`2_w3c-ssi-layer/requirements.txt`): `web3` (6.11.0, pinned in `requirements.txt`),
   `eth-account`, `cryptography`, `coincurve`-backed secp256k1, `pytest`.
   This runtime hosts the SSI layer, the testbed, and the comparison
   scripts.
@@ -106,7 +106,7 @@ a lower bound, not a full-featured figure.
 | **ERC-725xy** | `ERC725xy/CVINVehicleERC725XY.sol` (+ `CVINExecuteTarget.sol`) | The **full ERC-725X generic executor + ERC-725Y data store** account — a self-sovereign smart account that can act on-chain and carries VIN/make/model/year as `bytes32`-keyed data. Added in v0.8.0, closing the one previously-missing standard. | Maximum on-chain capability; the **heaviest** to deploy (a complete account per identity). |
 | **ERC-735** | `ERC735/CVINVehicleClaimHolder.sol` | On-chain claim holder: manufacturer/regulator attestations stored as claims with issuer signatures verified at add-time. | O(1) on-chain claim verification; carries a full claim state machine, so very heavy to deploy. |
 | **ERC-1155** | `ERC1155/CVINVehicleCredential1155.sol` | One contract issues many credential types; the birth credential is configured **soulbound** via an `_update` override. | Uniquely resists identity theft (non-transferable); no key recovery. |
-| **ERC-4337** | `ERC4337/CVINVehicleAccount.sol` + `ERC4337/CVINMinimalEntryPoint.sol` | Account-abstraction identity with UserOperation flow and **guardian-based social recovery** — the only standard here with genuine on-chain key recovery. | Real key recovery; account-abstraction indirection tax per operation. |
+| **ERC-4337** | `ERC4337/CVINVehicleAccount.sol` + `ERC4337/CVINMinimalEntryPoint.sol` | Account-abstraction identity with UserOperation flow and **guardian-based social recovery** — the only standard here with genuine on-chain key recovery (the guardian keeps permanent control after a recovery: defect D15, open). | Real key recovery; account-abstraction indirection tax per operation. |
 | **LSP8** | `LSP8/CVINVehicleLSP8.sol` | A LUKSO LSP8 Identifiable-Digital-Asset vehicle: each vehicle is a `bytes32` tokenId (`keccak256(VIN)`) with a per-token key/value metadata store. | Cross-ecosystem reference point; a transfer moves the identity. |
 | **CVIN-Combined** | `CVINCombined/CVINCombinedIdentity.sol` | **The thesis's own hybrid**: an ERC-1056 event-based identity fused with ERC-735-style on-chain claims in a single contract, sharing one ownership model. | Cheap event-log common path *plus* O(1) on-chain claims only where safety-critical — the H5 design. |
 | **MOBI VID (profile)** | `MOBI/MOBIVIDRegistryV2.sol` (extends `MOBIVIDRegistry.sol`; uses `ERC1056Registry.sol`) | The MOBI **VID II** application profile: a purpose-built registry for birth records and typed lifecycle events with role-gated, signature-verified attestations. Measured *alongside* the nine as an application profile, not one of the nine base standards. | Maximal on-chain semantic fidelity (typed events, odometer, jurisdiction, hashed VIN); pays for that structure in gas. |
@@ -191,8 +191,8 @@ and verifier:
   VC carries only `claimDigests`, and the holder discloses chosen
   claim+salt pairs at presentation time).
 - **Verifier** (`vc_verifier.py`) — a **6-stage offline verification
-  pipeline**: structure → schema → temporal → revocation → signature →
-  disclosure. Signature verification is secp256k1 public-key recovery, so
+  pipeline**: structure → schema → temporal → revocation → proof metadata and
+  signature → disclosure. Signature verification is secp256k1 public-key recovery, so
   **no blockchain round-trip is needed at verification time** — the
   property the V2V latency budget requires.
 
@@ -372,7 +372,7 @@ Layers 1–3 and never modifies them. Five instruments make up the framework.
 
 2. **Two-lens security analysis** (`security-analysis/`).
    *Lens 1 — executable attack suite*: the Mocha scenarios in
-   `1_blockchain-identity/test/security/securityScenarios.test.js` (with
+   `1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js` (with
    the `attackHarness.js` helper) fire adversarial transactions against the
    deployed contracts and assert reverts, with a differential control that
    the authorized operation succeeds; results are tabulated to
@@ -418,20 +418,20 @@ Layers 1–3 and never modifies them. Five instruments make up the framework.
 
 ## 4.6 Testing & Reproducibility
 
-The implementation is backed by roughly **295 automated tests, all green**,
-across both runtimes:
+The implementation is backed by automated suites, **all green**, across both
+runtimes (current totals in `sandbox/grand/report/GRAND_REPORT.md`, register #5):
 
 | Suite | Count | Location |
 |---|--:|---|
-| Hardhat contract tests | 217 | `1_blockchain-identity/test/**` |
+| Hardhat contract tests | see `sandbox/grand/report/GRAND_REPORT.md` | `1_blockchain-identity/test/**` |
 | W3C Verifiable Credentials | 28 | `2_w3c-ssi-layer/verifiable-credentials/tests/test_vc_layer.py` |
 | MOBI VID layer | 32 | `2_w3c-ssi-layer/mobi-vid/tests/` (incl. VIN cipher) |
 | VIN cipher (subset of MOBI VID) | 6 | `2_w3c-ssi-layer/mobi-vid/tests/test_vin_cipher.py` |
 | Lifecycle use cases | 12/12 | `cv2x-testbed/scripts/test_use_cases.py` |
 
-The 217 Hardhat total exceeds the raw `it()` count because several suites
+The Hardhat total exceeds the raw `it()` count because several suites
 generate parameterized cases per standard/operation at runtime. The
-security suite (`test/security/securityScenarios.test.js`, 54 scenarios,
+security suite (`test/L2-identity-system/security/securityScenarios.test.js`, 54 scenarios,
 43/43 applicable cells defended) stays green *because* the contracts
 defend, so a regression would surface as a real CI failure.
 
@@ -439,13 +439,13 @@ defend, so a regression would surface as a real CI failure.
 
 - **Committed lockfile** — `1_blockchain-identity` ships an npm lockfile so
   `npm ci` installs a byte-identical dependency tree; the getting-started
-  path is `npm ci && npx hardhat test` → 217 passing.
+  path is `npm ci && npx hardhat test`, with all tests passing.
 - **Deterministic outputs** — gas is exact `receipt.gasUsed` and was
   verified byte-identical across N=30 runs (σ=0, 95% CI width 0); the
   benchmark, compliance, and V2V commands regenerate every number reported
   in Chapter 5.
 - **CI workflows** (`.github/workflows/`) — three gates:
-  `test-contracts.yml` (the 217 Hardhat tests), `benchmark.yml` (gas
+  `test-contracts.yml` (the Hardhat suite), `benchmark.yml` (gas
   benchmark), and `w3c-compliance.yml` (the ≥90% compliance gate).
 - **Verified commands** (from `INVENTORY.md` / `CAPABILITIES.md`):
   - Contracts: `cd 1_blockchain-identity && npm ci && npx hardhat test`
@@ -476,8 +476,8 @@ identity providers, 12 real-crypto lifecycle use cases, and a SUMO V2V
 simulation that runs real signature/credential verification in the message
 path; and (4) a measurement-only comparison framework producing the gas,
 security, compliance, and validation artifacts Chapter 5 reports. The
-build is reproducible — a committed lockfile, deterministic outputs, three
-CI gates, and ~295 green tests — and its honesty caveats (minimal ERC-4337/
+build is reproducible — a committed lockfile, outputs deterministic for fixed
+inputs, CI gates, and green test suites (counted in the grand report) — and its honesty caveats (minimal ERC-4337/
 LSP8, unexecuted Sepolia run, simulated mobility and radio, out-of-scope
 VIN key custody) are stated where they arise rather than deferred.
 
