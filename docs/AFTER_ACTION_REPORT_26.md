@@ -1,8 +1,8 @@
 # After-Action Report 26 — Chapter 2 Draft Sections (D-15), Written While the Check Session Runs
 
 **Author:** Nikhil Prakash (MASc, UBC ECE)
-**Opened:** 2026-10-20, after report 24 closed at `b7ea6f4` (CI 8/8 green on `46f8d1f`). **Report 25 is reserved for
-the cross-model check session** (`docs/milestones/check_passes_16-22/START_PROMPT.md`), which runs in parallel in a
+**Opened:** 2026-10-20, after report 24 closed at `b7ea6f4` (CI 8/8 green on `46f8d1f`). **The cross-model check session
+takes the next free report number** (25 went to the TDP session's phase 10 on 2026-10-21) (`docs/milestones/check_passes_16-22/START_PROMPT.md`), which runs in parallel in a
 separate session; this pass commits locally and pushes only after that session has closed, so one session writes to
 the branch at a time.
 **Brief (the author, 2026-10-20):** go ahead with the chapter 2 positioning; point to the output documents, the
