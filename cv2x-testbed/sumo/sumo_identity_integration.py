@@ -816,6 +816,11 @@ class SUMOIdentityIntegration:
         state = self.vehicle_states.get(vehicle_id)
         if state is None:
             return None
+        # "Ahead" below means larger x (eastbound highway geometry); on the
+        # north-south approaches that is meaningless, so FCW is evaluated on
+        # highway lanes only (docs/visual/VISUAL_PLAN.md §7).
+        if not state.lane_id.startswith("highway"):
+            return None
         for other_id, other in self.vehicle_states.items():
             if other_id == vehicle_id or other.lane_id != state.lane_id:
                 continue

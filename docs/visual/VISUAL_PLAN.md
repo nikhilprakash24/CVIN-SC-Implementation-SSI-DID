@@ -301,13 +301,16 @@ generated map would not be the network the vehicles drove on.
 
 ## 7. Known gaps and risks
 
-- **GUI vehicle size.** SUMO-GUI frames show correct colours and names but the
-  vehicle glyphs are small at road scale; `vehicleExaggeration` in
-  `gui_settings.xml` did not visibly apply. Fix in Phase 4 (try the
-  `vehicleQuality`/`vehicleSize` attribute set of 1.28, or zoom to 3000 and track).
-- **FCW in TraCI mode** uses the mock-lane geometry ("ahead = larger x"); it is
-  right on the east-west highway, meaningless on the north–south approach. Phase 4
-  notes it; chapter 4 states FCW is evaluated on the highway edges.
+- **GUI vehicle size: fixed.** The 1.28 attribute is `vehicle_exaggeration`, not
+  `vehicleExaggeration`. At 6× and zoom 400 a car is readable in a 1600×900 frame.
+- **FCW is highway-only.** It uses "ahead = larger x", so the simulation now
+  returns no FCW for lanes not named `highway*`. Chapter 4 should state FCW is
+  evaluated on the highway edges.
+- **Cold verifications cluster at highway entry, not at the intersection.** The
+  cold map from the 60 s TraCI run (`figures/sumo_coldmap/`) puts first contacts
+  near x = 0, where vehicles are inserted. Few vehicles reach the junction in
+  60 s. The intersection hypothesis in Rung 3 needs a longer run (≥ 200 s) or
+  insertion closer to the junction before it can be claimed.
 - **Trace size.** ~300 events per simulated second at 30 vehicles. Fine for 60 s;
   for a 300 s run thin snapshots with `--trace-every 5` (figure counts stay exact).
 - **Replay in file:// mode** needs the file picker (browsers block fetch); the
@@ -327,4 +330,14 @@ Added: `cv2x-testbed/sumo/net_src/`, `cv2x-testbed/sumo/gui_settings.xml`,
 `cv2x-testbed/sumo/viz/render_trace.py`, `docs/visual/` (this plan, the phases
 doc, the schema, two traces, figure sets, SUMO frames, the replay viewer).
 
-Next: open `docs/visual/VISUAL_PHASES_PROMPTS.md` and run Phase 0.
+**Second session (2026-10-22):** Phases 0, 1 and 3 done, Phase 4 mostly done.
+Added `--trace-dir` to `run_v2v_stats.py`; median and worst seed traces of the
+registered N=30 configuration (`traces/README.md`); chapter figure set from the
+median (`figures/sim_50v_20s_median/`, PNG + SVG except F3) and F3/F5 from the
+worst; `viz/build_replay.py` and two offline replay pages
+(`replay/replay_sim_median.html`, `replay/replay_sumo.html`, both tested from
+file:// with zero page errors and exact counters); `viz/sumo_views.py` (cold
+map, frame/trace pairs in `figures/pairs/`); GUI glyph fix; FCW guard.
+
+Next: Phase 2 (FIGURES.md captions and F7 packet anatomy), the Phase 3 video
+clip, and Phase 5 (rogue vehicle, per-stage timers).
