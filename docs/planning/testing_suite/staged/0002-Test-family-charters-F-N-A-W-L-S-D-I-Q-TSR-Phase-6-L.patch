@@ -1,0 +1,567 @@
+From 9496ab4936ff8d32bf254b6193e060cec0ca8e76 Mon Sep 17 00:00:00 2001
+From: Nikhil Prakash <nikhil.prakash1995@gmail.com>
+Date: Thu, 22 Oct 2026 22:11:59 +0000
+Subject: [PATCH 2/2] Test-family charters F, N, A, W, L, S, D, I, Q (TSR Phase
+ 6; L offered to WM-2 B3)
+
+Drafts on the TSR template: what a passing test establishes and cannot,
+oracle, design, falsifiers with the register rows that would show them,
+threats to validity, reporting, replication, limits. Measured figures are
+cited by register row only. check_charters.py fails on a citation of a
+row that does not exist; its --probe shows it firing. Class G stays the
+generated GAS_CHARTER.md. No register row is relabelled.
+---
+ docs/testing/charters/A_ADVERSARIAL.md | 45 ++++++++++++++++++++++
+ docs/testing/charters/D_DETERMINISM.md | 40 +++++++++++++++++++
+ docs/testing/charters/F_FUNCTIONAL.md  | 47 +++++++++++++++++++++++
+ docs/testing/charters/I_INTEGRATION.md | 43 +++++++++++++++++++++
+ docs/testing/charters/L_LATENCY.md     | 46 ++++++++++++++++++++++
+ docs/testing/charters/N_NEGATIVE.md    | 41 ++++++++++++++++++++
+ docs/testing/charters/Q_ANALYSIS.md    | 38 ++++++++++++++++++
+ docs/testing/charters/README.md        | 25 ++++++++++++
+ docs/testing/charters/S_SCALE.md       | 39 +++++++++++++++++++
+ docs/testing/charters/W_CONFORMANCE.md | 44 +++++++++++++++++++++
+ docs/testing/check_charters.py         | 53 ++++++++++++++++++++++++++
+ 11 files changed, 461 insertions(+)
+ create mode 100644 docs/testing/charters/A_ADVERSARIAL.md
+ create mode 100644 docs/testing/charters/D_DETERMINISM.md
+ create mode 100644 docs/testing/charters/F_FUNCTIONAL.md
+ create mode 100644 docs/testing/charters/I_INTEGRATION.md
+ create mode 100644 docs/testing/charters/L_LATENCY.md
+ create mode 100644 docs/testing/charters/N_NEGATIVE.md
+ create mode 100644 docs/testing/charters/Q_ANALYSIS.md
+ create mode 100644 docs/testing/charters/README.md
+ create mode 100644 docs/testing/charters/S_SCALE.md
+ create mode 100644 docs/testing/charters/W_CONFORMANCE.md
+ create mode 100644 docs/testing/check_charters.py
+
+diff --git a/docs/testing/charters/A_ADVERSARIAL.md b/docs/testing/charters/A_ADVERSARIAL.md
+new file mode 100644
+index 0000000..e249e7b
+--- /dev/null
++++ b/docs/testing/charters/A_ADVERSARIAL.md
+@@ -0,0 +1,45 @@
++# Charter A — Adversarial tests
++
++**Status:** draft, 2026-10-22. **Binds:** `docs/THREAT_MODEL.md` (A1–A4, G1–G8, T1–T4); guide 1.2.4, 1.3.13.
++
++## 1. What a passing test establishes
++That a named attack, by a named adversary class, against a named security goal, was rejected on that option, and that
++the honest version of the same action succeeded (differential control). It does not establish that the option is
++"secure": only the registered attacks were tried (guide 1.3.13: "the 13 registered attacks were rejected").
++
++## 2. Oracle
++The strict security harness classifies each cell as DEFENDED only when the attack reverts with the documented
++expected reason and the control succeeds; otherwise VULNERABLE, UNEXPECTED-REVERT or FAILED-TO-RUN, or N/A with a
++reason (`test/L2-identity-system/security/attackHarness.js`). Off-chain attacks (VC/VP replay, holder binding,
++tampering, malleability) assert the exact rejection reason in the Python suites. Results of record: #28.
++
++## 3. Design
++- Each attack is traceable to an adversary (A1 network, A2 malicious registered party, A3 key compromise, A4 passive
++  observer) and a goal (G1–G8).
++- N/A cells state why the primitive is absent; an N/A cell is a finding, not a pass.
++- Every attack has a mutant or old-code run showing it would succeed without the guard (guide 1.3.11).
++
++## 4. Falsifiers it carries
++| Hypothesis | Refuting observation | Where |
++|---|---|---|
++| H5 (no option dominates on security) | one option DEFENDED on every applicable cell where every other option fails one | `attack_results.json`, `security_matrix.json` |
++| G3 replay resistance | a captured signed operation accepted out of context | signatureReplay cells; v2v-path and infrastructure replay tests (#45) |
++| G7 PII confidentiality | VIN recoverable from on-chain state | on-chain footprint (#49); VIN cipher tests |
++
++## 5. Threats to validity
++| Type | Threat | Control |
++|---|---|---|
++| Construct | the six-attack grid under-samples the threat model (no front-running, griefing, DoS on event walks) | listed as gaps; paper intake asks for further attack ideas |
++| Internal | representative implementations lack production guards | stated per cell |
++| External | Hardhat local chain; no mempool adversary | condition M1 stated with every security claim |
++| Coverage | ERC-725xy is not in the strict harness grid | gap in `coverage_matrix.md`; TSR P4-1 |
++
++## 6. Reporting
++Cell table option × attack, with outcome and expected reason; counts as "k of n applicable cells defended", never
++as a percentage of security.
++
++## 7. Replication
++CI; the security matrix is produced through the promote step (WM-2 A4) so a test run does not rewrite it.
++
++## 8. Limits
++Lens 2 cells marked `*` are reasoned, not executed, and are reported separately from lens 1.
+diff --git a/docs/testing/charters/D_DETERMINISM.md b/docs/testing/charters/D_DETERMINISM.md
+new file mode 100644
+index 0000000..316f2c4
+--- /dev/null
++++ b/docs/testing/charters/D_DETERMINISM.md
+@@ -0,0 +1,40 @@
++# Charter D — Determinism and run identity
++
++**Status:** draft, 2026-10-22. **Binds:** guide 1.1.6, 1.1.10, 1.3.10, 1.3.11; `tools/run_identity/`.
++
++## 1. What a passing check establishes
++That a result was produced by the code it names, from a clean tree, and that re-running that code reproduces it:
++byte-identical for exact metrics, within the stated distribution for statistical ones.
++
++## 2. Oracle
++- Gas determinism gate: every cell of the nine-standard table identical over 30 runs and against the committed file (#25).
++- Seeded randomness: two runs with the same `CVIN_SEED` byte-identical (WM-2 B1).
++- Run identity: the producer's stamp names its commit and per-producer scope; `dirty: false` on the producing code;
++  the promote step refuses dirty runs, other commits, changed scopes and edited outputs (13 refusal tests).
++- Stamp inventory: every tracked result file is covered (`check_stamps.py --check-coverage`).
++
++## 3. Design
++Producers write to `runs/` and reach a tracked path only through `promote.py`. Every guard has a probe that fails
++on the broken version (`probe_run_identity.sh`, the builder's `--check-complete` probes).
++
++## 4. Falsifiers it carries
++| Claim | Refuting observation |
++|---|---|
++| "gas is exact" for a row | any cell differing between two runs at the same code, without a declared class (`GAS_CHARTER.md`) |
++| "the run of record describes this code" | stamp scope hash differs from the current tree for a V row, without a "code changed since" note |
++
++## 5. Threats to validity
++| Type | Threat | Control |
++|---|---|---|
++| Internal | iteration-varying inputs (keys, signatures) mistaken for nondeterminism | gas classes G-mode, G-first-call |
++| Internal | a guard that never trips | probes in CI (guide 1.3.11) |
++| External | toolchain drift (Hardhat minor versions moved cells) | lockfile in the run identity |
++
++## 6. Reporting
++`STAMP_INVENTORY.md`; the "code changed since" column; delta files when results move.
++
++## 7. Replication
++Every CI run.
++
++## 8. Limits
++Latency is not byte-reproducible by nature; its reproducibility is charter L's replication rule.
+diff --git a/docs/testing/charters/F_FUNCTIONAL.md b/docs/testing/charters/F_FUNCTIONAL.md
+new file mode 100644
+index 0000000..c2f284f
+--- /dev/null
++++ b/docs/testing/charters/F_FUNCTIONAL.md
+@@ -0,0 +1,47 @@
++# Charter F — Functional tests
++
++**Status:** draft, 2026-10-22. **Binds:** guide 1.2.5, 1.2.6.
++
++## 1. What a passing test establishes
++That one operation of one implementation option does what its specification or the option's manifest says, on
++valid input, in the stated environment. It does **not** establish that the operation is secure, conformant to an
++external standard, cheap, or fast; those are classes A, W, G and L.
++
++## 2. Oracle
++An exact expected state or return value read back after the call: an owner, a resolved attribute, an event with its
++arguments, a balance. A test that only checks "did not revert" is a smoke test and is labelled as such in its title or
++moved to class D. A demo step (`sandbox/options/*/demos/*.js`) counts as functional evidence only when it asserts a
++read-back; demo steps flagged OBSERVATION are not evidence of correctness (`coverage_matrix.md`, T*).
++
++## 3. Design
++- One subject per test. A cross-option claim needs the same test on every option (the L1 mechanism layer), not
++  a per-option test repeated by hand.
++- Fresh state per test (`loadFixture` or a reset); no order dependence.
++- Incidental randomness seeded (guide 1.1.10; `CVIN_SEED`).
++- Every functional test of a privileged operation has a class-N partner that shows the operation refuses the
++  wrong caller.
++
++## 4. Falsifiers it carries
++| Hypothesis or claim | Observation that refutes it | Where it would show |
++|---|---|---|
++| H4 (MOBI VID realisable across backends) | a lifecycle event the manifest declares implemented has no passing functional test on that backend | L1 cells, `coverage_matrix.md` G cells |
++| "n/a means no primitive" (TSR S5) | a functional test passes for a cell a manifest declares not applicable | the builder's manifest/demo mismatch list |
++
++## 5. Threats to validity
++| Type | Threat | Control |
++|---|---|---|
++| Construct | per-option tests are written against each contract's own vocabulary, so "the same function" differs between options | cross-option functional claims come only from the L1 mechanism layer and the harness catalogue |
++| Internal | adapter or test realises an operation with a cheaper path than intended | harness adapter conformance (class W) and the realisation tables in `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md` §2 |
++| External | representative implementations (minimal EntryPoint, LSP8 stand-in) | manifest notes; stated with every cross-option result |
++| Coverage | ERC-725 has no per-option unit file; its functional evidence is the L1 layer, the harness and the demos | `coverage_matrix.md`, unit table |
++
++## 6. Reporting
++Counted in the register (`class: F`); reported as counts per subject, never as a percentage of "functions tested"
++without a denominator from the manifests.
++
++## 7. Replication
++Re-run in CI on every push; no host dependence expected.
++
++## 8. Limits
++The unit-test mapping is rule-based (`unit_rules.yaml`); a hand-graded audit sample of 50 entries found 43 with the right function before three
++substring fixes to the rules (testing-suite replan, staged record). Function counts are indicative until the author reviews the rules.
+diff --git a/docs/testing/charters/I_INTEGRATION.md b/docs/testing/charters/I_INTEGRATION.md
+new file mode 100644
+index 0000000..d0fd09b
+--- /dev/null
++++ b/docs/testing/charters/I_INTEGRATION.md
+@@ -0,0 +1,43 @@
++# Charter I — Integration and lifecycle
++
++**Status:** draft, 2026-10-22. **Binds:** guide 1.2.1, 1.2.7, 1.2.8 (pre-registered verdicts as they fell).
++
++## 1. What a passing test establishes
++That a multi-party sequence (a vehicle's lifecycle, a credential flow, an infrastructure exchange) completes with
++the expected end state and that forged or replayed steps inside it are rejected. It does not establish that each
++step is individually correct; that is classes F and N.
++
++## 2. Oracle
++- **Pre-registered experiments:** the verdict rule written before the run (M4 lifecycle parity, #33; infrastructure
++  I1–I5, #44–#48). Verdicts are reported as they fell, including FAIL and "outside band, not falsified".
++- **Use cases:** at present the oracle is "the function returns without raising"
++  (`sandbox/py-suites/L4-exemplar-interactions/test_lifecycle_use_cases.py` says so in its docstring). Explicit
++  end-state checks exist only in some use cases (as-found inventory II.2). This is the weakest oracle in the suite.
++
++## 3. Design
++A lifecycle test names its backend. The use cases run on the in-memory centralised registry with the VC layer, not on
++a chain backend; they are evidence about the VC layer's integration, not about any on-chain option.
++
++## 4. Falsifiers it carries
++| Hypothesis | Refuting observation | Rows |
++|---|---|---|
++| M4: "writes at least 10× faster centralised" | ratio below 10 | #33 |
++| M4: "equal once cached" | cached history slower beyond the declared band (it failed, as registered) | #33 |
++| I2 attack battery | any of the registered checks accepted | #45 |
++
++## 5. Threats to validity
++| Type | Threat | Control |
++|---|---|---|
++| Construct | "no exception" is not an end-state oracle | TSR P4-4: one computed end-state assertion per use case |
++| External | use cases on one backend | P4-4: second backend through `lifecycle_backends.py` |
++| Conclusion | single full run for M4, no stopping rule | stated in #33 |
++
++## 6. Reporting
++Verdict tables with the rule quoted; use cases reported as "12 of 12 completed without error", never as "verified".
++
++## 7. Replication
++Pre-registered experiments are re-run when their code changes (WM-2 A3b).
++
++## 8. Limits
++Until P4-4 lands, no thesis claim rests on the use cases beyond "the VC layer integrates end to end on the
++centralised baseline".
+diff --git a/docs/testing/charters/L_LATENCY.md b/docs/testing/charters/L_LATENCY.md
+new file mode 100644
+index 0000000..3422601
+--- /dev/null
++++ b/docs/testing/charters/L_LATENCY.md
+@@ -0,0 +1,46 @@
++# Charter L — Latency and throughput
++
++**Status:** draft, 2026-10-22, offered to WM-2 step B3 (which owns adoption and any relabelling of register rows).
++**Binds:** guide 1.1.3, 1.1.7; `docs/MEASUREMENT_CONDITIONS.md` §1 (conditions M0, M1, M1-H, M1-H/HTTP, M2).
++
++## 1. What a latency figure establishes
++The time one code path took on one host, under one condition, in one run. It does not establish network or
++production latency: no public-chain figure exists (M2 has never been run), and the V2V path excludes the radio stack.
++
++## 2. Oracle
++A latency result has no pass/fail of its own. It becomes a test when compared with a **pre-registered** budget or a
++second population in the **same run** (guide 1.1.7): e.g. SAE J2945/1's 100 ms budget for the receive-verify-decide
++path (`docs/LATENCY_BUDGET.md`).
++
++## 3. Design (the rules a row must meet, or be relabelled "descriptive only")
++1. N ≥ 30 after discarded warm-ups; median headline, p95 for budgets; min, max and mean optional.
++2. Host CPU, library versions, toolchain and commit recorded with the figure.
++3. Comparisons only within one run; across hosts only as a replication, side by side, never pooled.
++4. A confidence interval is a percentile bootstrap on the median with a recorded resample seed; a test between
++   populations is Mann–Whitney U with an effect size, Holm-corrected when several are reported together.
++5. A bound on messages is not a bound on time unless time was measured (guide 1.1.9).
++
++## 4. Falsifiers it carries
++| Hypothesis | Refuting observation | Rows |
++|---|---|---|
++| H3, off-chain half: cached verification fits the budget | p95 of warm verification ≥ budget | #27, #45 |
++| H3, on-chain half: a chain read at message time does not fit | an uncached on-chain verification inside the budget at p95 on an RPC transport | #32, #37, #39, #52 |
++| PKI as baseline | the ERC-1056 path faster than PKI on the same run | #21 |
++
++## 5. Threats to validity
++| Type | Threat | Control |
++|---|---|---|
++| Construct | in-process timing is not V2X latency | condition tags; budget compared only with the M0 path it constrains |
++| Internal | host load, library version effects (one library upgrade changed PKI cells several-fold, handback 2026-10-04 §6) | environment header; interleaved replicates (#52) |
++| External | one host per run; simulated mobility | replication on a second host, labelled |
++| Conclusion | knee positions are host-dependent (#32 vs #37, resolved by #52) | report the host with every knee |
++
++## 6. Reporting
++Table rows carry n, median, p95, condition, host id and run id. Figures without them are relabelled "descriptive only".
++
++## 7. Replication
++Rows #32/#37 re-run back to back on one host (#52) is the model. A row reaches E7 only with a second host or a
++stated second replicate.
++
++## 8. Limits
++#39 is U on this trunk at the time of writing; it is cited for design only.
+diff --git a/docs/testing/charters/N_NEGATIVE.md b/docs/testing/charters/N_NEGATIVE.md
+new file mode 100644
+index 0000000..6c6cd00
+--- /dev/null
++++ b/docs/testing/charters/N_NEGATIVE.md
+@@ -0,0 +1,41 @@
++# Charter N — Negative and revert tests
++
++**Status:** draft, 2026-10-22. **Binds:** guide 1.2.5, 1.2.6; review 02 Q-8 (exact reverts).
++
++## 1. What a passing test establishes
++That an invalid input or an unauthorised caller is refused, **for the stated reason**, and that the refusal leaves
++state unchanged. It does not establish that every invalid input is refused; it covers the inputs listed.
++
++## 2. Oracle
++The exact expected revert (custom error with arguments, or the revert string), or the exact Python exception type and
++message fragment. "Any revert" and "any exception" are not oracles: a test that passes on an unrelated failure
++(an ABI error, a missing fixture) proves nothing (review 02, Q-8; harness classifier, `attackHarness.js`).
++A regression test (`*.regression.test.js`) additionally fails on the code before its fix (guide 1.2.5).
++
++## 3. Design
++- Pair every negative with a positive control in the same fixture, so the refusal is attributable to the guard.
++- After a refusal, read back the state the call would have changed.
++- For validation of formats (VIN, DID syntax, chain id), cover the boundary values, not only a far-off invalid one.
++
++## 4. Falsifiers it carries
++| Claim | Refuting observation | Where |
++|---|---|---|
++| G4 authorisation integrity (`docs/THREAT_MODEL.md`) | a role acts beyond its authority without a revert | per-option N tests; D54 regression in `MOBIVID/attestEventRegression.test.js` |
++| "a fixed defect stays fixed" (`docs/DEFECT_LOG.md`) | a regression test passes on the pre-fix code | the mutant or old-code run recorded in the fix's report |
++
++## 5. Threats to validity
++| Type | Threat | Control |
++|---|---|---|
++| Construct | a revert for the wrong reason counted as a defence | exact expected revert required |
++| Internal | the positive control is missing, so a broken fixture reads as a defence | pair rule (§3) |
++| Conclusion | negatives cover chosen inputs only | boundary values; property-style generation is future work |
++
++## 6. Reporting
++Counts per subject (`coverage_matrix.md`). A defect found by a negative test enters `docs/DEFECT_LOG.md` before it is fixed.
++
++## 7. Replication
++CI on every push.
++
++## 8. Limits
++Several older per-option suites (ERC-721 legacy files) assert truthiness rather than exact values; they are
++counted, and listed for strengthening, not relied on for a claim.
+diff --git a/docs/testing/charters/Q_ANALYSIS.md b/docs/testing/charters/Q_ANALYSIS.md
+new file mode 100644
+index 0000000..5db451a
+--- /dev/null
++++ b/docs/testing/charters/Q_ANALYSIS.md
+@@ -0,0 +1,38 @@
++# Charter Q — Analysis (derived results)
++
++**Status:** draft, 2026-10-22. **Binds:** guide 1.2.1, 1.2.7; `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md` §6a, §8.
++
++## 1. What a derived result establishes
++A pure function of results of record: ratios, the capability matrix, dominance and the Pareto frontier, rubric inputs,
++the feature-asymmetry matrix. It adds no measurement; it can be no stronger than its inputs.
++
++## 2. Oracle
++Re-derivation: the analysis re-run on the same run directory gives the same output (`npm run metrics:analyze`;
++generated documents checked in CI).
++
++## 3. Design
++Criteria are declared before the analysis is read. Lower-bound inputs (lifetime totals excluding n/a events, marked
++†) are kept out of comparisons that would overstate them, or the comparison says so.
++
++## 4. Falsifiers it carries
++| Hypothesis | Refuting observation | Row |
++|---|---|---|
++| H5 (the hybrid is on the frontier) | the hybrid dominated on the declared criteria — **observed** (#36) | #36 |
++| H1 at lifetime level (≥ 10×) | a rich-state option within 10× on lifetime gas — **observed** (#30, #35) | #30, #35 |
++
++## 5. Threats to validity
++| Type | Threat | Control |
++|---|---|---|
++| Construct | **the H5 criteria changed** from the four in the framework's §8 to the six in §6a after the framework was written | to be recorded as a scope change and in a pre-registration amendment (guide 1.2.7); both sets reported |
++| Internal | a run-dependent latency axis inside a dominance criterion (#36 note) | dominance reported per criterion set, cost-only first |
++| Construct | rubric cells author-scored | rubric JSON's `reviewed` flags; a second scorer is an author decision |
++
++## 6. Reporting
++Each derived table names its run of record and its criterion set.
++
++## 7. Replication
++Inherits its inputs'.
++
++## 8. Limits
++The rubric is scored for few substrates; quantitative rubric inputs come from the harness (A5), qualitative cells
++are the author's.
+diff --git a/docs/testing/charters/README.md b/docs/testing/charters/README.md
+new file mode 100644
+index 0000000..bdab97f
+--- /dev/null
++++ b/docs/testing/charters/README.md
+@@ -0,0 +1,25 @@
++# Test-Family Charters
++
++**Author:** Nikhil Prakash (MASc, UBC ECE). **Written:** 2026-10-22 (testing-suite replan §4, TSR Phase 6).
++**Status:** drafts for the author's review, except class G, which is generated and of record.
++**Binds:** `docs/STYLE_AND_RIGOUR_GUIDE.md`; `docs/MEASUREMENT_CONDITIONS.md` for every number; TSR plan §9.2 template.
++
++A charter says, for one class of test, what a passing test establishes and what it cannot, how pass and fail are
++computed, which observation would refute the hypotheses the class bears on, and what threatens the conclusion.
++It quotes no measured number of its own (design parameters and published budgets excepted): where a measured figure matters it names the register row (`#nn`) that holds it.
++`check_charters.py` fails if a charter cites a row that does not exist.
++
++| Class | Name | Charter | Where the tests are (register `class`) |
++|---|---|---|---|
++| F | Functional | `F_FUNCTIONAL.md` | per-option tests, L1 mechanisms, demos, Python suites |
++| N | Negative / revert | `N_NEGATIVE.md` | per-option and regression tests, Python negative suites |
++| A | Adversarial | `A_ADVERSARIAL.md` | strict security harness, review-02 PoC suites, infrastructure verifier |
++| W | Conformance | `W_CONFORMANCE.md` | internal checker, external DID suite, resolver shape tests, adapter conformance |
++| G | Gas | `../GAS_CHARTER.md` (generated, WM-2 B2) | L1 gas cells, harness, nine-standard table |
++| L | Latency | `L_LATENCY.md` (draft offered to WM-2 B3) | freshness, PKI vs ERC-1056, V2V, HTTP condition |
++| S | Scale | `S_SCALE.md` | scaling experiments A–D, harness scale scenario |
++| D | Determinism and run identity | `D_DETERMINISM.md` | seeding, stamps, promote, gas determinism gate |
++| I | Integration and lifecycle | `I_INTEGRATION.md` | use cases, lifecycle parity, infrastructure I1–I5 |
++| Q | Analysis | `Q_ANALYSIS.md` | analysis layer, dominance, rubric, feature matrix |
++
++Counts of tests per subject and class: `../coverage_matrix.md` (generated).
+diff --git a/docs/testing/charters/S_SCALE.md b/docs/testing/charters/S_SCALE.md
+new file mode 100644
+index 0000000..426a084
+--- /dev/null
++++ b/docs/testing/charters/S_SCALE.md
+@@ -0,0 +1,39 @@
++# Charter S — Scale
++
++**Status:** draft, 2026-10-22. **Binds:** `docs/SCALING_EXPERIMENTS.md` (pre-registration); guide 1.2.7.
++
++## 1. What a scale result establishes
++How a cost or a latency changes with registry population N, per-identity history h, claim count, or neighbour density,
++over the tested range. It does not establish behaviour beyond the tested range; an extrapolated point (a saturation P*)
++is labelled as an extrapolation.
++
++## 2. Oracle
++A pre-declared shape: flat (O(1)), linear with a slope, or a named class, judged by a fitted slope with its R² or by a
++pre-declared tolerance, over pre-declared points.
++
++## 3. Design
++Points declared before the run (N ∈ {0, 100, 1 000}; h ∈ {1, 10, 50}; P ≤ 80); repeats declared before the run
++(Exp. C's five-repeat confirmation block, #26). Gas axes are exact; latency axes follow charter L.
++
++## 4. Falsifiers it carries
++| Hypothesis | Refuting observation | Rows |
++|---|---|---|
++| H1′ (marginal cost flat in N) | a positive slope in N beyond the declared tolerance | #31 |
++| "resolution cost grows with history for event-log options" | flat R3 cost in h for ERC-1056 | #31, #51 |
++| verify O(1) in claim count | slope in claims beyond tolerance | #26 (C) |
++
++## 5. Threats to validity
++| Type | Threat | Control |
++|---|---|---|
++| Construct | population built by the harness, not by real usage | stated |
++| Internal | tokenId width and calldata zero bytes move gas by a few units | gas classes (`GAS_CHARTER.md`) |
++| External | extrapolation beyond tested points | labelled |
++
++## 6. Reporting
++Slope, R², tested range and the extrapolation flag in every table.
++
++## 7. Replication
++Exp. A/B status B (bundle lineage) until re-executed on this trunk's definitions (#26).
++
++## 8. Limits
++No unit tests carry class S; scale evidence is experiments only (`coverage_matrix.md`).
+diff --git a/docs/testing/charters/W_CONFORMANCE.md b/docs/testing/charters/W_CONFORMANCE.md
+new file mode 100644
+index 0000000..66ee439
+--- /dev/null
++++ b/docs/testing/charters/W_CONFORMANCE.md
+@@ -0,0 +1,44 @@
++# Charter W — Conformance tests
++
++**Status:** draft, 2026-10-22. **Binds:** guide 1.2.2 ("compliant" needs clause-level evidence).
++
++## 1. What a passing test establishes
++That one normative statement of an external text (W3C DID Core, VC Data Model 2.0, the public MOBI VID texts, an ERC)
++or of the project's adapter contract holds for the implementation. It does not establish conformance to the whole
++text; a score is the fraction of the statements checked.
++
++## 2. Oracle
++- **External suite:** the W3C DID test suite's own assertions (#24). Both denominators are reported, with the
++  matched-pair table, because the generated test count depends on which keys the resolver emits.
++- **Internal checker:** each check executes the resolver or VC stack and returns PASS, PARTIAL or FAIL (#4). It is
++  self-written and checks document structure for DID Core; it is labelled internal and structural.
++- **Adapter conformance:** every catalogue operation leaves the identity in the expected state, or is declared not
++  supported (harness gate).
++- **MOBI clauses:** `docs/MOBI_VID_CHECKLIST.md`, clause by clause.
++
++## 3. Design
++Each check names the clause it tests. A check that cannot fail (a hard-coded PASS, a printed percentage) is not
++conformance evidence and is excluded (see the exclusion list in `unit_rules.yaml`).
++
++## 4. Falsifiers it carries
++| Hypothesis | Refuting observation | Where |
++|---|---|---|
++| H2 (≥ 90 % W3C conformance achievable) | external-suite pass fraction below the threshold on either denominator, or the internal score below it | #24, #4 |
++| "MOBI VID compliant" | any MUST clause not met | checklist (the thesis wording is "inspired by", per guide 1.2.2) |
++
++## 5. Threats to validity
++| Type | Threat | Control |
++|---|---|---|
++| Construct | the internal checker is self-scored and structural | reported beside the external suite; labelled |
++| Construct | denominator moves with resolver output | both denominators and matched pairs |
++| Internal | checker drift against the spec (the 7.1.2 correction, #4) | corrections disclosed in the row |
++| External | conformance of synthesised documents differs from on-chain resolution | on-chain resolution set reported separately (#24) |
++
++## 6. Reporting
++Fraction with numerator, denominator and the instrument; never a bare percentage.
++
++## 7. Replication
++Internal checker in CI with a floor; external suite run manually with dated reports in `docs/conformance/reports/`.
++
++## 8. Limits
++VC Data Model coverage depends on the internal checker only; no external VC suite run exists.
+diff --git a/docs/testing/check_charters.py b/docs/testing/check_charters.py
+new file mode 100644
+index 0000000..3f8804a
+--- /dev/null
++++ b/docs/testing/check_charters.py
+@@ -0,0 +1,53 @@
++#!/usr/bin/env python3
++"""Guard for docs/testing/charters/ (testing-suite replan §4 gate).
++
++Fails if a charter cites a claim-register row (`#nn`) that does not exist in docs/MEASUREMENT_CONDITIONS.md, or if
++a charter listed in the index is missing. Probe: `python3 docs/testing/check_charters.py --probe` injects a citation
++of a non-existent row into a copy and shows the check fails on it (guide rule 1.3.11).
++"""
++import pathlib
++import re
++import sys
++
++ROOT = pathlib.Path(__file__).resolve().parents[2]
++CH = ROOT / "docs/testing/charters"
++REG = ROOT / "docs/MEASUREMENT_CONDITIONS.md"
++
++
++def register_rows():
++    return {int(m) for m in re.findall(r"^\| ?#?(\d{1,3}) \|", REG.read_text(), re.M)}
++
++
++def problems(texts):
++    rows, out = register_rows(), []
++    for name, text in texts.items():
++        for m in sorted({int(x) for x in re.findall(r"(?<![\w&])#(\d{1,3})\b", text)}):
++            if m not in rows:
++                out.append(f"{name}: cites #{m}, which is not a register row")
++    index = texts.get("README.md", "")
++    for f in re.findall(r"`([A-Z]_[A-Z]+\.md)`", index):
++        if f not in texts:
++            out.append(f"README.md lists {f}, which does not exist")
++    return out
++
++
++def main():
++    texts = {p.name: p.read_text() for p in sorted(CH.glob("*.md"))}
++    if "--probe" in sys.argv:
++        broken = dict(texts)
++        broken["F_FUNCTIONAL.md"] += "\nProbe: see #999.\n"
++        found = problems(broken)
++        assert any("#999" in p for p in found), "probe failed: a citation of a non-existent row was not caught"
++        print("probe ok: the check fails on a citation of a non-existent row")
++        return
++    found = problems(texts)
++    for p in found:
++        print("CHARTER:", p)
++    if found:
++        sys.exit(1)
++    cited = sorted({int(x) for t in texts.values() for x in re.findall(r"(?<![\w&])#(\d{1,3})\b", t)})
++    print(f"{len(texts)} charter files; every cited register row exists ({len(cited)} rows cited)")
++
++
++if __name__ == "__main__":
++    main()
+-- 
+2.43.0
+

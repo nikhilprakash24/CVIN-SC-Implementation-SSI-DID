@@ -121,3 +121,22 @@ Applying the series to the trunk, or merging the trunk into this branch first, i
 | Allow this branch to take the trunk (merge), or land the staged series on the trunk in a trunk session | "merge here" or "apply on trunk after the check" |
 | R-1 to R-6 | ids and a word each, or silence (defaults stand) |
 | The second-pass sheet | unchanged; still the input to paper intake |
+
+## 8. Execution log (2026-10-22)
+
+| Step | Result |
+|---|---|
+| T1–T3 register entries | 675 added (per-option 291 + harness/stats 15 `it`, Python 333 functions, plus Phase 2 prototypes and promote-step tests, which CI runs); 305 existing entries unchanged; 0 unmapped, 0 duplicate ids |
+| T3 cross-check | pytest collects 333 distinct test functions (476 items); the register holds 333 |
+| T4 builder | `--check` current; coverage page gains a subject × class table |
+| T5 guard | `--check-complete` with an explicit exclusion list (five script-style files, archived copies); both probes fail as intended |
+| Mapping review | hand-graded sample of 50: 43 right on function; three substring defects fixed after it |
+| Charters | index + F, N, A, W, L, S, D, I, Q drafts; `check_charters.py` and its probe |
+| Trunk guards | `tools/prepush_check.sh` PREPUSH OK with both patches applied |
+| Landing | staged as a patch series (`docs/planning/testing_suite/staged/`), applies cleanly to `87334d6` |
+
+Findings the new tables surfaced, for the author:
+1. ERC-725 has no per-option unit test file; its evidence is the L1 layer, the harness and the demos.
+2. No unit test carries class S; scale evidence is the experiments only.
+3. The use-case suite's oracle is still "returns without raising" (its own docstring); charter I limits what it may support.
+4. The H5 dominance criteria changed after the framework named them; charter Q asks for a dated amendment.
