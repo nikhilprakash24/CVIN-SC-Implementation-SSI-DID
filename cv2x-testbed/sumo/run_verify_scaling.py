@@ -184,13 +184,17 @@ def main():
 
     ps, per_interval_median, per_interval_p95, per_interval_mean = [], [], [], []
     per_message_median = []
-    for P in P_VALUES:
+    for pi, P in enumerate(P_VALUES):
         subset = senders[:P]
+        # Simulation time keeps moving forward across P: the layer's replay cache is on by default
+        # (8c325cc), and a sender's BSM with a timestamp it already used would be refused as a replay,
+        # not verified (WM-2 A3b, 2026-10-22). Payloads are otherwise as before.
+        t0_p = 0.2 + pi * (args.warmup + args.intervals + 1) * 0.1
 
         # Warmup intervals (untimed).
-        sim_now[0] = 0.1
         for w in range(args.warmup):
-            pkgs = [layer.sign(s, build_bsm(s, 100 + w, 0.1))[0] for s in subset]
+            sim_now[0] = t0_p + w * 0.1
+            pkgs = [layer.sign(s, build_bsm(s, 100 + w, sim_now[0]))[0] for s in subset]
             for pkg in pkgs:
                 layer.verify(RECEIVER, pkg)
 
@@ -198,8 +202,8 @@ def main():
         per_msg = []
         for it in range(args.intervals):
             # Sign P fresh BSMs OUTSIDE the timed region.
-            sim_now[0] = it * 0.1
-            pkgs = [layer.sign(s, build_bsm(s, 1000 + it, it * 0.1))[0]
+            sim_now[0] = t0_p + (args.warmup + it) * 0.1
+            pkgs = [layer.sign(s, build_bsm(s, 1000 + it, sim_now[0]))[0]
                     for s in subset]
             t0 = time.perf_counter()
             for pkg in pkgs:
