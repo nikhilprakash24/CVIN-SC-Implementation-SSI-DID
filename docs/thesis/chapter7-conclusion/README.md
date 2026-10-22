@@ -107,6 +107,18 @@ safety timescale: the cost of blockchain identity is at issuance (RQ1 gas),
 not at verification time. Caveat: these bound the *cryptographic* cost and
 exclude radio/MAC/network-stack latency; mobility is simulated (§5.4).
 
+
+**RQ5 — Zero-knowledge privacy and its operation** *(extension, added 2026-10-22).* *Can zero-knowledge proofs
+provide the deferred VIN privacy tier and identity-dependent knowledge checks within the budgets used for RQ1 and
+RQ4, and what does operating them safely require?* Yes for registration and session time, no per V2V message. The
+ZK-VIN proof (3,498 constraints) is produced in a median 398.6 ms and verified in 18.42 ms off chain (register #55,
+#56, M0), and admission through `ZkVinGate` costs 301,163 gas (register #57, M1). Verification fits the ~100 ms V2V
+budget, but proving does not, so the proof belongs at session start. An unsalted VIN hash is reversed in 3.58 s
+(register #59), which is why the tier needs a hiding commitment. Operating it safely requires a custodian that
+remembers every disclosure to every verifier, enforces an owner-signed policy, and keeps any learned or language
+component inside a deterministic kernel; the bounded Steward held the narrowing attack to ≤ 3.0 bits on every run but
+missed its honest-service floor (register #60; §5.10).
+
 ---
 
 ## 7.3 Hypotheses — Verdicts
@@ -129,6 +141,14 @@ claim-capable/purpose-built backends and degrades to off-chain VCs or an
 unlinked approximation on the pure event-log (ERC-1056) and token (ERC-1155)
 backends. H4 is therefore supported *with a fidelity gradient*, not as a flat
 "works everywhere" claim.
+
+
+*Addition 2026-10-22 (extension).* The extension hypothesis H6 is reported beside the five above and does not change
+their verdicts.
+
+| # | Hypothesis | Verdict | Evidence (one line) |
+|---|---|---|---|
+| **H6** | Zero-knowledge vehicle identity is feasible at registration and session time but not per V2V message, and its safe operation requires a bounded, adaptive custodian | **Partly supported** | Six of seven pre-registered expectations pass (Z-E1–Z-E5, Z-E7); Z-E6 fails: leakage ≤ 3.0 bits on all runs, honest service < 90 % on 25 of 60 (register #55–#61; §5.10). |
 
 ---
 
@@ -192,6 +212,21 @@ None of these undercut the core comparative claims — which rest on
 deterministic gas and real-cryptography verification — but they bound the
 generality of the absolute-cost and end-to-end-latency statements.
 
+
+*Addition 2026-10-22: limitations of layer 5 (§4.8, §5.10).*
+
+- **Insecure single-party setup.** The ZK-VIN keys come from a trusted setup run with fixed entropy, so anyone who
+  reads the build script can forge proofs. The costs and correctness checks stand; production security does not.
+- **Simulation, not live adversaries.** The narrowing attack and its defences are a seeded simulation (condition Sim)
+  with scripted verifiers. The results claim the shape of the comparison, not a rate of attack in the field, and the
+  insider variant was added post hoc (amendment A2).
+- **Hand times are estimated.** The manual-burden operation and character counts are measured, but the hand times and
+  error probabilities are priced from cited rates (status E, register #61); one rate comes from a partially verified
+  source.
+- **Pure-Python primitives.** The `zkid` sigma protocols are readable reference code, neither constant time nor
+  optimised, so their timings bound nothing about a production library. No live language-model call was made, and no
+  timing was taken on vehicle hardware.
+
 ---
 
 ## 7.6 Future Work
@@ -220,6 +255,20 @@ Ordered from smallest lift (confirmation) to largest (new research):
    CVIN-Combined hybrid to MOBI (and related automotive-identity standards
    bodies) to inform a converged vehicle-identity profile.
 
+
+*Addition 2026-10-22: future work opened by layer 5 (§4.8, §5.10).*
+
+7. **An anonymity set at the gate.** `ZkVinGate` names the identity it admits; proving membership in a set of
+   anchored commitments instead would complete the protection property of Table C-2 (§6.8.2).
+8. **A multi-party setup ceremony.** Replace the fixed-entropy setup with a multi-party ceremony, the one step
+   between the prototype and production keys.
+9. **BBS and SD-JWT on the hot path.** Measure BBS signatures and SD-JWT selective disclosure on the same host and
+   against the same budgets, closing the open part of idea I-10.
+10. **PLONK or Halo 2.** Port ZK-VIN to a proof system with a universal or no trusted setup and compare proving time,
+    proof size and verification gas with the Groth16 figures.
+11. **A live red team.** Replace the simulated adversary with people, and run the optional language-model compiler
+    live, to test whether the kernel's bound and the grammar hold against adversaries that were not scripted.
+
 ---
 
 ## 7.7 Closing
@@ -239,6 +288,22 @@ on the six-criterion harness frontier (register #36). With
 the Sepolia run and real network-stack modeling as the next concrete steps,
 the framework is positioned to move from a rigorous local comparison to a
 fully field-validated one.
+
+
+---
+
+## 7.8 The Closed Loop
+
+*Added 2026-10-22 (extension; Report C §13).*
+
+The thesis set out to give machines identities: vehicles, and the services around them, that must be recognised,
+authorised and held to account. Its extension ends by finding that the most private form of identity, zero knowledge,
+can only be operated by a machine, and that the machine which operates it must itself be identified, delegated,
+revocable and auditable. Identity for machines; machines for identity. The same stack closes both ends of the loop:
+the DID, credential, revocation registry and anchored log that name a vehicle also name the agent that speaks for it.
+The agent wrapper is therefore not an add-on to self-sovereign identity but a condition of its use, provided that it
+stays bounded, with the owner's signed policy and a deterministic kernel, rather than any model, deciding what is
+disclosed.
 
 ---
 

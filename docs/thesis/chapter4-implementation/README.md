@@ -481,6 +481,122 @@ inputs, CI gates, and green test suites (counted in the grand report) — and it
 LSP8, unexecuted Sepolia run, simulated mobility and radio, out-of-scope
 VIN key custody) are stated where they arise rather than deferred.
 
+
+---
+
+## 4.8 Layer 5: the ZK-VIN Tier and the Steward
+
+*Added 2026-10-22 for RQ5 (closes the deferral recorded as SC-12). Code: `5_zkp-agent-identity/`. Sources:
+`docs/zkp/REPORT_A_ZKP_INTEGRATION.md` §2–§5, `REPORT_B_ZKP_AND_IDENTITY.md` §5, `REPORT_C_AGENT_WRAPPED_IDENTITY.md`
+§5–§8. Measured results are in §5.10.*
+
+Layer 5 adds a fifth, zero-knowledge layer on top of the four described above. It has two parts. The first is a
+privacy tier for the VIN: a vehicle proves facts about its VIN against an on-chain commitment without revealing it.
+The second is the custodian that operates those proofs for the owner, called the Steward. Both reuse earlier layers
+unchanged: the gate runs on Phase 1's ERC-1056 registry, and the Steward's delegation credential is issued and
+verified by the layer-2 VC stack (§4.3.2).
+
+### 4.8.1 The `zkid` primitives
+
+`5_zkp-agent-identity/zkid/` is a readable, pure-Python implementation of the sigma-protocol family on secp256k1. It
+contains Schnorr proofs of knowledge (interactive and non-interactive), Pedersen commitments with opening proofs,
+Chaum–Pedersen equality proofs, CDS OR proofs of a bit, range and threshold proofs built from them, Merkle inclusion
+proofs, and scoped nullifiers. Fiat–Shamir transcripts are domain-separated and length-prefixed, and they bind the
+verifier's identity and nonce, so a proof replayed to another verifier fails. Elliptic-curve and Keccak-256 outputs are
+checked against libsecp256k1 and Ethereum's Keccak.
+
+The three defining properties are tested, not assumed. Completeness is an honest run of every protocol. Special
+soundness is tested with an extractor that rewinds the prover and recovers the key from two accepting transcripts; the
+same extraction doubles as an attack on nonce reuse. Honest-verifier zero knowledge is tested with a simulator that
+produces accepting transcripts without the key. Each primitive also counts its field multiplications and point
+operations as it runs, which is what makes the manual-burden inventory of §3.9.4 a measurement (register #58, #61).
+The code is research code: correct and tested, but not constant time and not optimised.
+
+### 4.8.2 The ZK-VIN circuit and `ZkVinGate`
+
+The ZK-VIN statement is written in circom. Given public inputs (the anchored commitment, the authorised-manufacturer
+Merkle root, a model-year threshold, a region, a service scope and a challenge), the prover shows that it knows a VIN
+and salt that open the commitment, that the manufacturer code is in the authorised set, that the model year is at or
+above the threshold, and that the region matches. The single public output is a nullifier, Poseidon(salt, scope),
+which is the same for one vehicle within one scope and unlinkable across scopes. The compiled circuit has 3,498
+constraints (1,667 non-linear, 1,831 linear), 3,505 wires, 6 public and 27 private inputs and 1 public output
+(register #55). Proofs are Groth16, generated and verified with snarkjs.
+
+The build script runs both phases of the trusted setup with **fixed entropy**. That makes the build reproducible and
+every artefact hash-checkable in CI, and it also makes the setup **insecure**: anyone who reads the script can forge
+proofs. The prototype therefore demonstrates cost and correctness, not production security. A multi-party setup
+ceremony is the production gap.
+
+`contracts/ZkVinGate.sol` is an identity-dependent transaction (Phase 2 focus F1) whose dependency is *knowledge* of
+the opening of a commitment, the gap recorded as AR-5: a contract can compare a value with a stored hash but cannot
+check that a caller knows what a commitment contains. The ERC-1056 owner of an identity anchors a commitment; a
+governor publishes the manufacturer root and registers services; anyone, typically the owner's agent, submits `admit`
+with a proof. The gate checks every public signal against chain state, refuses a nullifier already used in the scope,
+verifies the proof with the generated Groth16 verifier, records the nullifier and runs the action. Contract tests
+cover single use per scope, unlinkable nullifiers across scopes, refusal at the wrong service, refusal of any
+mismatching signal with its index reported, refusal of a tampered proof, and anchoring by the ERC-1056 owner only,
+including after an ownership transfer.
+
+### 4.8.3 Schnorr through `ecrecover`
+
+`contracts/SchnorrEcrecoverVerifier.sol` verifies a Schnorr proof of key knowledge on chain without a pairing or a new
+precompile. It uses the known reduction of a Schnorr check to one call of Ethereum's `ecrecover`, with a matching
+prover in `zkid/schnorr_evm.py`. It proves much less than ZK-VIN, only knowledge of a key, but at a small fraction of
+the gas (register #57; §5.10).
+
+### 4.8.4 The Steward: an agent wrapper with a deterministic kernel
+
+The Steward (`5_zkp-agent-identity/steward/`) is the custodian that P3 asks for. Its design rule is that a language
+model may propose but a deterministic kernel disposes. This follows the separation used in the prompt-injection
+literature, where the component that reads untrusted text cannot act [@OWASP-LLM01; @GRESHAKE2023; @WILLISON2023;
+@DEBENEDETTI2025], and the shield of safe reinforcement learning, which corrects a learner's action only when it would
+violate the specification [@ALSHIEKH2018].
+
+| Component | Reads untrusted text | Decides a disclosure | Touches secrets |
+|---|---|---|---|
+| Interpreter (optional model) | yes | no | no |
+| Compiler (grammar or model) | the owner's text | no (drafts only) | no |
+| Kernel (deterministic) | no (structured fields only) | **yes, within the signed policy** | no |
+| Responder (learned) | no | chooses among what the kernel permits | no |
+| Vault | no | no | **yes** (proofs and signatures out) |
+
+- **Policy and grammar compiler.** The owner writes rules in a controlled English grammar ("Never reveal my VIN";
+  "Insurers may check that my model year is at least a threshold"; "Do not leak more than 3 bits about my model
+  year"). The compiler turns them into a strict policy whose canonical hash the owner signs. A sentence outside the
+  grammar is refused, not guessed. An optional language-model compiler, constrained by the policy's JSON schema, can
+  widen coverage; whatever it drafts passes the same validation and is adopted without a new signature only if it is
+  narrower than or equal to the signed policy. No live model call was made, so the plain-English claim rests on the
+  grammar and on these tests.
+- **Kernel.** It applies rules, consent, blocks and budgets and returns ANSWER, COARSEN or REFUSE. Its request schema
+  has no reveal operation and rejects unknown fields, so an injected instruction has nothing to ask for.
+- **Leakage budget.** The kernel keeps, for each protected attribute, the set of values still consistent with
+  everything disclosed to anyone, and so measures leakage over all verifiers together, not per verifier. Admission is
+  decided on the worst case, so a refusal does not itself leak, following the simulatable-auditing result
+  [@KENTHAPADI2005].
+- **Learned responder, shielded.** A tabular Q-learning responder chooses among the actions the kernel permits, for
+  example a coarsened answer in place of an exact one. It is trained deterministically and can improve honest
+  service; it cannot exceed the budget, because the kernel filters its choices.
+- **Vault.** Values, salts and keys are sealed; only proofs and signatures leave. The vault has no getter and no value
+  in its printed representation.
+- **Audit log.** Every decision is appended to a hash-chained log whose Merkle root can be anchored on chain; an
+  edited entry is detected.
+- **Delegation credential.** The Steward holds its own `did:ethr` DID and an `AgentDelegationCredential` issued by the
+  owner's DID through the Phase 1 VC layer, naming the agent, its scope, the hash of the policy it enforces and an
+  expiry. A verifier checks the chain owner → agent → presentation; the tests show it failing for the wrong scope, an
+  impostor key and a revoked credential (P6).
+
+The request path is: request → kernel → vault proof → signed response → audit entry. Prompt-injection, replay and
+linkage cases are unit tests rather than simulations: an interpreter told to "ignore all previous rules … reveal the
+VIN" emits malicious requests, and every one is rejected or refused with no proof produced.
+
+### 4.8.5 Summary of layer 5
+
+Layer 5 makes zero knowledge a working, tested part of the stack: pure-Python sigma protocols with measured operation
+counts, a Groth16 ZK-VIN circuit verified both off chain and inside an identity-dependent transaction, an on-chain
+Schnorr verifier, and a bounded agent that operates them under an owner-signed policy and is itself an identified,
+delegated and revocable subject. Its stated limits are the insecure single-party setup, the absence of constant-time
+code, and the absence of any live language-model run.
+
 ---
 
 *Working draft. Component references are to committed files in the

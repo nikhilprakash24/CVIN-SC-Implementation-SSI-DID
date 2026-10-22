@@ -532,6 +532,99 @@ in place above and carried in the project risk register.
   backend cannot express a concept natively, the mapping is flagged approximate
   rather than treated as portability.
 
+
+---
+
+## 3.9 Zero-Knowledge Extension: Pre-Registration and Conditions
+
+*Added 2026-10-22 for RQ5 and H6 (layer 5). Sources: `docs/zkp/PLAN_1_ZKP_AND_AGENT_IDENTITY.md` §1.1 and
+§Amendments; `docs/zkp/REPORT_A_ZKP_INTEGRATION.md`; register #55–#61.*
+
+The fifth layer asks whether zero-knowledge proofs can supply the VIN privacy tier that MOBI VID deferred (scope
+change SC-12), and what operating such proofs safely requires (RQ5). It was run as a separate extension with its own
+plan, written before any measurement. This section states what was fixed in advance, under which conditions each
+quantity was measured, and how the one argument that cannot be measured on people was priced.
+
+### 3.9.1 Propositions and pre-registered expectations
+
+The plan states six propositions, P1–P6, each with a kill criterion. P1 claims that zero knowledge closes the deferred
+gaps (the VIN tier, the knowledge-of-opening dependency of an identity-dependent transaction, and predicate
+disclosure). P2 claims that operating the primitives by hand is infeasible. P3 claims that the custodian they need has
+a definite requirements profile that an agent wrapper matches. P4 claims that such a wrapper is safe only if a language
+model proposes and a deterministic kernel disposes. P5 claims that zero knowledge per proof is not privacy over a
+session, and that an adaptive custodian stops a narrowing attack where a static rule does not. P6 claims that the agent
+itself needs an identity, and that the project's DID and VC stack provides it.
+
+The measurable part of these propositions is seven expectations, written into the plan before the first run and
+never edited afterwards (guide rule 1.2.7). They are the measurable part of H6.
+
+| Id | Expectation | Condition | Verdict rule |
+|---|---|---|---|
+| Z-E1 | ZK-VIN Groth16 verification off chain is under 100 ms, inside the V2V budget used for H3 | M0 | median of N=30 < 100 ms |
+| Z-E2 | ZK-VIN proving is under 10 s, so it belongs at registration or session start | M0 | median of N=10 < 10 s |
+| Z-E3 | On-chain verification in the gate contract is under 350,000 gas | M1 | exact `gasUsed` < 350,000 |
+| Z-E4 | A Groth16 proof is under 1 KiB as calldata | by construction | ABI-encoded proof < 1,024 bytes |
+| Z-E5 | The undefended narrowing attack recovers the model year exactly in at most ⌈log₂(range)⌉ queries | Sim | recovered on every seed |
+| Z-E6 | The Steward holds adversary leakage under its budget on every seed of both attack variants while serving at least 90 % of honest requests | Sim, 30 seeds | both hold on all 30 seeds |
+| Z-E7 | An unsalted SHA-256 of a VIN restricted to one manufacturer and model year is reversed by brute force in under one hour | M0 | measured rate × space < 3,600 s |
+
+The thresholds are the plan's, not results. A verdict is computed by the producing script and reported as it fell;
+Chapter 5 (§5.10) reports one failure.
+
+### 3.9.2 Amendments A1 (prior) and A2 (post hoc)
+
+Two dated amendments are recorded in the plan.
+
+**A1, before any run of the attack simulator.** It fixed the parameters under which Z-E5 and Z-E6 are read: the
+attacked attribute is the model year with a uniform prior over 1995–2026 (32 values, 5 bits); each episode holds 40
+honest requests from six accredited insurers plus a 10 % share of first-time unaccredited honest insurers; one
+adversary makes 12 adaptive bisection queries, either from one identity (*single*) or from a fresh identity per query
+(*Sybil*). It fixed the six defences (none; a static cap of 2 answers per verifier; a global 3.0-bit budget only; the
+Steward with a fixed responder; the Steward with a learned responder trained on seeds 10,000–12,999, disjoint from the
+evaluation seeds 1–30; and the learner without the budget, as an ablation). It defined honest service: a request is
+served when the answer settles the requester's question, exactly or by a coarsened proof that holds. It also fixed the
+reading of Z-E6 per seed: on every one of the 30 seeds, leakage ≤ 3.0 bits in both variants **and** service ≥ 90 %.
+
+**A2, post hoc.** A first trial run of the simulator, a wiring check on a dirty tree that is not reported as a result
+(guide rule 1.2.9), showed that in A1's threat model the adversary never holds an accreditation credential. A learner
+could therefore separate it by that feature alone, and the learner-without-budget ablation looked strongest. That is an
+artefact of the threat model, not a defence. A2 adds a third variant, *insider*, in which the adversary's single
+identity holds an accreditation, as a malicious but licensed insurer would. It is reported separately, enters neither
+Z-E5 nor Z-E6, and the learner was not retrained on it. No code that produces the pre-registered variants changed.
+A2 is labelled post hoc wherever its result is quoted.
+
+### 3.9.3 Conditions M0, M1, Sim and status E
+
+Layer 5 uses the condition tags of §3.1.3 and the register, plus one new tag.
+
+| Tag | Meaning here | Used for |
+|---|---|---|
+| **M0** | in-process, no chain, one host (2.80 GHz Xeon, CPython, Node v22.22.0, snarkjs 0.7.6; register #56) | proving and verification time (Z-E1, Z-E2), sigma-protocol timings and operation counts (register #58), the VIN brute force (Z-E7) |
+| **M1** | Hardhat in-process EVM, exact `receipt.gasUsed` (Hardhat 2.28.6, solc 0.8.24, optimizer 200 + viaIR, cancun; register #57) | gate and verifier gas (Z-E3) |
+| **Sim** | seeded simulation; every random choice drawn from a recorded seed; scripted agents, not people | the narrowing attack and its defences (Z-E5, Z-E6) |
+| **E** | estimate, not a measurement | extrapolations of the brute force beyond the measured space (register #59) and hand-execution times (register #61) |
+
+A **Sim** result claims the shape of an outcome, such as exact recovery or bits leaked against a budget. It is never a
+statement about deployed adversaries. One warm-up run is discarded before every M0 timing series. All layer-5 runs of
+record were produced at one commit with the producing code clean (register #56–#60).
+
+### 3.9.4 The manual-burden method: measured counts, cited rates
+
+P2 cannot be tested by asking people to compute a proof by hand. The method therefore separates two quantities and
+never mixes their status (register #61).
+
+1. **Counts are measured.** The `zkid` primitives count every field multiplication and point operation as they run;
+   the circuit's constraint and wire counts come from the compiler; the characters a person would have to copy (keys,
+   salts, proofs, public signals) are counted from the real artefacts. These counts are exact (status V).
+2. **Times and error probabilities are priced.** Each count is multiplied by a published human rate: a hand-computed
+   SHA-256 round in 16 minutes 45 seconds [@SHIRRIFF2014], from which a 256-bit field multiplication is priced
+   generously at about 2.1 hours, and a residual keying error rate of 0.6 % per character [@PANKO-BASIC, partial].
+   These results are estimates (status E), and every place that quotes them says so.
+
+Where the textbook Groth16 prover's operation count is itself an estimate from the circuit's wire count rather than
+a counter reading, it carries status E as well. The kill criterion of P2 is that a person could complete and check one
+presentation in a working day; the rates were chosen to favour the person, so a miss under them is conservative.
+
 ---
 
 *Working draft. Every procedure above is realized by the cited script; the

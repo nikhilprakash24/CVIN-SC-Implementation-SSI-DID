@@ -157,7 +157,7 @@
    ]
   },
   "4_comparison-framework/performance-metrics/run_gas_stats.py": {
-   "imports": 1,
+   "imports": 2,
    "paths": [
     "1_blockchain-identity/contracts",
     "1_blockchain-identity/hardhat.config.js",
@@ -166,7 +166,8 @@
     "1_blockchain-identity/scripts/benchmark_gas.js",
     "1_blockchain-identity/scripts/lib/run_stamp.js",
     "4_comparison-framework/performance-metrics/run_gas_stats.py",
-    "cv2x-testbed/contracts"
+    "cv2x-testbed/contracts",
+    "tools/run_identity/stamp.py"
    ],
    "results": [
     "4_comparison-framework/results/gas_benchmark_stats"
@@ -187,7 +188,7 @@
    ]
   },
   "4_comparison-framework/security-analysis/attack_scenarios.py": {
-   "imports": 5,
+   "imports": 6,
    "paths": [
     "1_blockchain-identity/contracts",
     "1_blockchain-identity/hardhat.config.js",
@@ -202,7 +203,8 @@
     "2_w3c-ssi-layer/verifiable-credentials/vc_schemas.py",
     "2_w3c-ssi-layer/verifiable-credentials/vc_verifier.py",
     "4_comparison-framework/security-analysis/attack_scenarios.py",
-    "cv2x-testbed/contracts"
+    "cv2x-testbed/contracts",
+    "tools/run_identity/stamp.py"
    ],
    "results": [
     "4_comparison-framework/security-analysis/results/security_matrix"
@@ -274,14 +276,15 @@
    ]
   },
   "cv2x-testbed/scripts/w3c_compliance_checker.py": {
-   "imports": 6,
+   "imports": 7,
    "paths": [
     "2_w3c-ssi-layer/did-resolution/did_resolver.py",
     "2_w3c-ssi-layer/verifiable-credentials/vc_holder.py",
     "2_w3c-ssi-layer/verifiable-credentials/vc_issuer.py",
     "2_w3c-ssi-layer/verifiable-credentials/vc_schemas.py",
     "2_w3c-ssi-layer/verifiable-credentials/vc_verifier.py",
-    "cv2x-testbed/scripts/w3c_compliance_checker.py"
+    "cv2x-testbed/scripts/w3c_compliance_checker.py",
+    "tools/run_identity/stamp.py"
    ],
    "results": [
     "4_comparison-framework/results/w3c_compliance"

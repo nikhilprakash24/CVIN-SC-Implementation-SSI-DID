@@ -1,12 +1,20 @@
 {
+  "run": {
+    "commit": "96044b96ee0d385c2a5abf64a6a252ab0366cc9e",
+    "code_dirty": false,
+    "tree_dirty": true,
+    "scope": "4_comparison-framework/performance-metrics/run_gas_stats.py",
+    "scope_files": 9,
+    "scope_sha": "03582849c2e3"
+  },
   "n_runs": 30,
   "all_deterministic": true,
   "non_deterministic_cells": [],
   "method": "Full 9-standard gas benchmark re-run N times on a fresh in-process Hardhat network each time; gasUsed aggregated per (standard, operation). EVM gas is deterministic for fixed calldata + pre-state, so identical values across runs (range_min_max width 0) is the expected, correct reproducibility result. range_min_max is the observed envelope, not a CI.",
   "source_metadata": {
     "solcVersion": "0.8.24",
-    "commit": "7d48f94",
-    "commitFull": "7d48f946ec665766b00ff085aeafa345b2abb110",
+    "commit": "96044b9",
+    "commitFull": "96044b96ee0d385c2a5abf64a6a252ab0366cc9e",
     "dirty": false,
     "dirtyAnyFile": true,
     "scope": "1_blockchain-identity/scripts/benchmark_gas.js",
@@ -22,7 +30,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-21T03:17:04.481Z",
+    "date": "2026-10-22T22:26:47.120Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [
