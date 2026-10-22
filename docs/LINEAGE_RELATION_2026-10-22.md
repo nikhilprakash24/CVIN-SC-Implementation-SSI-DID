@@ -1,42 +1,73 @@
-# Lineage Relation, 2026-10-22: this branch and the trunk have diverged again
+# Lineage Relation, 2026-10-22: the cv2x-testbed Workspace (W) and the Trunk (T)
 
-**Author:** Nikhil Prakash (MASc, UBC ECE). **Written under:** `docs/STYLE_AND_RIGOUR_GUIDE.md` rule 1.3.6
-(write down the relation between two branches before any merge). **This note merges nothing and changes no
-result.**
+**Author:** Nikhil Prakash (MASc, UBC ECE). **Plan 5, phase 1** (guide rule 1.3.6: read the other branch and write
+down its relation before merging). **Written before** any merge commit.
 
-## 1. The two branches
-| Branch | Head | Holds | Last activity |
-|---|---|---|---|
-| `claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt` (this one) | `bc4618f` | The clone lineage (review-02 follow-ups H-R, H-A, H-K, H-L), merged with the cv2x lineage and layer 5 (ZKP, agent-wrapped identity) through PR #3 (after-action report 20) | 2026-10-21 |
-| `claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy` (the trunk named by every handback) | `87334d6` | WM-2 passes 19–26: C3, C1, C2, the Technical Data Package, the progress report, drafts of chapters 2 and 6, `docs/STATUS_2026-10-22.md` | today |
+## 1. The two lineages
 
-- Merge base `b7997f8` (2026-10-15).
-- The trunk does **not** contain PR #3's merge; this branch does not contain the trunk's 46 newer commits.
-- A trial merge reports about 124 conflicting paths.
+- **Common base:** `b7997f8` ("Report 18 closed").
+- **W** = `claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy`, head `ec7e19b` (22:05 UTC, active): 49 commits.
+- **T** = the default branch `claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt`, head `4005a60` (PR #5): 82 commits
+  since the base (layer 5 and Plans 1–4, plus the clone lineage merged in PR #3).
+- **Files changed on both sides:** 53; a trial merge leaves **43 conflicted** (§4).
 
-## 2. The same work, done twice
-WM-2 steps C1, C2 and C3 were executed on **both** lines, independently:
+## 2. What W did (reports 19–27, numbered on W)
 
-| WM-2 step | This branch | Trunk | Which to keep (recommendation) |
-|---|---|---|---|
-| C1: `_resolve_ethr` reads the chain | H-R: forward replay, fails closed, `did:mobi` via `lookupByVINHash`; external suite offline 335/336 plus a separate on-chain set 311/311 (#24 note) | Pass 21: reads the registry when given a provider, chain-time validity; 11 tests | **Trunk's as the base**, porting H-R's `did:mobi` resolution and its on-chain conformance set if the author wants them (the trunk does not resolve did:mobi from the registry) |
-| C2: `attestEvent` scope | H-A: OWNER-role attesters owner-only (the registry had no delegate record), duplicate guard; pin 192,040 after merge | Pass 22: the MOBI registry **stores delegations** (`validDelegate`); owner or `veriKey` delegate, once per event; D54 fixed | **Trunk's.** It does what H-A could not (delegates). H-A's duplicate guard is covered by the trunk's "once per event" |
-| C3: #32 and #37 on one host | H-K: 12 alternating replicates, register #54 (was #42) | Pass 19: two replicates in opposite order, register #52 | **Both are valid measurements**; keep #52 as the row of record (the trunk's numbering) and add H-K's 12-replicate result as supporting data, or retire one with a note |
+| W report | Work | Overlaps T? |
+|---|---|---|
+| 19 | Contribution record; **WM-2 C3**: #32 and #37 at their own code on one host, two replicates in opposite order (register **#52**) | yes: T's #54 (clone lineage H-K) measures the same question by a different design |
+| 20 | Technical Data Package (TDP-001…010) in an engineering register | no |
+| 21 | **WM-2 C1**: did:ethr resolution reads ERC-1056 when given a provider (`blockchain_provider`, `registries={chain: address}`) | yes: T's H-R resolver (`blockchain_provider`/`rpc_url` + `ethr_registry`/`mobi_registry`; did:ethr and did:mobi on chain; change-chain walk; external suite 311/311) |
+| 22 | **WM-2 C2** (D54): `MOBIVIDRegistry` stores delegations (`validDelegate`); `attestEvent` requires the vehicle's owner or a `veriKey` delegate, once; D54 **fixed** | yes, and conflicting: T's H-A (OWNER role must be the owner; organisational roles keep registry-wide scope; D54 narrowed, open) |
+| 23 | Phase 2 session 3: deep-dive briefs I-24 (IDTx), I-05 (freshness theory) | touches `ideas.yaml`, `IDEA_REGISTER.md` (T added `status` entries) |
+| 24 | Decision sheet, `tools/prepush_check.sh`, progress report | no |
+| 25 | TDP runbook phase 10: thesis adaptation map onto chapter 3 | chapter 3 (T added §3.9) |
+| 26 | Chapter 2 draft sections 2.4a and 2.6 (separate file); chapter 6 §6.8 IDTx (separate file) | yes: T's full chapter 2 and T's §6.8 (layer 5) in the README |
+| 27 | TDP runbook phases 8 and 9: requirement-to-test trace, ICD gate `check_icd.py` in CI | no |
 
-Work only this branch has: H-L (#21 rejection-reason check, revert-origin check in the security harness, SUMO
-replay cache), the P1/X1 harness operations and the basic digital-ID set framing, layer 5 (ZKP), and PR #3's
-merged-tree re-runs. Work only the trunk has: passes 23–26 (briefs, decision sheet, progress report, chapter
-drafts, TDP runbook phase 10), and the cross-model check brief.
+## 3. The design question: C2 (decides phase 3)
 
-## 3. Why this session did not merge
-- `docs/STATUS_2026-10-22.md` §4 on the trunk asks that nothing be pushed there while the cross-model check of
-  passes 16–22 runs. WM-2 A3 onward waits on that check.
-- The overlapping implementations differ in design (owner-only vs delegates; two resolvers), so a merge is a
-  choice, not a mechanical union.
+| | T (H-A) | W (C2, report 22) |
+|---|---|---|
+| Who may attest | any role-holder; an OWNER-role attester must be the current owner | the vehicle's owner or its stored `veriKey` delegate, and holding a role |
+| Organisational roles | registry-wide (by design) | only as the owner's delegate |
+| Duplicates | `hasAttested`, "Already attested by this attester" | `hasAttested`, "Already attested" |
+| Delegation storage | none in MOBI (events only, K-5) | stored in `MOBIVIDRegistry` (`addDelegate` +22,346 gas) |
+| D54 | narrowed, open | fixed |
 
-## 4. What the author needs to decide
-1. **Which branch is the trunk from here** (the trunk session's position: `cv2x-testbed-setup`).
-2. **When to reconcile:** after the cross-model check reports (recommended), by merging this branch into the trunk
-   and taking the trunk's side for C1/C2/C3 as in §2, then porting the items in the "only this branch" list.
-3. Whether layer 5 (ZKP) and the PR #3 merge belong on the trunk now, or stay on this branch until the writing
-   series (`docs/zkp/PLAN_2_PHASED_PROMPTS.md`) is scheduled.
+W's rule implies T's (an owner-or-delegate attester that is OWNER-role is the owner), so taking W loses no protection
+T has. It removes the organisational roles' registry-wide scope, which T kept as a design choice; W's report 22
+records that choice as the defect. **Resolution (default I-a):** W's design; T's H-A tests are kept where they still
+hold (previous owner refused, duplicate refused) with W's revert strings, and the "organisational role attests any
+vehicle" expectation is rewritten to W's rule with the reason stated. The auto-merge of the contract keeps *both*
+checks and the duplicate guard twice; it must be resolved by hand.
+
+## 4. Conflicted files and their resolution
+
+| Group | Files | Resolution |
+|---|---|---|
+| Contracts | `MOBIVIDRegistryV2.sol` (both copies) | W's `attestEvent`; one `hasAttested`; testbed copy byte-identical (CI) |
+| Contract tests | `attestEventRegression.test.js`, `MOBIVIDRegistry.test.js` (auto-merged), `securityScenarios.test.js` (auto-merged) | W's pin method, re-measured on the merged bytecode; H-A cases adapted (§3) |
+| Resolver | `did_resolver.py` (5 hunks) | T's engine (did:mobi, change walk, D21 event) behind both constructor forms: W's `registries={chain: addr}` and T's `ethr_registry`/`rpc_url`; both test suites must pass |
+| Demo | `sandbox/options/mobi-vid/demos/claims.js` | W's revert string |
+| Registers | `MEASUREMENT_CONDITIONS.md`, `DEFECT_LOG.md`, `THREAT_MODEL.md`, `PLAN_WM-2.md` | W's rows and entries kept; T's rows **#52–#61 → #53–#62**; D54 "fixed" (W) with H-A recorded as the superseded design; C1/C2/C3 entries from W, T's A3 and pass-22 notes appended |
+| Reports | `AFTER_ACTION_REPORT_19…22.md` (add/add) | W's keep the numbers; T's become **28–31**, each with a renumbering note; T's report text referring to "report 20/21/22" updated |
+| Handback, manifest | `HANDBACK_2026-10-14.md`, `SESSION_MANIFEST_2026-09.md` | both sides' addenda kept, ordered by date, renumbered sections |
+| Tooling | `check_stamps.py`, `make_result_cards.py`, `test_register.yaml` | union of both sides' entries; card and class numbers follow the renumbering |
+| Generated | results JSON/CSV/TeX, artifacts, dashboards, cards, presentation, grand report, matrices, stamp inventory, crux register, mode classification | either side, then regenerated on the merged tree (phases 4–5) |
+
+## 5. Renumbering (T → merged)
+
+| Item | T | Merged |
+|---|---|---|
+| Register rows (basic set, P1/X1, same-host freshness, layer 5) | #52, #53, #54, #55–#61 | **#53, #54, #55, #56–#62** |
+| After-action reports (Plan 1, PR #3 merge, Plan 3, Plan 4) | 19, 20, 21, 22 | **28, 29, 30, 31** (this pass: **32**) |
+| Chapter 6 layer-5 section | §6.8 | **§6.9** (W's IDTx keeps §6.8) |
+| Chapter 2 | T's full draft §2.1–§2.7 | W's §2.4a (revocation freshness) and its §2.6 (IDTx) merged into T's §2.4 and §2.6 by topic, sources unioned |
+
+## 6. What each side's tests assert that the other may break
+- W's `test_did_resolver_chain.py` (constructor with `registries`) against T's resolver: fails unless both forms exist.
+- T's `test_did_resolver_onchain_{ethr,mobi}.py` against W's resolver: fails (no did:mobi chain path).
+- T's H-A tests against W's contract: the organisational-role case and the revert strings fail.
+- W's C2 tests against a merged contract with H-A's extra OWNER check: pass (the check is implied) but the gas pin moves.
+- Every gas row that includes MOBI moves (W measured addDelegate 57,667, attestation 222,082 on its tree).
