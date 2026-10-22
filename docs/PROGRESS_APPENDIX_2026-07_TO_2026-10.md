@@ -304,10 +304,11 @@
 | `df64ce9` | 2026-10-22 | Status and report 26: report 25 was taken by the TDP session; the check takes the next free number |
 | `87334d6` | 2026-10-22 | Status: two remaining references to report 25 corrected |
 
-## report 27 (2026-10-22 to 2026-10-22, 1 commits)
+## report 27 (2026-10-22 to 2026-10-22, 2 commits)
 
 | Commit | Date | Subject |
 |---|---|---|
 | `fa275da` | 2026-10-22 | After-action report 27 opened: TDP runbook phases 8 and 9 |
+| `ad6d6c5` | 2026-10-22 | TDP runbook phases 8 and 9: requirement-to-test trace with its guard (TDP-005 section 3); ICD gate check_icd.py in CI with a probe; TDP-003 … |
 
-188 commits in 24 groups.
+189 commits in 24 groups.

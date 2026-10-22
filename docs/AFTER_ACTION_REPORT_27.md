@@ -41,7 +41,9 @@ or a leading `--` are skipped and listed as unchecked.
   feature-matrix step cannot run in this container, as in report 25; everything else passes).
 
 ## 3. Closing
-The pass delivered P8, P9 and R. CI result on the closing commit: recorded in the "Report 27 closed" commit.
+The pass delivered P8, P9 and R. **CI 8 of 8 green on the closing commit `ad6d6c5`** (Smart Contract Tests run
+39861167239, W3C SSI Compliance Tests 39861166983, Performance Benchmarks 39861166946), read over the public
+Actions API from this session.
 
 **Four TDP guards now stand in CI** (matrix, worksheet, drawings, interface document), each with a probe that
 shows it fires. The package's remaining runbook phases are 11 (external review) and 12 (Rev B issue).
