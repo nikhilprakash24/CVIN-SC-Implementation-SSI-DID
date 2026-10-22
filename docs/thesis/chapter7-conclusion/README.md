@@ -259,7 +259,7 @@ Ordered from smallest lift (confirmation) to largest (new research):
 *Addition 2026-10-22: future work opened by layer 5 (§4.8, §5.10).*
 
 7. **An anonymity set at the gate.** `ZkVinGate` names the identity it admits; proving membership in a set of
-   anchored commitments instead would complete the protection property of Table C-2 (§6.8.2).
+   anchored commitments instead would complete the protection property of Table C-2 (§6.9.2).
 8. **A multi-party setup ceremony.** Replace the fixed-entropy setup with a multi-party ceremony, the one step
    between the prototype and production keys.
 9. **BBS and SD-JWT on the hot path.** Measure BBS signatures and SD-JWT selective disclosure on the same host and

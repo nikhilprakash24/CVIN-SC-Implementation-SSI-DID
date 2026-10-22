@@ -20,8 +20,8 @@ Legend: ✍️ written · ▫️ stub · 📊 backed by measured data (`SOURCES.
 
 ## Ch. 2 — Literature Review (`chapter2-literature-review/`) — ✍️ **drafted from verified sources** (2026-10-22)
 2.1 SSI & W3C DID/VC ✍️ · 2.2 Blockchain identity standards (the 9) ✍️ ·
-2.3 Vehicle identity & MOBI VID ✍️ · 2.4 V2X security & PKI (IEEE 1609.2 / SAE J2735) ✍️ ·
-2.5 ZKPs & anonymous credentials ✍️ · 2.6 Agent identity ✍️ · 2.7 Gap this thesis fills ✍️ (sources: `docs/zkp/SOURCES_ZKP.md`, 205 verified; `SOURCES.md` §7, 31 added and DOI-checked)
+2.3 Vehicle identity & MOBI VID ✍️ · 2.4 V2X security & PKI (IEEE 1609.2 / SAE J2735; 2.4.5 revocation freshness) ✍️ ·
+2.5 ZKPs & anonymous credentials ✍️ · 2.6 Agent identity ✍️ · 2.7 The identity-dependent transaction (IDTx) ✍️ · 2.8 Gap this thesis fills ✍️ · 2.9 Citation keys [A-*], [F-*] (sources: `docs/zkp/SOURCES_ZKP.md`, 205 verified; `SOURCES.md` §7, 31 added and DOI-checked)
 > Drafted from verified sources; open `[SOURCE NEEDED]` markers remain for MOBI VID and SAE J2735 texts and for searches the researcher should confirm. The researcher's reference set may extend or replace these sources.
 
 ## Ch. 3 — Methodology (`chapter3-methodology/`) — ✍️
@@ -43,7 +43,8 @@ Legend: ✍️ written · ▫️ stub · 📊 backed by measured data (`SOURCES.
 ## Ch. 6 — Discussion (`chapter6-discussion/`) — ✍️
 6.1 Security/performance/fidelity frontier ✍️ · 6.2 Which-standard-when ✍️ ·
 6.3 V2V viability ✍️ · 6.4 W3C interoperability ✍️ · 6.5 CVIN-Combined ✍️ ·
-6.6 Industry & threats ✍️ · 6.7 Summary ✍️ · 6.8 On-chain reality; SSI as a spectrum; the agent wrapper ✍️
+6.6 Industry & threats ✍️ · 6.7 Summary ✍️ · 6.8 The identity-dependent transaction (IDTx) ✍️ ·
+6.9 On-chain reality; SSI as a spectrum; the agent wrapper ✍️
 
 ## Ch. 7 — Conclusion (`chapter7-conclusion/`) — ✍️
 7.1 Summary ✍️ · 7.2 RQ answers ✍️ · 7.3 Hypothesis verdicts ✍️ ·
