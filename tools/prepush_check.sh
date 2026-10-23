@@ -31,6 +31,7 @@ CHECKS=(
   "docs/figures/make_dashboard_data.py --check"
   "docs/testing/build_register.py --check"
   "docs/testing/check_docs_numbers.py"
+  "docs/testing/check_claims.py --check"
   "docs/presentation/make_presentation.py --check"
   "docs/testing/check_stamps.py --check-coverage"
   "docs/phase2/build_phase2.py --check"

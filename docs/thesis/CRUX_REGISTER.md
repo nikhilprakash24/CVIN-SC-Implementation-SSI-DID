@@ -26,7 +26,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 | Row | Status | Claim (from the register) |
 |---|---|---|
 | #25 | V | Nine-standard gas table (deploy / create / update / delegate-or-claim / revoke / transfer per standard; MOBI-VID-V2 as application profile; ERC-4337 EntryPoint indirection +46,830 gas/op; create-identity spread 52,216 (C… |
-| #26 | V | Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,146 gas on the merged contracts); verify O(1) in claim count; V2V warm verification linear at 0.164 ms/neighbour (… |
+| #26 | V | Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,146 gas on the merged contracts); verify O(1) in claim count; V2V warm verification linear at 0.156 ms/neighbour (… |
 | #34 | V | Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,881 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS… |
 | #35 | V | Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,809 (wrapper 1,025,469) · ERC-1155 1,261,575 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,508,413 (excl. 3 n/a) · ERC-4337 2,221… |
 | #36 | V | H5 dominance analysis over six declared criteria (lifetime gas ↓, zero→nonzero SSTOREs ↓, R3 RPC at h=50 ↓, R3 median ms after lifecycle ↓, core ops supported ↑, O(1) on-chain credential check ↑ [design property, assigne… |
@@ -51,10 +51,10 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 | Row | Status | Claim (from the register) |
 |---|---|---|
-| #21 | V | PKI vs ERC-1056 identical operations, n=50 (median / p95 ms): verify 0.253 / 0.329 PKI (pki_standard; pki_centralized 0.254 / 0.325; CA signature + issuer + validity + CRL + message signature) vs 9.654 / 15.984 ERC-1056 … |
-| #27 | V | V2V SSI verify warm 0.153 ms [0.151, 0.154] (median of 30 seeded-run medians, 95 % bootstrap CI; p95 of run medians 0.158), cold 0.399 [0.381, 0.411]; PKI warm 0.094 [0.093, 0.095], cold 0.220 [0.218, 0.223]; 1,650,318 v… |
-| #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_… |
-| #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu… |
+| #21 | V | PKI vs ERC-1056 identical operations, n=50 (median / p95 ms): verify 0.226 / 0.294 PKI (pki_standard; pki_centralized 0.232 / 0.306; CA signature + issuer + validity + CRL + message signature) vs 15.513 / 18.348 ERC-1056… |
+| #27 | V | V2V SSI verify warm 0.142 ms [0.141, 0.143] (median of 30 seeded-run medians, 95 % bootstrap CI; p95 of run medians 0.146), cold 0.363 [0.355, 0.387]; PKI warm 0.090 [0.089, 0.091], cold 0.210 [0.204, 0.214]; 1,650,318 v… |
+| #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 14.673 / 14.284 / 17.089; k=5 3.152 / 0.397 / 15.202; k=25 0.944 / 0.371 / 0.674; k=∞ 0.357 / 0.346 / 0.415; P*(0.5) = 3 / 15 / 52 / 140. … |
+| #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 3.222 / 3.035 ms vs 14.136 / 14.751 ms for th… |
 | #39 | V | HTTP-RPC condition, all ten columns (N=30), on the merged contracts (re-run 2026-10-21, PR #3): every gas value identical to the in-process run of record (`2026-10-21T03-28-59Z_a9e2a28`) on all common cells (crud 131, li… |
 
 **Open gaps:**
@@ -75,7 +75,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 | Row | Status | Claim (from the register) |
 |---|---|---|
-| #44 | V | (pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1, A4 and A6; verdict outside band, not falsified) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in the same ru… |
+| #44 | V | (pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1, A4 and A6; verdict at the edge of the band, not falsified) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in … |
 | #45 | V | (pre-registered I2, amendments A4, A5 and A6; verdict PASS) Each of 15 registered checks (12 attacks and 3 warm variants) rejected for its expected reason in 30/30 runs, and the three warm variants verified warm in every… |
 | #46 | V | (pre-registered I3; verdict PASS) A verifier that has cached a revoked RSU accepts at most k − 1 further SPaT from it: `rsu_1`'s credential revoked at t = 10 s, re-check of the authority's (in-process) registry every k-t… |
 | #47 | V | (pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`), range over declared seeds 1–30 (WM-2 B1: the RSU keys are derived from each see… |
@@ -102,8 +102,8 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 
 | Row | Status | Claim (from the register) |
 |---|---|---|
-| #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 11.76 / 10.95 / 16.15; k=5 2.38 / 0.46 / 10.48; k=25 0.85 / 0.43 / 0.76; k=∞ 0.45 / 0.43 / 0.63; P*(0.5) = 4 / 21 / 58 / 110. Means fit t_… |
-| #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 2.76 / 2.89 ms vs 14.38 / 10.28 ms for the fu… |
+| #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 14.673 / 14.284 / 17.089; k=5 3.152 / 0.397 / 15.202; k=25 0.944 / 0.371 / 0.674; k=∞ 0.357 / 0.346 / 0.415; P*(0.5) = 3 / 15 / 52 / 140. … |
+| #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 3.222 / 3.035 ms vs 14.136 / 14.751 ms for th… |
 | #40 | S | (sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=… |
 | #52 | V | Freshness rows #32 and #37 re-run back to back on one host, each at its own code (#32 at `8216507`, #37 at `f660402`), fresh node per run, two replicates in opposite order (WM-2 C3, decision rule committed first in repor… |
 | #55 | V | (clone lineage, was #42) Freshness-k, same host, both refresh modes (12 replicates in alternating blocks, fresh node each; clean pool by foreign-CPU load; one replicate excluded for overlapping another experiment): t_loc… |

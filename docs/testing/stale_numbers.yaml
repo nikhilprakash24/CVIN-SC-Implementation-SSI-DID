@@ -61,28 +61,28 @@ entries:
   current: 35,038–35,062 over declared seeds 1–30 (WM-2 B1)
   row: 47
 - pattern: (?<![\d.])1\.096(?!\d)   # anchored at the lineage merge (PR #3): matched inside arXiv 2501.09674
-  current: 1.226 [1.219, 1.238], outside band, not falsified (verifier v3, WM-2 C0)
+  current: 1.197 [1.193, 1.201], at the edge of the band (verifier v3, A3b re-run; 1.226 on the run of record)
   row: 44
 - pattern: 0\.886 ms
-  current: 0.900 ms [0.889, 0.935] (verifier v3)
+  current: 0.805 ms [0.800, 0.817] (verifier v3, A3b re-run)
   row: 48
 - pattern: 65[–-]71 ms
-  current: 103.177 ms median at h = 50 (D58)
+  current: 91.113 ms median at h = 50 (A3b re-run; 103.177 on the run of record, D58)
   row: 31
 - pattern: 90 injected attacks
-  current: 150 injected attacks (5 per run × 30 runs; D59)
+  current: 210 injected attacks (7 per run × 30 runs, A3b re-run; 150 at the run of record, D59)
   row: 27
 - pattern: 93\.2 ?%
   current: 94.3 %
   row: 4
 - pattern: 0\.165 ms
-  current: 0.153 ms [0.151, 0.154]
+  current: 0.142 ms [0.141, 0.143] (A3b re-run)
   row: 27
 - pattern: \[0\.162, ?0\.168\]
-  current: '[0.151, 0.154]'
+  current: '[0.141, 0.143]'
   row: 27
 - pattern: 0\.400 ms
-  current: 0.399 ms
+  current: 0.363 ms (A3b re-run)
   row: 27
 - pattern: '1704992'
   current: ERC-725xy create 1,680,816; heaviest create ERC-735 1,757,881
