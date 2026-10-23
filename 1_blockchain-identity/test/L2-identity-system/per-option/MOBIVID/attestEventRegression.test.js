@@ -199,6 +199,19 @@ describe("MOBI VID V2 attestEvent: M3 regression (forged-signature path closed, 
       .to.be.revertedWith("Attester is not the vehicle's owner or delegate");
   });
 
+  it("D54: a delegation stops counting once the vehicle's identity is revoked", async function () {
+    // Found by the D54 mutation probe (report 36): without this test, dropping the revoked-identity check in
+    // validDelegate survived every behaviour test and was caught only by the gas pin.
+    const { registry, firstOwner, serviceCenter, dmv, vehicle } = await loadFixture(fixture);
+    const eventId = await recordEvent(registry, serviceCenter, vehicle, 18_000);
+    expect(await registry.validDelegate(vehicle.address, VERI_KEY, dmv.address)).to.equal(true);
+    await registry.connect(firstOwner).revokeIdentity(vehicle.address);
+    expect(await registry.validDelegate(vehicle.address, VERI_KEY, dmv.address)).to.equal(false);
+    await expect(registry.connect(dmv).attestEvent(eventId, vehicle.address,
+      await attestationSignature(registry, vehicle.address, eventId, dmv)))
+      .to.be.revertedWith("Attester is not the vehicle's owner or delegate");
+  });
+
   it("D54: the vehicle's current owner, holding a role, can attest without a delegation", async function () {
     const { registry, firstOwner, serviceCenter, vehicle } = await loadFixture(fixture);
     await registry.authorizeIssuer(firstOwner.address, ROLE.OWNER);

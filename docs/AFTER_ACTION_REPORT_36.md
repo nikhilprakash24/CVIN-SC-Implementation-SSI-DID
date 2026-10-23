@@ -16,3 +16,14 @@ The resolver the mutants target is the merged implementation (`ERC1056Reader`, f
 
 ## 2. Execution log
 - 2026-10-23 — report opened.
+- **M2, D54 probe: a test gap found and closed.** The first run killed 8 of 8, but one kill was hollow: with the
+  revoked-identity check removed from `validDelegate`, every behaviour test still passed and only the file's gas-pin
+  test failed, on its gas change (198,694 → 196,503 execution gas, one storage read fewer). A gas pin catches almost
+  any edit and proves nothing about behaviour, so the probe now runs the behaviour tests only (`--grep "D54|vulnerable
+  path"`). That run: 7 of 8 killed, `revoked_identity_ignored` survived. New test: "a delegation stops counting once the
+  vehicle's identity is revoked". Re-run: **0 of 8 survive**, every kill by a behaviour test. Hardhat count 562 → 563.
+- **M1, resolver probe:** **0 of 9 survive** on the merged `ERC1056Reader`. Several kills come through the reader's own
+  consistency check (an owner the replay did not reach raises `internalError`), which is a correct refusal, not a
+  silent wrong document.
+- **CI.** The D54 probe runs in the contracts job after the IDTx probe; the resolver probe runs in the Python job,
+  against its shared node.
