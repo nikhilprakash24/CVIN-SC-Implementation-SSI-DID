@@ -40,11 +40,11 @@ Register at generation: E 7, S 10, V 45 (62 rows).
 | STD-02 | External DID test suite | Test | #24 (V) | 335 of 336 generated tests: actual `335` → met | 1/1 files | **VERIFIED** | — |
 | STD-03 | MOBI-VID-inspired lifecycle on several backends | Demonstration | #30 (V), #33 (V) | — | 2/2 files | **VERIFIED** | — |
 | STD-04 | Database parity for lifecycle writes | Test | #33 (V) | pre-registered verdict as it fell: **FAIL** | — | **VERIFIED** | — |
-| RTV-01 | Warm credential verification inside the identity budget share | Test | #27 (V) | SSI warm verify median <= 0.5 ms: actual `0.1528` → met | 1/1 files | **PARTIAL** | pending: WM-2 A3b (open) |
+| RTV-01 | Warm credential verification inside the identity budget share | Test | #27 (V) | SSI warm verify median <= 0.5 ms: actual `0.14225` → met | 1/1 files | **PARTIAL** | pending: WM-2 A3b (open) |
 | RTV-02 | Uncached chain read at message time reported | Test | #21 (V) | — | — | **VERIFIED** | — |
 | RTV-03 | Freshness-k curve with both refresh modes | Test | #32 (V), #37 (V), #52 (V) | — | 1/1 files | **VERIFIED** | — |
 | RTV-04 | Signed message size | Test | #23 (V) | — | — | **VERIFIED** | — |
-| INF-01 | SPaT verification cost against BSM (I1) | Test | #44 (V) | pre-registered verdict as it fell: **outside band, not falsified** | — | **VERIFIED** | — |
+| INF-01 | SPaT verification cost against BSM (I1) | Test | #44 (V) | pre-registered verdict as it fell: **PASS** | — | **VERIFIED** | — |
 | INF-02 | Registered attacks rejected for their reasons (I2) | Test | #45 (V) | 30/30 runs, all 15 checks as expected: actual `30` → met | 1/1 files | **VERIFIED** | — |
 | INF-03 | Revoked roadside unit trusted for at most k minus 1 messages (I3) | Test | #46 (V) | pre-registered verdict as it fell: **PASS** | — | **VERIFIED** | — |
 | INF-04 | Roadside unit identity cost on chain (I4) | Test | #47 (V) | — | 1/1 files | **VERIFIED** | — |

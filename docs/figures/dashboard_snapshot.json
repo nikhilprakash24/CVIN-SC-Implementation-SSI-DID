@@ -411,47 +411,47 @@
     "per_population": {
       "ssi": {
         "sign": {
-          "median": 0.2241,
+          "median": 0.2095,
           "ci95": [
-            0.2214,
-            0.22705
+            0.2082,
+            0.2107
           ]
         },
         "cold": {
-          "median": 0.3991,
+          "median": 0.3627,
           "ci95": [
-            0.3809,
-            0.4107
+            0.3552,
+            0.387
           ]
         },
         "warm": {
-          "median": 0.1528,
+          "median": 0.14225,
           "ci95": [
-            0.1513,
-            0.1538
+            0.14065,
+            0.14275
           ]
         }
       },
       "pki": {
         "sign": {
-          "median": 0.0776,
+          "median": 0.08135,
           "ci95": [
-            0.0754,
-            0.0783
+            0.07975,
+            0.0824
           ]
         },
         "cold": {
-          "median": 0.22025,
+          "median": 0.2101,
           "ci95": [
-            0.2182,
-            0.223
+            0.2042,
+            0.214
           ]
         },
         "warm": {
-          "median": 0.0939,
+          "median": 0.0904,
           "ci95": [
-            0.093,
-            0.0945
+            0.08905,
+            0.09095
           ]
         }
       }
@@ -459,7 +459,7 @@
     "totals": {
       "messages_sent": 300591,
       "messages_verified": 1650318,
-      "verification_failures": 150
+      "verification_failures": 210
     },
     "condition": "M0, simulated mobility, real cryptography",
     "register": [
@@ -664,15 +664,15 @@
   },
   "infrastructure": {
     "I1": {
-      "verdict": "outside band, not falsified",
-      "ratio_median": 1.226384,
+      "verdict": "PASS",
+      "ratio_median": 1.197149,
       "ratio_ci95": [
-        1.21933,
-        1.23822
+        1.193348,
+        1.201253
       ],
-      "spat_warm_ms": 0.18405,
-      "bsm_warm_ms": 0.149,
-      "spat_cold_ms": 0.4731,
+      "spat_warm_ms": 0.1728,
+      "bsm_warm_ms": 0.14385,
+      "spat_cold_ms": 0.4705,
       "runs": 30
     },
     "I2": {
@@ -682,8 +682,8 @@
       "runs": 30
     },
     "I5": {
-      "controller_to_vehicle_ms": 0.9003,
-      "tmc_to_controller_ms": 0.47975
+      "controller_to_vehicle_ms": 0.8049,
+      "tmc_to_controller_ms": 0.4089
     },
     "source_stats": {
       "path": "cv2x-testbed/sumo/results/infrastructure_stats.json"

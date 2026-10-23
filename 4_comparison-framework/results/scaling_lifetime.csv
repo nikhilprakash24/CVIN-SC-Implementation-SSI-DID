@@ -3,7 +3,7 @@ rank,standard,append_op,birth_x1_gas,appends_x35_gas,transfers_x3_gas,lifetime_t
 1,ERC-1056,setAttribute,52594,1242290,155262,1450146,751370,2148922
 2,ERC-1155,issueCredential,107729,1498560,258894,1865183,986456,2743910
 3,CVIN-Combined,addClaim,52216,9624020,155241,9831477,4941847,14721108
-4,MOBI-VID-V2,recordLifecycleEvent,299143,8956850,600267,9856260,5077702,14634819
+4,MOBI-VID-V2,recordLifecycleEvent,299165,8958390,600465,9858020,5078593,14637448
 5,ERC-735,addClaim,1757881,9847775,86436,11692092,6724987,16659198
 
 # Profile (assumed),birth=1,maintenance=30,inspection=4,recall=1,transfer=3,total_events=39

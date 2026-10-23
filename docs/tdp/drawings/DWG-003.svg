@@ -121,18 +121,18 @@
 <text x="792.9139454522849" y="598" font-size="8.5" text-anchor="middle" fill="#93a9cb" font-weight="normal">50 ms</text>
 <line x1="866.4569727261425" y1="580" x2="866.4569727261425" y2="586" stroke="#e3ecf9" stroke-width="1"/>
 <text x="866.4569727261425" y="598" font-size="8.5" text-anchor="middle" fill="#93a9cb" font-weight="normal">100 ms</text>
-<rect x="60" y="452" width="172.0008210082945" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
-<text x="238.0008210082945" y="462" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.253 ms  PKI verify (in-process, CA sig + CRL)  [#21]</text>
-<rect x="60" y="472" width="118.52521860909292" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
-<text x="184.52521860909292" y="482" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.153 ms  SSI BSM verify WARM (cached key)  [#27]</text>
-<rect x="60" y="492" width="138.26808008532137" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
-<text x="204.26808008532137" y="502" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.184 ms  SPaT verify WARM (verifier v3)  [#44]</text>
-<rect x="60" y="512" width="220.39008749034576" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
-<text x="286.39008749034576" y="522" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.399 ms  SSI BSM verify COLD (credential verify)  [#27]</text>
-<rect x="60" y="532" width="238.4371699901659" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
-<text x="304.4371699901659" y="542" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.473 ms  SPaT verify COLD  [#44]</text>
-<rect x="60" y="552" width="558.4123710519237" height="12" stroke="#ffb454" fill="#ffb454" stroke-width="0.8" rx="0"/>
-<text x="624.4123710519237" y="562" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">9.654 ms  ERC-1056 verify UNCACHED (4 RPC, local node)  [#21]</text>
+<rect x="60" y="452" width="159.82166363375177" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
+<text x="225.82166363375177" y="462" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.226 ms  PKI verify (in-process, CA sig + CRL)  [#21]</text>
+<rect x="60" y="472" width="110.93440953381858" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
+<text x="176.93440953381858" y="482" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.142 ms  SSI BSM verify WARM (cached key)  [#27]</text>
+<rect x="60" y="492" width="131.5760667204504" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
+<text x="197.5760667204504" y="502" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.173 ms  SPaT verify WARM (verifier v3)  [#44]</text>
+<rect x="60" y="512" width="210.2430961500702" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
+<text x="276.2430961500702" y="522" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.363 ms  SSI BSM verify COLD (credential verify)  [#27]</text>
+<rect x="60" y="532" width="237.85247071915842" height="12" stroke="#7cc9ff" fill="#7cc9ff" stroke-width="0.8" rx="0"/>
+<text x="303.8524707191584" y="542" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">0.470 ms  SPaT verify COLD  [#44]</text>
+<rect x="60" y="552" width="608.7400628447846" height="12" stroke="#ffb454" fill="#ffb454" stroke-width="0.8" rx="0"/>
+<text x="674.7400628447846" y="562" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">15.513 ms  ERC-1056 verify UNCACHED (4 RPC, local node)  [#21]</text>
 <line x1="304.30464848409497" y1="446" x2="304.30464848409497" y2="580" stroke="#ffb454" stroke-width="1" stroke-dasharray="5,4"/>
 <text x="308.30464848409497" y="444" font-size="8" text-anchor="start" fill="#ffb454" font-weight="normal">0.5 ms: 100 neighbours in half the interval (P*(0.5)=100)</text>
 <line x1="866.4569727261425" y1="446" x2="866.4569727261425" y2="580" stroke="#ffb454" stroke-width="1" stroke-dasharray="5,4"/>
