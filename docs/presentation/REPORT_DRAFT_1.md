@@ -163,7 +163,7 @@
 | cost | erc1056, erc1056w |
 | costRead | erc1056, erc1056w, erc1155, erc725xy |
 | all | erc1056, erc1056w, erc721, erc1155, erc725xy, erc4337 |
-*Run of record `2026-10-21T03-28-59Z_a9e2a28`; criteria: Lifetime gas, Zero→nonzero SSTOREs, R3 RPC calls at h=50, R3 median ms after lifecycle, Core ops supported, O(1) on-chain credential check (view).*
+*Run of record `2026-10-23T00-49-12Z_1f4ace0`; criteria: Lifetime gas, Zero→nonzero SSTOREs, R3 RPC calls at h=50, R3 median ms after lifecycle, Core ops supported, O(1) on-chain credential check (view).*
 
 ### 3.10 Infrastructure messaging, V2I and I2I (registers #44–#48)
 

@@ -37,8 +37,8 @@
 | `cv2x-testbed/sumo/results/infrastructure_stats.json` | 2026-10-23T00:07:06+00:0 | 0b395705838af3554d0f33ea | False | True | no | 3.13.16 |  |
 | `cv2x-testbed/sumo/results/v2v_latency.json` | 2026-10-23T00:43:21.5170 | MISSING | MISSING | MISSING | MISSING | MISSING | single run: default output of one harness run; the results of record are v2v_latency_stats.json |
 | `cv2x-testbed/sumo/results/v2v_latency_stats.json` | 2026-10-23T00:37:55+00:0 | 0b395705838af3554d0f33ea | False | True | no | 3.13.16 |  |
-| `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-21T03:29:00.049Z | a9e2a28066f7158dfc6d0a58 | False (from any) | False | yes | 0.8.24 |  |
-| `1_blockchain-identity/results/metrics-rpc/latest/meta.json` | 2026-10-21T09:02:59.111Z | bd55af2a57db0b2aec373707 | False (from any) | False | yes | 0.8.24 |  |
+| `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-23T00:49:14.018Z | 1f4ace082fc32d8bc1c6b294 | False | False | no | 0.8.24 |  |
+| `1_blockchain-identity/results/metrics-rpc/latest/meta.json` | 2026-10-23T00:59:31.809Z | 1f4ace082fc32d8bc1c6b294 | False | True | no | 0.8.24 |  |
 | `5_zkp-agent-identity/results/attacks.json` | 2026-10-15T05:15:04+00:0 | 978988e | False | False | MISSING | 3.13.16 |  |
 | `5_zkp-agent-identity/results/gas_zk.json` | 2026-10-15T05:15:13.814Z | 978988e | False | True | MISSING | 2.28.6 |  |
 | `5_zkp-agent-identity/results/learning_curve.json` | MISSING | MISSING | MISSING | MISSING | MISSING | simulation, seeded; held | derived: written by attacks/train_responder.py; deterministic, reproduced byte for byte by bench/run_all.sh before each run of record (AAR 19) |
