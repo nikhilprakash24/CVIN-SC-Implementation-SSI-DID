@@ -1,21 +1,21 @@
 {
   "environment": {
-    "date_utc": "2026-10-14T06:13:09+00:00",
-    "commit": "7d08dce152da9b6dab754ae69ac238bbf665aa44",
+    "date_utc": "2026-10-23T00:13:18+00:00",
+    "commit": "0b395705838af3554d0f33ea5f555cbd575995f9",
     "tree_clean": false,
     "code_clean": true,
     "scope": "cv2x-testbed/sumo/run_infra_stats.py",
     "scope_sha": "61d1d8e60d86",
     "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
     "logical_cpus": 4,
-    "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
-    "python": "3.11.15",
+    "platform": "Linux-6.18.44-fc-v140-x86_64-with-glibc2.39",
+    "python": "3.13.16",
     "libraries": {
       "coincurve": "21.0.0",
       "eth-account": "0.14.0",
       "eth-keys": "0.8.0",
-      "cryptography": "41.0.7",
-      "numpy": "2.4.6",
+      "cryptography": "50.0.1",
+      "numpy": "2.5.3",
       "web3": "8.0.0"
     }
   },
@@ -909,5 +909,5 @@
     },
     "verdict": "PASS"
   },
-  "wall_clock_s": 1680.5
+  "wall_clock_s": 1472.8
 }

@@ -1,6 +1,6 @@
 {
   "run": {
-    "commit": "96044b96ee0d385c2a5abf64a6a252ab0366cc9e",
+    "commit": "ddb9b0505c97239eb75f6f4ce128dbedfa49ebf3",
     "code_dirty": false,
     "tree_dirty": true,
     "scope": "4_comparison-framework/performance-metrics/run_gas_stats.py",
@@ -13,8 +13,8 @@
   "method": "Full 9-standard gas benchmark re-run N times on a fresh in-process Hardhat network each time; gasUsed aggregated per (standard, operation). EVM gas is deterministic for fixed calldata + pre-state, so identical values across runs (range_min_max width 0) is the expected, correct reproducibility result. range_min_max is the observed envelope, not a CI.",
   "source_metadata": {
     "solcVersion": "0.8.24",
-    "commit": "96044b9",
-    "commitFull": "96044b96ee0d385c2a5abf64a6a252ab0366cc9e",
+    "commit": "ddb9b05",
+    "commitFull": "ddb9b0505c97239eb75f6f4ce128dbedfa49ebf3",
     "dirty": false,
     "dirtyAnyFile": true,
     "scope": "1_blockchain-identity/scripts/benchmark_gas.js",
@@ -30,7 +30,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-22T22:26:47.120Z",
+    "date": "2026-10-22T23:16:47.548Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [
@@ -622,74 +622,74 @@
     "MOBI-VID-V2": {
       "deployRegistry": {
         "n": 30,
-        "median": 4309419.0,
-        "min": 4309419,
-        "max": 4309419,
+        "median": 4370878.0,
+        "min": 4370878,
+        "max": 4370878,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          4309419,
-          4309419
+          4370878,
+          4370878
         ]
       },
       "createIdentity": {
         "n": 30,
-        "median": 299143.0,
-        "min": 299143,
-        "max": 299143,
+        "median": 299165.0,
+        "min": 299165,
+        "max": 299165,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          299143,
-          299143
+          299165,
+          299165
         ]
       },
       "updateAttribute": {
         "n": 30,
-        "median": 307210.0,
-        "min": 307210,
-        "max": 307210,
+        "median": 307254.0,
+        "min": 307254,
+        "max": 307254,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          307210,
-          307210
+          307254,
+          307254
         ]
       },
       "addDelegateOrClaim": {
         "n": 30,
-        "median": 35321.0,
-        "min": 35321,
-        "max": 35321,
+        "median": 57667.0,
+        "min": 57667,
+        "max": 57667,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          35321,
-          35321
+          57667,
+          57667
         ]
       },
       "transferOwnership": {
         "n": 30,
-        "median": 200111.0,
-        "min": 200111,
-        "max": 200111,
+        "median": 200155.0,
+        "min": 200155,
+        "max": 200155,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          200111,
-          200111
+          200155,
+          200155
         ]
       },
       "revoke": {
         "n": 30,
-        "median": 75382.0,
-        "min": 75382,
-        "max": 75382,
+        "median": 75404.0,
+        "min": 75404,
+        "max": 75404,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          75382,
-          75382
+          75404,
+          75404
         ]
       }
     },

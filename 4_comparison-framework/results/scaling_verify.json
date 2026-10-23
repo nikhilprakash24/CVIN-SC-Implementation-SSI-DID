@@ -98,58 +98,61 @@
       80
     ],
     "per_interval_ms": [
-      0.81694,
-      1.60899,
-      3.18674,
-      6.39915,
-      13.13381
+      0.77389,
+      1.53717,
+      3.0353,
+      6.22542,
+      12.45085
     ],
     "per_interval_p95_ms": [
-      0.94944,
-      1.9403,
-      4.0802,
-      8.88746,
-      17.63213
+      1.33288,
+      2.18487,
+      4.29449,
+      8.15917,
+      18.19108
     ],
     "per_interval_mean_ms": [
-      0.82792,
-      1.65786,
-      3.35325,
-      6.69336,
-      13.67747
+      0.84394,
+      1.6272,
+      3.21529,
+      6.4934,
+      13.20515
     ],
     "per_message_median_ms": [
-      0.156475,
-      0.153963,
-      0.152493,
-      0.153463,
-      0.155267
+      0.148776,
+      0.143684,
+      0.142955,
+      0.14506,
+      0.14541
     ],
     "budget_ms": 100.0,
     "saturation_P": null,
-    "extrapolated_saturation_P": 609.2,
+    "extrapolated_saturation_P": 641.2,
     "fit": {
-      "slope_ms_per_neighbor": 0.164265,
-      "intercept_ms": -0.063088,
-      "r2": 0.9998
+      "slope_ms_per_neighbor": 0.156003,
+      "intercept_ms": -0.031561,
+      "r2": 1.0
     },
     "intervals_per_point": 300,
     "warmup_per_point": 50,
-    "saturation_note": "per-interval verification stays within the 100 ms budget across the whole tested range (P<=80); saturation is beyond the tested range, extrapolated P*~=609 neighbors",
+    "saturation_note": "per-interval verification stays within the 100 ms budget across the whole tested range (P<=80); saturation is beyond the tested range, extrapolated P*~=641 neighbors",
     "environment": {
-      "date_utc": "2026-10-04T09:23:35+00:00",
-      "commit": "fd25d0529c6e652833ed491f9b2584edc5f56509",
-      "tree_clean": true,
+      "date_utc": "2026-10-23T00:06:45+00:00",
+      "commit": "0b395705838af3554d0f33ea5f555cbd575995f9",
+      "tree_clean": false,
+      "code_clean": true,
+      "scope": "cv2x-testbed/sumo/run_verify_scaling.py",
+      "scope_sha": "403002e69ec6",
       "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
       "logical_cpus": 4,
-      "platform": "Linux-6.18.44-fc-v64-x86_64-with-glibc2.39",
-      "python": "3.11.15",
+      "platform": "Linux-6.18.44-fc-v140-x86_64-with-glibc2.39",
+      "python": "3.13.16",
       "libraries": {
         "coincurve": "21.0.0",
         "eth-account": "0.14.0",
         "eth-keys": "0.8.0",
-        "cryptography": "49.0.0",
-        "numpy": "2.4.6",
+        "cryptography": "50.0.1",
+        "numpy": "2.5.3",
         "web3": "8.0.0"
       }
     },

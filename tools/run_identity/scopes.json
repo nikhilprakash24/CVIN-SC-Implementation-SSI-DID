@@ -7,7 +7,7 @@
  ],
  "scopes": {
   "1_blockchain-identity/benchmarks/run.js": {
-   "imports": 27,
+   "imports": 28,
    "paths": [
     "1_blockchain-identity/benchmarks/adapters/IdentityAdapter.js",
     "1_blockchain-identity/benchmarks/adapters/cvin.adapter.js",
@@ -40,6 +40,7 @@
     "1_blockchain-identity/hardhat.config.js",
     "1_blockchain-identity/package-lock.json",
     "1_blockchain-identity/package.json",
+    "1_blockchain-identity/scripts/lib/run_stamp.js",
     "cv2x-testbed/contracts"
    ],
    "results": [

@@ -70,7 +70,10 @@ async function main() {
       lockfileBlob: git("rev-parse HEAD:1_blockchain-identity/package-lock.json"),
     },
     dirty: (git("status --porcelain") || "").length > 0,
-    dirtyMeasured: (git("status --porcelain -- 1_blockchain-identity/benchmarks 1_blockchain-identity/contracts 1_blockchain-identity/hardhat.config.js 1_blockchain-identity/package-lock.json") || "").length > 0,
+    // WM-2 A6 (N-19, D33): the shared stamp helper decides measured-code dirtiness over this producer's
+    // registered scope with root-anchored pathspecs; the inline pathspecs above ran from 1_blockchain-identity
+    // and matched nothing, so the flag was inert.
+    dirtyMeasured: require("../scripts/lib/run_stamp").runStamp(__filename).dirty,
     date: new Date().toISOString(),
     node: process.version, hardhat: require("hardhat/package.json").version, ethers: hre.ethers.version,
     solc: solc.version, evmVersion: solc.settings.evmVersion || "default", optimizerRuns: solc.settings.optimizer.runs, viaIR: !!solc.settings.viaIR,

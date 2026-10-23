@@ -157,7 +157,7 @@
   "rows": [
    {
     "what": "verify one V2V message, warm cached credential, no chain contact (SSI)",
-    "median_ms": 0.1528,
+    "median_ms": 0.1422,
     "unit": "per message",
     "condition": "M0",
     "host": "Xeon @ 2.10GHz, kernel fc",
@@ -165,15 +165,15 @@
    },
    {
     "what": "one probe refresh: an eth_call to check the identity is unchanged",
-    "median_ms": 2.758,
+    "median_ms": 3.222,
     "unit": "per refresh, not per message",
     "condition": "M1",
-    "host": "Xeon @ 2.80GHz, kernel fc",
+    "host": "Xeon @ 2.10GHz, kernel fc",
     "row": "#37 (predates the D51 fix)"
    },
    {
     "what": "verify one message with an uncached ERC-1056 resolution (key replayed from event logs)",
-    "median_ms": 9.654,
+    "median_ms": 15.513,
     "unit": "per message",
     "condition": "M1",
     "host": "Xeon @ 2.10GHz, kernel fc",
