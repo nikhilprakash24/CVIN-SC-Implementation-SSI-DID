@@ -55,5 +55,5 @@ three separately measured costs from different runs and hosts; not comparable as
 | What is measured | median (ms) | unit | condition | host | register |
 |---|---:|---|---|---|---|
 | verify one V2V message, warm cached credential, no chain contact (SSI) | 0.1422 | per message | M0 | Xeon @ 2.10GHz, kernel fc | #27 |
-| one probe refresh: an eth_call to check the identity is unchanged | 2.758 | per refresh, not per message | M1 | Xeon @ 2.80GHz, kernel fc | #37 (predates the D51 fix) |
+| one probe refresh: an eth_call to check the identity is unchanged | 3.222 | per refresh, not per message | M1 | Xeon @ 2.10GHz, kernel fc | #37 (predates the D51 fix) |
 | verify one message with an uncached ERC-1056 resolution (key replayed from event logs) | 15.513 | per message | M1 | Xeon @ 2.10GHz, kernel fc | #21 (predates the D51 fix) |

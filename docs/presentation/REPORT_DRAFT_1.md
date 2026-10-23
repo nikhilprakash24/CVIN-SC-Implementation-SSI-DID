@@ -32,7 +32,7 @@
 | C1 CAV identity substrate | partial | 7 | 2 |
 | C2 Secure V2V messaging | partial | 5 | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | partial | 5 | 5 |
-| C4 Revocation freshness | partial | 3 | 3 |
+| C4 Revocation freshness | partial | 4 | 3 |
 | C5 W3C conformance | partial | 2 | 2 |
 | C6 MOBI VID lifecycle | partial | 2 | 1 |
 | C7 Privacy and linkability | partial | 1 | 1 |
@@ -131,10 +131,10 @@
 
 | k | Full refresh median (ms) | Full refresh p95 | Probe refresh median (ms) | Probe refresh p95 |
 |---|---|---|---|---|
-| 1 | 10.946 | 16.153 | 3.298 | 5.769 |
-| 5 | 0.456 | 10.479 | 0.522 | 3.875 |
-| 25 | 0.425 | 0.764 | 0.522 | 1.260 |
-| ∞ | 0.428 | 0.631 | 0.540 | 0.975 |
+| 1 | 14.284 | 17.089 | 3.617 | 4.709 |
+| 5 | 0.397 | 15.202 | 0.418 | 3.828 |
+| 25 | 0.371 | 0.674 | 0.370 | 0.518 |
+| ∞ | 0.346 | 0.415 | 0.396 | 0.714 |
 *A cached verifier re-checks the chain every k-th message; k trades revocation staleness (k − 1 messages) for latency. Two runs on one host type; host-dependence is an open item (crux C4).*
 
 ![Two lines of median verify latency against k](figures/f4_freshness_k.png)

@@ -165,10 +165,10 @@
    },
    {
     "what": "one probe refresh: an eth_call to check the identity is unchanged",
-    "median_ms": 2.758,
+    "median_ms": 3.222,
     "unit": "per refresh, not per message",
     "condition": "M1",
-    "host": "Xeon @ 2.80GHz, kernel fc",
+    "host": "Xeon @ 2.10GHz, kernel fc",
     "row": "#37 (predates the D51 fix)"
    },
    {

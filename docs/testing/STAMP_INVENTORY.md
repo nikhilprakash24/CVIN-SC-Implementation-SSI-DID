@@ -25,11 +25,11 @@
 | `4_comparison-framework/security-analysis/results/attack_results.json` | 2026-10-22T22:58:46.917Z | 2051159 | False | True | no | 0.8.24 |  |
 | `4_comparison-framework/security-analysis/results/onchain_security.json` | 2026-10-22T22:58:43.977Z | 2051159 | False | True | no | 0.8.24 | hand check: same |
 | `4_comparison-framework/security-analysis/results/security_matrix.json` | 2026-10-22T22:58:44Z | 205115991a560bd6d1b3dfb1 | False (inert) | MISSING | no | 3.13.16 |  |
-| `cv2x-testbed/results/freshness_k.json` | 2026-10-04T09:24:10+00:0 | 8216507 | False (from any) | False | yes | 2.28.6 |  |
-| `cv2x-testbed/results/freshness_k_probe.json` | 2026-10-04T22:12:41+00:0 | dd31d22 | False (from any) | False | yes | 3.11.15 |  |
-| `cv2x-testbed/results/freshness_k_probe_fullref.json` | 2026-10-04T22:11:47+00:0 | f660402 | False (from any) | False | yes | 3.11.15 |  |
-| `cv2x-testbed/results/freshness_k_probe_fullref_r2.json` | 2026-10-04T22:18:57+00:0 | 22a556f | False (from any) | False | yes | 3.11.15 |  |
-| `cv2x-testbed/results/freshness_k_probe_r2.json` | 2026-10-04T22:18:19+00:0 | 439b118 | False (from any) | False | yes | 3.11.15 |  |
+| `cv2x-testbed/results/freshness_k.json` | 2026-10-23T00:45:05+00:0 | f1f3596 | False (from any) | False | no | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/results/freshness_k_probe.json` | 2026-10-23T00:45:47+00:0 | f1f3596 | False (inert) | True | no | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/results/freshness_k_probe_fullref.json` | 2026-10-23T00:45:24+00:0 | f1f3596 | False (inert) | True | no | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/results/freshness_k_probe_fullref_r2.json` | 2026-10-23T00:46:25+00:0 | f1f3596 | False (inert) | True | no | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/results/freshness_k_probe_r2.json` | 2026-10-23T00:46:06+00:0 | f1f3596 | False (inert) | True | no | 0.8.20+commit.a1b79de6 |  |
 | `cv2x-testbed/results/freshness_k_samehost.json` | MISSING | MISSING | MISSING | MISSING | MISSING | MISSING | derived: summary of the 12 stamped same-host replicates in freshness_k_samehost/ (#55, clone lineage #42); all_git_clean recorded |
 | `cv2x-testbed/results/lifecycle_parity.json` | 2026-10-22T22:58:49+00:0 | 2051159 | False (inert) | True | no | 0.8.20+commit.a1b79de6 |  |
 | `cv2x-testbed/results/pki_vs_erc1056.json` | 2026-10-22T23:58:19+00:0 | 0b39570 | False (from any) | False | no | 0.8.20+commit.a1b79de6 |  |

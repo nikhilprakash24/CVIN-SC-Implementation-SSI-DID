@@ -475,27 +475,27 @@
       "by_k": [
         {
           "k": "1",
-          "median_ms": 10.946,
-          "p95_ms": 16.153
+          "median_ms": 14.284,
+          "p95_ms": 17.089
         },
         {
           "k": "5",
-          "median_ms": 0.456,
-          "p95_ms": 10.479
+          "median_ms": 0.397,
+          "p95_ms": 15.202
         },
         {
           "k": "25",
-          "median_ms": 0.425,
-          "p95_ms": 0.764
+          "median_ms": 0.371,
+          "p95_ms": 0.674
         },
         {
           "k": "inf",
-          "median_ms": 0.428,
-          "p95_ms": 0.631
+          "median_ms": 0.346,
+          "p95_ms": 0.415
         }
       ],
-      "t_local_ms": 0.428,
-      "t_chain_ms": 10.518,
+      "t_local_ms": 0.346,
+      "t_chain_ms": 13.938,
       "host": "Intel(R) Xeon(R) Processor @ 2.10GHz"
     },
     "probe": {
@@ -506,28 +506,28 @@
       "by_k": [
         {
           "k": "1",
-          "median_ms": 3.298,
-          "p95_ms": 5.769
+          "median_ms": 3.617,
+          "p95_ms": 4.709
         },
         {
           "k": "5",
-          "median_ms": 0.522,
-          "p95_ms": 3.875
+          "median_ms": 0.418,
+          "p95_ms": 3.828
         },
         {
           "k": "25",
-          "median_ms": 0.522,
-          "p95_ms": 1.26
+          "median_ms": 0.37,
+          "p95_ms": 0.518
         },
         {
           "k": "inf",
-          "median_ms": 0.54,
-          "p95_ms": 0.975
+          "median_ms": 0.396,
+          "p95_ms": 0.714
         }
       ],
-      "t_local_ms": 0.54,
-      "t_chain_ms": 2.758,
-      "host": "Intel(R) Xeon(R) Processor @ 2.80GHz"
+      "t_local_ms": 0.396,
+      "t_chain_ms": 3.222,
+      "host": "Intel(R) Xeon(R) Processor @ 2.10GHz"
     }
   },
   "lifecycle_parity": {
@@ -1392,7 +1392,7 @@
       "id": "C4",
       "title": "Revocation freshness",
       "question": "How quickly does a verifier stop trusting a revoked vehicle key, and at what latency cost?",
-      "claim": "A cached verifier honours a revoked key for at most k-1 further messages. Measured on one host in alternating blocks (#55), the one-call probe refresh is 3.2x cheaper on chain than a full refresh and serves more neighbours at every finite k; neither mode reaches the neighbour-saturation target, so any k must be quoted with its t_local.",
+      "claim": "A cached verifier honours a revoked key for at most k-1 further messages (every run, both refresh modes). The one-call probe refresh is about 3-5x cheaper on chain than a full refresh. Whether any k meets the neighbour-saturation target depends on the host's local verify time t_local - no knee at t_local above 0.5 ms (#37 first runs,",
       "hypotheses": [
         "H3"
       ],
@@ -1428,6 +1428,11 @@
           "row": 40,
           "status": "S",
           "claim": "(sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=…"
+        },
+        {
+          "row": 52,
+          "status": "V",
+          "claim": "Freshness rows #32 and #37 re-run back to back on one host, each at its own code (#32 at `8216507`, #37 at `f660402`), fresh node per run, two replicates in opposite order (WM-2 C3, decision rule committed first in repor…"
         },
         {
           "row": 55,
