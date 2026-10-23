@@ -13,3 +13,14 @@
 
 ## 2. Execution log
 - 2026-10-23 — report opened.
+- **B3, latency charter.** `docs/testing/latency_charter.py` writes `docs/testing/LATENCY_CHARTER.md`: 14 rows
+  classed, 9 L-within, 1 L-absolute, 4 L-descriptive (#26, #31, #39, #57), 1 L-derived (#36). Both guards shown to fire
+  (a missing class for #27; #31 claimed as L-within against a file with no CPU).
+  - **Finding: the metrics harness records no host.** Its `meta.json` names Node and the compiler but not the CPU, so
+    #31 and #39 are descriptive only for latency (gas unaffected). Logged as **N-26**: record the CPU at the next
+    harness run of record.
+  - **Finding: #55's summary file records no CPU**; each of its 12 replicate files does, so the check reads one.
+  - The four relabelled rows carry a dated register note. The first wording of #57's note said "gas", which made the
+    gas charter treat #57 as a gas row; reworded, since #57 reports no gas.
+  - CI's document step and `tools/prepush_check.sh` run `latency_charter.py --check`. Regenerated: the test register,
+    dashboard, result cards, presentation page, and the TDP's DWG-005 (with its own generator; it reads the register).

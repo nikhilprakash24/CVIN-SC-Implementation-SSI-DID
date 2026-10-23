@@ -97,6 +97,7 @@ jobs:
         python3 docs/phase2/focus/make_focus_figures.py --check
         python3 docs/phase2/focus/F3_interaction_modes/classify_modes.py --check
         python3 docs/testing/gas_charter.py --check
+        python3 docs/testing/latency_charter.py --check
         python3 docs/figures/make_result_cards.py --check
         python3 docs/tdp/make_vcrm.py --check
         python3 docs/tdp/make_fmeca.py --check
