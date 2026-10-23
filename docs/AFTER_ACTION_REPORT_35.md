@@ -31,3 +31,5 @@
   `build_register.py` gives each test a TC id `TC-py-<module>-<test>`, disambiguated by a short hash where two names
   collide. Result: 376 entries (L3 78, L4 19, SSI layer 279), equal to the record's 376 tests, all pass. The register's
   `--check` passes; the pre-push guard passes, including the TDP's trace check that reads the register.
+- **Grand run (last), at `b49c9a1`.** ALL OK: smoke 11, L1 99, Hardhat 562, Python layers 376, 92 demos / 1,758 steps.
+  Generated documents regenerated; the pre-push guard passes.
