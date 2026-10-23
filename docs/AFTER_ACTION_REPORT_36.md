@@ -28,3 +28,5 @@ The resolver the mutants target is the merged implementation (`ERC1056Reader`, f
 - **CI.** The D54 probe runs in the contracts job after the IDTx probe; the resolver probe runs in the Python job,
   against its shared node.
 - **Grand run (last), at `cea9cf0`.** ALL OK: Hardhat 563 (one new test), Python 376, 92 demos / 1,758 steps. Generated documents regenerated.
+- **CI at `cb5ed18`: 10 of 11.** The resolver probe step had been inserted into the compliance-score job, which runs
+  no Hardhat node, so it failed there. Moved to the Python job after its suite step, where the node on 8548 runs.

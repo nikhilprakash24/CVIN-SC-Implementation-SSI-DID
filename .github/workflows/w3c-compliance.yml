@@ -108,6 +108,12 @@ jobs:
           exit 1
         fi
 
+    - name: Chain-resolver mutants (each must be caught; WM-2 C1 tests, after-action report 36)
+      shell: bash
+      env:
+        CV2X_TEST_RPC_URL: http://127.0.0.1:8548
+      run: python3 2_w3c-ssi-layer/did-resolution/mutation/mutate_resolver_chain.py
+
   compliance-score:
     name: W3C compliance score
     runs-on: ubuntu-latest
@@ -127,12 +133,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    - name: Chain-resolver mutants (each must be caught; WM-2 C1 tests, after-action report 36)
-      shell: bash
-      env:
-        CV2X_TEST_RPC_URL: http://127.0.0.1:8548
-      run: python3 2_w3c-ssi-layer/did-resolution/mutation/mutate_resolver_chain.py
 
     - name: Setup Python
       uses: actions/setup-python@v5
