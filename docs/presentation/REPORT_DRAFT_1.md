@@ -10,10 +10,10 @@
 |---|---|---|
 | How many identity standards were implemented and measured? | 10 (nine base standards and the MOBI VID V2 profile) | #25 |
 | How far apart is the cost of creating an identity? | 33.7× (CVIN-Combined 52,216 gas to ERC-735 1,757,881) | #25 |
-| Does identity verification fit a V2V message budget? | SSI warm verify 0.153 ms [0.151, 0.154], N = 30 runs; budget 100 ms | #27 |
+| Does identity verification fit a V2V message budget? | SSI warm verify 0.142 ms [0.141, 0.143], N = 30 runs; budget 100 ms | #27 |
 | Do the identities meet W3C DID / VC? | internal checker 94.3 % (41 pass, 1 partial, 2 fail of 44); external DID suite 335/336 | #4, #24 |
 | Are the identity contracts attack-resistant? | 43 of 43 applicable attack cells defended (11 not applicable), strict harness | #28 |
-| Can infrastructure (RSUs, controllers) use the same identity layer? | I1 outside band, not falsified (SPaT/BSM warm ratio 1.226), I2 PASS (15 registered checks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
+| Can infrastructure (RSUs, controllers) use the same identity layer? | I1 PASS (SPaT/BSM warm ratio 1.197), I2 PASS (15 registered checks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
 | How large is the test and evidence base? | 562 Hardhat tests, 376 Python-layer tests, 92 feature demos (1,758 steps); 45 verified register rows | grand report |
 
 ## 2. Research questions and hypotheses
@@ -32,7 +32,7 @@
 | C1 CAV identity substrate | partial | 7 | 2 |
 | C2 Secure V2V messaging | partial | 5 | 2 |
 | C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | partial | 5 | 5 |
-| C4 Revocation freshness | partial | 3 | 3 |
+| C4 Revocation freshness | partial | 4 | 3 |
 | C5 W3C conformance | partial | 2 | 2 |
 | C6 MOBI VID lifecycle | partial | 2 | 1 |
 | C7 Privacy and linkability | partial | 1 | 1 |
@@ -84,7 +84,7 @@
 | ERC-735 | 295,242 | 295,277 | 295,289 (native) | 5/5 |
 | ERC-1155 | 107,729 | 80,131 | 63,031 (emulated) | 3/5 |
 | CVIN-Combined | 51,766 | 34,690 | 336,896 (native) | 5/5 |
-| MOBI-VID-V2 | 299,165 | 307,254 | 222,082 (native) | 5/5 |
+| MOBI-VID-V2 | 299,165 | 307,254 | 222,058 (native) | 5/5 |
 *`4_comparison-framework/results/mobi_vid_backends.json`.*
 
 ### 3.4 Security (register #28)
@@ -119,9 +119,9 @@
 
 | Path | Sign (ms) | Cold verify (ms) | Warm verify (ms) |
 |---|---|---|---|
-| SSI (blockchain credential) | 0.224 [0.221, 0.227] | 0.399 [0.381, 0.411] | 0.153 [0.151, 0.154] |
-| PKI (IEEE 1609.2-style) | 0.078 [0.075, 0.078] | 0.220 [0.218, 0.223] | 0.094 [0.093, 0.095] |
-*Median of 30 seeded-run medians, 95 % bootstrap CI; 50 vehicles; 1,650,318 verifications; 150 failures, all injected attacks. Condition: M0, simulated mobility, real cryptography.*
+| SSI (blockchain credential) | 0.209 [0.208, 0.211] | 0.363 [0.355, 0.387] | 0.142 [0.141, 0.143] |
+| PKI (IEEE 1609.2-style) | 0.081 [0.080, 0.082] | 0.210 [0.204, 0.214] | 0.090 [0.089, 0.091] |
+*Median of 30 seeded-run medians, 95 % bootstrap CI; 50 vehicles; 1,650,318 verifications; 210 failures, all injected attacks. Condition: M0, simulated mobility, real cryptography.*
 
 ![Dot and interval per path](figures/f3_v2v_latency.png)
 
@@ -131,10 +131,10 @@
 
 | k | Full refresh median (ms) | Full refresh p95 | Probe refresh median (ms) | Probe refresh p95 |
 |---|---|---|---|---|
-| 1 | 10.946 | 16.153 | 3.298 | 5.769 |
-| 5 | 0.456 | 10.479 | 0.522 | 3.875 |
-| 25 | 0.425 | 0.764 | 0.522 | 1.260 |
-| ∞ | 0.428 | 0.631 | 0.540 | 0.975 |
+| 1 | 14.284 | 17.089 | 3.617 | 4.709 |
+| 5 | 0.397 | 15.202 | 0.418 | 3.828 |
+| 25 | 0.371 | 0.674 | 0.370 | 0.518 |
+| ∞ | 0.346 | 0.415 | 0.396 | 0.714 |
 *A cached verifier re-checks the chain every k-th message; k trades revocation staleness (k − 1 messages) for latency. Two runs on one host type; host-dependence is an open item (crux C4).*
 
 ![Two lines of median verify latency against k](figures/f4_freshness_k.png)
@@ -163,7 +163,7 @@
 | cost | erc1056, erc1056w |
 | costRead | erc1056, erc1056w, erc1155, erc725xy |
 | all | erc1056, erc1056w, erc721, erc1155, erc725xy, erc4337 |
-*Run of record `2026-10-21T03-28-59Z_a9e2a28`; criteria: Lifetime gas, Zero→nonzero SSTOREs, R3 RPC calls at h=50, R3 median ms after lifecycle, Core ops supported, O(1) on-chain credential check (view).*
+*Run of record `2026-10-23T00-49-12Z_1f4ace0`; criteria: Lifetime gas, Zero→nonzero SSTOREs, R3 RPC calls at h=50, R3 median ms after lifecycle, Core ops supported, O(1) on-chain credential check (view).*
 
 ### 3.10 Infrastructure messaging, V2I and I2I (registers #44–#48)
 
@@ -171,11 +171,11 @@ Roadside units (RSUs), signal controllers and a traffic-management centre (TMC) 
 
 | Exp. | Question | Result | Verdict |
 |---|---|---|---|
-| I1 | Does a warm SPaT verify cost what a warm BSM verify does? | ratio 1.226 [1.219, 1.238]; SPaT 0.184 ms vs BSM 0.149 ms | outside band, not falsified |
+| I1 | Does a warm SPaT verify cost what a warm BSM verify does? | ratio 1.197 [1.193, 1.201]; SPaT 0.173 ms vs BSM 0.144 ms | PASS |
 | I2 | Are registered attacks rejected for the right reason? | 15 checks, 30/30 runs | PASS |
 | I3 | How long is a revoked RSU trusted by a cached verifier? | k=1: 0 (≤ 0) · k=5: 4 (≤ 4) · k=25: 24 (≤ 24) · k=inf: 100 messages | PASS |
 | I4 | What does an RSU identity cost on chain? | key anchor 52,582–52,606 gas; hand to authority 51,742–51,754 | reported |
-| I5 | What do the I2I operations add? | 0.900 ms, a sum of operation costs (not a path latency) | reported |
+| I5 | What do the I2I operations add? | 0.805 ms, a sum of operation costs (not a path latency) | reported |
 
 | I2 check | Expected rejection reason |
 |---|---|

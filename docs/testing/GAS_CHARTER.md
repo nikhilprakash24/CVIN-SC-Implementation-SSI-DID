@@ -75,6 +75,7 @@ Of **119** transaction cells (36 iterations each: 1 exact + 5 warm-up + 30 sampl
 | #1 | G-exact | Hardhat test suite, fixed signers |
 | #3 | G-exact | gas-reporter average over the suite's calls; exact for the suite, not a single operation |
 | #6 | G-derived | ratio of exact creation costs (#25) |
+| #21 | G-range | testbed ERC1056Registry writes in the PKI-vs-ERC-1056 experiment: receipt gas over 50 iterations varies by calldata zero bytes; the row quotes the maximum with the range in the result file |
 | #22 | G-range | the row reports 37,767–37,791 from calldata zero bytes |
 | #25 | G-exact | benchmark_gas.js with fixed signers and its own run-to-run determinism check |
 | #26 | G-derived | scaling and lifetime figures built from exact per-operation costs |
@@ -96,4 +97,4 @@ Of **119** transaction cells (36 iterations each: 1 exact + 5 warm-up + 30 sampl
 | #54 | G-mode | metrics harness: P1 and X1 cells are modes; re-run on the merged tree, run 2026-10-21T03-28-59Z_a9e2a28 |
 | #58 | G-exact | layer 5 measure_gas.js: fixed proof and signers, receipt gas; view rows are eth_estimateGas |
 
-23 rows classified; every V row whose claim mentions gas (21) has a class.
+24 rows classified; every V row whose claim mentions gas (22) has a class.

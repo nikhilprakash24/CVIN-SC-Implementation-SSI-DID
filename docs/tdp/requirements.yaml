@@ -85,9 +85,9 @@ requirements:
     method: T
     evidence_rows: [30, 35]
     files: [1_blockchain-identity/benchmarks/run.js, 1_blockchain-identity/results/metrics/latest/meta.json]
-    pending: [A6]
+    pending: []
     tests: [1_blockchain-identity/benchmarks/run.js]
-    limit: Run of record 2026-10-21T03-28-59Z_a9e2a28 (re-run on the merged tree; was 2026-10-09T02-09-36Z_7a9a996); the harness flag that marks measured-code dirtiness is inert until A6 (D33, N-19).
+    limit: Run of record 2026-10-23T00-49-12Z_1f4ace0 (A3b re-run on the one trunk); the harness flag that marks measured-code dirtiness is live since WM-2 A6 (2026-10-23; D33, N-19).
   - id: PRF-04
     title: Lifetime cost model with sensitivity band
     shall: A fifteen-year lifetime cost model shall rank substrates with a declared sensitivity band on recurring event frequency.
@@ -158,9 +158,9 @@ requirements:
     method: T
     evidence_rows: [32, 37]
     files: [cv2x-testbed/tests/test_d51_chain_time.py]
-    pending: [A3b]
+    pending: []
     tests: [cv2x-testbed/tests/test_d51_chain_time.py]
-    limit: Rows #32 and #37 were measured before the fix and hold under the old clock assumption until the A3b re-run (plan WM-2 A3b).
+    limit: Rows #32 and #37 were re-run after the fix at the A3b re-run of 2026-10-23 (5 RPCs per full refresh); a freshness knee is quoted only with its t_local.
   - id: SEC-05
     title: Attestation authority
     shall: An on-chain lifecycle attestation shall be accepted only when signed by a party authorised for that vehicle.
@@ -187,7 +187,7 @@ requirements:
     method: T
     evidence_rows: [38]
     verdict_from: pseudonyms.gas_verdict
-    pending: [A3b]
+    pending: []
     tests: [1_blockchain-identity/scripts/experiment_pseudonym_pool.js, 1_blockchain-identity/test/L2-identity-system/per-option/ERC1056/PseudonymPool.test.js]
     limit: Chain-layer linkability only; radio, timing and position linkability are out of scope (SC-02).
 
@@ -240,9 +240,9 @@ requirements:
     evidence_rows: [27]
     threshold: {path: v2v.per_population.ssi.warm.median, op: "<=", value: 0.5, label: "SSI warm verify median <= 0.5 ms"}
     files: [cv2x-testbed/sumo/run_v2v_stats.py]
-    pending: [A3b]
+    pending: []
     tests: [cv2x-testbed/sumo/run_v2v_stats.py]
-    limit: M0, mock mobility, one host; the pre-merge measurement is scheduled for a trunk re-run (A3b).
+    limit: M0, mock mobility, one host; re-run on the one trunk at A3b (2026-10-23, #27).
   - id: RTV-02
     title: Uncached chain read at message time reported
     shall: The cost of resolving a sender's key and revocation status from the chain at message time shall be measured on the same operations as the PKI baseline and reported beside it.
@@ -323,9 +323,9 @@ requirements:
     evidence_rows: []
     files: [tools/run_identity/stamp.py, tools/run_identity/producers.json, tools/run_identity/scopes.json]
     ci: Probe that the run-identity flags fire
-    pending: [A6]
+    pending: []
     tests: [docs/testing/probe_run_identity.sh]
-    limit: The metrics harness switches to the shared helper at A6; until then its own flag is inert (D33).
+    limit: The metrics harness takes its measured-code flag from the shared helper since A6 (2026-10-23, D33 closed by it).
   - id: EVD-02
     title: Promotion only from a clean run
     shall: A result file shall reach its tracked path only through a promote step that refuses dirty runs, other commits, changed scopes, edited outputs and undeclared destinations.

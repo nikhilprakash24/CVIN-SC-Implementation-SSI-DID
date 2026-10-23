@@ -38,6 +38,7 @@ ROWS = {
     3: ("G-exact", "gas-reporter average over the suite's calls; exact for the suite, not a single operation"),
     6: ("G-derived", "ratio of exact creation costs (#25)"),
     22: ("G-range", "the row reports 37,767–37,791 from calldata zero bytes"),
+    21: ("G-range", "testbed ERC1056Registry writes in the PKI-vs-ERC-1056 experiment: receipt gas over 50 iterations varies by calldata zero bytes; the row quotes the maximum with the range in the result file"),
     25: ("G-exact", "benchmark_gas.js with fixed signers and its own run-to-run determinism check"),
     26: ("G-derived", "scaling and lifetime figures built from exact per-operation costs"),
     28: ("G-exact", "security scenarios with fixed accounts; the attestEvent gas is a single run"),

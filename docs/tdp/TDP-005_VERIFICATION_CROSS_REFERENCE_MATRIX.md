@@ -9,8 +9,8 @@
 
 | Status | Count | Meaning |
 |---|---|---|
-| VERIFIED | 30 | every evidence row V; files and CI present; threshold met; nothing pending |
-| PARTIAL | 6 | some evidence V; at least one row non-V, a threshold unmet, an item missing, or a named trunk item still open |
+| VERIFIED | 35 | every evidence row V; files and CI present; threshold met; nothing pending |
+| PARTIAL | 1 | some evidence V; at least one row non-V, a threshold unmet, an item missing, or a named trunk item still open |
 | OPEN | 0 | no V evidence |
 
 Register at generation: E 7, S 10, V 45 (62 rows).
@@ -24,7 +24,7 @@ Register at generation: E 7, S 10, V 45 (62 rows).
 | SYS-03 | Declared conditions per measurement | Inspection | #25 (V), #27 (V), #34 (V) | — | 1/1 files | **VERIFIED** | — |
 | PRF-01 | Nine-standard gas table, deterministic | Test | #25 (V) | 30/30 runs byte-identical: actual `True` → met | 2/2 files; CI step found | **VERIFIED** | — |
 | PRF-02 | Create-identity ratio stated under its definition | Analysis | #6 (V), #25 (V) | — | — | **VERIFIED** | — |
-| PRF-03 | Lifecycle gas over seventeen events | Test | #30 (V), #35 (V) | — | 2/2 files | **PARTIAL** | pending: WM-2 A6 (open) |
+| PRF-03 | Lifecycle gas over seventeen events | Test | #30 (V), #35 (V) | — | 2/2 files | **VERIFIED** | — |
 | PRF-04 | Lifetime cost model with sensitivity band | Analysis | #26 (V) | — | 1/1 files | **VERIFIED** | — |
 | PRF-05 | On-chain footprint and read cost against history | Test | #31 (V), #49 (V), #51 (V) | — | — | **VERIFIED** | — |
 | PRF-07 | Relayed and account-abstracted write cost | Test | #34 (V), #50 (V) | — | — | **VERIFIED** | — |
@@ -32,24 +32,24 @@ Register at generation: E 7, S 10, V 45 (62 rows).
 | SEC-01 | Executable revert harness, strict reasons | Test | #28 (V) | 43 applicable cells DEFENDED: actual `43` → met | 1/1 files | **VERIFIED** | — |
 | SEC-02 | Signed generation time, freshness window and replay cache | Test | #21 (V), #45 (V) | — | 2/2 files | **VERIFIED** | — |
 | SEC-03 | Revocation staleness bounded by the re-check cadence | Test | #32 (V), #37 (V), #46 (V) | I3 at k=25 PASS (bound 24): actual `PASS` → met | — | **VERIFIED** | — |
-| SEC-04 | Revoked key under clock skew | Test | #32 (V), #37 (V) | — | 1/1 files | **PARTIAL** | pending: WM-2 A3b (open) |
+| SEC-04 | Revoked key under clock skew | Test | #32 (V), #37 (V) | — | 1/1 files | **VERIFIED** | — |
 | SEC-05 | Attestation authority | Test | #28 (V) | — | — | **VERIFIED** | — |
 | SEC-06 | VIN confidentiality on chain | Inspection | #28 (V) | — | 2/2 files | **PARTIAL** | pending: D64 (open) |
-| SEC-07 | Pseudonym pool observability | Test | #38 (V) | pre-registered verdict as it fell: **FAIL** | — | **PARTIAL** | pending: WM-2 A3b (open) |
+| SEC-07 | Pseudonym pool observability | Test | #38 (V) | pre-registered verdict as it fell: **FAIL** | — | **VERIFIED** | — |
 | STD-01 | Internal structural checker at or above ninety percent | Test | #4 (V) | score >= 90: actual `94.3` → met | 1/1 files; CI step found | **VERIFIED** | — |
 | STD-02 | External DID test suite | Test | #24 (V) | 335 of 336 generated tests: actual `335` → met | 1/1 files | **VERIFIED** | — |
 | STD-03 | MOBI-VID-inspired lifecycle on several backends | Demonstration | #30 (V), #33 (V) | — | 2/2 files | **VERIFIED** | — |
 | STD-04 | Database parity for lifecycle writes | Test | #33 (V) | pre-registered verdict as it fell: **FAIL** | — | **VERIFIED** | — |
-| RTV-01 | Warm credential verification inside the identity budget share | Test | #27 (V) | SSI warm verify median <= 0.5 ms: actual `0.1528` → met | 1/1 files | **PARTIAL** | pending: WM-2 A3b (open) |
+| RTV-01 | Warm credential verification inside the identity budget share | Test | #27 (V) | SSI warm verify median <= 0.5 ms: actual `0.14225` → met | 1/1 files | **VERIFIED** | — |
 | RTV-02 | Uncached chain read at message time reported | Test | #21 (V) | — | — | **VERIFIED** | — |
 | RTV-03 | Freshness-k curve with both refresh modes | Test | #32 (V), #37 (V), #52 (V) | — | 1/1 files | **VERIFIED** | — |
 | RTV-04 | Signed message size | Test | #23 (V) | — | — | **VERIFIED** | — |
-| INF-01 | SPaT verification cost against BSM (I1) | Test | #44 (V) | pre-registered verdict as it fell: **outside band, not falsified** | — | **VERIFIED** | — |
+| INF-01 | SPaT verification cost against BSM (I1) | Test | #44 (V) | pre-registered verdict as it fell: **PASS** | — | **VERIFIED** | — |
 | INF-02 | Registered attacks rejected for their reasons (I2) | Test | #45 (V) | 30/30 runs, all 15 checks as expected: actual `30` → met | 1/1 files | **VERIFIED** | — |
 | INF-03 | Revoked roadside unit trusted for at most k minus 1 messages (I3) | Test | #46 (V) | pre-registered verdict as it fell: **PASS** | — | **VERIFIED** | — |
 | INF-04 | Roadside unit identity cost on chain (I4) | Test | #47 (V) | — | 1/1 files | **VERIFIED** | — |
 | INF-05 | Back-haul operation cost (I5) | Test | #48 (V) | — | — | **VERIFIED** | — |
-| EVD-01 | Run stamp with per-producer scope | Inspection | — | — | 3/3 files; CI step found | **PARTIAL** | pending: WM-2 A6 (open) |
+| EVD-01 | Run stamp with per-producer scope | Inspection | — | — | 3/3 files; CI step found | **VERIFIED** | — |
 | EVD-02 | Promotion only from a clean run | Test | — | — | 2/2 files | **VERIFIED** | — |
 | EVD-03 | Pre-registration before any run, amendments dated | Inspection | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V), #33 (V), #38 (V) | — | 2/2 files | **VERIFIED** | — |
 | EVD-04 | Generated documents regenerated and checked | Inspection | — | — | 4/4 files; CI step found | **VERIFIED** | — |
@@ -142,7 +142,7 @@ A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path 
 | SYS-03 | No M2 (public testnet) measurement exists on the trunk (N-11). |
 | PRF-01 | M1 only (local Hardhat, cancun); operation definitions differ per standard and are declared per row. |
 | PRF-02 | H1's update and lifetime halves are not supported (#35); the split verdict is the one to report. |
-| PRF-03 | Run of record 2026-10-21T03-28-59Z_a9e2a28 (re-run on the merged tree; was 2026-10-09T02-09-36Z_7a9a996); the harness flag that marks measured-code dirtiness is inert until A6 (D33, N-19). |
+| PRF-03 | Run of record 2026-10-23T00-49-12Z_1f4ace0 (A3b re-run on the one trunk); the harness flag that marks measured-code dirtiness is live since WM-2 A6 (2026-10-23; D33, N-19). |
 | PRF-04 | A model over an assumed profile, not a measurement of a fleet. |
 | PRF-05 | SSTORE opcodes counted, not net slots; per-identity contract code not counted (#49). |
 | PRF-07 | Gas only; who pays and who is trusted are not measured; the ERC-1056 signed digest omits the chain id (D52). |
@@ -158,7 +158,7 @@ A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path 
 | STD-02 | The denominator is 336 generated tests, not 441; DID-URL dereferencing is not run. |
 | STD-03 | 2 of 8 VID I MUSTs met; the profile is "MOBI-VID-inspired, checked against the public texts" (SC-14a). |
 | STD-04 | Writes PASS (at least 10x); "equal once cached" FAIL (ratio set by the baseline's serialisation); the baseline is a lower bound. |
-| RTV-01 | M0, mock mobility, one host; the pre-merge measurement is scheduled for a trunk re-run (A3b). |
+| RTV-01 | M0, mock mobility, one host; re-run on the one trunk at A3b (2026-10-23, |
 | RTV-02 | The ERC-1056 column is the cv2x registry, not EthereumDIDRegistry (K-5); the PKI baseline is in-process, a lower bound on deployed PKI. |
 | RTV-03 | The knee is the most host-sensitive figure; no finite k reached P*(0.5)=100 on |
 | RTV-04 | Bytes only; no channel model, so no airtime or loss figure follows from it. |
@@ -167,7 +167,7 @@ A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path 
 | INF-03 | In-process registry; message count, not time; no cache expiry. |
 | INF-04 | Per-credential issuance costs no gas in this design and is not measured. |
 | INF-05 | The harness does not chain the SPaT to the controller update; queuing, network and tail are excluded. |
-| EVD-01 | The metrics harness switches to the shared helper at A6; until then its own flag is inert (D33). |
+| EVD-01 | The metrics harness takes its measured-code flag from the shared helper since A6 (2026-10-23, D33 closed by it). |
 | EVD-02 | A run at an earlier commit cannot pass the promote step and is copied with a manifest as a declared deviation (report 19). |
 | EVD-03 | Amendments A1-A3 were post hoc and are marked so. |
 | EVD-04 | The contribution record depends on git history and is regenerated at each pass's close, not checked in CI. |

@@ -72,7 +72,7 @@ Convention. "Shall" marks a requirement. The threshold values are the ones the t
 
 - Derived from: RQ1; H1 (lifetime half); H4
 - Verification: Test; register #30, #35
-- Limit: Run of record 2026-10-21T03-28-59Z_a9e2a28 (re-run on the merged tree; was 2026-10-09T02-09-36Z_7a9a996); the harness flag that marks measured-code dirtiness is inert until A6 (D33, N-19).
+- Limit: Run of record 2026-10-23T00-49-12Z_1f4ace0 (A3b re-run on the one trunk); the harness flag that marks measured-code dirtiness is live since WM-2 A6 (2026-10-23; D33, N-19).
 
 **PRF-04 Lifetime cost model with sensitivity band.** A fifteen-year lifetime cost model shall rank substrates with a declared sensitivity band on recurring event frequency.
 
@@ -174,7 +174,7 @@ Convention. "Shall" marks a requirement. The threshold values are the ones the t
 
 - Derived from: H3; RQ4; docs/LATENCY_BUDGET.md section 2 (P*(0.5) >= 100)
 - Verification: Test; register #27; threshold: SSI warm verify median <= 0.5 ms
-- Limit: M0, mock mobility, one host; the pre-merge measurement is scheduled for a trunk re-run (A3b).
+- Limit: M0, mock mobility, one host; re-run on the one trunk at A3b (2026-10-23,
 
 **RTV-02 Uncached chain read at message time reported.** The cost of resolving a sender's key and revocation status from the chain at message time shall be measured on the same operations as the PKI baseline and reported beside it.
 
@@ -232,7 +232,7 @@ Convention. "Shall" marks a requirement. The threshold values are the ones the t
 
 - Derived from: guide rule 1.1.6; WM-2 A2 (D49)
 - Verification: Inspection
-- Limit: The metrics harness switches to the shared helper at A6; until then its own flag is inert (D33).
+- Limit: The metrics harness takes its measured-code flag from the shared helper since A6 (2026-10-23, D33 closed by it).
 
 **EVD-02 Promotion only from a clean run.** A result file shall reach its tracked path only through a promote step that refuses dirty runs, other commits, changed scopes, edited outputs and undeclared destinations.
 

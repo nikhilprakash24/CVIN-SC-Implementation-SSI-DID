@@ -13,7 +13,7 @@
         "logBytes": 2272,
         "sstoreCount": 10,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 136.072277
+        "latencyMs": 118.748922
       },
       {
         "eventNo": 2,
@@ -26,7 +26,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 13.015608
+        "latencyMs": 26.533627
       },
       {
         "eventNo": 3,
@@ -39,7 +39,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.968894
+        "latencyMs": 14.036454
       },
       {
         "eventNo": 4,
@@ -52,7 +52,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.345647
+        "latencyMs": 12.051029
       },
       {
         "eventNo": 5,
@@ -65,7 +65,7 @@
         "logBytes": 288,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 19.91261
+        "latencyMs": 14.222669
       },
       {
         "eventNo": 6,
@@ -78,7 +78,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 15.194775
+        "latencyMs": 12.959235
       },
       {
         "eventNo": 7,
@@ -91,7 +91,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.054611
+        "latencyMs": 13.011653
       },
       {
         "eventNo": 8,
@@ -104,7 +104,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.910705
+        "latencyMs": 15.419027
       },
       {
         "eventNo": 9,
@@ -117,7 +117,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 19.182233
+        "latencyMs": 13.688827
       },
       {
         "eventNo": 10,
@@ -130,7 +130,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.290271
+        "latencyMs": 12.200541
       },
       {
         "eventNo": 11,
@@ -143,7 +143,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 13.218744
+        "latencyMs": 11.160916
       },
       {
         "eventNo": 12,
@@ -156,7 +156,7 @@
         "logBytes": 384,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 23.867733
+        "latencyMs": 22.982682
       },
       {
         "eventNo": 13,
@@ -169,7 +169,7 @@
         "logBytes": 128,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 16.724411
+        "latencyMs": 11.446489
       },
       {
         "eventNo": 14,
@@ -182,7 +182,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.294621
+        "latencyMs": 12.288632
       },
       {
         "eventNo": 15,
@@ -195,7 +195,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 14.899769
+        "latencyMs": 11.31078
       },
       {
         "eventNo": 16,
@@ -208,7 +208,7 @@
         "logBytes": 128,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.607143
+        "latencyMs": 12.51047
       },
       {
         "eventNo": 17,
@@ -221,7 +221,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.543453
+        "latencyMs": 13.267366
       }
     ],
     "lifetimeGas": 1050809,
@@ -251,7 +251,7 @@
         "logBytes": 2400,
         "sstoreCount": 12,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 63.087972
+        "latencyMs": 166.660423
       },
       {
         "eventNo": 2,
@@ -264,7 +264,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 14.922746
+        "latencyMs": 16.648819
       },
       {
         "eventNo": 3,
@@ -277,7 +277,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.546425
+        "latencyMs": 16.679637
       },
       {
         "eventNo": 4,
@@ -290,7 +290,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 14.053676
+        "latencyMs": 18.122058
       },
       {
         "eventNo": 5,
@@ -303,7 +303,7 @@
         "logBytes": 288,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 22.341228
+        "latencyMs": 15.596214
       },
       {
         "eventNo": 6,
@@ -316,7 +316,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 18.93627
+        "latencyMs": 15.648362
       },
       {
         "eventNo": 7,
@@ -329,7 +329,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 19.282647
+        "latencyMs": 17.470865
       },
       {
         "eventNo": 8,
@@ -342,7 +342,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 20.329104
+        "latencyMs": 29.839376
       },
       {
         "eventNo": 9,
@@ -355,7 +355,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 31.594718
+        "latencyMs": 39.619599
       },
       {
         "eventNo": 10,
@@ -368,7 +368,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 30.330158
+        "latencyMs": 27.40749
       },
       {
         "eventNo": 11,
@@ -381,7 +381,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 21.669965
+        "latencyMs": 29.450106
       },
       {
         "eventNo": 12,
@@ -394,7 +394,7 @@
         "logBytes": 384,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 36.329727
+        "latencyMs": 42.430387
       },
       {
         "eventNo": 13,
@@ -407,7 +407,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 13.522687
+        "latencyMs": 13.361141
       },
       {
         "eventNo": 14,
@@ -420,7 +420,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 19.946388
+        "latencyMs": 14.350439
       },
       {
         "eventNo": 15,
@@ -433,7 +433,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 16.427818
+        "latencyMs": 13.818293
       },
       {
         "eventNo": 16,
@@ -446,7 +446,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.525163
+        "latencyMs": 14.63802
       },
       {
         "eventNo": 17,
@@ -459,7 +459,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 20.29121
+        "latencyMs": 15.172402
       }
     ],
     "lifetimeGas": 1025469,
@@ -489,7 +489,7 @@
         "logBytes": 416,
         "sstoreCount": 27,
         "zeroToNonzeroSstores": 23,
-        "latencyMs": 21.596262
+        "latencyMs": 16.953846
       },
       {
         "eventNo": 2,
@@ -502,7 +502,7 @@
         "logBytes": 416,
         "sstoreCount": 24,
         "zeroToNonzeroSstores": 16,
-        "latencyMs": 31.662285
+        "latencyMs": 16.772416
       },
       {
         "eventNo": 3,
@@ -515,7 +515,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 5,
-        "latencyMs": 16.955086
+        "latencyMs": 15.985298
       },
       {
         "eventNo": 4,
@@ -528,7 +528,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 14.325536
+        "latencyMs": 13.588655
       },
       {
         "eventNo": 5,
@@ -541,7 +541,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 15.525667
+        "latencyMs": 14.886233
       },
       {
         "eventNo": 6,
@@ -554,7 +554,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 15.381715
+        "latencyMs": 13.720062
       },
       {
         "eventNo": 7,
@@ -567,7 +567,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 15.567
+        "latencyMs": 11.473445
       },
       {
         "eventNo": 8,
@@ -580,7 +580,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 13.878699
+        "latencyMs": 20.756049
       },
       {
         "eventNo": 9,
@@ -593,7 +593,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 15.960135
+        "latencyMs": 22.938331
       },
       {
         "eventNo": 10,
@@ -606,7 +606,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 14.823489
+        "latencyMs": 12.139034
       },
       {
         "eventNo": 11,
@@ -619,7 +619,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 12.808671
+        "latencyMs": 11.97978
       },
       {
         "eventNo": 12,
@@ -632,7 +632,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 11.612649
+        "latencyMs": 12.425367
       },
       {
         "eventNo": 13,
@@ -645,7 +645,7 @@
         "logBytes": 288,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 6,
-        "latencyMs": 16.746987
+        "latencyMs": 14.102085
       },
       {
         "eventNo": 14,
@@ -658,7 +658,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 12.5521
+        "latencyMs": 12.677393
       },
       {
         "eventNo": 15,
@@ -671,7 +671,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 22.420994
+        "latencyMs": 13.421496
       },
       {
         "eventNo": 16,
@@ -684,7 +684,7 @@
         "logBytes": 288,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 6,
-        "latencyMs": 17.335108
+        "latencyMs": 12.415455
       },
       {
         "eventNo": 17,
@@ -697,7 +697,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.868255
+        "latencyMs": 11.800474
       }
     ],
     "lifetimeGas": 2706685,
@@ -727,7 +727,7 @@
         "logBytes": 1120,
         "sstoreCount": 41,
         "zeroToNonzeroSstores": 34,
-        "latencyMs": 113.917105
+        "latencyMs": 123.73515
       },
       {
         "eventNo": 2,
@@ -740,7 +740,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 5,
-        "latencyMs": 14.3118
+        "latencyMs": 12.2963
       },
       {
         "eventNo": 3,
@@ -753,7 +753,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 19.788715
+        "latencyMs": 11.71855
       },
       {
         "eventNo": 4,
@@ -766,7 +766,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 17.810753
+        "latencyMs": 12.147841
       },
       {
         "eventNo": 5,
@@ -779,7 +779,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 18.060022
+        "latencyMs": 12.38616
       },
       {
         "eventNo": 6,
@@ -792,7 +792,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 16.700804
+        "latencyMs": 11.39463
       },
       {
         "eventNo": 7,
@@ -805,7 +805,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 14.660432
+        "latencyMs": 12.023383
       },
       {
         "eventNo": 8,
@@ -818,7 +818,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 14.81161
+        "latencyMs": 12.120238
       },
       {
         "eventNo": 9,
@@ -831,7 +831,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 13.654775
+        "latencyMs": 16.041634
       },
       {
         "eventNo": 10,
@@ -844,7 +844,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 14.802362
+        "latencyMs": 13.143575
       },
       {
         "eventNo": 11,
@@ -857,7 +857,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 15.611204
+        "latencyMs": 11.72139
       },
       {
         "eventNo": 12,
@@ -870,7 +870,7 @@
         "logBytes": 192,
         "sstoreCount": 11,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 33.812701
+        "latencyMs": 28.29352
       },
       {
         "eventNo": 13,
@@ -883,7 +883,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.412421
+        "latencyMs": 12.283233
       },
       {
         "eventNo": 14,
@@ -896,7 +896,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 14.289916
+        "latencyMs": 16.802006
       },
       {
         "eventNo": 15,
@@ -909,7 +909,7 @@
         "logBytes": 64,
         "sstoreCount": 6,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.825124
+        "latencyMs": 12.823341
       },
       {
         "eventNo": 16,
@@ -922,7 +922,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 10.954975
+        "latencyMs": 12.69811
       },
       {
         "eventNo": 17,
@@ -935,7 +935,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 10.58022
+        "latencyMs": 12.987104
       }
     ],
     "lifetimeGas": 3155103,
@@ -965,7 +965,7 @@
         "logBytes": 2560,
         "sstoreCount": 35,
         "zeroToNonzeroSstores": 35,
-        "latencyMs": 78.618462
+        "latencyMs": 74.149489
       },
       {
         "eventNo": 2,
@@ -991,7 +991,7 @@
         "logBytes": 1056,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 12,
-        "latencyMs": 31.472257
+        "latencyMs": 40.660658
       },
       {
         "eventNo": 4,
@@ -1004,7 +1004,7 @@
         "logBytes": 1056,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 12,
-        "latencyMs": 35.672482
+        "latencyMs": 41.197297
       },
       {
         "eventNo": 5,
@@ -1017,7 +1017,7 @@
         "logBytes": 1024,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 12,
-        "latencyMs": 22.016265
+        "latencyMs": 21.452314
       },
       {
         "eventNo": 6,
@@ -1030,7 +1030,7 @@
         "logBytes": 1088,
         "sstoreCount": 14,
         "zeroToNonzeroSstores": 13,
-        "latencyMs": 23.028714
+        "latencyMs": 19.330677
       },
       {
         "eventNo": 7,
@@ -1043,7 +1043,7 @@
         "logBytes": 1088,
         "sstoreCount": 14,
         "zeroToNonzeroSstores": 13,
-        "latencyMs": 18.676066
+        "latencyMs": 18.762635
       },
       {
         "eventNo": 8,
@@ -1056,7 +1056,7 @@
         "logBytes": 1088,
         "sstoreCount": 14,
         "zeroToNonzeroSstores": 13,
-        "latencyMs": 21.263591
+        "latencyMs": 19.928236
       },
       {
         "eventNo": 9,
@@ -1069,7 +1069,7 @@
         "logBytes": 1088,
         "sstoreCount": 14,
         "zeroToNonzeroSstores": 13,
-        "latencyMs": 24.714824
+        "latencyMs": 15.578496
       },
       {
         "eventNo": 10,
@@ -1082,7 +1082,7 @@
         "logBytes": 1088,
         "sstoreCount": 14,
         "zeroToNonzeroSstores": 13,
-        "latencyMs": 21.497698
+        "latencyMs": 18.296791
       },
       {
         "eventNo": 11,
@@ -1121,7 +1121,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 14.982158
+        "latencyMs": 11.708966
       },
       {
         "eventNo": 14,
@@ -1134,7 +1134,7 @@
         "logBytes": 1056,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 12,
-        "latencyMs": 46.940989
+        "latencyMs": 29.592643
       },
       {
         "eventNo": 15,
@@ -1147,7 +1147,7 @@
         "logBytes": 480,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 21.983382
+        "latencyMs": 20.838122
       },
       {
         "eventNo": 16,
@@ -1160,7 +1160,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.813973
+        "latencyMs": 17.421348
       },
       {
         "eventNo": 17,
@@ -1173,7 +1173,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 14.340471
+        "latencyMs": 16.384385
       }
     ],
     "lifetimeGas": 5797549,
@@ -1207,7 +1207,7 @@
         "logBytes": 544,
         "sstoreCount": 3,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 13.393063
+        "latencyMs": 13.284625
       },
       {
         "eventNo": 2,
@@ -1220,7 +1220,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 14.442105
+        "latencyMs": 11.555918
       },
       {
         "eventNo": 3,
@@ -1233,7 +1233,7 @@
         "logBytes": 352,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 23.390085
+        "latencyMs": 13.71145
       },
       {
         "eventNo": 4,
@@ -1246,7 +1246,7 @@
         "logBytes": 352,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 11.964591
+        "latencyMs": 13.67365
       },
       {
         "eventNo": 5,
@@ -1259,7 +1259,7 @@
         "logBytes": 352,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 16.284177
+        "latencyMs": 15.06086
       },
       {
         "eventNo": 6,
@@ -1272,7 +1272,7 @@
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.43109
+        "latencyMs": 11.8204
       },
       {
         "eventNo": 7,
@@ -1285,7 +1285,7 @@
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 15.211694
+        "latencyMs": 11.859733
       },
       {
         "eventNo": 8,
@@ -1298,7 +1298,7 @@
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 14.225044
+        "latencyMs": 12.531016
       },
       {
         "eventNo": 9,
@@ -1311,7 +1311,7 @@
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 15.214838
+        "latencyMs": 14.317243
       },
       {
         "eventNo": 10,
@@ -1324,7 +1324,7 @@
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 15.545183
+        "latencyMs": 12.20088
       },
       {
         "eventNo": 11,
@@ -1363,7 +1363,7 @@
         "logBytes": 672,
         "sstoreCount": 17,
         "zeroToNonzeroSstores": 6,
-        "latencyMs": 206.37975
+        "latencyMs": 199.004226
       },
       {
         "eventNo": 14,
@@ -1376,7 +1376,7 @@
         "logBytes": 352,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 16.194395
+        "latencyMs": 21.85993
       },
       {
         "eventNo": 15,
@@ -1389,7 +1389,7 @@
         "logBytes": 352,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 33.296572
+        "latencyMs": 34.908082
       },
       {
         "eventNo": 16,
@@ -1402,7 +1402,7 @@
         "logBytes": 672,
         "sstoreCount": 17,
         "zeroToNonzeroSstores": 6,
-        "latencyMs": 252.467898
+        "latencyMs": 221.17423
       },
       {
         "eventNo": 17,
@@ -1415,7 +1415,7 @@
         "logBytes": 1408,
         "sstoreCount": 9,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 58.643223
+        "latencyMs": 63.75895
       }
     ],
     "lifetimeGas": 1261575,
@@ -1448,7 +1448,7 @@
         "logBytes": 1376,
         "sstoreCount": 11,
         "zeroToNonzeroSstores": 11,
-        "latencyMs": 58.92009
+        "latencyMs": 58.350087
       },
       {
         "eventNo": 2,
@@ -1461,7 +1461,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 12.238762
+        "latencyMs": 14.493089
       },
       {
         "eventNo": 3,
@@ -1474,7 +1474,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 14.257211
+        "latencyMs": 12.583922
       },
       {
         "eventNo": 4,
@@ -1487,7 +1487,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 13.140974
+        "latencyMs": 14.666962
       },
       {
         "eventNo": 5,
@@ -1500,7 +1500,7 @@
         "logBytes": 192,
         "sstoreCount": 3,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 16.320527
+        "latencyMs": 14.486411
       },
       {
         "eventNo": 6,
@@ -1513,7 +1513,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 14.126223
+        "latencyMs": 15.668745
       },
       {
         "eventNo": 7,
@@ -1526,7 +1526,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 13.244521
+        "latencyMs": 12.997897
       },
       {
         "eventNo": 8,
@@ -1539,7 +1539,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 12.775515
+        "latencyMs": 13.806611
       },
       {
         "eventNo": 9,
@@ -1552,7 +1552,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 13.753231
+        "latencyMs": 16.489579
       },
       {
         "eventNo": 10,
@@ -1565,7 +1565,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 13.560253
+        "latencyMs": 13.315129
       },
       {
         "eventNo": 11,
@@ -1604,7 +1604,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.686019
+        "latencyMs": 11.533055
       },
       {
         "eventNo": 14,
@@ -1617,7 +1617,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 13.498591
+        "latencyMs": 12.696932
       },
       {
         "eventNo": 15,
@@ -1630,7 +1630,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.894955
+        "latencyMs": 13.974153
       },
       {
         "eventNo": 16,
@@ -1643,7 +1643,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.877643
+        "latencyMs": 11.970536
       },
       {
         "eventNo": 17,
@@ -1656,7 +1656,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 23.353002
+        "latencyMs": 11.401279
       }
     ],
     "lifetimeGas": 2956507,
@@ -1689,7 +1689,7 @@
         "logBytes": 3264,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 12,
-        "latencyMs": 35.639711
+        "latencyMs": 34.363003
       },
       {
         "eventNo": 2,
@@ -1715,7 +1715,7 @@
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 14.125771
+        "latencyMs": 13.278987
       },
       {
         "eventNo": 4,
@@ -1728,7 +1728,7 @@
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 13.185916
+        "latencyMs": 13.317739
       },
       {
         "eventNo": 5,
@@ -1741,7 +1741,7 @@
         "logBytes": 416,
         "sstoreCount": 3,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 12.688499
+        "latencyMs": 13.104775
       },
       {
         "eventNo": 6,
@@ -1754,7 +1754,7 @@
         "logBytes": 480,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 12.290834
+        "latencyMs": 13.169981
       },
       {
         "eventNo": 7,
@@ -1767,7 +1767,7 @@
         "logBytes": 480,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 12.626341
+        "latencyMs": 12.573495
       },
       {
         "eventNo": 8,
@@ -1780,7 +1780,7 @@
         "logBytes": 480,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 11.743415
+        "latencyMs": 13.689008
       },
       {
         "eventNo": 9,
@@ -1793,7 +1793,7 @@
         "logBytes": 480,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 12.549772
+        "latencyMs": 13.332148
       },
       {
         "eventNo": 10,
@@ -1806,7 +1806,7 @@
         "logBytes": 480,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 13.619045
+        "latencyMs": 14.849409
       },
       {
         "eventNo": 11,
@@ -1845,7 +1845,7 @@
         "logBytes": 256,
         "sstoreCount": 8,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 26.401166
+        "latencyMs": 14.139951
       },
       {
         "eventNo": 14,
@@ -1858,7 +1858,7 @@
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 19.222342
+        "latencyMs": 11.284511
       },
       {
         "eventNo": 15,
@@ -1871,7 +1871,7 @@
         "logBytes": 288,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 16.294819
+        "latencyMs": 14.157751
       },
       {
         "eventNo": 16,
@@ -1884,7 +1884,7 @@
         "logBytes": 256,
         "sstoreCount": 8,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 14.367848
+        "latencyMs": 13.287707
       },
       {
         "eventNo": 17,
@@ -1897,7 +1897,7 @@
         "logBytes": 352,
         "sstoreCount": 6,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.910095
+        "latencyMs": 25.722256
       }
     ],
     "lifetimeGas": 1508413,
@@ -1931,7 +1931,7 @@
         "logBytes": 1408,
         "sstoreCount": 9,
         "zeroToNonzeroSstores": 9,
-        "latencyMs": 157.793397
+        "latencyMs": 115.656968
       },
       {
         "eventNo": 2,
@@ -1944,7 +1944,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 13.308395
+        "latencyMs": 12.379085
       },
       {
         "eventNo": 3,
@@ -1957,7 +1957,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 12.274074
+        "latencyMs": 12.042631
       },
       {
         "eventNo": 4,
@@ -1970,7 +1970,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 13.299468
+        "latencyMs": 13.338082
       },
       {
         "eventNo": 5,
@@ -1983,7 +1983,7 @@
         "logBytes": 192,
         "sstoreCount": 3,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 12.844745
+        "latencyMs": 13.473509
       },
       {
         "eventNo": 6,
@@ -1996,7 +1996,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 13.049636
+        "latencyMs": 14.493903
       },
       {
         "eventNo": 7,
@@ -2009,7 +2009,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 14.015302
+        "latencyMs": 15.756976
       },
       {
         "eventNo": 8,
@@ -2022,7 +2022,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 17.087833
+        "latencyMs": 13.641159
       },
       {
         "eventNo": 9,
@@ -2035,7 +2035,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 18.452594
+        "latencyMs": 14.092552
       },
       {
         "eventNo": 10,
@@ -2048,7 +2048,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 15.049768
+        "latencyMs": 13.980917
       },
       {
         "eventNo": 11,
@@ -2061,7 +2061,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 12.196544
+        "latencyMs": 13.302279
       },
       {
         "eventNo": 12,
@@ -2074,7 +2074,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.27415
+        "latencyMs": 12.143433
       },
       {
         "eventNo": 13,
@@ -2087,7 +2087,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 11.789151
+        "latencyMs": 12.876718
       },
       {
         "eventNo": 14,
@@ -2100,7 +2100,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 14.92944
+        "latencyMs": 13.401898
       },
       {
         "eventNo": 15,
@@ -2113,7 +2113,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 14.003811
+        "latencyMs": 16.359924
       },
       {
         "eventNo": 16,
@@ -2126,7 +2126,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 10.46251
+        "latencyMs": 13.690169
       },
       {
         "eventNo": 17,
@@ -2139,7 +2139,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 11.586891
+        "latencyMs": 12.792534
       }
     ],
     "lifetimeGas": 2221290,
@@ -2169,7 +2169,7 @@
         "logBytes": 2016,
         "sstoreCount": 42,
         "zeroToNonzeroSstores": 41,
-        "latencyMs": 64.987121
+        "latencyMs": 39.676535
       },
       {
         "eventNo": 2,
@@ -2182,7 +2182,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 17.406728
+        "latencyMs": 12.027021
       },
       {
         "eventNo": 3,
@@ -2195,7 +2195,7 @@
         "logBytes": 704,
         "sstoreCount": 12,
         "zeroToNonzeroSstores": 11,
-        "latencyMs": 19.377221
+        "latencyMs": 15.206099
       },
       {
         "eventNo": 4,
@@ -2208,7 +2208,7 @@
         "logBytes": 704,
         "sstoreCount": 12,
         "zeroToNonzeroSstores": 11,
-        "latencyMs": 19.873799
+        "latencyMs": 17.284814
       },
       {
         "eventNo": 5,
@@ -2221,7 +2221,7 @@
         "logBytes": 288,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 13.684573
+        "latencyMs": 15.497631
       },
       {
         "eventNo": 6,
@@ -2234,7 +2234,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.694775
+        "latencyMs": 14.092779
       },
       {
         "eventNo": 7,
@@ -2247,7 +2247,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.103049
+        "latencyMs": 14.992603
       },
       {
         "eventNo": 8,
@@ -2260,7 +2260,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 16.545948
+        "latencyMs": 14.000226
       },
       {
         "eventNo": 9,
@@ -2273,7 +2273,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.580275
+        "latencyMs": 13.047408
       },
       {
         "eventNo": 10,
@@ -2286,7 +2286,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.603345
+        "latencyMs": 14.583135
       },
       {
         "eventNo": 11,
@@ -2299,7 +2299,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 16.118226
+        "latencyMs": 12.516346
       },
       {
         "eventNo": 12,
@@ -2312,7 +2312,7 @@
         "logBytes": 384,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 26.273897
+        "latencyMs": 25.896189
       },
       {
         "eventNo": 13,
@@ -2325,7 +2325,7 @@
         "logBytes": 128,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 11.912348
+        "latencyMs": 12.572669
       },
       {
         "eventNo": 14,
@@ -2338,7 +2338,7 @@
         "logBytes": 704,
         "sstoreCount": 12,
         "zeroToNonzeroSstores": 11,
-        "latencyMs": 21.52632
+        "latencyMs": 18.477967
       },
       {
         "eventNo": 15,
@@ -2351,7 +2351,7 @@
         "logBytes": 352,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 40.532717
+        "latencyMs": 16.629318
       },
       {
         "eventNo": 16,
@@ -2364,7 +2364,7 @@
         "logBytes": 128,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 12.51666
+        "latencyMs": 11.133376
       },
       {
         "eventNo": 17,
@@ -2377,7 +2377,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 15.244451
+        "latencyMs": 11.784524
       }
     ],
     "lifetimeGas": 2559537,

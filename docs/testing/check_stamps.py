@@ -72,7 +72,7 @@ def _flag_live(kind, commit):
                              capture_output=True, text=True, check=True).stdout
     except Exception:  # noqa: BLE001
         return False
-    return ":(top)" in src
+    return ":(top)" in src or (kind == "harness" and "runStamp(__filename)" in src)  # A6: the harness calls the shared helper
 
 
 def _first(flat, keys):

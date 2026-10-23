@@ -1,5 +1,5 @@
-k,n,median_ms,p95_ms,mean_ms,min_ms,max_ms,stdev_ms,refreshes_in_window,cached_in_window,refresh_median_ms,cached_median_ms,refresh_rpc_median,cached_rpc_max,rpc_calls_mean,analytic_this_run_ms,analytic_latency_budget_ms,P*(0.5)_measured_mean,P*(0.5)_measured_median,P*(0.5)_analytic_this_run,P*(0.5)_analytic_latency_budget,staleness_max_accepted_after_revocation,staleness_bound_k_minus_1,staleness_within_bound
-1,250,10.9457,16.1526,11.7557,8.7807,29.4815,2.5968,250,0,10.9457,,4.0000,,4.0000,10.9457,2.9000,4,4,4,17,0,0,True
-5,250,0.4557,10.4792,2.3791,0.3601,15.2770,3.8715,50,200,9.7152,0.4394,4.0000,0,0.8000,2.5315,0.9000,21,109,19,55,4,4,True
-25,250,0.4248,0.7645,0.8495,0.3520,12.0166,1.9932,10,240,10.4834,0.4235,4.0000,0,0.1600,0.8487,0.5000,58,117,58,100,24,24,True
-inf,250,0.4280,0.6312,0.4532,0.3546,0.8455,0.0882,0,250,,0.4280,,0,0.0000,0.4280,0.4000,110,116,116,125,50,,unbounded
+k,refresh_mode,n,median_ms,p95_ms,mean_ms,min_ms,max_ms,stdev_ms,refreshes_in_window,full_resolutions_in_window,probe_only_refreshes_in_window,cached_in_window,refresh_median_ms,cached_median_ms,refresh_rpc_median,cached_rpc_max,rpc_calls_mean,analytic_this_run_ms,analytic_latency_budget_ms,P*(0.5)_measured_mean,P*(0.5)_measured_median,P*(0.5)_analytic_this_run,P*(0.5)_analytic_latency_budget,staleness_max_accepted_after_revocation,staleness_bound_k_minus_1,staleness_within_bound
+1,full,250,14.2843,17.0886,14.6728,11.7696,25.8658,1.8706,250,250,0,0,14.2843,,5.0000,,5.0000,14.2843,2.9000,3,3,3,17,0,0,True
+5,full,250,0.3972,15.2017,3.1516,0.3202,23.1181,5.5122,50,50,0,200,13.5301,0.3812,5.0000,0,1.0000,3.1336,0.9000,15,125,15,55,4,4,True
+25,full,250,0.3710,0.6736,0.9436,0.2890,15.8978,2.7417,10,10,0,240,14.2812,0.3697,5.0000,0,0.2000,0.9035,0.5000,52,134,55,100,24,24,True
+inf,full,250,0.3460,0.4152,0.3565,0.3032,1.1703,0.0625,0,0,0,250,,0.3460,,0,0.0000,0.3460,0.4000,140,144,144,125,50,,unbounded
