@@ -8,6 +8,7 @@ derived from the record that already identifies it:
     L1 uniform mechanisms   sandbox/grand/report/L1-asymmetry.json     TC-<slug>-<op>-F (and -G when gas is measured)
     strict security harness 4_comparison-framework/security-analysis/results/attack_results.json  TC-<slug>-<attack>-A
     feature demos           sandbox/grand/report/demos.json             TC-<slug>-<family>-F
+    Python layers (WM-2 A7) sandbox/grand/report/py_layers.json         TC-py-<module>-<test> (layer L3, L4 or SSI)
 The coverage matrix (option x capability family) is derived from the manifests' stances and the
 demo runs: N = not applicable (manifest reason), T = exercised by a passing demo, F = demo
 failing (X is reserved by the TSR plan for out of scope), G = implemented but no demo; "+M" marks families measured in the comparison.
@@ -79,6 +80,26 @@ def build():
             tcs.append({"id": f'TC-{opt}-{f["family"]}-F', "layer": "demo", "sut": opt, "op": f["family"], "class": "F",
                         "evidence": "E2", "verdict": "pass" if f["ok"] else "fail", "steps": f["steps"],
                         "location": f'sandbox/options/{opt}/demos/{f["family"]}.js', "source": "sandbox/grand/report/demos.json"})
+    # Python layers (WM-2 A7): one TC per test in the grand runner's per-test record
+    py = ROOT / "sandbox/grand/report/py_layers.json"
+    if py.exists():
+        import hashlib
+        import re as _re
+        layer_of = (("sandbox/py-suites/L3-ssi/", "L3"), ("sandbox/py-suites/L4-exemplar-interactions/", "L4"),
+                    ("2_w3c-ssi-layer/", "SSI"))
+        seen = set()
+        for t in json.loads(py.read_text())["tests"]:
+            layer = next((l for pre, l in layer_of if t["file"].startswith(pre)), "py")
+            stem = pathlib.Path(t["file"]).stem.removeprefix("test_")
+            slug = _re.sub(r"[^A-Za-z0-9]+", "-", f'{stem}-{t["name"].removeprefix("test_")}').strip("-")[:80]
+            tid = f"TC-py-{slug}"
+            if tid in seen:  # parametrised or truncated names: disambiguate deterministically
+                tid += "-" + hashlib.sha256(f'{t["file"]}::{t["name"]}'.encode()).hexdigest()[:6]
+            seen.add(tid)
+            tcs.append({"id": tid, "layer": layer, "sut": t["file"].split("/")[0] if layer == "SSI" else "py-suites",
+                        "op": t["name"], "class": "F", "evidence": "E3",
+                        "verdict": {"passed": "pass", "failed": "fail"}.get(t["outcome"], t["outcome"]),
+                        "location": f'{t["file"]}::{t["name"]}', "source": "sandbox/grand/report/py_layers.json"})
     tcs.sort(key=lambda t: t["id"])
     ids = [t["id"] for t in tcs]
     dup = sorted({i for i in ids if ids.count(i) > 1})

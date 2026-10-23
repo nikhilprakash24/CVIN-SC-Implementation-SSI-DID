@@ -24,3 +24,10 @@
     gas charter treat #57 as a gas row; reworded, since #57 reports no gas.
   - CI's document step and `tools/prepush_check.sh` run `latency_charter.py --check`. Regenerated: the test register,
     dashboard, result cards, presentation page, and the TDP's DWG-005 (with its own generator; it reads the register).
+- **A7, Python suites in the test register.** The grand runner's Python stage now passes `--junitxml` (classic
+  format, which records each test's file) to `sandbox/py-suites/run.sh` and reduces the output to
+  `sandbox/grand/report/py_layers.json`: file, name and outcome per test, sorted, paths made repository-relative
+  (pytest's root is `sandbox/py-suites`; the first record had `../../` paths, corrected before commit).
+  `build_register.py` gives each test a TC id `TC-py-<module>-<test>`, disambiguated by a short hash where two names
+  collide. Result: 376 entries (L3 78, L4 19, SSI layer 279), equal to the record's 376 tests, all pass. The register's
+  `--check` passes; the pre-push guard passes, including the TDP's trace check that reads the register.
