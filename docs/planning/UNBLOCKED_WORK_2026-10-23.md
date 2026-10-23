@@ -15,7 +15,7 @@ remains worth running as an audit. One session pushes at a time. The plan's next
 | # | Item | Produces | Why it needs no one | Size | Risk | Recommendation |
 |---|---|---|---|---|---|---|
 | U1 | **WM-2 B3, the latency charter** (class L): every latency row conforms (within-run comparison, host and library record, N ≥ 30) or is relabelled "descriptive only"; generated and CI-checked, as the gas charter is | `docs/testing/LATENCY_CHARTER.md` + generator + CI line; register notes on relabelled rows | reads the register and the result files; changes no measurement | 1 pass | a row may have to be relabelled, which the thesis then must respect; that is the charter's purpose | **take** |
-| U2 | **WM-2 A5, `claims.yaml`** (the plan's next executable as of report 33): stable ids for every register row; every V row's quoted numbers checked against its result file by script (the WM-1 audit showed an edited row passed every guard) | `docs/testing/claims.yaml` + checker in CI | mechanical; strengthens the guard that A3b and A6 will rely on | 1 to 2 passes | the checker will find rows whose quoted numbers it cannot locate in a file; each is a finding, not a fix | **take, before A3** |
+| U2 | ~~**WM-2 A5, `claims.yaml`**~~ **done by another session on 2026-10-23 (`50888c7`)**: stable ids for every register row; every V row's quoted numbers checked against its result file by script (the WM-1 audit showed an edited row passed every guard) | `docs/testing/claims.yaml` + checker in CI | mechanical; strengthens the guard that A3b and A6 will rely on | 1 to 2 passes | the checker will find rows whose quoted numbers it cannot locate in a file; each is a finding, not a fix | **take, before A3** |
 | U3 | **WM-2 A7**: the Python suites (L3, L4, SSI layer, 342 tests) entered in the test register with TC ids | `docs/testing/test_register.yaml` extended; coverage matrix regenerated | generated from the test files | 1 pass | none to results | take |
 | U4 | **Mutation scripts for the C1 and C2 tests**, as `mutate_idtx.sh` and the verifier mutation script exist: show that the resolver chain tests and the D54 tests kill mutants of the code they guard | `2_w3c-ssi-layer/did-resolution/mutation/`, `1_blockchain-identity/test/.../mutate_d54.sh`; CI lines | rule 1.3.11, every guard shown to fire; C1 and C2 have regression proofs but no mutant counts | 1 pass | none to results; a surviving mutant is a finding about test strength | **take** |
 | U5 | **WM-2 D2**: RSU-to-RSU messaging design note (what it would add to crux C3; whether the thesis needs it) | `docs/design/RSU_TO_RSU_NOTE.md` | a note for the author to decide on; no build | half a pass | none | take |
@@ -40,7 +40,7 @@ remains worth running as an audit. One session pushes at a time. The plan's next
 | A scholarly-database search for "identity-dependent transaction" (the brief's open item) | the research connectors are not reachable from this session today; web search only, which the brief already did |
 
 ## 3. Proposed order if the answer is "all of it"
-U2 (A5, claims.yaml) → U1 (B3, latency charter) → U3 (A7) → U4 (mutation scripts) → U6 (chapter audit, now over the
+U1 (B3, latency charter; A5 done elsewhere) → U3 (A7) → U4 (mutation scripts) → U6 (chapter audit, now over the
 written chapter 2 as well) → U7 (TDP review) → U5 (D2 note) → U8 (I-05 model) → U9, U10 → U11, U12.
 Each is its own after-action report, opened and committed first, pushed when the branch is quiet, closed with CI.
 U2, U1 and U3 are the plan's own order (A5, then A7, B3, D1).
