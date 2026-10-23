@@ -77,7 +77,8 @@ def file_numbers(path):
             walk(json.loads(text))
         except json.JSONDecodeError:
             pass
-    for whole, frac in NUM.findall(text.replace("_", "")):
+    text = re.sub(r"(\d)n\b", r"\1", text.replace("_", ""))  # JS numeric separators and BigInt literals: 198_694n
+    for whole, frac in NUM.findall(text):
         try:
             vals.add(float(whole.replace(",", "") + (frac or "")))
         except ValueError:

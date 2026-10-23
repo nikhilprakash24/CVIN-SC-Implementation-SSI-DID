@@ -1,0 +1,340 @@
+_doc:
+- Stable ids for the claim register's rows and, for every V row, the result files that carry its numbers (WM-2 A5).
+- Hand-maintained; checked by docs/testing/check_claims.py. 'derived' lists bold numbers that no file holds, each with how it is obtained.
+claims:
+- id: c1-createvehicledid-78-090-gas
+  row: 1
+  sources:
+  - docs/review02/FOLLOWUP_FC.md
+- id: c2-changeowner-68-854-adddelegate
+  row: 2
+  sources:
+  - docs/review02/FOLLOWUP_FC.md
+  - docs/figures/results_snapshot.json
+- id: c3-erc-721-mint-102
+  row: 3
+  sources:
+  - docs/figures/results_snapshot.json
+- id: c4-w3c-compliance-internal-checker
+  row: 4
+  sources:
+  - 4_comparison-framework/results/w3c_compliance.json
+- id: c25-nine-standard-gas-table
+  row: 25
+  sources:
+  - 4_comparison-framework/results/gas_benchmark.json
+  - 4_comparison-framework/results/gas_comparison.csv
+  - 4_comparison-framework/results/gas_comparison.tex
+- id: c26-scaling-marginal-cost-o
+  row: 26
+  sources:
+  - 4_comparison-framework/results/scaling_lifetime.json
+  - 4_comparison-framework/results/scaling_lifetime.csv
+  - 4_comparison-framework/results/scaling_marginal.json
+  - 4_comparison-framework/results/scaling_marginal.csv
+  - 4_comparison-framework/results/scaling_verify.json
+  - 4_comparison-framework/results/scaling_verify_richness.csv
+  - 4_comparison-framework/results/scaling_verify_density.csv
+- id: c27-v2v-ssi-verify-warm
+  row: 27
+  sources:
+  - cv2x-testbed/sumo/results/v2v_latency_stats.json
+- id: c28-security-43-43-attacks
+  row: 28
+  sources:
+  - 4_comparison-framework/security-analysis/results/security_matrix.json
+  - 4_comparison-framework/security-analysis/results/security_matrix.csv
+  - 4_comparison-framework/security-analysis/results/attack_results.json
+  - 1_blockchain-identity/test/L2-identity-system/per-option/MOBIVID/attestEventRegression.test.js
+- id: c24-external-w3c-did-test
+  row: 24
+  sources:
+  - docs/conformance/reports/jest-cvin/cvin-cli-did-identifier-2026-10-04b.json
+  - docs/conformance/reports/jest-cvin/cvin-cli-did-core-properties-2026-10-04b.json
+  - docs/conformance/reports/jest-cvin/cvin-cli-did-production-2026-10-04b.json
+  - docs/conformance/reports/jest-cvin/cvin-cli-did-consumption-2026-10-04b.json
+  - docs/conformance/reports/jest-cvin/cvin-cli-did-resolution-2026-10-04b.json
+  derived:
+  - value: '335'
+    how: 'sum of numPassedTests over the five jest-cvin 2026-10-04b reports: identifier 3 + core properties 88 + production 48 + consumption 3 + resolution 193'
+  - value: '336'
+    how: 'sum of numTotalTests over the same five reports: 3 + 88 + 48 + 3 + 194'
+- id: c5-vc-layer-28-28
+  row: 5
+- id: c6-erc-1056-provides-10
+  row: 6
+  sources:
+  - 4_comparison-framework/results/gas_comparison.csv
+- id: c7-did-creation-45-000
+  row: 7
+- id: c8-nft-minting-150-000
+  row: 8
+- id: c9-erc-725-proxy-creation
+  row: 9
+- id: c10-resolution-50-100-ms
+  row: 10
+- id: c11-resolution-0-8-ms
+  row: 11
+- id: c12-vc-verification-5-10
+  row: 12
+- id: c13-vc-verify-median-7
+  row: 13
+- id: c14-10-ms-verification
+  row: 14
+- id: c15-sumo-simulation-with-50
+  row: 15
+- id: c16-nine-standards-compared
+  row: 16
+- id: c17-v2v-ssi-warm-verify
+  row: 17
+- id: c18-erc-1056-createidentity-52
+  row: 18
+- id: c19-security-43-43-attacks
+  row: 19
+- id: c20-usd-costs
+  row: 20
+- id: c21-pki-vs-erc-1056
+  row: 21
+  sources:
+  - cv2x-testbed/results/pki_vs_erc1056.csv
+  - cv2x-testbed/results/pki_vs_erc1056.json
+  - cv2x-testbed/results/pki_vs_erc1056.md
+- id: c22-cv2x-testbed-erc1056registry-gas
+  row: 22
+  sources:
+  - cv2x-testbed/results/pki_vs_erc1056.csv
+  - cv2x-testbed/results/pki_vs_erc1056.json
+  - cv2x-testbed/results/pki_vs_erc1056.md
+- id: c29-harness-l1-per-op
+  row: 29
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/crud.json
+  - 1_blockchain-identity/results/metrics/latest/tables/crud_gas.csv
+- id: c30-harness-l2-mobi-vid
+  row: 30
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/lifecycle.json
+  - 1_blockchain-identity/results/metrics/latest/tables/lifecycle_gas.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/lifecycle_totals.md
+  - 1_blockchain-identity/results/metrics/latest/tables/analysis_ratios.csv
+- id: c31-harness-l3-l6-per
+  row: 31
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/tables/scale.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/scale_latency.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/resolve.csv
+  derived:
+  - value: '87'
+    how: 87,033 B (tables/scale.csv, h=50, R3_resolve_document, erc1056) / 1,000, rounded to KB
+- id: c32-freshness-k-erc-1056
+  row: 32
+  sources:
+  - cv2x-testbed/results/freshness_k.json
+  - cv2x-testbed/results/freshness_k.csv
+  - cv2x-testbed/results/freshness_k.md
+- id: c33-m4-lifecycle-parity-n
+  row: 33
+  sources:
+  - cv2x-testbed/results/lifecycle_parity.json
+  - cv2x-testbed/results/lifecycle_parity.csv
+  - cv2x-testbed/results/lifecycle_parity.md
+- id: c34-harness-l1-per-op
+  row: 34
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/crud.json
+  - 1_blockchain-identity/results/metrics/latest/tables/crud_gas.csv
+- id: c35-harness-l2-lifecycle-all
+  row: 35
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/lifecycle.json
+  - 1_blockchain-identity/results/metrics/latest/tables/lifecycle_gas.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/lifecycle_totals.md
+- id: c36-h5-dominance-analysis-over
+  row: 36
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/ANALYSIS.md
+- id: c37-freshness-k-with-a
+  row: 37
+  sources:
+  - cv2x-testbed/results/freshness_k_probe.json
+  - cv2x-testbed/results/freshness_k_probe.csv
+  - cv2x-testbed/results/freshness_k_probe.md
+  - cv2x-testbed/results/freshness_k_probe_r2.json
+  - cv2x-testbed/results/freshness_k_probe_r2.csv
+  - cv2x-testbed/results/freshness_k_probe_r2.md
+  - cv2x-testbed/results/freshness_k_probe_fullref.json
+  - cv2x-testbed/results/freshness_k_probe_fullref.csv
+  - cv2x-testbed/results/freshness_k_probe_fullref.md
+  - cv2x-testbed/results/freshness_k_probe_fullref_r2.json
+  - cv2x-testbed/results/freshness_k_probe_fullref_r2.csv
+  - cv2x-testbed/results/freshness_k_probe_fullref_r2.md
+- id: c38-m5-pseudonym-pool-on
+  row: 38
+  sources:
+  - 4_comparison-framework/results/pseudonym_pool.json
+  - 4_comparison-framework/results/pseudonym_pool.md
+  - 1_blockchain-identity/test/L2-identity-system/per-option/ERC1056/PseudonymPool.test.js
+- id: c39-http-rpc-condition-all
+  row: 39
+  sources:
+  - 1_blockchain-identity/results/metrics-rpc/latest/REPORT.md
+  - 1_blockchain-identity/results/metrics-rpc/latest/batch.json
+  - 1_blockchain-identity/results/metrics-rpc/latest/crud.json
+  - 1_blockchain-identity/results/metrics-rpc/latest/lifecycle.json
+  - 1_blockchain-identity/results/metrics-rpc/latest/meta.json
+  - 1_blockchain-identity/results/metrics-rpc/latest/raw.jsonl
+  - 1_blockchain-identity/results/metrics-rpc/latest/resolve.json
+  - 1_blockchain-identity/results/metrics-rpc/latest/scale.json
+  - 1_blockchain-identity/results/metrics-rpc/latest/throughput.json
+- id: c40-freshness-k-cached-verifier
+  row: 40
+- id: c41-lifecycle-parity-centralized-registry
+  row: 41
+- id: c42-gas-moved-by-the
+  row: 42
+  sources:
+  - 4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json
+- id: c43-gas-moved-by-the
+  row: 43
+  sources:
+  - 4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json
+  - 4_comparison-framework/results/mobi_vid_backends.json
+  - docs/conformance/reports/registry-did-2026-10-04/did-spec-test-run.latest.json
+  - docs/conformance/reports/registry-did-2026-10-04/mint_did.out.txt
+- id: c44-warm-verification-of-a
+  row: 44
+  sources:
+  - cv2x-testbed/sumo/results/infrastructure_stats.json
+- id: c45-each-of-15-registered
+  row: 45
+  sources:
+  - cv2x-testbed/sumo/results/infrastructure_stats.json
+- id: c46-a-verifier-that-has
+  row: 46
+  sources:
+  - cv2x-testbed/sumo/results/infrastructure_revocation.json
+- id: c47-on-chain-cost-of
+  row: 47
+  sources:
+  - 4_comparison-framework/results/infrastructure_gas.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_01.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_02.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_03.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_04.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_05.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_06.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_07.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_08.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_09.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_10.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_11.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_12.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_13.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_14.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_15.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_16.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_17.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_18.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_19.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_20.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_21.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_22.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_23.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_24.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_25.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_26.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_27.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_28.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_29.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/run_30.json
+  - 4_comparison-framework/results/infrastructure_gas_runs/summary.json
+- id: c48-cost-of-the-cryptographic
+  row: 48
+  sources:
+  - cv2x-testbed/sumo/results/infrastructure_stats.json
+- id: c49-harness-l1-l2-on
+  row: 49
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/tables/crud_storage.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/crud_logbytes.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/lifecycle_totals.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/lifecycle_totals.md
+- id: c50-relayed-writes-erc-1056
+  row: 50
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/tables/crud_gas.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/crud_gas.md
+  derived:
+  - value: 27,622
+    how: difference U5_meta_tx 62,646 − U3_set_attribute 35,024, erc1056 column of tables/crud_gas.csv
+- id: c51-harness-l3-read-cost
+  row: 51
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/tables/scale.csv
+- id: c52-freshness-rows-32-and
+  row: 52
+  sources:
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k32_full.csv
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k32_full.json
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k32_full.log.txt
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k32_full.md
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k37_full.csv
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k37_full.json
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k37_full.log.txt
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k37_full.md
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k37_probe.csv
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k37_probe.json
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k37_probe.log.txt
+  - cv2x-testbed/results/freshness_k_c3/c3_r1_k37_probe.md
+- id: c53-basic-digital-id-set
+  row: 53
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/tables/analysis_basic_set.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/analysis_basic_set.md
+- id: c54-basic-set-functions-p1
+  row: 54
+  sources:
+  - 1_blockchain-identity/results/metrics/latest/tables/crud_gas.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/analysis_basic_set.csv
+  - 1_blockchain-identity/results/metrics/latest/tables/analysis_basic_set.md
+- id: c55-freshness-k-same-host
+  row: 55
+  sources:
+  - cv2x-testbed/results/freshness_k_samehost.json
+  - cv2x-testbed/results/freshness_k_samehost.csv
+  - cv2x-testbed/results/freshness_k_samehost.md
+- id: c56-was-proposed-row-z1
+  row: 56
+  sources:
+  - 5_zkp-agent-identity/artifacts/circuit_info.txt
+  derived:
+  - value: 3,498
+    how: sum of circuit_info.txt non-linear constraints 1,667 + linear constraints 1,831
+- id: c57-was-proposed-row-z2
+  row: 57
+  sources:
+  - 5_zkp-agent-identity/results/zkvin_bench.json
+- id: c58-was-proposed-row-z3
+  row: 58
+  sources:
+  - 5_zkp-agent-identity/results/gas_zk.json
+- id: c59-was-proposed-row-z4
+  row: 59
+  sources:
+  - 5_zkp-agent-identity/results/sigma_bench.json
+- id: c60-was-proposed-row-z5
+  row: 60
+  sources:
+  - 5_zkp-agent-identity/results/vin_bruteforce.json
+- id: c61-was-proposed-row-z6
+  row: 61
+  sources:
+  - 5_zkp-agent-identity/results/attacks.json
+- id: c62-was-proposed-row-z7
+  row: 62
+  sources:
+  - 5_zkp-agent-identity/results/manual_burden.json
+- id: c23-signed-bsm-like-message
+  row: 23
+  sources:
+  - 5_zkp-agent-identity/results/manual_burden.json
