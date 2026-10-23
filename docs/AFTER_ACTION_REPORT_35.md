@@ -33,3 +33,14 @@
   `--check` passes; the pre-push guard passes, including the TDP's trace check that reads the register.
 - **Grand run (last), at `b49c9a1`.** ALL OK: smoke 11, L1 99, Hardhat 562, Python layers 376, 92 demos / 1,758 steps.
   Generated documents regenerated; the pre-push guard passes.
+
+## 3. Closing
+The pass delivered both steps. **CI 11 of 11 green on `09c5363`.** WM-2 stands at 15 of 20 steps.
+
+**B3** classes every verified latency figure. Four rows are now descriptive only. The most useful finding is that the
+metrics harness never recorded the machine it ran on, so its latency rows cannot be compared across runs until N-26
+is done; its gas rows are unaffected. **A7** puts all 376 Python tests in the test register from a per-test record the
+grand runner now keeps, so the register covers every suite.
+
+**Next:** the remaining unblocked items (mutation scripts for the C1 and C2 tests, the read-only chapter and TDP
+audits, D2, the I-05 model, CI hygiene, progress report draft 2). D1 waits on the author's D-1.
