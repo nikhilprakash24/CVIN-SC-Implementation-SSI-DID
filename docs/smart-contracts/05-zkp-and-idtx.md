@@ -254,3 +254,79 @@ Events: `Executed(bytes32 indexed action, address indexed identity, Kind kind, a
 - Compiled outputs live in `5_zkp-agent-identity/hh-artifacts/` and `phase2/idtx/artifacts/`, which are build products and not maintained by hand.
 - `ZkVinGate.sol` and `IdtxExecutor.sol` each declare their own minimal ERC-1056 interface (`IERC1056Owner` and `IERC1056` respectively), which duplicates part of Phase 1's `EthereumDIDRegistry` ABI. Both were written separately and are not shared code.
 - `5_zkp-agent-identity/test-contracts/` contains no Solidity, only `zkvin_gate.test.js`.
+
+---
+
+## Diagrams & examples
+
+### Off-chain proving → `ZkVinGate.admit` → `Groth16Verifier`
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant O as Identity owner
+    participant H as Holder / agent (circom + snarkjs)
+    participant G as ZkVinGate
+    participant R as EthereumDIDRegistry (ERC-1056)
+    participant V as Groth16Verifier
+    O->>G: anchorCommitment(identity, Poseidon(packedVIN, modelYear, region, salt))
+    G->>R: identityOwner(identity) == msg.sender?
+    Note over G: governor: setService(serviceId, scope, minModelYear, region, challenge)
+    H->>H: snarkjs.groth16.fullProve(private VIN, year, salt, Merkle path; public params)
+    H-->>H: (a, b, c, pub), pub[0] = nullifier = Poseidon(salt, scope)
+    H->>G: admit(identity, serviceId, a, b, c, pub, action)
+    G->>G: check pub[1..6] vs commitmentOf, mfrRoot, service; nullifier unused in scope
+    G->>V: verifyProof(a, b, c, pub) (ecMul 0x07, ecAdd 0x06, pairing 0x08)
+    V-->>G: true / false (false → InvalidProof)
+    G->>G: nullifierUsed[scope][pub[0]] = true
+    G-->>H: emit Admitted(identity, serviceId, nullifier, action)
+```
+
+### IDTx intent → fulfil against ERC-1056
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Creator (anyone)
+    participant K as Keeper (anyone)
+    participant X as IdtxExecutor
+    participant R as EthereumDIDRegistry (ERC-1056)
+    participant S as IdentityCommitments
+    C->>X: createIntent(dep, action, deadline)
+    X-->>C: emit IntentCreated(id, action, identity, deadline)
+    Note over R: state may change meanwhile (changeOwner, revokeDelegate, revokeCommitment)
+    K->>X: fulfil(id)
+    X->>X: require !done and now <= deadline
+    alt dep.kind == Owner
+        X->>R: identityOwner(identity) == party?
+    else dep.kind == Delegate
+        X->>R: validDelegate(identity, key, party)
+    else dep.kind == Commitment
+        X->>S: valueOf(identity, key) == expected (non-zero, unexpired, setter still owner)
+    end
+    X-->>K: emit IntentFulfilled(id, keeper) + Executed(action, identity, kind, keeper)
+```
+
+### ethers v6 example (mirrors the tests)
+
+Adapted from `5_zkp-agent-identity/test-contracts/zkvin_gate.test.js` (`deployAll`, l.16–28 and l.41–46) and `phase2/idtx/test/idtx.test.js` (l.24–31, l.106–111):
+
+```js
+// ZK-VIN gate: FIX = fixtures/zkvin_proof.json (proof made by snarkjs off chain)
+const verifier = await (await ethers.getContractFactory("Groth16Verifier")).deploy();
+const gate = await (await ethers.getContractFactory("ZkVinGate")).deploy(
+  await registry.getAddress(), await verifier.getAddress(), FIX.mfrRoot);
+await gate.connect(owner).anchorCommitment(vehicle, FIX.vehicle.commitment);
+await gate.setService(INSURER, FIX.request.scope, FIX.request.minModelYear, FIX.vehicle.region, FIX.request.challenge);
+const P = FIX.insurer;
+await expect(gate.connect(agent).admit(vehicle, INSURER, P.a, P.b, P.c, P.pub, ACTION))
+  .to.emit(gate, "Admitted").withArgs(vehicle, INSURER, P.pub[0], ACTION);
+
+// IDTx: next-transaction intent re-checked at fulfilment
+const exec = await (await ethers.getContractFactory("IdtxExecutor"))
+  .deploy(await registry.getAddress(), await commitments.getAddress());
+const dep = { kind: 0 /* Owner */, identity: vehicle, key: ethers.ZeroHash, expected: ethers.ZeroHash, party: owner.address };
+const deadline = (await ethers.provider.getBlock("latest")).timestamp + 600;
+await exec.createIntent(dep, ethers.id("insure"), deadline);
+await expect(exec.connect(keeper).fulfil(0)).to.emit(exec, "IntentFulfilled").withArgs(0, keeper.address);
+```
