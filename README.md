@@ -167,11 +167,11 @@ All numbers below are measured from the repository; each has a row in `docs/MEAS
 | ERC-725 | 519,384 |
 | ERC-721 | 545,101 |
 | ERC-4337 | 759,088 |
-| ERC-735 | 1,757,881 |
+| ERC-735 | 1,757,893 |
 | ERC-725xy | 1,680,816 |
 
 *Condition M1: solc 0.8.24, optimizer 200 + viaIR, evm `cancun`, OpenZeppelin 5.0.2, Hardhat local; re-executed 2026-10-04 after the defect fixes (`4_comparison-framework/results/gas_benchmark.json`; cells moved by the fixes are listed in `gas_moved_by_defect_fixes_2026-10-04.json` and `…_pass06.json`). See `docs/MEASUREMENT_CONDITIONS.md` #25, #31, #32.*
-**Key finding:** ~34× create spread across standards (CVIN-Combined 52,216 to ERC-735 1,757,881); ERC-1056 is ~10× cheaper than ERC-721/ERC-725 under this table's operation definitions (bare `createIdentity` vs VIN-bound `mintVehicle`), ≈7× when the VIN is bound on both sides (**H1 supported**; definitions and the reconciliation with the bare-mint figure of 102,804 are in `docs/MEASUREMENT_CONDITIONS.md` #6/#25). The ERC-4337 EntryPoint indirection adds +46,830 gas/op. MOBI VID V2 is measured alongside as an application profile, not as one of the 9 base standards.
+**Key finding:** ~34× create spread across standards (CVIN-Combined 52,216 to ERC-735 1,757,893); ERC-1056 is ~10× cheaper than ERC-721/ERC-725 under this table's operation definitions (bare `createIdentity` vs VIN-bound `mintVehicle`), ≈7× when the VIN is bound on both sides (**H1 supported**; definitions and the reconciliation with the bare-mint figure of 102,804 are in `docs/MEASUREMENT_CONDITIONS.md` #6/#25). The ERC-4337 EntryPoint indirection adds +46,830 gas/op. MOBI VID V2 is measured alongside as an application profile, not as one of the 9 base standards.
 
 ### V2V latency (RQ4 / H3) — N=30 seeded runs, median [95% CI], ms
 

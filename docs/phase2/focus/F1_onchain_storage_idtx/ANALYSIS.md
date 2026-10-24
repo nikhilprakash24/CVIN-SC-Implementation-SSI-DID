@@ -45,7 +45,7 @@ literature in chapter 2 (review §3.1: Xu et al.; Eberhardt and Tai).
 - Over the same 17-event lifecycle, zero→nonzero SSTOREs range from 8 (ERC-1056) to 149 (ERC-735), and lifetime gas
   from 1,050,809 to 5,797,549 (register #49, #35).
 - The association is not a cause on its own. ERC-735's and ERC-725xy's creation cost is mostly contract code
-  deployed per identity (C1 1,757,881 and 1,730,753 with 3 and 2 SSTOREs; CAPTURE §2.2).
+  deployed per identity (C1 1,757,893 and 1,730,753 with 3 and 2 SSTOREs; CAPTURE §2.2).
 - In ERC-1056 an attribute update is one storage write that creates no slot, plus 288 log bytes. In ERC-735 it is
   13 storage writes, 12 of them new slots, plus 1,024 log bytes (#49).
 

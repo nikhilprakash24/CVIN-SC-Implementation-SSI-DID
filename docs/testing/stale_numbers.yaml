@@ -17,6 +17,7 @@ history:
 - docs/tdp/REVIEW_2026-10.md   # the TDP review quotes the stale values it found (report 37)
 - docs/thesis/CHAPTER_AUDIT_2026-10.md   # quotes the stale values it found, on purpose (report 37)
 - docs/review02/*
+- docs/phase2/reviews/*   # review records quote the figures their reviewers read
 - docs/reconciliation/*
 - docs/prior-survey/*
 - docs/planning/*
@@ -87,7 +88,7 @@ entries:
   current: 0.363 ms (A3b re-run)
   row: 27
 - pattern: '1704992'
-  current: ERC-725xy create 1,680,816; heaviest create ERC-735 1,757,881
+  current: ERC-725xy create 1,680,816; heaviest create ERC-735 1,757,893
   row: 25
 - pattern: '52178'
   current: 52,216 (CVIN-Combined create)
@@ -102,11 +103,11 @@ entries:
   current: 545,101 (ERC-721 create)
   row: 25
 - pattern: 1598928|1404108|1535776
-  current: 1,757,881 (ERC-735 create)
+  current: 1,757,893 (ERC-735 create)
   row: 25
   note: '1,535,776 restored 2026-10-10 (audit finding A-2): its removal in pass 11 rested on register #34, which itself still carried the pre-merge harness value'
 - pattern: ~33×|~32×|32\.2×
-  current: ~34× (52,216 → 1,757,881)
+  current: ~34× (52,216 → 1,757,893)
   row: 25
 - pattern: '1450824'
   current: 1,450,146
@@ -205,7 +206,7 @@ entries:
   row: 5
   note: 'audit finding T-1: count near the word, any phrasing'
 - pattern: ~?(33|32\.2) ?[×x]\b
-  current: '33.7× (52,216 to 1,757,881; #25)'
+  current: '33.7× (52,216 to 1,757,893; #25)'
   row: 25
   note: 'audit finding T-17: ASCII x and no tilde'
 - pattern: \b93,2 ?%|\b93\.2 percent
@@ -293,3 +294,6 @@ entries:
   row: 25
   pending: ['docs/thesis/*/*.md']
   pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '1757881'
+  current: 1,757,893 (ERC-735 create since the NatSpec metadata change, PR #15; re-run 2026-10-24)
+  row: 25

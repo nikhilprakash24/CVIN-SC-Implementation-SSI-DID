@@ -39,7 +39,7 @@ mobility. Every number has a row in a claim register with a status, and only "V"
 
 | Number | Row |
 |---|---|
-| Create-identity gas 52,216 to 1,757,881 (33.7×) across nine standards | #25 |
+| Create-identity gas 52,216 to 1,757,893 (33.7×) across nine standards | #25 |
 | Lifecycle gas: ERC-1056 1,050,809 (cheapest); ERC-735 5,797,549 (excl. 3 n/a) | #35 |
 | New storage slots over the lifecycle: 8 (ERC-1056) to 149 (ERC-735) | #49 |
 | Relayed write over direct: ERC-1056 +27,622 gas; ERC-4337 +47,116 | #50, #34 |

@@ -48,7 +48,7 @@
     "source": {
       "path": "4_comparison-framework/results/gas_benchmark.json"
     },
-    "measured": "2026-10-22T23:16:49.669Z",
+    "measured": "2026-10-24T12:29:04.178Z",
     "condition": "M1",
     "operations": [
       "deployRegistry",
@@ -70,7 +70,7 @@
         "transferOwnership": 51754
       },
       "ERC-721": {
-        "deployRegistry": 2787288,
+        "deployRegistry": 2787276,
         "createIdentity": 545101,
         "updateAttribute": 119737,
         "updateAttributeVia4337": null,
@@ -98,7 +98,7 @@
       },
       "ERC-735": {
         "deployRegistry": null,
-        "createIdentity": 1757881,
+        "createIdentity": 1757893,
         "updateAttribute": 83341,
         "updateAttributeVia4337": null,
         "addDelegateOrClaim": 298358,
@@ -133,7 +133,7 @@
         "transferOwnership": 80568
       },
       "MOBI-VID-V2": {
-        "deployRegistry": 4370878,
+        "deployRegistry": 4370866,
         "createIdentity": 299165,
         "updateAttribute": 307254,
         "updateAttributeVia4337": null,
@@ -157,7 +157,7 @@
     },
     "create_max": {
       "standard": "ERC-735",
-      "gas": 1757881
+      "gas": 1757893
     },
     "create_spread": 33.67,
     "determinism": {
@@ -207,9 +207,9 @@
       },
       {
         "standard": "ERC-735",
-        "total": 11692092,
-        "low": 6724987,
-        "high": 16659198
+        "total": 11692104,
+        "low": 6724999,
+        "high": 16659210
       }
     ],
     "register": [
@@ -292,7 +292,7 @@
           "native": true
         },
         "thirdPartyAttestation": {
-          "gas": 222058,
+          "gas": 222070,
           "native": true
         },
         "fidelity": "5/5"
@@ -604,8 +604,8 @@
     "source": {
       "path": "1_blockchain-identity/results/metrics/latest/analysis.json"
     },
-    "runId": "2026-10-23T00-49-12Z_1f4ace0",
-    "dirty": false,
+    "runId": "2026-10-24T12-29-26Z_7a59058",
+    "dirty": true,
     "criteria": [
       "Lifetime gas",
       "Zero→nonzero SSTOREs",
@@ -1255,7 +1255,7 @@
         {
           "row": 34,
           "status": "V",
-          "claim": "Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,881 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS…"
+          "claim": "Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,893 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS…"
         },
         {
           "row": 35,
@@ -1779,7 +1779,7 @@
     "31": {
       "row": 31,
       "status": "V",
-      "claim": "Harness L3/L6: per-op gas flat in population N ≤ 1 000 (≤ 12 gas from tokenId width); ERC-1056 resolution grows linearly in history: 14 → 32 → 112 RPC calls / 87 KB at h = 50, median 91.113 ms (p95 100.55) in-process (ru…",
+      "claim": "Harness L3/L6: per-op gas flat in population N ≤ 1 000 (≤ 12 gas from tokenId width); ERC-1056 resolution grows linearly in history: 14 → 32 → 112 RPC calls / 87 KB at h = 50, median 153.786 ms (p95 175.9; 10 samples, de…",
       "tag": "M1-H"
     },
     "32": {
@@ -1797,7 +1797,7 @@
     "34": {
       "row": 34,
       "status": "V",
-      "claim": "Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,881 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS…",
+      "claim": "Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,893 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS…",
       "tag": "M1-H"
     },
     "35": {

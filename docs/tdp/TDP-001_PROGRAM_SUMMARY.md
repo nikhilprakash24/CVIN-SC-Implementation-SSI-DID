@@ -34,7 +34,7 @@ Three things, each with evidence already on the trunk.
 
 1. **One operation catalogue over nine substrates, with the operation definitions declared.** The same seventeen
    lifecycle events and the same per-operation catalogue run on every standard; a substrate without a primitive is
-   recorded as not applicable, never emulated (TDP-002 SYS-01). Creation gas spans 52,216 to 1,757,881, a factor of
+   recorded as not applicable, never emulated (TDP-002 SYS-01). Creation gas spans 52,216 to 1,757,893, a factor of
    33.7 (#25); over the lifecycle the cheapest standard leads by between 1.20 and 5.52 times, not ten (#35). The
    ratio depends on the definition, and the register says which (#6).
 2. **The chain off the hot path, with the price of freshness measured.** Warm verification of a safety message with a

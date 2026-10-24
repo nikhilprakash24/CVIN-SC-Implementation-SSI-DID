@@ -4,8 +4,8 @@
     "design": "docs/SCALING_EXPERIMENTS.md",
     "disclaimer": "This is a MODEL over an ASSUMED event profile, not a measurement. Totals integrate measured per-op gas (Experiment A steady-state append marginals + gas_benchmark.json birth/transfer costs) across the canonical profile. Gas is relative on-chain work, not fiat (RESEARCH_AUDIT.md §4.1). The profile is an assumption; the +/-50% band varies recurring event frequency.",
     "solcVersion": "0.8.24",
-    "commit": "ddb9b05",
-    "commitFull": "ddb9b0505c97239eb75f6f4ce128dbedfa49ebf3",
+    "commit": "7a59058",
+    "commitFull": "7a5905803a0219119fa6b59368461d0f7e203e13",
     "dirty": false,
     "dirtyAnyFile": true,
     "scope": "1_blockchain-identity/scripts/benchmark_scaling.js",
@@ -14,7 +14,7 @@
     "node": "v22.22.0",
     "hardhat": "2.28.6",
     "ozVersion": "5.0.2",
-    "date": "2026-10-22T23:16:54.582Z",
+    "date": "2026-10-24T12:29:13.378Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "profile": {
@@ -55,7 +55,7 @@
     },
     {
       "name": "ERC-735",
-      "total": 11692092
+      "total": 11692104
     }
   ],
   "standards": {
@@ -100,8 +100,8 @@
       "decomposition": {
         "birth": {
           "count": 1,
-          "unitGas": 1757881,
-          "subtotalGas": 1757881,
+          "unitGas": 1757893,
+          "subtotalGas": 1757893,
           "source": "gas_benchmark.createIdentity"
         },
         "appends": {
@@ -123,12 +123,12 @@
         }
       },
       "distinguishesEventClasses": "partial: birth (createIdentity) and transfer (ownership op) are distinct on-chain ops; maintenance/inspection/recall collapse to the generic append op (the standard does not type them on-chain)",
-      "totalLifetimeGas": 11692092,
+      "totalLifetimeGas": 11692104,
       "sensitivityBand": {
         "note": "+/-50% event frequency on the recurring (append + transfer) load; birth fixed at 1.",
-        "low": 6724987,
-        "base": 11692092,
-        "high": 16659198
+        "low": 6724999,
+        "base": 11692104,
+        "high": 16659210
       }
     },
     "ERC-1155": {

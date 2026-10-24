@@ -61,7 +61,7 @@ deterministic for fixed calldata and pre-state.
 | **ERC-721** (vehicle NFT) | 545,101 | 119,737 | 174,670 |
 | **ERC-4337** (account abstraction, *minimal repr.*) | 759,088 | 49,343 | 28,539 |
 | **ERC-725xy** (full ERC-725 X+Y smart account) | 1,680,816 | 49,937 | 28,834 |
-| **ERC-735** (claim holder) | 1,757,881 | 83,341 | 28,812 |
+| **ERC-735** (claim holder) | 1,757,893 | 83,341 | 28,812 |
 
 **Key finding (H1 SUPPORTED):** ~34× spread from cheapest to most expensive
 identity creation; the minimal registries (CVIN-Combined, ERC-1056) are ~10×
@@ -106,7 +106,7 @@ key rotation without changing the identity.
 
 ### ERC-735 — Claim Holder ✅
 On-chain claim registry (addClaim / removeClaim). Expensive to deploy
-(1,757,881 gas create, the heaviest measured) because it carries the full claim-management state machine.
+(1,757,893 gas create, the heaviest measured) because it carries the full claim-management state machine.
 Use cases: manufacturer/regulator attestations bound to an identity.
 
 ### ERC-1155 — Multi-Token Credentials (soulbound) ✅
