@@ -14,6 +14,7 @@ history:
 - docs/PROGRESS_APPENDIX_*.md   # generated from git subjects, which quote figures as they were (report 24)
 - docs/tdp/TDP-006_FMECA.md   # generated verbatim from docs/DEFECT_LOG.md, a history document (report 21)
 - docs/MEASUREMENT_CONDITIONS.md
+- docs/tdp/REVIEW_2026-10.md   # the TDP review quotes the stale values it found (report 37)
 - docs/thesis/CHAPTER_AUDIT_2026-10.md   # quotes the stale values it found, on purpose (report 37)
 - docs/review02/*
 - docs/reconciliation/*

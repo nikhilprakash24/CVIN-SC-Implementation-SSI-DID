@@ -48,3 +48,14 @@
   ~700× against the 100 ms budget), and the July attestEvent pair now names itself as history. The 28 hits in
   `docs/thesis/` are left for WM-2 D1: the checker gained a **pending** class that prints them, does not fail on
   them, fails on any new hit elsewhere (shown to fire), and reports a pending glob as CLEARED once its hits are gone.
+- **U5 = WM-2 D2, the RSU-to-RSU note.** `docs/design/RSU_TO_RSU_NOTE.md`. A single RSU-to-RSU hop uses the
+  mechanism #45 already verifies (credentialed sender, permitted message type, expiry, replay; checked in
+  `infrastructure_layer.py`); the new part is relay authority (origin versus the right to forward), which is the V2V
+  relay gap C3 already states. Recommendation **D2-a, scope out** with a chapter 6 paragraph; D2-b (one relay type,
+  three checks, about one pass) if the author wants evidence. New author decision D2.
+- **U7, TDP review (read-only).** `docs/tdp/REVIEW_2026-10.md`, written by a subagent; no TDP document changed by
+  it. 101 claims in TDP-001, 003, 007, 008 and 009: 45 OK, 6 mismatch, 2 overstated, 37 stale, 11 missing. Most
+  stale items come from the A3b re-runs of 10-22 and 10-23; layer 5 is absent from all five documents. Two findings
+  re-checked here and confirmed: TDP-001 calls #39 "status U" (it is V); #21's uncached verify is now 15.513 ms, not
+  9.654. TDP-001's 0.153 ms had already been corrected under U10. The corrections are a follow-up (new task T-15),
+  since the TDP has its own revision rule (a revision letter per document).
