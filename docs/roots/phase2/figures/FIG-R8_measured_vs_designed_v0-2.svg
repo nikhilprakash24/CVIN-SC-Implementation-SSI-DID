@@ -1,0 +1,324 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 839" width="1000" height="839" font-family="Helvetica, Arial, 'DejaVu Sans', sans-serif"><defs><pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="#fff4cc"/><line x1="0" y1="0" x2="0" y2="5" stroke="#e0a800" stroke-width="2"/></pattern><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs><rect width="1000" height="839" fill="#fff"/><text x="500.0" y="24.0" font-size="16" text-anchor="middle" fill="#222" font-weight="bold">FIG-R8 · Measured vs designed — the honesty map, one row per sub-layer</text>
+<text x="500.0" y="41.0" font-size="10" text-anchor="middle" fill="#666">Source: R6 Full-Stack Atlas v0-2 §7 (parsed verbatim) and §2.L3 narrative</text>
+<text x="14.0" y="72.0" font-size="10" text-anchor="start" fill="#222" font-weight="bold">Sub-layer</text>
+<text x="72.0" y="72.0" font-size="10" text-anchor="start" fill="#222" font-weight="bold">M in this programme (rows / files)</text>
+<text x="322.0" y="72.0" font-size="10" text-anchor="start" fill="#222" font-weight="bold">Ds only</text>
+<text x="512.0" y="72.0" font-size="10" text-anchor="start" fill="#222" font-weight="bold">Not used</text>
+<text x="682.0" y="72.0" font-size="10" text-anchor="start" fill="#222" font-weight="bold">Honest one-line summary (R6 §7)</text>
+<rect x="10.0" y="78.0" width="58.0" height="28.0" rx="0" fill="#e6dfd8" stroke="#5a4632" stroke-width="1"/>
+<text x="16.0" y="91.0" font-size="10" text-anchor="start" fill="#5a4632" font-weight="bold">LH.1</text>
+<rect x="68.0" y="78.0" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="90.0" font-size="9" text-anchor="start" fill="#222">environment headers (#27, #57)</text>
+<rect x="318.0" y="78.0" width="190.0" height="28.0" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="90.0" font-size="9" text-anchor="start" fill="#222">entropy quality</text>
+<rect x="508.0" y="78.0" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="90.0" font-size="9" text-anchor="start" fill="#777">—</text>
+<rect x="678.0" y="78.0" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="90.0" font-size="9" text-anchor="start" fill="#222">keys come from a cloud host's OS CSPRNG, or from</text>
+<text x="682.0" y="100.5" font-size="9" text-anchor="start" fill="#222">SHA-256(vehicle_id) in the testbed</text>
+<rect x="10.0" y="106.0" width="58.0" height="17.5" rx="0" fill="#e6dfd8" stroke="#5a4632" stroke-width="1"/>
+<text x="16.0" y="119.0" font-size="10" text-anchor="start" fill="#5a4632" font-weight="bold">LH.2</text>
+<rect x="68.0" y="106.0" width="250.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="72.0" y="118.0" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="318.0" y="106.0" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="118.0" font-size="9" text-anchor="start" fill="#222">HSM, SE, TEE</text>
+<rect x="508.0" y="106.0" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="118.0" font-size="9" text-anchor="start" fill="#777">TPM</text>
+<rect x="678.0" y="106.0" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="118.0" font-size="9" text-anchor="start" fill="#222">no key in this programme has lived in hardware</text>
+<rect x="10.0" y="123.5" width="58.0" height="17.5" rx="0" fill="#e6dfd8" stroke="#5a4632" stroke-width="1"/>
+<text x="16.0" y="136.5" font-size="10" text-anchor="start" fill="#5a4632" font-weight="bold">LH.3</text>
+<rect x="68.0" y="123.5" width="250.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="72.0" y="135.5" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="318.0" y="123.5" width="190.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="322.0" y="135.5" font-size="9" text-anchor="start" fill="#222">— (OBU is I, a Python object)</text>
+<rect x="508.0" y="123.5" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="135.5" font-size="9" text-anchor="start" fill="#777">CAN, Ethernet, gateway</text>
+<rect x="678.0" y="123.5" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="135.5" font-size="9" text-anchor="start" fill="#222">the vehicle is simulated</text>
+<rect x="54.0" y="128.5" width="9.0" height="9.0" rx="0" fill="#ffffff" stroke="#1f8a7a" stroke-width="1.4"/>
+<rect x="10.0" y="141.0" width="58.0" height="17.5" rx="0" fill="#e6dfd8" stroke="#5a4632" stroke-width="1"/>
+<text x="16.0" y="154.0" font-size="10" text-anchor="start" fill="#5a4632" font-weight="bold">LH.4</text>
+<rect x="68.0" y="141.0" width="250.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="72.0" y="153.0" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="318.0" y="141.0" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="153.0" font-size="9" text-anchor="start" fill="#222">GNSS time assumption</text>
+<rect x="508.0" y="141.0" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="153.0" font-size="9" text-anchor="start" fill="#777">real modems</text>
+<rect x="678.0" y="141.0" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="153.0" font-size="9" text-anchor="start" fill="#222">radio is a free-space model; time is the host clock</text>
+<rect x="10.0" y="158.5" width="58.0" height="17.5" rx="0" fill="#e6dfd8" stroke="#5a4632" stroke-width="1"/>
+<text x="16.0" y="171.5" font-size="10" text-anchor="start" fill="#5a4632" font-weight="bold">LH.5</text>
+<rect x="68.0" y="158.5" width="250.0" height="17.5" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="170.5" font-size="9" text-anchor="start" fill="#222">same-host replicates (#52, #55)</text>
+<rect x="318.0" y="158.5" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="170.5" font-size="9" text-anchor="start" fill="#222">validator hosts</text>
+<rect x="508.0" y="158.5" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="170.5" font-size="9" text-anchor="start" fill="#777">—</text>
+<rect x="678.0" y="158.5" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="170.5" font-size="9" text-anchor="start" fill="#222">one host per run</text>
+<rect x="10.0" y="176.0" width="58.0" height="17.5" rx="0" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+<text x="16.0" y="189.0" font-size="10" text-anchor="start" fill="#555555" font-weight="bold">L0.1</text>
+<rect x="68.0" y="176.0" width="250.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="72.0" y="188.0" font-size="9" text-anchor="start" fill="#222">— (PC5 mode-4 ResourcePool is I; no row)</text>
+<rect x="318.0" y="176.0" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="188.0" font-size="9" text-anchor="start" fill="#222">reselection on pseudonym change</text>
+<rect x="508.0" y="176.0" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="188.0" font-size="9" text-anchor="start" fill="#777">802.11p, NR-V2X</text>
+<rect x="678.0" y="176.0" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="188.0" font-size="9" text-anchor="start" fill="#222">no PHY/MAC result; RF linkability is Dv only (PF-44c)</text>
+<rect x="54.0" y="181.0" width="9.0" height="9.0" rx="0" fill="#ffffff" stroke="#1f8a7a" stroke-width="1.4"/>
+<rect x="10.0" y="193.5" width="58.0" height="17.5" rx="0" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+<text x="16.0" y="206.5" font-size="10" text-anchor="start" fill="#555555" font-weight="bold">L0.2</text>
+<rect x="68.0" y="193.5" width="250.0" height="17.5" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="205.5" font-size="9" text-anchor="start" fill="#222">loopback HTTP cost (#39)</text>
+<rect x="318.0" y="193.5" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="205.5" font-size="9" text-anchor="start" fill="#222">Uu backhaul</text>
+<rect x="508.0" y="193.5" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="205.5" font-size="9" text-anchor="start" fill="#777">WSMP, QUIC</text>
+<rect x="678.0" y="193.5" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="205.5" font-size="9" text-anchor="start" fill="#222">localhost only</text>
+<rect x="10.0" y="211.0" width="58.0" height="17.5" rx="0" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+<text x="16.0" y="224.0" font-size="10" text-anchor="start" fill="#555555" font-weight="bold">L0.3</text>
+<rect x="68.0" y="211.0" width="250.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="72.0" y="223.0" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="318.0" y="211.0" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="223.0" font-size="9" text-anchor="start" fill="#222">static nodes, permissioning</text>
+<rect x="508.0" y="211.0" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="223.0" font-size="9" text-anchor="start" fill="#777">devp2p, discv4/5, libp2p</text>
+<rect x="678.0" y="211.0" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="223.0" font-size="9" text-anchor="start" fill="#222">no P2P network ever ran</text>
+<rect x="8.0" y="210.0" width="974.0" height="19.5" rx="0" fill="none" stroke="#c0392b" stroke-width="2"/>
+<rect x="10.0" y="228.5" width="58.0" height="17.5" rx="0" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+<text x="16.0" y="241.5" font-size="10" text-anchor="start" fill="#555555" font-weight="bold">L0.4</text>
+<rect x="68.0" y="228.5" width="250.0" height="17.5" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="240.5" font-size="9" text-anchor="start" fill="#222">RPC counts and bytes (#21, #31, #37, #51)</text>
+<rect x="318.0" y="228.5" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="240.5" font-size="9" text-anchor="start" fill="#222">TLS to providers</text>
+<rect x="508.0" y="228.5" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="240.5" font-size="9" text-anchor="start" fill="#777">WS, Engine API</text>
+<rect x="678.0" y="228.5" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="240.5" font-size="9" text-anchor="start" fill="#222">reads are unproven</text>
+<rect x="10.0" y="246.0" width="58.0" height="28.0" rx="0" fill="#fbe4e4" stroke="#9c2c2c" stroke-width="1"/>
+<text x="16.0" y="259.0" font-size="10" text-anchor="start" fill="#9c2c2c" font-weight="bold">L1.1</text>
+<rect x="68.0" y="246.0" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="258.0" font-size="9" text-anchor="start" fill="#222">ECDSA/P-256 verify (#21, #27); Groth16 (#56–#58);</text>
+<text x="72.0" y="268.5" font-size="9" text-anchor="start" fill="#222">sigma (#59); hash enumeration (#60)</text>
+<rect x="318.0" y="246.0" width="190.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="322.0" y="258.0" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="508.0" y="246.0" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="258.0" font-size="9" text-anchor="start" fill="#777">Ed25519, BLS12-381, CL/BBS+</text>
+<rect x="678.0" y="246.0" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="258.0" font-size="9" text-anchor="start" fill="#222">the best-measured layer after gas</text>
+<rect x="10.0" y="274.0" width="58.0" height="17.5" rx="0" fill="#fbe4e4" stroke="#9c2c2c" stroke-width="1"/>
+<text x="16.0" y="287.0" font-size="10" text-anchor="start" fill="#9c2c2c" font-weight="bold">L1.2</text>
+<rect x="68.0" y="274.0" width="250.0" height="17.5" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="286.0" font-size="9" text-anchor="start" fill="#222">library versions per result</text>
+<rect x="318.0" y="274.0" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="286.0" font-size="9" text-anchor="start" fill="#222">BouncyCastle (Besu)</text>
+<rect x="508.0" y="274.0" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="286.0" font-size="9" text-anchor="start" fill="#777">anoncreds-rs</text>
+<rect x="678.0" y="274.0" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="286.0" font-size="9" text-anchor="start" fill="#222">six secp256k1 implementations in use</text>
+<rect x="10.0" y="291.5" width="58.0" height="28.0" rx="0" fill="#ece3f5" stroke="#5c3d8c" stroke-width="1"/>
+<text x="16.0" y="304.5" font-size="10" text-anchor="start" fill="#5c3d8c" font-weight="bold">L2.1</text>
+<rect x="68.0" y="291.5" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="303.5" font-size="9" text-anchor="start" fill="#222">SSTORE and log-byte counts (#30, #49)</text>
+<rect x="318.0" y="291.5" width="190.0" height="28.0" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="303.5" font-size="9" text-anchor="start" fill="#222">Bonsai</text>
+<rect x="508.0" y="291.5" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="303.5" font-size="9" text-anchor="start" fill="#777">proofs (eth_getProof)</text>
+<rect x="678.0" y="291.5" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="303.5" font-size="9" text-anchor="start" fill="#222">state is counted, never proved; the changed walk is intact</text>
+<text x="682.0" y="314.0" font-size="9" text-anchor="start" fill="#222">(D21, D22 fixed)</text>
+<rect x="10.0" y="319.5" width="58.0" height="17.5" rx="0" fill="#ece3f5" stroke="#5c3d8c" stroke-width="1"/>
+<text x="16.0" y="332.5" font-size="10" text-anchor="start" fill="#5c3d8c" font-weight="bold">L2.2</text>
+<rect x="68.0" y="319.5" width="250.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="72.0" y="331.5" font-size="9" text-anchor="start" fill="#222">— (in-memory)</text>
+<rect x="318.0" y="319.5" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="331.5" font-size="9" text-anchor="start" fill="#222">RocksDB</text>
+<rect x="508.0" y="319.5" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="331.5" font-size="9" text-anchor="start" fill="#777">—</text>
+<rect x="678.0" y="319.5" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="331.5" font-size="9" text-anchor="start" fill="#222">nothing persists beyond a run</text>
+<rect x="8.0" y="318.5" width="974.0" height="19.5" rx="0" fill="none" stroke="#c0392b" stroke-width="2"/>
+<rect x="10.0" y="337.0" width="58.0" height="17.5" rx="0" fill="#ece3f5" stroke="#5c3d8c" stroke-width="1"/>
+<text x="16.0" y="350.0" font-size="10" text-anchor="start" fill="#5c3d8c" font-weight="bold">L2.3</text>
+<rect x="68.0" y="337.0" width="250.0" height="17.5" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="349.0" font-size="9" text-anchor="start" fill="#222">replay-cache behaviour (#45)</text>
+<rect x="318.0" y="337.0" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="349.0" font-size="9" text-anchor="start" fill="#222">status list, CAS</text>
+<rect x="508.0" y="337.0" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="349.0" font-size="9" text-anchor="start" fill="#777">accumulators</text>
+<rect x="678.0" y="337.0" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="349.0" font-size="9" text-anchor="start" fill="#222">revocation lists are a Python dict or file</text>
+<rect x="10.0" y="354.5" width="58.0" height="28.0" rx="0" fill="#d9e7f5" stroke="#2c5a8c" stroke-width="1"/>
+<text x="16.0" y="367.5" font-size="10" text-anchor="start" fill="#2c5a8c" font-weight="bold">L3.1</text>
+<rect x="68.0" y="354.5" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="366.5" font-size="9" text-anchor="start" fill="#222">automine as the condition of every M1 row</text>
+<text x="72.0" y="377.0" font-size="9" text-anchor="start" fill="#222">(meta.json)</text>
+<rect x="318.0" y="354.5" width="190.0" height="28.0" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="366.5" font-size="9" text-anchor="start" fill="#222">QBFT, Gasper</text>
+<rect x="508.0" y="354.5" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="366.5" font-size="9" text-anchor="start" fill="#777">IBFT 2.0, Clique</text>
+<rect x="678.0" y="354.5" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="366.5" font-size="9" text-anchor="start" fill="#222">no consensus protocol has been measured; N_v = 1</text>
+<rect x="8.0" y="353.5" width="974.0" height="30.0" rx="0" fill="none" stroke="#c0392b" stroke-width="2"/>
+<rect x="10.0" y="382.5" width="58.0" height="17.5" rx="0" fill="#d9e7f5" stroke="#2c5a8c" stroke-width="1"/>
+<text x="16.0" y="395.5" font-size="10" text-anchor="start" fill="#2c5a8c" font-weight="bold">L3.2</text>
+<rect x="68.0" y="382.5" width="250.0" height="17.5" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="394.5" font-size="9" text-anchor="start" fill="#222">Hardhat 2.28.6</text>
+<rect x="318.0" y="382.5" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="394.5" font-size="9" text-anchor="start" fill="#222">Besu, Quorum, Ganache (configured)</text>
+<rect x="508.0" y="382.5" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="394.5" font-size="9" text-anchor="start" fill="#777">Geth, Anvil</text>
+<rect x="678.0" y="382.5" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="394.5" font-size="9" text-anchor="start" fill="#222">single-client evidence</text>
+<rect x="8.0" y="381.5" width="974.0" height="19.5" rx="0" fill="none" stroke="#c0392b" stroke-width="2"/>
+<rect x="10.0" y="400.0" width="58.0" height="28.0" rx="0" fill="#e3f0d8" stroke="#4d7a2a" stroke-width="1"/>
+<text x="16.0" y="413.0" font-size="10" text-anchor="start" fill="#4d7a2a" font-weight="bold">L4.1</text>
+<rect x="68.0" y="400.0" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="412.0" font-size="9" text-anchor="start" fill="#222">gas, exhaustively (#1–#3, #22, #25, #29–#35,</text>
+<text x="72.0" y="422.5" font-size="9" text-anchor="start" fill="#222">#47–#50, #54, #58)</text>
+<rect x="318.0" y="400.0" width="190.0" height="28.0" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="412.0" font-size="9" text-anchor="start" fill="#222">free gas, EIP-1559 pricing</text>
+<rect x="508.0" y="400.0" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="412.0" font-size="9" text-anchor="start" fill="#777">blobs</text>
+<rect x="678.0" y="400.0" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="412.0" font-size="9" text-anchor="start" fill="#222">gas is exact; price is E (#20)</text>
+<rect x="10.0" y="428.0" width="58.0" height="28.0" rx="0" fill="#e3f0d8" stroke="#4d7a2a" stroke-width="1"/>
+<text x="16.0" y="441.0" font-size="10" text-anchor="start" fill="#4d7a2a" font-weight="bold">L4.2</text>
+<rect x="68.0" y="428.0" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="440.0" font-size="9" text-anchor="start" fill="#222">role-gated attack cells (#28, #45)</text>
+<rect x="318.0" y="428.0" width="190.0" height="28.0" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="440.0" font-size="9" text-anchor="start" fill="#222">node/account permissioning, validator</text>
+<text x="322.0" y="450.5" font-size="9" text-anchor="start" fill="#222">governance</text>
+<rect x="508.0" y="428.0" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="440.0" font-size="9" text-anchor="start" fill="#777">—</text>
+<rect x="678.0" y="428.0" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="440.0" font-size="9" text-anchor="start" fill="#222">governance is single EOA keys</text>
+<rect x="8.0" y="427.0" width="974.0" height="30.0" rx="0" fill="none" stroke="#c0392b" stroke-width="2"/>
+<rect x="10.0" y="456.0" width="58.0" height="17.5" rx="0" fill="#e3f0d8" stroke="#4d7a2a" stroke-width="1"/>
+<text x="16.0" y="469.0" font-size="10" text-anchor="start" fill="#4d7a2a" font-weight="bold">L4.3</text>
+<rect x="68.0" y="456.0" width="250.0" height="17.5" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="468.0" font-size="9" text-anchor="start" fill="#222">instrument G = 60 M (meta.json)</text>
+<rect x="318.0" y="456.0" width="190.0" height="17.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="468.0" font-size="9" text-anchor="start" fill="#222">capacity at design G and Δ (PF-49)</text>
+<rect x="508.0" y="456.0" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="468.0" font-size="9" text-anchor="start" fill="#777">—</text>
+<rect x="678.0" y="456.0" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="468.0" font-size="9" text-anchor="start" fill="#222">capacity is Dv, not measured</text>
+<rect x="10.0" y="473.5" width="58.0" height="17.5" rx="0" fill="#fde2c8" stroke="#c46f00" stroke-width="1"/>
+<text x="16.0" y="486.5" font-size="10" text-anchor="start" fill="#c46f00" font-weight="bold">L5.1</text>
+<rect x="68.0" y="473.5" width="250.0" height="17.5" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="485.5" font-size="9" text-anchor="start" fill="#222">precompile gas in aggregate (#58)</text>
+<rect x="318.0" y="473.5" width="190.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="322.0" y="485.5" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="508.0" y="473.5" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="485.5" font-size="9" text-anchor="start" fill="#777">sha256, modexp, BLS</text>
+<rect x="678.0" y="473.5" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="485.5" font-size="9" text-anchor="start" fill="#222">ecrecover and bn256 carry the load</text>
+<rect x="10.0" y="491.0" width="58.0" height="28.0" rx="0" fill="#fde2c8" stroke="#c46f00" stroke-width="1"/>
+<text x="16.0" y="504.0" font-size="10" text-anchor="start" fill="#c46f00" font-weight="bold">L5.2</text>
+<rect x="68.0" y="491.0" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="503.0" font-size="9" text-anchor="start" fill="#222">per-function gas and attack cells for ten columns</text>
+<text x="72.0" y="513.5" font-size="9" text-anchor="start" fill="#222">(#25, #28, #29–#36, #49–#54)</text>
+<rect x="318.0" y="491.0" width="190.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="322.0" y="503.0" font-size="9" text-anchor="start" fill="#222">— (IdtxExecutor is I)</text>
+<rect x="508.0" y="491.0" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="503.0" font-size="9" text-anchor="start" fill="#777">—</text>
+<rect x="678.0" y="491.0" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="503.0" font-size="9" text-anchor="start" fill="#222">117 SCF rows; negative tests for 24 of 44 checked rows</text>
+<text x="682.0" y="513.5" font-size="9" text-anchor="start" fill="#222">(Q-R6-07); CEI clean on four surfaces (I)</text>
+<rect x="54.0" y="496.0" width="9.0" height="9.0" rx="0" fill="#ffffff" stroke="#1f8a7a" stroke-width="1.4"/>
+<rect x="10.0" y="519.0" width="58.0" height="28.0" rx="0" fill="#fde2c8" stroke="#c46f00" stroke-width="1"/>
+<text x="16.0" y="532.0" font-size="10" text-anchor="start" fill="#c46f00" font-weight="bold">L5.3</text>
+<rect x="68.0" y="519.0" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="531.0" font-size="9" text-anchor="start" fill="#222">legacy/EIP-155; UserOps (#25, #50); Signed meta-tx</text>
+<text x="72.0" y="541.5" font-size="9" text-anchor="start" fill="#222">(#50)</text>
+<rect x="318.0" y="519.0" width="190.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="322.0" y="531.0" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="508.0" y="519.0" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="531.0" font-size="9" text-anchor="start" fill="#777">2930, 4844, 7702</text>
+<rect x="678.0" y="519.0" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="531.0" font-size="9" text-anchor="start" fill="#222">chain id binds the outer tx only</text>
+<rect x="10.0" y="547.0" width="58.0" height="17.5" rx="0" fill="#fff1c9" stroke="#a37a00" stroke-width="1"/>
+<text x="16.0" y="560.0" font-size="10" text-anchor="start" fill="#a37a00" font-weight="bold">L6.1</text>
+<rect x="68.0" y="547.0" width="250.0" height="17.5" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="559.0" font-size="9" text-anchor="start" fill="#222">did:ethr on chain (#24, #31, #51)</text>
+<rect x="318.0" y="547.0" width="190.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="322.0" y="559.0" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="508.0" y="547.0" width="170.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="559.0" font-size="9" text-anchor="start" fill="#777">did:indy</text>
+<rect x="678.0" y="547.0" width="302.0" height="17.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="559.0" font-size="9" text-anchor="start" fill="#222">did:ethr and did:mobi are real; the rest are synthesised</text>
+<rect x="10.0" y="564.5" width="58.0" height="28.0" rx="0" fill="#fff1c9" stroke="#a37a00" stroke-width="1"/>
+<text x="16.0" y="577.5" font-size="10" text-anchor="start" fill="#a37a00" font-weight="bold">L6.2</text>
+<rect x="68.0" y="564.5" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="576.5" font-size="9" text-anchor="start" fill="#222">VC v2.0 Data Integrity, thesis cryptosuite (#4,</text>
+<text x="72.0" y="587.0" font-size="9" text-anchor="start" fill="#222">#27)</text>
+<rect x="318.0" y="564.5" width="190.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="322.0" y="576.5" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="508.0" y="564.5" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="576.5" font-size="9" text-anchor="start" fill="#777">AnonCreds, BBS+, mDL</text>
+<rect x="678.0" y="564.5" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="576.5" font-size="9" text-anchor="start" fill="#222">selective disclosure is SD-JWT-style digests</text>
+<rect x="10.0" y="592.5" width="58.0" height="28.0" rx="0" fill="#fff1c9" stroke="#a37a00" stroke-width="1"/>
+<text x="16.0" y="605.5" font-size="10" text-anchor="start" fill="#a37a00" font-weight="bold">L6.3</text>
+<rect x="68.0" y="592.5" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="604.5" font-size="9" text-anchor="start" fill="#222">Set A/B coverage (#53, #54); ZK admission (#58);</text>
+<text x="72.0" y="615.0" font-size="9" text-anchor="start" fill="#222">attestations (#28)</text>
+<rect x="318.0" y="592.5" width="190.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="322.0" y="604.5" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="508.0" y="592.5" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="604.5" font-size="9" text-anchor="start" fill="#777">—</text>
+<rect x="678.0" y="592.5" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="604.5" font-size="9" text-anchor="start" fill="#222">IDTX exists as code without a result (I)</text>
+<rect x="54.0" y="597.5" width="9.0" height="9.0" rx="0" fill="#ffffff" stroke="#1f8a7a" stroke-width="1.4"/>
+<rect x="10.0" y="620.5" width="58.0" height="28.0" rx="0" fill="#dff3f0" stroke="#1f6f63" stroke-width="1"/>
+<text x="16.0" y="633.5" font-size="10" text-anchor="start" fill="#1f6f63" font-weight="bold">L7.1</text>
+<rect x="68.0" y="620.5" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="632.5" font-size="9" text-anchor="start" fill="#222">provider timings (#21, #32, #33, #37); Steward Sim</text>
+<text x="72.0" y="643.0" font-size="9" text-anchor="start" fill="#222">(#61)</text>
+<rect x="318.0" y="620.5" width="190.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="322.0" y="632.5" font-size="9" text-anchor="start" fill="#222">—</text>
+<rect x="508.0" y="620.5" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="632.5" font-size="9" text-anchor="start" fill="#777">ACA-Py, Veramo</text>
+<rect x="678.0" y="620.5" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="632.5" font-size="9" text-anchor="start" fill="#222">Python providers, not agents</text>
+<rect x="10.0" y="648.5" width="58.0" height="28.0" rx="0" fill="#dff3f0" stroke="#1f6f63" stroke-width="1"/>
+<text x="16.0" y="661.5" font-size="10" text-anchor="start" fill="#1f6f63" font-weight="bold">L7.2</text>
+<rect x="68.0" y="648.5" width="250.0" height="28.0" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="660.5" font-size="9" text-anchor="start" fill="#222">message freshness and verifier v3 (#44–#48); state</text>
+<text x="72.0" y="671.0" font-size="9" text-anchor="start" fill="#222">refresh k (#32, #37, #46); message size (#23)</text>
+<rect x="318.0" y="648.5" width="190.0" height="28.0" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="660.5" font-size="9" text-anchor="start" fill="#222">1609.2 encodings; TTL</text>
+<rect x="508.0" y="648.5" width="170.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="660.5" font-size="9" text-anchor="start" fill="#777">DIDComm</text>
+<rect x="678.0" y="648.5" width="302.0" height="28.0" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="660.5" font-size="9" text-anchor="start" fill="#222">JSON-signed messages; staleness bounded in messages, not time</text>
+<rect x="10.0" y="676.5" width="58.0" height="38.5" rx="0" fill="#dff3f0" stroke="#1f6f63" stroke-width="1"/>
+<text x="16.0" y="689.5" font-size="10" text-anchor="start" fill="#1f6f63" font-weight="bold">L7.3</text>
+<rect x="68.0" y="676.5" width="250.0" height="38.5" rx="0" fill="#e4f2e4" stroke="#2b6b2b" stroke-width="1.2"/>
+<text x="72.0" y="688.5" font-size="9" text-anchor="start" fill="#222">V2V in --simulate (#27); RSU/TMC (#44–#48);</text>
+<text x="72.0" y="699.0" font-size="9" text-anchor="start" fill="#222">lifecycle (#30, #33); pseudonym pool (#38,</text>
+<text x="72.0" y="709.5" font-size="9" text-anchor="start" fill="#222">negative)</text>
+<rect x="318.0" y="676.5" width="190.0" height="38.5" rx="0" fill="#fbf1e6" stroke="#c46f00" stroke-width="1.2" stroke-dasharray="3,2"/>
+<text x="322.0" y="688.5" font-size="9" text-anchor="start" fill="#222">SUMO-binary runs (#15 E), ns-3</text>
+<rect x="508.0" y="676.5" width="170.0" height="38.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="512.0" y="688.5" font-size="9" text-anchor="start" fill="#777">—</text>
+<rect x="678.0" y="676.5" width="302.0" height="38.5" rx="0" fill="#ffffff" stroke="#ccc" stroke-width="0.6"/>
+<text x="682.0" y="688.5" font-size="9" text-anchor="start" fill="#222">mobility is mocked in the runs of record</text>
+<text x="14.0" y="759.0" font-size="9" text-anchor="start" fill="#1f8a7a">Teal I marker = the row names an item at status I (implemented, unmeasured: code runs, no register row) — L0.1 ResourcePool, LH.3 OBU object, L5.2 IdtxExecutor/CEI check, L6.3 IDTX.</text>
+<text x="14.0" y="733.0" font-size="9" text-anchor="start" fill="#c0392b">Red outline = consensus / finality / availability / persistence sub-layers: nothing above an automining single process has been executed. R6 §2.L3: "The repository's executed agreement mechanism</text>
+<text x="14.0" y="745.0" font-size="9" text-anchor="start" fill="#c0392b">is Hardhat automine ... provides ordering trivially and safety and liveness not at all"; Besu, QBFT, Gasper, RocksDB, node permissioning are DESIGN.</text>
+<line x1="15.0" y1="795.0" x2="985.0" y2="795.0" stroke="#ccc" stroke-width="1"/>
+<rect x="20.0" y="801.0" width="9.0" height="9.0" rx="0" fill="#3f8f3f" stroke="#2b6b2b" stroke-width="1.4"/>
+<text x="33.0" y="809.0" font-size="9" text-anchor="start" fill="#444">MEASURED</text>
+<rect x="93.2" y="801.0" width="9.0" height="9.0" rx="0" fill="#ffffff" stroke="#1f8a7a" stroke-width="1.4"/>
+<text x="106.2" y="809.0" font-size="9" text-anchor="start" fill="#444">I implemented-unmeasured</text>
+<rect x="252.8" y="801.0" width="9.0" height="9.0" rx="0" fill="#f3f3f3" stroke="#c46f00" stroke-width="1.4" stroke-dasharray="3,2"/>
+<text x="265.8" y="809.0" font-size="9" text-anchor="start" fill="#444">Ds DESIGN</text>
+<rect x="331.4" y="801.0" width="9.0" height="9.0" rx="0" fill="#ffffff" stroke="#bbbbbb" stroke-width="1.4"/>
+<text x="344.4" y="809.0" font-size="9" text-anchor="start" fill="#444">— not used / empty</text>
+<text x="20.0" y="825.0" font-size="9" text-anchor="start" fill="#666">Source: R6 Full-Stack Atlas v0-2 §7 table, locked by R9 SLD-12 (cell text verbatim, markdown stripped). Scale R9 PN-32 · make_phase2_figures_v0-2.py (v0-2 inputs).</text></svg>
