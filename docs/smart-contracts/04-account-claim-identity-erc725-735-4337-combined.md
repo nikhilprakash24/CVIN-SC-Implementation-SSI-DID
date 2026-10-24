@@ -292,3 +292,80 @@ No references were found in `cv2x-testbed/`, `phase2` code, `5_zkp-agent-identit
 - `1_blockchain-identity/_research-copies/ERC725/contracts/CVIN_DID_ERC725.sol` is **byte-identical** (`cmp`) to `contracts/ERC725/CVIN_DID_ERC725.sol`. Its `README.md` is a stale description: it presents `execute` and `approve` as functional and contains a placeholder `git clone https://github.com/your-repo/...` setup.
 - `1_blockchain-identity/_research-copies/ERC725xy/` contains only `README.md` files (including `contracts_all/README.md`) and **no .sol copy** of the X/Y contract.
 - No other copies of `CVINVehicleERC725XY`, `CVINExecuteTarget`, `CVINVehicleClaimHolder`, `CVINVehicleAccount`, `CVINMinimalEntryPoint` or `CVINCombinedIdentity` exist outside `1_blockchain-identity/contracts/` (searched by filename, excluding node_modules).
+
+---
+
+## Diagrams & examples
+
+### ERC-4337 UserOperation flow (minimal harness)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Owner as Owner key (EOA, off-chain signer)
+    participant Bundler as Bundler / any EOA
+    participant EP as CVINMinimalEntryPoint
+    participant Acct as CVINVehicleAccount
+    participant Target as Target (self or external)
+    Bundler->>EP: nonces(account)
+    Bundler->>EP: getUserOpHash(userOp) (v0.7 layout + address(EP) + chainid)
+    Owner-->>Bundler: signMessage(getBytes(userOpHash)) (EIP-191)
+    Bundler->>EP: handleOp(userOp)
+    EP->>EP: require initCode empty, nonce == nonces[sender]; nonces[sender]++
+    EP->>Acct: validateUserOp(userOp, userOpHash, 0)
+    Acct->>Acct: msg.sender == entryPoint; ecrecover(EIP-191(userOpHash)) == owner ?
+    Acct-->>EP: 0 (ok) or 1 (SIG_VALIDATION_FAILED)
+    EP->>EP: require validationData == 0
+    EP->>Acct: call(userOp.callData), e.g. execute / setAttribute / transferOwnership
+    Acct->>Target: execute(target, value, data) -> target.call (optional)
+    Acct-->>EP: success (revert is bubbled up, whole tx reverts)
+    EP-->>Bundler: emit UserOperationHandled(userOpHash, sender, nonce, true)
+```
+
+Ethers v6, mirroring `sandbox/options/erc-4337/adapter.js` (`signedOp`, L172-192):
+
+```js
+const callData = account.interface.encodeFunctionData('setAttribute', [ethers.id('vin'), ethers.toUtf8Bytes(vin)]);
+const userOp = {
+  sender: await account.getAddress(),
+  nonce: await entryPoint.nonces(await account.getAddress()),
+  initCode: '0x', callData,
+  accountGasLimits: ethers.ZeroHash, preVerificationGas: 0, gasFees: ethers.ZeroHash, // hashed, not enforced
+  paymasterAndData: '0x', signature: '0x',
+};
+const userOpHash = await entryPoint.getUserOpHash(userOp);
+userOp.signature = await owner.signMessage(ethers.getBytes(userOpHash)); // EIP-191 over userOpHash
+await (await entryPoint.connect(bundler).handleOp(userOp)).wait();
+```
+
+### ERC-735 claim issue and verify (`CVINVehicleClaimHolder`)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Owner as Vehicle owner
+    participant Issuer as Issuer (OEM / inspector)
+    participant H as CVINVehicleClaimHolder (one per vehicle)
+    participant V as Verifier
+    Owner->>H: deploy(vin) -> VehicleIdentityCreated
+    Owner->>H: authorizeIssuer(issuer, topic) -> IssuerAuthorized (D25a)
+    Issuer-->>Owner: sig = signMessage(keccak256(holder, topic, data)) (EIP-191)
+    Owner->>H: addClaim(topic, 1, issuer, sig, data, uri)
+    H->>H: recover == issuer, EIP-2 low-s, not revokedClaims, issuer==owner or authorised, topic 1 ends with VIN (D25b)
+    H-->>Owner: ClaimRequested + ClaimAdded (or ClaimChanged on update)
+    V->>H: getClaimIdsByTopic(topic) / getClaim(claimId) / claimExists(issuer, topic)
+    Issuer->>H: removeClaim(claimId) or revokeClaimContent(topic, data) -> revokedClaims (K-2)
+```
+
+Ethers v6, mirroring `sandbox/options/erc-735/adapter.js` (`addClaim`, L131-157):
+
+```js
+const digest = ethers.solidityPackedKeccak256(['address', 'uint256', 'bytes'], [holderAddr, topic, data]);
+const sig = await issuer.signMessage(ethers.getBytes(digest)); // EIP-191 prefixed, as the contract expects
+if (!(await holder.isAuthorizedIssuer(issuer.address, topic)))
+  await (await holder.connect(owner).authorizeIssuer(issuer.address, topic)).wait();
+await (await holder.connect(owner).addClaim(topic, 1, issuer.address, sig, data, '')).wait();
+const claimId = ethers.solidityPackedKeccak256(['address', 'uint256'], [issuer.address, topic]);
+```
+
+For `CVINCombinedIdentity` the digest also includes `identity` and is signed **raw**, without the EIP-191 envelope (`sandbox/options/cvin-combined/adapter.js` L154): `ethers.Signature.from(wallet.signingKey.sign(digest)).serialized`. A `signMessage` signature from the ERC-735 flow above is therefore rejected by the Combined registry, and the reverse also holds.

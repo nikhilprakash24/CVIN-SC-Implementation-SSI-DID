@@ -286,3 +286,97 @@ All paths below are relative to the repo root. `1bi/` is short for `1_blockchain
 | `test/*.js` | `1bi/test/L2-identity-system/per-option/ERC721/*.js` | Not identical: the diff is 41, 24 and 10 lines (combined, identityBased, regularExtended). The live versions are the maintained ones. |
 
 There are no byte-identical copies of `CVINVehicleNFT`, `CVINVehicleCredential1155` or `CVINVehicleLSP8` anywhere in the repo. `_normalizeVIN` is deliberately duplicated in all three, with only the revert prefixes differing.
+
+---
+
+## Diagrams & examples
+
+The three primary contracts implement the same lifecycle, but each gives a different party control. The diagrams follow the sandbox adapter mappings described above.
+
+**ERC-721 (`CVINVehicleNFT`)**: the holder transfers, and an admin revokes softly.
+
+```mermaid
+sequenceDiagram
+    actor M as Manufacturer (MANUFACTURER_ROLE)
+    actor S as Service center (SERVICE_CENTER_ROLE)
+    actor H as Holder
+    actor A as Admin (DEFAULT_ADMIN_ROLE)
+    participant N as CVINVehicleNFT
+    M->>N: mintVehicle(to, vin, make, model, year, color, uri)
+    N-->>H: _safeMint → onERC721Received (if contract)
+    N-->>M: Transfer, MetadataUpdate, VehicleMinted
+    S->>N: addServiceRecord(tokenId, "key=value")
+    N-->>S: ServiceRecordAdded
+    H->>N: safeTransferFrom(holder, buyer, tokenId)
+    N-->>H: VehicleTransferred + Transfer (history appended)
+    A->>N: deactivateVehicle(tokenId)
+    N-->>A: VehicleDeactivated (active=false, not burned)
+```
+
+**ERC-1155 (`CVINVehicleCredential1155`)**: the issuer handles every step, because credentials are soulbound.
+
+```mermaid
+sequenceDiagram
+    actor I as Issuer (ISSUER_ROLE)
+    participant C as CVINVehicleCredential1155
+    I->>C: registerVehicle(vehicle, vin)
+    C-->>I: TransferSingle(BIRTH_CERT), VehicleRegistered, CredentialIssued
+    I->>C: issueCredential(vehicle, INSPECTION_CERT, 1)
+    I->>C: setTokenURI(type, uri)
+    C-->>I: URI, CredentialURIUpdated
+    I->>C: issuerTransferIdentity(vehicle, newVehicle)
+    C-->>I: TransferBatch, IdentityRebound (VIN re-bound)
+    Note over C: safeTransferFrom / safeBatchTransferFrom always revert
+    loop each held type t (credentialTypesOf)
+        I->>C: revokeCredential(newVehicle, t, balance)
+    end
+    I->>C: revokeCredential(newVehicle, BIRTH_CERT, 1)
+    C-->>I: CredentialRevoked (VIN indexes deleted)
+```
+
+**LSP8 (`CVINVehicleLSP8`)**: the authority writes data, and the token owner transfers.
+
+```mermaid
+sequenceDiagram
+    actor O as Authority (contract owner)
+    actor T as Token owner
+    participant L as CVINVehicleLSP8
+    O->>L: mintVehicle(tokenOwner, vin)
+    L-->>O: TokenIdDataChanged(DATA_KEY_VIN), DataChanged, Transfer(force=true), VehicleMinted
+    O->>L: setDataForTokenId(tokenId, keccak256(key), value)
+    T->>L: transfer(tokenOwner, to, tokenId, true, "0x")
+    L-->>T: Transfer(operator, from, to, tokenId, force, data)
+    O->>L: revokeVehicle(tokenId, "0x")
+    L-->>O: Transfer(to 0), VehicleRevoked (generation++)
+```
+
+**ethers v6 usage.** The snippet below is condensed from `sandbox/options/erc-721/adapter.js` (L81-153), `sandbox/options/erc-1155/adapter.js` (L93-149) and `sandbox/options/lsp8/adapter.js` (L97-148). The Hardhat `ethers` object is assumed.
+
+```js
+// ERC-721: the deployer holds MANUFACTURER_ROLE; grant SERVICE_CENTER_ROLE for setAttribute
+const nft = await (await ethers.getContractFactory('CVINVehicleNFT', deployer)).deploy();
+await nft.grantServiceCenterRole(deployer.address);
+await (await nft.mintVehicle(owner.address, vin17, 'CVIN', 'Sandbox', 2024, 'none',
+  `ipfs://cvin-vehicle/${vin17}.json`)).wait();
+const tokenId = await nft.vinToTokenId(vin17);
+await nft.addServiceRecord(tokenId, 'colour=blue');
+await nft.connect(owner)['safeTransferFrom(address,address,uint256)'](owner.address, buyer.address, tokenId);
+await nft.deactivateVehicle(tokenId);              // soft revoke, token not burned
+
+// ERC-1155: issuer-mediated only
+const c = await (await ethers.getContractFactory('CVINVehicleCredential1155', deployer)).deploy();
+await c.registerVehicle(owner.address, vin17);
+await c.issueCredential(owner.address, 3n, 1n);    // INSPECTION_CERT
+await c.issuerTransferIdentity(owner.address, buyer.address);
+for (const t of await c.credentialTypesOf(buyer.address))
+  await c.revokeCredential(buyer.address, t, await c.balanceOf(buyer.address, t));
+await c.revokeCredential(buyer.address, 1n, 1n);   // BIRTH_CERT last (D8)
+
+// LSP8: bytes32 tokenId = keccak256(normalised VIN)
+const l = await (await ethers.getContractFactory('CVINVehicleLSP8', deployer)).deploy('CVIN Vehicle Identity LSP8', 'CVIN-LSP8');
+await l.mintVehicle(owner.address, vin17);
+const id = await l.tokenIdForVIN(vin17);
+await l.setDataForTokenId(id, ethers.id('colour'), ethers.toUtf8Bytes('blue'));
+await l.connect(owner).transfer(owner.address, buyer.address, id, true, '0x');
+await l.revokeVehicle(id, '0x');
+```

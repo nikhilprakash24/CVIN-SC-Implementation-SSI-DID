@@ -393,9 +393,9 @@ constructor, then `_initializeAllowedIssuers()`.
   Without one, even the issuer of the event cannot attest. A current owner without a role cannot
   attest either. `hasAttested` is set before the signature check, but a revert rolls it back
   (tested: "a reverted attempt does not consume the attester's slot").
-- The signature is stored on-chain even though it has already been checked. That costs gas: the
-  sandbox manifest records `attestEvent` at about 192,749 gas, and
-  `4_comparison-framework/results/gas_benchmark.json` notes 222,070.
+- The signature is stored on-chain even though it has already been checked, which adds gas.
+  A third-party `attestEvent` costs about 222,082 gas (register #28; see
+  `docs/AFTER_ACTION_REPORT_22.md`).
 - **Events are append-only.** They cannot be revoked or corrected. De-authorising an issuer does
   not invalidate its past events. `DECOMMISSION` and `THEFT_REPORT` are plain records: they do not
   call `revokeIdentity` or freeze anything.
@@ -622,3 +622,79 @@ constructor, then `_initializeAllowedIssuers()`.
   - `CVINVehicleDIDRegistry.sol` (ERC1056 folder) only references
     `MOBIVIDRegistry.PERMANENT_ATTRIBUTE_VALIDITY` in a comment; it is not a copy.
   - Old experiment drivers live under `cv2x-testbed/scripts/archive-2026-10-03/`.
+
+---
+
+## Diagrams & examples
+
+> The three `.sol` files now carry full NatSpec (comments only; code is unchanged). Inserting the
+> comment lines shifted line numbers, so the `Lxxx` references and md5 values above describe the
+> pre-NatSpec revision; the symbol names remain accurate.
+
+### Typical lifecycle (V2)
+
+```mermaid
+sequenceDiagram
+    actor RA as Registry authority (deployer)
+    actor OEM as Manufacturer
+    actor O1 as First owner
+    actor ISS as Issuer (e.g. DMV / inspection)
+    actor O2 as Second owner
+    participant R as MOBIVIDRegistryV2
+    RA->>R: deploy (RA = registryAuthority + manufacturer; allowedIssuers matrix filled)
+    RA->>R: authorizeManufacturer(OEM)
+    RA->>R: authorizeIssuer(ISS, GOVERNMENT_DMV)
+    OEM->>R: registerVehicleBirth(id, vinHash, encVIN, certHash, O1, attrs)
+    R-->>R: VehicleBirthRegistered, DIDOwnerChanged (+ DIDAttributeChanged)
+    OEM->>R: anchorVehicleKey(id, pubkey)  (once, before first sale)
+    O1->>R: addDelegate(id, bytes32("veriKey"), ISS, ttl)  (consent, D54)
+    ISS->>R: recordLifecycleEvent(id, REGISTRATION, odo, dataHash, vcHash, "BC-CAN")
+    R-->>ISS: LifecycleEventRecorded(eventId)
+    ISS->>R: attestEvent(eventId, id, EIP-191 sig)
+    R-->>R: ECDSA.recover == msg.sender, EventAttested
+    O1->>R: transferVehicleOwnership(id, O2, odo, "CA DMV")
+    R-->>R: OwnershipTransfer pushed, DIDOwnerChanged, VehicleOwnershipTransferred
+    O2->>R: revokeIdentity(id)  (terminal: every mutator reverts afterwards)
+```
+
+### Roles and permissions
+
+```mermaid
+flowchart LR
+    RA[registryAuthority] -->|authorizeManufacturer / revoke| M[authorizedManufacturers]
+    RA -->|authorizeIssuer / revoke| I[authorizedIssuers: one IssuerRole per address]
+    RA -->|transferRegistryAuthority| RA
+    M -->|registerVehicleBirth| V((vehicle identity))
+    M -.->|anchorVehicleKey: registering OEM, once, before first transfer| V
+    OW[ERC-1056 owner] -->|transferVehicleOwnership, add/revokeDelegate, setAttribute, anchorVehicleKey, revokeIdentity| V
+    I -->|recordLifecycleEvent per allowedIssuers matrix; OWNER role only on own vehicle| V
+    I -->|attestEvent: also needs owner or veriKey delegate + valid signature| V
+```
+
+### ethers v6 example
+
+Mirrors `1_blockchain-identity/test/L2-identity-system/per-option/MOBIVID/MOBIVIDRegistry.test.js`
+(`deployV2Fixture`, `extractEventId`, `attestationSignature`):
+
+```js
+const registry = await (await ethers.getContractFactory(V2_FQN)).deploy();
+await registry.authorizeManufacturer(manufacturer.address);
+await registry.authorizeIssuer(dmv.address, IssuerRole.GOVERNMENT_DMV);
+
+await registry.connect(manufacturer).registerVehicleBirth(
+  vehicle.address, VIN_HASH, "encrypted:VIN", BIRTH_CERT_HASH, firstOwner.address, BIRTH_ATTRS);
+
+// D54: the attester needs the owner's consent as a veriKey delegation (ASCII bytes32, not keccak)
+await registry.connect(firstOwner).addDelegate(
+  vehicle.address, ethers.encodeBytes32String("veriKey"), dmv.address, 86400);
+
+const receipt = await (await registry.connect(dmv).recordLifecycleEvent(
+  vehicle.address, EventType.REGISTRATION, 11200, DATA_HASH, CRED_HASH, "BC-CAN")).wait();
+const eventId = extractEventId(registry, receipt);   // parses LifecycleEventRecorded
+
+const inner = ethers.solidityPackedKeccak256(
+  ["address", "uint256", "address", "bytes32"],
+  [await registry.getAddress(), chainId, vehicle.address, eventId]);
+const sig = await dmv.signMessage(ethers.getBytes(inner));   // EIP-191 prefix
+await registry.connect(dmv).attestEvent(eventId, vehicle.address, sig);
+```

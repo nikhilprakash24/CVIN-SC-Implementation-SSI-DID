@@ -230,3 +230,61 @@ The `*Signed` entry points let a relayer submit operations for the identity owne
   - `1_blockchain-identity/contracts/MOBI/ERC1056Registry.sol`: the "ERC-1056 / vehicle profile" sandbox option.
   - `cv2x-testbed/contracts/ERC1056Registry.sol`: the cv2x testbed registry, which `scripts/experiment_pseudonym_pool.js:6-7` explicitly says is "NOT" this one (K-5).
 - `1_blockchain-identity/_research-copies/ERC1056/` holds research notes only (Markdown summaries of upstream EthereumDIDRegistry / EthrDID / EthrDIDResolver, plus comparisons), no `.sol`.
+
+---
+
+## Diagrams & examples
+
+**Lifecycle (wrapper-controlled mode shown after the direct-mode steps)**
+
+```mermaid
+sequenceDiagram
+    participant M as Manufacturer
+    participant O as Vehicle owner (DID = address)
+    participant R as Relayer
+    participant W as CVINVehicleDIDRegistry
+    participant D as EthereumDIDRegistry
+    participant X as Off-chain resolver
+    M->>W: createVehicleDID(vin, owner, ...)
+    W-->>M: VehicleDIDCreated(did, vin, owner, manufacturer)
+    O->>D: addDelegate(did, keccak256("veriKey"), key, validity)
+    D-->>O: DIDDelegateChanged
+    O->>D: setAttribute(did, keccak256(name), value, validity)
+    D-->>O: DIDAttributeChanged
+    R->>D: changeOwnerSigned(did, v, r, s, newOwner) (owner-signed raw digest)
+    D-->>R: DIDOwnerChanged
+    Note over O,D: optional hand-over to wrapper (irreversible)
+    O->>D: changeOwner(did, W)
+    O->>W: setVehicleAttributes(did, make, model, ...)
+    W->>D: setAttribute x8 (100-year validity)
+    O->>W: transferVehicleOwnership(did, newOwner)
+    X->>D: identityOwner(did), changed(did)
+    X->>D: walk DIDOwnerChanged/DIDDelegateChanged/DIDAttributeChanged via previousChange
+    X->>W: getVINFromDID(did), vehicleOwnerOf(did)
+```
+
+**ethers v6 example** (mirrors `sandbox/options/erc-1056-uport/adapter.js`: `create`, `addKeyOrDelegate`, `setAttribute` and `signedOp`)
+
+```js
+const { ethers } = require('hardhat');
+const registry = await (await ethers.getContractFactory('EthereumDIDRegistry')).deploy();
+const wrapper = await (await ethers.getContractFactory('CVINVehicleDIDRegistry'))
+  .deploy(await registry.getAddress());           // deployer = admin + first manufacturer
+
+// Explicit, VIN-bound creation (the DID is the owner's address)
+await wrapper.connect(deployer).createVehicleDID(
+  '1HGCM82633A004352', owner.address, 'Honda', 'Accord', 2024, 'Blue', 'ENG123', 1700000000, 'L2');
+
+// Direct mode: the owner writes to the registry
+await registry.connect(owner).addDelegate(owner.address, ethers.id('veriKey'), key.address, 86400);
+await registry.connect(owner).setAttribute(owner.address, ethers.id('did/svc/MessagingService'),
+  ethers.toUtf8Bytes('https://example.org/msg'), 365 * 24 * 3600);
+
+// Meta-tx: raw ERC-1056 digest (no EIP-191 prefix, no chainid), relayed by anyone
+const nonce = await registry.nonce(await registry.identityOwner(owner.address));
+const digest = ethers.solidityPackedKeccak256(
+  ['bytes1', 'bytes1', 'address', 'uint256', 'address', 'string', 'address'],
+  ['0x19', '0x00', await registry.getAddress(), nonce, owner.address, 'changeOwner', newOwner]);
+const sig = ownerWallet.signingKey.sign(digest);
+await registry.connect(relayer).changeOwnerSigned(owner.address, sig.v, sig.r, sig.s, newOwner);
+```
