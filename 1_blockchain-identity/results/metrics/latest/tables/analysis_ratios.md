@@ -12,4 +12,4 @@
 | Zero→nonzero SSTOREs (× baseline) | 1 | 1.13 | 11.50 | 10.38 | 18.13 | 2.25 | 4.75 | 5.25 | 4.63 | 10.13 |
 | Lifetime transactions (× baseline) | 1 | 0.77 | 0.65 | 1 | 0.58 | 0.81 | 0.62 | 0.58 | 0.96 | 0.73 |
 
-_Run 2026-10-15T05-03-01Z_ef2c851 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
+_Run 2026-10-04T09-50-29Z_0eef6af · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
