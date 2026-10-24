@@ -29,3 +29,12 @@
   form the sister session's master plan uses; the to-dos and blockers with what each unblocks; a reading order; and
   the artifact catalogue by importance and by date, with the published pages. The sister session's master plan could
   not be read here (the documents connector did not connect), so §6 follows its described form, not its text.
+- **Visual atlas.** `docs/figures/master_atlas.html`, published as the private page *CVIN-SC Master Atlas*
+  (https://claude.ai/artifact/99tvf1uGNF8r8ekpWXJffM); its content is the master plan's.
+- **U6, chapter audit (read-only).** `docs/thesis/CHAPTER_AUDIT_2026-10.md`, written by a subagent from the register
+  and the latency charter; no chapter changed. Over chapters 1, 2, 4, 6 and 7: 39 OK, 22 mismatch, 2 overstated,
+  16 unsourced, 13 stale. Two findings re-checked here against the register and confirmed: chapter 1 calls H5
+  "supported outright" while #36 has CVIN-Combined dominated by ERC-4337 on all six criteria; chapters 6 and 7 quote
+  the V2V warm verify as 0.153 ms where #27 reads 0.142 ms [0.141, 0.143]. **Finding about the tooling:** the
+  stale-figure checker did not catch 0.153 in the chapters, so its entries miss superseded #27 values; this goes to
+  U10. The fixes are WM-2 D1's editing half, which waits on D-1.

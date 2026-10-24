@@ -176,7 +176,7 @@ That is item Q-B7 in §6 and task T-12 in §7.
 ### 5.1 Next, in order
 | # | Work | Produces | Waits on |
 |---|---|---|---|
-| 1 | U6: read-only chapter audit (chapters 1, 2, 4, 6, 7) | `docs/thesis/CHAPTER_AUDIT_2026-10.md` | nothing; it stopped on a rate limit and resumes |
+| 1 | U6: read-only chapter audit, **done 10-24**: 39 OK, 22 mismatch, 2 overstated, 16 unsourced, 13 stale | `docs/thesis/CHAPTER_AUDIT_2026-10.md` | the fixes are WM-2 D1, after D-1 |
 | 2 | U7: read-only review of the hand-written TDP documents | `docs/tdp/REVIEW_2026-10.md` | nothing |
 | 3 | U5 = WM-2 D2: RSU-to-RSU design note | `docs/design/RSU_TO_RSU_NOTE.md` | nothing; the build decision is yours |
 | 4 | U10: stale-figure patterns for small counts | checker entries | nothing |
@@ -333,7 +333,7 @@ are documents only until the defence.
 ### 10.3 Published pages (private, in your claude.ai gallery)
 | Page | Link | What | Last updated |
 |---|---|---|---|
-| CVIN-SC Master Atlas | see the chat that wrote this file | the visual version of this file | 2026-10-24 |
+| CVIN-SC Master Atlas | https://claude.ai/artifact/99tvf1uGNF8r8ekpWXJffM (source `docs/figures/master_atlas.html`) | the visual version of this file | 2026-10-24 |
 | Programme Atlas (sister session) | https://claude.ai/artifact/3HD23T6TaRpegV24TtFDoU | the sister session's atlas | 2026-10-24 |
 | Programme Master Plan and Audit Pack (sister session) | https://claude.ai/artifact/Q5Gd1ifKqgzAWUQ7xXoBQ7 | holds the Phase B section this file mirrors | 2026-10-23 |
 | CVIN Status Brief | https://claude.ai/artifact/MDkTRXxMhz6QRtNnvXTk52 | the 10-22 status as a page | 2026-10-23 |
