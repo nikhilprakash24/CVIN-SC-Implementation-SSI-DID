@@ -38,3 +38,4 @@
   the V2V warm verify as 0.153 ms where #27 reads 0.142 ms [0.141, 0.143]. **Finding about the tooling:** the
   stale-figure checker did not catch 0.153 in the chapters, so its entries miss superseded #27 values; this goes to
   U10. The fixes are WM-2 D1's editing half, which waits on D-1.
+- **CI after U9 (`6a7fe6c` onward): 2 workflows red.** Two jobs set a subdirectory as their working directory, so the relative path to the pins file failed. Every install now reads `$GITHUB_WORKSPACE/ci/requirements-ci.txt`.
