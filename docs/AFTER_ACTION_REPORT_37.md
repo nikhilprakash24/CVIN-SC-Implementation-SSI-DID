@@ -69,3 +69,20 @@
 - **Process finding.** The handback's standing practice (guide rule 1.3.1) is "commits under the author's name only,
   no co-author trailers, no assistant or model identifiers". This session's commits from `558fc9d` to `8b35320` carried
   co-author and session trailers. Pushed history is not rewritten; from this commit on, commits follow the rule.
+- **T-12, the open branches (read-only).** `docs/planning/BRANCH_REVIEW_2026-10-24.md`. No conflicts. The two
+  docs-only branches trial-merged cleanly but failed the stale-figure check (21 superseded figures in 5 files, all
+  from before the re-runs), so nothing was merged. Two branches change producers of record (the V2V driver; the
+  harness results), and one adds a new build (X1). Four new author decisions, B-1 to B-4, each with a recommendation.
+
+## 3. Closing
+Every item of the unblocked list is done (U1 to U12), and the branch review (T-12) with it. No contract, library or
+test code changed in this pass (tooling, documents and CI only), so the grand run of report 36 at `cea9cf0` still
+stands for the test base; CI is the closing gate.
+
+The pass's most useful result is a finding about the record itself: A5 corrected #27 in the register on 2026-10-23,
+and the correction reached none of the 24 documents that quoted the old value. The checker now catches it, the
+documents outside the thesis are corrected, and the 28 thesis hits are listed as pending on WM-2 D1. The chapter
+audit and the TDP review list every other drifted figure.
+
+**New decisions for the author:** D2 (RSU-to-RSU; recommendation scope out) and B-1 to B-4 (the open branches).
+**Next executable work:** T-15 (correct the TDP from its review). Then WM-2 D1 waits on D-1, and E1 on the check session.

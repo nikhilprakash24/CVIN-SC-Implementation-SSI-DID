@@ -177,11 +177,11 @@ That is item Q-B7 in §6 and task T-12 in §7.
 | # | Work | Produces | Waits on |
 |---|---|---|---|
 | 1 | U6: read-only chapter audit, **done 10-24**: 39 OK, 22 mismatch, 2 overstated, 16 unsourced, 13 stale | `docs/thesis/CHAPTER_AUDIT_2026-10.md` | the fixes are WM-2 D1, after D-1 |
-| 2 | U7: read-only review of the hand-written TDP documents | `docs/tdp/REVIEW_2026-10.md` | nothing |
-| 3 | U5 = WM-2 D2: RSU-to-RSU design note | `docs/design/RSU_TO_RSU_NOTE.md` | nothing; the build decision is yours |
-| 4 | U10: stale-figure patterns for small counts | checker entries | nothing |
-| 5 | U11, U12: progress report draft 2; index and handback hygiene | the report, index rows | nothing |
-| 6 | Branch review (T-12): the five open research branches | a merge or record decision for each | nothing for the review; you for any merge that changes a result |
+| 2 | U7: read-only TDP review, **done 10-24**: 45 OK, 6 mismatch, 2 overstated, 37 stale, 11 missing (layer 5 absent) | `docs/tdp/REVIEW_2026-10.md` | corrections are task T-15 |
+| 3 | U5 = WM-2 D2: RSU-to-RSU design note, **done 10-24**: recommends scope out (D2-a) | `docs/design/RSU_TO_RSU_NOTE.md` | **your D2** |
+| 4 | U10: stale-figure checker, **done 10-24**: the old V2V figures found in 24 files and corrected outside the thesis; 28 thesis hits pending on D1 | checker entries | nothing |
+| 5 | U11, U12, **done 10-24**: progress report draft 2; index and handback hygiene | the report, index rows | N-23 and the reader, for the final form |
+| 6 | Branch review (T-12), **done 10-24**: nothing merged; 21 stale figures block the two docs-only branches | `docs/planning/BRANCH_REVIEW_2026-10-24.md` | **your B-1 to B-4** |
 | 7 | WM-2 D1: edit chapters 1, 4, 6, 7 to the register | chapter edits | **D-1** |
 | 8 | WM-2 E1: the cross-model check | `FINDINGS.md` | **you open the session** |
 | 9 | WM-2 F1: presentation draft 2 | the report | E1 findings, so they go in once |
@@ -205,8 +205,8 @@ default that runs if no answer comes.
 | Q-B4 | What is the reference set for chapter 2 §2.1 to §2.5? | you | those sections being cited from sources read at origin | sections stay as written by the other session, unchecked |
 | Q-B5 | Is IDTx a paper or a chapter 6 taxonomy? (I-24) | you | Phase 2 F1 plans | taxonomy only (D-7 (a)) |
 | Q-B6 | Will there be a Sepolia witness run? (D-10) | you, with two secrets | the most visible open limitation | stated as a limitation |
-| Q-B7 | What happens to the five open research branches (§3.3)? | review here, then you | figures, the TSR series, the research expansion | they stay unmerged |
-| Q-B8 | Does the thesis need RSU-to-RSU messaging? (D2) | you, after the note | crux C3's scope | scoped out |
+| Q-B7 | What happens to the five open research branches (§3.3)? Reviewed: decisions B-1 to B-4 in `docs/planning/BRANCH_REVIEW_2026-10-24.md` | you | figures, the TSR series, the research expansion | they stay unmerged |
+| Q-B8 | Does the thesis need RSU-to-RSU messaging? (D2; the note recommends D2-a, scope out) | you | crux C3's scope, WM-2 D2 | scoped out |
 | Q-B9 | Which Phase 2 programme and ideas? (P2-D1) | you | Phase 2 session 4 | none chosen |
 | Q-B10 | Does the cross-model check agree with passes 16 to 22? | the check session | WM-2 E1, E2 | WM-2 cannot close |
 | Q-B11 | Does I-05's model predict the probe knee (P1: k = 12 to 14 on host 3)? | a measurement after P2-D1 | the freshness theory claim | stays a prediction |
@@ -226,11 +226,13 @@ Each task names what it blocks. "You" means the author. The order is the order o
 | T-5 | Supply the chapter 2 reference set (Q-B4) | you | nothing | chapter 2 §2.1 to §2.5 checked |
 | T-6 | Decide I-24 (Q-B5) | you | nothing | Phase 2 F1 |
 | T-7 | Sepolia secrets or "limitation" (Q-B6) | you | nothing | D-10 |
-| T-8 | U6, U7, U5, U10 | this session | nothing | D1 is faster; the TDP is checked |
+| T-8 | U6, U7, U5, U10, **done 10-24** | this session | nothing | D1 is faster; the TDP is checked |
 | T-9 | U11, U12, then the final progress report | this session | T-1, T-4 for the final form | the hand-over |
 | T-10 | WM-2 D1 | this session | T-3 | E2 |
 | T-11 | WM-2 F1, then E2 | this session | T-2 | WM-2 closed |
-| T-12 | Review the five open branches | this session | nothing | Q-B7 |
+| T-12 | Review the five open branches, **done 10-24** | this session | nothing | Q-B7 |
+| T-15 | Correct the TDP's stale figures and add layer 5 (from the TDP review) | this session | nothing | the TDP current |
+| T-16 | Answer D2 and B-1 to B-4 | you | nothing | WM-2 D2; the branch merges |
 | T-13 | The rest of the decision sheet (P2-D*, C1-d*, C2-d*) | you | nothing | the records |
 | T-14 | Commit signing, optional | you, with a key | nothing | verified commits |
 
