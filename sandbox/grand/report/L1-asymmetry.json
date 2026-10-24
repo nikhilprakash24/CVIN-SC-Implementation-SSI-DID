@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-23T05:14:40.910Z",
+  "generatedAt": "2026-10-24T12:49:22.050Z",
   "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
   "options": [
     "cvin-combined",
@@ -141,7 +141,7 @@
       "option": "erc-735",
       "mechanism": "create",
       "outcome": "ok",
-      "gasUsed": "1757881",
+      "gasUsed": "1757893",
       "reason": null,
       "note": "claim-holder deployment is the creation cost (vin=CVNERC73500000000 stored in constructor); explicit; resolved as did:erc735:0x7a69:0x712516e61C8B383dF4A63CFe83d7701Bce54B03e"
     },
@@ -429,9 +429,9 @@
       "option": "cvin-combined",
       "mechanism": "claim",
       "outcome": "ok",
-      "gasUsed": "316465",
+      "gasUsed": "316477",
       "reason": null,
-      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x380054… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
+      "note": "addClaim topic=1 CLAIM_TOPIC_VIN issuer=0x227342… (adapter-signed raw digest); claim data (L1-claim:cvin-combined:CVNCVINCOMBINED00)"
     },
     {
       "option": "erc-1056-uport",
@@ -511,7 +511,7 @@
       "outcome": "ok",
       "gasUsed": "287354",
       "reason": null,
-      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x6d646ab6ce288e1588a5a62a274ca92ec4200cfbbe7…)"
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x65b1eeacc6aed73e8c50f35eb043b5913ee8fe98999…)"
     },
     {
       "option": "cvin-combined",

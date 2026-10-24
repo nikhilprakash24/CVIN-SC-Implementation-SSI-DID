@@ -25,18 +25,18 @@
 | `4_comparison-framework/security-analysis/results/attack_results.json` | 2026-10-22T22:58:46.917Z | 2051159 | False | True | yes | 0.8.24 |  |
 | `4_comparison-framework/security-analysis/results/onchain_security.json` | 2026-10-22T22:58:43.977Z | 2051159 | False | True | yes | 0.8.24 | hand check: same |
 | `4_comparison-framework/security-analysis/results/security_matrix.json` | 2026-10-22T22:58:44Z | 205115991a560bd6d1b3dfb1 | False (inert) | MISSING | yes | 3.13.16 |  |
-| `cv2x-testbed/results/freshness_k.json` | 2026-10-23T00:45:05+00:0 | f1f3596 | False (from any) | False | yes | 0.8.20+commit.a1b79de6 |  |
-| `cv2x-testbed/results/freshness_k_probe.json` | 2026-10-23T00:45:47+00:0 | f1f3596 | False (inert) | True | yes | 0.8.20+commit.a1b79de6 |  |
-| `cv2x-testbed/results/freshness_k_probe_fullref.json` | 2026-10-23T00:45:24+00:0 | f1f3596 | False (inert) | True | yes | 0.8.20+commit.a1b79de6 |  |
-| `cv2x-testbed/results/freshness_k_probe_fullref_r2.json` | 2026-10-23T00:46:25+00:0 | f1f3596 | False (inert) | True | yes | 0.8.20+commit.a1b79de6 |  |
-| `cv2x-testbed/results/freshness_k_probe_r2.json` | 2026-10-23T00:46:06+00:0 | f1f3596 | False (inert) | True | yes | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/results/freshness_k.json` | 2026-10-23T00:45:05+00:0 | f1f3596 | False (from any) | False | no (comment-only) | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/results/freshness_k_probe.json` | 2026-10-23T00:45:47+00:0 | f1f3596 | False (inert) | True | no (comment-only) | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/results/freshness_k_probe_fullref.json` | 2026-10-23T00:45:24+00:0 | f1f3596 | False (inert) | True | no (comment-only) | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/results/freshness_k_probe_fullref_r2.json` | 2026-10-23T00:46:25+00:0 | f1f3596 | False (inert) | True | no (comment-only) | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/results/freshness_k_probe_r2.json` | 2026-10-23T00:46:06+00:0 | f1f3596 | False (inert) | True | no (comment-only) | 0.8.20+commit.a1b79de6 |  |
 | `cv2x-testbed/results/freshness_k_samehost.json` | MISSING | MISSING | MISSING | MISSING | MISSING | MISSING | derived: summary of the 12 stamped same-host replicates in freshness_k_samehost/ (#55, clone lineage #42); all_git_clean recorded |
-| `cv2x-testbed/results/lifecycle_parity.json` | 2026-10-22T22:58:49+00:0 | 2051159 | False (inert) | True | yes | 0.8.20+commit.a1b79de6 |  |
-| `cv2x-testbed/results/pki_vs_erc1056.json` | 2026-10-22T23:58:19+00:0 | 0b39570 | False (from any) | False | yes | 0.8.20+commit.a1b79de6 |  |
-| `cv2x-testbed/sumo/results/infrastructure_revocation.json` | 2026-10-23T00:13:18+00:0 | 0b395705838af3554d0f33ea | False | True | yes | 3.13.16 |  |
-| `cv2x-testbed/sumo/results/infrastructure_stats.json` | 2026-10-23T00:07:06+00:0 | 0b395705838af3554d0f33ea | False | True | yes | 3.13.16 |  |
+| `cv2x-testbed/results/lifecycle_parity.json` | 2026-10-22T22:58:49+00:0 | 2051159 | False (inert) | True | no (comment-only) | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/results/pki_vs_erc1056.json` | 2026-10-22T23:58:19+00:0 | 0b39570 | False (from any) | False | no (comment-only) | 0.8.20+commit.a1b79de6 |  |
+| `cv2x-testbed/sumo/results/infrastructure_revocation.json` | 2026-10-23T00:13:18+00:0 | 0b395705838af3554d0f33ea | False | True | no (comment-only) | 3.13.16 |  |
+| `cv2x-testbed/sumo/results/infrastructure_stats.json` | 2026-10-23T00:07:06+00:0 | 0b395705838af3554d0f33ea | False | True | no (comment-only) | 3.13.16 |  |
 | `cv2x-testbed/sumo/results/v2v_latency.json` | 2026-10-23T00:43:21.5170 | MISSING | MISSING | MISSING | MISSING | MISSING | single run: default output of one harness run; the results of record are v2v_latency_stats.json |
-| `cv2x-testbed/sumo/results/v2v_latency_stats.json` | 2026-10-23T00:37:55+00:0 | 0b395705838af3554d0f33ea | False | True | yes | 3.13.16 |  |
+| `cv2x-testbed/sumo/results/v2v_latency_stats.json` | 2026-10-23T00:37:55+00:0 | 0b395705838af3554d0f33ea | False | True | no (comment-only) | 3.13.16 |  |
 | `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-24T12:29:28.205Z | 7a5905803a0219119fa6b593 | False | True | no | 0.8.24 |  |
 | `1_blockchain-identity/results/metrics-rpc/latest/meta.json` | 2026-10-23T00:59:31.809Z | 1f4ace082fc32d8bc1c6b294 | False | True | yes | 0.8.24 |  |
 | `5_zkp-agent-identity/results/attacks.json` | 2026-10-15T05:15:04+00:0 | 978988e | False | False | MISSING | 3.13.16 |  |
