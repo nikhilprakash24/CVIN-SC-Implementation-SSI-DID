@@ -5,7 +5,7 @@
 ## Phase roadmap
 
 ```
-Phase 1  function set, IDTx, benchmark gap   [■■■■■■□□□□]  ~60%   IN PROGRESS
+Phase 1  function set, IDTx, benchmark gap   [■■■■■■■■□□]  ~75%   IN PROGRESS
 Phase 2  compare to other ID systems         [□□□□□□□□□□]    0%   planned
 Phase 3  nearest benchmarks, benchmark v0     [□□□□□□□□□□]    0%   planned
 Phase 4  same, for AI agents                  [□□□□□□□□□□]    0%   planned
@@ -22,7 +22,7 @@ Phase 6  IDTx + compound scenarios visualized [□□□□□□□□□□]  
 | 1.3 | Primitive cards (protocols/algorithms) | SS | ✅ done → `p1/PRIMITIVES.md` |
 | 1.4 | Pseudocode (F1–F12 + IDTx) — **author will double-check** | CE | ✅ done → `p1/PSEUDOCODE.md` |
 | 1.5 | Analogy matrix (centralized / digital-ID / CAV) | SS | ✅ done → `p1/ANALOGIES.md` |
-| 1.8 | Figures P1-1…P1-6 | VA | 🔵 running |
+| 1.8 | Figures P1-1…P1-6 | VA | ✅ done → `figures/*.svg` (stdlib script) |
 | 1.6 | Benchmark-gap evidence | LS | ✅ done → `p1/BENCHMARK_GAP.md` |
 | 1.7 | IDTx prior-art positioning | LS | ⬜ queued |
 | 1.9 | Thesis drafts (Ch 3 §3.x, Ch 6 §6.8, Ch 2 §2.6, App. G) | ED | ⬜ queued |
