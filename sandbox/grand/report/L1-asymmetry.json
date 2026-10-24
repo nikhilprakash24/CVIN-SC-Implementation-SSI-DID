@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-22T22:54:41.761Z",
+  "generatedAt": "2026-10-23T05:14:40.910Z",
   "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
   "options": [
     "cvin-combined",
@@ -511,7 +511,7 @@
       "outcome": "ok",
       "gasUsed": "287354",
       "reason": null,
-      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0xba457a711023ba056b10dbfa1a359ba8a40ad6b528d…)"
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x6d646ab6ce288e1588a5a62a274ca92ec4200cfbbe7…)"
     },
     {
       "option": "cvin-combined",

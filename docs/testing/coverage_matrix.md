@@ -23,7 +23,7 @@ T = exercised by a passing demo · T* = passing demo that flags steps (DEFECT or
 Totals: G 13, N 78, T 51, T* 40.
 The two baselines (centralized registry, IEEE 1609.2-style PKI) are Python providers with no feature demos by design; their G cells are exercised by the Python suites and the experiments, not by demos.
 
-Test register: 305 TC entries in `docs/testing/test_register.yaml`.
+Test register: 681 TC entries in `docs/testing/test_register.yaml`.
 
 **Manifest / demo mismatches** (shown as N above):
 - erc-1056-vehicle / Claims / credentials: manifest says not applicable, but a passing demo exists

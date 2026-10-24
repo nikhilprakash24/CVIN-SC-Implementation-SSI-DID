@@ -30,7 +30,7 @@ imply?
 | Finding | Evidence |
 |---|---|
 | **Writes.** A relayed or account-abstracted write costs between a half and four fifths more gas than a direct one. ERC-1056: +27,622 on 35,024 (0.79), and the relayer pays. ERC-4337: +47,116 on 94,651 (0.50); the bundler submits and, under the standard, the account pays. Only these two of the ten harness columns have such a path. | #50, #34 |
-| **Reads.** Each row is quoted with its own condition, and no ratio is formed across them (rule 1.1.7). Offline SSI verify: 0.153 ms (#27, M0). One probe refresh of the cached ERC-1056 verifier: 2.76 ms, the cost of one refresh, not of verifying one message (#37, another host). Uncached ERC-1056 verify: 9.654 ms (#21, M1). | #27, #37, #21 |
+| **Reads.** Each row is quoted with its own condition, and no ratio is formed across them (rule 1.1.7). Offline SSI verify: 0.142 ms (#27, M0). One probe refresh of the cached ERC-1056 verifier: 2.76 ms, the cost of one refresh, not of verifying one message (#37, another host). Uncached ERC-1056 verify: 9.654 ms (#21, M1). | #27, #37, #21 |
 | **The 10 Hz budget, per path and host.** The SSI offline path fits (#26, #27). The ERC-1056 cached verifier does not: on #37's host no finite k reaches P*(0.5) = 100, and k = ∞ gives 78 and 87. #32 gives 110 at k = ∞ on another host. | analysis §4 |
 | **Argument from the standard, not evidence:** out of cellular coverage, only Mode C is available. The testbed has no radio. | analysis §4 |
 

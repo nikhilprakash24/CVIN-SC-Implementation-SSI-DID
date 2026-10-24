@@ -40,7 +40,7 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install dependencies
-      run: python -m pip install eth-account coincurve cryptography pytest
+      run: python -m pip install -r "$GITHUB_WORKSPACE/ci/requirements-ci.txt"
 
     - name: Run VC layer tests
       run: python -m pytest tests/test_vc_layer.py -v
@@ -74,7 +74,7 @@ jobs:
     - name: Install dependencies
       run: |
         (cd 1_blockchain-identity && npm ci && npx hardhat compile)
-        python -m pip install eth-account coincurve cryptography web3 pytest numpy
+        python -m pip install -r "$GITHUB_WORKSPACE/ci/requirements-ci.txt"
 
     - name: Testbed artifacts match a fresh compile
       # Review 02 R2-H2: the tracked cv2x-testbed/artifacts (loaded by the #21/#22
@@ -108,6 +108,12 @@ jobs:
           exit 1
         fi
 
+    - name: Chain-resolver mutants (each must be caught; WM-2 C1 tests, after-action report 36)
+      shell: bash
+      env:
+        CV2X_TEST_RPC_URL: http://127.0.0.1:8548
+      run: python3 2_w3c-ssi-layer/did-resolution/mutation/mutate_resolver_chain.py
+
   compliance-score:
     name: W3C compliance score
     runs-on: ubuntu-latest
@@ -136,7 +142,7 @@ jobs:
     - name: Install Python dependencies
       # The merged checker imports the VC layer (EIP-191 / secp256k1 proofs),
       # so it needs the same packages as the VC job. Unpinned: see header note.
-      run: pip install eth-account coincurve cryptography web3
+      run: pip install -r "$GITHUB_WORKSPACE/ci/requirements-ci.txt"
 
     - name: Run W3C compliance checker
       shell: bash
@@ -206,7 +212,7 @@ jobs:
       # Unpinned: see the header note.
       run: |
         (cd 1_blockchain-identity && npm ci && npx hardhat compile)
-        pip install eth-account coincurve cryptography web3 pytest numpy
+        pip install -r "$GITHUB_WORKSPACE/ci/requirements-ci.txt"
 
     - name: Run the Python layers (L3 SSI, L4 exemplar interactions, SSI-layer suites); fail on any skip
       shell: bash

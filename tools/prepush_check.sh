@@ -38,6 +38,8 @@ CHECKS=(
   "docs/phase2/focus/make_focus_figures.py --check"
   "docs/phase2/focus/F3_interaction_modes/classify_modes.py --check"
   "docs/testing/gas_charter.py --check"
+  "docs/testing/latency_charter.py --check"
+  "docs/phase2/briefs/i05_model.py --check"
   "docs/figures/make_result_cards.py --check"
   "docs/tdp/make_vcrm.py --check"
   "docs/tdp/make_fmeca.py --check"

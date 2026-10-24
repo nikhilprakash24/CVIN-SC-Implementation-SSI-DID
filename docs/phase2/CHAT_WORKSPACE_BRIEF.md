@@ -43,7 +43,7 @@ mobility. Every number has a row in a claim register with a status, and only "V"
 | Lifecycle gas: ERC-1056 1,050,809 (cheapest); ERC-735 5,797,549 (excl. 3 n/a) | #35 |
 | New storage slots over the lifecycle: 8 (ERC-1056) to 149 (ERC-735) | #49 |
 | Relayed write over direct: ERC-1056 +27,622 gas; ERC-4337 +47,116 | #50, #34 |
-| V2V warm verification 0.153 ms [0.151, 0.154] (M0); uncached chain-backed verification 9.654 ms (M1, a different run: never form a ratio across them) | #27, #21 |
+| V2V warm verification 0.142 ms [0.141, 0.143] (M0); uncached chain-backed verification 9.654 ms (M1, a different run: never form a ratio across them) | #27, #21 |
 | A re-check every k messages accepts at most k − 1 messages after a revocation | #46 |
 | ERC-1056 document resolution at history 50: 112 RPC calls, 87 KB | #31 |
 | W3C structural self-score 94.3 %; external DID test suite 335/336 | #4, #24 |

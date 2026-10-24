@@ -50,7 +50,7 @@ then tested:
   requirements-driven move along it.
 - **Blockchain-credential verification fits the V2V safety budget (H3).** With real
   cryptography over thirty seeded runs and 1.65 million verifications, a
-  blockchain-rooted credential verifies in 0.153 ms (95% CI [0.151, 0.154]) — well
+  blockchain-rooted credential verifies in 0.142 ms (95% CI [0.141, 0.143]) — well
   under the ~10 ms budget for the message-authentication step, so identity verification
   is not the V2V latency bottleneck (the end-to-end ~100 ms budget's network terms are
   out of scope) — while catching every injected attack. The cost of
@@ -113,7 +113,7 @@ Every chapter draft is measured against this list before it is called done.
 | ~34× gas spread; ERC-1056 ~10× cheaper | H1 | `gas_benchmark.json` (N=30, σ=0) | §5.2 |
 | Hybrid Pareto-optimal on fidelity-per-gas | H5 | `gas_benchmark.json`, `mobi_vid_backends.json` | §5.3, §5.3.1 |
 | MOBI VID portable across 5 backends (fidelity gradient) | H4 | `mobi_vid_backends.json` | §5.3.1 |
-| SSI warm verify 0.153 ms ≤ 10 ms auth budget (verification not the bottleneck; network terms excluded) | H3 | `v2v_latency_stats.json` (N=30, bootstrap CI) | §5.4 |
+| SSI warm verify 0.142 ms ≤ 10 ms auth budget (verification not the bottleneck; network terms excluded) | H3 | `v2v_latency_stats.json` (N=30, bootstrap CI) | §5.4 |
 | 94.3% W3C compliance | H2 | `w3c_compliance_checker.py` (live; snapshot pending) | §5.5 |
 | No standard dominates; found-and-fixed attestation gap | H5/security | `security_matrix.json`, `attack_results.json` | §5.6 |
 | Marginal cost O(1) (no history degradation); lifetime cost reverses point ranking; hybrid tunable via claim fraction *f* | H5 (lifetime) | `scaling_marginal.json`, `scaling_lifetime.json` | §5.9 |
