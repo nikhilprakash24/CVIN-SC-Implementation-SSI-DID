@@ -18,6 +18,7 @@ history:
 - docs/thesis/CHAPTER_AUDIT_2026-10.md   # quotes the stale values it found, on purpose (report 37)
 - docs/review02/*
 - docs/phase2/reviews/*   # review records quote the figures their reviewers read
+- docs/roots/*   # Roots G-R1 versioned snapshots, dated; they quote the figures current when each version was written (1,757,881 before the NatSpec restatement); the Roots thread adopts 1,757,893 at its next version
 - docs/reconciliation/*
 - docs/prior-survey/*
 - docs/planning/*
