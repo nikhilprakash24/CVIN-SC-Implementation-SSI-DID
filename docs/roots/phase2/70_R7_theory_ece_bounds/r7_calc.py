@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """R7 v0-1 scratch calculator. Every number in R7 is printed here with its equation and inputs.
 Run: python3 r7_calc.py   (numpy, scipy).
-Print labels are working labels; final R7 tags: B->PF-38, C->PF-40, D->PF-43/44, E->PF-45, F->PF-46,
-G->PF-41/42, H->PF-47/53, I->PF-48, J->PF-49..52, K->PF-54, L->PF-32/36/48/57/61.
-C2 (round-robin exact) supersedes the geometric MC in C for R7. Inputs marked M = register row, S = standard, E = estimated, P = parameter."""
+Print labels are working labels; final R7 tags: A->R4 re-checks, B->PF-38, C/C2->PF-40, D->PF-43,
+E/F->PF-44, G->PF-41/42, H->PF-47/53, I->PF-48, J->PF-49..52, K->PF-54/55, L->PF-32/33/36/60. Inputs marked M = register row, S = standard, E = estimated, P = parameter."""
 import math, numpy as np
 from scipy import stats
 rng = np.random.default_rng(42)
