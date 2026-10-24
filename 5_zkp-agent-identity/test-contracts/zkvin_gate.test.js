@@ -71,6 +71,20 @@ describe("ZK-VIN on chain (layer 5)", function () {
     await expect(gate.admit(vehicle, INSURER, P.a, P.b, P.c, P.pub, ACTION)).to.be.revertedWithCustomError(gate, "SignalMismatch").withArgs(6);
   });
 
+  it("only the governor configures services; unknown services and a changed region are rejected", async function () {
+    // added with mutate_zkvin_gate.sh, whose register_any_caller / inactive_service / region_unchecked
+    // mutants survived the suite before this test
+    const { gate, stranger, vehicle } = await deployAll();
+    await expect(gate.connect(stranger).setService(INSURER, FIX.request.scope, FIX.request.minModelYear, FIX.vehicle.region, FIX.request.challenge))
+      .to.be.revertedWithCustomError(gate, "NotGovernor");
+    await expect(gate.admit(vehicle, ethers.id("no-such-service"), P.a, P.b, P.c, P.pub, ACTION))
+      .to.be.revertedWithCustomError(gate, "UnknownService");
+    const otherRegion = (BigInt(FIX.vehicle.region) + 1n).toString();
+    await gate.setService(INSURER, FIX.request.scope, FIX.request.minModelYear, otherRegion, FIX.request.challenge);
+    await expect(gate.admit(vehicle, INSURER, P.a, P.b, P.c, P.pub, ACTION))
+      .to.be.revertedWithCustomError(gate, "SignalMismatch").withArgs(4);
+  });
+
   it("rejects a tampered proof whose signals all match", async function () {
     const { gate, vehicle } = await deployAll();
     const badA = [P.a[0], (BigInt(P.a[1]) + 1n).toString()];

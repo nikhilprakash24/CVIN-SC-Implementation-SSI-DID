@@ -20,7 +20,7 @@ single-party setup, and `zkid` is not constant time.
 | `bench/` | sigma timings, VIN brute force, manual-burden inventory, `run_all.sh` (runs of record) |
 | `figures/` | 12 figures from committed results; `make_figures.py --check` |
 | `demos/full_circle_demo.py` | the whole story in one terminal session (transcript in `results/demo_transcript.txt`) |
-| `tests/`, `test-contracts/`, `mutate_zkid.sh` | 49 Python tests, 8 contract tests, 5 mutants that must be caught |
+| `tests/`, `test-contracts/`, `mutate_zkid.sh`, `mutate_zkvin_gate.sh` | 49 Python tests, 9 contract tests, 5 Python mutants and 12 ZkVinGate mutants that must be caught |
 
 ```bash
 pip install pytest eth-account coincurve matplotlib && npm ci

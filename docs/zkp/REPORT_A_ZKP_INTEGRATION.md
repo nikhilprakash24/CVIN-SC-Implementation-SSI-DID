@@ -298,8 +298,8 @@ cd 5_zkp-agent-identity && python3 -m pytest
 # ZK-VIN: prove, verify, five false statements (needs node; circom only to rebuild)
 npm ci && node scripts/prove_and_verify.js
 
-# Contracts (8 tests) against Phase 1's ERC-1056 registry
-cd ../1_blockchain-identity && npm ci && npx hardhat compile && npx hardhat --config hardhat.zkp.config.js test
+# Contracts (9 tests) against Phase 1's ERC-1056 registry; then the ZkVinGate mutation probe (0 of 12 may survive)
+cd ../1_blockchain-identity && npm ci && npx hardhat compile && npx hardhat --config hardhat.zkp.config.js test && bash ../5_zkp-agent-identity/mutate_zkvin_gate.sh
 
 # Everything of record, then the figures
 cd ../5_zkp-agent-identity && bash bench/run_all.sh && python3 figures/make_figures.py
