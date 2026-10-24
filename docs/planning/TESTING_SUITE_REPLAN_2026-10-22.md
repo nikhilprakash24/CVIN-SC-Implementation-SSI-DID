@@ -140,3 +140,13 @@ Findings the new tables surfaced, for the author:
 2. No unit test carries class S; scale evidence is the experiments only.
 3. The use-case suite's oracle is still "returns without raising" (its own docstring); charter I limits what it may support.
 4. The H5 dominance criteria changed after the framework named them; charter Q asks for a dated amendment.
+
+## 9. Rebase onto the trunk of 2026-10-24 (series v2)
+
+The trunk's branch review (T-12) asked for exactly this: take the staged parts that A5 and A7 did not cover. A7 now
+registers the SSI-layer and sandbox Python tests; B3 wrote the latency charter. Series v2, on `1fba094`, registers the
+remaining bodies (529 entries, 527 tests, every Python directory equal to pytest's count), extends the completeness
+guard to A7's files and to layer 5, and keeps the eight charters the trunk does not have. Record and gates:
+`docs/planning/testing_suite/staged/README.md`.
+
+Still open for the author: where the series lands (a trunk session applies it), and the defaults R-2 to R-6.

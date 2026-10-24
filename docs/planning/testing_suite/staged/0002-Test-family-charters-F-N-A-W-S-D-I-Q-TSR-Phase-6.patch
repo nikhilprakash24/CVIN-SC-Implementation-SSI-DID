@@ -1,33 +1,29 @@
-From 9496ab4936ff8d32bf254b6193e060cec0ca8e76 Mon Sep 17 00:00:00 2001
+From dfbae512656ff8df4100804839513950785b2a2d Mon Sep 17 00:00:00 2001
 From: Nikhil Prakash <nikhil.prakash1995@gmail.com>
-Date: Thu, 22 Oct 2026 22:11:59 +0000
-Subject: [PATCH 2/2] Test-family charters F, N, A, W, L, S, D, I, Q (TSR Phase
- 6; L offered to WM-2 B3)
+Date: Sat, 24 Oct 2026 12:20:52 +0000
+Subject: [PATCH 2/2] Test-family charters F, N, A, W, S, D, I, Q (TSR Phase 6)
 
-Drafts on the TSR template: what a passing test establishes and cannot,
-oracle, design, falsifiers with the register rows that would show them,
-threats to validity, reporting, replication, limits. Measured figures are
-cited by register row only. check_charters.py fails on a citation of a
-row that does not exist; its --probe shows it firing. Class G stays the
-generated GAS_CHARTER.md. No register row is relabelled.
+Drafts on the TSR template for the classes without a charter; G and L are
+the generated GAS_CHARTER.md and LATENCY_CHARTER.md and are linked, not
+duplicated. Measured figures are cited by register row only.
+check_charters.py fails on a citation of a row that does not exist; its
+--probe shows it firing. No register row is relabelled.
 ---
  docs/testing/charters/A_ADVERSARIAL.md | 45 ++++++++++++++++++++++
  docs/testing/charters/D_DETERMINISM.md | 40 +++++++++++++++++++
  docs/testing/charters/F_FUNCTIONAL.md  | 47 +++++++++++++++++++++++
  docs/testing/charters/I_INTEGRATION.md | 43 +++++++++++++++++++++
- docs/testing/charters/L_LATENCY.md     | 46 ++++++++++++++++++++++
  docs/testing/charters/N_NEGATIVE.md    | 41 ++++++++++++++++++++
  docs/testing/charters/Q_ANALYSIS.md    | 38 ++++++++++++++++++
  docs/testing/charters/README.md        | 25 ++++++++++++
  docs/testing/charters/S_SCALE.md       | 39 +++++++++++++++++++
  docs/testing/charters/W_CONFORMANCE.md | 44 +++++++++++++++++++++
  docs/testing/check_charters.py         | 53 ++++++++++++++++++++++++++
- 11 files changed, 461 insertions(+)
+ 10 files changed, 415 insertions(+)
  create mode 100644 docs/testing/charters/A_ADVERSARIAL.md
  create mode 100644 docs/testing/charters/D_DETERMINISM.md
  create mode 100644 docs/testing/charters/F_FUNCTIONAL.md
  create mode 100644 docs/testing/charters/I_INTEGRATION.md
- create mode 100644 docs/testing/charters/L_LATENCY.md
  create mode 100644 docs/testing/charters/N_NEGATIVE.md
  create mode 100644 docs/testing/charters/Q_ANALYSIS.md
  create mode 100644 docs/testing/charters/README.md
@@ -88,7 +84,7 @@ index 0000000..e249e7b
 +Lens 2 cells marked `*` are reasoned, not executed, and are reported separately from lens 1.
 diff --git a/docs/testing/charters/D_DETERMINISM.md b/docs/testing/charters/D_DETERMINISM.md
 new file mode 100644
-index 0000000..316f2c4
+index 0000000..10f9144
 --- /dev/null
 +++ b/docs/testing/charters/D_DETERMINISM.md
 @@ -0,0 +1,40 @@
@@ -131,7 +127,7 @@ index 0000000..316f2c4
 +Every CI run.
 +
 +## 8. Limits
-+Latency is not byte-reproducible by nature; its reproducibility is charter L's replication rule.
++Latency is not byte-reproducible by nature; its reproducibility is the latency charter's replication rule (`../LATENCY_CHARTER.md`).
 diff --git a/docs/testing/charters/F_FUNCTIONAL.md b/docs/testing/charters/F_FUNCTIONAL.md
 new file mode 100644
 index 0000000..c2f284f
@@ -234,58 +230,6 @@ index 0000000..d0fd09b
 +## 8. Limits
 +Until P4-4 lands, no thesis claim rests on the use cases beyond "the VC layer integrates end to end on the
 +centralised baseline".
-diff --git a/docs/testing/charters/L_LATENCY.md b/docs/testing/charters/L_LATENCY.md
-new file mode 100644
-index 0000000..3422601
---- /dev/null
-+++ b/docs/testing/charters/L_LATENCY.md
-@@ -0,0 +1,46 @@
-+# Charter L — Latency and throughput
-+
-+**Status:** draft, 2026-10-22, offered to WM-2 step B3 (which owns adoption and any relabelling of register rows).
-+**Binds:** guide 1.1.3, 1.1.7; `docs/MEASUREMENT_CONDITIONS.md` §1 (conditions M0, M1, M1-H, M1-H/HTTP, M2).
-+
-+## 1. What a latency figure establishes
-+The time one code path took on one host, under one condition, in one run. It does not establish network or
-+production latency: no public-chain figure exists (M2 has never been run), and the V2V path excludes the radio stack.
-+
-+## 2. Oracle
-+A latency result has no pass/fail of its own. It becomes a test when compared with a **pre-registered** budget or a
-+second population in the **same run** (guide 1.1.7): e.g. SAE J2945/1's 100 ms budget for the receive-verify-decide
-+path (`docs/LATENCY_BUDGET.md`).
-+
-+## 3. Design (the rules a row must meet, or be relabelled "descriptive only")
-+1. N ≥ 30 after discarded warm-ups; median headline, p95 for budgets; min, max and mean optional.
-+2. Host CPU, library versions, toolchain and commit recorded with the figure.
-+3. Comparisons only within one run; across hosts only as a replication, side by side, never pooled.
-+4. A confidence interval is a percentile bootstrap on the median with a recorded resample seed; a test between
-+   populations is Mann–Whitney U with an effect size, Holm-corrected when several are reported together.
-+5. A bound on messages is not a bound on time unless time was measured (guide 1.1.9).
-+
-+## 4. Falsifiers it carries
-+| Hypothesis | Refuting observation | Rows |
-+|---|---|---|
-+| H3, off-chain half: cached verification fits the budget | p95 of warm verification ≥ budget | #27, #45 |
-+| H3, on-chain half: a chain read at message time does not fit | an uncached on-chain verification inside the budget at p95 on an RPC transport | #32, #37, #39, #52 |
-+| PKI as baseline | the ERC-1056 path faster than PKI on the same run | #21 |
-+
-+## 5. Threats to validity
-+| Type | Threat | Control |
-+|---|---|---|
-+| Construct | in-process timing is not V2X latency | condition tags; budget compared only with the M0 path it constrains |
-+| Internal | host load, library version effects (one library upgrade changed PKI cells several-fold, handback 2026-10-04 §6) | environment header; interleaved replicates (#52) |
-+| External | one host per run; simulated mobility | replication on a second host, labelled |
-+| Conclusion | knee positions are host-dependent (#32 vs #37, resolved by #52) | report the host with every knee |
-+
-+## 6. Reporting
-+Table rows carry n, median, p95, condition, host id and run id. Figures without them are relabelled "descriptive only".
-+
-+## 7. Replication
-+Rows #32/#37 re-run back to back on one host (#52) is the model. A row reaches E7 only with a second host or a
-+stated second replicate.
-+
-+## 8. Limits
-+#39 is U on this trunk at the time of writing; it is cited for design only.
 diff --git a/docs/testing/charters/N_NEGATIVE.md b/docs/testing/charters/N_NEGATIVE.md
 new file mode 100644
 index 0000000..6c6cd00
@@ -379,14 +323,14 @@ index 0000000..5db451a
 +are the author's.
 diff --git a/docs/testing/charters/README.md b/docs/testing/charters/README.md
 new file mode 100644
-index 0000000..bdab97f
+index 0000000..ac42c97
 --- /dev/null
 +++ b/docs/testing/charters/README.md
 @@ -0,0 +1,25 @@
 +# Test-Family Charters
 +
 +**Author:** Nikhil Prakash (MASc, UBC ECE). **Written:** 2026-10-22 (testing-suite replan §4, TSR Phase 6).
-+**Status:** drafts for the author's review, except class G, which is generated and of record.
++**Status:** drafts for the author's review, except classes G and L, which are generated and of record.
 +**Binds:** `docs/STYLE_AND_RIGOUR_GUIDE.md`; `docs/MEASUREMENT_CONDITIONS.md` for every number; TSR plan §9.2 template.
 +
 +A charter says, for one class of test, what a passing test establishes and what it cannot, how pass and fail are
@@ -401,7 +345,7 @@ index 0000000..bdab97f
 +| A | Adversarial | `A_ADVERSARIAL.md` | strict security harness, review-02 PoC suites, infrastructure verifier |
 +| W | Conformance | `W_CONFORMANCE.md` | internal checker, external DID suite, resolver shape tests, adapter conformance |
 +| G | Gas | `../GAS_CHARTER.md` (generated, WM-2 B2) | L1 gas cells, harness, nine-standard table |
-+| L | Latency | `L_LATENCY.md` (draft offered to WM-2 B3) | freshness, PKI vs ERC-1056, V2V, HTTP condition |
++| L | Latency | `../LATENCY_CHARTER.md` (generated, WM-2 B3) | freshness, PKI vs ERC-1056, V2V, HTTP condition |
 +| S | Scale | `S_SCALE.md` | scaling experiments A–D, harness scale scenario |
 +| D | Determinism and run identity | `D_DETERMINISM.md` | seeding, stamps, promote, gas determinism gate |
 +| I | Integration and lifecycle | `I_INTEGRATION.md` | use cases, lifecycle parity, infrastructure I1–I5 |
@@ -410,7 +354,7 @@ index 0000000..bdab97f
 +Counts of tests per subject and class: `../coverage_matrix.md` (generated).
 diff --git a/docs/testing/charters/S_SCALE.md b/docs/testing/charters/S_SCALE.md
 new file mode 100644
-index 0000000..426a084
+index 0000000..8210aaa
 --- /dev/null
 +++ b/docs/testing/charters/S_SCALE.md
 @@ -0,0 +1,39 @@
@@ -429,7 +373,7 @@ index 0000000..426a084
 +
 +## 3. Design
 +Points declared before the run (N ∈ {0, 100, 1 000}; h ∈ {1, 10, 50}; P ≤ 80); repeats declared before the run
-+(Exp. C's five-repeat confirmation block, #26). Gas axes are exact; latency axes follow charter L.
++(Exp. C's five-repeat confirmation block, #26). Gas axes are exact; latency axes follow the latency charter (`../LATENCY_CHARTER.md`).
 +
 +## 4. Falsifiers it carries
 +| Hypothesis | Refuting observation | Rows |
