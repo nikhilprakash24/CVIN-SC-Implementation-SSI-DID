@@ -31,3 +31,23 @@ continue.
   zero byte of the old hash became non-zero or the reverse, at 4 or 16 gas per calldata byte. No other cell moved; the
   33.7× creation ratio is unchanged. The default branch merged the pass without a re-run, so its register quotes the
   old values too.
+- **I2, the proof that the pass changes no behaviour.** Both commits (`1fba094` and the merge) compiled in all three
+  projects. Every artifact's creation and runtime bytecode was compared with the trailing metadata removed
+  (`tools/run_identity/bytecode_equiv.py`, shown to fire on a one-byte change):
+
+  | Project | Artifacts | Differ only in the metadata hash | Differ beyond it |
+  |---|---|---|---|
+  | `1_blockchain-identity` | 19 | 17 | 0 |
+  | layer 5 (`hardhat.zkp.config.js`) | 5 | 2 | 0 |
+  | `cv2x-testbed` | 3 | 3 | 0 |
+
+  So nothing that executes the contracts can behave differently; only deployment gas sees the change.
+- **I2, what re-runs and what does not (the orchestrator's default, stated as such).** The merge flipped 23 result
+  families to "code changed since". Re-running the testbed's latency families for a comments-only change would replace
+  each run of record with a new run that differs only by host noise, so they are not re-run: their claims contain no
+  deployment gas (the files record a deploy figure only in their environment header). `check_stamps.py` gains
+  `COMMENT_ONLY_COMMITS`, a sibling of the existing stamp-only list: a listed commit is verified line by line (in
+  `.sol` files every changed line is a comment or blank; compiled artifacts and bytecode files differ only in the
+  metadata; debug files only in their build-info pointer), and it exempts only the result prefixes named
+  (`cv2x-testbed/`), which then read "no (comment-only)". Shown to fire: listing the C2 commit `92cc4d5` fails the
+  check on its first code line. The gas families and the harness re-run.
