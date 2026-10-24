@@ -1,0 +1,10 @@
+# Python packages for CI (unblocked item U9, after-action report 37). Pinned to the versions the grand run of
+# record passed on (local, 2026-10-23), so a new upstream release cannot change a CI result unannounced.
+coincurve==21.0.0
+cryptography==41.0.7
+eth-account==0.14.0
+matplotlib==3.11.2
+numpy==2.4.6
+pytest==9.1.1
+PyYAML==6.0.1
+web3==8.0.0

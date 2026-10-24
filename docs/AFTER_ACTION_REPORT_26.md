@@ -26,3 +26,9 @@ blocking items and the parallel session.
   Two corrections before commit, both my own: I had attributed ERC-735's 149 storage slots (#49) to the MOBI
   registry, which is not a harness column; and the history figure 169,361 was written without the arrow the
   stale-figure checker requires. The D54 fix is placed as a fifth IDTx instance in the thesis's own code.
+
+## 3. Closing
+Closed 2026-10-23 without the check's findings, which have not arrived: the cross-model check has not run. Both drafts
+were absorbed verbatim into the chapter files by pass 31 (chapter 2 §2.7, chapter 6 §6.8), and the draft files now
+point there. When the check's `FINDINGS.md` arrives, the report open at that time reads it and re-runs each finding's
+gate before accepting it. Pushes of this pass went to `73cba2d`, CI 8 of 8 green.

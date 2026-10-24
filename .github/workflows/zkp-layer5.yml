@@ -24,7 +24,7 @@ jobs:
       with:
         python-version: '3.12'
     - name: Install
-      run: python -m pip install --quiet pytest eth-account coincurve matplotlib
+      run: python -m pip install --quiet -r "$GITHUB_WORKSPACE/ci/requirements-ci.txt"
     - name: Tests (no skips allowed)
       run: |
         python -m pytest -q -rs | tee pytest.log

@@ -124,8 +124,8 @@ state exactly.
   rows (which serialize on the node).
 - <!-- history: superseded by #27 --> The bundle lineage reported an off-chain warm verify of 0.165 ms
   (N=30) and a saturation of ≈772 neighbours at 0.130 ms/neighbour. Both were
-  **re-executed on this trunk 2026-10-04**: warm verify **0.153 ms [0.151, 0.154]**
-  (register #27), and **0.164 ms/neighbour, P* ≈ 609** (register #26; an
+  **re-executed on this trunk 2026-10-04**: warm verify **0.153 ms [0.151, 0.154]** (since superseded:
+  0.142 ms [0.141, 0.143] at the 2026-10-22 re-run, register #27), and **0.164 ms/neighbour, P* ≈ 609** (register #26; an
   extrapolation beyond the tested P ≤ 80). The change from the bundle values is
   environmental (same-host A/B), not code.
 

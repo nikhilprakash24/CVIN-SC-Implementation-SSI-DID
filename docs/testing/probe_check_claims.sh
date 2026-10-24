@@ -18,9 +18,12 @@ import re
 p = "docs/MEASUREMENT_CONDITIONS.md"; L = open(p).read().split("\n")
 for i, l in enumerate(L):
     if l.startswith("| 25 |"):
-        L[i] = l.replace("**1,757,881**", "**1,757,882**", 1); break
+        new = l.replace("**1,757,893**", "**1,757,894**", 1)
+        if new == l: raise SystemExit("probe edit (i) did not apply: row #25 no longer quotes **1,757,893**")
+        L[i] = new; break
 open(p, "w").write("\n".join(L))
 EOF
+[ $? -eq 0 ] || fail "(i) the edit did not apply"
 python3 docs/testing/check_claims.py --check > /dev/null && fail "(i) an edited bold number passed"
 restore
 

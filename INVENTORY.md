@@ -123,7 +123,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `mobi-vid/tests/test_vin_cipher.py` | — | ✅ Complete | AES-256-GCM VIN encryption tests (replaced earlier demo XOR) |
 | `mobi-vid/README.md` | — | ✅ Complete | Honest implemented-status table |
 
-**MOBI VID Python test suite total**: 32 tests (layer + VIN cipher). On-chain `attestEvent` now verifies attester signature via ecrecover (forged/replayed attestations revert); attestEvent cost rose 121k → 193k gas as a result.
+**MOBI VID Python test suite total**: 32 tests (layer + VIN cipher). On-chain `attestEvent` now verifies attester signature via ecrecover (forged/replayed attestations revert); attestEvent cost rose 121k → 193k gas as a result in the July build (now 198,694 execution gas, #28).
 
 ### Config
 
@@ -154,7 +154,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | MOBI VID / VIN encryption test scripts | `scripts/test_mobi_vid.py`, `scripts/test_vin_encryption.py` | ✅ Passing |
 | On-chain contracts + Hardhat project | `contracts/`, `hardhat.config.js` | ✅ ERC-1056, MOBI VID V1/V2 |
 
-**Measured V2V result** (N=30 seeded runs; register #27): SSI warm verify **0.153 ms** [0.151, 0.154]; cold 0.399 ms; PKI warm 0.094 ms. 1,650,318 messages verified, 150 failures = exactly the 5 injected attacks × 30 runs (zero false positives/negatives). The verification step is far inside the 100 ms V2V budget (H3 supported, verification-step scope).
+**Measured V2V result** (N=30 seeded runs; register #27): SSI warm verify **0.142 ms** [0.141, 0.143]; cold 0.363 ms; PKI warm 0.090 ms. 1,650,318 messages verified, 210 failures = exactly the 7 injected attacks × 30 runs (zero false positives/negatives). The verification step is far inside the 100 ms V2V budget (H3 supported, verification-step scope).
 
 **Honest caveats**: V2V latency excludes radio/MAC/network-stack; mobility is simulated (no SUMO binary in the measurement environment).
 
@@ -174,7 +174,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `results/gas_comparison.csv`, `gas_comparison.tex` | ✅ Complete | Camera-ready gas comparison table |
 | `results/sepolia_validation.json` | ✅ Complete (scaffold) | Sepolia validation output slot (real run pending) |
 
-**Gas finding (RQ1/H1)** (register #25, #6): 33.7× create-identity spread across standards, from CVIN-Combined 52,216 gas (cheapest) to ERC-735 1,757,881 (heaviest; ERC-725xy 1,680,816 second); bare ERC-1056 ~10× cheaper than the VIN-bound ERC-721 mint (H1 supported); ERC-4337 EntryPoint indirection = +46,830 gas/op.
+**Gas finding (RQ1/H1)** (register #25, #6): 33.7× create-identity spread across standards, from CVIN-Combined 52,216 gas (cheapest) to ERC-735 1,757,893 (heaviest; ERC-725xy 1,680,816 second); bare ERC-1056 ~10× cheaper than the VIN-bound ERC-721 mint (H1 supported); ERC-4337 EntryPoint indirection = +46,830 gas/op.
 
 ### Security analysis ✅ — two complementary lenses
 
@@ -250,7 +250,7 @@ Additional living docs at repo root: `README.md`, `CHANGELOG.md`, `CAPABILITIES.
 |------------|---------|
 | H1 — minimal-state ≥10× cheaper for identity creation | ✅ Supported (ERC-1056 52,594 vs ERC-721 545,101 = 10.4×) |
 | H2 — ≥90% W3C compliance achievable | ✅ Supported (94.3% measured) |
-| H3 — off-chain verify meets V2V budget | ✅ Supported (SSI warm 0.153 ms ≪ 100 ms) |
+| H3 — off-chain verify meets V2V budget | ✅ Supported (SSI warm 0.142 ms ≪ 100 ms) |
 | H4 — MOBI VID realizable across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
 | H5 — hybrid on the cost/capability frontier | ✅ Supported (CVIN-Combined) |
 

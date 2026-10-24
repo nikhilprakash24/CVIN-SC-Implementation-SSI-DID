@@ -144,7 +144,7 @@ A possible title, for the author's decision (D-14): *Measured Trade-offs of Ethe
 |---|---|---|---|
 | H1 | Minimal-state standards are at least 10× cheaper than rich-state ones to create a vehicle identity | **split.** Creation: supported under the stated definition (52,594 vs 545,101 = 10.4×; 6.9× with the VIN bound on both sides). Update and lifetime: not supported; ERC-1056 is cheapest over the lifecycle by 1.20× to 5.52×, not 10× (the 1.20× is against an ERC-1155 total that omits two events it lacks) | #6, #25, #35 |
 | H2 | At least 90 % on the internal structural checker, with residual gaps confined to documented deviations | supported as a structural self-score (94.3 %; 41 PASS, 1 PARTIAL, 2 FAIL of 44); the external DID suite passes 335/336 | #4, #24 |
-| H3 | Off-chain verification of pre-issued credentials fits the budget; chain reads at message time do not | supported for the verification step: SSI warm 0.153 ms [0.151, 0.154]; uncached ERC-1056 verify 9.654 ms median | #21, #27 |
+| H3 | Off-chain verification of pre-issued credentials fits the budget; chain reads at message time do not | supported for the verification step: SSI warm 0.142 ms [0.141, 0.143]; uncached ERC-1056 verify 9.654 ms median | #21, #27 |
 | H4 | The MOBI-VID-inspired lifecycle is realisable across backends with a fidelity gradient | supported with the gradient stated | #30; `mobi_vid_backends.json` (re-executed per #43) |
 | H5 | No standard dominates; the hybrid's position depends on the criteria | **split.** No dominance: supported. Hybrid: on the fidelity-per-gas plane among the MOBI backends, yet dominated by ERC-4337 on all six harness criteria | #36 |
 | I1 to I5 | pre-registered infrastructure questions, no hypothesis | as registered: I1 outside band, not falsified (ratio 1.226 on verifier v3; it was 1.096, PASS, on v2; corrected 2026-10-14 after the WM-2 C0 re-run), I2 PASS (15 checks, 30/30 runs), I3 PASS (at most k − 1 messages), I4 and I5 reported | #44 to #48 |
@@ -300,7 +300,7 @@ The author has not fixed the three modes; I propose a default (D-9) that Phase 1
 | Write | account-abstracted (UserOperation through an EntryPoint) | +46,830 gas per operation (#25); U5 141,767 = direct U3 + 47,116 (#34) |
 | Read | on demand at message time | 9.654 ms uncached ERC-1056 verify (#21) |
 | Read | cached with a re-check every k | #32; the one-call probe refresh, 2.76 / 2.89 ms per refresh (#37) |
-| Read | offline credential, no chain at message time | 0.153 ms warm (#27) |
+| Read | offline credential, no chain at message time | 0.142 ms warm (#27) |
 
 The ERC-1056 relayed-path gas sits in the harness `crud_gas` table but in no register row; register it before a chapter quotes it.
 The classification that report 16 starts (every operation and demo step labelled by mode, generated from code) is a classification, not a measurement, so it fits inside WM-2's rule.
