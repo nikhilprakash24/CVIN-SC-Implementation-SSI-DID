@@ -36,9 +36,14 @@ No test, contract, result of record or register row is changed.
 
 Not run: the test suites themselves (no test changed) and CI (nothing pushed to the trunk).
 
-## To apply (the author's call)
+## Also verified on the default branch's incoming state (2026-10-24)
+Applied with `git am -3` on PR #16's head `7a59058` (the clone line with the cv2x reports 35–37, A7 and B3):
+`build_register.py --check` current, `--check-complete` pass, `check_charters.py` pass, `tools/prepush_check.sh`
+PREPUSH OK.
+
+## To apply (after PR #16 merges; replan §10, R-7)
 ```bash
-git checkout claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy
+git checkout claude/clone-cvin-id-scs-011CUyxScetMdSQFkuQUNLTt   # or the cv2x trunk
 git am <this branch>/docs/planning/testing_suite/staged/*.patch
 python3 docs/testing/build_register.py --check && python3 docs/testing/build_register.py --check-complete
 python3 docs/testing/check_charters.py && bash tools/prepush_check.sh

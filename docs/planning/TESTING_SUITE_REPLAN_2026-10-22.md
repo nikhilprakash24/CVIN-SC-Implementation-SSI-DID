@@ -150,3 +150,33 @@ guard to A7's files and to layer 5, and keeps the eight charters the trunk does 
 `docs/planning/testing_suite/staged/README.md`.
 
 Still open for the author: where the series lands (a trunk session applies it), and the defaults R-2 to R-6.
+
+## 10. Cross-check for PR #19 and the decisions taken (2026-10-24)
+
+**PR #19 as opened was not safe to merge.** Its base is the clone line (`claude/clone-cvin-id-scs-…`); GitHub reported
+it conflicting, and two of its commits (`a01b5de`, `6548a88`, 2026-10-15) replaced
+`1_blockchain-identity/results/metrics/latest/` with a run older than the trunk's run of record and wrote v0
+`docs/testing/` files that the trunk has since replaced. Both are reverted on this branch (`6aafcff`, `365ee1e`); their
+baseline and report are kept as superseded history under `docs/planning/testing_suite/history/`. After the reverts the
+PR changes eight planning files, adds no code, test or result, and merges into its base with no conflict
+(`git merge-tree`, 2026-10-24).
+
+**Where the series lands.** The series needs the trunk's WM-2 A7 record, which the clone line receives with PR #16.
+Verified on PR #16's head `7a59058` with the series applied: `build_register.py --check` current, `--check-complete`
+pass, `check_charters.py` pass, `tools/prepush_check.sh` PREPUSH OK. It also applies to the cv2x trunk at `1fba094`
+(§9).
+
+**Decisions taken as the orchestrator's defaults** (labelled as such, per guide 2.1.7; the author may overturn any):
+
+| ID | Decision taken | Why this one |
+|---|---|---|
+| R-1 | Build against the trunk that has A7 (cv2x `1fba094`, equal to the clone line after PR #16) | the register work needs A7's record |
+| R-2 | Derived identifiers; no test title edited | the trunk builder's stated principle; touches no test file |
+| R-3 | `TC-<sut>-<op>-<cls>-<hash8>` | stable under insertion |
+| R-4 | Rule file with the firing rule recorded per entry | reviewable; 43/50 sample right on function before three fixes |
+| R-5 | This branch's 10-15 files reverted, kept as history | the trunk's review asks it; avoids overwriting results of record |
+| R-6 | Eight charters; G and L stay the trunk's generated charters | no duplicate instruments |
+| R-7 | PR #19 lands the plan, replan, history and the staged series as documents; the series is applied to the default branch by a follow-up after PR #16 merges | this session cannot merge the trunk into its branch (permission policy), and the series must apply on a tree with A7 |
+
+**Order of merges that keeps everything consistent:** PR #16, then PR #19, then apply the series (one `git am`) on the
+default branch and push it with CI.
