@@ -27,7 +27,14 @@ admitted set (§3.x.4).
 > refers to functions by **name and set**, not by a contested F-number. Verbatim signatures are reproduced in
 > Appendix G-B once the archive is available (marked **[B1]**).
 
-### 3.x.2 The twelve functions
+### 3.x.2 The function set
+
+The exact count and numbering are pending the canon archive (G-B, **[B1]**); the operations the substrates are compared
+on are listed below. `BASIC_ID_SET_EXTENSION.md` groups them as Set A (identity and keys) + Set B (credentials) = the
+`IMinimalSSI` twelve, with the relayed/sponsored operation a programme addition. The last two (execute, relayed op)
+have *no analogue* in the centralized, national, or V2X identity worlds (`ANALOGIES.md`); they are blockchain-account
+capabilities, not operations an identity must have, so the set is best read as **the capability surface these
+substrates expose for comparison**, not as a proven minimal or necessary set (examiner obj. 1).
 
 | Set | Function (by name) | What it does |
 |---|---|---|
@@ -42,6 +49,7 @@ admitted set (§3.x.4).
 | B | verify credential | check a credential's signature and status |
 | B | revoke credential | invalidate an issued claim |
 | B | create presentation | a holder discloses a credential to a verifier, replay-protected |
+| (opt.) | relayed / sponsored operation (meta-tx) | submit an operation whose gas another party pays — a programme addition, no identity-world analogue |
 
 The full function→implementation map across the ten substrates — the symbol that realises each function and the test
 that guards it — is Appendix G-A; the per-function pseudocode is Appendix G-D. Two structural findings fall out of the
@@ -105,13 +113,21 @@ capture the contribution: no function in Set A or Set B is, by itself, an IDTx.
 ### 6.8.2 The inventory: the mechanism is rare
 
 Re-classified under the definition, the twenty-six candidate gates of Phase 1 (twenty-five from `CAPTURE.md` §5, plus
-`payToll`, which the capture missed) fall into six classes, of which **only four are true IDTx** (`ANALYSIS.md` §4.2;
-Figure P1-5): the MOBI birth (VIN uniqueness against other identities), the two `addClaim` paths (issuer authorisation
-and claim status), and `payToll` (a payment gated on the named vehicle's owner). Ten are identity administration or
-sender authorisation, four are admission-time authentication, five are off-chain identity-dependent *decisions*, two
-are not dependencies at all. **The finding is the scarcity:** the guard-on-execution mechanism is used overwhelmingly
-for administration and authentication, and the interesting dependencies live off-chain as decisions. That the true
-IDTx are few is itself a result.
+`payToll`, which the capture missed) fall into **six classes** (`ANALYSIS.md` §4.2; Figure P1-5): **4** true IDTx,
+**10** identity administration or sender authorisation, **4** admission-time authentication, **1** enabling view (T3
+`validDelegate` — state any contract could depend on, but a gate by itself is not a transaction), **5** off-chain
+identity-dependent *decisions*, and **2** that are not dependencies at all (4+10+4+1+5+2 = 26). The four true IDTx are
+the MOBI birth (VIN uniqueness against other identities), the two `addClaim` paths (issuer authorisation and claim
+status), and `payToll` (a payment gated on the named vehicle's owner).
+
+**Boundary caveat (examiner obj. 3).** Only the two `addClaim` paths lie inside the ten *measured* substrates; `payToll`
+is in an ERC-721 research copy (`CVIN_NFT_DID_ERC721.sol`, not the measured substrate, no register row) and the MOBI
+birth is in MOBI-VID, outside the ten-adapter conformance gate (Appendix G-A). Over the measured set the count is
+therefore **2**, with `payToll` and the MOBI birth as out-of-set exemplars. The count is also sensitive to the
+definition's exact wording (T5's dependency is on the *set* of identities, not one the transaction names in the
+narrowest reading). The robust claim is the weaker one: **the guard-on-execution mechanism is used overwhelmingly for
+administration and authentication, and the richest identity dependencies live off-chain as decisions** — not a precise
+headcount.
 
 ### 6.8.3 The three-axis taxonomy
 

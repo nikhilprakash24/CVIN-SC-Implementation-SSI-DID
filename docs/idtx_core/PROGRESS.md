@@ -26,7 +26,7 @@ Phase 6  IDTx + compound scenarios visualized [□□□□□□□□□□]  
 | 1.6 | Benchmark-gap evidence | LS | ✅ done → `p1/BENCHMARK_GAP.md` |
 | 1.7 | IDTx prior-art positioning | LS | ⬜ queued |
 | 1.9 | Thesis drafts (Ch 3 §3.x, Ch 6 §6.8, Ch 2 §2.6, App. G) | ED | ✅ done → `p1/THESIS_DRAFT.md` |
-| 1.10 | Examiner pass (draft only) | SK | 🔵 running |
+| 1.10 | Examiner pass (draft only) | SK | ✅ done → `p1/EXAMINER_REVIEW.md` (4 FATAL, 8 MAJOR) |
 | 1.11 | CI: figure + link checks | ED | ⬜ queued |
 
 Legend: ⬜ queued · 🔵 running · ✅ done · ⏸ blocked · ⚠ needs author
@@ -53,3 +53,13 @@ Legend: ⬜ queued · 🔵 running · ✅ done · ⏸ blocked · ⚠ needs autho
 - [ ] WP 1.4 pseudocode — you will verify line-by-line against the Solidity.
 - [ ] Supply `cvin-sandbox-v1.3` archive (or F1–F12 signatures) to clear [B1].
 - [ ] Function-naming: left to my judgment for clarity (per your note).
+
+## Examiner pass (WP 1.10) — author decisions needed
+
+The blind examiner raised 4 FATAL + 8 MAJOR + 5 minor. Editor fixed the mechanical/verified ones (obj. 5, 6, 9, 10) this pass. **Four need your call** because they narrow the headline claims:
+- **obj. 1** — drop "minimal set an identity *must* support" → "capability surface for comparison"? (editor softened pending your yes/no)
+- **obj. 2** — concede the IDTx predicate is object-attribute ABAC realized on-chain, and relocate novelty to the locus taxonomy + ordering analysis only?
+- **obj. 3** — report the IDTx count as 2 (measured set) not 4, with payToll/MOBI as out-of-set exemplars? (editor applied this; confirm)
+- **obj. 4** — restate the benchmark gap without using the coined term, and concede A5 applies to your own proposed benchmark too?
+
+See `p1/EXAMINER_REVIEW.md` for the full triage and the minimum fix per objection.

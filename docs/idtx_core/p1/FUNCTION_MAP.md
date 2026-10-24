@@ -181,7 +181,7 @@ Path keys:
 |---|---|---|---|
 | anchor commitment (owner-only) | `5_zkp-agent-identity/contracts/ZkVinGate.sol:80` anchorCommitment | `5_zkp-agent-identity/test-contracts/zkvin_gate.test.js:80` | only ERC-1056 owner anchors |
 | set service policy | `ZkVinGate.sol:86` setService | `zkvin_gate.test.js` | |
-| scoped ZK admission (nullifier, once per scope) | `ZkVinGate.sol:92` admit | `zkvin_gate.test.js:41,49,57,63` | scope-bound, unlinkable per scope |
+| scoped ZK admission (nullifier, once per scope) | `ZkVinGate.sol:92` admit | `zkvin_gate.test.js:41,49,57,63` | one-time per scope; hides VIN/year/mfr. NOT identity-unlinkable: `admit` emits identity in clear (:113), linkable across scopes |
 
 ---
 
