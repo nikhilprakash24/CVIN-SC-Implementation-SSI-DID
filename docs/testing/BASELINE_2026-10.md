@@ -38,21 +38,7 @@ Not re-run in Phase 0 (no code change touches them; they stay at their 2026-10-0
 
 ## 4. Harness run of record on HEAD
 
-Run **`2026-10-15T05-03-01Z_ef2c851`**, promoted to `results/metrics/latest` (previous: `2026-10-04T09-50-29Z_0eef6af`).
-
-| Check | Result |
-|---|---|
-| `meta.measured.contractsTree` vs `HEAD:1_blockchain-identity/contracts` | `04c33c2` = `04c33c2` ✓ (closes plan §6.4 item 1) |
-| `dirty` / `dirtyMeasured` | `true` / **`false`** — the working tree held this pass's uncommitted docs and tools; none of the four measured paths differed, which is the §5.F condition |
-| Hardfork executed / block gas | osaka / 60 M (as §5.A) |
-| crud: 192 (adapter, op) cells × 11 exact fields (gasUsed, intrinsic, execution, calldata, logs, SSTORE/SLOAD, zero→nonzero, txCount, supported) vs previous run | **0 differences** — run-to-run byte-identity of exact metrics confirmed on a different host |
-| lifecycle: lifetime totals per adapter | unchanged |
-| exact tables (`crud_gas`, `crud_storage`, `crud_calldata`, `crud_txcount`, `lifecycle_*`, `scale`, `batch`) | content identical; only the run-id footer changed; the `.csv` versions are byte-identical |
-| `gasDeterministic:false` cells | still 14, same cells (iteration-to-iteration ranges; plan §6.4 item 2, Phase 4 packet P4-3) |
-| latency tables (`*_latency*`, `resolve`, `throughput`) | moved, as expected on a different host; e.g. R3 median ms after lifecycle: ERC-1056 20.31 → 16.71, ERC-1155 2.63 → 2.57 |
-| `npm run metrics:analyze` | A1 ratios, A2 capabilities, A5 rubric exact inputs unchanged; A3/A4 **frontier (all six criteria) unchanged**: erc1056, erc1056w, erc721, erc1155, erc725xy, erc4337 — CVIN-Combined still dominated (register #36 holds on this host) |
-
-Register consequence: rows #29–#31, #34–#36 keep status **V** with the run id updated to `2026-10-15T05-03-01Z_ef2c851`; the latency figures in #31 (ms) are host-specific and now have a second-host observation (E7 candidate once the plan's replication protocol exists). #39 (HTTP condition) was **not** re-run.
+HARNESS_SECTION
 
 ## 5. Quarantine (W0-B)
 
@@ -65,11 +51,11 @@ Moved to `4_comparison-framework/results/superseded/2026-10-15/` with a README n
 | `4_comparison-framework/results/gas_benchmark.json` (restored, committed) | `4ec80356cf86d829` |
 | checker report (this run) | `3e1a3669ca31506e` |
 | `results/metrics/latest/crud.json` before re-run (0eef6af run) | `bcd6e33326748f95` |
-| `results/metrics/latest/crud.json` after re-run | `fb9e48e8bdd85b06` |
+| `results/metrics/latest/crud.json` after re-run | CRUD_HASH |
 
 ## 7. Exit criteria (plan §8 Phase 0)
 
 - [x] all suites green, no skips
-- [x] `meta.measured.contractsTree == HEAD:1_blockchain-identity/contracts` — `04c33c2` = `04c33c2`
+- [x] `meta.measured.contractsTree == HEAD:1_blockchain-identity/contracts` — CONTRACTS_CHECK
 - [x] baseline hashes recorded
-- [x] register rows whose numbers moved: none; #29–#31, #34–#36 re-stamped on the new run id (same values); latency-only rows get a second-host observation
+- [x] register rows whose numbers moved: REGISTER_MOVED
