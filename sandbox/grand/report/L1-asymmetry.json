@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-22T22:54:41.761Z",
+  "generatedAt": "2026-10-24T13:03:37.383Z",
   "suite": "1_blockchain-identity/test/L1-identity-mechanisms",
   "options": [
     "cvin-combined",
@@ -141,7 +141,7 @@
       "option": "erc-735",
       "mechanism": "create",
       "outcome": "ok",
-      "gasUsed": "1757881",
+      "gasUsed": "1757893",
       "reason": null,
       "note": "claim-holder deployment is the creation cost (vin=CVNERC73500000000 stored in constructor); explicit; resolved as did:erc735:0x7a69:0x712516e61C8B383dF4A63CFe83d7701Bce54B03e"
     },
@@ -511,7 +511,7 @@
       "outcome": "ok",
       "gasUsed": "287354",
       "reason": null,
-      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0xba457a711023ba056b10dbfa1a359ba8a40ad6b528d…)"
+      "note": "recordLifecycleEvent(REPAIR) by SERVICE_CENTER issuer; VC hash stored, signature not verified (attestEvent is separate); claimId (0x9e9d046bea9d6e1277c1bbf46a653824619f1bbcce7…)"
     },
     {
       "option": "cvin-combined",

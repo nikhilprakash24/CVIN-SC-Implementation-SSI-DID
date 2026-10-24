@@ -1,12 +1,12 @@
 # L1 identity mechanisms — cross-option asymmetry (from tests)
 
-Generated 2026-10-22T22:54:41.761Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
+Generated 2026-10-24T13:03:37.383Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
 
 ✓ gas = the adapter ran the mechanism (exact gasUsed of the measured transaction; 0 = no transaction, e.g. implicit creation or a view) · — = NotApplicable (reason below) · ✗ = adapter error or failed assertion · · = not run
 
 | Mechanism | cvin-combined | erc-1056-uport | erc-1056-vehicle | erc-1155 | erc-4337 | erc-721 | erc-725 | erc-725xy | erc-735 | lsp8 | mobi-vid |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| create | ✓ 0 | ✓ 77836 | ✓ 54655 | ✓ 107729 | ✓ 759088 | ✓ 545197 | ✓ 519384 | ✓ 1730753 | ✓ 1757881 | ✓ 152644 | ✓ 276895 |
+| create | ✓ 0 | ✓ 77836 | ✓ 54655 | ✓ 107729 | ✓ 759088 | ✓ 545197 | ✓ 519384 | ✓ 1730753 | ✓ 1757893 | ✓ 152644 | ✓ 276895 |
 | controller-change | ✓ 68835 | ✓ 68842 | ✓ 53882 | ✓ 89793 | ✓ 28527 | ✓ 179562 | ✓ 28378 | ✓ 28822 | ✓ 28800 | ✓ 80568 | ✓ 180171 |
 | key-or-delegate | ✓ 72284 | ✓ 72219 | ✓ 35044 | — | ✓ 47569 | — | ✓ 137096 | — | — | — | ✓ 57655 |
 | attribute | ✓ 51622 | ✓ 52016 | ✓ 37180 | ✓ 96478 | ✓ 94471 | ✓ 120137 | — | ✓ 95166 | — | ✓ 100346 | ✓ 37529 |

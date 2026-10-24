@@ -170,7 +170,8 @@
     "moved_by_fixes": [
       "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json",
       "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json",
-      "4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json"
+      "4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json",
+      "4_comparison-framework/results/gas_moved_by_natspec_2026-10-24.json"
     ],
     "register": [
       25
@@ -766,8 +767,8 @@
     "source": {
       "path": "sandbox/grand/report/GRAND_REPORT.md"
     },
-    "generated": "2026-10-22T22:57:48Z",
-    "commit": "319fdaa",
+    "generated": "2026-10-24T13:08:37Z",
+    "commit": "231e4ac",
     "stages": {
       "smoke": {
         "ok": true,
@@ -779,7 +780,7 @@
       },
       "L1+L2": {
         "ok": true,
-        "result": "{'passing': 562, 'failing': 0}"
+        "result": "{'passing': 563, 'failing': 0}"
       },
       "L3+L4": {
         "ok": true,

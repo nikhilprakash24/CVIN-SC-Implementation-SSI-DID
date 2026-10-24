@@ -39,6 +39,7 @@ CLASSES = {
     "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json": ("history", "a diff between two runs of record, each stamped or registered; not a measurement"),
     "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json": ("history", "same"),
     "4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json": ("history", "same"),
+    "4_comparison-framework/results/gas_moved_by_natspec_2026-10-24.json": ("history", "diff between the results of record and one scratch re-run (not kept) after the NatSpec pass; logs a ±12-gas deployment shift from the metadata hash; not a measurement of record"),
     "4_comparison-framework/results/sensitivity.json": ("stamp producer", "no producer in the tree (optimizer sweep, July run); WM-2 A3 gap, pass 31"),
     "cv2x-testbed/sumo/results/v2v_latency.json": ("single run", "default output of one harness run; the results of record are v2v_latency_stats.json"),
     "cv2x-testbed/results/freshness_k_samehost.json": ("derived", "summary of the 12 stamped same-host replicates in freshness_k_samehost/ (#55, clone lineage #42); all_git_clean recorded"),
