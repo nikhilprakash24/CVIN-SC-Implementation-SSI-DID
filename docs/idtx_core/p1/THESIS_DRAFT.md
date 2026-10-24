@@ -13,14 +13,20 @@
 
 A comparison of identity substrates needs a common unit. Comparing whole standards (ERC-1056 against ERC-735 against
 ERC-4337) compares bundles that draw their boundaries differently; comparing single opcodes compares mechanism, not
-capability. This thesis takes the unit to be a **minimal set of identity-system functions** — the operations an
-identity must support to be usable as an identity, independent of how any one substrate realises them.
+capability. This thesis takes the unit to be a **shared set of identity-system functions** — the capability surface on
+which the substrates are compared, independent of how any one substrate realises them. It is *not* claimed to be a
+proven-minimal or necessary set: the agent-proxy (`execute`) and the relayed/sponsored operation have no analogue in
+the centralized, national, or V2X identity worlds (`ANALOGIES.md`); they are blockchain-account capabilities, so the
+set reflects what these EVM substrates expose for comparison, not a per-function necessity argument (examiner obj. 1).
 
-The set is the canonical sandbox's `IMinimalSSI` interface of twelve functions (`docs/BASIC_ID_SET_EXTENSION.md` §1),
-split into **Set A — identity and keys** and **Set B — credentials**, with an optional **Set C** agent layer. A
-substrate is *admitted* to the comparison when it passes the twelve-test compliance suite ("admission = compliance").
-This is the paper's conformance gate; the measurement catalogue then adds cost, lifecycle, read path and scale over the
-admitted set (§3.x.4).
+The set is the canonical sandbox's `IMinimalSSI` interface (`docs/BASIC_ID_SET_EXTENSION.md` §1), split into
+**Set A — identity and keys** and **Set B — credentials**, with an optional **Set C** agent layer. A substrate is
+*admitted* to the comparison when it passes the compliance suite on a **pass-or-justified-`n/a`** basis: a substrate
+need not implement every function natively, only either support it or carry a recorded `n/a` where the standard lacks
+the primitive (Appendix G-A records native vs pattern vs absent per substrate — only ERC-4337 is natively complete;
+delegate and `create presentation` are `n/a` on several token substrates, and ERC-725 `execute` is a stub). Admission
+is therefore *not* "implements all twelve"; the earlier "admission = compliance" shorthand is corrected here (examiner
+obj. 8). The measurement catalogue then adds cost, lifecycle, read path and scale over the admitted set (§3.x.4).
 
 > Function-numbering note. Three sources number the twelve functions differently (`ANALOGIES.md`,
 > `BASIC_ID_SET_EXTENSION.md`, and the `cvin-sandbox-v1.3` canon archive, which is not in this repository). This thesis
@@ -50,6 +56,9 @@ substrates expose for comparison**, not as a proven minimal or necessary set (ex
 | B | revoke credential | invalidate an issued claim |
 | B | create presentation | a holder discloses a credential to a verifier, replay-protected |
 | (opt.) | relayed / sponsored operation (meta-tx) | submit an operation whose gas another party pays — a programme addition, no identity-world analogue |
+
+`execute` sits in Set A because the canon interface places it there (`BASIC_ID_SET_EXTENSION.md`); the **optional Set C**
+is the separate ERC-8004 *agent* layer (and the layer-5 `ZkVinGate`), not the plain `execute` primitive (examiner obj. 17).
 
 The full function→implementation map across the ten substrates — the symbol that realises each function and the test
 that guards it — is Appendix G-A; the per-function pseudocode is Appendix G-D. Two structural findings fall out of the
@@ -138,6 +147,13 @@ delegate or key validity / attribute or claim value / revocation status / histor
 the "at admission" point — that is the excluded sender-authentication class — which the figure shows as a deliberately
 empty facet.
 
+> Prototype scope (examiner obj. 15). The `IdtxExecutor` prototype's `execute`/`fulfil` demonstrate the *admissibility
+> predicate* (they revert unless the identity dependency holds) but emit rather than enact an external effect, so the
+> artifact evidences the "admissibility" half of §6.8.1, not the "effect" half. Positioning against **capability-based
+> security** (obj. 13): a capability is unforgeable bearer authority the holder presents; an IDTx instead *reads* the
+> named identity's current ledger state at execution, so it reflects revocation and rotation immediately, where a bearer
+> capability, once issued, does not — that freshness coupling, not possession of a token, is the distinguishing property.
+
 Three constraints connect the axes, each a finding in its own right: **L1 rules out direct evaluation** (an ERC-1056
 attribute can be depended on only through a receipt proof Phase 1 never built — the registry exposes no attribute-value
 read, `idtx.test.js:138`); **a commitment is equality-only** (it proves no knowledge of what it commits to, AR-5); and
@@ -147,23 +163,47 @@ transaction, AR-10).
 
 ### 6.8.4 Position against prior art
 
-The guard-on-execution mechanism is **not new, and the thesis says so first.** Permissioned tokens over an identity
-registry — ERC-3643 with ONCHAINID — are the closest prior art: a transfer gated on claims from trusted issuers. The
+The guard-on-execution mechanism is **not new, and the thesis says so first.** More strongly, the *predicate semantics*
+are not new either: an IDTx evaluates the attributes of the object/resource identity named in the request, which is
+**object-attribute ABAC** (NIST SP 800-162 §3.2 evaluates subject, object, and environment attributes — object-attribute
+policies gate precisely on the state of the named resource, not only the caller). The earlier framing that "ABAC gates
+the caller whereas an IDTx names another identity" is withdrawn as a mischaracterisation of ABAC (examiner obj. 2).
+Permissioned tokens over an identity registry — ERC-3643 with ONCHAINID — are the closest on-chain prior art, and the
 one place an IDTx-class workload has actually been *measured* is Frutuoso et al. (2026, arXiv 2607.16383), ad hoc and
-with no shared workload. The contribution claimed here is therefore **not the mechanism** but (i) the definition that
-separates dependence on another identity's state from administration and authentication, (ii) the storage-locus
-taxonomy, and (iii) the freshness dimension Phase 1 measured for decisions (k−1-message staleness bound, register #32,
-#37).
+with no shared workload.
+
+The contribution claimed here is therefore narrow and explicit: **the IDTx is object-attribute ABAC realised on-chain**,
+and what is new is (i) the **storage-locus × encoding × evaluation-point taxonomy** (§6.8.3), which classifies *where*
+the depended-on identity state lives and *when* it is evaluated — a dimension ABAC's policy model does not address
+because it assumes a trusted PDP with direct attribute access; and (ii) the **on-chain freshness and ordering analysis**
+(the staleness bound for off-chain decisions, and the mempool ordering race a later re-check leaves open, AR-10), which
+arises only because the PDP is itself a transaction on a public ledger. The definition (§6.8.1) earns its place by
+drawing the boundary these two analyses need, not by claiming a new access-control concept.
+
+> Freshness-evidence caveat (examiner obj. 7). The k−1-message staleness bound (register #32, #37) predates the D51
+> chain-time fix and is marked for re-run in `ANALYSIS.md` §3 (A3b). It is cited here as **pre-fix and provisional**;
+> the contribution rests on the *existence and shape* of the bound, not on the superseded numbers, and the clean
+> measurement belongs to the post-thesis study (P5).
 
 ---
 
 ## C. Chapter 2 — §2.6 ending, and Chapter 7 — contribution/future-work (HOME of the gap claim)
 
-The benchmark-gap claim is stated **only** in its narrow, defensible form (decision D-GAP; evidence in Appendix G-F,
-31 sources):
+The benchmark-gap claim is stated in a form that a neutral reader can recognise as a gap *before* reading Chapter 6 —
+i.e. without invoking the thesis's own coined term (decision D-GAP, revised per examiner obj. 4; evidence in
+Appendix G-F, 31 sources):
 
-> No benchmark provides a shared, reusable workload **and** an admission/conformance rule **and** IDTx-level dependency
-> semantics; every artefact found satisfies at most two of these three, and none has an independent reproduction.
+> No existing benchmark pairs a **shared, reusable identity-gating workload** — operations whose admissibility depends
+> on the state of a named identity — with an **admission/conformance rule**. Performance benchmarks that exist measure
+> the identity *lifecycle* (create/resolve/update/deactivate) with no gating workload; conformance suites supply a
+> workload and an admission rule but measure spec conformance, not cost; and the one study that measures an
+> identity-gating workload (Frutuoso et al. 2026) is ad hoc, with no reusable harness.
+
+Two honesty constraints the examiner pressed and the thesis accepts: the gap is **not** defined as "no one has
+benchmarked an IDTx" (that would be trivially true of any new term); and independent reproduction is **not** used as a
+discriminator against prior art, because the benchmark this thesis itself proposes (below) also lacks a reproduction at
+publication — reproduction is named as a *maturity milestone* for any candidate, this work included, not as a gap only
+others fail.
 
 The thesis does **not** claim that no SSI or decentralized-identity benchmark exists — one does (Satybaldy et al. 2026,
 arXiv 2601.20716, which self-describes as a benchmark and ships a replication package). The thesis positions against it

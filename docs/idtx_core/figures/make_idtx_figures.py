@@ -499,7 +499,7 @@ def markdown():
          "one figure in this directory (the table view of the SVG). The script is Python-stdlib only (no matplotlib) and "
          "emits deterministic SVG. **Author:** Nikhil Prakash (MASc, UBC ECE).", "",
          "Sources: `PLAN.md` §4.2/§4.4, `p1/FUNCTION_MAP.md`, `p1/ANALOGIES.md`, "
-         "`phase2/focus/F1_onchain_storage_idtx/ANALYSIS.md` §4.2/§4.4, `BASIC_ID_SET_EXTENSION.md` §2. "
+         "`docs/phase2/focus/F1_onchain_storage_idtx/ANALYSIS.md` §4.2/§4.4, `BASIC_ID_SET_EXTENSION.md` §2. "
          "F-numbers are not used as labels because they are inconsistent across these sources (see the P1-6 note); functions "
          "are named and grouped by set.", ""]
 

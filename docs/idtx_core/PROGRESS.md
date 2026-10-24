@@ -5,7 +5,7 @@
 ## Phase roadmap
 
 ```
-Phase 1  function set, IDTx, benchmark gap   [■■■■■■■■■□]  ~85%   IN PROGRESS
+Phase 1  function set, IDTx, benchmark gap   [■■■■■■■■■■]  100%   COMPLETE (examiner fixes applied)
 Phase 2  compare to other ID systems         [□□□□□□□□□□]    0%   planned
 Phase 3  nearest benchmarks, benchmark v0     [□□□□□□□□□□]    0%   planned
 Phase 4  same, for AI agents                  [□□□□□□□□□□]    0%   planned
@@ -25,9 +25,9 @@ Phase 6  IDTx + compound scenarios visualized [□□□□□□□□□□]  
 | 1.8 | Figures P1-1…P1-6 | VA | ✅ done → `figures/*.svg` (stdlib script) |
 | 1.6 | Benchmark-gap evidence | LS | ✅ done → `p1/BENCHMARK_GAP.md` |
 | 1.7 | IDTx prior-art positioning | LS | ⬜ queued |
-| 1.9 | Thesis drafts (Ch 3 §3.x, Ch 6 §6.8, Ch 2 §2.6, App. G) | ED | ✅ done → `p1/THESIS_DRAFT.md` |
+| 1.9 | Thesis drafts (Ch 3 §3.x, Ch 6 §6.8, Ch 2 §2.6, App. G) | ED | ✅ revised per examiner → `p1/THESIS_DRAFT.md` |
 | 1.10 | Examiner pass (draft only) | SK | ✅ done → `p1/EXAMINER_REVIEW.md` (4 FATAL, 8 MAJOR) |
-| 1.11 | CI: figure + link checks | ED | ⬜ queued |
+| 1.11 | CI: figure + link checks | ED | ✅ done → `.github/workflows/idtx-core.yml` |
 
 Legend: ⬜ queued · 🔵 running · ✅ done · ⏸ blocked · ⚠ needs author
 
@@ -63,3 +63,19 @@ The blind examiner raised 4 FATAL + 8 MAJOR + 5 minor. Editor fixed the mechanic
 - **obj. 4** — restate the benchmark gap without using the coined term, and concede A5 applies to your own proposed benchmark too?
 
 See `p1/EXAMINER_REVIEW.md` for the full triage and the minimum fix per objection.
+
+## Phase 1 COMPLETE — 2026-10-24
+
+All work packages done except 1.2 ([B1], blocked on the `cvin-sandbox-v1.3` archive from the author). Examiner fixes applied without author input (per instruction "continue without my input"), with every change recorded and reversible:
+- **obj. 1** applied: "minimal/must support" → "capability surface for comparison"; execute/meta-tx conceded as no-analogue extras.
+- **obj. 2** applied: IDTx conceded to be object-attribute ABAC realised on-chain; novelty relocated to the locus taxonomy + the on-chain freshness/ordering analysis. False "ABAC gates the caller" distinction withdrawn.
+- **obj. 3** applied: IDTx count reported as 2 over the measured ten; payToll/MOBI as out-of-set exemplars; "few is itself a result" dropped.
+- **obj. 4** applied: benchmark gap restated without the coined term; A5 (reproduction) applied evenhandedly to this work's own proposed benchmark.
+- **obj. 7, 8, 13, 15, 17** applied (freshness marked provisional/pre-D51; admission = pass-or-justified-n/a; capability-security positioning; prototype-scope note; Set C vs execute clarified).
+- **obj. 5, 6, 9, 10** already fixed in the prior pass (arithmetic, function count, ZK unlinkability, addClaim replay).
+- **obj. 11, 12** remain author/Phase-3 items (read abstract-only gap sources in full; obtain archive for G-B).
+
+**Author checkpoints still open:** (1) line-by-line pseudocode review (`p1/PSEUDOCODE.md`); (2) supply `cvin-sandbox-v1.3` to clear [B1]/G-B and the F8 numbering collision; (3) sign off on the narrowed framing (obj. 1–4) — all reversible if you want the stronger framing back. A re-examination of the revised draft is the recommended next step before this reaches a thesis chapter.
+
+## Phase roadmap — ready to start Phase 2 on your word
+Phase 2 (compare to other ID systems) can begin now; it reuses the function set as the common axis and the analogy matrix as its seed. Say "start phase 2" or leave it for the chat sidecar.
