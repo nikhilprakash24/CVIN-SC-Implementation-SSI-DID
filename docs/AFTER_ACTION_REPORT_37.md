@@ -59,3 +59,13 @@
   re-checked here and confirmed: TDP-001 calls #39 "status U" (it is V); #21's uncached verify is now 15.513 ms, not
   9.654. TDP-001's 0.153 ms had already been corrected under U10. The corrections are a follow-up (new task T-15),
   since the TDP has its own revision rule (a revision letter per document).
+- **U11, progress report draft 2.** Reports 25 to 37 added; every figure updated to the register (62 rows, 45 V;
+  Hardhat 563, Python 376; WM-2 15 of 20); a table of every High defect with its finder; two statements of draft 1
+  corrected: #44 now has a run inside its band (1.197) and is reported "at the edge of the band", and #39 is V with its
+  latency descriptive only. The reader and the AI-use statement stay as marked gaps (N-23).
+- **U12, hygiene.** `docs/INDEX.md` gains seven rows (the master plan first); `docs/DEVELOPMENT_HISTORY.md` points on
+  from July; the handback's reading order adds the master plan, the decision sheet and the check's start prompt; the
+  unblocked list marks U1 to U12 done.
+- **Process finding.** The handback's standing practice (guide rule 1.3.1) is "commits under the author's name only,
+  no co-author trailers, no assistant or model identifiers". This session's commits from `558fc9d` to `8b35320` carried
+  co-author and session trailers. Pushed history is not rewritten; from this commit on, commits follow the rule.
