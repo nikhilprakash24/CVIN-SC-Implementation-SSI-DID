@@ -3,8 +3,8 @@
 This group holds the repo's ERC-1056 "Lightweight Identity" option. `EthereumDIDRegistry` is a near-verbatim Solidity 0.8 port of the uPort/Veramo `ethr-did-registry`. It is one shared contract for every identity. Any Ethereum address is already a DID (`did:ethr:<address>`), and owner, delegate and attribute changes are stored as events, not as contract storage. Off-chain resolvers rebuild a W3C DID Document by walking the `changed[]` → `previousChange` event chain. `CVINVehicleDIDRegistry` is a CVIN-specific wrapper on top of it. It adds a manufacturer-gated VIN↔DID mapping, the vehicle attribute keys (VID-I), and an optional "wrapper-controlled" mode. In that mode the vehicle owner hands ERC-1056 control of the DID to the wrapper, and the wrapper then tracks the vehicle owner itself. The Python resolver `2_w3c-ssi-layer/did-resolution/did_resolver.py` implements did:ethr resolution in line with DID Core against a deployed `EthereumDIDRegistry`.
 
 Files:
-- `1_blockchain-identity/contracts/ERC1056/EthereumDIDRegistry.sol` (408 lines)
-- `1_blockchain-identity/contracts/ERC1056/CVINVehicleDIDRegistry.sol` (421 lines)
+- `1_blockchain-identity/contracts/ERC1056/EthereumDIDRegistry.sol` (492 lines)
+- `1_blockchain-identity/contracts/ERC1056/CVINVehicleDIDRegistry.sol` (532 lines)
 - `2_w3c-ssi-layer/did-resolution/did_resolver.py` (related, resolution side)
 
 ---
@@ -15,13 +15,13 @@ Files:
 - **What it is:** EIP issue #1056 (Pelle Braendgaard / uPort, 2018). It was never merged as a final EIP and lives as a GitHub issue plus the reference implementation `uport-project/ethr-did-registry` (now `decentralized-identity/ethr-did-registry`). It is a single shared registry for key management of existing accounts, so identity creation costs nothing, keys can be delegated with expiry, and attributes are published as events.
 - **Canonical interface:** `identityOwner(address)`, `validDelegate(address,bytes32,address)`, `changeOwner`, `changeOwnerSigned`, `addDelegate`, `addDelegateSigned`, `revokeDelegate`, `revokeDelegateSigned`, `setAttribute`, `setAttributeSigned`, `revokeAttribute`, `revokeAttributeSigned`; public mappings `owners`, `delegates`, `changed`, `nonce`; events `DIDOwnerChanged(identity indexed, owner, previousChange)`, `DIDDelegateChanged(identity indexed, delegateType, delegate, validTo, previousChange)`, `DIDAttributeChanged(identity indexed, name, value, validTo, previousChange)`.
 - **How faithful this repo is:** the full public surface, the event signatures and the signed-message digest layout match upstream.
-  - Signed digest: `keccak256(0x19 ‖ 0x00 ‖ address(this) ‖ nonce[identityOwner(identity)] ‖ identity ‖ "<fnName>" ‖ args…)`, recovered with raw `ecrecover` (`EthereumDIDRegistry.sol:160-173`, `:220-235`, `:283-297`, `:337-351`, `:387-401`). This is the upstream "EIP-191 version 0x00, intended validator" form. It is **not** EIP-712 and does **not** bind `block.chainid`, so the same signature can be replayed across chains if the registry has the same address on each. `scripts/security_scenarios.js:144` records this caveat.
+  - Signed digest: `keccak256(0x19 ‖ 0x00 ‖ address(this) ‖ nonce[identityOwner(identity)] ‖ identity ‖ "<fnName>" ‖ args…)`, recovered with raw `ecrecover` (`EthereumDIDRegistry.sol:198-211`, `:270-285`, `:344-358`, `:410-424`, `:471-485`). This is the upstream "EIP-191 version 0x00, intended validator" form. It is **not** EIP-712 and does **not** bind `block.chainid`, so the same signature can be replayed across chains if the registry has the same address on each. `scripts/security_scenarios.js:144` records this caveat.
   - Deviations from upstream:
     1. Revert strings are `"DIDRegistry: unauthorized"` / `"DIDRegistry: invalid signature"`. Upstream uses `"bad_actor"` / `"bad_signature"`.
     2. Upstream factors the logic into internal `changeOwner(identity, actor, newOwner)` style helpers plus `checkSignature`. Here each `*Signed` function inlines the hash and the state change, which duplicates code.
-    3. `setAttributeSigned` and `revokeAttributeSigned` write `changed[identity]` *before* emitting, using a cached `previousChange` (`:356-358`, `:404-406`). The unsigned versions emit first. The observable result is the same.
+    3. `setAttributeSigned` and `revokeAttributeSigned` write `changed[identity]` *before* emitting, using a cached `previousChange` (`:429-431`, `:488-490`). The unsigned versions emit first. The observable result is the same.
     4. There is no `onlyOwner` custom error and no `ecrecover` zero-address check. A zero signer can never match `identityOwner`, because that function never returns 0 except when the owner was explicitly set to 0 (see the deactivation caveat below).
-  - Comment drift: the header claims "minimal gas costs (events only, no storage for attributes)". That is true for attributes, but delegates do use storage (`delegates` mapping, `:79-80`).
+  - Comment drift: the header claims "minimal gas costs (events only, no storage for attributes)". That is true for attributes, but delegates do use storage (`delegates` mapping, `:106-107`).
 
 ### did:ethr DID method (DIF `ethr-did-resolver` spec)
 - DID syntax: `did:ethr:[<network|chainId>:]<0x address | compressed pubkey>`. The DID Document is derived from registry events:
@@ -29,7 +29,7 @@ Files:
   - `veriKey` / `sigAuth` delegates become `#delegate-N`;
   - attributes named `did/pub/<alg>/<purpose>/<encoding>` become verification methods, and `did/svc/<type>` become services;
   - setting the owner to `0x0` deactivates the DID.
-- **Spec requires attribute names / delegate types to be bytes32 *right-padded ASCII strings*** (e.g. `stringToBytes32("did/svc/MessagingService")`). **Deviation:** `CVINVehicleDIDRegistry` defines every key as `keccak256("did/...")` (`CVINVehicleDIDRegistry.sol:44-70`), and the sandbox adapter also hashes names (`addDelegate(identity, keccak256(purpose), …)`, `setAttribute(identity, keccak256(name), …)`). A spec-conformant did:ethr resolver cannot decode hashed names back into `did/svc/...` / `did/pub/...`, and cannot recognise `keccak256("veriKey")` as `veriKey`. These attributes and delegates therefore do **not** show up in a standard did:ethr DID Document; only the raw events record them. The repo's Python resolver decodes names with `_bytes32_to_str` (`did_resolver.py:401`), so it only maps names that were written as padded ASCII.
+- **Spec requires attribute names / delegate types to be bytes32 *right-padded ASCII strings*** (e.g. `stringToBytes32("did/svc/MessagingService")`). **Deviation:** `CVINVehicleDIDRegistry` defines every key as `keccak256("did/...")` (`CVINVehicleDIDRegistry.sol:71-110`), and the sandbox adapter also hashes names (`addDelegate(identity, keccak256(purpose), …)`, `setAttribute(identity, keccak256(name), …)`). A spec-conformant did:ethr resolver cannot decode hashed names back into `did/svc/...` / `did/pub/...`, and cannot recognise `keccak256("veriKey")` as `veriKey`. These attributes and delegates therefore do **not** show up in a standard did:ethr DID Document; only the raw events record them. The repo's Python resolver decodes names with `_bytes32_to_str` (`did_resolver.py:401`), so it only maps names that were written as padded ASCII.
 
 ### W3C DID Core v1.0 and DID Resolution
 - DID Core (W3C Recommendation, July 2022) defines the DID Document data model (`id`, `verificationMethod`, `authentication`, `assertionMethod`, `service`, …) and the `resolve()` / `resolveRepresentation()` contract, which returns `didResolutionMetadata`, `didDocument` and `didDocumentMetadata`, with error codes `invalidDid`, `notFound` and `representationNotSupported`. The DID Resolution spec is still a W3C CCG/WG draft.
@@ -62,26 +62,26 @@ The `*Signed` entry points let a relayer submit operations for the identity owne
 | `delegates` | `mapping(address=>mapping(bytes32=>mapping(address=>uint)))` public | 80-81 | `validTo` timestamp per (identity, type, delegate) |
 
 ### Events
-`DIDOwnerChanged(address indexed identity, address owner, uint previousChange)` (`:30`); `DIDDelegateChanged(address indexed identity, bytes32 delegateType, address delegate, uint validTo, uint previousChange)` (`:44`); `DIDAttributeChanged(address indexed identity, bytes32 name, bytes value, uint validTo, uint previousChange)` (`:60`). A `validTo` of 0 means revoked.
+`DIDOwnerChanged(address indexed identity, address owner, uint previousChange)` (`:49`); `DIDDelegateChanged(address indexed identity, bytes32 delegateType, address delegate, uint validTo, uint previousChange)` (`:64`); `DIDAttributeChanged(address indexed identity, bytes32 name, bytes value, uint validTo, uint previousChange)` (`:82`). A `validTo` of 0 means revoked.
 
 ### Modifiers
-`onlyOwner(address identity, address actor)` (`:90`) requires `actor == identityOwner(identity)`.
+`onlyOwner(address identity, address actor)` (`:119`) requires `actor == identityOwner(identity)`.
 
 ### Functions
 | Signature | Vis/Mut | What it does | Access | Events | Origin |
 |---|---|---|---|---|---|
-| `identityOwner(address identity) returns (address)` (`:105`) | public view | Returns `owners[identity]`, or `identity` if unset | anyone | none | ERC-1056 |
-| `validDelegate(address,bytes32,address) returns (bool)` (`:120`) | public view | `delegates[..] > block.timestamp` | anyone | none | ERC-1056 |
-| `changeOwner(address identity, address newOwner)` (`:136`) | public | Sets `owners[identity]`, then updates `changed` | `onlyOwner` | `DIDOwnerChanged` | ERC-1056 |
-| `changeOwnerSigned(identity, v, r, s, newOwner)` (`:153`) | public | Same as above, authorised by the owner's signature; `nonce[signer]++` | signature from current owner (any relayer) | `DIDOwnerChanged` | ERC-1056 |
-| `addDelegate(identity, delegateType, delegate, validity)` (`:190`) | public | `delegates[...] = block.timestamp + validity` | `onlyOwner` | `DIDDelegateChanged` | ERC-1056 |
-| `addDelegateSigned(identity, v, r, s, delegateType, delegate, validity)` (`:211`) | public | Signed version | owner signature | `DIDDelegateChanged` | ERC-1056 |
-| `revokeDelegate(identity, delegateType, delegate)` (`:256`) | public | Sets validity to 0 | `onlyOwner` | `DIDDelegateChanged` (validTo 0) | ERC-1056 |
-| `revokeDelegateSigned(identity, v, r, s, delegateType, delegate)` (`:275`) | public | Signed version | owner signature | `DIDDelegateChanged` | ERC-1056 |
-| `setAttribute(identity, bytes32 name, bytes value, uint validity)` (`:314`) | public | Emits only; no storage except `changed` | `onlyOwner` | `DIDAttributeChanged` | ERC-1056 |
-| `setAttributeSigned(identity, v, r, s, name, value, validity)` (`:328`) | public | Signed version | owner signature | `DIDAttributeChanged` | ERC-1056 |
-| `revokeAttribute(identity, name, value)` (`:367`) | public | Emits with `validTo = 0` | `onlyOwner` | `DIDAttributeChanged` | ERC-1056 |
-| `revokeAttributeSigned(identity, v, r, s, name, value)` (`:379`) | public | Signed version | owner signature | `DIDAttributeChanged` | ERC-1056 |
+| `identityOwner(address identity) returns (address)` (`:135`) | public view | Returns `owners[identity]`, or `identity` if unset | anyone | none | ERC-1056 |
+| `validDelegate(address,bytes32,address) returns (bool)` (`:151`) | public view | `delegates[..] > block.timestamp` | anyone | none | ERC-1056 |
+| `changeOwner(address identity, address newOwner)` (`:169`) | public | Sets `owners[identity]`, then updates `changed` | `onlyOwner` | `DIDOwnerChanged` | ERC-1056 |
+| `changeOwnerSigned(identity, v, r, s, newOwner)` (`:191`) | public | Same as above, authorised by the owner's signature; `nonce[signer]++` | signature from current owner (any relayer) | `DIDOwnerChanged` | ERC-1056 |
+| `addDelegate(identity, delegateType, delegate, validity)` (`:230`) | public | `delegates[...] = block.timestamp + validity` | `onlyOwner` | `DIDDelegateChanged` | ERC-1056 |
+| `addDelegateSigned(identity, v, r, s, delegateType, delegate, validity)` (`:261`) | public | Signed version | owner signature | `DIDDelegateChanged` | ERC-1056 |
+| `revokeDelegate(identity, delegateType, delegate)` (`:308`) | public | Sets validity to 0 | `onlyOwner` | `DIDDelegateChanged` (validTo 0) | ERC-1056 |
+| `revokeDelegateSigned(identity, v, r, s, delegateType, delegate)` (`:336`) | public | Signed version | owner signature | `DIDDelegateChanged` | ERC-1056 |
+| `setAttribute(identity, bytes32 name, bytes value, uint validity)` (`:377`) | public | Emits only; no storage except `changed` | `onlyOwner` | `DIDAttributeChanged` | ERC-1056 |
+| `setAttributeSigned(identity, v, r, s, name, value, validity)` (`:401`) | public | Signed version | owner signature | `DIDAttributeChanged` | ERC-1056 |
+| `revokeAttribute(identity, name, value)` (`:442`) | public | Emits with `validTo = 0` | `onlyOwner` | `DIDAttributeChanged` | ERC-1056 |
+| `revokeAttributeSigned(identity, v, r, s, name, value)` (`:463`) | public | Signed version | owner signature | `DIDAttributeChanged` | ERC-1056 |
 | auto getters `owners`, `changed`, `nonce`, `delegates` | public view | mapping reads | anyone | none | ERC-1056 |
 
 ### Design notes / security caveats
@@ -114,28 +114,28 @@ The `*Signed` entry points let a relayer submit operations for the identity owne
 | `PERMANENT_ATTRIBUTE_VALIDITY` | `uint256` constant = 100·365 days | 81 | **Duplicate** of `VEHICLE_ATTRIBUTE_VALIDITY` and unused internally; the D18 regression test reads it |
 
 ### Events
-`VehicleDIDCreated(address indexed did, string vin, address indexed owner, address indexed manufacturer)` (`:85`); `VehicleOwnershipTransferred(address indexed did, address indexed previousOwner, address indexed newOwner)` (`:92`); `ManufacturerAuthorized(address indexed manufacturer, bool authorized)` (`:98`).
+`VehicleDIDCreated(address indexed did, string vin, address indexed owner, address indexed manufacturer)` (`:137`); `VehicleOwnershipTransferred(address indexed did, address indexed previousOwner, address indexed newOwner)` (`:152`); `ManufacturerAuthorized(address indexed manufacturer, bool authorized)` (`:164`).
 
 ### Modifiers
-`onlyContractOwner` (`:102`); `onlyAuthorizedManufacturer` (`:107`); `onlyVehicleOwner(did)` (`:115`), which requires `msg.sender == vehicleOwnerOf(did)`.
+`onlyContractOwner` (`:169`); `onlyAuthorizedManufacturer` (`:175`); `onlyVehicleOwner(did)` (`:188`), which requires `msg.sender == vehicleOwnerOf(did)`.
 
 ### Functions
 | Signature | Vis/Mut | What it does | Access | Events | Origin |
 |---|---|---|---|---|---|
-| `constructor(address _didRegistry)` (`:125`) | — | Binds the registry; deployer becomes `owner` and an authorised manufacturer | — | none | CVIN extension |
-| `setAuthorizedManufacturer(address, bool)` (`:133`) | external | Grants or revokes the manufacturer role | `onlyContractOwner` | `ManufacturerAuthorized` | CVIN extension |
-| `createVehicleDID(vin, vehicleOwner, make, model, uint16 year, color, engineNumber, uint256 manufacturingDate, autonomyLevel) returns (address did)` (`:156`) | external | Requires a 17-char VIN that is not yet registered; `did = vehicleOwner`; stores both mappings. **make…autonomyLevel are accepted but ignored** (no attributes are written) | `onlyAuthorizedManufacturer` | `VehicleDIDCreated` | CVIN extension |
-| `setVehicleAttributes(address did, make, model, year, color, engineNumber, manufacturingDate, autonomyLevel)` (`:218`) | external | Requires the wrapper to be the ERC-1056 owner and the DID to be registered; calls `didRegistry.setAttribute` 8 times (VIN, make, …; `year`/date `abi.encodePacked`) with 100-year validity | `onlyVehicleOwner(did)` | 8× `DIDAttributeChanged` (from the registry) | CVIN extension over ERC-1056 `setAttribute` |
-| `transferVehicleOwnership(address did, address newOwner)` (`:259`) | external | Wrapper-controlled mode only: updates `vehicleOwners[did]`; the ERC-1056 owner stays the wrapper | `onlyVehicleOwner(did)` | `VehicleOwnershipTransferred` | CVIN extension |
-| `updateOwnershipMapping(address oldOwnerDID, address newOwnerDID)` (`:282`) | external | Direct-flow follow-up after `changeOwner(old, new)`: requires `identityOwner(old) == new`, then moves the VIN mappings to `newOwnerDID` | **anyone** (check is state-based) | `VehicleOwnershipTransferred(old, old, new)` | CVIN extension |
-| `setServiceEndpoint(address did, bytes32 endpointType, string url, uint validity)` (`:315`) | external | Forwards to `didRegistry.setAttribute`; reverts in the registry unless the wrapper controls the DID | `onlyVehicleOwner(did)` | `DIDAttributeChanged` | ERC-1056 passthrough |
-| `addVerificationDelegate(did, delegateAddress, delegateType, validity)` (`:333`) | external | Forwards to `didRegistry.addDelegate` | `onlyVehicleOwner(did)` | `DIDDelegateChanged` | ERC-1056 passthrough |
-| `revokeVerificationDelegate(did, delegateAddress, delegateType)` (`:348`) | external | Forwards to `didRegistry.revokeDelegate` | `onlyVehicleOwner(did)` | `DIDDelegateChanged` | ERC-1056 passthrough |
-| `getDIDFromVIN(string vin) returns (address)` (`:363`) | external view | `vinToDID[keccak256(vin)]` | anyone | none | CVIN extension |
-| `getVINFromDID(address) returns (string)` (`:373`) | external view | `didToVIN` | anyone | none | CVIN extension |
-| `vehicleOwnerOf(address did) returns (address)` (`:389`) | public view | Returns the ERC-1056 controller unless that is the wrapper itself; otherwise `vehicleOwners[did]`, or `did` if unset | anyone | none | CVIN extension |
-| `getVehicleOwner(address)` (`:403`) | external view | Alias for `vehicleOwnerOf` | anyone | none | CVIN extension |
-| `isValidDelegate(did, delegateType, delegateAddress) returns (bool)` (`:414`) | external view | Forwards to `didRegistry.validDelegate` | anyone | none | ERC-1056 passthrough |
+| `constructor(address _didRegistry)` (`:204`) | — | Binds the registry; deployer becomes `owner` and an authorised manufacturer | — | none | CVIN extension |
+| `setAuthorizedManufacturer(address, bool)` (`:218`) | external | Grants or revokes the manufacturer role | `onlyContractOwner` | `ManufacturerAuthorized` | CVIN extension |
+| `createVehicleDID(vin, vehicleOwner, make, model, uint16 year, color, engineNumber, uint256 manufacturingDate, autonomyLevel) returns (address did)` (`:247`) | external | Requires a 17-char VIN that is not yet registered; `did = vehicleOwner`; stores both mappings. **make…autonomyLevel are accepted but ignored** (no attributes are written) | `onlyAuthorizedManufacturer` | `VehicleDIDCreated` | CVIN extension |
+| `setVehicleAttributes(address did, make, model, year, color, engineNumber, manufacturingDate, autonomyLevel)` (`:311`) | external | Requires the wrapper to be the ERC-1056 owner and the DID to be registered; calls `didRegistry.setAttribute` 8 times (VIN, make, …; `year`/date `abi.encodePacked`) with 100-year validity | `onlyVehicleOwner(did)` | 8× `DIDAttributeChanged` (from the registry) | CVIN extension over ERC-1056 `setAttribute` |
+| `transferVehicleOwnership(address did, address newOwner)` (`:354`) | external | Wrapper-controlled mode only: updates `vehicleOwners[did]`; the ERC-1056 owner stays the wrapper | `onlyVehicleOwner(did)` | `VehicleOwnershipTransferred` | CVIN extension |
+| `updateOwnershipMapping(address oldOwnerDID, address newOwnerDID)` (`:382`) | external | Direct-flow follow-up after `changeOwner(old, new)`: requires `identityOwner(old) == new`, then moves the VIN mappings to `newOwnerDID` | **anyone** (check is state-based) | `VehicleOwnershipTransferred(old, old, new)` | CVIN extension |
+| `setServiceEndpoint(address did, bytes32 endpointType, string url, uint validity)` (`:418`) | external | Forwards to `didRegistry.setAttribute`; reverts in the registry unless the wrapper controls the DID | `onlyVehicleOwner(did)` | `DIDAttributeChanged` | ERC-1056 passthrough |
+| `addVerificationDelegate(did, delegateAddress, delegateType, validity)` (`:438`) | external | Forwards to `didRegistry.addDelegate` | `onlyVehicleOwner(did)` | `DIDDelegateChanged` | ERC-1056 passthrough |
+| `revokeVerificationDelegate(did, delegateAddress, delegateType)` (`:455`) | external | Forwards to `didRegistry.revokeDelegate` | `onlyVehicleOwner(did)` | `DIDDelegateChanged` | ERC-1056 passthrough |
+| `getDIDFromVIN(string vin) returns (address)` (`:471`) | external view | `vinToDID[keccak256(vin)]` | anyone | none | CVIN extension |
+| `getVINFromDID(address) returns (string)` (`:482`) | external view | `didToVIN` | anyone | none | CVIN extension |
+| `vehicleOwnerOf(address did) returns (address)` (`:498`) | public view | Returns the ERC-1056 controller unless that is the wrapper itself; otherwise `vehicleOwners[did]`, or `did` if unset | anyone | none | CVIN extension |
+| `getVehicleOwner(address)` (`:513`) | external view | Alias for `vehicleOwnerOf` | anyone | none | CVIN extension |
+| `isValidDelegate(did, delegateType, delegateAddress) returns (bool)` (`:525`) | external view | Forwards to `didRegistry.validDelegate` | anyone | none | ERC-1056 passthrough |
 | auto getters for every public mapping and constant | public view | — | anyone | none | — |
 
 ### Design notes / security caveats
@@ -148,7 +148,7 @@ The `*Signed` entry points let a relayer submit operations for the identity owne
 - **Plaintext VIN on-chain:** `didToVIN` stores the VIN in clear, and the `VehicleDIDCreated` event carries it too.
 - **Ignored parameters:** `createVehicleDID`'s attribute parameters are dead inputs (gas cost, misleading API).
 - **Hashed keys (non-conformant):** the `keccak256` attribute and delegate keys do not follow did:ethr naming (see Standards).
-- **History of fixes:** `setVehicleAttributes` was previously unreachable (REVIEW_02 K-1 / defect D18: no `did` parameter, plus a `uint256.max` validity). It was fixed as documented in the comments at `:204-208` and `:72-80`. The duplicate constant is left over from that fix.
+- **History of fixes:** `setVehicleAttributes` was previously unreachable (REVIEW_02 K-1 / defect D18: no `did` parameter, plus a `uint256.max` validity). It was fixed as documented in the comments at `:295-299` and `:112-125`. The duplicate constant is left over from that fix.
 - **Missing revocation passthrough:** the wrapper exposes no `revokeAttribute`, so a service endpoint set in wrapper mode cannot be revoked.
 
 ---
@@ -181,7 +181,7 @@ The `*Signed` entry points let a relayer submit operations for the identity owne
 - `ERC1056Registry.regression.test.js` in the same folder tests the *different* `contracts/MOBI/ERC1056Registry.sol`.
 - `1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js:185` covers "Security / ERC-1056 (EthereumDIDRegistry)" attacks such as an unauthorised `addDelegate`.
 - `5_zkp-agent-identity/test-contracts/zkvin_gate.test.js` deploys the Phase 1 `EthereumDIDRegistry` artifact unmodified as the anchor for the zkVIN gate.
-- `phase2/idtx/test/idtx.test.js` and `phase2/idtx/contracts/IdtxExecutor.sol` call the registry through an `IERC1056` interface (`:38`).
+- `phase2/idtx/test/idtx.test.js` and `phase2/idtx/contracts/IdtxExecutor.sol` call the registry through an `IERC1056` interface (`:41`).
 
 **Sandbox** (`sandbox/options/erc-1056-uport/`)
 - `adapter.js`: its header maps each method to a contract function:

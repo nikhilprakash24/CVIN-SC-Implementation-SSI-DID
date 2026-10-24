@@ -40,30 +40,30 @@ OpenZeppelin `ECDSA` and `MessageHashUtils`.
   `DIDOwnerChanged`, `DIDDelegateChanged` and `DIDAttributeChanged`, each carrying
   `previousChange` so a resolver can walk the per-identity change list backwards. It underlies
   the `did:ethr` DID method.
-- **How faithful `ERC1056Registry.sol` is:** the header says it is "Based on uport-project/ethr-did-registry" (L8).
-  - *Kept:* the storage `owners`, `changed` and `nonce` (L59–61). The three events have the
-    canonical field layout (L24–44). `identityOwner` falls back to the identity itself (L91–97).
+- **How faithful `ERC1056Registry.sol` is:** the header says it is "Based on uport-project/ethr-did-registry" (L12).
+  - *Kept:* the storage `owners`, `changed` and `nonce` (L116–122). The three events have the
+    canonical field layout (L60–94). `identityOwner` falls back to the identity itself (L163–169).
     Each mutator emits an event with `previousChange = changed[identity]` and then sets
     `changed = block.number`. The internal `(identity, actor, …)` / public `(identity, …)` split
-    is kept. Revoking a delegate or attribute emits `validTo = block.timestamp` (L177, L243), as
+    is kept. Revoking a delegate or attribute emits `validTo = block.timestamp` (L277, L363), as
     canonical does.
-  - *Removed:* every `*Signed` meta-transaction variant. `nonce` is declared (L61) but never read
+  - *Removed:* every `*Signed` meta-transaction variant. `nonce` is declared (L122) but never read
     or written, which the sandbox adapter header also notes. The `delegates` mapping and
     `validDelegate` are also missing, so in the base contract delegations exist only as events;
     `MOBIVIDRegistry` adds them back (section 3.2).
-  - *Extended (CVIN):* `revoked`/`revokedAt` storage (L62–65). A terminal
-    `revokeIdentity` (L264) that emits a new `DIDRevoked(identity, revokedAt, previousChange)`
-    event (L52–56). That event carries `previousChange`, so the change list stays walkable through
-    the revocation (defect D21). A `notRevoked` modifier (L81) freezes every mutator after
-    revocation (D16/D21, REVIEW_02 K-3). Convenience functions `registerVehicle` (L285) and
-    `updateVehicleKey` (L306), plus the views `isRevoked`, `lastChanged` and `getIdentityInfo`.
+  - *Extended (CVIN):* `revoked`/`revokedAt` storage (L125–130). A terminal
+    `revokeIdentity` (L392) that emits a new `DIDRevoked(identity, revokedAt, previousChange)`
+    event (L107–111). That event carries `previousChange`, so the change list stays walkable through
+    the revocation (defect D21). A `notRevoked` modifier (L152) freezes every mutator after
+    revocation (D16/D21, REVIEW_02 K-3). Convenience functions `registerVehicle` (L426) and
+    `updateVehicleKey` (L453), plus the views `isRevoked`, `lastChanged` and `getIdentityInfo`.
   - *Naming deviation:* the vehicle key attribute name is `keccak256("did/pub/secp256k1/veriKey/base64")`
-    (L293, L310; `MOBIVIDRegistry.VEHICLE_KEY_ATTRIBUTE` L321). The did:ethr convention stores the
+    (L434, L457; `MOBIVIDRegistry.VEHICLE_KEY_ATTRIBUTE` L401). The did:ethr convention stores the
     name as the ASCII string right-padded into `bytes32`. A stock `ethr-did-resolver` therefore
     does not recognise this attribute as a verification method. The repo's own resolvers
     (`mobi_vid_provider._resolve_key_on_chain`, `erc1056_provider._resolve_key_from_events`) match
     the keccak name instead.
-  - `changeOwner(address,address)` is `virtual` (L122), so MOBI can block it for born vehicles.
+  - `changeOwner(address,address)` is `virtual` (L206), so MOBI can block it for born vehicles.
     The internal `addDelegate` and `revokeDelegate` are `virtual` too, so MOBI can store delegations.
 
 ### 1.2 MOBI VID I (Vehicle Birth Certificate) and VID II (Vehicle Lifecycle)
@@ -79,14 +79,14 @@ OpenZeppelin `ECDSA` and `MessageHashUtils`.
   - `MOBI_VID1_TECHNICAL_SPEC.md` §2 embeds a full draft `MOBIVIDRegistry` (from about L155). This
     is a **stale copy**. It writes birth attributes with `type(uint256).max` validity (spec L299).
     That overflows `block.timestamp + validity` and reverts, the "V1 overflow bug" the code fixes
-    with `PERMANENT_ATTRIBUTE_VALIDITY = 100 * 365 days` (MOBIVIDRegistry L65). The draft also
-    names the lookup `findVehicleByVINHash` (spec L380); the code has `lookupByVINHash` (L506).
+    with `PERMANENT_ATTRIBUTE_VALIDITY = 100 * 365 days` (MOBIVIDRegistry L100). The draft also
+    names the lookup `findVehicleByVINHash` (spec L380); the code has `lookupByVINHash` (L630).
     Its `VehicleBirth` struct has no `blockNumber`. Its VIN privacy section promises a
     zero-knowledge VIN proof tier, which was never built (see the
     `2_w3c-ssi-layer/mobi-vid/README.md` status table).
   - `MOBI_VID2_SSI_DESIGN.md` "Lifecycle Events" (L37ff) lists an `OWNERSHIP_TRANSFER` event type
     and puts `bytes32[] attestations` inside the event struct. Its `IssuerRole` has no `NONE`. The
-    code (V2 L35–62) has no `OWNERSHIP_TRANSFER`, adds `REGISTRATION` and `DECOMMISSION`
+    code (V2 L65–95) has no `OWNERSHIP_TRANSFER`, adds `REGISTRATION` and `DECOMMISSION`
     (11 types), adds `NONE` (9 roles), and keeps attestations in a separate
     `eventAttestations[eventId]` array plus a `credentialHash` field.
   - Both docs call `birthCertHash`/`dataHash` "IPFS hashes". The SSI layer README says these are
@@ -96,7 +96,7 @@ OpenZeppelin `ECDSA` and `MessageHashUtils`.
 
     | Where | Formula |
     |---|---|
-    | Contract comment (V1 L33) | `SHA256(VIN + salt + vehicleDID)` |
+    | Contract comment (V1 L66) | `SHA256(VIN + salt + vehicleDID)` |
     | `mobi_vid_provider._hash_vin` | the same, with a random 16-byte hex salt |
     | `2_w3c-ssi-layer/mobi-vid` | `SHA256(VIN ‖ ":" ‖ salt)` with a 32-byte salt |
     | `deploy_mobi_vid.js` | `keccak256(VIN+"salt"+identity)` |
@@ -105,7 +105,7 @@ OpenZeppelin `ECDSA` and `MessageHashUtils`.
 ### 1.3 W3C DID Core v1.0 and did:ethr
 
 - **W3C DID Core** became a Recommendation in July 2022. The contracts only *produce the
-  identifier*: `getVehicleDID` (V1 L598) returns `did:ethr:0x<minimal chainId hex>:0x<40 lowercase hex>`.
+  identifier*: `getVehicleDID` (V1 L725) returns `did:ethr:0x<minimal chainId hex>:0x<40 lowercase hex>`.
   That matches the did:ethr method syntax with a hex chain id; it was fixed by D10 / Review-02 K-15
   and is tested in `MOBIVIDRegistry.regression.test.js`. The DID document is built off-chain
   by replaying the ERC-1056 events (`2_w3c-ssi-layer/did-resolution/did_resolver.py`, on-chain mode,
@@ -116,17 +116,17 @@ OpenZeppelin `ECDSA` and `MessageHashUtils`.
 ### 1.4 W3C Verifiable Credentials Data Model
 
 - VC Data Model v1.1 is a W3C Recommendation, superseded by v2.0. V2's header claims "W3C
-  Verifiable Credentials v1.1" (L16). On-chain this amounts to the opaque `bytes32` fields
-  `credentialHash` (V2 L77) and `birthCertHash` (V1 L35), with no VC parsing. Issuance, the
+  Verifiable Credentials v1.1" (L19). On-chain this amounts to the opaque `bytes32` fields
+  `credentialHash` (V2 L113) and `birthCertHash` (V1 L68), with no VC parsing. Issuance, the
   schemas and verification all live in `2_w3c-ssi-layer/mobi-vid/` together with
   `2_w3c-ssi-layer/verifiable-credentials/`.
 
 ### 1.5 EIP-191 signed data, EIP-2 low-s (via OpenZeppelin)
 
 - EIP-191 (Final) defines the `"\x19Ethereum Signed Message:\n32"` prefix. `attestEvent`
-  (V2 L338) recovers the signer of
+  (V2 L411) recovers the signer of
   `toEthSignedMessageHash(keccak256(abi.encodePacked(address(this), block.chainid, vehicleIdentity, eventId)))`
-  and requires it to equal `msg.sender` (L369–376). Binding the contract address and chain id is
+  and requires it to equal `msg.sender` (L442–449). Binding the contract address and chain id is
   an ad-hoc domain separation, not EIP-712. OpenZeppelin `ECDSA.recover` rejects malleable high-s
   signatures and the zero address. Earlier revisions stored the signature without checking it.
 
@@ -171,38 +171,38 @@ also deploys it on its own as the "ERC-1056 / vehicle profile" option (`cv2x-tes
 | `revoked` | `mapping(address=>bool)` public | 62 | CVIN extension |
 | `revokedAt` | `mapping(address=>uint)` public | 65 | timestamp of the revocation, CVIN extension |
 
-**Events:** `DIDOwnerChanged(identity indexed, owner, previousChange)` L24, ERC-1056.
-`DIDDelegateChanged(identity indexed, delegateType, delegate, validTo, previousChange)` L30, ERC-1056.
-`DIDAttributeChanged(identity indexed, name, value, validTo, previousChange)` L38, ERC-1056.
-`DIDRevoked(identity indexed, revokedAt, previousChange)` L52, CVIN extension.
+**Events:** `DIDOwnerChanged(identity indexed, owner, previousChange)` L60, ERC-1056.
+`DIDDelegateChanged(identity indexed, delegateType, delegate, validTo, previousChange)` L73, ERC-1056.
+`DIDAttributeChanged(identity indexed, name, value, validTo, previousChange)` L88, ERC-1056.
+`DIDRevoked(identity indexed, revokedAt, previousChange)` L107, CVIN extension.
 
-**Modifiers:** `onlyOwner(identity, actor)` L67 requires `actor == identityOwner(identity)`.
-`notRevoked(identity)` L81.
+**Modifiers:** `onlyOwner(identity, actor)` L136 requires `actor == identityOwner(identity)`.
+`notRevoked(identity)` L152.
 
 **Functions**
 
 | Signature | Vis / mut | What it does | Access control | Events | Origin |
 |---|---|---|---|---|---|
-| `identityOwner(address identity) returns (address)` L91 | public view | Returns `owners[identity]`, or `identity` if unset | — | — | ERC-1056 |
-| `isRevoked(address) returns (bool)` L102 | public view | Returns the `revoked` flag | — | — | CVIN extension |
-| `changeOwner(address identity, address actor, address newOwner)` L110 | internal | Sets `owners`, emits, bumps `changed` | `onlyOwner(identity, actor)`, `notRevoked` | DIDOwnerChanged | ERC-1056 |
-| `changeOwner(address identity, address newOwner)` L122 | public **virtual** | Calls the internal version with `msg.sender` | owner | DIDOwnerChanged | ERC-1056 |
-| `addDelegate(identity, actor, bytes32 delegateType, address delegate, uint validity)` L135 | internal virtual | Emits a delegate event with `validTo = now + validity`; nothing stored | onlyOwner, notRevoked | DIDDelegateChanged | ERC-1056 (event-only) |
-| `addDelegate(identity, delegateType, delegate, validity)` L155 | public | Wrapper | owner | DIDDelegateChanged | ERC-1056 |
-| `revokeDelegate(identity, actor, delegateType, delegate)` L167 | internal virtual | Emits with `validTo = now` | onlyOwner, notRevoked | DIDDelegateChanged | ERC-1056 |
-| `revokeDelegate(identity, delegateType, delegate)` L184 | public | Wrapper | owner | DIDDelegateChanged | ERC-1056 |
-| `setAttribute(identity, actor, bytes32 name, bytes value, uint validity)` L201 | internal | Emits an attribute event with `validTo = now + validity` (checked arithmetic) | onlyOwner, notRevoked | DIDAttributeChanged | ERC-1056 |
-| `setAttribute(identity, name, bytes calldata value, validity)` L221 | public | Wrapper | owner | DIDAttributeChanged | ERC-1056 |
-| `revokeAttribute(identity, actor, name, value)` L233 | internal | Emits with `validTo = now` | onlyOwner, notRevoked | DIDAttributeChanged | ERC-1056 |
-| `revokeAttribute(identity, name, bytes calldata value)` L250 | public | Wrapper | owner | DIDAttributeChanged | ERC-1056 |
-| `revokeIdentity(address identity)` L264 | public | Single-shot terminal revocation: sets `revoked` and `revokedAt`, emits, bumps `changed` | `onlyOwner(identity, msg.sender)`; reverts if already revoked | DIDRevoked | CVIN extension |
-| `lastChanged(address) returns (uint)` L277 | public view | Returns `changed[identity]` | — | — | CVIN extension (canonical exposes `changed`) |
-| `registerVehicle(address vehicleIdentity, bytes calldata publicKey)` L285 | public | Requires not revoked and self-owned, then `setAttribute(keccak("did/pub/secp256k1/veriKey/base64"), key, 1 year)` | effectively `msg.sender == vehicleIdentity`, because `setAttribute` is onlyOwner with `actor = msg.sender` | DIDAttributeChanged | CVIN extension |
-| `updateVehicleKey(address vehicleIdentity, bytes calldata newPublicKey)` L306 | public | Writes a new key attribute (1 year); **does not revoke the old one** (comment L312–314) | onlyOwner, notRevoked | DIDAttributeChanged | CVIN extension |
-| `getIdentityInfo(address) returns (owner, lastChangedBlock, isRevoked, revokedTimestamp)` L329 | public view | Aggregate read | — | — | CVIN extension |
+| `identityOwner(address identity) returns (address)` L163 | public view | Returns `owners[identity]`, or `identity` if unset | — | — | ERC-1056 |
+| `isRevoked(address) returns (bool)` L177 | public view | Returns the `revoked` flag | — | — | CVIN extension |
+| `changeOwner(address identity, address actor, address newOwner)` L190 | internal | Sets `owners`, emits, bumps `changed` | `onlyOwner(identity, actor)`, `notRevoked` | DIDOwnerChanged | ERC-1056 |
+| `changeOwner(address identity, address newOwner)` L206 | public **virtual** | Calls the internal version with `msg.sender` | owner | DIDOwnerChanged | ERC-1056 |
+| `addDelegate(identity, actor, bytes32 delegateType, address delegate, uint validity)` L223 | internal virtual | Emits a delegate event with `validTo = now + validity`; nothing stored | onlyOwner, notRevoked | DIDDelegateChanged | ERC-1056 (event-only) |
+| `addDelegate(identity, delegateType, delegate, validity)` L249 | public | Wrapper | owner | DIDDelegateChanged | ERC-1056 |
+| `revokeDelegate(identity, actor, delegateType, delegate)` L267 | internal virtual | Emits with `validTo = now` | onlyOwner, notRevoked | DIDDelegateChanged | ERC-1056 |
+| `revokeDelegate(identity, delegateType, delegate)` L289 | public | Wrapper | owner | DIDDelegateChanged | ERC-1056 |
+| `setAttribute(identity, actor, bytes32 name, bytes value, uint validity)` L310 | internal | Emits an attribute event with `validTo = now + validity` (checked arithmetic) | onlyOwner, notRevoked | DIDAttributeChanged | ERC-1056 |
+| `setAttribute(identity, name, bytes calldata value, validity)` L336 | public | Wrapper | owner | DIDAttributeChanged | ERC-1056 |
+| `revokeAttribute(identity, actor, name, value)` L353 | internal | Emits with `validTo = now` | onlyOwner, notRevoked | DIDAttributeChanged | ERC-1056 |
+| `revokeAttribute(identity, name, bytes calldata value)` L375 | public | Wrapper | owner | DIDAttributeChanged | ERC-1056 |
+| `revokeIdentity(address identity)` L392 | public | Single-shot terminal revocation: sets `revoked` and `revokedAt`, emits, bumps `changed` | `onlyOwner(identity, msg.sender)`; reverts if already revoked | DIDRevoked | CVIN extension |
+| `lastChanged(address) returns (uint)` L409 | public view | Returns `changed[identity]` | — | — | CVIN extension (canonical exposes `changed`) |
+| `registerVehicle(address vehicleIdentity, bytes calldata publicKey)` L426 | public | Requires not revoked and self-owned, then `setAttribute(keccak("did/pub/secp256k1/veriKey/base64"), key, 1 year)` | effectively `msg.sender == vehicleIdentity`, because `setAttribute` is onlyOwner with `actor = msg.sender` | DIDAttributeChanged | CVIN extension |
+| `updateVehicleKey(address vehicleIdentity, bytes calldata newPublicKey)` L453 | public | Writes a new key attribute (1 year); **does not revoke the old one** (comment L459–461) | onlyOwner, notRevoked | DIDAttributeChanged | CVIN extension |
+| `getIdentityInfo(address) returns (owner, lastChangedBlock, isRevoked, revokedTimestamp)` L482 | public view | Aggregate read | — | — | CVIN extension |
 
 **Design notes / caveats**
-- `registerVehicle` only guards on "still self-owned" (L290), so the same identity can call it
+- `registerVehicle` only guards on "still self-owned" (L431), so the same identity can call it
   again and publish another key. "Already registered" really means "ownership was transferred".
 - Without stored delegations there is no on-chain `validDelegate`. Off-chain consumers must
   replay events to learn delegate validity.
@@ -217,12 +217,12 @@ also deploys it on its own as the "ERC-1056 / vehicle profile" option (`cv2x-tes
 VIN-hash lookup, an ownership-transfer log that records odometer and authority, anchoring of the
 vehicle key, stored delegations (needed for V2 attestation consent) and a `did:ethr` string helper.
 
-**Inheritance/imports:** `import "./ERC1056Registry.sol"`; `contract MOBIVIDRegistry is ERC1056Registry` (L24).
+**Inheritance/imports:** `import "./ERC1056Registry.sol"`; `contract MOBIVIDRegistry is ERC1056Registry` (L54).
 
 **Structs:**
-- `VehicleBirth` (L32): `vinHash`, `encryptedVIN` (string), `birthCertHash`, `timestamp`,
+- `VehicleBirth` (L65): `vinHash`, `encryptedVIN` (string), `birthCertHash`, `timestamp`,
   `manufacturer`, `firstOwner`, `blockNumber`, `exists`.
-- `OwnershipTransfer` (L46): `from`, `to`, `timestamp`, `blockNumber`, `odometer`,
+- `OwnershipTransfer` (L80): `from`, `to`, `timestamp`, `blockNumber`, `odometer`,
   `registrationAuthority` (string).
 
 **State variables / constants**
@@ -240,49 +240,49 @@ vehicle key, stored delegations (needed for V2 attestation consent) and a `did:e
 | `delegates` | `mapping(address=>mapping(bytes32=>mapping(address=>uint)))` public | 331 | identity ⇒ type ⇒ delegate ⇒ validTo, as in canonical ERC-1056 (WM-2 C2 / D54) |
 
 **Events:**
-- `VehicleBirthRegistered(vehicleIdentity indexed, vinHash indexed, manufacturer indexed, firstOwner, birthCertHash, timestamp)` L89
-- `VehicleOwnershipTransferred(vehicleIdentity indexed, from indexed, to indexed, odometer, timestamp)` L101
-- `ManufacturerAuthorized(manufacturer indexed, timestamp)` L112
-- `ManufacturerAuthorizationRevoked(manufacturer indexed, timestamp)` L120
-- `VehicleKeyAnchored(vehicleIdentity indexed, keyHash indexed, anchoredBy indexed, validTo)` L364
+- `VehicleBirthRegistered(vehicleIdentity indexed, vinHash indexed, manufacturer indexed, firstOwner, birthCertHash, timestamp)` L133
+- `VehicleOwnershipTransferred(vehicleIdentity indexed, from indexed, to indexed, odometer, timestamp)` L151
+- `ManufacturerAuthorized(manufacturer indexed, timestamp)` L164
+- `ManufacturerAuthorizationRevoked(manufacturer indexed, timestamp)` L174
+- `VehicleKeyAnchored(vehicleIdentity indexed, keyHash indexed, anchoredBy indexed, validTo)` L473
 - Inherited: `DIDOwnerChanged`, `DIDAttributeChanged` and `DIDDelegateChanged` from the base.
 
-**Modifiers:** `onlyRegistryAuthority` L127, `onlyAuthorizedManufacturer` L135,
-`vehicleNotRegistered(id)` L143, `vehicleRegistered(id)` L151, plus the inherited
+**Modifiers:** `onlyRegistryAuthority` L182, `onlyAuthorizedManufacturer` L191,
+`vehicleNotRegistered(id)` L201, `vehicleRegistered(id)` L211, plus the inherited
 `onlyOwner` and `notRevoked`.
 
-**Constructor** (L161): `registryAuthority = msg.sender`. It also authorises the deployer as a
-manufacturer ("for testing", L163) and emits `ManufacturerAuthorized`.
+**Constructor** (L223): `registryAuthority = msg.sender`. It also authorises the deployer as a
+manufacturer ("for testing", L225) and emits `ManufacturerAuthorized`.
 
 **Functions**
 
 | Signature | Vis / mut | What it does | Access control | Events | Origin |
 |---|---|---|---|---|---|
-| `authorizeManufacturer(address)` L174 | external | Grants manufacturer status; rejects the zero address and duplicates | onlyRegistryAuthority | ManufacturerAuthorized | CVIN ext. (MOBI profile) |
-| `revokeManufacturerAuthorization(address)` L189 | external | Removes the grant | onlyRegistryAuthority | ManufacturerAuthorizationRevoked | CVIN ext. |
-| `transferRegistryAuthority(address newAuthority)` L203 | external | One-step authority hand-over (non-zero check) | onlyRegistryAuthority | **none** | CVIN ext. |
-| `registerVehicleBirth(address vehicleIdentity, bytes32 vinHash, string encryptedVIN, bytes32 birthCertHash, address firstOwner, bytes birthAttributes)` L227 | external | Rejects zero values, duplicate VIN hashes and any identity with DID history (`changed == 0`, K-4, L250). Stores the birth, maps the VIN hash, sets `owners[id] = firstOwner` **directly**, writes optional `mobi/vid/birth/attributes` with `firstOwner` as the ERC-1056 actor (L288–297), then emits | onlyAuthorizedManufacturer, vehicleNotRegistered | VehicleBirthRegistered, DIDOwnerChanged, (DIDAttributeChanged) | MOBI VID I |
-| `addDelegate(identity, actor, type, delegate, validity)` L333 | internal override | Calls super (event), then stores `delegates[...] = now + validity` | inherited onlyOwner, notRevoked | DIDDelegateChanged | ERC-1056 (canonical storage restored) |
-| `revokeDelegate(identity, actor, type, delegate)` L344 | internal override | Calls super, then sets the stored validTo to `now` | inherited | DIDDelegateChanged | ERC-1056 |
-| `validDelegate(address identity, bytes32 delegateType, address delegate) returns (bool)` L356 | public view | `!revoked && delegates[..] > now` | — | — | ERC-1056 (plus a revocation check) |
-| `anchorVehicleKey(address vehicleIdentity, bytes publicKey)` L389 | external | Accepts a 65- or 33-byte secp256k1 key. Writes the `VEHICLE_KEY_ATTRIBUTE` attribute with 100-year validity, using the owner as actor | vehicleRegistered, notRevoked; caller is the owner (any time) **or** the registering manufacturer, once, only while `ownershipHistory` is empty | DIDAttributeChanged, VehicleKeyAnchored | CVIN ext. (D11b) |
-| `changeOwner(address identity, address newOwner)` L429 | public override | Reverts for born vehicles ("use transferVehicleOwnership"); otherwise plain ERC-1056 | owner (via super) | DIDOwnerChanged | ERC-1056, restricted (K-3) |
-| `transferVehicleOwnership(address vehicleIdentity, address newOwner, uint256 odometer, string authority)` L448 | external | Pushes an `OwnershipTransfer`, then calls the internal `changeOwner` | vehicleRegistered, onlyOwner(msg.sender), not revoked, non-zero newOwner | DIDOwnerChanged, VehicleOwnershipTransferred | MOBI VID I/II |
-| `getVehicleBirth(address) returns (VehicleBirth)` L492 | external view | Reverts if unregistered | — | — | MOBI VID I |
-| `lookupByVINHash(bytes32) returns (address)` L506 | external view | Returns 0 if unknown | — | — | MOBI VID I |
-| `getOwnershipHistory(address) returns (OwnershipTransfer[])` L519 | external view | | vehicleRegistered | — | CVIN ext. |
-| `getOwnershipHistoryCount(address) returns (uint256)` L533 | external view | | — | — | CVIN ext. |
-| `vehicleExists(address) returns (bool)` L546 | external view | | — | — | CVIN ext. |
-| `getVehicleInfo(address) returns (birth, currentOwner, isRevoked, transferCount)` L562 | external view | Combined read | vehicleRegistered | — | CVIN ext. |
-| `getVehicleDID(address) returns (string)` L598 | external view | `did:ethr:0x<chainid>:0x<addr>` | — | — | W3C DID / did:ethr helper |
-| `_toHexString(uint256)` L622 | internal pure | Minimal lowercase hex ("0" for 0) | — | — | helper |
-| `_toHexString(uint256, uint256 length)` L650 | internal pure | Zero-padded hex; reverts if it does not fit | — | — | helper |
+| `authorizeManufacturer(address)` L238 | external | Grants manufacturer status; rejects the zero address and duplicates | onlyRegistryAuthority | ManufacturerAuthorized | CVIN ext. (MOBI profile) |
+| `revokeManufacturerAuthorization(address)` L256 | external | Removes the grant | onlyRegistryAuthority | ManufacturerAuthorizationRevoked | CVIN ext. |
+| `transferRegistryAuthority(address newAuthority)` L272 | external | One-step authority hand-over (non-zero check) | onlyRegistryAuthority | **none** | CVIN ext. |
+| `registerVehicleBirth(address vehicleIdentity, bytes32 vinHash, string encryptedVIN, bytes32 birthCertHash, address firstOwner, bytes birthAttributes)` L305 | external | Rejects zero values, duplicate VIN hashes and any identity with DID history (`changed == 0`, K-4, L328). Stores the birth, maps the VIN hash, sets `owners[id] = firstOwner` **directly**, writes optional `mobi/vid/birth/attributes` with `firstOwner` as the ERC-1056 actor (L366–375), then emits | onlyAuthorizedManufacturer, vehicleNotRegistered | VehicleBirthRegistered, DIDOwnerChanged, (DIDAttributeChanged) | MOBI VID I |
+| `addDelegate(identity, actor, type, delegate, validity)` L423 | internal override | Calls super (event), then stores `delegates[...] = now + validity` | inherited onlyOwner, notRevoked | DIDDelegateChanged | ERC-1056 (canonical storage restored) |
+| `revokeDelegate(identity, actor, type, delegate)` L440 | internal override | Calls super, then sets the stored validTo to `now` | inherited | DIDDelegateChanged | ERC-1056 |
+| `validDelegate(address identity, bytes32 delegateType, address delegate) returns (bool)` L459 | public view | `!revoked && delegates[..] > now` | — | — | ERC-1056 (plus a revocation check) |
+| `anchorVehicleKey(address vehicleIdentity, bytes publicKey)` L503 | external | Accepts a 65- or 33-byte secp256k1 key. Writes the `VEHICLE_KEY_ATTRIBUTE` attribute with 100-year validity, using the owner as actor | vehicleRegistered, notRevoked; caller is the owner (any time) **or** the registering manufacturer, once, only while `ownershipHistory` is empty | DIDAttributeChanged, VehicleKeyAnchored | CVIN ext. (D11b) |
+| `changeOwner(address identity, address newOwner)` L546 | public override | Reverts for born vehicles ("use transferVehicleOwnership"); otherwise plain ERC-1056 | owner (via super) | DIDOwnerChanged | ERC-1056, restricted (K-3) |
+| `transferVehicleOwnership(address vehicleIdentity, address newOwner, uint256 odometer, string authority)` L570 | external | Pushes an `OwnershipTransfer`, then calls the internal `changeOwner` | vehicleRegistered, onlyOwner(msg.sender), not revoked, non-zero newOwner | DIDOwnerChanged, VehicleOwnershipTransferred | MOBI VID I/II |
+| `getVehicleBirth(address) returns (VehicleBirth)` L615 | external view | Reverts if unregistered | — | — | MOBI VID I |
+| `lookupByVINHash(bytes32) returns (address)` L630 | external view | Returns 0 if unknown | — | — | MOBI VID I |
+| `getOwnershipHistory(address) returns (OwnershipTransfer[])` L644 | external view | | vehicleRegistered | — | CVIN ext. |
+| `getOwnershipHistoryCount(address) returns (uint256)` L658 | external view | | — | — | CVIN ext. |
+| `vehicleExists(address) returns (bool)` L671 | external view | | — | — | CVIN ext. |
+| `getVehicleInfo(address) returns (birth, currentOwner, isRevoked, transferCount)` L688 | external view | Combined read | vehicleRegistered | — | CVIN ext. |
+| `getVehicleDID(address) returns (string)` L725 | external view | `did:ethr:0x<chainid>:0x<addr>` | — | — | W3C DID / did:ethr helper |
+| `_toHexString(uint256)` L750 | internal pure | Minimal lowercase hex ("0" for 0) | — | — | helper |
+| `_toHexString(uint256, uint256 length)` L780 | internal pure | Zero-padded hex; reverts if it does not fit | — | — | helper |
 
 **Design notes / security caveats**
 - **Writes with the owner as actor, without the owner's signature.** `registerVehicleBirth` and
   `anchorVehicleKey` (manufacturer path) pass `firstOwner`/`owner` as the `actor` of the internal
   `setAttribute`. The ERC-1056 event then looks owner-authored even though the manufacturer sent
-  it. This is intentional (comment L273–287) but weakens what an attribute event proves about
+  it. This is intentional (comment L351–365) but weakens what an attribute event proves about
   consent.
 - **Key-less vehicle identities.** The manufacturer picks `vehicleIdentity`. Callers derive it
   from the VIN (`mobi_vid_provider._generate_vehicle_identity` uses the first 20 bytes of
@@ -300,7 +300,7 @@ manufacturer ("for testing", L163) and emits `ManufacturerAuthorized`.
 - **Revocation is owner-only and terminal.** It is inherited unchanged, so an authority cannot
   decommission a vehicle. Once revoked, `transferVehicleOwnership` and `changeOwner` revert
   (tested in `MOBIVIDRegistry.regression.test.js`).
-- The birth "immutability" means there is no update path for `vehicleBirths`. K-4 (L250) stops a
+- The birth "immutability" means there is no update path for `vehicleBirths`. K-4 (L328) stops a
   manufacturer from re-birthing or taking over an identity that already has DID history.
 
 ### 3.3 `MOBIVIDRegistryV2` (VID II) — `1_blockchain-identity/contracts/MOBI/MOBIVIDRegistryV2.sol`
@@ -312,16 +312,16 @@ owner's consent and an on-chain EIP-191 signature check.
 **Inheritance/imports:** `MOBIVIDRegistry`; OpenZeppelin `ECDSA`, `MessageHashUtils` (L4–6).
 
 **Enums:**
-- `EventType` (L35): MAINTENANCE, REPAIR, ACCIDENT, RECALL, INSPECTION, MODIFICATION,
+- `EventType` (L65): MAINTENANCE, REPAIR, ACCIDENT, RECALL, INSPECTION, MODIFICATION,
   THEFT_REPORT, RECOVERY, INSURANCE_CLAIM, REGISTRATION, DECOMMISSION (ordinals 0–10).
-- `IssuerRole` (L52): NONE, MANUFACTURER, DEALER, SERVICE_CENTER, INSURANCE_COMPANY,
+- `IssuerRole` (L85): NONE, MANUFACTURER, DEALER, SERVICE_CENTER, INSURANCE_COMPANY,
   GOVERNMENT_DMV, POLICE, INSPECTION_STATION, OWNER (ordinals 0–8).
 - Note: `IssuerRole.MANUFACTURER` is separate from `authorizedManufacturers` in V1.
 
 **Structs:**
-- `LifecycleEvent` (L70): `eventId`, `eventType`, `issuer`, `timestamp`, `odometer`, `dataHash`,
+- `LifecycleEvent` (L106): `eventId`, `eventType`, `issuer`, `timestamp`, `odometer`, `dataHash`,
   `credentialHash`, `verified`, `jurisdiction`, `blockNumber`.
-- `EventAttestation` (L87): `attester`, `role`, `signature` (bytes), `timestamp`.
+- `EventAttestation` (L124): `attester`, `role`, `signature` (bytes), `timestamp`.
 
 **State variables**
 
@@ -336,7 +336,7 @@ owner's consent and an on-chain EIP-191 signature check.
 | `eventTypeCount` | `mapping(address=>mapping(EventType=>uint256))` public | 115 |
 | `allowedIssuers` | `mapping(EventType=>mapping(IssuerRole=>bool))` public | 118 |
 
-**Permission matrix** (`_initializeAllowedIssuers`, L539–582; no setter exists, so it is fixed at deploy):
+**Permission matrix** (`_initializeAllowedIssuers`, L619–662; no setter exists, so it is fixed at deploy):
 
 | EventType | Allowed roles |
 |---|---|
@@ -352,41 +352,41 @@ owner's consent and an on-chain EIP-191 signature check.
 | REGISTRATION | GOVERNMENT_DMV |
 | DECOMMISSION | MANUFACTURER, GOVERNMENT_DMV |
 
-"Verified" roles (`_isVerifiedIssuer` L589) are MANUFACTURER, GOVERNMENT_DMV, POLICE, DEALER and
+"Verified" roles (`_isVerifiedIssuer` L671) are MANUFACTURER, GOVERNMENT_DMV, POLICE, DEALER and
 INSPECTION_STATION. Events from SERVICE_CENTER, INSURANCE_COMPANY and OWNER are stored with
 `verified = false`.
 
 **Events:**
-- `LifecycleEventRecorded(vehicleIdentity indexed, eventId indexed, eventType indexed, issuer, odometer, timestamp)` L125
-- `EventAttested(eventId indexed, attester indexed, role, timestamp)` L137
-- `IssuerAuthorized(issuer indexed, role, timestamp)` L147
-- `IssuerAuthorizationRevoked(issuer indexed, timestamp)` L156
+- `LifecycleEventRecorded(vehicleIdentity indexed, eventId indexed, eventType indexed, issuer, odometer, timestamp)` L170
+- `EventAttested(eventId indexed, attester indexed, role, timestamp)` L186
+- `IssuerAuthorized(issuer indexed, role, timestamp)` L199
+- `IssuerAuthorizationRevoked(issuer indexed, timestamp)` L210
 
-**Modifier:** `onlyAuthorizedIssuer(eventType)` L163. **Constructor** L173: calls the V1
+**Modifier:** `onlyAuthorizedIssuer(eventType)` L220. **Constructor** L231: calls the V1
 constructor, then `_initializeAllowedIssuers()`.
 
 **Functions**
 
 | Signature | Vis / mut | What it does | Access control | Events | Origin |
 |---|---|---|---|---|---|
-| `authorizeIssuer(address issuer, IssuerRole role)` L185 | external | Sets or overwrites the role (not NONE) | onlyRegistryAuthority | IssuerAuthorized | MOBI VID II (CVIN design) |
-| `revokeIssuerAuthorization(address)` L200 | external | Sets the role to NONE | onlyRegistryAuthority | IssuerAuthorizationRevoked | MOBI VID II |
-| `isAuthorizedIssuer(address, EventType) returns (bool)` L218 | public view | Role-matrix check only | — | — | MOBI VID II |
-| `recordLifecycleEvent(address vehicleIdentity, EventType, uint256 odometer, bytes32 dataHash, bytes32 credentialHash, string jurisdiction) returns (bytes32 eventId)` L244 | external | Rejects revoked vehicles. An OWNER-role caller must be the current owner (K-15, L266). Computes `eventId = keccak(vehicle, type, sender, timestamp, count)`, stores the struct, appends the id, bumps the counters | vehicleRegistered, onlyAuthorizedIssuer | LifecycleEventRecorded | MOBI VID II |
-| `attestEvent(bytes32 eventId, address vehicleIdentity, bytes signature)` L338 | external | Requires that the event exists, the caller's role is not NONE, the caller is the owner **or** `validDelegate(id,"veriKey",caller)`, and the caller has not attested yet. Recovers the EIP-191 signature over (contract, chainid, vehicle, eventId) and requires it to equal the caller, then stores the attestation | as described (L345–376) | EventAttested | MOBI VID II + EIP-191 |
-| `getVehicleEvents(address) returns (bytes32[])` L403 | external view | | vehicleRegistered | — | MOBI VID II |
-| `getEvent(address, bytes32) returns (LifecycleEvent)` L418 | external view | Reverts if missing | — | — | MOBI VID II |
-| `getEventAttestations(bytes32) returns (EventAttestation[])` L435 | external view | | — | — | MOBI VID II |
-| `getEventTypeCount(address, EventType) returns (uint256)` L449 | external view | | — | — | CVIN ext. |
-| `getCompleteHistory(address) returns (birth, eventCount, lastEvent)` L464 | external view | VID I + II summary | vehicleRegistered | — | CVIN ext. |
-| `getEventsByType(address, EventType) returns (bytes32[])` L490 | external view | O(n) filter over all events | — | — | CVIN ext. |
-| `getOdometerHistory(address) returns (uint256[], uint256[])` L516 | external view | O(n) readings and timestamps | — | — | CVIN ext. |
-| `_initializeAllowedIssuers()` L539 | internal | Fills the matrix | constructor | — | CVIN ext. |
-| `_isVerifiedIssuer(address) returns (bool)` L589 | internal view | | — | — | CVIN ext. |
+| `authorizeIssuer(address issuer, IssuerRole role)` L245 | external | Sets or overwrites the role (not NONE) | onlyRegistryAuthority | IssuerAuthorized | MOBI VID II (CVIN design) |
+| `revokeIssuerAuthorization(address)` L262 | external | Sets the role to NONE | onlyRegistryAuthority | IssuerAuthorizationRevoked | MOBI VID II |
+| `isAuthorizedIssuer(address, EventType) returns (bool)` L280 | public view | Role-matrix check only | — | — | MOBI VID II |
+| `recordLifecycleEvent(address vehicleIdentity, EventType, uint256 odometer, bytes32 dataHash, bytes32 credentialHash, string jurisdiction) returns (bytes32 eventId)` L311 | external | Rejects revoked vehicles. An OWNER-role caller must be the current owner (K-15, L333). Computes `eventId = keccak(vehicle, type, sender, timestamp, count)`, stores the struct, appends the id, bumps the counters | vehicleRegistered, onlyAuthorizedIssuer | LifecycleEventRecorded | MOBI VID II |
+| `attestEvent(bytes32 eventId, address vehicleIdentity, bytes signature)` L411 | external | Requires that the event exists, the caller's role is not NONE, the caller is the owner **or** `validDelegate(id,"veriKey",caller)`, and the caller has not attested yet. Recovers the EIP-191 signature over (contract, chainid, vehicle, eventId) and requires it to equal the caller, then stores the attestation | as described (L418–449) | EventAttested | MOBI VID II + EIP-191 |
+| `getVehicleEvents(address) returns (bytes32[])` L477 | external view | | vehicleRegistered | — | MOBI VID II |
+| `getEvent(address, bytes32) returns (LifecycleEvent)` L493 | external view | Reverts if missing | — | — | MOBI VID II |
+| `getEventAttestations(bytes32) returns (EventAttestation[])` L510 | external view | | — | — | MOBI VID II |
+| `getEventTypeCount(address, EventType) returns (uint256)` L524 | external view | | — | — | CVIN ext. |
+| `getCompleteHistory(address) returns (birth, eventCount, lastEvent)` L540 | external view | VID I + II summary | vehicleRegistered | — | CVIN ext. |
+| `getEventsByType(address, EventType) returns (bytes32[])` L567 | external view | O(n) filter over all events | — | — | CVIN ext. |
+| `getOdometerHistory(address) returns (uint256[], uint256[])` L595 | external view | O(n) readings and timestamps | — | — | CVIN ext. |
+| `_initializeAllowedIssuers()` L619 | internal | Fills the matrix | constructor | — | CVIN ext. |
+| `_isVerifiedIssuer(address) returns (bool)` L671 | internal view | | — | — | CVIN ext. |
 
 **Design notes / security caveats**
 - **Roles apply registry-wide.** Organisational roles can file events against *any* vehicle;
-  that is by design (L264–265). OWNER is also a global grant from the authority, scoped at use
+  that is by design (L331–332). OWNER is also a global grant from the authority, scoped at use
   time to the current owner. One address holds only one role.
 - **Attestation needs both authority and consent (D54).** An organisational attester must hold a
   `veriKey` delegation from the owner. Only `veriKey` counts; a `sigAuth` delegation does not.
@@ -404,7 +404,7 @@ constructor, then `_initializeAllowedIssuers()`.
 - `getEventsByType` and `getOdometerHistory` are unbounded view loops. They are fine for `eth_call`
   but cannot be used inside transactions on large histories.
 - `jurisdiction` and `registrationAuthority` are free-form strings with no validation.
-- The `"veriKey"` literal (L358) converts to an ASCII-padded `bytes32`. Callers must pass
+- The `"veriKey"` literal (L431) converts to an ASCII-padded `bytes32`. Callers must pass
   `ethers.encodeBytes32String("veriKey")` (as `benchmark_gas.js` does), not keccak.
 
 ---
@@ -604,9 +604,9 @@ constructor, then `_initializeAllowedIssuers()`.
 
 | Canonical | Copy | Status |
 |---|---|---|
-| `1_blockchain-identity/contracts/MOBI/ERC1056Registry.sol` | `cv2x-testbed/contracts/ERC1056Registry.sol` | byte-identical (md5 `49eac56b…`) |
-| `1_blockchain-identity/contracts/MOBI/MOBIVIDRegistry.sol` | `cv2x-testbed/contracts/MOBIVIDRegistry.sol` | byte-identical (md5 `089792b8…`) |
-| `1_blockchain-identity/contracts/MOBI/MOBIVIDRegistryV2.sol` | `cv2x-testbed/contracts/MOBIVIDRegistryV2.sol` | byte-identical (md5 `5484d7d5…`) |
+| `1_blockchain-identity/contracts/MOBI/ERC1056Registry.sol` | `cv2x-testbed/contracts/ERC1056Registry.sol` | byte-identical (md5 `c4196fe6…`) |
+| `1_blockchain-identity/contracts/MOBI/MOBIVIDRegistry.sol` | `cv2x-testbed/contracts/MOBIVIDRegistry.sol` | byte-identical (md5 `9ab616c8…`) |
+| `1_blockchain-identity/contracts/MOBI/MOBIVIDRegistryV2.sol` | `cv2x-testbed/contracts/MOBIVIDRegistryV2.sol` | byte-identical (md5 `a66644bd…`) |
 
 - Two guards keep the copies identical: `tools/prepush_check.sh` (L21–24, with a self-test probe
   at L60–63) and the CI step in `.github/workflows/test-contracts.yml`. The comments disagree on
@@ -627,9 +627,7 @@ constructor, then `_initializeAllowedIssuers()`.
 
 ## Diagrams & examples
 
-> The three `.sol` files now carry full NatSpec (comments only; code is unchanged). Inserting the
-> comment lines shifted line numbers, so the `Lxxx` references and md5 values above describe the
-> pre-NatSpec revision; the symbol names remain accurate.
+> The three `.sol` files now carry full NatSpec (comments only; code is unchanged).
 
 ### Typical lifecycle (V2)
 
