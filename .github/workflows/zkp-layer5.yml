@@ -75,3 +75,17 @@ jobs:
     - run: npx hardhat compile
     - name: Layer 5 contract tests against Phase 1's unmodified ERC-1056 registry
       run: npx hardhat --config hardhat.zkp.config.js test
+    - name: ZkVinGate mutants (each guard of admit/anchorCommitment/setService must be caught)
+      run: bash ../5_zkp-agent-identity/mutate_zkvin_gate.sh
+    - name: NatSpec complete on every project contract (docs/smart-contracts/00-architecture.md section 4)
+      # all three Hardhat configs are compiled here; zkp is recompiled because the mutation probe
+      # restores the source but leaves the last mutant's artifacts behind
+      run: |
+        npx hardhat --config hardhat.phase2.config.js compile
+        npx hardhat --config hardhat.zkp.config.js compile
+        cd .. && node tools/check_natspec.js \
+          1_blockchain-identity/artifacts/build-info contracts/ \
+          phase2/idtx/artifacts/build-info phase2/idtx/contracts/ \
+          5_zkp-agent-identity/hh-artifacts/build-info 5_zkp-agent-identity/contracts/
+    - name: Contract bytecode unchanged unless the manifest is updated (comment-only edits pass)
+      run: cd .. && node tools/bytecode_manifest.js --check

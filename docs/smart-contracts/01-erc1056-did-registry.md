@@ -4,7 +4,7 @@ This group holds the repo's ERC-1056 "Lightweight Identity" option. `EthereumDID
 
 Files:
 - `1_blockchain-identity/contracts/ERC1056/EthereumDIDRegistry.sol` (492 lines)
-- `1_blockchain-identity/contracts/ERC1056/CVINVehicleDIDRegistry.sol` (532 lines)
+- `1_blockchain-identity/contracts/ERC1056/CVINVehicleDIDRegistry.sol` (534 lines)
 - `2_w3c-ssi-layer/did-resolution/did_resolver.py` (related, resolution side)
 
 ---
@@ -127,15 +127,15 @@ The `*Signed` entry points let a relayer submit operations for the identity owne
 | `createVehicleDID(vin, vehicleOwner, make, model, uint16 year, color, engineNumber, uint256 manufacturingDate, autonomyLevel) returns (address did)` (`:247`) | external | Requires a 17-char VIN that is not yet registered; `did = vehicleOwner`; stores both mappings. **make…autonomyLevel are accepted but ignored** (no attributes are written) | `onlyAuthorizedManufacturer` | `VehicleDIDCreated` | CVIN extension |
 | `setVehicleAttributes(address did, make, model, year, color, engineNumber, manufacturingDate, autonomyLevel)` (`:311`) | external | Requires the wrapper to be the ERC-1056 owner and the DID to be registered; calls `didRegistry.setAttribute` 8 times (VIN, make, …; `year`/date `abi.encodePacked`) with 100-year validity | `onlyVehicleOwner(did)` | 8× `DIDAttributeChanged` (from the registry) | CVIN extension over ERC-1056 `setAttribute` |
 | `transferVehicleOwnership(address did, address newOwner)` (`:354`) | external | Wrapper-controlled mode only: updates `vehicleOwners[did]`; the ERC-1056 owner stays the wrapper | `onlyVehicleOwner(did)` | `VehicleOwnershipTransferred` | CVIN extension |
-| `updateOwnershipMapping(address oldOwnerDID, address newOwnerDID)` (`:382`) | external | Direct-flow follow-up after `changeOwner(old, new)`: requires `identityOwner(old) == new`, then moves the VIN mappings to `newOwnerDID` | **anyone** (check is state-based) | `VehicleOwnershipTransferred(old, old, new)` | CVIN extension |
-| `setServiceEndpoint(address did, bytes32 endpointType, string url, uint validity)` (`:418`) | external | Forwards to `didRegistry.setAttribute`; reverts in the registry unless the wrapper controls the DID | `onlyVehicleOwner(did)` | `DIDAttributeChanged` | ERC-1056 passthrough |
-| `addVerificationDelegate(did, delegateAddress, delegateType, validity)` (`:438`) | external | Forwards to `didRegistry.addDelegate` | `onlyVehicleOwner(did)` | `DIDDelegateChanged` | ERC-1056 passthrough |
-| `revokeVerificationDelegate(did, delegateAddress, delegateType)` (`:455`) | external | Forwards to `didRegistry.revokeDelegate` | `onlyVehicleOwner(did)` | `DIDDelegateChanged` | ERC-1056 passthrough |
-| `getDIDFromVIN(string vin) returns (address)` (`:471`) | external view | `vinToDID[keccak256(vin)]` | anyone | none | CVIN extension |
-| `getVINFromDID(address) returns (string)` (`:482`) | external view | `didToVIN` | anyone | none | CVIN extension |
-| `vehicleOwnerOf(address did) returns (address)` (`:498`) | public view | Returns the ERC-1056 controller unless that is the wrapper itself; otherwise `vehicleOwners[did]`, or `did` if unset | anyone | none | CVIN extension |
-| `getVehicleOwner(address)` (`:513`) | external view | Alias for `vehicleOwnerOf` | anyone | none | CVIN extension |
-| `isValidDelegate(did, delegateType, delegateAddress) returns (bool)` (`:525`) | external view | Forwards to `didRegistry.validDelegate` | anyone | none | ERC-1056 passthrough |
+| `updateOwnershipMapping(address oldOwnerDID, address newOwnerDID)` (`:384`) | external | Direct-flow follow-up after `changeOwner(old, new)`: requires `identityOwner(old) == new`, then moves the VIN mappings to `newOwnerDID` | **anyone** (check is state-based) | `VehicleOwnershipTransferred(old, old, new)` | CVIN extension |
+| `setServiceEndpoint(address did, bytes32 endpointType, string url, uint validity)` (`:420`) | external | Forwards to `didRegistry.setAttribute`; reverts in the registry unless the wrapper controls the DID | `onlyVehicleOwner(did)` | `DIDAttributeChanged` | ERC-1056 passthrough |
+| `addVerificationDelegate(did, delegateAddress, delegateType, validity)` (`:440`) | external | Forwards to `didRegistry.addDelegate` | `onlyVehicleOwner(did)` | `DIDDelegateChanged` | ERC-1056 passthrough |
+| `revokeVerificationDelegate(did, delegateAddress, delegateType)` (`:457`) | external | Forwards to `didRegistry.revokeDelegate` | `onlyVehicleOwner(did)` | `DIDDelegateChanged` | ERC-1056 passthrough |
+| `getDIDFromVIN(string vin) returns (address)` (`:473`) | external view | `vinToDID[keccak256(vin)]` | anyone | none | CVIN extension |
+| `getVINFromDID(address) returns (string)` (`:484`) | external view | `didToVIN` | anyone | none | CVIN extension |
+| `vehicleOwnerOf(address did) returns (address)` (`:500`) | public view | Returns the ERC-1056 controller unless that is the wrapper itself; otherwise `vehicleOwners[did]`, or `did` if unset | anyone | none | CVIN extension |
+| `getVehicleOwner(address)` (`:515`) | external view | Alias for `vehicleOwnerOf` | anyone | none | CVIN extension |
+| `isValidDelegate(did, delegateType, delegateAddress) returns (bool)` (`:527`) | external view | Forwards to `didRegistry.validDelegate` | anyone | none | ERC-1056 passthrough |
 | auto getters for every public mapping and constant | public view | — | anyone | none | — |
 
 ### Design notes / security caveats

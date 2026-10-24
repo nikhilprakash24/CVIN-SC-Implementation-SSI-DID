@@ -1,0 +1,117 @@
+{
+ "5_zkp-agent-identity/contracts/Groth16Verifier.sol:Groth16Verifier": {
+  "creation": "6caabd782935aac7ee90b61e09c9dff29a9e8f2675c43259486ef2e2605313b1",
+  "runtime": "306466547e487aa21e3a428ac2bd5358af6c90108503fab9102a3445cb573c0b",
+  "abi": "8c171641ec355b144c12e85dfe40d25b7e57df34d59083776f2a4d17e9de05b4"
+ },
+ "5_zkp-agent-identity/contracts/SchnorrEcrecoverVerifier.sol:SchnorrEcrecoverVerifier": {
+  "creation": "d1cdd8643f3316d4bca204302f9f4fd1a816ae0e87af696860f0332569667e41",
+  "runtime": "a9a5eca090a5144776cc50ee2fe7d9ceb6b278b1d547555eff0c2f0874c26591",
+  "abi": "1dda699bb354bfbc9bbb2f6e299d83b8f3e252f5ff148415525cd80a8d622711"
+ },
+ "5_zkp-agent-identity/contracts/ZkVinGate.sol:ZkVinGate": {
+  "creation": "a888c097060b51ba832d22efa899e68a5f153e05127f60f2a63af40a848eb3dc",
+  "runtime": "5d3113207da0a535434ca1414261bb1a5c3380eae347e1954542a75531ac72b2",
+  "abi": "ab61f26945ed95a6b3ce75ffb2bb6b8f668bf019c0819fd7d48f06ec0c449e59"
+ },
+ "contracts/CVINCombined/CVINCombinedIdentity.sol:CVINCombinedIdentity": {
+  "creation": "5efe152dacc0b0c5f8b41dfd9aeee1f332c6c28c84e2ae76f46b1ed47d531aa0",
+  "runtime": "0b108d98e202d1a7944f005f55e474adcb5e5fc87bdc167cbfec9f0d2259b9ac",
+  "abi": "9486e0b825b4802bce679b6866f5e2a0919d8b7841e83e1f1e51ca0cf3469c48"
+ },
+ "contracts/ERC1056/CVINVehicleDIDRegistry.sol:CVINVehicleDIDRegistry": {
+  "creation": "6eb8ff46dfb5a13cfe9ce311c7c99749c10cc447d1066f433159f058fad59573",
+  "runtime": "2ffc4638ce62db5f7ae6c5b56243b86edd57e123f47e83b0ae138154bc6c83b0",
+  "abi": "bd1a7699de53fd87c88684803e7a94f3fa4ce91a17a81f6e62ea3ffeb5e4248a"
+ },
+ "contracts/ERC1056/EthereumDIDRegistry.sol:EthereumDIDRegistry": {
+  "creation": "3fb89b214f0626336bb1dc8b3b2025bc528e09140a9480b32bcea41a0c34242f",
+  "runtime": "5934347c789775ed354e17946d4edb1546272d8223df9b6c4e800b3bffaf84b4",
+  "abi": "1f719ab049f34266aaa07449980c051739c4576c74791365edc43356d649d923"
+ },
+ "contracts/ERC1155/CVINVehicleCredential1155.sol:CVINVehicleCredential1155": {
+  "creation": "fb5c232f6d6ace2c246801e24be95bbbe937eda0f952e4f9365b25b6f072de8a",
+  "runtime": "fd3f42e4ebcd3203083a403fb135dd1d08050e639c6e6711d7bad176fe134a88",
+  "abi": "71bcdffb1e73c998269e665ff69a1b1343af5de132773c239e1c3afa0dce8862"
+ },
+ "contracts/ERC4337/CVINMinimalEntryPoint.sol:CVINMinimalEntryPoint": {
+  "creation": "d5d1e55903badb4d72d9331e9c93f749662587ebe6962f9cd2c246cab9a9d846",
+  "runtime": "0ba5daab0df1d59267dc6bbdcf772dc5a40a7d436c0348e71b22dba88503864b",
+  "abi": "5a0a692e1dc2fbbbaf771401ef60412562c4694114a6272f88f4878ff6eea22d"
+ },
+ "contracts/ERC4337/CVINVehicleAccount.sol:CVINVehicleAccount": {
+  "creation": "f404088229981735f41ff877b3efbfa965eeecda42fa7ba301aae097001d2f25",
+  "runtime": "e3305377547ef5bc41454b338d4933bb17222fa63f1f3b450947054b5d23361f",
+  "abi": "90667747eebd9e3b04a69d526c231fb64383e99b844009400cf57b434369e3bc"
+ },
+ "contracts/ERC721/CVIN_NFT_DID_ERC721_Monolithic.sol:CVIN_NFT_DID_ERC721_Monolithic": {
+  "creation": "ecbb4fab6e407fbd7a2b3a45e6ec11088390e196cc586004cfeddf6b55f6ac47",
+  "runtime": "4d45720f863c296320122722678fb4915be22c222ae192debe1f914ab05f21ef",
+  "abi": "d93b5ff3d24bb7b1d14e4b5cd2114a73bc0d09a05ca3aef537abcadefbd84531"
+ },
+ "contracts/ERC721/CVIN_NFT_DID_ERC721.sol:CVIN_NFT_DID_ERC721": {
+  "creation": "5b49c0eb87a53ec6fbd859188ed328935b41b08f509dcec45164fed94b9ea450",
+  "runtime": "13cf3757ca9abbd7cdb2b34a457f29a427c593d0e2e79c6b45acf67a51d7a151",
+  "abi": "38fa425d4ec61d9c2494c06686e3598247f6568f31d13ff185f59375849e6637"
+ },
+ "contracts/ERC721/CVINVehicleNFT.sol:CVINVehicleNFT": {
+  "creation": "6b76b8bac9d505ef0baa4ae87cea00d3e0e4000f7caf6a7d3d0e22c5d735b3bd",
+  "runtime": "358a68bc04d91f055bd0868eef1835f05522e021caacb03a14907454a62689b8",
+  "abi": "018ac9a523edc5d47eca43752c7cbbac532f193405921ea5ab878ff1a10ec2d9"
+ },
+ "contracts/ERC725/CVIN_DID_ERC725.sol:CVIN_SCBasedAccOrID_DID_ERC725Basic": {
+  "creation": "e5c39f16c0edb87ccc0409cec9853070936a990107e408ad9b589a52d50c20ae",
+  "runtime": "251d10af7d629a3713af344c3ef5353387cf7b34324e211ece7c2bec34c3435f",
+  "abi": "03217c4c10ea959da6d80e27f77e838a01aca1ff207b4c09c11f3f9b5483e95d"
+ },
+ "contracts/ERC725xy/CVINExecuteTarget.sol:CVINExecuteTarget": {
+  "creation": "06b082f7bc3df4461fd07c6ed8339fa5cc8563a677fd9446e774eed02bd72307",
+  "runtime": "48681874e3e3d4e2056e24033a4ab7456ba93eb1ae7e1ff1ab849ebf09ca488f",
+  "abi": "bdac971597537e6413722047ad850ee2a74806b67dc88de4949e7350892ea322"
+ },
+ "contracts/ERC725xy/CVINVehicleERC725XY.sol:CVINVehicleERC725XY": {
+  "creation": "26ec0ce970a40bb27aca92e83f8fbb5c235355f02e8dfd4b5783544b7bd3bc3a",
+  "runtime": "ec332f69cd4617a284dea6f4c13c80b9ede0db67dd7a60b37638fa9da607f2e9",
+  "abi": "41d66f325e28e72b48289e34eb772edff9c23c3391f7212cdd6c0962a27688a5"
+ },
+ "contracts/ERC735/CVINVehicleClaimHolder.sol:CVINVehicleClaimHolder": {
+  "creation": "3007a683e0e64b4361ad024c39f455e7666c6d74f71031529d91dca2c8bc9e3a",
+  "runtime": "0acef054524ce9d72b6850901e5c68122d424f8a880cf21c9e2f51d3505dc2a5",
+  "abi": "e04085d4aa1229ed940217960e108eabf6667707491b08b7789ae2d0ba658bec"
+ },
+ "contracts/LSP8/CVINVehicleLSP8.sol:CVINVehicleLSP8": {
+  "creation": "466a2ff8516d1473c049c512409c81f34b3e4dfa77c3ec680ff1600c463bfa12",
+  "runtime": "6074f9e95ead5d51d1521efb19cc7a804b86add6f9a70ea399095c053a6d8580",
+  "abi": "609224f894adbe592b2cc9df25a7f20d1ad6203dbd190d1cbd0dc223c88bb6d6"
+ },
+ "contracts/MOBI/ERC1056Registry.sol:ERC1056Registry": {
+  "creation": "4ccf67d69e37507b201dd96a3af4e22d7666004efd48bf7e10360add4ce6bc4e",
+  "runtime": "892a1f2bdc824e2ba4d7a2225f9a277096f54eb143d12b20eefc7067f6304313",
+  "abi": "1b7badd8c6500778f5c5a9562ba30c636396f2e7d67215fc35c8648167314b10"
+ },
+ "contracts/MOBI/MOBIVIDRegistry.sol:MOBIVIDRegistry": {
+  "creation": "298fa2265fe952be4aeda6abfba8af9daf9b126de0b5f92aa58a8f2bc88b8a2c",
+  "runtime": "ac4ffb477bc628b178ddc47f87c8b653c1fcd2cbd3827ccd919d3373e635dc3c",
+  "abi": "fab466fc27e72477732d3e3bdc424457c40e313d76c7615eddf59d25e95f8169"
+ },
+ "contracts/MOBI/MOBIVIDRegistryV2.sol:MOBIVIDRegistryV2": {
+  "creation": "f4003f3b9eee9cb88a7577a46588c2fa8f5dc37c9f55354a6248faa0f8d351dc",
+  "runtime": "340fea6ea39c3c664c81b34c2031a7c91608bbbed3ca8b39455b6202f035b273",
+  "abi": "97f8484a50610e0248b1e65dc9cfd4e4ef44ba9b8b08caacdf28a4e226f624a3"
+ },
+ "contracts/test/ReentrantVinReceiver.sol:ReentrantVinReceiver": {
+  "creation": "ac24ab0a2507f52b570ae6be094b2f49f61bf92dda4efb3b2883bcc7f08263a8",
+  "runtime": "ae6d13fdf251c83306489dd66aa28f16668784e07b6efe6667395f341a9e59d5",
+  "abi": "76ae8e3856d15533ea8f043bece7318112a615652772a0601ed804996e5a3b36"
+ },
+ "phase2/idtx/contracts/IdtxExecutor.sol:IdentityCommitments": {
+  "creation": "192c2933bb9ed8c0f5b11d5368c4793bbb59fb4d55e5a114d68991744b3b7c73",
+  "runtime": "b15b77737b4f1b83fc39536a1f36d7102dd4cfd2d4edf112c24aa44e7440ffd8",
+  "abi": "a255fb7fc7b7f5750c3523944d698750c1924595110f8b5be002decff6c82d08"
+ },
+ "phase2/idtx/contracts/IdtxExecutor.sol:IdtxExecutor": {
+  "creation": "e65ffcd64faa7c7745a484b2ecb21a577b71264b1aa8a8555d16270e922b9c41",
+  "runtime": "4d3b92de426911590b7366d9904ab819c3934e9a36eb3127bea212772cf88005",
+  "abi": "35257a8c9d66f780598d52e6908bab026ddc7e2e392cfa3b3c573ed0136befad"
+ }
+}

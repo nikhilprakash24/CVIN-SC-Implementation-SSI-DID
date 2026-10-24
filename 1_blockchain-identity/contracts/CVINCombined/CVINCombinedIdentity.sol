@@ -218,6 +218,7 @@ contract CVINCombinedIdentity {
     // ============ Modifiers ============
 
     /// @dev Restricts to {identityOwner}(`identity`). Reverts "CVINCombined: unauthorized".
+    /// @param identity The ERC-1056 identity whose current owner must be msg.sender.
     modifier onlyIdentityOwner(address identity) {
         require(msg.sender == identityOwner(identity), "CVINCombined: unauthorized");
         _;

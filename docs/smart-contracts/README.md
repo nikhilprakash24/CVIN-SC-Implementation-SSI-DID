@@ -24,6 +24,7 @@ once the metadata is stripped).
 | [03 – Token standards](03-token-standards-erc721-erc1155-lsp8.md) | `ERC721/{CVINVehicleNFT,CVIN_NFT_DID_ERC721,CVIN_NFT_DID_ERC721_Monolithic}.sol`, `ERC1155/CVINVehicleCredential1155.sol`, `LSP8/CVINVehicleLSP8.sol`, `_research-copies/ERC721` | ERC-721, ERC-1155, ERC-165, ERC-2981, LUKSO LSP8, ISO 3779 |
 | [04 – Account & claim identity](04-account-claim-identity-erc725-735-4337-combined.md) | `ERC725/CVIN_DID_ERC725.sol`, `ERC725xy/{CVINVehicleERC725XY,CVINExecuteTarget}.sol`, `ERC735/CVINVehicleClaimHolder.sol`, `ERC4337/{CVINVehicleAccount,CVINMinimalEntryPoint}.sol`, `CVINCombined/CVINCombinedIdentity.sol` | ERC-725 (v1, X/Y), ERC-735, ERC-4337, EIP-191 |
 | [05 – ZKP & IDTx](05-zkp-and-idtx.md) | `5_zkp-agent-identity/contracts/{Groth16Verifier,SchnorrEcrecoverVerifier,ZkVinGate}.sol`, `phase2/idtx/contracts/IdtxExecutor.sol` (+ `IdentityCommitments`) | Groth16 / snarkjs, EIP-196/197, circom + Poseidon, Schnorr-via-ecrecover, ERC-1056 |
+| [06 – Security review](06-security-review.md) | all | Exploitability verdicts, the `mintVehicle` fix, Slither triage, CI guards (NatSpec lint, bytecode manifest, ZkVinGate mutants) |
 
 ## Cross-cutting usage map
 
@@ -41,5 +42,13 @@ once the metadata is stripped).
 Details and line refs are in each doc. Highlights:
 - Stub/partial implementations: `CVIN_DID_ERC725` (`execute` only emits, `approve` is empty), LSP8 subset (no LSP1 hooks/operators/ERC-165), minimal 4337 EntryPoint.
 - Spec deviations: hashed attribute/delegate names in the ERC-1056 wrappers and MOBI (invisible to a stock did:ethr resolver); 1155 transfers always revert (soulbound).
-- Security caveats: `ZkVinGate` action not bound into proof (front-run); Groth16 single-party setup; `CVINVehicleDIDRegistry.updateOwnershipMapping` unrestricted; `CVINVehicleNFT.mintVehicle` reentrancy window; 4337 guardian instant takeover; no low-s checks in 4337/Combined.
+- Security caveats, re-checked for exploitability in Phase 3 (see [06 – Security review](06-security-review.md)):
+  - **Fixed:** the re-entrancy window in `CVINVehicleNFT.mintVehicle` (a manufacturer-role receiver could mint one VIN twice; there is now a regression test).
+  - **Open, documented:**
+    - `ZkVinGate`'s action is not bound into the proof, so a copied proof can be front-run and burn the nullifier (griefing). The fix needs a circuit change.
+    - Groth16 single-party setup.
+    - The 4337 guardian can take over instantly (a recovery-design choice).
+  - **Not exploitable:**
+    - `updateOwnershipMapping` is callable by anyone, but the ERC-1056 owner already fixed the outcome.
+    - There is no low-s check in the 4337 account or Combined, but the nonce and the issuer/topic claim ids already prevent replay.
 - Stale material: `_research-copies/ERC721` monolithic balance bug; stale NatSpec in `CVINCombinedIdentity` (L119-127); draft contract embedded in `MOBI_VID*` root specs.

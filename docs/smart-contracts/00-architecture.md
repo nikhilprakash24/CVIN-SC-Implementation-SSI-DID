@@ -146,5 +146,9 @@ it, whose IPFS hash covers the source text. The annotation pass was checked like
 5. The Hardhat suites (main, phase2, zkp), the MOBI copy check and `tools/prepush_check.sh` were
    re-run.
 
-The metadata hash is 32 bytes either way. Deployment gas can move by a few units, because calldata
-costs differ for zero and non-zero bytes, but runtime gas is unaffected.
+The metadata hash is 32 bytes either way. Deployment gas can move in multiples of 12, because calldata
+costs differ for zero (4 gas) and non-zero (16 gas) bytes, but runtime gas is unaffected. Measured on
+the nine-standard benchmark, 2 of 61 cells moved, both deployments, by exactly ±12 gas: ERC-735
+`createIdentity` and MOBI-VID-V2 `deployRegistry`. The delta is logged in
+`4_comparison-framework/results/gas_moved_by_natspec_2026-10-24.json`. `tools/bytecode_manifest.js`
+deliberately ignores this metadata noise and fails only on real code changes.

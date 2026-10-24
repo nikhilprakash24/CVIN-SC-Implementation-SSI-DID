@@ -74,11 +74,15 @@ contract CVINVehicleERC725XY {
     bytes4 internal constant _INTERFACEID_ERC725Y = 0x629aa694;
 
     // ============ ERC-725X operation types ============
-    /// @notice ERC-725X operation type codes accepted by {execute}.
+    /// @notice ERC-725X operation type codes accepted by {execute}: CALL (0).
     uint256 public constant OPERATION_CALL = 0;
+    /// @notice ERC-725X operation type CREATE (1); `target` must be address(0).
     uint256 public constant OPERATION_CREATE = 1;
+    /// @notice ERC-725X operation type CREATE2 (2); salt in the last 32 bytes of `data`, `target` must be address(0).
     uint256 public constant OPERATION_CREATE2 = 2;
+    /// @notice ERC-725X operation type STATICCALL (3); `value` must be 0.
     uint256 public constant OPERATION_STATICCALL = 3;
+    /// @notice ERC-725X operation type DELEGATECALL (4); runs `target`'s code in this account's storage.
     uint256 public constant OPERATION_DELEGATECALL = 4;
 
     // ============ Well-known CVIN vehicle attribute data keys ============

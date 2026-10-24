@@ -19,7 +19,7 @@ All paths below are relative to the repo root. `1bi/` is short for `1_blockchain
 | **LUKSO LSP8** Identifiable Digital Asset | LUKSO standard (lsp-smart-contracts v0.14 line) | `bytes32` tokenIds; `totalSupply`, `balanceOf`, `tokenOwnerOf`, `tokenIdsOf`, `transfer(from,to,tokenId,force,data)`, `transferBatch`, operator functions (`authorizeOperator`, `revokeOperator`, `isOperatorFor`, `getOperatorsOf`), `setDataForTokenId`/`getDataForTokenId` and batch variants; event `Transfer(operator, from, to, tokenId, force, data)`, `TokenIdDataChanged`; built on ERC725Y + LSP4 metadata + LSP1 receiver hooks | `CVINVehicleLSP8` | **Representative subset** (see header L18-47). Implemented with matching signatures: the views, `transfer`, the Transfer event shape (L130-137), `TokenIdDataChanged` (L144-148), set/get data and their batch variants. **Omitted:** LSP1 universal-receiver notification. `force` only means "an EOA recipient is allowed" (L350-352); there is no LSP1 probing. Also omitted: operators, `transferBatch`, ERC725Y collection-level `setData`/`getData`, LSP4 keys, and ERC-165. **Extensions:** an extra generic `DataChanged(dataKey, value)` (L154, without tokenId), `mintVehicle`/`revokeVehicle`, the token owner may burn, a hand-written `owner`/`transferOwnership` without renounce, and generation-scoped data (REVIEW_02 K-8). |
 | **ERC725Y / LSP2 keys** | LUKSO | key/value data | `CVINVehicleLSP8` (style only) | Data keys are plain `keccak256("CVIN_VIN")` etc. (L72-81). They are **not** LSP2 JSON-schema-encoded keys. |
 | **W3C DID / `did:nft`** | W3C DID Core (Rec); `did:nft` is not a registered method | DID string | `CVINVehicleNFT.getVehicleDID` | Only a string is produced: `did:nft:erc721:0x<lowercase addr>:<tokenId>` (L372-381, hex helper L504-522, which is not EIP-55 checksummed). There is no DID document and no resolver on-chain. The other contracts expose no DID function. |
-| **ISO 3779 VIN** | ISO | 17-char VIN, no I/O/Q | all three primary contracts | `_normalizeVIN`: length 17, upper-cases a–z, allows `[A-HJ-NPR-Z0-9]`. The check digit (position 9) is intentionally **not** verified (`CVINVehicleNFT.sol:463-499`, copied in 1155 L403-439 and LSP8 L285-321). |
+| **ISO 3779 VIN** | ISO | 17-char VIN, no I/O/Q | all three primary contracts | `_normalizeVIN`: length 17, upper-cases a–z, allows `[A-HJ-NPR-Z0-9]`. The check digit (position 9) is intentionally **not** verified (`CVINVehicleNFT.sol:467-503`, copied in 1155 L403-439 and LSP8 L285-321). |
 
 **Dependencies** (`1bi/package.json`): `@openzeppelin/contracts` **5.0.2** (exact), `@openzeppelin/contracts-upgradeable` 5.0.2, `@lukso/lsp-smart-contracts` ^0.14.0. The LSP8 contract does not import the LUKSO package. OZ modules used: `ERC721`, `ERC721URIStorage`, `ERC721Enumerable`, `ERC1155`, `ERC2981`, `AccessControl`, `Ownable`, `Strings`, and the interfaces `IERC165`/`IERC2981`/`IERC721`/`IERC721Metadata`/`IERC721Receiver`. Compilers: `CVINVehicleLSP8` uses `pragma ^0.8.24`, the others `^0.8.20`. `hardhat.config.js` configures 0.8.24/0.8.20/… and `paths.sources = "./contracts"`, so `_research-copies/` is **not compiled**.
 
@@ -28,44 +28,44 @@ All paths below are relative to the repo root. `1bi/` is short for `1_blockchain
 ## 1. `1bi/contracts/ERC721/CVINVehicleNFT.sol` — primary ERC-721 vehicle identity
 
 **Purpose:** one NFT per vehicle. Holds VIN↔tokenId maps, an on-chain metadata struct, a transfer-history log, append-only service-record URIs, a soft "deactivate" flag and the `did:nft` string.
-**Inherits:** `ERC721, ERC721URIStorage, ERC721Enumerable, AccessControl` (L50). It also imports `Strings`. Constructor: name "CVIN Vehicle Identity", symbol "CVIN-VID". It grants `DEFAULT_ADMIN_ROLE` and `MANUFACTURER_ROLE` to the deployer (L158-161).
+**Inherits:** `ERC721, ERC721URIStorage, ERC721Enumerable, AccessControl` (L52). It also imports `Strings`. Constructor: name "CVIN Vehicle Identity", symbol "CVIN-VID". It grants `DEFAULT_ADMIN_ROLE` and `MANUFACTURER_ROLE` to the deployer (L160-163).
 
 | State variable | Type | Line | Notes |
 |---|---|---|---|
-| `_nextTokenId` | `uint256 private` = 1 | 54 | sequential ids starting at 1 (0 = "no token" sentinel) |
-| `MANUFACTURER_ROLE`, `INSPECTOR_ROLE`, `SERVICE_CENTER_ROLE` | `bytes32 constant` | 58-64 | `INSPECTOR_ROLE` is granted but **no function checks it** |
-| `vinToTokenId` | `mapping(string=>uint256) public` | 69 | keyed by the normalised VIN |
-| `tokenIdToVIN` | `mapping(uint256=>string) public` | 73 | duplicates `vehicleMetadata.vin` |
-| `vehicleMetadata` | `mapping(uint256=>VehicleMetadata) public` | 78-90 | vin, make, model, year (uint16), color, manufacturer, mintTimestamp, active |
-| `transferHistory` | `mapping(uint256=>TransferRecord[]) public` | 94-103 | from, to, timestamp, blockNumber |
-| `serviceRecords` | `mapping(uint256=>string[]) public` | 107 | URIs |
-| `_VIN_ALLOWED`, `_VIN_LOWER_AZ` | `uint256 private constant` | 496-499 | character bitmaps |
+| `_nextTokenId` | `uint256 private` = 1 | 56 | sequential ids starting at 1 (0 = "no token" sentinel) |
+| `MANUFACTURER_ROLE`, `INSPECTOR_ROLE`, `SERVICE_CENTER_ROLE` | `bytes32 constant` | 60-66 | `INSPECTOR_ROLE` is granted but **no function checks it** |
+| `vinToTokenId` | `mapping(string=>uint256) public` | 71 | keyed by the normalised VIN |
+| `tokenIdToVIN` | `mapping(uint256=>string) public` | 75 | duplicates `vehicleMetadata.vin` |
+| `vehicleMetadata` | `mapping(uint256=>VehicleMetadata) public` | 80-92 | vin, make, model, year (uint16), color, manufacturer, mintTimestamp, active |
+| `transferHistory` | `mapping(uint256=>TransferRecord[]) public` | 96-105 | from, to, timestamp, blockNumber |
+| `serviceRecords` | `mapping(uint256=>string[]) public` | 109 | URIs |
+| `_VIN_ALLOWED`, `_VIN_LOWER_AZ` | `uint256 private constant` | 500-503 | character bitmaps |
 
-**Events:** `VehicleMinted(tokenId, vin, owner, manufacturer)` (L117), `VehicleTransferred(tokenId, from, to, timestamp)` (L130), `ServiceRecordAdded(tokenId, recordURI, addedBy)` (L142), `VehicleDeactivated(tokenId, by)` (L152). The inherited ERC-721 events are also emitted: `Transfer`, `Approval`, `ApprovalForAll`, and the role events.
+**Events:** `VehicleMinted(tokenId, vin, owner, manufacturer)` (L119), `VehicleTransferred(tokenId, from, to, timestamp)` (L132), `ServiceRecordAdded(tokenId, recordURI, addedBy)` (L144), `VehicleDeactivated(tokenId, by)` (L154). The inherited ERC-721 events are also emitted: `Transfer`, `Approval`, `ApprovalForAll`, and the role events.
 **Modifiers:** only the inherited `onlyRole`.
 
 | Function | Visibility / mutability | What it does | Access control | Events | Origin |
 |---|---|---|---|---|---|
-| `constructor()` L158 | — | sets name and symbol, grants admin and manufacturer roles | — | `RoleGranted`×2 | OZ / CVIN |
-| `mintVehicle(address to, string vin, string make, string model, uint16 year, string color, string metadataURI) returns (uint256)` L181 | external | normalises the VIN, requires it to be unique and `to≠0`, `_safeMint`s, sets the URI, writes the maps and metadata, and pushes a mint record to the history | `MANUFACTURER_ROLE` | `Transfer`, `MetadataUpdate`*, `VehicleMinted` | CVIN extension (wraps ERC-721 mint) |
-| `_update(address to, uint256 tokenId, address auth) returns (address)` L244 | internal override | for a transfer that is neither a mint nor a burn, appends a history record and emits | (inherits ERC-721 auth) | `VehicleTransferred` | ERC-721 hook + CVIN |
-| `addServiceRecord(uint256 tokenId, string recordURI)` L275 | external | appends a URI; the token must exist | `SERVICE_CENTER_ROLE` | `ServiceRecordAdded` | CVIN |
-| `getServiceRecords(uint256)` L290 | external view | returns all service records | — | — | CVIN |
-| `getTransferHistory(uint256)` L306 | external view | returns the `TransferRecord[]` | — | — | CVIN |
-| `getOwnershipChain(uint256)` L320 | external view | returns the `to` of every record | — | — | CVIN |
-| `deactivateVehicle(uint256)` L343 | external | sets `active=false` (soft revoke; the token is **not** burned) | `DEFAULT_ADMIN_ROLE` | `VehicleDeactivated` | CVIN |
-| `isVehicleActive(uint256)` L358 | external view | reads the flag (false for a nonexistent token) | — | — | CVIN |
-| `getVehicleDID(uint256)` L372 | external view | returns `did:nft:erc721:<addr>:<id>` | — | — | CVIN (did:nft) |
-| `getTokenIdFromVIN(string)` L390 | external view | lookup with normalisation; reverts if not found | — | — | CVIN |
-| `getVINFromTokenId(uint256)` L404 | external view | lookup; reverts if the token does not exist | — | — | CVIN |
-| `getVehiclesByOwner(address)` L417 | external view | loops `tokenOfOwnerByIndex` | — | — | CVIN over ERC-721 Enumerable |
-| `getTotalVehicles()` L434 | external view | `_nextTokenId-1` (count of minted tokens) | — | — | CVIN |
-| `grantManufacturerRole / grantInspectorRole / grantServiceCenterRole(address)` L443-459 | external | wrappers around `grantRole` | `DEFAULT_ADMIN_ROLE` | `RoleGranted` | CVIN |
-| `_normalizeVIN(string)` L478 | internal pure | ISO 3779 normalise/validate | — | — | CVIN (D13) |
-| `toHexString(address)`, `char(bytes1)` L504, L519 | internal pure | lower-case hex | — | — | CVIN helper |
-| `tokenURI(uint256)` L531 | public view override | resolves the ERC721/URIStorage diamond | — | — | ERC-721 Metadata |
-| `supportsInterface(bytes4)` L544 | public view override | merges 721/Enumerable/URIStorage/AccessControl | — | — | ERC-165 |
-| `_increaseBalance(address,uint128)` L556 | internal override | required by Enumerable | — | — | OZ |
+| `constructor()` L160 | — | sets name and symbol, grants admin and manufacturer roles | — | `RoleGranted`×2 | OZ / CVIN |
+| `mintVehicle(address to, string vin, string make, string model, uint16 year, string color, string metadataURI) returns (uint256)` L184 | external | normalises the VIN, requires it to be unique and `to≠0`, `_safeMint`s, sets the URI, writes the maps and metadata, and pushes a mint record to the history | `MANUFACTURER_ROLE` | `Transfer`, `MetadataUpdate`*, `VehicleMinted` | CVIN extension (wraps ERC-721 mint) |
+| `_update(address to, uint256 tokenId, address auth) returns (address)` L248 | internal override | for a transfer that is neither a mint nor a burn, appends a history record and emits | (inherits ERC-721 auth) | `VehicleTransferred` | ERC-721 hook + CVIN |
+| `addServiceRecord(uint256 tokenId, string recordURI)` L279 | external | appends a URI; the token must exist | `SERVICE_CENTER_ROLE` | `ServiceRecordAdded` | CVIN |
+| `getServiceRecords(uint256)` L294 | external view | returns all service records | — | — | CVIN |
+| `getTransferHistory(uint256)` L310 | external view | returns the `TransferRecord[]` | — | — | CVIN |
+| `getOwnershipChain(uint256)` L324 | external view | returns the `to` of every record | — | — | CVIN |
+| `deactivateVehicle(uint256)` L347 | external | sets `active=false` (soft revoke; the token is **not** burned) | `DEFAULT_ADMIN_ROLE` | `VehicleDeactivated` | CVIN |
+| `isVehicleActive(uint256)` L362 | external view | reads the flag (false for a nonexistent token) | — | — | CVIN |
+| `getVehicleDID(uint256)` L376 | external view | returns `did:nft:erc721:<addr>:<id>` | — | — | CVIN (did:nft) |
+| `getTokenIdFromVIN(string)` L394 | external view | lookup with normalisation; reverts if not found | — | — | CVIN |
+| `getVINFromTokenId(uint256)` L408 | external view | lookup; reverts if the token does not exist | — | — | CVIN |
+| `getVehiclesByOwner(address)` L421 | external view | loops `tokenOfOwnerByIndex` | — | — | CVIN over ERC-721 Enumerable |
+| `getTotalVehicles()` L438 | external view | `_nextTokenId-1` (count of minted tokens) | — | — | CVIN |
+| `grantManufacturerRole / grantInspectorRole / grantServiceCenterRole(address)` L447-463 | external | wrappers around `grantRole` | `DEFAULT_ADMIN_ROLE` | `RoleGranted` | CVIN |
+| `_normalizeVIN(string)` L482 | internal pure | ISO 3779 normalise/validate | — | — | CVIN (D13) |
+| `toHexString(address)`, `char(bytes1)` L508, L523 | internal pure | lower-case hex | — | — | CVIN helper |
+| `tokenURI(uint256)` L535 | public view override | resolves the ERC721/URIStorage diamond | — | — | ERC-721 Metadata |
+| `supportsInterface(bytes4)` L548 | public view override | merges 721/Enumerable/URIStorage/AccessControl | — | — | ERC-165 |
+| `_increaseBalance(address,uint128)` L560 | internal override | required by Enumerable | — | — | OZ |
 | *Inherited:* `balanceOf, ownerOf, name, symbol, approve, getApproved, setApprovalForAll, isApprovedForAll, transferFrom, safeTransferFrom×2, totalSupply, tokenByIndex, tokenOfOwnerByIndex, hasRole, getRoleAdmin, grantRole, revokeRole, renounceRole` | public | standard behaviour | owner/approved; role admin | standard | ERC-721 / Enumerable / AccessControl |
 
 \* In OZ 5.0.2, `ERC721URIStorage._setTokenURI` emits the EIP-4906 `MetadataUpdate` event. The contract does not declare EIP-4906 itself.
@@ -74,7 +74,7 @@ All paths below are relative to the repo root. `1bi/` is short for `1_blockchain
 - There is no burn path. "Revocation" is the soft `active=false` flag, and a deactivated vehicle can **still be transferred** and still receive service records, because neither function checks `active`.
 - `transferHistory` and `serviceRecords` are unbounded arrays. The getters return whole arrays, so a long history can exceed view gas limits.
 - `INSPECTOR_ROLE` is not used. Service records are unsigned free-form strings.
-- `mintVehicle` uses `_safeMint`, which calls `onERC721Received` on the recipient **before** the VIN maps and metadata are written (L200 vs L204-225). This is a reentrancy window for a malicious receiver. The caller holds the manufacturer role, so impact is limited.
+- **Fixed in Phase 3:** `mintVehicle` used to call `_safeMint`, and with it the recipient's `onERC721Received`, **before** writing the VIN maps. A receiver holding the manufacturer role could re-enter and mint the same VIN twice; `mintReentrancy.regression.test.js` reproduced it. The VIN maps are now written first (L204-205, then `_safeMint` at L208). Metadata and the mint `TransferRecord` are still written after the callback (L212-230), so a receiver sees empty metadata during the callback. Gas is unchanged (ERC-721 `create` 545,197 in `L1-asymmetry.md`).
 - The `did:nft` address is lowercase and not checksummed.
 
 ---
