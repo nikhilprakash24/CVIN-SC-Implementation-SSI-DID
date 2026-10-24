@@ -40,3 +40,11 @@
   U10. The fixes are WM-2 D1's editing half, which waits on D-1.
 - **CI after U9 (`6a7fe6c` onward): 2 workflows red.** Two jobs set a subdirectory as their working directory, so the relative path to the pins file failed. Every install now reads `$GITHUB_WORKSPACE/ci/requirements-ci.txt`.
 - **CI green on `e481889`** (all four workflows), with the pinned packages. Report stays open for U7, U5, U10, U11 and U12.
+- **U10, the stale-figure checker.** Eight entries added for superseded #27, #28, #22 and #25 values, with exact
+  phrases for the small counts (150 of 150, 5 per run × 30). **Finding: A5's correction of #27 (2026-10-23) never
+  reached the citing documents.** The new entries found the old V2V figures (0.153 ms, cold 0.399, PKI 0.094, 150
+  failures, ~650×) in 24 files, including the README and chapter 5, which the chapter audit had not covered. Outside
+  the thesis, all were corrected to #27's values (0.142 ms [0.141, 0.143], cold 0.363, PKI 0.090, 210 = 7 × 30,
+  ~700× against the 100 ms budget), and the July attestEvent pair now names itself as history. The 28 hits in
+  `docs/thesis/` are left for WM-2 D1: the checker gained a **pending** class that prints them, does not fail on
+  them, fails on any new hit elsewhere (shown to fire), and reports a pending glob as CLEARED once its hits are gone.

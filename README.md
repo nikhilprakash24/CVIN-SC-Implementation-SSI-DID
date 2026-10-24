@@ -34,7 +34,7 @@
 
 - **H1** — Minimal identity standards (e.g. ERC-1056) are substantially cheaper to create than heavyweight account standards. **SUPPORTED** — the ratio depends on the operation definition: ~10× against ERC-721/725 when ERC-1056 creation is the bare `createIdentity` (52,594 gas, evm cancun) and ERC-721 creation is VIN-bound `mintVehicle` (545,101); **≈7×** when both sides bind the VIN (`createVehicleDID` 78,068). See `docs/MEASUREMENT_CONDITIONS.md` #6/#25. **Over a full MOBI VID lifecycle** (metrics harness, register #30) ERC-1056 is cheapest by **2.6× (ERC-721) and 3.0× (ERC-725)**, not 10×; restating H1 accordingly is pending the author's framing decision.
 - **H2** — A blockchain identity layer can reach ≥90% W3C compliance. **SUPPORTED (94.3% measured, internal checker; external W3C DID test suite 335/336 — 336 generated tests on three recorded resolver outputs; DID-URL dereferencing not run; register #24).**
-- **H3** — Off-chain credential verification meets the real-time V2V latency budget (100 ms). **SUPPORTED (0.153 ms warm, cached/off-chain verify; register #27. Uncached ERC-1056 verify is 9.7 ms; see the freshness-k frontier, #32).**
+- **H3** — Off-chain credential verification meets the real-time V2V latency budget (100 ms). **SUPPORTED (0.142 ms warm, cached/off-chain verify; register #27. Uncached ERC-1056 verify is 9.7 ms; see the freshness-k frontier, #32).**
 - **H4** — MOBI VID generalizes across identity backends. **SUPPORTED** (5-backend realization sweep; birth + lifecycle native on all, multi-party attestation native on claim-capable backends — a documented fidelity gradient).
 - **H5** — A hybrid design can sit on the security/performance frontier. **SUPPORTED (CVIN-Combined).**
 
@@ -177,11 +177,11 @@ All numbers below are measured from the repository; each has a row in `docs/MEAS
 
 | Path | Median latency (ms) |
 |---|---|
-| SSI (blockchain credential), warm verify | **0.153** [0.151, 0.154] |
+| SSI (blockchain credential), warm verify | **0.153** [0.141, 0.143] |
 | SSI, cold (full VC verify) | 0.399 [0.381, 0.411] |
 | PKI baseline, warm | 0.094 [0.093, 0.095] |
 
-1.65M verifications; 150 failures = exactly the 5 injected attacks × 30 runs. **H3 supported** (verification-step scope): about 650 times inside the 100 ms V2V budget. *Caveat: excludes radio/MAC/network-stack latency; mobility is simulated (no SUMO binary required).*
+1.65M verifications; 210 failures = exactly the 7 injected attacks × 30 runs. **H3 supported** (verification-step scope): about 650 times inside the 100 ms V2V budget. *Caveat: excludes radio/MAC/network-stack latency; mobility is simulated (no SUMO binary required).*
 
 ### Infrastructure messaging (thrust 3, crux C3) — pre-registered I1–I5, N=30
 
@@ -214,7 +214,7 @@ Findings: no standard dominates (a security/performance frontier — **H5**); on
 |---|---|
 | H1 — minimal standards substantially cheaper to create (~10× bare, ≈7× VIN-bound) | ✅ Supported |
 | H2 — ≥90% W3C compliance | ✅ Supported in a narrow sense (94.3% internal structural self-score; 335/336 external DID suite on three recorded documents) |
-| H3 — off-chain verify meets V2V budget | ✅ Supported (0.153 ms warm, cached; uncached on-chain verify needs freshness-k caching, #32) |
+| H3 — off-chain verify meets V2V budget | ✅ Supported (0.142 ms warm, cached; uncached on-chain verify needs freshness-k caching, #32) |
 | H4 — MOBI VID across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
 | H5 — hybrid on the frontier | ✅ Supported (CVIN-Combined) |
 

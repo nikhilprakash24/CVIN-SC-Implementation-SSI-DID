@@ -243,7 +243,7 @@ All of the following are **built and tested** in the current repo:
    python3 cv2x-testbed/sumo/sumo_identity_integration.py --simulate
    python3 cv2x-testbed/sumo/run_v2v_stats.py     # N=30 seeded stats
    ```
-   Headline: SSI warm verify ~0.153 ms median (~650× margin to the 100 ms V2V
+   Headline: SSI warm verify ~0.142 ms median (~700× margin to the 100 ms V2V
    budget, H3). *Caveat: excludes the radio/MAC/network stack; mobility is
    simulated (no SUMO binary).*
 7. **Run the security suites** — 54 Mocha attack scenarios (43/43 applicable

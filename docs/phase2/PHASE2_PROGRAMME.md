@@ -36,7 +36,7 @@ ideation, then architecture, then planning, then build waves, with the author ch
      one operator. The F2 prototype shows the database half of the argument: a hash-chained journal cannot reveal a
      full rewrite or a tail deletion without an anchor kept outside.
 3. **The safety budget is met per path, not per mode.**
-   - The SSI offline verification path fits: 0.153 ms per message (#27).
+   - The SSI offline verification path fits: 0.142 ms per message (#27).
    - The ERC-1056 cached verifier does not reach the budget's sender count on its host at any finite k (#37).
    - Those rows come from different runs and hosts, so no ratio is formed across them (guide 1.1.7).
    - Out of cellular coverage only offline verification is possible. That is an argument from the radio standard;
@@ -57,7 +57,7 @@ ideation, then architecture, then planning, then build waves, with the author ch
 | Lifecycle gas, 17 events | ERC-1056 1,050,809 cheapest; ERC-735 5,797,549 (excl. 3 n/a) | #35 |
 | New storage slots over the lifecycle | 8 (ERC-1056) to 149 (ERC-735) | #49 |
 | Relayed write over direct | ERC-1056 +27,622 gas; ERC-4337 +47,116 | #50, #34 |
-| V2V verification, warm SSI | 0.153 ms [0.151, 0.154] | #27 |
+| V2V verification, warm SSI | 0.142 ms [0.141, 0.143] | #27 |
 | Uncached chain-backed verification | 9.654 ms median | #21 |
 | Staleness bound with a re-check every k messages | at most k − 1 messages | #46 |
 | Attack harness | 43 of 43 applicable cells defended | #28 |

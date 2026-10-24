@@ -14,6 +14,7 @@ history:
 - docs/PROGRESS_APPENDIX_*.md   # generated from git subjects, which quote figures as they were (report 24)
 - docs/tdp/TDP-006_FMECA.md   # generated verbatim from docs/DEFECT_LOG.md, a history document (report 21)
 - docs/MEASUREMENT_CONDITIONS.md
+- docs/thesis/CHAPTER_AUDIT_2026-10.md   # quotes the stale values it found, on purpose (report 37)
 - docs/review02/*
 - docs/reconciliation/*
 - docs/prior-survey/*
@@ -249,3 +250,45 @@ entries:
 - pattern: '4366383'
   current: 4,370,878 MOBI-VID-V2 deploy (final C2 design, report 22)
   row: 25
+# U10 (report 37): superseded #27, #28, #22, #25 values the chapter audit found still quoted, and the small counts
+# (exact phrases, since a bare small integer matches too much).
+- pattern: '(?<![\d.])0\.153 ms'
+  current: 0.142 ms [0.141, 0.143] V2V warm verify (A5)
+  row: 27
+  pending: ['docs/thesis/*/*.md', 'docs/thesis/README.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '(?<![\d.])0\.399 ms'
+  current: 0.363 ms V2V cold verify (A5)
+  row: 27
+  pending: ['docs/thesis/*/*.md', 'docs/thesis/README.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '(?<![\d.])0\.094 ms'
+  current: 0.090 ms PKI warm verify (A5)
+  row: 27
+  pending: ['docs/thesis/*/*.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '\b150 injected attacks|\(150 of 150\)|5 per run x 30|5 per run × 30|150 = 5 attacks'
+  current: 210 failures = 7 injected attacks × 30 runs
+  row: 27
+  pending: ['docs/thesis/*/*.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '121k ?(->|→) ?193k|121,?110 (->|→|to) 192,?718'
+  current: 198,694 attestEvent execution gas (WM-2 C2)
+  row: 28
+  pending: ['docs/thesis/*/*.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '54639'
+  current: 54,868 registerVehicle (54,844 to 54,868)
+  row: 22
+  pending: ['docs/thesis/*/*.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '103849|149430|542474'
+  current: 107,729 / 152,644 / 545,101 mint gas
+  row: 25
+  pending: ['docs/thesis/*/*.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '2751406|3952603'
+  current: ERC-721 deploy 2,787,288; MOBI-VID-V2 4,370,878
+  row: 25
+  pending: ['docs/thesis/*/*.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1

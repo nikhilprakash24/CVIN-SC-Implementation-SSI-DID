@@ -308,12 +308,12 @@ path. `run_v2v_stats.py` aggregates **N=30 seeded runs**.
 
 | Path | Warm verify | Cold verify |
 |------|------------:|------------:|
-| SSI (blockchain credential) | **0.153 [0.151, 0.154]** | 0.399 [0.381, 0.411] |
+| SSI (blockchain credential) | **0.153 [0.141, 0.143]** | 0.399 [0.381, 0.411] |
 | PKI baseline | 0.094 [0.093, 0.095] | — |
 
 Across the campaign: **1,650,318 verifications, 150 failures**, exactly the 5
 injected attacks × 30 runs (all caught; register #27). **H3 SUPPORTED:** the warm SSI verify
-sits ~650× under the 100 ms V2V budget.
+sits ~700× under the 100 ms V2V budget.
 
 **Caveats (stated in the results):** figures are pure identity-verification CPU
 time — no radio/MAC/propagation/queueing; mobility is a mock kinematic model
@@ -370,7 +370,7 @@ encrypts the VIN.
 The audit found MOBI `attestEvent` was **storing** an attestation signature but
 never verifying it (a forgery/replay gap). It now recovers the signer on-chain
 (ecrecover) and reverts forged/replayed attestations. Cost moved
-**121,110 → 192,718 gas**; the MOBI `Replay` security test now passes.
+**121,110 → 192,718 gas** in the July build (now 198,694 execution gas, #28); the MOBI `Replay` security test now passes.
 
 ---
 
@@ -415,7 +415,7 @@ never verifying it (a forgery/replay gap). It now recovers the signer on-chain
 |---|------------|--------|----------|
 | H1 | Minimal standards ≥10× cheaper to create | **Supported** | ERC-1056/CVIN-Combined ~10× under ERC-721/725; ~34× total spread |
 | H2 | ≥90% W3C compliance | **Supported** | 94.3% executable checker |
-| H3 | Off-chain verify meets V2V budget | **Supported** | 0.153 ms warm SSI verify, ~650× margin |
+| H3 | Off-chain verify meets V2V budget | **Supported** | 0.142 ms warm SSI verify, ~700× margin |
 | H4 | MOBI VID across backends | **Supported** | 5-backend sweep; fidelity gradient (birth+lifecycle native on all; attestation native on claim-capable) |
 | H5 | Hybrid on the security/perf frontier | **Supported** | CVIN-Combined |
 
