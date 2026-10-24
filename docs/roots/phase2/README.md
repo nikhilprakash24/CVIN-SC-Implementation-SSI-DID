@@ -109,7 +109,15 @@ Record keys are namespaced by issuing document (the panel's re-keying); every re
 | Primary sources for eight unfetched citations (incl. HSM verify times) | R7 LIM-R7-01..08 | Accuracy Ledger / Latency |
 | Blind re-derivation of the composition lemma | SLD-10 | This Roots thread, fresh session |
 | R6/R8 v0-3 cross-reference sweep; R7 v0-3 (lead figure 320) | PN-34..39 | This Roots thread |
-| Ruling on SOL-16 and on FIG-R13's attack classes | Q-R9-01 | Author |
+| Ruling on SOL-16 (Q-R9-01) and on FIG-R13's attack classes | — | Author — **deferred 2026-10-24**; until ruled, SOL-16 is cited only together with SOL-05, and FIG-R13 carries its "classes proposed, not confirmed" flag |
+
+## 6a. Author decisions
+
+| Date | Decision |
+|---|---|
+| 2026-10-24 | SOL-16 as a standalone contribution: **deferred** |
+| 2026-10-24 | FIG-R13 attack classes: **deferred** (designer's proposal stands, flagged) |
+| 2026-10-24 | PR #14: **merge** |
 
 ## 7. How to pick this up in another chat
 
