@@ -107,8 +107,8 @@ Record keys are namespaced by issuing document (the panel's re-keying); every re
 | E-F1-1 IDTX gas measurement | RV-IDTX executor rows | IDTX work chats |
 | Commit the Sepolia witness as a register row, or drop it | RV-IMPL Sepolia rows | Scale thread |
 | Primary sources for eight unfetched citations (incl. HSM verify times) | R7 LIM-R7-01..08 | Accuracy Ledger / Latency |
-| Blind re-derivation of the composition lemma | SLD-10 | This Roots thread, fresh session |
-| R6/R8 v0-3 cross-reference sweep; R7 v0-3 (lead figure 320) | PN-34..39 | This Roots thread |
+| ~~Blind re-derivation of the composition lemma~~ | SLD-10 | **done 2026-10-24** (§6b) |
+| ~~R6/R8 v0-3 cross-reference sweep; R7 v0-3 (lead figure 320)~~ | PN-34..39 | **done 2026-10-24** (§6b); λ and δ for ε_K still to be declared as PAR by R8 |
 | Ruling on SOL-16 (Q-R9-01) and on FIG-R13's attack classes | — | Author — **deferred 2026-10-24**; until ruled, SOL-16 is cited only together with SOL-05, and FIG-R13 carries its "classes proposed, not confirmed" flag |
 
 ## 6a. Author decisions
@@ -117,7 +117,15 @@ Record keys are namespaced by issuing document (the panel's re-keying); every re
 |---|---|
 | 2026-10-24 | SOL-16 as a standalone contribution: **deferred** |
 | 2026-10-24 | FIG-R13 attack classes: **deferred** (designer's proposal stands, flagged) |
-| 2026-10-24 | PR #14: **merge** |
+| 2026-10-24 | PR #14: **merged** (`4c3c248`) |
+
+## 6b. Follow-ups done on 2026-10-24 (branch `roots/G-R1-phase2-v0-3`)
+
+| Item | Result |
+|---|---|
+| v0-3 consistency sweep of R6, R7, R8 (PN-34..39) | Stale cross-references fixed; R7 lead verification figure now **320** neighbours at half budget (register #26 re-stated: 0.156 ms/neighbour, *P*\* ≈ 641); EIP-7623 floor condition derived (binds iff execution gas < 6z + 24n); coverage unchanged at 77 / 3 / 115 / 223 |
+| SLD-10 blind re-derivation of the composition lemma (PF-36), written by a fresh agent that never saw R7 | **Passed with corrections** (`70_R7_theory_ece_bounds/blind/`): revocation term replaced by a key-theft-in-window term ε_K ≈ λ(σ+δ); multi-user loss stated inside the bound; hash term restricted to the document commitment; concrete security 6.16 bits (*N_v* = 4) and 4.32 bits (*N_v* = 1), not 4.16 (KD-R7-08). The 36.7-orders gap between ledger and cryptographic terms reproduced exactly. SLD-10 may now enter a chapter |
+| CI note | The "Nine-standard gas benchmark" determinism failure on PR #14 predates it: it also fails on the base at `554a094` (PR #15). Not caused by documents |
 
 ## 7. How to pick this up in another chat
 

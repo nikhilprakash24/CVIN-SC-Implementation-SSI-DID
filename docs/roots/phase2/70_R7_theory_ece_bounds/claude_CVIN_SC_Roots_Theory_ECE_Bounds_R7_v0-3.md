@@ -9,11 +9,11 @@
 | Date | 2026-10-24 |
 | Re-keying | **re-keyed per R9 §3.1** (Q-R7-nn kept; KD-R4-nn → KD-R7-nn; KD-R4-08/09 → CEV-R7-01/02; PAR → R8 numbers; script labels → document PF numbering). Phase 1 erratum pointer: R9 §3.4 X-1..X-9. |
 | Consumes | R4 v0.1 (SYM-01..24, PF-01..31, SR-A..K, frozen); R3 v0.1 (BP- tags); Phase 1 README (SOL-01..09); `PHASE2_SHARED_BRIEF.md` v1.0; R6 v0-1 (HW-, ALG-, IMP-, SCF-, BP-LH/Lx.y, SOL-10..17); R8 v0-1/v0-2 (MD-, PAR-); R9 v0-1 (PN-, SLD-, DRP-, NC-, CA-); claim register `docs/MEASUREMENT_CONDITIONS.md` (rows written #n); `docs/LATENCY_BUDGET.md`; `cv2x-testbed/identity/freshness.py`, `erc1056_provider.py`; `cv2x-testbed/protocols/cv2x_stack.py`; `5_zkp-agent-identity/`; `docs/testing/GAS_CHARTER.md`; `1_blockchain-identity/results/metrics/latest/` |
-| Assigns | `SYM-25`–`SYM-58`, `SR-L`–`SR-T`, `PF-32`–`PF-66` (PF-45, PF-46 filled in v0-2; PF-63..66 added at R8/R9 request), `Q-R7-01`–`Q-R7-08`, `KD-R7-01..06` issued; `KD-R7-07` retired by merge, `CEV-R7-01`–`02`, `LIM-R7-01`–`08`. **PAR- is no longer assigned here**: R8 owns it (R7's 26 parameters map onto R8 PAR-02..26 and PAR-31..43; §8). |
+| Assigns | `SYM-25`–`SYM-58`, `SR-L`–`SR-T`, `PF-32`–`PF-66` (PF-45, PF-46 filled in v0-2; PF-63..66 added at R8/R9 request), `Q-R7-01`–`Q-R7-08`, `KD-R7-01..06` and `KD-R7-08` issued; `KD-R7-07` retired by merge, `CEV-R7-01`–`02`, `LIM-R7-01`–`08`. **PAR- is no longer assigned here**: R8 owns it (R7's 26 parameters map onto R8 PAR-02..26 and PAR-31..43; §8). |
 | Status scale (suite-wide, PN-32) | **M** MEASURED (register row or result file) · **Dv** DERIVED (equation + inputs) · **I** IMPLEMENTED-UNMEASURED · **Ds** DESIGN (specified, not built) · **E** ESTIMATED · **S** STANDARD (cited specification or theorem) · **—** not used. A status is never upgraded. |
 | Reproducibility | Every number below is printed, with its equation and inputs, by `r7_calc_v0-3.py` in this folder (python3, numpy, scipy; seeds 42 and 2026). Print labels are this document's PF numbers, one to one. The script ends with a self-check that reads this file and fails (exit 1) if any PF tag printed here is absent from its output, or if any R7-owned label it prints is absent here. |
 
-Progress ▓▓▓▓▓▓▓▓▓▓ 95 % (v0-3: R9 v0-2 PN-34/37/38 applied; PF-43 lead re-based on register #26 as re-stated 2026-10-23; EIP-7623 floor condition stated. Open items are primary-source checks logged as LIM-R7-nn, the LIM-R7-08 receipt (CA-20) and the blind re-derivation of PF-36, SLD-10.)
+Progress ▓▓▓▓▓▓▓▓▓▓ 95 % (v0-3: R9 v0-2 PN-34/37/38 applied; PF-43 lead re-based on register #26 as re-stated 2026-10-23; EIP-7623 floor condition stated. Open items are primary-source checks logged as LIM-R7-nn, the LIM-R7-08 receipt (CA-20), and PAR-⟦λ, δ⟧ from R8. SLD-10 blind check of PF-36 passed with corrections.)
 
 **How to read.** §0 lists what changed since v0-1 and why. §1 extends the notation. §2 (cryptography) and §3 (distributed computing) are the *theory* half: what the identity binding is as strong as, and when the ledger's terms of W are defined at all. §4 (hardware, radio, clocks) and §5 (EVM) are the *engineering* half: where the real bottlenecks are. §6 formalises freshness. §7 gives R8 one formula per measurement dimension. §8 maps R7's parameters onto R8's PAR numbers. §9 indexes every PF with a one-line "So what". §10 records the repository-vs-Phase-1 corrections, §11 the citation limits, §12 the dispositions of R9's findings and §13 the change log. §14 is the HANDOFF. **Read PF-39 (§3.4) before quoting any latency number measured in this repository.**
 
@@ -29,6 +29,7 @@ Progress ▓▓▓▓▓▓▓▓▓▓ 95 % (v0-3: R9 v0-2 PN-34/37/38 applied;
 | V3-02 | `r7_calc_v0-3.py`: #26 slope 0.164 → 0.156 (prints 320.5 / 641.0), CA-09 note removed, EIP-7623 floor condition and `setAttribute` first/later-write thresholds printed; self-check reads v0-3 | script | PN-34, PN-37 |
 | V3-03 | EIP-7623 floor-binding condition (*g_exec* < 6·*z* + 24·*n*) and the ERC-1056 `setAttribute` first-write / later-write split | §5.4 | PN-37 |
 | V3-04 | KD range written "KD-R7-01..06 issued; KD-R7-07 retired by merge" everywhere | header, §0, §13, §14 | PN-38 |
+| V3-06 | **SLD-10 blind check** (`blind/BLIND_REDERIVATION_PF-36.md`, AGREE-WITH-CORRECTIONS): PF-36 revocation term → ε_K ≈ λ(σ+δ) with PAR-⟦λ, δ⟧ requested of R8; ε_Σ^(n_D) ≤ n_D·ε_Σ inside the bound; ε_H restricted to the document commitment; proof replaced by games G0–G3; concrete bits 6.16 / 4.32 (4.16 kept as remark); may/must-not-claim sentences; gate PASSED-WITH-CORRECTIONS; new correction KD-R7-08; PF index rows 36, 59; script prints | §2.5, §9, §10, §14, script | SLD-10 |
 | V3-05 | Header: version v0-3, date 2026-10-24, progress bar, script name | header | — |
 
 Historical records are left as written: §12 row PN-16 and §13 row 9 record the v0-2 response (305 = 50/0.164), which PN-34 supersedes.
@@ -39,7 +40,7 @@ Historical records are left as written: §12 row PN-16 and §13 row 9 record the
 
 | Item | v0-1 | v0-2 | Why (R9 ref) |
 |---|---|---|---|
-| Correction keys | KD-R4-01..07 | **KD-R7-01..06 issued; KD-R7-07 retired by merge** (into KD-R7-02) | issuer namespacing (§3.1, PN-31) |
+| Correction keys | KD-R4-01..07 | **KD-R7-01..06 issued; KD-R7-07 retired by merge** (into KD-R7-02); KD-R7-08 added in v0-3 | issuer namespacing (§3.1, PN-31) |
 | Confirmation keys | KD-R4-08, KD-R4-09 | **CEV-R7-01, CEV-R7-02** | confirmations, not corrections (PN-20) |
 | Parameters | PAR-01..26 (R7-owned) | R8 numbers: PAR-02, 04, 05, 06, 10, 12, 16, 18, 19, 20, 22, 24, 25, 26, 11, and new **PAR-31..43** | R8 owns PAR- (PN-26, Table B) |
 | Script labels | working labels (PF-32..52 meant other things) | identical to document PF numbering; header map in the script | PN-10 |
@@ -146,25 +147,29 @@ Define **BIND-FAIL**: a verifier *V* accepts *m* as sent by subject DID *D* at t
 
 **Lemma (PF-36).** For any efficient 𝒜,
 
-  P(BIND-FAIL) ≤ ε_Σ + ε_H + ε_L + ε_R + P(revocation inside σ),
+  **P(BIND-FAIL) ≤ ε_Σ^(*n_D*) + ε_H + ε_L + ε_R + ε_K**, with ε_Σ^(*n_D*) ≤ *n_D*·ε_Σ,
 
-which is a **union bound over failure events**. The terms differ in nature, and the reader must not read them as one kind of quantity (PN-19):
+which is a **union bound over failure events** (status **Dv** as a formula; SLD-10 blind check, KD-R7-08). The sum needs no independence between L and R (R reads L); a product would be wrong, because either event alone suffices.
+
+*Why the v0-2 term was wrong.* v0-2 wrote "P(revocation inside σ)". A revocation by itself causes no BIND-FAIL: if the honest owner revoked a key and still signs with it inside σ, the controller as fixed at *t* − σ did sign, so the event did not occur. The harmful event is **ε_K = P(the controller key fixed at *t* − σ is stolen and used before V's view reflects revocation) ≈ λ(σ + δ)** per targeted subject (≈ *n_D*·λ(σ + δ) for "any subject"), with λ the key-theft rate per key and δ the detection-plus-revocation latency. This also supplies the key-theft term the v0-2 bound lacked: theft is a non-cryptographic path to forgery. λ and δ are undeclared: **PAR-⟦λ, δ⟧ requested of R8**. The terms differ in nature, and the reader must not read them as one kind of quantity (PN-19):
 
 | Term | Event | Nature | Worked value |
 |---|---|---|---|
-| ε_Σ | forgery under EUF-CMA | **computational** advantage (SR-L) | 2⁻¹²⁸ ≈ 2.94×10⁻³⁹ |
-| ε_H | hash collision binding *m* or the document | **computational** advantage (SR-M) | 2⁻¹²⁸ |
+| ε_Σ^(*n_D*) | forgery under multi-user EUF-CMA over *n_D* keys | **computational** advantage (SR-L); ≤ *n_D*·ε_Σ | single-user 2⁻¹²⁸ ≈ 2.94×10⁻³⁹; with the *n_D* loss ≈ 2⁻⁸³ |
+| ε_H | collision on the DID-document commitment (when Σ is ECDSA-with-H the message digest is already inside ε_Σ, so it is not counted again) | **computational** advantage (SR-M) | 2⁻¹²⁸ |
 | ε_L | two honest readers see conflicting final states | **governance prior** (collusion probability, R4 PF-16) — not an adversary advantage | *N_v* = 4, *p_c* = 0.05: 1.40×10⁻² |
 | ε_R | resolver returns a wrong document | **implementation prior** (assumed bug/lie rate; PF-64) | 10⁻⁶ (assumed) |
-| σ-term | revoked key accepted within σ | **design window** (BP-L6-04) | PF-54 |
+| ε_K | controller key at *t* − σ stolen and used before V's view reflects revocation | **operational prior** ≈ λ(σ + δ); window from PF-54 (BP-L6-04) | λ, δ undeclared (PAR-⟦λ, δ⟧ requested of R8) |
 
-*Proof sketch (hybrids).* H₀ is the real experiment. H₁ replaces the resolver output by the document computed from the ledger's final state at *t* − σ; the difference is ε_R. H₂ replaces "the state any reader sees" by "the unique final state"; the difference is ε_L (for QBFT this means two finalised blocks at one height, i.e. more than *f_B* Byzantine validators). H₃ replaces H by an injective map; the difference is ε_H. In H₃ an accepting (*m*, *σ*) not produced by the controller is a forgery, so success ≤ ε_Σ. The reduction embeds the challenge key as *D*'s key and guesses *D* among *n_D* subjects, which costs a factor *n_D*. ∎
+*Proof (games G0–G3; `blind/BLIND_REDERIVATION_PF-36.md` §2).* G0 is the real experiment: V accepts (*D*, *m*, *s*, *t*) but sk_D, fixed by L at *t* − σ, never signed *m*. G1 replaces the key R returned by pk\*, the key implied by the common honest final state of L at *t* − σ; by the difference lemma |P0 − P1| ≤ ε_L + ε_R. G2 also requires the accepted document to have the committed hash; |P1 − P2| ≤ ε_H. G3 excludes runs in which sk\* was stolen; |P2 − P3| ≤ ε_K. In G3 an accepted signature under pk\* on an unsigned *m* with sk\* secret is a forgery: B embeds *n_D* challenge keys, simulates L and R honestly and answers signing queries through its oracle, so P3 ≤ Adv^MU-EUF-CMA_Σ(B) = ε_Σ^(*n_D*). ∎
 
-**Worked instances (Dv from E inputs).** With *N_v* = 4, the sum is 1.40×10⁻². The ledger term exceeds each cryptographic term by **36.7 orders of magnitude** (1.40×10⁻² vs 2.94×10⁻³⁹). **Executed instance (*N_v* = 1, Hardhat):** ε_L = *p_c* of one operator. At an assumed *p_c* = 0.05 the bound is 5.00×10⁻², i.e. the binding is exactly as strong as trust in the person running the node.
+**Worked instances (Dv from E inputs).** With *N_v* = 4, the sum is 1.40×10⁻². The ledger term exceeds each cryptographic term by **36.7 orders of magnitude** (1.40×10⁻² vs 2.94×10⁻³⁹). **Executed instance (*N_v* = 1, Hardhat):** ε_L = *p_c* of one operator. At an assumed *p_c* = 0.05 the bound is 5.00×10⁻² (0.050001 with the computational and resolver terms; ε_K excluded, undeclared), i.e. the binding is exactly as strong as trust in the person running the node.
 
-**Tightness.** The multi-user loss is *n_D* = 3.12×10¹³ ≈ 2^44.8. That leaves ≈ 83.2 bits from a 128-bit scheme in the loose worst-case bound. Combined with the ledger term, the concrete bits (PF-59) at *N_v* = 4 are min_i(−log₂ ε_i) − log₂ 4 = **4.16 bits**, which is a ledger-dominated figure and not a cryptographic one.
+**Tightness.** The multi-user loss is *n_D* = 3.12×10¹³ ≈ 2^44.8. That leaves ≈ 83.2 bits from a 128-bit scheme in the loose worst-case bound. The best generic attack (one-out-of-*n* discrete log, ≈ √(q/n)) leaves ≈ 105.6 bits in practice. **Concrete figure (PF-59, KD-R7-08):** −log₂ of the sum is **6.16 bits** at *N_v* = 4, *p_c* = 0.05 (total 1.402×10⁻²) and **4.32 bits** at *N_v* = 1 (total 0.050001), ε_K excluded. v0-2's 4.16 = min_i(−log₂ ε_i) − log₂ 4 is a looser union-of-four approximation, kept only as a remark. These are operational probabilities conditional on the priors, not cryptographic strength.
 
-*Gate (SLD-10):* this lemma does not enter a chapter until a blind re-derivation in a fresh session agrees. The statement to hand that session is the event definition, the five-term bound and the hybrid order above.
+*What a thesis may claim.* Under multi-user EUF-CMA, collision resistance, ledger non-equivocation, resolver integrity and no key theft, BIND-FAIL is bounded by the sum of the corresponding terms, and the cryptographic terms are negligible (≈ 2⁻⁸³ or better with the multi-user loss). The end-to-end assurance is set by trust assumptions, not cryptography: ≈ 10⁻² for a 4-validator QBFT ledger and 5×10⁻² for the single-node ledger actually executed. *Must not claim:* "128-bit security" end to end; a revocation-probability term (it is key compromise within the revocation window); or that the single-node ledger prevents its own operator from equivocating.
+
+*Gate (SLD-10): **PASSED-WITH-CORRECTIONS*** (blind re-derivation `blind/BLIND_REDERIVATION_PF-36.md`, verdict AGREE-WITH-CORRECTIONS; corrections applied above as KD-R7-08).
 
 ---
 
@@ -593,7 +598,7 @@ A correlated-collusion (beta-binomial) variant at *N_v* = 4 gives 3.20×10⁻² 
 | 33 | keccak CR 2^128; unsalted VIN serial = 19.93 bits → 3.58 s (#60) | S / M | L1-03, BP-L6.1-01 | 03, 05, SOL-11 | Hashing a VIN does not hide it; only salted or ZK paths do (SLD-08). |
 | 34 | hash commitment binds at 2⁻¹²⁸, hides iff salted; Pedersen perfectly hiding | Dv | L1-03, BP-L6.1-01 | SOL-11 | Every low-entropy attribute needs a ≥ 128-bit salt (PRM-L1.1-03). |
 | 35 | Groth16 sound only with honest CRS; repo setup single-party ⇒ P = *p_s* | S / M (setup) | BP-L1.2-03, BP-L1.2-04 | SOL-11 | No production soundness claim for ZK-VIN until a ceremony (NC-04). |
-| 36 | union bound over failure events (computational, governance, implementation); *N_v* = 1 instance = *p_c* | Dv (gated, SLD-10) | L6-02, L6-04, L3-01 | 05, 06 | Binding is as strong as ledger governance; better curves buy nothing yet. |
+| 36 | union bound ε_Σ^(n_D) + ε_H + ε_L + ε_R + ε_K (computational, governance, implementation, key theft); *N_v* = 1 instance = *p_c* | Dv (SLD-10 passed with corrections) | L6-02, L6-04, L3-01 | 05, 06 | Binding is as strong as ledger governance; better curves buy nothing yet. |
 | 37 | QBFT safety N_v ≥ 3f_B+1 (async), liveness after GST | S / Ds | L3-01..03 | 02 | Design-appendix table; the executed system has none of it (SLD-13). |
 | 38 | QBFT messages (N_v−1)(2N_v+1): 27…945 for N_v 4…22 | Dv / Ds | L3-02 | 02 | Consensus traffic is never the consortium bottleneck. |
 | 39 | Hardhat automine: N_v = 1, no Δ, t_finalise ≡ 0; gas portable, latency not | M (config) / Dv | L3-01, L7-07, BP-L3.2-02 | 01 | Quote repo latency only as client + RPC cost (SLD-01; NC-01). |
@@ -616,7 +621,7 @@ A correlated-collusion (beta-binomial) variant at *N_v* = 4 gives 3.20×10⁻² 
 | 56 | freshness-term table | Dv | L6-04 | 05 | σ_k is the dominant measured term of W. |
 | 57 | time-to-confirm metric (+57a availability) | Ds / Dv | L3-02 | R8 MD-01, MD-10 | MD-01 cells stay empty for the executed system. |
 | 58 | trilemma coordinates (T, L, C) | Dv | — | R8 MD-03 | Places each option on R3's surface from three PFs. |
-| 59 | protocol-security triple (class, loss, bits); 4.16 bits at N_v = 4 | Dv | — | R8 MD-05 | A "128-bit" system is ledger-limited to a few bits of confidence. |
+| 59 | protocol-security triple (class, loss, bits); 6.16 bits at N_v = 4, 4.32 at N_v = 1 (−log₂ of the sum; KD-R7-08) | Dv | — | R8 MD-05 | A "128-bit" system is ledger-limited to a few bits of confidence. |
 | 60 | NC = f_B+1, PF-16, HHI, Shannon, governance score; today NC = 1, HHI = 1 | Dv | L3-01, L4-04 | R8 MD-02 | The executed system has no decentralisation to report (NC-01). |
 | 61 | SC security vector (access, replay, kill rate, attacks, audit) | M partial | BP-L5.2-01..06 | R8 MD-04 | Tabulate (a), (b), (e) before citing (SLD-16). |
 | 62 | privacy: k_A, ℓ, hiding bits | M / Dv | L6-05, BP-L0.1-02 | R8 MD-09 | One number per layer: chain *k_A* = 1, RF ℓ up to 0.8, VIN 19.93 bits. |
@@ -640,6 +645,7 @@ PF-45 and PF-46 are no longer reserved. Their v0-1 placeholder meanings (verify-
 | **KD-R7-05** | ~~KD-R4-05~~ | corrects R4 PF-11 *p_s*^*t_s* | repo setup single-party: P = *p_s* (#57) | **ACCEPT** (X-5) |
 | **KD-R7-06** | ~~KD-R4-06~~ | corrects R4 σ = 5 s (time) | repo bounds staleness in messages (*k_f* − 1); time only with TTL | **ACCEPT** (X-6) |
 | ~~KD-R7-07~~ | ~~KD-R4-07~~ | — | merged into KD-R7-02 (number retired, not reused) | merged (X-1) |
+| **KD-R7-08** (v0-3) | — | corrects R7 v0-2 PF-36/PF-59 | revocation term → ε_K ≈ λ(σ+δ); ε_Σ multi-user inside the bound; ε_H restricted to the document commitment; concrete figure −log₂(sum) = 6.16 / 4.32 bits (was 4.16) | **ACCEPT** (SLD-10 blind check) |
 | **CEV-R7-01** | ~~KD-R4-08~~ | confirms R4 PF-31 | RPC read O(10–200 ms) consistent with 15.513 ms uncached local (#21), 91.113 ms at history 50 (#31), probe 3.2 ms (#37); history-dependent | confirmation (PN-20) |
 | **CEV-R7-02** | ~~KD-R4-09~~ | confirms R4 PF-02, PF-04, PF-16, PF-19 | re-computed by `r7_calc_v0-2.py` §A; all reproduce | confirmation (PN-20) |
 
@@ -719,7 +725,7 @@ Each disputed number was re-derived independently in `r7_calc_v0-2.py` before th
 
 **Files.** `docs/roots/phase2/70_R7_theory_ece_bounds/claude_CVIN_SC_Roots_Theory_ECE_Bounds_R7_v0-3.md` (this document) and `…/r7_calc_v0-3.py` (prints every number; seeds 42 and 2026; the self-check against this file passes, exit 0). v0-1, v0-2, `r7_calc.py` and `r7_calc_v0-2.py` are untouched.
 
-**Tags.** Assigned: SYM-25..58; SR-L..T; PF-32..66 (45/46 filled; 63..66 new); Q-R7-01..08; KD-R7-01..06 issued; KD-R7-07 retired by merge; CEV-R7-01..02; LIM-R7-01..08. Retired: ~~KD-R4-01..09~~ (R7-issued), ~~R7 PAR-01..26~~ → R8 PAR (§8), the v0-1 script working labels, the reserved meanings of PF-45/46. Consumed: R4 PF/SYM/SR; R6 HW-, ALG-, IMP-, SCF-, BP-, SOL-11; R8 MD-, PAR-; R9 PN-, SLD-, DRP-, NC-, CA-.
+**Tags.** Assigned: SYM-25..58; SR-L..T; PF-32..66 (45/46 filled; 63..66 new); Q-R7-01..08; KD-R7-01..06 and KD-R7-08 issued; KD-R7-07 retired by merge; CEV-R7-01..02; LIM-R7-01..08. Retired: ~~KD-R4-01..09~~ (R7-issued), ~~R7 PAR-01..26~~ → R8 PAR (§8), the v0-1 script working labels, the reserved meanings of PF-45/46. Consumed: R4 PF/SYM/SR; R6 HW-, ALG-, IMP-, SCF-, BP-, SOL-11; R8 MD-, PAR-; R9 PN-, SLD-, DRP-, NC-, CA-.
 
 **Five load-bearing decisions.**
 1. PF-39: the executed system is *N_v* = 1 with no Δ. Gas is portable; latency is client + RPC only.
@@ -728,6 +734,6 @@ Each disputed number was re-derived independently in `r7_calc_v0-2.py` before th
 4. PF-36/65/66: binding is a union bound dominated by governance and common-mode terms, not cryptography.
 5. *G* = 60 M is an instrument value. Capacity is reported over *G* ∈ {30, 60, 100} M with *G* and Δ as PAR.
 
-**Open questions.** Q-R7-01 Besu genesis; Q-R7-02 HSM/ECU *t_ver*; Q-R7-03 IDTX gas (E-F1-1); Q-R7-04 SPS counter and 802.11p model in `cv2x_stack.py`; Q-R7-05 RSU propagation; Q-R7-06 docstring 650 → 596; Q-R7-07 provider TTL; Q-R7-08 tabulate PF-61(a),(e). Also: confirm the EIP-7623 floor on one receipt (LIM-R7-08); blind re-derivation of PF-36 (SLD-10, owner per Q-R9-04).
+**Open questions.** Q-R7-01 Besu genesis; Q-R7-02 HSM/ECU *t_ver*; Q-R7-03 IDTX gas (E-F1-1); Q-R7-04 SPS counter and 802.11p model in `cv2x_stack.py`; Q-R7-05 RSU propagation; Q-R7-06 docstring 650 → 596; Q-R7-07 provider TTL; Q-R7-08 tabulate PF-61(a),(e). Also: confirm the EIP-7623 floor on one receipt (LIM-R7-08); PAR-⟦λ, δ⟧ requested of R8 (key-theft rate λ, detection-plus-revocation latency δ, for PF-36 ε_K). SLD-10 blind re-derivation of PF-36: done, passed with corrections (KD-R7-08).
 
 **Corrections issued.** PF-43 condition (278.8 → 27.9); reselection linkability (0.368/0.549/0.819 → 0.136/0.449/0.805); LOG3 per kB (9,317 → 9,692) and storage/log ratio (76–84× → 18–28× by basis); software *P*\*(0.5) 351 → 352 (crypto-only ceiling; 320 leads from #26, PN-34); ledger-vs-crypto gap "37" → 36.7 orders.

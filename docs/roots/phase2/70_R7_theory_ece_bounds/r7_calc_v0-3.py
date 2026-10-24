@@ -129,7 +129,11 @@ p("PF-36", "union bound, Nv=1", f"{sum(terms1.values()) + 0.05:.3e}")
 nD = 3.12e13
 p("PF-36", "multi-user loss log2(n_D)", f"{math.log2(nD):.1f} bits -> 128-{math.log2(nD):.1f} = {128-math.log2(nD):.1f} bits")
 bits = min(128, 128, -math.log2(eL4), -math.log2(1e-6)) - math.log2(4)
-p("PF-59", "bits = min_i(-log2 eps_i) - log2(#terms=4), Nv=4", f"{bits:.2f}", "(ledger-dominated)")
+p("PF-59", "remark (v0-2, looser): bits = min_i(-log2 eps_i) - log2(#terms=4), Nv=4", f"{bits:.2f}", "(ledger-dominated)")
+tot4 = sum(terms.values()); tot1 = sum(terms1.values()) + 0.05
+p("PF-59", "-log2(sum) Nv=4 pc=.05 (KD-R7-08, SLD-10 blind check; eps_K excluded)", f"{-math.log2(tot4):.2f} bits", f"total {tot4:.4e}")
+p("PF-59", "-log2(sum) Nv=1 pc=.05 (KD-R7-08; eps_K excluded)", f"{-math.log2(tot1):.2f} bits", f"total {tot1:.6f}")
+p("PF-36", "eps_K ~ lambda*(sigma+delta) per subject (key theft in revocation window)", "symbolic", "PAR-[lambda, delta] requested of R8")
 
 # ---------------------------------------------------------------- F
 print("\n== F. RNG and key generation (PF-41, PF-42) -- ESTIMATED illustrations (DRP-07) ==")
