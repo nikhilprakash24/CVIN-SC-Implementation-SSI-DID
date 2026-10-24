@@ -79,3 +79,6 @@ All work packages done except 1.2 ([B1], blocked on the `cvin-sandbox-v1.3` arch
 
 ## Phase roadmap — ready to start Phase 2 on your word
 Phase 2 (compare to other ID systems) can begin now; it reuses the function set as the common axis and the analogy matrix as its seed. Say "start phase 2" or leave it for the chat sidecar.
+
+## Second examiner pass — propagation gaps closed (2026-10-24)
+A blind verify-the-fixes re-examination confirmed the framing fixes landed in the thesis, but caught that obj. 9/10 fixes and the obj. 3 retreat had been applied to support files only. Now back-propagated into `THESIS_DRAFT.md` (ZkVinGate no longer "unlinkable across scopes"; addClaim raw-digest replay caveat added to the primitive bullet) and `ANALYSIS.md` (the stale "true IDTx are few / count is a finding" sentence superseded by a correction note); obj. 6 "twelve" off-by-one reworded to defer to G-B. Second-pass verdict: **defensible** once these gaps closed — which they now are. This was a genuine editor miss (support-file fixes not propagated), caught by the re-examination — logged as the reason the verify pass was worth running.

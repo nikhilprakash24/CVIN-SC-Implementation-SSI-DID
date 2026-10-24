@@ -36,8 +36,11 @@ obj. 8). The measurement catalogue then adds cost, lifecycle, read path and scal
 ### 3.x.2 The function set
 
 The exact count and numbering are pending the canon archive (G-B, **[B1]**); the operations the substrates are compared
-on are listed below. `BASIC_ID_SET_EXTENSION.md` groups them as Set A (identity and keys) + Set B (credentials) = the
-`IMinimalSSI` twelve, with the relayed/sponsored operation a programme addition. The last two (execute, relayed op)
+on are listed below. `BASIC_ID_SET_EXTENSION.md` groups them as Set A (identity and keys) + Set B (credentials) — the
+`IMinimalSSI` interface — with the relayed/sponsored operation a *separate* programme addition on top. The eleven rows
+below are the lifecycle operations this draft can name distinctly; whether the canonical interface numbers them as
+twelve (and exactly how) is deferred to the G-B archive, so this draft does not assert a "twelve" count. The last two
+(execute, relayed op)
 have *no analogue* in the centralized, national, or V2X identity worlds (`ANALOGIES.md`); they are blockchain-account
 capabilities, not operations an identity must have, so the set is best read as **the capability surface these
 substrates expose for comparison**, not as a proven minimal or necessary set (examiner obj. 1).
@@ -78,7 +81,10 @@ The functions rest on a small stack of cryptographic and protocol primitives (Ap
 primitive, with the spec section read at source and the alternatives):
 
 - **secp256k1 ECDSA with EIP-191/EIP-712 domain separation** `[src]` — the authentication-and-attestation primitive;
-  domain separation is what stops a signature from one context being replayed in another.
+  domain separation is what stops a signature from one context being replayed in another. **Caveat:** this holds for the
+  EIP-712/191 paths, *not* for `addClaim`/`attestEvent`, which recover a **raw keccak digest** (no EIP-191, no chain-id,
+  no nonce; `CVINCombinedIdentity.sol`) — so those two carried-signature paths, which are the measured "true IDTx",
+  carry a cross-chain replay exposure (D52) the thesis does not claim to have closed (Appendix G-C card 1, item e′).
 - **did:ethr over ERC-1056, event-sourced resolution** `[src]` — the document is reconstructed from the event log, not
   stored; this is the source of ERC-1056's low write cost and its history-dependent read cost (register #31, #51).
 - **W3C DID Core 1.0** `[src]` and **Verifiable Credentials Data Model 2.0** `[src]` — the identifier/document and the
@@ -87,7 +93,10 @@ primitive, with the spec section read at source and the alternatives):
 - **Salted-hash commitment** — the L3 VIN-privacy pattern; it gates by *equality* with a public value and proves no
   knowledge of the committed value (`ANALYSIS.md` §4.4, AR-5).
 - **Groth16 zk-SNARK with a nullifier** `[src]` — the ZK-VIN tier (`ZkVinGate`); the nullifier makes an admission
-  scoped and unlinkable across scopes.
+  one-time *within* a scope and hides the VIN/year/mfr. It does **not** make admissions unlinkable across scopes: the
+  built `admit` emits the identity address in clear (`ZkVinGate.sol:113`) and re-checks the same anchored commitment
+  every scope, so an identity's admissions are linkable. Cross-identity unlinkability would need a Semaphore-style
+  anonymity set, not built here (Appendix G-C card 7).
 
 ### 3.x.4 The extension to a full SSI system
 

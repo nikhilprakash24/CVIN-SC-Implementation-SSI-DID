@@ -37,3 +37,12 @@ draft's framing.** The mechanical slips (obj. 5, 6, 9, 10) are fixed below; the 
 
 ## What the editor fixed this pass (mechanical, verified-correct)
 obj. 5, 6, 9, 10, plus softening of obj. 1/2/3 wording pending author sign-off. Framing FATALs 1–4 and MAJORs 8, 11, 12 are surfaced to the author.
+
+## Second examiner pass (verify-the-fixes) — propagation gaps closed 2026-10-24
+A blind re-examination confirmed the framing fixes (obj. 1, 2, 3, 4, 7, 8) were made correctly *in the thesis draft*,
+but found three fixes applied only to support files and not back-propagated. All three now closed:
+- **obj. 9** — THESIS §3.x.3 still said "unlinkable across scopes"; **corrected** to match the contract and card 7.
+- **obj. 10** — THESIS §3.x.3 domain-separation bullet lacked the `addClaim` raw-digest caveat; **added**.
+- **obj. 3** — `ANALYSIS.md` §4.2 still said "true IDTx are few … that count is itself a finding"; **superseded** by an inline correction note pointing here.
+- **obj. 6** — the "Set A + Set B = twelve" sentence was off by one; **reworded** to defer the count to G-B (no "twelve" asserted).
+Second-pass overall verdict: the reframed core (object-attribute ABAC on-chain; novelty = locus taxonomy + ordering/freshness analysis) is defensible once these propagation gaps are closed — which they now are. Remaining open: obj. 11 (read abstract-only gap sources in full — Phase 3), obj. 12 / G-B (archive), and the author's pseudocode review.
