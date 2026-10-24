@@ -9,10 +9,10 @@
 | 3.2.8 ▲ Controller rotation: U1 (gas) | 51,754 | 57,188 | 179,470 | 28,390 | 28,812 | 89,805 | 28,834 | 83,380 | 28,539 | 68,847 |
 | 3.2.8 ▲ Deletion: D3 deactivate (gas) | 34,230 | 43,809 | 27,689 | 23,091 | 28,596 | 39,565 | 23,182 | 43,044 | 28,323 | 51,016 |
 | 3.3.2 ▲ Limited-resource resolution: R3 RPC calls at h=50 | 112 | 55 | 7 | 61 | 3 | 3 | 2 | 3 | 61 | 107 |
-| 3.3.2 ▲ Resolution median ms after lifecycle | 15.93 | 14.71 | 7.29 | 16.94 | 10.07 | 3.17 | 4.20 | 4.55 | 8.13 | 14.84 |
+| 3.3.2 ▲ Resolution median ms after lifecycle | 28.35 | 22.92 | 11.46 | 23.55 | 19.45 | 4.60 | 6.80 | 7.84 | 13.28 | 23.41 |
 | 3.4.1 Auditability: linked event chain vs state snapshot | full linked history (previousChange chain) | full linked history (previousChange chain) | events + current state (no chain pointer) | current state (events unlinked) | events + current state (no chain pointer) | current state (events unlinked) | current state (events unlinked) | current state (events unlinked) | current state (events unlinked) | full linked history (previousChange chain) |
 | 3.4.7 Verification relationships: delegate keys | delegates with TTL | delegates with TTL | approval (no expiry) | delegates with TTL | none | none | none | none | recovery guardian only | delegates with TTL |
 | 3.4.8 Relayed / signed operations (meta-tx) | yes | no | no | no | no | no | no | no | yes | no |
 | 3.7.2 ▲ Incentive for many DIDs: lifetime gas × baseline | 1 | 0.98 | 2.58 | 3 | 5.52† | 1.2† | 2.81† | 1.44† | 2.11 | 2.44 |
 
-_Run 2026-10-24T13-01-37Z_963439a · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
+_Run 2026-10-24T12-29-26Z_7a59058 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_

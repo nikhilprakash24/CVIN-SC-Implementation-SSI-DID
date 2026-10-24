@@ -48,7 +48,7 @@
     "source": {
       "path": "4_comparison-framework/results/gas_benchmark.json"
     },
-    "measured": "2026-10-24T13:01:08.121Z",
+    "measured": "2026-10-24T12:29:04.178Z",
     "condition": "M1",
     "operations": [
       "deployRegistry",
@@ -604,7 +604,7 @@
     "source": {
       "path": "1_blockchain-identity/results/metrics/latest/analysis.json"
     },
-    "runId": "2026-10-24T13-01-37Z_963439a",
+    "runId": "2026-10-24T12-29-26Z_7a59058",
     "dirty": true,
     "criteria": [
       "Lifetime gas",
@@ -1779,7 +1779,7 @@
     "31": {
       "row": 31,
       "status": "V",
-      "claim": "Harness L3/L6: per-op gas flat in population N ≤ 1 000 (≤ 12 gas from tokenId width); ERC-1056 resolution grows linearly in history: 14 → 32 → 112 RPC calls / 87 KB at h = 50, median 85.585 ms (p95 120.271) in-process (r…",
+      "claim": "Harness L3/L6: per-op gas flat in population N ≤ 1 000 (≤ 12 gas from tokenId width); ERC-1056 resolution grows linearly in history: 14 → 32 → 112 RPC calls / 87 KB at h = 50, median 153.786 ms (p95 175.9; 10 samples, de…",
       "tag": "M1-H"
     },
     "32": {

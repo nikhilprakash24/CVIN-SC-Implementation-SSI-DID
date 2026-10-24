@@ -1,8 +1,8 @@
 {
-  "runId": "2026-10-24T13-01-37Z_963439a",
-  "commit": "963439a23b916a7ab4091e736c7c14f30854db9a",
-  "commitShort": "963439a",
-  "branch": "claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy",
+  "runId": "2026-10-24T12-29-26Z_7a59058",
+  "commit": "7a5905803a0219119fa6b59368461d0f7e203e13",
+  "commitShort": "7a59058",
+  "branch": "claude/zkp-ai-identity-research-n5uho9",
   "measured": {
     "benchmarksTree": "d91134ea8124565c1f93fef96937267fb31826e9",
     "contractsTree": "81089cb562bfdf6e83e0cfef10d9aa262270d374",
@@ -11,7 +11,7 @@
   },
   "dirty": true,
   "dirtyMeasured": false,
-  "date": "2026-10-24T13:01:38.831Z",
+  "date": "2026-10-24T12:29:28.205Z",
   "node": "v22.22.0",
   "hardhat": "2.28.6",
   "ethers": "6.17.0",
@@ -83,11 +83,11 @@
     "ethUSD": 3000
   },
   "scenarioSeconds": {
-    "crud": 309.534,
-    "lifecycle": 5.573,
-    "scale": 296.18,
-    "batch": 42.908,
-    "throughput": 52.545,
-    "resolve": 9.813
+    "crud": 478.278,
+    "lifecycle": 10.148,
+    "scale": 472.473,
+    "batch": 64.421,
+    "throughput": 97.854,
+    "resolve": 16.818
   }
 }

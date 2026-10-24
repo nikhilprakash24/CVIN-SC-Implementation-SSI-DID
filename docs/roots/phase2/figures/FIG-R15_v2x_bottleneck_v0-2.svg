@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 664" width="1000" height="664" font-family="Helvetica, Arial, 'DejaVu Sans', sans-serif"><defs><pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="#fff4cc"/><line x1="0" y1="0" x2="0" y2="5" stroke="#e0a800" stroke-width="2"/></pattern><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs><rect width="1000" height="664" fill="#fff"/><text x="500.0" y="24.0" font-size="16" text-anchor="middle" fill="#222" font-weight="bold">FIG-R15 · V2X safety-message path: verification load vs neighbours — hardware and airtime bind before the ledger</text>
+<text x="500.0" y="41.0" font-size="10" text-anchor="middle" fill="#666">Source: R7 Theory and ECE Bounds v0-2 + r7_calc_v0-2.py output §4.2 (PF-43) and §4.3 (PF-44)</text>
+<rect x="90.0" y="80.0" width="640.0" height="400.0" rx="0" fill="#fff" stroke="#999" stroke-width="1"/>
+<line x1="90.0" y1="480.0" x2="90.0" y2="80.0" stroke="#eee" stroke-width="1"/>
+<text x="90.0" y="494.0" font-size="9" text-anchor="middle" fill="#222">0</text>
+<line x1="190.0" y1="480.0" x2="190.0" y2="80.0" stroke="#eee" stroke-width="1"/>
+<text x="190.0" y="494.0" font-size="9" text-anchor="middle" fill="#222">50</text>
+<line x1="290.0" y1="480.0" x2="290.0" y2="80.0" stroke="#eee" stroke-width="1"/>
+<text x="290.0" y="494.0" font-size="9" text-anchor="middle" fill="#222">100</text>
+<line x1="390.0" y1="480.0" x2="390.0" y2="80.0" stroke="#eee" stroke-width="1"/>
+<text x="390.0" y="494.0" font-size="9" text-anchor="middle" fill="#222">150</text>
+<line x1="490.0" y1="480.0" x2="490.0" y2="80.0" stroke="#eee" stroke-width="1"/>
+<text x="490.0" y="494.0" font-size="9" text-anchor="middle" fill="#222">200</text>
+<line x1="590.0" y1="480.0" x2="590.0" y2="80.0" stroke="#eee" stroke-width="1"/>
+<text x="590.0" y="494.0" font-size="9" text-anchor="middle" fill="#222">250</text>
+<line x1="690.0" y1="480.0" x2="690.0" y2="80.0" stroke="#eee" stroke-width="1"/>
+<text x="690.0" y="494.0" font-size="9" text-anchor="middle" fill="#222">300</text>
+<line x1="90.0" y1="480.0" x2="730.0" y2="480.0" stroke="#eee" stroke-width="1"/>
+<text x="84.0" y="483.0" font-size="9" text-anchor="end" fill="#222">0</text>
+<line x1="90.0" y1="430.0" x2="730.0" y2="430.0" stroke="#eee" stroke-width="1"/>
+<text x="84.0" y="433.0" font-size="9" text-anchor="end" fill="#222">25</text>
+<line x1="90.0" y1="380.0" x2="730.0" y2="380.0" stroke="#eee" stroke-width="1"/>
+<text x="84.0" y="383.0" font-size="9" text-anchor="end" fill="#222">50</text>
+<line x1="90.0" y1="330.0" x2="730.0" y2="330.0" stroke="#eee" stroke-width="1"/>
+<text x="84.0" y="333.0" font-size="9" text-anchor="end" fill="#222">75</text>
+<line x1="90.0" y1="280.0" x2="730.0" y2="280.0" stroke="#eee" stroke-width="1"/>
+<text x="84.0" y="283.0" font-size="9" text-anchor="end" fill="#222">100</text>
+<line x1="90.0" y1="230.0" x2="730.0" y2="230.0" stroke="#eee" stroke-width="1"/>
+<text x="84.0" y="233.0" font-size="9" text-anchor="end" fill="#222">125</text>
+<line x1="90.0" y1="180.0" x2="730.0" y2="180.0" stroke="#eee" stroke-width="1"/>
+<text x="84.0" y="183.0" font-size="9" text-anchor="end" fill="#222">150</text>
+<line x1="90.0" y1="130.0" x2="730.0" y2="130.0" stroke="#eee" stroke-width="1"/>
+<text x="84.0" y="133.0" font-size="9" text-anchor="end" fill="#222">175</text>
+<line x1="90.0" y1="80.0" x2="730.0" y2="80.0" stroke="#eee" stroke-width="1"/>
+<text x="84.0" y="83.0" font-size="9" text-anchor="end" fill="#222">200</text>
+<text x="410.0" y="512.0" font-size="10" text-anchor="middle" fill="#222">neighbours P (each sending BSMs at 10 Hz)</text>
+<text x="40.0" y="280.0" font-size="10" text-anchor="middle" fill="#222" transform="rotate(-90 40.0 280.0)">verification time per 100 ms interval, ms  (= ρ_v × 100)</text>
+<line x1="90.0" y1="280.0" x2="730.0" y2="280.0" stroke="#c0392b" stroke-width="2"/>
+<rect x="430.0" y="265.0" width="296.0" height="13.0" rx="0" fill="#fff" stroke="none" stroke-width="1"/>
+<text x="726.0" y="275.0" font-size="9" text-anchor="end" fill="#c0392b" font-weight="bold">100 ms Tier-1 budget (ρ_v = 1: queue unstable above)</text>
+<line x1="90.0" y1="380.0" x2="730.0" y2="380.0" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="5,3"/>
+<rect x="330.0" y="365.0" width="266.0" height="13.0" rx="0" fill="#fff" stroke="none" stroke-width="1"/>
+<text x="596.0" y="375.0" font-size="9" text-anchor="end" fill="#c0392b">identity share f_id = 0.5 → 50 ms (defines P*(0.5))</text>
+<line x1="90.0" y1="480.0" x2="730.0" y2="389.1" stroke="#3f8f3f" stroke-width="2.2"/>
+<circle cx="190.0" cy="466.0" r="3" fill="#3f8f3f"/>
+<circle cx="290.0" cy="452.0" r="3" fill="#3f8f3f"/>
+<circle cx="490.0" cy="424.0" r="3" fill="#3f8f3f"/>
+<circle cx="690.0" cy="394.0" r="3" fill="#3f8f3f"/>
+<line x1="748.0" y1="93.0" x2="770.0" y2="93.0" stroke="#3f8f3f" stroke-width="2.2"/>
+<text x="776.0" y="96.0" font-size="9" text-anchor="start" fill="#222" font-weight="bold">Xeon software SSI warm (#27, M)</text>
+<text x="776.0" y="108.0" font-size="9" text-anchor="start" fill="#444">t_ver 0.142 ms · P*(0.5)=352 · P*(1)=704</text>
+<line x1="90.0" y1="480.0" x2="730.0" y2="422.4" stroke="#2b6b2b" stroke-width="2.2" stroke-dasharray="2,2"/>
+<circle cx="190.0" cy="472.0" r="3" fill="#2b6b2b"/>
+<circle cx="290.0" cy="462.0" r="3" fill="#2b6b2b"/>
+<circle cx="490.0" cy="444.0" r="3" fill="#2b6b2b"/>
+<circle cx="690.0" cy="426.0" r="3" fill="#2b6b2b"/>
+<line x1="748.0" y1="123.0" x2="770.0" y2="123.0" stroke="#2b6b2b" stroke-width="2.2"/>
+<text x="776.0" y="126.0" font-size="9" text-anchor="start" fill="#222" font-weight="bold">Xeon software PKI warm (#27, M)</text>
+<text x="776.0" y="138.0" font-size="9" text-anchor="start" fill="#444">t_ver 0.09 ms · P*(0.5)=555 · P*(1)=1111</text>
+<line x1="90.0" y1="480.0" x2="730.0" y2="320.0" stroke="#b8860b" stroke-width="2.2" stroke-dasharray="5,3"/>
+<circle cx="190.0" cy="456.0" r="3" fill="#b8860b"/>
+<circle cx="290.0" cy="430.0" r="3" fill="#b8860b"/>
+<circle cx="490.0" cy="380.0" r="3" fill="#b8860b"/>
+<circle cx="690.0" cy="330.0" r="3" fill="#b8860b"/>
+<line x1="748.0" y1="153.0" x2="770.0" y2="153.0" stroke="#b8860b" stroke-width="2.2" stroke-dasharray="5,3"/>
+<text x="776.0" y="156.0" font-size="9" text-anchor="start" fill="#222" font-weight="bold">V2X ASIC/HSM class (E)</text>
+<text x="776.0" y="168.0" font-size="9" text-anchor="start" fill="#444">t_ver 0.25 ms · P*(0.5)=200 · P*(1)=400</text>
+<line x1="90.0" y1="480.0" x2="490.0" y2="80.0" stroke="#c46f00" stroke-width="2.2" stroke-dasharray="5,3"/>
+<circle cx="190.0" cy="380.0" r="3" fill="#c46f00"/>
+<circle cx="290.0" cy="280.0" r="3" fill="#c46f00"/>
+<circle cx="490.0" cy="80.0" r="3" fill="#c46f00"/>
+<line x1="748.0" y1="183.0" x2="770.0" y2="183.0" stroke="#c46f00" stroke-width="2.2" stroke-dasharray="5,3"/>
+<text x="776.0" y="186.0" font-size="9" text-anchor="start" fill="#222" font-weight="bold">Cortex-A53-class software (E)</text>
+<text x="776.0" y="198.0" font-size="9" text-anchor="start" fill="#444">t_ver 1.0 ms · P*(0.5)=50 · P*(1)=100</text>
+<line x1="90.0" y1="480.0" x2="170.0" y2="80.0" stroke="#8e2c2c" stroke-width="2.2" stroke-dasharray="5,3"/>
+<line x1="748.0" y1="213.0" x2="770.0" y2="213.0" stroke="#8e2c2c" stroke-width="2.2" stroke-dasharray="5,3"/>
+<text x="776.0" y="216.0" font-size="9" text-anchor="start" fill="#222" font-weight="bold">MCU HSM EVITA-full class (E)</text>
+<text x="776.0" y="228.0" font-size="9" text-anchor="start" fill="#444">t_ver 5.0 ms · P*(0.5)=10 · P*(1)=20</text>
+<line x1="90.0" y1="480.0" x2="730.0" y2="375.0" stroke="#2c5a8c" stroke-width="1.6" stroke-dasharray="1,3"/>
+<circle cx="699.8" cy="380.0" r="4" fill="none" stroke="#2c5a8c" stroke-width="1.6"/>
+<rect x="429.8" y="406.0" width="266.0" height="13.0" rx="0" fill="#fff" stroke="none" stroke-width="1"/>
+<text x="695.8" y="416.0" font-size="9" text-anchor="end" fill="#2c5a8c">#26 model 0.164 ms/nbr → P*(0.5) = 305 (lead, M)</text>
+<line x1="748.0" y1="243.0" x2="770.0" y2="243.0" stroke="#2c5a8c" stroke-width="1.6" stroke-dasharray="1,3"/>
+<text x="776.0" y="246.0" font-size="9" text-anchor="start" fill="#222" font-weight="bold">register #26 linear model (M; P ≤ 80 tested)</text>
+<text x="748.0" y="282.0" font-size="9" text-anchor="start" fill="#222" font-weight="bold">PF-44 airtime: vehicles that fit</text>
+<text x="748.0" y="294.0" font-size="9" text-anchor="start" fill="#222" font-weight="bold">an 802.11p channel at CBR 0.6</text>
+<line x1="164.0" y1="80.0" x2="164.0" y2="480.0" stroke="#7a3e9d" stroke-width="1.4" stroke-dasharray="4,2"/>
+<text x="167.0" y="92.0" font-size="9" text-anchor="start" fill="#7a3e9d" font-weight="bold">N_fit=37</text>
+<text x="748.0" y="308.0" font-size="9" text-anchor="start" fill="#7a3e9d">repo JSON PKI (#23 1,110 B): 37</text>
+<line x1="216.0" y1="80.0" x2="216.0" y2="480.0" stroke="#7a3e9d" stroke-width="1.4" stroke-dasharray="4,2"/>
+<text x="219.0" y="103.0" font-size="9" text-anchor="start" fill="#7a3e9d" font-weight="bold">N_fit=63</text>
+<text x="748.0" y="320.0" font-size="9" text-anchor="start" fill="#7a3e9d">repo JSON ERC-1056 (#23 596 B): 63</text>
+<line x1="454.0" y1="80.0" x2="454.0" y2="480.0" stroke="#7a3e9d" stroke-width="1.4" stroke-dasharray="4,2"/>
+<text x="457.0" y="138.0" font-size="9" text-anchor="start" fill="#7a3e9d" font-weight="bold">N_fit=182</text>
+<text x="748.0" y="332.0" font-size="9" text-anchor="start" fill="#7a3e9d">1609.2 digest: 182</text>
+<text x="748.0" y="348.0" font-size="9" text-anchor="start" fill="#7a3e9d">JSON costs 2.9× / 5.0× digest airtime</text>
+<text x="15.0" y="530.0" font-size="9" text-anchor="start" fill="#222">Reading: a curve crossing the dashed 50 ms line marks the neighbour count where verification alone uses the identity budget; crossing the red 100 ms line, the verifier queue is unstable.</text>
+<text x="15.0" y="543.0" font-size="9" text-anchor="start" fill="#222">The MCU HSM class saturates at P = 20 and the Cortex-A53 class at P = 100, below the 37–182 vehicles the channel can carry; the repo's JSON encoding caps the channel first for software verifiers.</text>
+<text x="15.0" y="556.0" font-size="9" text-anchor="start" fill="#222">The ledger enters only through state refreshes: with k_f ≥ 27.9 (refresh-load criterion, P = 100) refreshes stay inside the budget; the whole-path criterion needs k_f ≥ 91 (#32 knee ≈ 90).</text>
+<text x="15.0" y="569.0" font-size="9" text-anchor="start" fill="#222">Under HAA-1 (k_f → ∞) both criteria reduce to a pure verification-hardware condition.</text>
+<text x="15.0" y="582.0" font-size="9" text-anchor="start" fill="#666">Caveats: Xeon rows are M (#27) on a server host, not an OBU (NC-05); ASIC/HSM, A53 and MCU classes are E (LIM-R7-03); PF-44 sizes are E (LIM-R7-02/07). Numbers parsed from r7_calc_v0-2.py output.</text>
+<line x1="15.0" y1="620.0" x2="985.0" y2="620.0" stroke="#ccc" stroke-width="1"/>
+<rect x="20.0" y="626.0" width="9.0" height="9.0" rx="0" fill="#3f8f3f" stroke="#2b6b2b" stroke-width="1.4"/>
+<text x="33.0" y="634.0" font-size="9" text-anchor="start" fill="#444">MEASURED</text>
+<rect x="93.2" y="626.0" width="9.0" height="9.0" rx="0" fill="url(#hatch)" stroke="#b8860b" stroke-width="1.4"/>
+<text x="106.2" y="634.0" font-size="9" text-anchor="start" fill="#444">ESTIMATED</text>
+<text x="20.0" y="650.0" font-size="9" text-anchor="start" fill="#666">Source: r7_calc_v0-2.py §G (PF-43), §H (PF-44); register rows #23 #26 #27 #32. Scale R9 PN-32 · make_phase2_figures_v0-2.py (v0-2 inputs).</text>
+<text x="980.0" y="634.0" font-size="9" text-anchor="end" fill="#666" font-style="italic">solid = M, dashed = E</text></svg>

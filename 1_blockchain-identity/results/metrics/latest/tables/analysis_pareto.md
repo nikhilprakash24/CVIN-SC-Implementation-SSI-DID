@@ -5,11 +5,11 @@
 | Lifetime gas ↓ | 1,050,809 | 1,025,469 | 2,706,685 | 3,155,103 | 5,797,561 | 1,261,575 | 2,956,507 | 1,508,413 | 2,221,290 | 2,559,537 |
 | Zero→nonzero SSTOREs ↓ | 8 | 9 | 92 | 83 | 149 | 21 | 38 | 42 | 37 | 81 |
 | R3 RPC calls at h=50 ↓ | 112 | 55 | 7 | 61 | 3 | 3 | 2 | 3 | 61 | 107 |
-| R3 median ms after lifecycle ↓ | 15.93 | 14.71 | 7.29 | 16.94 | 10.07 | 3.17 | 4.20 | 4.55 | 8.13 | 14.84 |
+| R3 median ms after lifecycle ↓ | 28.35 | 22.92 | 11.46 | 23.55 | 19.45 | 4.60 | 6.80 | 7.84 | 13.28 | 23.41 |
 | Core ops supported ↑ | 18 | 17 | 16 | 17 | 13 | 14 | 15 | 13 | 18 | 17 |
 | O(1) on-chain credential check (view) ↑ | no | no | yes | yes | yes | yes | yes | yes | yes | yes |
 | **Dominated by** (cost axes: lifetime, SSTOREs) | — | — | ERC-1056, ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337, CVIN-Combined | ERC-1056, ERC-1056 (wrapper), ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined | ERC-1056, ERC-1056 (wrapper), ERC-721, ERC-725, ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined | ERC-1056, ERC-1056 (wrapper) | ERC-1056, ERC-1056 (wrapper), ERC-1155, ERC-4337 | ERC-1056, ERC-1056 (wrapper), ERC-1155 | ERC-1056, ERC-1056 (wrapper), ERC-1155 | ERC-1056, ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337 |
 | **Dominated by** (cost + read path) | — | — | ERC-1155, LSP8 | ERC-1056 (wrapper), ERC-1155, ERC-725xy, LSP8, ERC-4337 | ERC-1155, ERC-725xy, LSP8 | — | — | ERC-1155 | ERC-1155 | ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337 |
 | **Dominated by** (all six criteria) | — | — | — | ERC-4337 | ERC-1155, ERC-725xy, LSP8 | — | — | ERC-1155 | — | ERC-4337 |
 
-_Run 2026-10-24T13-01-37Z_963439a · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
+_Run 2026-10-24T12-29-26Z_7a59058 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_

@@ -154,6 +154,7 @@ That is item Q-B7 in §6 and task T-12 in §7.
 | The cross-model check session | `docs/milestones/check_passes_16-22/` | the brief is written; the check has not run (no `FINDINGS.md`) |
 | The sister "Build CV2X code" session | its own Master Plan and Atlas (§10.3) | its Phase B section is the model for §6 here. This session could not read it, because the documents connector did not connect. |
 | Research and writing feeds | pages in §10.3 | parallel chats for the literature, writing and directions |
+| **Rule for every session (added 2026-10-24, report 38)** | this file | before a re-run of record, push the opened after-action report naming the producers, so a session that fetches sees the claim; one run per producer, the first one counts. A change to any contract source, comments included, moves deployment gas: CI's stamp gate now fails until the gas producers are re-run or the commit is proved comment-only |
 
 ---
 

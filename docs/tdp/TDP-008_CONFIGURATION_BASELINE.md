@@ -39,7 +39,7 @@ versions, the runs of record with their identities, the toolchain pins, the buil
 | Register rows | Producer | Code commit | Result commit or run id | Identity fields |
 |---|---|---|---|---|
 | #25 | `benchmark_gas.js` | `d0cc19c` | `4_comparison-framework/results/gas_benchmark.json` | `metadata.dirty` false; 30 of 30 runs byte-identical |
-| #29, #30, #31, #34, #35, #36, #49, #50, #51 | `benchmarks/run.js` | `1f4ace0` | run `2026-10-23T00-49-12Z_1f4ace0` (`results/metrics/latest/`; was `2026-10-09T02-09-36Z_7a9a996`) | `measured.{benchmarksTree, contractsTree, hardhatConfigBlob, lockfileBlob}`; `dirty` false; Hardhat 2.28.6, Node v22.22.0, ethers 6.17.0 |
+| #29, #30, #31, #34, #35, #36, #49, #50, #51 | `benchmarks/run.js` | `7a59058` | run `2026-10-24T12-29-26Z_7a59058` (`results/metrics/latest/`; re-run after the NatSpec metadata change, report 38; before it `2026-10-23T00-49-12Z_1f4ace0`, earlier `2026-10-09T02-09-36Z_7a9a996`) | `measured.{benchmarksTree, contractsTree, hardhatConfigBlob, lockfileBlob}`; `dirty` false; Hardhat 2.28.6, Node v22.22.0, ethers 6.17.0 |
 | #21, #22, #23 | `experiment_pki_vs_erc1056.py` | `0b39570` (A3b) | results `f1f3596` | `git_dirty` false; cryptography 50.0.1; Python 3.13.16; Xeon 2.10 GHz |
 | #27 | `run_v2v_stats.py` | `0b39570` (A3b) | results `f1f3596` (`cv2x-testbed/sumo/results/v2v_latency_stats.json`) | 30 seeded runs, Xeon 2.10 GHz x 4; A3b re-run done (was `58a6513`, pre-merge lineage) |
 | #32 | `experiment_freshness_k.py` | `f1f3596` (A3b) | results `1f21007` | `git_dirty` false; host Xeon 2.10 GHz; D51 block-time read |

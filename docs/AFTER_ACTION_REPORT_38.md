@@ -89,3 +89,22 @@ continue.
   6, 12 of 12, 16 of 17, 8 of 8; the skipped ones were already fixed or waited for this re-run and are now done here),
   each at revision B with a revision-history row; R-04 to R-07 retired, R-14 to R-18 and I-05, I-06 added; layer 5
   added throughout. Spot-checked here (#21 at 15.513 ms, the retirements). `check_icd.py`: 185 identifiers, 0 missing.
+- **Integration: two sessions re-ran the same families.** When this pass came to push, the branch had moved: the
+  session that relays syncs through the layer-5 branch had found the same NatSpec effect, re-run the gas families and
+  the in-process harness first (`2c6799a`, harness `2026-10-24T12-29-26Z_7a59058`, 12:29 UTC on its own host), merged
+  this pass's checker commit, and the author merged PR #17 into this branch. **Resolution, under report 33's rule of
+  one run per producer and no re-roll:** the first run is the run of record. Wherever both sessions ran a producer,
+  its results are taken; this pass's duplicate runs of those families are discarded (their gas agreed cell for cell,
+  so nothing is lost). This pass's runs stay where it was the only one: the security scenarios and matrix (promoted,
+  content unchanged), the I4 seeds study and the HTTP-RPC harness (`2026-10-24T13-13-44Z_963439a`).
+  - The register takes the other session's rows #25 and #31 to #35; this pass adds what they had not: #26 and #35
+    restated (their files read 11,692,104 and 5,797,561 but the rows still quoted the old values; A5's check missed
+    it because the figures are not bold), #34's ERC-735 create, and #39.
+  - **#39 can no longer compare the two runs' latency:** the in-process run of record and the RPC run come from
+    different hosts (their in-process U3 median 14.4 ms is above this RPC run's 13.8 ms). The row keeps the RPC run's
+    absolute values, descriptive only, and the gas identity, re-checked against their run: crud, lifecycle and batch
+    tables identical, 18 of 18 common scale rows identical.
+  - Their stale-figure additions are kept (the Roots G-R1 snapshots join the history globs); their chapter 5 and 7
+    corrections of 1,757,881 clear that pending entry. Result card #31 follows #31 (153.786 ms on their host).
+  - **Process finding:** two sessions repeated a re-run because neither could see the other's work in progress. The
+    master plan's §3.4 now asks a session to push an opened report before a re-run, so the other sees it on fetch.

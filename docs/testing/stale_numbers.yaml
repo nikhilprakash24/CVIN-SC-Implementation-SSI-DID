@@ -15,6 +15,7 @@ history:
 - docs/tdp/TDP-006_FMECA.md   # generated verbatim from docs/DEFECT_LOG.md, a history document (report 21)
 - docs/MEASUREMENT_CONDITIONS.md
 - docs/phase2/reviews/*   # dated reviews keep the figures of their day (report 38)
+- docs/roots/*   # Roots G-R1 versioned snapshots, dated; they quote the figures current when each version was written (1,757,881 before the NatSpec restatement); the Roots thread adopts 1,757,893 at its next version
 - docs/tdp/REVIEW_2026-10.md   # the TDP review quotes the stale values it found (report 37)
 - docs/thesis/CHAPTER_AUDIT_2026-10.md   # quotes the stale values it found, on purpose (report 37)
 - docs/review02/*
@@ -298,8 +299,6 @@ entries:
 - pattern: '1757881'
   current: 1,757,893 ERC-735 create (report 38, metadata)
   row: 25
-  pending: ['docs/thesis/*/*.md', 'docs/thesis/README.md']
-  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
 - pattern: '4370878'
   current: 4,370,866 MOBI-VID-V2 deploy (report 38, metadata)
   row: 25
