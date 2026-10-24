@@ -17,6 +17,7 @@ double-counting a single contribution as two).
 | SP-6 | CVIN-Combined: a Pareto-optimal hybrid on the fidelity-per-gas frontier | Design paper (H5) |
 | SP-7 | Two lenses for smart-contract identity security | Methodology |
 | SP-8 | An executable W3C DID/VC compliance checker | Methodology/tools |
+| SP-9 | A minimal ID-system function set, IDTx, and the case for an identity benchmark (companion; plan in `docs/idtx_core/DETAILED_PLAN.md`) | Position + benchmark proposal |
 
 ---
 

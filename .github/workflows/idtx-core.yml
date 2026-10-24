@@ -1,0 +1,27 @@
+# IDTx core contribution (docs/idtx_core/): the ID-system function set, IDTx, and the benchmark-gap argument.
+# CI guards that the committed figures and their data tables are current, and that intra-doc links resolve.
+# The figure script is Python stdlib-only (no matplotlib), so this job installs nothing.
+name: idtx-core
+
+on:
+  push:
+    paths:
+      - 'docs/idtx_core/**'
+      - '.github/workflows/idtx-core.yml'
+  pull_request:
+    paths:
+      - 'docs/idtx_core/**'
+      - '.github/workflows/idtx-core.yml'
+
+jobs:
+  idtx-core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Figures and data tables are current (stdlib-only)
+        run: python3 docs/idtx_core/figures/make_idtx_figures.py --check
+      - name: Intra-repo markdown links resolve
+        run: python3 docs/idtx_core/check_links.py

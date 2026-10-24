@@ -104,6 +104,13 @@ missed, fall into six classes. Only four are IDTx.
 In Phase 1, then, true IDTx are few. The mechanism is mostly used for administration and authentication, and the
 interesting dependencies sit off chain, as decisions. That count is itself a finding for the thesis.
 
+> **Correction (2026-10-24, examiner obj. 3 — see `docs/idtx_core/p1/EXAMINER_REVIEW.md`).** The headcount "four" is
+> boundary-sensitive and two of the four (`payToll`, the MOBI birth) lie *outside* the ten measured substrates. The
+> thesis (Ch 6 §6.8.2) no longer presents a precise count as a result: over the measured ten the count is **2** (the
+> two `addClaim` paths), with `payToll`/MOBI as out-of-set exemplars, and the robust claim is the weaker qualitative
+> one (administration/authentication dominate; the richest dependencies are off-chain). This note supersedes "that
+> count is itself a finding" for thesis purposes.
+
 ### 4.3 Position against known patterns (to be confirmed at source in chapter 2)
 The guard-on-execution mechanism is not new, and the thesis says so first. The contribution is three things:
 - the definition, which separates dependence on another identity's lifecycle state from administration and
