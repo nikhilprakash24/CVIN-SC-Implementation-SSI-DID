@@ -174,7 +174,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `results/gas_comparison.csv`, `gas_comparison.tex` | ✅ Complete | Camera-ready gas comparison table |
 | `results/sepolia_validation.json` | ✅ Complete (scaffold) | Sepolia validation output slot (real run pending) |
 
-**Gas finding (RQ1/H1)** (register #25, #6): 33.7× create-identity spread across standards, from CVIN-Combined 52,216 gas (cheapest) to ERC-735 1,757,881 (heaviest; ERC-725xy 1,680,816 second); bare ERC-1056 ~10× cheaper than the VIN-bound ERC-721 mint (H1 supported); ERC-4337 EntryPoint indirection = +46,830 gas/op.
+**Gas finding (RQ1/H1)** (register #25, #6): 33.7× create-identity spread across standards, from CVIN-Combined 52,216 gas (cheapest) to ERC-735 1,757,893 (heaviest; ERC-725xy 1,680,816 second); bare ERC-1056 ~10× cheaper than the VIN-bound ERC-721 mint (H1 supported); ERC-4337 EntryPoint indirection = +46,830 gas/op.
 
 ### Security analysis ✅ — two complementary lenses
 

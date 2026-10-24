@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" font-family="Helvetica, Arial, sans-serif"><defs><pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="#fff4cc"/><line x1="0" y1="0" x2="0" y2="5" stroke="#e0a800" stroke-width="2"/></pattern><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs><rect width="1000" height="640" fill="#fff"/><text x="500.0" y="24.0" font-size="16" text-anchor="middle" fill="#222" font-weight="bold">FIG-R14 · Phase 1 to Phase 2 map: documents, directions and tag ownership</text>
+<text x="500.0" y="41.0" font-size="10" text-anchor="middle" fill="#666">Source: Phase 1 README (tag table); PHASE2_SHARED_BRIEF §3–§4; R6 and R8 v0-1 headers</text>
+<rect x="15.0" y="54.0" width="970.0" height="150.0" rx="6" fill="#fafafa" stroke="#ccc" stroke-width="1"/>
+<text x="25.0" y="72.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">PHASE 1 (docs/roots/phase1/) — primitives and architectures, tags frozen</text>
+<rect x="30.0" y="82.0" width="176.0" height="110.0" rx="5" fill="#fff" stroke="#555" stroke-width="1.3"/>
+<text x="38.0" y="100.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">R1 Roots Lineage</text>
+<text x="38.0" y="118.0" font-size="9" text-anchor="start" fill="#333">L0–L7</text>
+<text x="38.0" y="132.0" font-size="9" text-anchor="start" fill="#333">T-01..T-24</text>
+<text x="38.0" y="146.0" font-size="9" text-anchor="start" fill="#333">T-I01..T-I22</text>
+<line x1="206.0" y1="137.0" x2="220.0" y2="137.0" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+<rect x="222.0" y="82.0" width="176.0" height="110.0" rx="5" fill="#fff" stroke="#555" stroke-width="1.3"/>
+<text x="230.0" y="100.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">R2 Integration Scan</text>
+<text x="230.0" y="118.0" font-size="9" text-anchor="start" fill="#333">SOL-01..09</text>
+<text x="230.0" y="132.0" font-size="9" text-anchor="start" fill="#333">options O1–O18</text>
+<line x1="398.0" y1="137.0" x2="412.0" y2="137.0" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+<rect x="414.0" y="82.0" width="176.0" height="110.0" rx="5" fill="#fff" stroke="#555" stroke-width="1.3"/>
+<text x="422.0" y="100.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">R3 I2I Identity Stack</text>
+<text x="422.0" y="118.0" font-size="9" text-anchor="start" fill="#333">BP-L0-01..BP-L7-07</text>
+<text x="422.0" y="132.0" font-size="9" text-anchor="start" fill="#333">FIG-R1..R6</text>
+<text x="422.0" y="146.0" font-size="9" text-anchor="start" fill="#333">R1–R8, I1–I9</text>
+<line x1="590.0" y1="137.0" x2="604.0" y2="137.0" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+<rect x="606.0" y="82.0" width="176.0" height="110.0" rx="5" fill="#fff" stroke="#555" stroke-width="1.3"/>
+<text x="614.0" y="100.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">R4 Proofs and Bounds</text>
+<text x="614.0" y="118.0" font-size="9" text-anchor="start" fill="#333">PF-01..31</text>
+<text x="614.0" y="132.0" font-size="9" text-anchor="start" fill="#333">SYM-01..24</text>
+<line x1="782.0" y1="137.0" x2="796.0" y2="137.0" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+<rect x="798.0" y="82.0" width="176.0" height="110.0" rx="5" fill="#fff" stroke="#555" stroke-width="1.3"/>
+<text x="806.0" y="100.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">R5 Pass Record</text>
+<text x="806.0" y="118.0" font-size="9" text-anchor="start" fill="#333">KD-R1..3, Q-R1..6</text>
+<text x="806.0" y="132.0" font-size="9" text-anchor="start" fill="#333">CEV, LIM, MC</text>
+<text x="650.0" y="232.0" font-size="10" text-anchor="middle" fill="#555">consumed (cited, never redefined) ↓</text>
+<line x1="200.0" y1="205.0" x2="200.0" y2="248.0" stroke="#555" stroke-width="1.4" marker-end="url(#arr)"/>
+<line x1="500.0" y1="205.0" x2="500.0" y2="248.0" stroke="#555" stroke-width="1.4" marker-end="url(#arr)"/>
+<line x1="800.0" y1="205.0" x2="800.0" y2="248.0" stroke="#555" stroke-width="1.4" marker-end="url(#arr)"/>
+<rect x="15.0" y="252.0" width="970.0" height="330.0" rx="6" fill="#fafafa" stroke="#ccc" stroke-width="1"/>
+<text x="25.0" y="270.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">PHASE 2 (docs/roots/phase2/) — deeper and complete: hardware → application, plus reverse register</text>
+<rect x="430.0" y="290.0" width="160.0" height="24.0" rx="3" fill="#dff3f0" stroke="#1f6f63" stroke-width="1"/>
+<text x="510.0" y="306.0" font-size="9" text-anchor="middle" fill="#1f6f63" font-weight="bold">L7 Application</text>
+<rect x="430.0" y="316.0" width="160.0" height="24.0" rx="3" fill="#fff1c9" stroke="#a37a00" stroke-width="1"/>
+<text x="510.0" y="332.0" font-size="9" text-anchor="middle" fill="#a37a00" font-weight="bold">L6 Identity</text>
+<rect x="430.0" y="342.0" width="160.0" height="24.0" rx="3" fill="#fde2c8" stroke="#c46f00" stroke-width="1"/>
+<text x="510.0" y="358.0" font-size="9" text-anchor="middle" fill="#c46f00" font-weight="bold">L5 Ledger/EVM</text>
+<rect x="430.0" y="368.0" width="160.0" height="24.0" rx="3" fill="#e3f0d8" stroke="#4d7a2a" stroke-width="1"/>
+<text x="510.0" y="384.0" font-size="9" text-anchor="middle" fill="#4d7a2a" font-weight="bold">L4 Econ/gov</text>
+<rect x="430.0" y="394.0" width="160.0" height="24.0" rx="3" fill="#d9e7f5" stroke="#2c5a8c" stroke-width="1"/>
+<text x="510.0" y="410.0" font-size="9" text-anchor="middle" fill="#2c5a8c" font-weight="bold">L3 Agreement</text>
+<rect x="430.0" y="420.0" width="160.0" height="24.0" rx="3" fill="#ece3f5" stroke="#5c3d8c" stroke-width="1"/>
+<text x="510.0" y="436.0" font-size="9" text-anchor="middle" fill="#5c3d8c" font-weight="bold">L2 Data/storage</text>
+<rect x="430.0" y="446.0" width="160.0" height="24.0" rx="3" fill="#fbe4e4" stroke="#9c2c2c" stroke-width="1"/>
+<text x="510.0" y="462.0" font-size="9" text-anchor="middle" fill="#9c2c2c" font-weight="bold">L1 Crypto</text>
+<rect x="430.0" y="472.0" width="160.0" height="24.0" rx="3" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+<text x="510.0" y="488.0" font-size="9" text-anchor="middle" fill="#555555" font-weight="bold">L0 Network</text>
+<rect x="430.0" y="498.0" width="160.0" height="24.0" rx="3" fill="#e6dfd8" stroke="#5a4632" stroke-width="1"/>
+<text x="510.0" y="514.0" font-size="9" text-anchor="middle" fill="#5a4632" font-weight="bold">LH Hardware</text>
+<line x1="416.0" y1="520.0" x2="416.0" y2="294.0" stroke="#2c5a8c" stroke-width="2" marker-end="url(#arr)"/>
+<text x="408.0" y="455.0" font-size="9" text-anchor="middle" fill="#2c5a8c" transform="rotate(-90 408.0 455.0)">forward: enables ↑ (bottom-up)</text>
+<line x1="604.0" y1="294.0" x2="604.0" y2="520.0" stroke="#a33" stroke-width="2" marker-end="url(#arr)"/>
+<text x="616.0" y="455.0" font-size="9" text-anchor="middle" fill="#a33" transform="rotate(90 616.0 455.0)">reverse: anchors ↓ (top-down)</text>
+<rect x="30.0" y="290.0" width="340.0" height="140.0" rx="5" fill="#fff" stroke="#1f8a7a" stroke-width="1.6"/>
+<text x="38.0" y="306.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">R6 Full-Stack Atlas (forward)</text>
+<text x="362.0" y="306.0" font-size="9" text-anchor="end" fill="#666">v0-1 issued</text>
+<text x="38.0" y="322.0" font-size="9" text-anchor="start" fill="#333">owns: HW-01..12 · PRO-01..22 · ALG-01..24</text>
+<text x="38.0" y="335.0" font-size="9" text-anchor="start" fill="#333">IMP-&lt;sublayer&gt;-nn · SCF-&lt;contract&gt;-nn (117 rows)</text>
+<text x="38.0" y="348.0" font-size="9" text-anchor="start" fill="#333">BP-LH-01..06 + 33 BP-Lx.y-nn · SOL-10..17</text>
+<text x="38.0" y="361.0" font-size="9" text-anchor="start" fill="#333">sub-layers LH, L0.1–L7.3 populated</text>
+<text x="38.0" y="374.0" font-size="9" text-anchor="start" fill="#333">§6 secured-by traces · §7 measured vs designed</text>
+<text x="38.0" y="387.0" font-size="9" text-anchor="start" fill="#333">→ PF-⟦n⟧ placeholders handed to R7</text>
+<text x="38.0" y="400.0" font-size="9" text-anchor="start" fill="#333">figures: FIG-R7, R8, R9, R13</text>
+<rect x="30.0" y="440.0" width="340.0" height="128.0" rx="5" fill="#fff" stroke="#c46f00" stroke-width="1.6" stroke-dasharray="3,2"/>
+<text x="38.0" y="456.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">R7 Theory and ECE Bounds</text>
+<text x="362.0" y="456.0" font-size="9" text-anchor="end" fill="#666">pending (r7_calc.py only)</text>
+<text x="38.0" y="472.0" font-size="9" text-anchor="start" fill="#333">owns: PF-32+ · SYM-25+</text>
+<text x="38.0" y="485.0" font-size="9" text-anchor="start" fill="#333">bounds ALG- (R6 defines, R7 bounds)</text>
+<text x="38.0" y="498.0" font-size="9" text-anchor="start" fill="#333">resolves R6 PF-⟦1⟧..⟦24⟧ and R8 ⟦PF-??⟧</text>
+<text x="38.0" y="511.0" font-size="9" text-anchor="start" fill="#333">moves R8 rows from unbounded to bounded</text>
+<rect x="640.0" y="290.0" width="345.0" height="140.0" rx="5" fill="#fff" stroke="#1f8a7a" stroke-width="1.6"/>
+<text x="648.0" y="306.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">R8 Reverse Anchor Register</text>
+<text x="977.0" y="306.0" font-size="9" text-anchor="end" fill="#666">v0-1 issued</text>
+<text x="648.0" y="322.0" font-size="9" text-anchor="start" fill="#333">owns: RV-&lt;CAT&gt;-nn (19 categories, 301 rows)</text>
+<text x="648.0" y="335.0" font-size="9" text-anchor="start" fill="#333">MD-01..MD-22 · PAR-01..PAR-30 (declared only)</text>
+<text x="648.0" y="348.0" font-size="9" text-anchor="start" fill="#333">cites R6 tags as ⟦…-??⟧ placeholders (v0-2)</text>
+<text x="648.0" y="361.0" font-size="9" text-anchor="start" fill="#333">§4 five anchor chains · §5 coverage 19×22</text>
+<text x="648.0" y="374.0" font-size="9" text-anchor="start" fill="#333">status scale adds I (implemented-unmeasured)</text>
+<text x="648.0" y="387.0" font-size="9" text-anchor="start" fill="#333">figures: FIG-R10, R11, R12</text>
+<rect x="640.0" y="440.0" width="345.0" height="128.0" rx="5" fill="#fff" stroke="#c46f00" stroke-width="1.6" stroke-dasharray="3,2"/>
+<text x="648.0" y="456.0" font-size="11" text-anchor="start" fill="#222" font-weight="bold">R9 Professors' Panel Review</text>
+<text x="977.0" y="456.0" font-size="9" text-anchor="end" fill="#666">pending</text>
+<text x="648.0" y="472.0" font-size="9" text-anchor="start" fill="#333">reviews R6–R8 (and R7) at v0-1 → v0-2</text>
+<text x="648.0" y="485.0" font-size="9" text-anchor="start" fill="#333">record keys continue: KD-R4+, Q-R7+, F-R5+,</text>
+<text x="648.0" y="498.0" font-size="9" text-anchor="start" fill="#333">LIM-R5+, MC-R6+ (all documents)</text>
+<text x="648.0" y="511.0" font-size="9" text-anchor="start" fill="#333">visual agent owns FIG-R7+ (this set)</text>
+<line x1="370.0" y1="360.0" x2="408.0" y2="360.0" stroke="#2c5a8c" stroke-width="1.4" marker-end="url(#arr)"/>
+<line x1="638.0" y1="360.0" x2="612.0" y2="360.0" stroke="#a33" stroke-width="1.4" marker-end="url(#arr)"/>
+<line x1="200.0" y1="430.0" x2="200.0" y2="440.0" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="640.0" y1="548.0" x2="370.0" y2="548.0" stroke="#555" stroke-width="1" marker-end="url(#arr)" stroke-dasharray="4,3"/>
+<text x="510.0" y="543.0" font-size="9" text-anchor="middle" fill="#555">⟦PF-??⟧ / PAR → R7</text>
+<line x1="370.0" y1="572.0" x2="640.0" y2="572.0" stroke="#555" stroke-width="1" marker-end="url(#arr)" stroke-dasharray="4,3"/>
+<text x="510.0" y="567.0" font-size="9" text-anchor="middle" fill="#555">all → R9 review</text>
+<line x1="15.0" y1="596.0" x2="985.0" y2="596.0" stroke="#ccc" stroke-width="1"/>
+<text x="20.0" y="626.0" font-size="9" text-anchor="start" fill="#666">Source: Phase 1 README §tags; PHASE2_SHARED_BRIEF §3 (tag namespaces) §4 (files); R6/R8 'Assigns' rows. Status legend per R6 header / R8 §0 (M, Dv, Ds, E, S, I). Generated by make_phase2_figures.py; first-pass (v0-1) inputs.</text>
+<text x="980.0" y="610.0" font-size="9" text-anchor="end" fill="#666" font-style="italic">solid teal outline = issued v0-1 · dashed orange = pending (not yet written)</text></svg>

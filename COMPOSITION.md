@@ -38,7 +38,7 @@ The argument runs in five measured claims, each a hypothesis held from the outse
 then tested:
 
 - **The substrate choice is a ~34× cost decision, and the minimal one wins the common
-  path (H1).** Creating an identity ranges from 52,216 gas (the hybrid) to 1,757,881
+  path (H1).** Creating an identity ranges from 52,216 gas (the hybrid) to 1,757,893
   (the ERC-735 claim holder); the lightweight event-log substrate (ERC-1056) is ~10×
   cheaper than the NFT and proxy designs. The decision to build on ERC-1056 was made
   *first*; the measurement confirms it.

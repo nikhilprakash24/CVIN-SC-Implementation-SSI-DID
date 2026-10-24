@@ -177,14 +177,14 @@ npx hardhat run scripts/benchmark_gas.js
 === Gas benchmark summary (gasUsed) ===
 operation	ERC-1056	ERC-721	ERC-725	ERC-725xy	ERC-735	ERC-1155	ERC-4337	LSP8	MOBI-VID-V2	CVIN-Combined
 ...
-createIdentity	52594	545101	519384	1680816	1757881	107729	759088	152644	299165	52216
+createIdentity	52594	545101	519384	1680816	1757893	107729	759088	152644	299165	52216
 ...
 Results written to .../4_comparison-framework/results/gas_benchmark.json
 ```
 
 Reading it: the thesis's hybrid **CVIN-Combined (52,216 gas)** and **ERC-1056
 (52,594)** are ~10× cheaper to create than ERC-721/725, with a ~34× spread up
-to the **ERC-735** claim-holder deploy (1,757,881). This is the evidence for
+to the **ERC-735** claim-holder deploy (1,757,893). This is the evidence for
 H1 (minimal DID standards are ≥10× cheaper). Numbers are Hardhat-local, solc
 0.8.24, OZ 5.0.2, and are deterministic (byte-identical across N=30 runs).
 

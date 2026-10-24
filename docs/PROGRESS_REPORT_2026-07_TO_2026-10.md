@@ -68,7 +68,7 @@ The register's discipline is that a number enters a chapter only with a row of s
 number stays as history with an arrow to its replacement.
 
 **Established, and re-confirmed on the one trunk.** The nine-standard gas table (#25): creating an identity spans
-52,216 gas (CVIN-Combined) to 1,757,881 (ERC-735), 33.7×. V2V credential verification on the warm path at 0.142 ms,
+52,216 gas (CVIN-Combined) to 1,757,893 (ERC-735), 33.7×. V2V credential verification on the warm path at 0.142 ms,
 95 % CI [0.141, 0.143] (#27), from the A3b re-run of 2026-10-22; the earlier 0.153 ms was the pre-merge run. 43 of 43
 attack scenarios defended, each reverting with its documented reason (#28).
 

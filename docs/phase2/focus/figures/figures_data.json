@@ -28,7 +28,7 @@
     "log_bytes": 3072
    },
    "ERC-735": {
-    "lifetime_gas": 5797549,
+    "lifetime_gas": 5797561,
     "note": "(excl. 3 n/a)",
     "zero_to_nonzero_sstores": 149,
     "log_bytes": 12960

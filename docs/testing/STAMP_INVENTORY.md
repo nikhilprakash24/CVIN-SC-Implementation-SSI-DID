@@ -8,17 +8,17 @@
 
 | File | date | commit | dirty (code) | dirty (any) | code changed since | toolchain | class |
 |---|---|---|---|---|---|---|---|
-| `4_comparison-framework/results/gas_benchmark.json` | 2026-10-22T23:16:49.669Z | ddb9b05 | False | True | yes | 0.8.24 |  |
-| `4_comparison-framework/results/gas_benchmark_stats.json` | 2026-10-22T23:16:47.548Z | ddb9b05 | False | True | yes | 0.8.24 |  |
+| `4_comparison-framework/results/gas_benchmark.json` | 2026-10-24T12:29:04.178Z | 7a59058 | False | True | no | 0.8.24 |  |
+| `4_comparison-framework/results/gas_benchmark_stats.json` | 2026-10-24T12:29:00.238Z | 7a59058 | False | True | no | 0.8.24 |  |
 | `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json` | MISSING | MISSING | MISSING | MISSING | MISSING | MISSING | history: a diff between two runs of record, each stamped or registered; not a measurement |
 | `4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json` | 2026-10-04 | a764387 (results of reco | MISSING | MISSING | MISSING | M1: solc 0.8.24, optimiz | history: same |
 | `4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json` | 2026-10-06 | MISSING | MISSING | MISSING | MISSING | M1: solc 0.8.24, optimiz | history: same |
-| `4_comparison-framework/results/infrastructure_gas.json` | 2026-10-22T23:16:56.033Z | ddb9b05 | False | True | yes | 0.8.24 |  |
+| `4_comparison-framework/results/infrastructure_gas.json` | 2026-10-24T12:29:17.100Z | 7a59058 | False | True | no | 0.8.24 |  |
 | `4_comparison-framework/results/infrastructure_gas_run1.json` | 2026-10-09T06:08:42.697Z | f1f9e37 | False | True | yes | 0.8.24 |  |
-| `4_comparison-framework/results/mobi_vid_backends.json` | 2026-10-22T23:16:51.402Z | ddb9b05 | False | True | yes | 0.8.24 | hand check: AAR-11 R3: tree clean at 02:27:39 (gas_benchmark), outputs-only commit d54178e |
-| `4_comparison-framework/results/pseudonym_pool.json` | 2026-10-22T23:17:03.801Z | ddb9b05 | False | True | yes | 2.28.6 |  |
-| `4_comparison-framework/results/scaling_lifetime.json` | 2026-10-22T23:16:54.582Z | ddb9b05 | False | True | yes | 0.8.24 | hand check: same |
-| `4_comparison-framework/results/scaling_marginal.json` | 2026-10-22T23:16:54.551Z | ddb9b05 | False | True | yes | 0.8.24 | hand check: same |
+| `4_comparison-framework/results/mobi_vid_backends.json` | 2026-10-24T12:29:07.940Z | 7a59058 | False | True | no | 0.8.24 | hand check: AAR-11 R3: tree clean at 02:27:39 (gas_benchmark), outputs-only commit d54178e |
+| `4_comparison-framework/results/pseudonym_pool.json` | 2026-10-24T12:29:24.637Z | 7a59058 | False | True | no | 2.28.6 |  |
+| `4_comparison-framework/results/scaling_lifetime.json` | 2026-10-24T12:29:13.378Z | 7a59058 | False | True | no | 0.8.24 | hand check: same |
+| `4_comparison-framework/results/scaling_marginal.json` | 2026-10-24T12:29:13.332Z | 7a59058 | False | True | no | 0.8.24 | hand check: same |
 | `4_comparison-framework/results/scaling_verify.json` | 2026-10-04T09:22:18+00:0 | d78e344a79705286bf7572a0 | False | False | yes | 3.11.15 |  |
 | `4_comparison-framework/results/sensitivity.json` | 2026-07-24T03:18:28.250Z | MISSING | MISSING | MISSING | MISSING | 0.8.24 | stamp producer: no producer in the tree (optimizer sweep, July run); WM-2 A3 gap, pass 31 |
 | `4_comparison-framework/results/w3c_compliance.json` | 2026-10-22T22:58:40.9497 | 205115991a560bd6d1b3dfb1 | False (inert) | MISSING | no | 3.13.16 |  |
@@ -37,7 +37,7 @@
 | `cv2x-testbed/sumo/results/infrastructure_stats.json` | 2026-10-23T00:07:06+00:0 | 0b395705838af3554d0f33ea | False | True | no (comment-only) | 3.13.16 |  |
 | `cv2x-testbed/sumo/results/v2v_latency.json` | 2026-10-23T00:43:21.5170 | MISSING | MISSING | MISSING | MISSING | MISSING | single run: default output of one harness run; the results of record are v2v_latency_stats.json |
 | `cv2x-testbed/sumo/results/v2v_latency_stats.json` | 2026-10-23T00:37:55+00:0 | 0b395705838af3554d0f33ea | False | True | no (comment-only) | 3.13.16 |  |
-| `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-23T00:49:14.018Z | 1f4ace082fc32d8bc1c6b294 | False | False | yes | 0.8.24 |  |
+| `1_blockchain-identity/results/metrics/latest/meta.json` | 2026-10-24T12:29:28.205Z | 7a5905803a0219119fa6b593 | False | True | no | 0.8.24 |  |
 | `1_blockchain-identity/results/metrics-rpc/latest/meta.json` | 2026-10-23T00:59:31.809Z | 1f4ace082fc32d8bc1c6b294 | False | True | yes | 0.8.24 |  |
 | `5_zkp-agent-identity/results/attacks.json` | 2026-10-15T05:15:04+00:0 | 978988e | False | False | MISSING | 3.13.16 |  |
 | `5_zkp-agent-identity/results/gas_zk.json` | 2026-10-15T05:15:13.814Z | 978988e | False | True | MISSING | 2.28.6 |  |

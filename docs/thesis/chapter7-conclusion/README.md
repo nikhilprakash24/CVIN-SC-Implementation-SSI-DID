@@ -68,7 +68,7 @@ can be re-run and independently checked.
 
 **RQ1 — Performance (cost).** *How do blockchain identity standards compare
 in on-chain cost?* Identity-creation gas spans **~34×** across the nine
-standards, from 52,216 gas (CVIN-Combined) to 1,757,881 gas (ERC-735).
+standards, from 52,216 gas (CVIN-Combined) to 1,757,893 gas (ERC-735).
 Minimal event-log designs are cheapest and full smart-account / on-chain-claim
 designs are most expensive; concretely, **ERC-1056 (52,594) is ~10× cheaper**
 than the NFT/proxy designs ERC-721 (545,101) and ERC-725 (519,384), and the
