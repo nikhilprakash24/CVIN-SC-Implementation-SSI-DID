@@ -68,7 +68,7 @@
      A thick link is a first contact (full credential verification); a thin one is a cached-peer signature check; red is a rejection.</p>
 </header>
 <div class="bar">
-  <input type="file" id="file" accept=".jsonl,.json,.txt">
+  <input type="file" id="file" accept=".jsonl,.gz,.json,.txt">
   <button id="play">Play</button>
   <button class="ghost" id="stepb">Step</button>
   <label>speed <select id="speed"><option>0.25</option><option>0.5</option><option selected>1</option><option>2</option><option>5</option></select>×</label>
@@ -118,27 +118,46 @@
     $('log').textContent = '';
   }
 
+  // Reads cvin-v2v-trace/1 (docs/PLAN_SUMO_VISUALISATION.md §3, §7.1) plus the
+  // additive enroll/safety/attack/lane fields (docs/visual/TRACE_SCHEMA.md).
+  // Vehicle messages only; infrastructure traffic is counted, not drawn.
   function parse(text) {
     reset();
-    const lines = text.split('\n');
-    let order = [];
-    for (const line of lines) {
+    const VEH = new Set(['BSM', 'FCW', 'EEBL']);
+    const txById = new Map(), pop = {};
+    let header = null, lastT = 0, step = 0, infra = 0;
+    for (const line of text.split('\n')) {
       if (!line.trim()) continue;
-      let e; try { e = JSON.parse(line); } catch { continue; }
-      switch (e.ev) {
-        case 'meta': meta = e; break;
-        case 'enroll': enroll[e.vehicle] = e; break;
-        case 'snap': snaps.push(e); break;
-        case 'tx': { const k = e.t.toFixed(3); if (!txByStep.has(k)) txByStep.set(k, []); txByStep.get(k).push(e); break; }
-        case 'safety': safety.push(e); break;
-        case 'attack': attacks.push(e); break;
-        case 'summary': summary = e; break;
+      let r; try { r = JSON.parse(line); } catch { continue; }
+      switch (r.type) {
+        case 'header': header = r; break;
+        case 'enroll': pop[r.id] = r.pop;
+          enroll[r.id] = { vehicle: r.id, identity: r.pop === 'ssi' ? 'MOBI_VID' : 'PKI', did: r.did, vin: r.vin, make: r.make, model: r.model, year: r.year }; break;
+        case 'step': lastT = Math.max(lastT, r.t);
+          snaps.push({ t: r.t, step: step++, v: r.vehicles.map(v => { if (!(v.id in pop)) pop[v.id] = v.pop; return [v.id, v.x, v.y, v.speed || 0, v.heading || 0, v.lane || 'lane']; }) }); break;
+        case 'tx': {
+          if (!VEH.has(r.kind)) { infra++; break; }
+          const e = { t: r.t, sender: r.from, type: r.kind, emergency: r.kind !== 'BSM', pop: pop[r.from] || 'pki', rx: [] };
+          txById.set(r.msg, e);
+          const k = r.t.toFixed(3); if (!txByStep.has(k)) txByStep.set(k, []); txByStep.get(k).push(e); break; }
+        case 'rx': { const e = txById.get(r.msg); if (e) e.rx.push([r.to, !!r.ok, r.path === 'cold', r.verify_ms || 0]); break; }
+        case 'safety': safety.push({ t: r.t, app: r.app, vehicle: r.id, warned: r.warned, target: r.target, ttc_s: r.ttc_s, gap_m: r.gap_m }); break;
+        case 'attack': attacks.push({ t: r.t, name: r.id, rejected: !!r.rejected, reason: r.reason }); break;
       }
     }
-    if (!meta || !snaps.length) { $('card').textContent = 'That file has no meta/snap events; is it a trace?'; return; }
+    for (const [id, p] of Object.entries(pop)) if (!enroll[id]) enroll[id] = { vehicle: id, identity: p === 'ssi' ? 'MOBI_VID' : 'PKI' };
+    if (header && header.schema === 'cvin-v2v-trace/1') {
+      const env = header.environment || {};
+      meta = { mode: header.mobility === 'traci' ? 'sumo' : 'simulate', seed: header.seed,
+               duration_s: Math.round(lastT + (header.step_ms || 100) / 1000), step_s: (header.step_ms || 100) / 1000,
+               bsm_rate_hz: Math.round(1000 / (header.step_ms || 100)), neighbor_radius_m: header.radius_m, max_neighbors: header.max_receivers,
+               road: { length_m: 5000 }, snapshot_every: header.snapshot_every || 1,
+               commit: (env.git_commit || '').slice(0, 7), caveat: header.caveat, infra };
+    }
+    if (!meta || !snaps.length) { $('card').textContent = 'Not a cvin-v2v-trace/1 trace (no header or no step events).'; return; }
     $('scrub').max = snaps.length - 1; $('scrub').value = 0;
-    $('prov').textContent = `trace: mode ${meta.mode} · seed ${meta.seed} · ${meta.duration_s} s · ${meta.bsm_rate_hz} Hz BSM · ${meta.neighbor_radius_m} m radius · ≤${meta.max_neighbors} rx/broadcast · generated ${meta.generated_at}` +
-      (summary ? ` · attack tests: ${Object.values(summary.attack_tests).filter(Boolean).length}/${Object.keys(summary.attack_tests).length} rejected` : '');
+    $('prov').textContent = `trace cvin-v2v-trace/1 · mobility ${meta.mode === 'sumo' ? 'SUMO/TraCI' : 'mock'} · seed ${meta.seed} · ${meta.duration_s} s · commit ${meta.commit || 'n/a'} · ${meta.caveat || 'no radio channel, no MAC'}` +
+      (attacks.length ? ` · attacks: ${attacks.filter(a => a.rejected).length}/${attacks.length} rejected` : '') + (meta.infra ? ` · ${meta.infra} infrastructure messages not drawn` : '');
     $('card').textContent = `Loaded ${snaps.length} snapshots, ${Object.keys(enroll).length} enrolled vehicles, ${[...txByStep.values()].reduce((a, b) => a + b.length, 0)} broadcasts.`;
     draw();
   }
@@ -333,7 +352,9 @@
   $('stepb').onclick = () => { if (!meta) return; idx = Math.min(snaps.length - 1, idx + 1); draw(); };
   $('scrub').oninput = (ev) => { idx = parseInt(ev.target.value, 10); draw(); };
   $('follow').onchange = draw;
-  $('file').onchange = (ev) => { const f = ev.target.files[0]; if (!f) return; f.text().then(parse); };
+  const readBlob = (blob, name) => /\.gz$/.test(name) && 'DecompressionStream' in window
+    ? new Response(blob.stream().pipeThrough(new DecompressionStream('gzip'))).text() : blob.text();
+  $('file').onchange = (ev) => { const f = ev.target.files[0]; if (!f) return; readBlob(f, f.name).then(parse); };
   canvas.onclick = (ev) => {
     if (!meta) return;
     const r = canvas.getBoundingClientRect();
@@ -350,7 +371,7 @@
   if (emb && emb.trim()) parse(emb);
   else {
     const q = new URLSearchParams(location.search).get('trace');
-    if (q) fetch(q).then(r => r.text()).then(parse).catch(() => { $('card').textContent = `Could not fetch ${q}; use the file picker.`; });
+    if (q) fetch(q).then(r => r.blob()).then(b => readBlob(b, q)).then(parse).catch(() => { $('card').textContent = `Could not fetch ${q}; use the file picker.`; });
   }
 })();
 </script>

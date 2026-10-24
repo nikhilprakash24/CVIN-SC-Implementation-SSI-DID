@@ -1,10 +1,10 @@
 # Experiment B: lifetime cost MODEL over an assumed 39-event profile (not a measurement)
 rank,standard,append_op,birth_x1_gas,appends_x35_gas,transfers_x3_gas,lifetime_total_gas,band_minus50pct_gas,band_plus50pct_gas
 1,ERC-1056,setAttribute,52594,1242290,155262,1450146,751370,2148922
-2,ERC-1155,issueCredential,103913,1401645,251841,1757399,930656,2584142
-3,CVIN-Combined,addClaim,52216,9469775,155241,9677232,4864724,14489740
-4,MOBI-VID-V2,recordLifecycleEvent,299143,8947435,600069,9846647,5072895,14620399
-5,ERC-735,addClaim,1535776,9650795,86238,11272809,6404293,16141326
+2,ERC-1155,issueCredential,107729,1498560,258894,1865183,986456,2743910
+3,CVIN-Combined,addClaim,52216,9624020,155241,9831477,4941847,14721108
+4,MOBI-VID-V2,recordLifecycleEvent,299165,8958390,600465,9858020,5078593,14637448
+5,ERC-735,addClaim,1757881,9847775,86436,11692092,6724987,16659198
 
 # Profile (assumed),birth=1,maintenance=30,inspection=4,recall=1,transfer=3,total_events=39
 # Model,"MODEL over an ASSUMED profile. Lifetime = birth(createIdentity) + 35 x steady-state append marginal (Exp A) + 3 x transferOwnership. Band = +/-50% recurring event frequency (birth fixed). Gas is relative on-chain work, not fiat."

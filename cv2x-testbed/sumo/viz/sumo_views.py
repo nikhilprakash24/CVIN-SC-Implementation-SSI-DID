@@ -13,7 +13,7 @@ pairs    For each SUMO-GUI frame captured with --screenshot-dir during the SAME
          view at the same t on the right: what the simulator showed beside what
          the identity layer did.
 
-Style and palette: docs/visual/VISUAL_PLAN.md §4 (shared with render_trace.py).
+Style and palette: docs/visual/VISUAL_PLAN.md §4 (shared with thesis_figures.py).
 """
 import argparse
 import collections
@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-import render_trace as rt  # noqa: E402
+import thesis_figures as rt  # noqa: E402
 
 NET = HERE.parent / "highway_intersection.net.xml"
 
@@ -153,7 +153,7 @@ def main():
     a = ap.parse_args()
     root = HERE.parents[2] / "docs" / "visual" / "figures"
     if a.cmd == "coldmap":
-        coldmap(a.trace, a.out or root / "sumo_coldmap" / f"coldmap_{pathlib.Path(a.trace).stem}.png")
+        coldmap(a.trace, a.out or root / "sumo_coldmap" / f"coldmap_{rt.trace_name(a.trace)}.png")
     else:
         pairs(a.trace, a.frames, a.out or root / "pairs", a.every)
 

@@ -98,10 +98,14 @@ class ERC1155Adapter extends IdentityAdapter {
     const n = (h.held.get(k) || 0) + delta;
     if (n > 0) h.held.set(k, n); else h.held.delete(k);
   }
+  /** D8 (merged 2026-10-06): credential types are bounded to 1..255 so the held set is a bitmap; a
+   *  credential hash is mapped deterministically onto the custom range 6..255 (the five named
+   *  types keep 1..5). Two credentials of one vehicle alias only if their hashes collide mod 250. */
+  _typeOf(credHash) { return 6n + (BigInt(credHash) % 250n); }
   async rotateController(h, newOwner) {
     const reg = this._reg(this.actors.manufacturer);
-    const txs = [await reg.issuerTransferCredential(h.vehicle, newOwner.address, TYPE.BIRTH_CERT)];
-    for (const k of h.held.keys()) txs.push(await reg.issuerTransferCredential(h.vehicle, newOwner.address, BigInt(k)));
+    // D7/D8 (merged 2026-10-06): the identity moves with every held credential in one transaction
+    const txs = [await reg.issuerTransferIdentity(h.vehicle, newOwner.address)];
     h.vehicle = newOwner.address;
     h.controller = newOwner;
     return { txs };
@@ -122,8 +126,12 @@ class ERC1155Adapter extends IdentityAdapter {
     return { txs: [tx] };
   }
   async deactivate(h) {
-    const tx = await this._reg(this.actors.manufacturer).revokeCredential(h.vehicle, TYPE.BIRTH_CERT, 1);
-    return { txs: [tx] };
+    // D8 (merged 2026-10-06): the BIRTH_CERT cannot be burned while other credentials are held (no orphans)
+    const reg = this._reg(this.actors.manufacturer);
+    const txs = [];
+    for (const [k, n] of [...h.held.entries()]) { txs.push(await reg.revokeCredential(h.vehicle, BigInt(k), n)); h.held.delete(k); }
+    txs.push(await reg.revokeCredential(h.vehicle, TYPE.BIRTH_CERT, 1));
+    return { txs };
   }
 
   async anchorIssuerKey(issuer, key) {
@@ -131,17 +139,17 @@ class ERC1155Adapter extends IdentityAdapter {
     return { txs: [tx] };
   }
   async anchorStatus(h, credHash, issuerArg) {
-    const tx = await this._reg(this._issuer(issuerArg)).issueCredential(h.vehicle, BigInt(credHash), 1);
-    this._hold(h, BigInt(credHash), 1);
+    const tx = await this._reg(this._issuer(issuerArg)).issueCredential(h.vehicle, this._typeOf(credHash), 1);
+    this._hold(h, this._typeOf(credHash), 1);
     return { txs: [tx] };
   }
   async revokeCredential(h, credHash, issuerArg) {
-    const tx = await this._reg(this._issuer(issuerArg)).revokeCredential(h.vehicle, BigInt(credHash), 1);
-    this._hold(h, BigInt(credHash), -1);
+    const tx = await this._reg(this._issuer(issuerArg)).revokeCredential(h.vehicle, this._typeOf(credHash), 1);
+    this._hold(h, this._typeOf(credHash), -1);
     return { txs: [tx] };
   }
   async statusCheck(h, credHash) {
-    return (await this.contracts.reg.hasCredential(h.vehicle, BigInt(credHash))) ? "active" : "revoked";
+    return (await this.contracts.reg.hasCredential(h.vehicle, this._typeOf(credHash))) ? "active" : "revoked";
   }
 
   async prepareThroughputSenders(senders) {

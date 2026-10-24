@@ -188,12 +188,20 @@ nine base standards.
 - **RQ4 — Real-time feasibility.** Can identity establishment plus credential
   verification fit inside the latency envelope of safety-critical V2V
   applications (~100 ms end-to-end)?
+- **RQ5 — Zero-knowledge privacy and its operation** *(extension, adopted
+  2026-10-22; `docs/zkp/THESIS_INTEGRATION_MAP.md`).* Can zero-knowledge proofs
+  provide the deferred VIN privacy tier and identity-dependent knowledge checks
+  within the budgets used for RQ1 and RQ4, and what does operating them safely
+  require?
 
 ### Hypotheses
 
 - **H1 (Performance).** Minimal-state standards (e.g. ERC-1056) are at least
   **10× cheaper** than rich-state standards (e.g. ERC-725/735) on gas for
-  identity creation and update, trading away on-chain expressiveness.
+  identity creation and update, trading away on-chain expressiveness. *As tested
+  (Chapter 5), the ≥10× holds for creation only; on update the ratio is 3.4× over
+  ERC-721 and 3.9× over ERC-725 (register #25), so the update half of H1 is not
+  supported.*
 - **H2 (Compliance).** At least **90%** aggregate W3C compliance is achievable
   through a resolution/translation layer, with residual gaps confined to
   specific properties requiring off-chain augmentation.
@@ -208,9 +216,16 @@ nine base standards.
 - **H5 (Security frontier).** **No single standard dominates**; the standards
   occupy a security/performance Pareto frontier, and a hybrid (ERC-1056
   identity + ERC-735 claims) sits on that frontier.
+- **H6 (Zero-knowledge vehicle identity)** *(extension, with RQ5).*
+  Zero-knowledge vehicle identity is feasible at registration and session time
+  but not per V2V message, and its safe operation requires a bounded, adaptive
+  custodian whose own trust rests on the same decentralised identity stack.
+  Its measurable part is the pre-registered set Z-E1..Z-E7 (register #56–#62).
 
 **Preview of findings (see Chapter 5).** The thesis finds **all five
-hypotheses supported**. H1, H2, H3, and H5 are supported outright; H4 is
+hypotheses supported**. The extension hypothesis H6 is **partly supported**: feasibility and
+the custodian's necessity hold (six of seven expectations pass), but the bounded
+custodian misses its pre-registered honest-service level (Z-E6 FAIL). H1, H2, H3, and H5 are supported outright; H4 is
 supported with a documented *fidelity gradient* — the identity and lifecycle
 operations port natively to every backend measured, while native on-chain
 multi-party attestation is available only on the claim-capable and
@@ -239,7 +254,7 @@ tested artifact and quantified in Chapter 5:
    Credentials stack (issuer, holder wallet, and a multi-stage offline
    verifier, with selective disclosure and revocation) lift on-chain identities
    to W3C conformance. An executable, CI-gated compliance checker measures
-   **93.2%** aggregate compliance against DID Core v1.0 and VC Data Model v2.0
+   **94.3%** aggregate compliance against DID Core v1.0 and VC Data Model v2.0
    (Chapter 5, RQ3).
 
 3. **Evidence that blockchain identity is viable for real-time V2V.** Real
@@ -268,9 +283,9 @@ tested artifact and quantified in Chapter 5:
 6. **A reproducible, open testbed.** The comparison rests on an open,
    re-runnable testbed: nine standards plus the MOBI VID profile, a four-method
    DID resolver, the VC stack, twelve end-to-end lifecycle use cases with real
-   cryptographic verification, and a simulated V2V harness — backed by roughly
-   **295 automated tests** (217 Hardhat contract tests, 28 VC, 32 MOBI VID, 6
-   VIN-cipher, and 12/12 lifecycle use cases) with every reported number
+   cryptographic verification, and a simulated V2V harness — backed by the
+   **automated test suites** (Hardhat contract tests, VC, MOBI VID, VIN-cipher,
+   and 12/12 lifecycle use cases; current totals in `sandbox/grand/report/GRAND_REPORT.md`) with every reported number
    traceable to a committed artifact and a documented command (Chapters 3–5).
 
 ---

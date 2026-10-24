@@ -1,0 +1,125 @@
+{
+  "about": "I4 over declared seeds (WM-2 B1): RSU keys derived from each seed and recorded per run; gas varies with the keys' calldata zero bytes (EIP-2028). A second run with the same seeds reproduces every value.",
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "commit": [
+    "ddb9b05"
+  ],
+  "dirty": [
+    false
+  ],
+  "operations": {
+    "create_identity": {
+      "min": 0,
+      "max": 0,
+      "values": [
+        0
+      ],
+      "mode": 0,
+      "counts": {
+        "0": 30
+      }
+    },
+    "anchor_key_by_rsu": {
+      "min": 52582,
+      "max": 52606,
+      "values": [
+        52582,
+        52594,
+        52606
+      ],
+      "mode": 52606,
+      "counts": {
+        "52582": 1,
+        "52594": 7,
+        "52606": 22
+      }
+    },
+    "anchor_service_endpoint": {
+      "min": 34038,
+      "max": 34050,
+      "values": [
+        34038,
+        34050
+      ],
+      "mode": 34050,
+      "counts": {
+        "34038": 1,
+        "34050": 29
+      }
+    },
+    "hand_control_to_authority": {
+      "min": 51742,
+      "max": 51754,
+      "values": [
+        51742,
+        51754
+      ],
+      "mode": 51754,
+      "counts": {
+        "51742": 1,
+        "51754": 29
+      }
+    },
+    "rotate_key_by_authority": {
+      "min": 35486,
+      "max": 35510,
+      "values": [
+        35486,
+        35498,
+        35510
+      ],
+      "mode": 35510,
+      "counts": {
+        "35486": 1,
+        "35498": 9,
+        "35510": 20
+      }
+    },
+    "revoke_old_key": {
+      "min": 35038,
+      "max": 35062,
+      "values": [
+        35038,
+        35050,
+        35062
+      ],
+      "mode": 35062,
+      "counts": {
+        "35038": 1,
+        "35050": 7,
+        "35062": 22
+      }
+    }
+  }
+}

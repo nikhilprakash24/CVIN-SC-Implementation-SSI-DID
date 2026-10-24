@@ -368,7 +368,7 @@ def main():
                   'mining_mode': 'automine (no interval mining)' if automine else 'unknown/interval',
                   'contract_address': address, 'contract_deploy_gas': deploy_gas,
                   'client_version': w3.client_version, **info}
-    env = H.environment(chain_info, args.n, args.warmup)
+    env = H.environment(chain_info, args.n, args.warmup, producer=__file__)
     print("Environment:", json.dumps(env, indent=2, default=str))
 
     central = CentralizedLifecycleBackend()

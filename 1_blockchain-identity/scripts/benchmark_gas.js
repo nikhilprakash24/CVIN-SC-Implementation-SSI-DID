@@ -26,6 +26,7 @@
  * Run:  npx hardhat run scripts/benchmark_gas.js
  */
 
+const { runStamp } = require("./lib/run_stamp");
 const fs = require("fs");
 const path = require("path");
 const { ethers } = require("hardhat");
@@ -357,6 +358,9 @@ async function benchmarkMOBIVIDV2(signers) {
 
   // Setup: authorize a second issuer (deployer as DEALER) to attest (not counted).
   await (await registry.authorizeIssuer(deployer.address, 2 /* DEALER */)).wait();
+  // Setup: the owner's consent, a veriKey delegation (WM-2 C2, D54; not counted).
+  await (await registry.connect(firstOwner).addDelegate(
+    vehicleIdentity, ethers.encodeBytes32String("veriKey"), deployer.address, 86400)).wait();
   // attestEvent now verifies the attester's signature on-chain (domain-separated
   // digest: address(this) + chainId + vehicle + eventId, EIP-191 wrapped).
   const attestChainId = (await ethers.provider.getNetwork()).chainId;
@@ -444,6 +448,10 @@ async function benchmarkERC735(signers) {
   );
 
   const identityAddress = await holder.getAddress();
+
+  // D25a setup (not measured): authorise the issuers the benchmark uses.
+  await (await holder.authorizeIssuer(manufacturer.address, VIN_ATTESTATION)).wait();
+  await (await holder.authorizeIssuer(inspector.address, INSPECTION)).wait();
 
   // addDelegateOrClaim: first addClaim (issuer-signed VIN attestation, ClaimAdded).
   const dataV1 = ethers.toUtf8Bytes(`VIN:${VIN}`);
@@ -539,7 +547,7 @@ async function benchmarkERC1155(signers) {
       credential.issuerTransferCredential(vehicle.address, newVehicleAddress.address, BIRTH_CERT)
     ),
     1,
-    "issuerTransferCredential of the BIRTH_CERT: re-binds VIN + registration mappings to the new vehicle address. Credentials are soulbound - holder-initiated transfers revert by design."
+    "issuerTransferCredential of the BIRTH_CERT on a vehicle holding nothing else: re-binds VIN + registration mappings to the new vehicle address. Credentials are soulbound - the standard transfer entry points revert for everyone (D7 fix); an identity that still holds credentials moves atomically through issuerTransferIdentity (not benchmarked: its cost grows with the number of held types)."
   );
 
   return results;
@@ -857,6 +865,7 @@ async function main() {
     ...results,
     metadata: {
       solcVersion: "0.8.24",
+    ...runStamp(__filename),
       solcSettings: { optimizer: { enabled: true, runs: 200 }, viaIR: true },
       ozVersion: "5.0.2",
       date: new Date().toISOString(),

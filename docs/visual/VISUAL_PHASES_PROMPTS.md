@@ -11,7 +11,7 @@ Conventions every prompt relies on:
   is `claude/simulation-visual-plan-gp4exp` (or a branch off it).
 - Never overwrite `cv2x-testbed/sumo/results/v2v_latency.json`; traced runs pass
   `--results` to a scratch path.
-- Every figure comes from `cv2x-testbed/sumo/viz/render_trace.py` or SUMO-GUI
+- Every figure comes from `cv2x-testbed/sumo/viz/thesis_figures.py` or SUMO-GUI
   via `--screenshot-dir`; no manual screenshots of live windows.
 - Palette and two-register rule: `docs/visual/VISUAL_PLAN.md` §4.
 
@@ -29,7 +29,7 @@ Read docs/visual/VISUAL_PLAN.md §0–§1 and docs/visual/TRACE_SCHEMA.md. Then 
 2. cd cv2x-testbed/sumo && python3 sumo_identity_integration.py --simulate --duration 5 --vehicles 20 --results /tmp/v2v_check.json --trace /tmp/check.jsonl ; confirm 7/7 attacks rejected and the trace has meta/enroll/snap/tx/safety/attack/summary events (count each).
 3. netconvert -c net_src/netconvert.cfg and then sumo -c simulation.sumocfg --end 10 --no-step-log ; confirm it loads with no errors and inserts vehicles.
 4. python3 sumo_identity_integration.py --duration 10 --results /tmp/v2v_traci.json --trace /tmp/traci.jsonl ; confirm "Mode: SUMO" and "SUMO started (sumo)".
-5. python3 viz/render_trace.py /tmp/check.jsonl --out /tmp/figs ; confirm 7 PNGs.
+5. python3 viz/thesis_figures.py /tmp/check.jsonl --out /tmp/figs ; confirm 7 PNGs.
 6. If Xvfb exists: xvfb-run -a -s "-screen 0 1600x900x24" python3 sumo_identity_integration.py --gui --duration 8 --screenshot-dir /tmp/frames --screenshot-every 40 --gui-zoom 1500 --gui-track platoon_leader --results /tmp/v2v_gui.json ; confirm PNG frames of 1600x900.
 Do not change any source file. End with a table: step, pass/fail, one-line note. If a step fails, show the exact error and stop there.
 ```
@@ -77,7 +77,7 @@ Task:
 1. Render the full F1–F6 set from docs/visual/traces/sim_50v_60s_median.jsonl with --t 0 15 and the EEBL instant (find it in the trace's safety events), --focus the first SSI vehicle, and --svg. Render F2, F3 and F5 from docs/visual/traces/sumo_traci_120s.jsonl.
 2. Look at every PNG. For each, check: title counts match the trace (recount with a short python snippet), legend names every colour, footer present, nothing overlaps. Fix the renderer if anything is wrong; do not hand-edit images.
 3. Write docs/thesis/chapter5-results/FIGURES.md: for each figure, the file path, the exact render command, a caption of 2–4 sentences in the thesis voice, the register row it supports (#27 for latency; the attack-rejection rows for F4), and the mock/real statement from VISUAL_PLAN.md §1 that the caption must carry (e.g. "compute latency only; no channel modelled").
-4. Add an F7 "one message, anatomised" figure to render_trace.py: take one real SSI package and one real PKI package from a 2 s --simulate run (add a --dump-packages N flag that writes the first N signed packages of each population to JSON, without touching the measured path), and draw the two as labelled stacks with field names and byte sizes (json.dumps length). Caption it as a diagram of real packets.
+4. Add an F7 "one message, anatomised" figure to thesis_figures.py: take one real SSI package and one real PKI package from a 2 s --simulate run (add a --dump-packages N flag that writes the first N signed packages of each population to JSON, without touching the measured path), and draw the two as labelled stacks with field names and byte sizes (json.dumps length). Caption it as a diagram of real packets.
 5. Update docs/visual/VISUAL_PLAN.md §8 with what changed.
 Commit. Do not edit chapter prose beyond FIGURES.md.
 ```
@@ -211,7 +211,7 @@ rows.
 
 ## If a phase goes wrong
 
-- A figure "looks wrong": fix `render_trace.py`, rerender, never edit the PNG.
+- A figure "looks wrong": fix `thesis_figures.py`, rerender, never edit the PNG.
 - A number in a title disagrees with the register: the register wins; the
   figure is from a different run than the result of record, so say so in the
   caption or rerender from the median trace.

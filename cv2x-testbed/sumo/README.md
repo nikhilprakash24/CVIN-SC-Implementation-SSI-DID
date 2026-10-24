@@ -53,7 +53,7 @@ verified at receive**; all reported latencies are measured with
 - `routes.rou.xml`, `simulation.sumocfg` — routes (sorted by departure time, as
   SUMO requires) and run configuration
 - `gui_settings.xml` — SUMO-GUI scheme for unattended screenshot runs
-- `viz/render_trace.py` — figures F1–F6 from an event trace
+- `viz/thesis_figures.py` — figures F1–F6 from an event trace
 - `results/v2v_latency.json` — machine-readable results of the last run
 
 ## Event trace, figures and replay (visual layer)
@@ -67,9 +67,9 @@ drawn only from traces:
 ```bash
 # trace a run (point --results away from the result of record)
 python3 sumo_identity_integration.py --simulate --duration 30 --vehicles 30 \
-    --results /tmp/v2v.json --trace ../../docs/visual/traces/sim_30v_30s_seed42.jsonl
+    --results /tmp/v2v.json --trace ../../docs/visual/traces/sim_50v_20s_seed6.jsonl.gz
 # figures
-python3 viz/render_trace.py ../../docs/visual/traces/sim_30v_30s_seed42.jsonl --t 0 15 --focus veh_001
+python3 viz/thesis_figures.py ../../docs/visual/traces/sim_50v_20s_seed6.jsonl.gz --t 0 15 --focus veh_001
 # interactive replay: open docs/visual/replay/replay.html and pick the trace
 # real SUMO over TraCI (pip install eclipse-sumo), headless GUI frames
 xvfb-run -a -s "-screen 0 1600x900x24" python3 sumo_identity_integration.py --gui \

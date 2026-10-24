@@ -11,21 +11,21 @@
 
 | Category | Status | Evidence |
 |----------|--------|----------|
-| Smart Contracts (all 9 standards + MOBI VID) | ✅ Complete | 217 Hardhat tests passing |
-| W3C SSI Layer (DID + VC + MOBI VID) | ✅ Complete | 28 VC + 32 MOBI VID pytest passing; 93.2% measured W3C compliance |
+| Smart Contracts (all 9 standards + MOBI VID) | ✅ Complete | Hardhat suite passing (current totals in `sandbox/grand/report/GRAND_REPORT.md`) |
+| W3C SSI Layer (DID + VC + MOBI VID) | ✅ Complete | 28 VC + 32 MOBI VID pytest passing; 94.3% measured W3C compliance |
 | CV2X Testbed (use cases + V2V + SUMO-sim) | 🔄 ~85% | 12/12 use cases; real-crypto V2V loop measured (N=30); mobility still simulated |
 | Comparison Framework | ✅ Complete | 9/9 standards gas-benchmarked (N=30, σ=0); security matrices + Sepolia harness generated |
 | Documentation | 🔄 ~80% | honest-claims cleanup done; Chapter 5 results draft assembled from measured artifacts |
 | CI/CD | ✅ Complete | 3 workflows (contracts, benchmark, W3C compliance gate ≥90%) |
-| **OVERALL** | **~70%+** | **~295 automated tests green** |
+| **OVERALL** | **~70%+** | **all automated tests green** (current counts: `sandbox/grand/report/GRAND_REPORT.md`) |
 
-Automated test totals (all green): **217 Hardhat contract tests + 28 W3C VC + 32 MOBI VID (Python) + 12/12 lifecycle use cases** (~295 total). W3C compliance: **93.2% measured** (executable checker, CI-gated ≥90%).
+Automated test suites (all green): **Hardhat contract tests + W3C VC + MOBI VID (Python) + 12/12 lifecycle use cases** (current totals in `sandbox/grand/report/GRAND_REPORT.md`). W3C compliance: **94.3% measured** (executable checker, CI-gated ≥90%).
 
 ---
 
 ## 1️⃣ Blockchain Identity Layer (`1_blockchain-identity/`)
 
-Hardhat project implementing all 9 blockchain identity standards plus the MOBI VID application profile. **217 tests passing.** solc 0.8.24, optimizer (200 runs) + viaIR, OpenZeppelin 5.0.2.
+Hardhat project implementing all 9 blockchain identity standards plus the MOBI VID application profile. **All tests passing** (current count: `sandbox/grand/report/GRAND_REPORT.md`). solc 0.8.24, optimizer (200 runs) + viaIR, OpenZeppelin 5.0.2.
 
 ### The 9 standards + MOBI VID (Solidity contracts)
 
@@ -50,7 +50,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 
 **Total contract Solidity**: ~4,656 lines across 16 files.
 
-### Test Files (217 tests total)
+### Test Files (current total in the grand report)
 
 | File | `it()` scenarios | Status | Purpose |
 |------|------------------|--------|---------|
@@ -69,7 +69,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `test/security/securityScenarios.test.js` | 54 | ✅ | Adversarial revert suite — 43/43 applicable cells DEFENDED |
 | `test/security/attackHarness.js` | (helper) | ✅ | Shared attack-scenario harness |
 
-> The 217 passing total exceeds the raw `it()` count above because several suites generate parameterized cases per standard/operation at runtime.
+> The passing total (current figure: `sandbox/grand/report/GRAND_REPORT.md`) exceeds the raw `it()` count above because several suites generate parameterized cases per standard/operation at runtime.
 
 ### Scripts
 
@@ -87,7 +87,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `hardhat.config.js`, `package.json` | ✅ Complete | Hardhat / NPM config |
 | `SEPOLIA_VALIDATION.md` | ✅ Complete | Sepolia validation procedure (run pending) |
 
-**Status**: ✅ **COMPLETE** — all 9 standards + MOBI VID implemented, tested (217), and gas-benchmarked.
+**Status**: ✅ **COMPLETE** — all 9 standards + MOBI VID implemented, tested (current count in the grand report), and gas-benchmarked.
 
 ---
 
@@ -150,11 +150,11 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | V2V N=30 statistics harness | `sumo/run_v2v_stats.py` | ✅ Produces `sumo/results/v2v_latency_stats.json` (seeds 1–30) |
 | SUMO configs (50 vehicles) | `sumo/*.net.xml`, `routes.rou.xml`, `simulation.sumocfg` | 🔄 hand-authored; regenerate with `netconvert` for real-SUMO runs |
 | CV2X protocol stack (PHY/MAC, BSM/DENM) | `protocols/cv2x_stack.py` | ✅ Simulation-grade |
-| W3C compliance checker (executable) | `scripts/w3c_compliance_checker.py` | ✅ 93.2% measured |
+| W3C compliance checker (executable) | `scripts/w3c_compliance_checker.py` | ✅ 94.3% measured |
 | MOBI VID / VIN encryption test scripts | `scripts/test_mobi_vid.py`, `scripts/test_vin_encryption.py` | ✅ Passing |
 | On-chain contracts + Hardhat project | `contracts/`, `hardhat.config.js` | ✅ ERC-1056, MOBI VID V1/V2 |
 
-**Measured V2V result** (N=30 seeded runs): SSI warm verify **0.165 ms** [0.162, 0.168]; cold 0.400 ms; PKI warm 0.102 ms. 1,650,318 messages verified, 90 failures = exactly the 3 injected attacks × 30 runs (zero false positives/negatives). ~600× margin to the 100 ms V2V budget (H3 supported).
+**Measured V2V result** (N=30 seeded runs; register #27): SSI warm verify **0.153 ms** [0.151, 0.154]; cold 0.399 ms; PKI warm 0.094 ms. 1,650,318 messages verified, 150 failures = exactly the 5 injected attacks × 30 runs (zero false positives/negatives). The verification step is far inside the 100 ms V2V budget (H3 supported, verification-step scope).
 
 **Honest caveats**: V2V latency excludes radio/MAC/network-stack; mobility is simulated (no SUMO binary in the measurement environment).
 
@@ -174,7 +174,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `results/gas_comparison.csv`, `gas_comparison.tex` | ✅ Complete | Camera-ready gas comparison table |
 | `results/sepolia_validation.json` | ✅ Complete (scaffold) | Sepolia validation output slot (real run pending) |
 
-**Gas finding (RQ1/H1)**: ~33× spread across standards; CVIN-Combined 52,178 gas (cheapest) → ERC-725xy 1,704,992 (heaviest full-account deploy); ERC-1056 ~10× cheaper than ERC-721/725 (H1 supported); ERC-4337 EntryPoint indirection = +46,862 gas/op.
+**Gas finding (RQ1/H1)** (register #25, #6): 33.7× create-identity spread across standards, from CVIN-Combined 52,216 gas (cheapest) to ERC-735 1,757,881 (heaviest; ERC-725xy 1,680,816 second); bare ERC-1056 ~10× cheaper than the VIN-bound ERC-721 mint (H1 supported); ERC-4337 EntryPoint indirection = +46,830 gas/op.
 
 ### Security analysis ✅ — two complementary lenses
 
@@ -187,7 +187,7 @@ Hardhat project implementing all 9 blockchain identity standards plus the MOBI V
 | `security-analysis/results/onchain_security.json`, `security_comparison.tex` | ✅ Complete | On-chain security findings + comparison table |
 | `security-analysis/EXECUTABLE_ATTACK_SCENARIOS.md`, `README.md`, `INDEX.md` | ✅ Complete | Documentation of both lenses |
 
-**Security finding (RQ2/H5)**: no standard dominates (security/performance frontier); only ERC-4337 has genuine on-chain key recovery; ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that hashes + encrypts the VIN. MOBI `attestEvent` signature-verification gap was found AND fixed (121k → 193k gas).
+**Security finding (RQ2/H5)**: no standard dominates (security/performance frontier); only ERC-4337 has genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open); ERC-1155 uniquely resists identity theft (soulbound); MOBI VID is the only family that hashes + encrypts the VIN. MOBI `attestEvent` signature-verification gap was found AND fixed (121k → 193k gas).
 
 **Status**: ✅ **COMPLETE** — gas benchmark, security matrices, and Sepolia harness all generated.
 
@@ -212,9 +212,9 @@ Additional living docs at repo root: `README.md`, `CHANGELOG.md`, `CAPABILITIES.
 
 | File | Status | Purpose |
 |------|--------|---------|
-| `test-contracts.yml` | ✅ Complete | Smart-contract testing (217 Hardhat) |
+| `test-contracts.yml` | ✅ Complete | Smart-contract testing (Hardhat suite) |
 | `benchmark.yml` | ✅ Complete | Gas benchmarks |
-| `w3c-compliance.yml` | ✅ Complete | W3C compliance gate (≥90%; measured 93.2%) |
+| `w3c-compliance.yml` | ✅ Complete | W3C compliance gate (≥90%; measured 94.3%) |
 
 **Status**: ✅ **COMPLETE** — fully automated.
 
@@ -230,13 +230,13 @@ Additional living docs at repo root: `README.md`, `CHANGELOG.md`, `CAPABILITIES.
 
 | Phase | Completion | Status |
 |-------|------------|--------|
-| Smart Contracts (9 standards + MOBI VID) | 100% (217 tests) | ✅ |
+| Smart Contracts (9 standards + MOBI VID) | 100% (count in the grand report) | ✅ |
 | W3C DID Layer | 100% (4 methods) | ✅ |
 | W3C VC Layer | 100% (28 tests) | ✅ |
 | MOBI VID (Python + on-chain) | 100% (32 tests; AES-256-GCM VIN) | ✅ |
 | CV2X Testbed | ~85% (12/12 use cases + real-crypto V2V N=30; SUMO in simulate mode) | 🔄 |
 | Comparison Framework | 100% (gas N=30 σ=0, security two-lens, Sepolia harness) | ✅ |
-| W3C Compliance | 93.2% measured (executable checker) | ✅ |
+| W3C Compliance | 94.3% measured (executable checker) | ✅ |
 | Documentation | ~80% (Ch. 5 results draft from measured artifacts) | 🔄 |
 | CI/CD | 100% | ✅ |
 
@@ -248,9 +248,9 @@ Additional living docs at repo root: `README.md`, `CHANGELOG.md`, `CAPABILITIES.
 
 | Hypothesis | Verdict |
 |------------|---------|
-| H1 — minimal-state ≥10× cheaper for identity creation | ✅ Supported (ERC-1056 52,612 vs ERC-721 542,429 = 10.3×) |
-| H2 — ≥90% W3C compliance achievable | ✅ Supported (93.2% measured) |
-| H3 — off-chain verify meets V2V budget | ✅ Supported (SSI warm 0.165 ms ≪ 100 ms) |
+| H1 — minimal-state ≥10× cheaper for identity creation | ✅ Supported (ERC-1056 52,594 vs ERC-721 545,101 = 10.4×) |
+| H2 — ≥90% W3C compliance achievable | ✅ Supported (94.3% measured) |
+| H3 — off-chain verify meets V2V budget | ✅ Supported (SSI warm 0.153 ms ≪ 100 ms) |
 | H4 — MOBI VID realizable across backends | ✅ Supported (5-backend sweep; fidelity gradient) |
 | H5 — hybrid on the cost/capability frontier | ✅ Supported (CVIN-Combined) |
 
@@ -266,11 +266,11 @@ Additional living docs at repo root: `README.md`, `CHANGELOG.md`, `CAPABILITIES.
 
 ## 🚀 Getting Started (verified commands)
 
-- Contracts: `cd 1_blockchain-identity && npm ci && npx hardhat test` → 217 passing
+- Contracts: `cd 1_blockchain-identity && npm ci && npx hardhat test` → all passing (current count: `sandbox/grand/report/GRAND_REPORT.md`)
 - VC tests: `python3 -m pytest 2_w3c-ssi-layer/verifiable-credentials/tests/` → 28
 - MOBI VID tests: `cd 2_w3c-ssi-layer/mobi-vid && python3 -m pytest tests/` → 32
 - Use cases: `python3 cv2x-testbed/scripts/test_use_cases.py` → 12/12
-- W3C compliance: `python3 cv2x-testbed/scripts/w3c_compliance_checker.py` → 93.2%
+- W3C compliance: `python3 cv2x-testbed/scripts/w3c_compliance_checker.py` → 94.3 % (register #4)
 - Gas benchmark: `cd 1_blockchain-identity && npx hardhat run scripts/benchmark_gas.js`; tables via `4_comparison-framework/performance-metrics/generate_tables.py`
 - V2V sim: `python3 cv2x-testbed/sumo/sumo_identity_integration.py --simulate`; N=30 stats via `cv2x-testbed/sumo/run_v2v_stats.py`
 

@@ -1,0 +1,200 @@
+# Crux Register
+
+**Generated** by `docs/figures/make_dashboard_data.py` from `docs/thesis/cruxes.yaml` and the claim register (`docs/MEASUREMENT_CONDITIONS.md`). Do not edit by hand; edit the YAML and regenerate.
+
+A crux is a question the thesis must answer for an examiner. State: **evidenced** = every evidence row is status V and no gap is open; **partial** = at least one V row, and an open gap or a non-V row; **gap** = no evidence row of status V. Only V rows count as evidence; a listed row missing from the register fails the build.
+
+| Crux | State | Hypotheses | Evidence rows (status) | Open gaps |
+|---|---|---|---|---|
+| C1 CAV identity substrate | **partial** | H1, H5 | #25 (V), #26 (V), #34 (V), #35 (V), #36 (V), #42 (V), #43 (V) | 2 |
+| C2 Secure V2V messaging | **partial** | H3 | #21 (V), #27 (V), #32 (V), #37 (V), #39 (V) | 2 |
+| C3 Infrastructure messaging (V2I and infrastructure-to-infrastructure) | **partial** | — | #44 (V), #45 (V), #46 (V), #47 (V), #48 (V) | 5 |
+| C4 Revocation freshness | **partial** | H3 | #32 (V), #37 (V), #40 (S), #52 (V), #55 (V) | 3 |
+| C5 W3C conformance | **partial** | H2 | #4 (V), #24 (V) | 2 |
+| C6 MOBI VID lifecycle | **partial** | H4 | #30 (V), #33 (V), #41 (S) | 1 |
+| C7 Privacy and linkability | **partial** | — | #38 (V) | 1 |
+| C8 Veracity versus automation asymmetry | **partial** | H5 | #28 (V), #42 (V), #43 (V) | 1 |
+
+## C1 — CAV identity substrate
+
+**Question.** On which blockchain identity standard should a connected or autonomous vehicle's DID be anchored?
+
+**Claim.** Minimal-state standards are an order of magnitude cheaper to create an identity on; the hybrid sits on the cost/capability frontier at creation and over a vehicle's lifetime.
+
+**Thrusts:** 1, 5 · **Hypotheses:** H1, H5 · **Defects bearing on it:** D7, D13, D25
+
+| Row | Status | Claim (from the register) |
+|---|---|---|
+| #25 | V | Nine-standard gas table (deploy / create / update / delegate-or-claim / revoke / transfer per standard; MOBI-VID-V2 as application profile; ERC-4337 EntryPoint indirection +46,830 gas/op; create-identity spread 52,216 (C… |
+| #26 | V | Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,146 gas on the merged contracts); verify O(1) in claim count; V2V warm verification linear at 0.156 ms/neighbour (… |
+| #34 | V | Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,881 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS… |
+| #35 | V | Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,809 (wrapper 1,025,469) · ERC-1155 1,261,575 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,508,413 (excl. 3 n/a) · ERC-4337 2,221… |
+| #36 | V | H5 dominance analysis over six declared criteria (lifetime gas ↓, zero→nonzero SSTOREs ↓, R3 RPC at h=50 ↓, R3 median ms after lifecycle ↓, core ops supported ↑, O(1) on-chain credential check ↑ [design property, assigne… |
+| #42 | V | (sandbox lineage, was #31; history row for the pre-merge contracts) Gas moved by the 2026-10-04 defect fixes (D13 VIN normalisation on three mint paths; D21 `revoked` check and `previousChange` on the vehicle-profile reg… |
+| #43 | V | (sandbox lineage, was #32; history row for the pre-merge contracts) Gas moved by the 2026-10-04 pass-06 fixes (D7/D8 ERC-1155: standard transfers closed, held-type bitmap, `issuerTransferIdentity`; D11b MOBI `anchorVehic… |
+
+**Open gaps:**
+- After the 2026-10 fixes ERC-735 is the heaviest create (veracity has a deployment price); chapters 5 and 6 need the sentence.
+- The harness analysis (#36) finds CVIN-Combined dominated by ERC-4337 on six criteria; H5's wording must reconcile with it.
+
+**The examiner will ask:** Is "cheaper" robust to the operation definition, and does the frontier survive the harness's six criteria?
+
+**Artefacts:** `4_comparison-framework/results/gas_benchmark.json`, `4_comparison-framework/results/scaling_lifetime.json`, `docs/FEATURE_ASYMMETRY_MATRIX.md`, `sandbox/grand/report/L1-asymmetry.md`
+
+## C2 — Secure V2V messaging
+
+**Question.** Does blockchain-rooted identity verification fit the V2V safety-message budget?
+
+**Claim.** Off-chain verification of pre-issued credentials adds well under a millisecond per message; uncached on-chain resolution does not fit and needs a freshness policy.
+
+**Thrusts:** 3 · **Hypotheses:** H3 · **Defects bearing on it:** D11, D11b
+
+| Row | Status | Claim (from the register) |
+|---|---|---|
+| #21 | V | PKI vs ERC-1056 identical operations, n=50 (median / p95 ms): verify 0.226 / 0.294 PKI (pki_standard; pki_centralized 0.232 / 0.306; CA signature + issuer + validity + CRL + message signature) vs 15.513 / 18.348 ERC-1056… |
+| #27 | V | V2V SSI verify warm 0.142 ms [0.141, 0.143] (median of 30 seeded-run medians, 95 % bootstrap CI; p95 of run medians 0.146), cold 0.363 [0.355, 0.387]; PKI warm 0.090 [0.089, 0.091], cold 0.210 [0.204, 0.214]; 1,650,318 v… |
+| #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 14.673 / 14.284 / 17.089; k=5 3.152 / 0.397 / 15.202; k=25 0.944 / 0.371 / 0.674; k=∞ 0.357 / 0.346 / 0.415; P*(0.5) = 3 / 15 / 52 / 140. … |
+| #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 3.222 / 3.035 ms vs 14.136 / 14.751 ms for th… |
+| #39 | V | HTTP-RPC condition, all ten columns (N=30), on the merged contracts (re-run 2026-10-21, PR #3): every gas value identical to the in-process run of record (`2026-10-21T03-28-59Z_a9e2a28`) on all common cells (crud 131, li… |
+
+**Open gaps:**
+- Mobility is simulated (no SUMO run); radio, MAC and channel are out of scope.
+- The freshness knee is host-dependent (#37).
+
+**The examiner will ask:** What part of the 100 ms budget did you measure, and on which host?
+
+**Artefacts:** `cv2x-testbed/sumo/results/v2v_latency_stats.json`, `cv2x-testbed/results/pki_vs_erc1056.json`, `cv2x-testbed/results/freshness_k.json`
+
+## C3 — Infrastructure messaging (V2I and infrastructure-to-infrastructure)
+
+**Question.** Does the same identity layer secure roadside-unit and infrastructure messages (SPaT/MAP, RSU-to-RSU, RSU-to-traffic-management)?
+
+**Claim.** An RSU is a DID with a road-authority issuer; warm verification of its signed SPaT costs about what a warm BSM does (about 10 % more after the binding, replay and expiry checks); 13 registered checks (10 attacks, 3 warm variants) are rejected for their expected reasons; a cached verifier honours a revoked RSU for at most k-1 further messages (by construction of the re-check cadence: I3 checks the implementation, not a revocation latency).
+
+**Thrusts:** 3 · **Hypotheses:** none yet · **Defects bearing on it:** none
+
+| Row | Status | Claim (from the register) |
+|---|---|---|
+| #44 | V | (pre-registered I1, `docs/design/INFRASTRUCTURE_PREREG.md`, amendments A1, A4 and A6; verdict at the edge of the band, not falsified) Warm verification of a signed SPaT from a credentialed RSU, against a warm SSI BSM in … |
+| #45 | V | (pre-registered I2, amendments A4, A5 and A6; verdict PASS) Each of 15 registered checks (12 attacks and 3 warm variants) rejected for its expected reason in 30/30 runs, and the three warm variants verified warm in every… |
+| #46 | V | (pre-registered I3; verdict PASS) A verifier that has cached a revoked RSU accepts at most k − 1 further SPaT from it: `rsu_1`'s credential revoked at t = 10 s, re-check of the authority's (in-process) registry every k-t… |
+| #47 | V | (pre-registered I4, amendments A2 and A4; reported, no verdict) On-chain cost of an RSU identity on `EthereumDIDRegistry` (exact `gasUsed`), range over declared seeds 1–30 (WM-2 B1: the RSU keys are derived from each see… |
+| #48 | V | (pre-registered I5, amendment A3; reported, no verdict) Cost of the cryptographic operations on the controller → RSU → vehicle path on verifier v3: per run the sum of four per-run medians (controller sign + RSU warm veri… |
+
+**Open gaps:**
+- Mobility is the mock model (no SUMO run); no radio channel; the I2I back-haul and the revocation registry are in-process (no propagation delay, no lookup cost).
+- A fresh message relayed within the 1 s window to a receiver that never heard it is not detected (as for V2V).
+- I3 bounds a message count, not a time; the verifier cache does not expire.
+- RSU-to-RSU messaging is not modelled; I2I covers controller-to-RSU and TMC-to-controller only.
+- The k the thesis defends is the open C4 decision; it applies to RSUs as to vehicles.
+
+**The examiner will ask:** Your title says connected vehicles; where is the infrastructure?
+
+**Artefacts:** `docs/design/INFRASTRUCTURE_MESSAGING.md`, `docs/design/INFRASTRUCTURE_PREREG.md`, `cv2x-testbed/sumo/results/infrastructure_stats.json`, `cv2x-testbed/sumo/results/infrastructure_revocation.json`, `4_comparison-framework/results/infrastructure_gas.json`
+
+## C4 — Revocation freshness
+
+**Question.** How quickly does a verifier stop trusting a revoked vehicle key, and at what latency cost?
+
+**Claim.** A cached verifier honours a revoked key for at most k-1 further messages (every run, both refresh modes). The one-call probe refresh is about 3-5x cheaper on chain than a full refresh. Whether any k meets the neighbour-saturation target depends on the host's local verify time t_local - no knee at t_local above 0.5 ms (#37 first runs,
+
+**Thrusts:** 3, 5 · **Hypotheses:** H3 · **Defects bearing on it:** D21
+
+| Row | Status | Claim (from the register) |
+|---|---|---|
+| #32 | V | Freshness-k ERC-1056 verify, n=250 per k, mean (amortised) / median / p95 ms: k=1 14.673 / 14.284 / 17.089; k=5 3.152 / 0.397 / 15.202; k=25 0.944 / 0.371 / 0.674; k=∞ 0.357 / 0.346 / 0.415; P*(0.5) = 3 / 15 / 52 / 140. … |
+| #37 | V | Freshness-k with a one-call (probe) refresh, cv2x ERC-1056 verify: a refresh is one `getIdentityInfo` eth_call, with full resolution only if the identity moved. t_chain_probe 3.222 / 3.035 ms vs 14.136 / 14.751 ms for th… |
+| #40 | S | (sandbox lineage, was #29; S by instrument — superseded by #32/#37, kept for the k=100 point and as the first measurement behind `LATENCY_BUDGET.md` §3) Freshness-k cached verifier, ERC-1056 (n=200, one sender, warm): k=… |
+| #52 | V | Freshness rows #32 and #37 re-run back to back on one host, each at its own code (#32 at `8216507`, #37 at `f660402`), fresh node per run, two replicates in opposite order (WM-2 C3, decision rule committed first in repor… |
+| #55 | V | (clone lineage, was #42) Freshness-k, same host, both refresh modes (12 replicates in alternating blocks, fresh node each; clean pool by foreign-CPU load; one replicate excluded for overlapping another experiment): t_loc… |
+
+**Open gaps:**
+- D51 (revoked key accepted under a lagging verifier clock) was fixed in WM-2 C0 (2026-10-14); #32 and #37 keep their clock-assumption note until their A3b re-runs. Residual D63 (probe path, test chains only) is low.
+- The RSU analogue (#46) counts messages from a revoked RSU under an in-process registry; it bounds the re-check cadence, not the latency cost, so it is not counted as C4 evidence.
+- Choose the k the thesis defends (review-2 decisions 10 and 14).
+
+**The examiner will ask:** Is k-1 messages of revocation staleness at 10 Hz acceptable for a safety system?
+
+**Artefacts:** `cv2x-testbed/results/freshness_k.json`, `cv2x-testbed/results/freshness_k_probe.json`
+
+## C5 — W3C conformance
+
+**Question.** Can blockchain identities be lifted to W3C DID and VC conformance?
+
+**Claim.** The executable checker clears the 90 % target and the external W3C DID test suite passes all but one generated test, also on a registry-minted did:ethr.
+
+**Thrusts:** 2 · **Hypotheses:** H2 · **Defects bearing on it:** D10, D27
+
+| Row | Status | Claim (from the register) |
+|---|---|---|
+| #4 | V | W3C compliance, internal checker: 94.3% on the review-02 tree (executable score = PASS + 0.5×PARTIAL over 44 executed checks: 41 PASS, 1 PARTIAL, 2 FAIL; DID Core v1.0, VC Data Model v2.0; the 10 SSI-principle items are … |
+| #24 | V | External W3C DID test suite: 335/336 generated tests (also 335/336 on a `did:ethr` minted by `MOBIVIDRegistry.getVehicleDID` on Hardhat, sandbox lineage 2026-10-04, `docs/conformance/W3C_DID_TEST_SUITE.md` §8 of the sand… |
+
+**Open gaps:**
+- The DID Core checks test a synthesised document; label them structural (review-2 decision 2).
+- The executable checker (#4) still scores offline-synthesised documents; the resolver now also reads chain state (H-R, merged 2026-10-21) and the external suite passes 311/311 on that on-chain set (#24), but the checker itself has not been switched (WM-2 C1 gap).
+
+**The examiner will ask:** Does conformance of the document shape say anything about the chain state behind it?
+
+**Artefacts:** `4_comparison-framework/results/w3c_compliance.json`, `docs/conformance/W3C_DID_TEST_SUITE.md`
+
+## C6 — MOBI VID lifecycle
+
+**Question.** Is the MOBI VID birth certificate and lifecycle realisable across substrates?
+
+**Claim.** Birth and lifecycle are native on all five backends; multi-party attestation on three; the profile is MOBI-VID-inspired, checked against the public texts.
+
+**Thrusts:** 4 · **Hypotheses:** H4 · **Defects bearing on it:** D16
+
+| Row | Status | Claim (from the register) |
+|---|---|---|
+| #30 | V | Harness L2 MOBI-VID lifecycle (17 events, including the delegate add that the rotation retires): 1,050,809 / 2,706,685 / 3,155,103 gas (ERC-1056 / 721 / 725), ERC-1056 cheapest by 2.58× / 3.00×; zero→nonzero SSTOREs 8 / … |
+| #33 | V | M4 lifecycle parity (pre-registered, `PLAN_MOBI_SUMO.md` §A.2), n=50, median / p95 ms, centralized vs MOBI-VID-V2: birth 0.0028 / 0.0076 vs 14.13 / 20.77 (398,298 gas); lifecycle event 0.0064 / 0.0109 vs 11.86 / 14.88 (2… |
+| #41 | S | (sandbox lineage, was #30; S by instrument — superseded by #33; its `attest_event` row, which #33 lacks, is kept here) Lifecycle parity, centralized registry vs MOBI VID V2 (n=50, median / p95 ms): register_birth 0.004 /… |
+
+**Open gaps:**
+- Few of the VID I MUSTs are met and the birth certificate lacks mandatory fields (checklist §1; SC-17, SC-18 pending).
+
+**The examiner will ask:** Why call it MOBI if most normative requirements are unmet?
+
+**Artefacts:** `4_comparison-framework/results/mobi_vid_backends.json`, `docs/MOBI_VID_CHECKLIST.md`
+
+## C7 — Privacy and linkability
+
+**Question.** What does pseudonymity cost on a public identity registry, and is it effective?
+
+**Claim.** A delegate pool is fully linkable by one log query; per-pseudonym DIDs are unlinkable only while attribute-free or relayed.
+
+**Thrusts:** 5 · **Hypotheses:** none yet · **Defects bearing on it:** none
+
+| Row | Status | Claim (from the register) |
+|---|---|---|
+| #38 | V | M5 pseudonym pool on `EthereumDIDRegistry` (pre-registered, `PLAN_MOBI_SUMO.md` §A.2): 20 `addDelegate` per 5-min epoch cost 1,113,456 gas (first epoch), then 1,096,368 (71,919 for the identity's first write, then 54,807… |
+
+**Open gaps:**
+- Radio, timing and position linkability are future work (SC-02).
+
+**The examiner will ask:** Is a public chain compatible with V2X pseudonymity at all?
+
+**Artefacts:** `4_comparison-framework/results/pseudonym_pool.json`
+
+## C8 — Veracity versus automation asymmetry
+
+**Question.** What does implemented-but-uncompared surface cost in correctness and security?
+
+**Claim.** Exercising every public function found latent defects the comparison never priced; fixing them moved the gas table.
+
+**Thrusts:** 5 · **Hypotheses:** H5 · **Defects bearing on it:** D7, D11b, D13, D21, D22, D25
+
+| Row | Status | Claim (from the register) |
+|---|---|---|
+| #28 | V | Security: 43/43 attacks defended; DEFENDED = reverted with the documented expected reason (strict harness, review 02 Q-8). attestEvent found-and-fixed 121,110 → 192,718 gas (July build); since WM-2 C2 (2026-10-17: the at… |
+| #42 | V | (sandbox lineage, was #31; history row for the pre-merge contracts) Gas moved by the 2026-10-04 defect fixes (D13 VIN normalisation on three mint paths; D21 `revoked` check and `previousChange` on the vehicle-profile reg… |
+| #43 | V | (sandbox lineage, was #32; history row for the pre-merge contracts) Gas moved by the 2026-10-04 pass-06 fixes (D7/D8 ERC-1155: standard transfers closed, held-type bitmap, `issuerTransferIdentity`; D11b MOBI `anchorVehic… |
+
+**Open gaps:**
+- The chapter-6 section is a draft.
+
+**The examiner will ask:** Would a different implementation of the same standard have different defects, and does that undermine the comparison?
+
+**Artefacts:** `docs/DEFECT_LOG.md`, `sandbox/grand/report/demos.md`, `docs/thesis/chapter6-discussion/section-feature-asymmetry.md`

@@ -1,10 +1,10 @@
 {
  "meta": {
   "repo": "nikhilprakash24/CVIN-SC-Implementation-SSI-DID",
-  "commit": "708302a",
-  "date": "2026-09-24",
-  "env": "Node 22.22 \u00b7 Hardhat \u00b7 solc 0.8.24 (cancun, viaIR) \u00b7 Python 3.11",
-  "contracts_compiled": 32
+  "commit": "cac1729",
+  "date": "2026-10-03",
+  "env": "Node 22.22 \u00b7 Hardhat \u00b7 solc 0.8.24 (cancun, viaIR) \u00b7 OpenZeppelin 5.0.2 \u00b7 Python 3.11",
+  "contracts_compiled": 47
  },
  "suites": [
   {
@@ -13,28 +13,23 @@
    "failed": 0
   },
   {
-   "name": "EthereumDIDRegistry (ERC-1056)",
-   "passed": 19,
+   "name": "MOBI VID I/II Python (pytest)",
+   "passed": 23,
    "failed": 0
   },
   {
-   "name": "CVINVehicleDIDRegistry (ERC-1056 wrapper)",
-   "passed": 19,
+   "name": "VIN cipher (pytest)",
+   "passed": 9,
    "failed": 0
   },
   {
-   "name": "ERC-721 combined",
-   "passed": 4,
+   "name": "Contracts \u2014 9 standards + MOBI VID (Hardhat)",
+   "passed": 151,
    "failed": 0
   },
   {
-   "name": "ERC-721 identity-based",
-   "passed": 1,
-   "failed": 0
-  },
-  {
-   "name": "ERC-721 regular extended",
-   "passed": 4,
+   "name": "Security scenarios, 9 standards (Hardhat)",
+   "passed": 68,
    "failed": 0
   }
  ],
@@ -47,48 +42,65 @@
   "ERC-721 mint (avg)": 102804
  },
  "compliance": {
-  "overall_pct": 89.6,
-  "pass": 58,
-  "partial": 4,
-  "fail": 5,
-  "total": 67,
+  "overall_pct": 94.3,
+  "pass": 41,
+  "partial": 1,
+  "fail": 2,
+  "total": 44,
   "by_spec": {
-   "W3C DID Core v1.0": {
-    "pass": 19,
-    "total": 28,
-    "pct": 75.0
+   "W3C DID Core v1.0 (executable)": {
+    "pass": 14,
+    "total": 15,
+    "pct": 93.3
    },
-   "W3C VC Data Model v1.1": {
-    "pass": 29,
+   "W3C VC Data Model v2.0 (executable)": {
+    "pass": 27,
     "total": 29,
-    "pct": 100.0
+    "pct": 93.1
    },
-   "SSI Principles": {
-    "pass": 10,
-    "total": 10,
-    "pct": 100.0
+   "External: W3C DID test suite (resolution)": {
+    "pass": 193,
+    "total": 194,
+    "pct": 99.5
    }
   }
  },
  "fixes": [
-  "Build: solc <code>0.8.24</code> + <code>evmVersion: cancun</code> added so OpenZeppelin (^0.8.24, uses <code>mcopy</code>) compiles \u2014 the trunk did not compile as received.",
-  "<code>CVINVehicleDIDRegistry</code>: service-endpoint and delegate functions were unreachable (ERC-1056 owner check vs. wrapper as caller); fixed with <code>vehicleOwnerOf()</code>, behaviour-preserving for existing flows.",
-  "<code>CVIN_NFT_DID_ERC721_Monolithic</code> restored from backup with OpenZeppelin v5 fixes; a <code>_balances += tokenId</code> accounting bug corrected to <code>+= 1</code>.",
-  "<code>CVIN_NFT_DID_ERC721</code>: added <code>recordEntry</code> / <code>getEntryTimestamp</code> / <code>payToll</code> that the tests were written against.",
-  "Tests migrated from ethers v5 to v6; <code>previousChange</code> off-by-one and an infeasible &lt;50k gas bound corrected; ERC-1056 signed-change test now signs the raw digest (contract uses <code>ecrecover</code>, not EIP-191)."
+  "Build: solc <code>0.8.24</code> + <code>evmVersion: cancun</code> \u2014 the trunk did not compile as received.",
+  "<code>CVINVehicleDIDRegistry</code>: unreachable service-endpoint/delegate functions fixed (<code>vehicleOwnerOf()</code>).",
+  "<code>erc1056_provider</code>: placeholder key resolution (<code>\"0x04...\"</code>) replaced by on-chain resolution \u2014 blockchain verification had never worked.",
+  "Analysis lineage merged (53 commits): nine standards, security harness, scaling results; 219 tests on the merged trunk.",
+  "<code>did_resolver</code>: five resolution-metadata root causes fixed \u2014 official W3C DID test suite 328/441 \u2192 335/336; internal checker 94.3%.",
+  "Freshness-k cached verifier measured (0.44 ms cached, 2.70 ms with one <code>changed()</code> per message); lifecycle-parity comparison measured (writes 10\u00b3\u00d7 slower on chain)."
  ],
  "links": [
+  {
+   "text": "Handback (start here)",
+   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/HANDBACK_2026-09-30.md"
+  },
+  {
+   "text": "Claim register",
+   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/MEASUREMENT_CONDITIONS.md"
+  },
   {
    "text": "Project summary",
    "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/PROJECT_SUMMARY.md"
   },
   {
-   "text": "After-action report",
-   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/AFTER_ACTION_REPORT.md"
+   "text": "External W3C DID conformance",
+   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/conformance/W3C_DID_TEST_SUITE.md"
   },
   {
-   "text": "Audit 01 \u2014 original goals",
-   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/AUDIT_01_ORIGINAL_GOALS.md"
+   "text": "Latency budget (freshness-k)",
+   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/docs/LATENCY_BUDGET.md"
+  },
+  {
+   "text": "PKI vs ERC-1056",
+   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/cv2x-testbed/results/pki_vs_erc1056.md"
+  },
+  {
+   "text": "Lifecycle parity",
+   "href": "https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/blob/claude/cv2x-testbed-setup-011CUz5ay5VfEAsZzv5cexDy/cv2x-testbed/results/lifecycle_parity.md"
   },
   {
    "text": "Repository branch",

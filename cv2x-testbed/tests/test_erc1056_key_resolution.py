@@ -168,7 +168,7 @@ def test_revoked_flag_rejects_even_when_a_key_resolves(provider, vid):
 
 
 def test_verify_uses_no_isRevoked_call(provider, vid):
-    """T-5: one eth_call (getIdentityInfo) + one eth_getLogs (+ web3's eth_chainId)."""
+    """T-5: one eth_call (getIdentityInfo) + one eth_getLogs (+ web3's eth_chainId); since WM-2 C0 also one eth_getBlockByNumber (chain time, D51)."""
     rc = RPCCounter(provider.w3)
     try:
         for i in range(3):
@@ -176,7 +176,8 @@ def test_verify_uses_no_isRevoked_call(provider, vid):
             rc.reset()
             assert provider.verify_message(signed)[0] is True
             registry = [m for m in rc.methods if m != 'eth_chainId']
-            assert registry == ['eth_call', 'eth_getLogs'], rc.methods
+            # + eth_getBlockByNumber since WM-2 C0: key validity is decided in chain time (D51)
+            assert registry == ['eth_call', 'eth_getLogs', 'eth_getBlockByNumber'], rc.methods
     finally:
         provider.w3.provider.make_request = rc._orig
         if hasattr(provider.w3.provider, '_request_func_cache'):

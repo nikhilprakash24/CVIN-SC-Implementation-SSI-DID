@@ -50,9 +50,9 @@ The work comprises four integrated artifacts:
 
 4. **A reproducible, open comparison framework.** A gas benchmark, two
    complementary security lenses, and table generators that regenerate every
-   figure in Chapter 5 from source. The whole is exercised by **~295
-   automated tests, all green** (217 Hardhat contract tests + 28 W3C VC + 32
-   MOBI VID + 6 VIN-cipher + 12/12 lifecycle use cases).
+   figure in Chapter 5 from source. The whole is exercised by **automated
+   suites, all green** (Hardhat contract tests + W3C VC + MOBI VID + VIN-cipher
+   + 12/12 lifecycle use cases; current totals in `sandbox/grand/report/GRAND_REPORT.md`).
 
 The central methodological commitment throughout is *measured, not asserted*:
 gas figures are exact `receipt.gasUsed`, verified byte-identical across N=30
@@ -67,12 +67,12 @@ can be re-run and independently checked.
 ## 7.2 Answers to the Research Questions
 
 **RQ1 — Performance (cost).** *How do blockchain identity standards compare
-in on-chain cost?* Identity-creation gas spans **~33×** across the nine
-standards, from 52,178 gas (CVIN-Combined) to 1,704,992 gas (ERC-725xy).
+in on-chain cost?* Identity-creation gas spans **~34×** across the nine
+standards, from 52,216 gas (CVIN-Combined) to 1,757,881 gas (ERC-735).
 Minimal event-log designs are cheapest and full smart-account / on-chain-claim
-designs are most expensive; concretely, **ERC-1056 (52,612) is ~10× cheaper**
-than the NFT/proxy designs ERC-721 (542,429) and ERC-725 (528,647), and the
-ERC-4337 EntryPoint indirection adds a measured 46,862 gas per operation. Gas
+designs are most expensive; concretely, **ERC-1056 (52,594) is ~10× cheaper**
+than the NFT/proxy designs ERC-721 (545,101) and ERC-725 (519,384), and the
+ERC-4337 EntryPoint indirection adds a measured 46,830 gas per operation. Gas
 is deterministic (byte-identical across N=30), so the ranking is exact, not a
 sampling artifact (§5.2).
 
@@ -80,7 +80,7 @@ sampling artifact (§5.2).
 standard dominates**; the standards occupy distinct points on a
 security/performance trade-off frontier rather than one being universally
 best. The cheapest identities (ERC-1056, CVIN-Combined) are the most
-Sybil-vulnerable; only **ERC-4337** offers genuine on-chain key recovery
+Sybil-vulnerable; only **ERC-4337** offers genuine on-chain key recovery (with a caveat: the guardian keeps permanent control after a recovery, defect D15, open)
 (guardian `recoverOwner`); **ERC-1155** uniquely resists identity theft via a
 soulbound transfer override; and MOBI VID is the only family that hashes and
 encrypts the VIN rather than exposing it on-chain. The executable revert suite
@@ -88,23 +88,36 @@ defends **43/43 applicable attack cells**, and the analysis surfaced and then
 fixed a real `attestEvent` signature-verification gap (§5.6).
 
 **RQ3 — W3C compliance.** *Can blockchain-rooted identity meet W3C SSI
-standards while serving automotive needs?* Yes — **93.2% aggregate compliance
-is achievable and measured** by an executable checker (DID Core v1.0 93.3%,
-13/15; VC Data Model v2.0 93.1%, 27/29), above the ≥90% CI gate. The residual
-~7% is two documented, deliberate deviations (deterministic sorted-key JSON
+standards while serving automotive needs?* Yes, in a narrow sense — **94.3% on the internal
+executable checker**, a structural self-score rather than conformance (register #4; WM-1 audit U-F4) (DID Core v1.0 14/15
+passing with one PARTIAL; VC Data Model v2.0 93.1%, 27/29; register #4), above the
+≥90% CI gate. Apart from the one PARTIAL, the residual ~6% is two documented,
+deliberate deviations (deterministic sorted-key JSON
 rather than URDNA2015 canonicalization; a thesis-defined, Ethereum-native
 cryptosuite), i.e. registration/canonicalization choices, not any structural
 incompatibility (§5.5).
 
 **RQ4 — Real-time feasibility.** *Are blockchain identities viable for
 safety-critical, real-time V2V?* Yes, for the cryptographic path. SSI warm
-verification is **0.165 ms [0.162, 0.168]** (N=30) against the ~100 ms
-end-to-end V2V budget — a ~600× margin — and even the cold full-credential
-path (0.400 ms) clears a 10 ms signature-check target by 25×. SSI costs ~1.6×
-the PKI baseline (0.102 ms) per warm message, but both are immaterial at the
+verification is **0.153 ms [0.151, 0.154]** (N=30) against the ~100 ms
+end-to-end V2V budget — a ~650× margin — and even the cold full-credential
+path (0.399 ms) clears a 10 ms signature-check target by 25×. SSI costs ~1.6×
+the PKI baseline (0.094 ms) per warm message, but both are immaterial at the
 safety timescale: the cost of blockchain identity is at issuance (RQ1 gas),
 not at verification time. Caveat: these bound the *cryptographic* cost and
 exclude radio/MAC/network-stack latency; mobility is simulated (§5.4).
+
+
+**RQ5 — Zero-knowledge privacy and its operation** *(extension, added 2026-10-22).* *Can zero-knowledge proofs
+provide the deferred VIN privacy tier and identity-dependent knowledge checks within the budgets used for RQ1 and
+RQ4, and what does operating them safely require?* Yes for registration and session time, no per V2V message. The
+ZK-VIN proof (3,498 constraints) is produced in a median 398.6 ms and verified in 18.42 ms off chain (register #56,
+#57, M0), and admission through `ZkVinGate` costs 301,163 gas (register #58, M1). Verification fits the ~100 ms V2V
+budget, but proving does not, so the proof belongs at session start. An unsalted VIN hash is reversed in 3.58 s
+(register #60), which is why the tier needs a hiding commitment. Operating it safely requires a custodian that
+remembers every disclosure to every verifier, enforces an owner-signed policy, and keeps any learned or language
+component inside a deterministic kernel; the bounded Steward held the narrowing attack to ≤ 3.0 bits on every run but
+missed its honest-service floor (register #61; §5.10).
 
 ---
 
@@ -114,11 +127,11 @@ All five hypotheses are **supported**, with H4 carrying a documented nuance.
 
 | # | Hypothesis | Verdict | Evidence (one line) |
 |---|---|---|---|
-| **H1** | Minimal-state standards are ≥10× cheaper for identity creation | **Supported** | ERC-1056 52,612 vs ERC-721 542,429 = 10.3× (§5.2). |
-| **H2** | ≥90% W3C compliance is achievable via a translation layer | **Supported** | 93.2% measured; the two gaps are canonicalization/cryptosuite only (§5.5). |
-| **H3** | Off-chain credential verification meets the V2V real-time budget | **Supported** | SSI warm 0.165 ms ≪ 100 ms (~600× margin), N=30 (§5.4). |
+| **H1** | Minimal-state standards are ≥10× cheaper for identity creation | **Supported** | ERC-1056 52,594 vs ERC-721 545,101 = 10.4× (§5.2). |
+| **H2** | ≥90% W3C compliance is achievable via a translation layer | **Supported** | 94.3% measured; the two FAILs are canonicalization/cryptosuite only, plus one PARTIAL (register #4) (§5.5). |
+| **H3** | Off-chain credential verification meets the V2V real-time budget | **Supported** | SSI warm 0.153 ms ≪ 100 ms (~650× margin), N=30 (§5.4). |
 | **H4** | MOBI VID's semantics are realizable across backends | **Supported (fidelity gradient)** | Birth + lifecycle native on all 5 backends; multi-party attestation native on 3/5 (ERC-735, CVIN-Combined, MOBI-VID-V2 = 5/5), only partial on ERC-1056/ERC-1155 (3/5) (§5.3.1). |
-| **H5** | A hybrid design can sit on the cost/capability frontier | **Supported** | CVIN-Combined pays ERC-1056 identity cost yet adds on-chain claims; Pareto-optimal among 5/5 backends (§5.3, §5.3.1, §5.6). |
+| **H5** | A hybrid design can sit on the cost/capability frontier | **Supported on the fidelity-per-gas plane** | CVIN-Combined pays ERC-1056 identity cost yet adds on-chain claims; on the fidelity-per-gas frontier among the 5 MOBI backends (§5.3, §5.3.1, §5.6). Not on the frontier of the six-criterion harness analysis: dominated by ERC-4337 on all six (register #36). |
 
 The H4 nuance is substantive and worth stating plainly: MOBI VID's semantics
 *port*, but not uniformly. Birth (VID I) and lifecycle (VID II) writes are
@@ -129,6 +142,14 @@ unlinked approximation on the pure event-log (ERC-1056) and token (ERC-1155)
 backends. H4 is therefore supported *with a fidelity gradient*, not as a flat
 "works everywhere" claim.
 
+
+*Addition 2026-10-22 (extension).* The extension hypothesis H6 is reported beside the five above and does not change
+their verdicts.
+
+| # | Hypothesis | Verdict | Evidence (one line) |
+|---|---|---|---|
+| **H6** | Zero-knowledge vehicle identity is feasible at registration and session time but not per V2V message, and its safe operation requires a bounded, adaptive custodian | **Partly supported** | Six of seven pre-registered expectations pass (Z-E1–Z-E5, Z-E7); Z-E6 fails: leakage ≤ 3.0 bits on all runs, honest service < 90 % on 25 of 60 (register #56–#62; §5.10). |
+
 ---
 
 ## 7.4 Contributions
@@ -137,23 +158,24 @@ backends. H4 is therefore supported *with a fidelity gradient*, not as a flat
   identity standards for automotive SSI, all implemented and benchmarked on
   one identical testbed rather than compared on paper.
 - **Exact, deterministic performance data** (gas across all nine standards,
-  N=30, byte-identical, σ=0), quantifying a ~33× cost spread and the ~10×
-  minimal-vs-NFT gap, plus an isolated 46,862-gas ERC-4337 indirection tax.
-- **A W3C-compliant SSI layer for blockchain vehicle identity** achieving 93.2%
-  executable, CI-gated compliance (DID Core + VC Data Model) with a full
+  N=30, byte-identical, σ=0), quantifying a ~34× cost spread and the ~10×
+  minimal-vs-NFT gap, plus an isolated 46,830-gas ERC-4337 indirection tax.
+- **An SSI layer for blockchain vehicle identity expressed in W3C DID and VC
+  structures**, scoring 94.3% on the internal, CI-gated structural checker (DID Core + VC Data Model) with a full
   offline VC pipeline and four-method DID resolver.
 - **A real-cryptography CV2X testbed** demonstrating that blockchain identity
-  verification fits the V2V safety budget with ~600× margin (SSI warm
-  0.165 ms), with attacks caught at zero false-negative/positive over 1.65 M
-  verifications.
+  verification fits the V2V safety budget with ~650× margin (SSI warm
+  0.153 ms): all 5 injected attack types rejected in every run (150 of 150), and no
+  benign message rejected among 1.65 M verifications.
 - **A dual-lens security analysis** (54-scenario executable revert suite +
   threat matrix) establishing that no standard dominates and mapping the
   trade-off frontier — including surfacing and fixing a real `attestEvent`
   forgery/replay gap.
-- **The CVIN-Combined hybrid**, an ERC-1056 + ERC-735 design shown to be
-  Pareto-optimal: ERC-1056-level identity cost with on-chain verifiable
-  claims when needed.
-- **A reproducible open framework** (~295 green tests + regenerable tables)
+- **The CVIN-Combined hybrid**, an ERC-1056 + ERC-735 design on the
+  fidelity-per-gas frontier among the five MOBI backends: ERC-1056-level identity
+  cost with on-chain verifiable claims when needed. Under the six-criterion
+  harness analysis it is dominated by ERC-4337 (register #36).
+- **A reproducible open framework** (green test suites counted in `sandbox/grand/report/GRAND_REPORT.md`, regenerable tables)
   that lets the entire comparison be independently re-run and audited.
 
 ---
@@ -190,6 +212,21 @@ None of these undercut the core comparative claims — which rest on
 deterministic gas and real-cryptography verification — but they bound the
 generality of the absolute-cost and end-to-end-latency statements.
 
+
+*Addition 2026-10-22: limitations of layer 5 (§4.8, §5.10).*
+
+- **Insecure single-party setup.** The ZK-VIN keys come from a trusted setup run with fixed entropy, so anyone who
+  reads the build script can forge proofs. The costs and correctness checks stand; production security does not.
+- **Simulation, not live adversaries.** The narrowing attack and its defences are a seeded simulation (condition Sim)
+  with scripted verifiers. The results claim the shape of the comparison, not a rate of attack in the field, and the
+  insider variant was added post hoc (amendment A2).
+- **Hand times are estimated.** The manual-burden operation and character counts are measured, but the hand times and
+  error probabilities are priced from cited rates (status E, register #62); one rate comes from a partially verified
+  source.
+- **Pure-Python primitives.** The `zkid` sigma protocols are readable reference code, neither constant time nor
+  optimised, so their timings bound nothing about a production library. No live language-model call was made, and no
+  timing was taken on vehicle hardware.
+
 ---
 
 ## 7.6 Future Work
@@ -218,6 +255,20 @@ Ordered from smallest lift (confirmation) to largest (new research):
    CVIN-Combined hybrid to MOBI (and related automotive-identity standards
    bodies) to inform a converged vehicle-identity profile.
 
+
+*Addition 2026-10-22: future work opened by layer 5 (§4.8, §5.10).*
+
+7. **An anonymity set at the gate.** `ZkVinGate` names the identity it admits; proving membership in a set of
+   anchored commitments instead would complete the protection property of Table C-2 (§6.9.2).
+8. **A multi-party setup ceremony.** Replace the fixed-entropy setup with a multi-party ceremony, the one step
+   between the prototype and production keys.
+9. **BBS and SD-JWT on the hot path.** Measure BBS signatures and SD-JWT selective disclosure on the same host and
+   against the same budgets, closing the open part of idea I-10.
+10. **PLONK or Halo 2.** Port ZK-VIN to a proof system with a universal or no trusted setup and compare proving time,
+    proof size and verification gas with the Groth16 figures.
+11. **A live red team.** Replace the simulated adversary with people, and run the optional language-model compiler
+    live, to test whether the kernel's bound and the grammar hold against adversaries that were not scripted.
+
 ---
 
 ## 7.7 Closing
@@ -225,13 +276,34 @@ Ordered from smallest lift (confirmation) to largest (new research):
 The thesis converts a design debate that has largely been conducted on paper
 into an empirical, reproducible comparison. The headline result is not that
 one standard wins, but that **the choice is a measurable trade-off**: minimal
-event-log designs are an order of magnitude cheaper, no standard dominates on
-security, W3C compliance is reachable (93.2%), and blockchain identity clears
-the real-time V2V bar by a wide margin. The CVIN-Combined hybrid shows that a
-purpose-built design can occupy the favorable corner of that frontier. With
+event-log designs are an order of magnitude cheaper to create an identity in
+(where "create" means one registry entry for registry standards but a full
+per-vehicle contract deployment for ERC-725, ERC-725xy and ERC-735, with
+registry deployment excluded; a clone-based deployment was not measured), no
+standard dominates on security, the internal W3C checker scores 94.3% (a
+structural self-score), and blockchain identity verification clears the
+real-time V2V bar by a wide margin for the cryptographic step. The CVIN-Combined
+hybrid sits on the fidelity-per-gas frontier among the MOBI backends, though not
+on the six-criterion harness frontier (register #36). With
 the Sepolia run and real network-stack modeling as the next concrete steps,
 the framework is positioned to move from a rigorous local comparison to a
 fully field-validated one.
+
+
+---
+
+## 7.8 The Closed Loop
+
+*Added 2026-10-22 (extension; Report C §13).*
+
+The thesis set out to give machines identities: vehicles, and the services around them, that must be recognised,
+authorised and held to account. Its extension ends by finding that the most private form of identity, zero knowledge,
+can only be operated by a machine, and that the machine which operates it must itself be identified, delegated,
+revocable and auditable. Identity for machines; machines for identity. The same stack closes both ends of the loop:
+the DID, credential, revocation registry and anchored log that name a vehicle also name the agent that speaks for it.
+The agent wrapper is therefore not an add-on to self-sovereign identity but a condition of its use, provided that it
+stays bounded, with the owner's signed policy and a deterministic kernel, rather than any model, deciding what is
+disclosed.
 
 ---
 

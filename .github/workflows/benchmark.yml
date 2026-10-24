@@ -17,6 +17,8 @@ on:
     # claude/** added in review 2 (Q-1): the trunk has no `main`, so with
     # `[ main ]` alone none of these jobs ran on push.
     branches: [ main, claude/** ]
+  pull_request:
+    branches: [ '**' ]
   schedule:
     # Nightly at 00:00 UTC
     - cron: '0 0 * * *'

@@ -7,6 +7,9 @@ import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
 /**
  * @title MOBI VID Registry V2
+ * @author CVIN research project
+ * @notice MOBI VID II lifecycle events: role-gated event issuance with VC hashes
+ *         and multi-party, owner-consented, EIP-191-signed attestations.
  * @dev Extends MOBI VID Registry with VID 2.0 lifecycle events
  *
  * Standards Compliance:
@@ -24,13 +27,40 @@ import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
  * - Role-based access control for issuers
  * - Verifiable Credential integration
  * - Complete vehicle history
+ *
+ * Design: `MOBIVIDRegistryV2 is MOBIVIDRegistry is ERC1056Registry`. Imports
+ * OpenZeppelin Contracts 5.0.2 `ECDSA` and `MessageHashUtils` (libraries, not
+ * bases). The role => event-type matrix is fixed at deploy by
+ * _initializeAllowedIssuers (no setter). Deviations from the repo's
+ * MOBI_VID2_SSI_DESIGN.md: no OWNERSHIP_TRANSFER event type (ownership uses
+ * transferVehicleOwnership), REGISTRATION and DECOMMISSION added, IssuerRole
+ * has NONE, and attestations live in `eventAttestations[eventId]`. The VC
+ * integration is only the opaque `credentialHash`; no VC is parsed on-chain.
+ *
+ * @custom:standard MOBI Vehicle Identity (VID II) https://dlt.mobi/standards/
+ * @custom:standard ERC-1056 Ethereum Lightweight Identity https://eips.ethereum.org/EIPS/eip-1056
+ * @custom:standard EIP-191 Signed Data Standard https://eips.ethereum.org/EIPS/eip-191
+ * @custom:standard EIP-2 (low-s signatures, via OpenZeppelin ECDSA) https://eips.ethereum.org/EIPS/eip-2
+ * @custom:standard W3C Verifiable Credentials Data Model v1.1 https://www.w3.org/TR/vc-data-model/
+ * @custom:standard W3C DID Core v1.0 https://www.w3.org/TR/did-core/
+ * @custom:security Issuer roles are registry-wide (one role per address); organisational roles can file events
+ *                  against any vehicle by design. OWNER is scoped at use time to the current owner (K-15).
+ * @custom:security Lifecycle events are append-only: they cannot be revoked or corrected, and de-authorising an
+ *                  issuer does not invalidate past events. DECOMMISSION / THEFT_REPORT do not freeze the identity.
+ * @custom:security Odometer values are not checked for monotonicity on-chain (rollback detection is off-chain).
+ * @custom:security getEventsByType / getOdometerHistory are unbounded loops (fine for eth_call only).
+ * @custom:security Attestation signatures use ad-hoc domain separation (contract, chainid), not EIP-712, and are
+ *                  stored on-chain after verification (gas cost).
+ * @custom:security `jurisdiction` is a free-form, unvalidated string.
+ * @custom:see docs/smart-contracts/02-mobi-vid.md
+ * @custom:see sandbox/options/mobi-vid/adapter.js
  */
 contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
 
     // ============ ENUMS ============
 
     /**
-     * @dev Types of lifecycle events
+     * @notice Types of lifecycle events (ordinals 0-10).
      */
     enum EventType {
         MAINTENANCE,        // Regular service (oil change, tire rotation, etc.)
@@ -47,7 +77,10 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Roles for event issuers
+     * @notice Roles for event issuers (ordinals 0-8).
+     * @dev Separate from MOBIVIDRegistry.authorizedManufacturers. The per-role
+     *      comments describe intent; the authoritative permissions are in
+     *      _initializeAllowedIssuers.
      */
     enum IssuerRole {
         NONE,              // Not authorized
@@ -66,6 +99,9 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     /**
      * @dev Lifecycle Event (MOBI VID II)
      * Represents a mutable event in the vehicle's history
+     * @notice One recorded lifecycle event of a vehicle.
+     * @custom:note Despite "mutable" above, no function modifies a stored event (append-only). `dataHash` is a
+     *              content hash in practice, not an IPFS hash. `verified` is derived from the issuer's role.
      */
     struct LifecycleEvent {
         bytes32 eventId;           // Unique event identifier
@@ -83,6 +119,7 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     /**
      * @dev Event Attestation
      * Multiple parties can attest to an event
+     * @notice One verified attestation of an event.
      */
     struct EventAttestation {
         address attester;          // DID of attester
@@ -93,35 +130,42 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
 
     // ============ STORAGE ============
 
-    // Authorized issuers (address => role)
+    /// @notice Authorized issuers (address => role)
+    /// @dev One role per address; NONE means not authorized.
     mapping(address => IssuerRole) public authorizedIssuers;
 
-    // Vehicle lifecycle events (vehicleIdentity => eventId => LifecycleEvent)
+    /// @notice Vehicle lifecycle events (vehicleIdentity => eventId => LifecycleEvent)
     mapping(address => mapping(bytes32 => LifecycleEvent)) public lifecycleEvents;
 
-    // Vehicle event IDs list (vehicleIdentity => array of eventIds)
+    /// @notice Vehicle event IDs list (vehicleIdentity => array of eventIds)
     mapping(address => bytes32[]) public vehicleEventIds;
 
-    // Event attestations (eventId => array of attestations)
+    /// @notice Event attestations (eventId => array of attestations)
     mapping(bytes32 => EventAttestation[]) public eventAttestations;
 
-    // One attestation per (eventId, attester), so eventAttestations[eventId]
-    // counts distinct attesters (review-02 H-A, handback decision 4)
+    /// @notice eventId => attester => attested (WM-2 C2, D54: one attestation per attester)
     mapping(bytes32 => mapping(address => bool)) public hasAttested;
 
-    // Event count per vehicle
+    /// @notice Event count per vehicle
     mapping(address => uint256) public vehicleEventCount;
 
-    // Event type statistics (vehicleIdentity => eventType => count)
+    /// @notice Event type statistics (vehicleIdentity => eventType => count)
     mapping(address => mapping(EventType => uint256)) public eventTypeCount;
 
-    // Allowed issuers per event type
+    /// @notice Allowed issuers per event type
+    /// @dev Filled once by _initializeAllowedIssuers in the constructor; no setter.
     mapping(EventType => mapping(IssuerRole => bool)) public allowedIssuers;
 
     // ============ EVENTS ============
 
     /**
-     * @dev Emitted when a lifecycle event is recorded
+     * @notice Emitted when a lifecycle event is recorded
+     * @param vehicleIdentity The vehicle identity
+     * @param eventId The new event id
+     * @param eventType The event type
+     * @param issuer The issuer (msg.sender)
+     * @param odometer Odometer reading supplied by the issuer
+     * @param timestamp Block timestamp
      */
     event LifecycleEventRecorded(
         address indexed vehicleIdentity,
@@ -133,7 +177,11 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     );
 
     /**
-     * @dev Emitted when an event is attested
+     * @notice Emitted when an event is attested
+     * @param eventId The attested event
+     * @param attester The attester (msg.sender)
+     * @param role The attester's role at attestation time
+     * @param timestamp Block timestamp
      */
     event EventAttested(
         bytes32 indexed eventId,
@@ -143,7 +191,10 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     );
 
     /**
-     * @dev Emitted when an issuer is authorized
+     * @notice Emitted when an issuer is authorized
+     * @param issuer The issuer address
+     * @param role The role granted
+     * @param timestamp Block timestamp
      */
     event IssuerAuthorized(
         address indexed issuer,
@@ -152,7 +203,9 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     );
 
     /**
-     * @dev Emitted when an issuer authorization is revoked
+     * @notice Emitted when an issuer authorization is revoked
+     * @param issuer The issuer address
+     * @param timestamp Block timestamp
      */
     event IssuerAuthorizationRevoked(
         address indexed issuer,
@@ -161,6 +214,9 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
 
     // ============ MODIFIERS ============
 
+    /// @notice Requires msg.sender's role to be allowed to issue `eventType`.
+    /// @dev Role-matrix check only (see isAuthorizedIssuer).
+    /// @param eventType The event type being issued
     modifier onlyAuthorizedIssuer(EventType eventType) {
         require(
             isAuthorizedIssuer(msg.sender, eventType),
@@ -171,6 +227,7 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
 
     // ============ CONSTRUCTOR ============
 
+    /// @notice Runs the MOBIVIDRegistry constructor, then fills the role => event-type matrix.
     constructor() MOBIVIDRegistry() {
         // Initialize allowed issuers for each event type
         _initializeAllowedIssuers();
@@ -179,7 +236,9 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     // ============ ISSUER MANAGEMENT ============
 
     /**
-     * @dev Authorize an issuer with a specific role
+     * @notice Authorize an issuer with a specific role
+     * @dev onlyRegistryAuthority. Overwrites any existing role; NONE is rejected.
+     *      Emits IssuerAuthorized.
      * @param issuer Address to authorize
      * @param role Role to assign
      */
@@ -195,7 +254,9 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Revoke issuer authorization
+     * @notice Revoke issuer authorization
+     * @dev onlyRegistryAuthority. Sets the role to NONE; past events stay valid.
+     *      Emits IssuerAuthorizationRevoked.
      * @param issuer Address to revoke
      */
     function revokeIssuerAuthorization(address issuer)
@@ -209,7 +270,7 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Check if address is authorized to issue event type.
+     * @notice Check if address is authorized to issue event type.
      * Role check only: recordLifecycleEvent also requires an OWNER-role
      * issuer to be the vehicle's current owner (K-15).
      * @param issuer Address to check
@@ -233,6 +294,11 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
      * @dev Record a lifecycle event
      *
      * This is the core MOBI VID II function
+     * vehicleRegistered, onlyAuthorizedIssuer; rejects revoked vehicles; an
+     * OWNER-role caller must be the current owner (K-15). eventId =
+     * keccak256(vehicle, eventType, msg.sender, block.timestamp, count).
+     * Emits LifecycleEventRecorded.
+     * @notice Record a lifecycle event for a registered vehicle (authorized issuer only).
      *
      * @param vehicleIdentity Vehicle DID
      * @param eventType Type of event
@@ -314,15 +380,8 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Attest to an event
-     * Allows multiple parties to sign off on an event
-     *
-     * Who may attest an event on vehicle V: any address holding an
-     * organisational role (MANUFACTURER, DEALER, SERVICE_CENTER,
-     * INSURANCE_COMPANY, GOVERNMENT_DMV, POLICE, INSPECTION_STATION), on any
-     * vehicle; an OWNER-role address only while it is V's current ERC-1056
-     * owner. Role-less addresses (NONE) cannot attest. Each address can
-     * attest a given event once (hasAttested).
+     * @notice Attest to an event
+     * @dev Allows multiple parties to sign off on an event
      *
      * The attester must sign the domain-separated attestation digest
      *
@@ -338,6 +397,12 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
      * forged attestation signature (a replay/forgery gap). This revision binds
      * the signature to this contract, this chain, the vehicle and the event,
      * and rejects anything that does not recover to the attester.
+     *
+     * Access: the event must exist, the caller must hold a role other than
+     * NONE, and must be the current owner or a valid bytes32("veriKey")
+     * delegate of the vehicle (D54; a sigAuth delegation does not count), and
+     * may attest once. Emits EventAttested.
+     * @custom:note hasAttested is set before the signature check; a revert rolls it back.
      *
      * @param eventId Event to attest
      * @param vehicleIdentity Vehicle DID
@@ -358,23 +423,16 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
             authorizedIssuers[msg.sender] != IssuerRole.NONE,
             "Not authorized to attest"
         );
-
-        // Review-02 H-A (handback next-session item 2): the role check alone
-        // let any OWNER-role address attest events on any vehicle. Same scope
-        // rule as recordLifecycleEvent (K-15): an OWNER-role attester must be
-        // the vehicle's current ERC-1056 owner, so a previous owner loses the
-        // right on transfer. ERC1056Registry keeps delegates only as events
-        // (no on-chain delegate mapping, K-5), so there is no delegate check.
-        // The organisational roles (manufacturer, dealer, service centre,
-        // insurer, DMV, police, inspection station) keep their registry-wide
-        // scope: they are the documented third-party co-signers of the
-        // multi-party attestation design.
-        if (authorizedIssuers[msg.sender] == IssuerRole.OWNER) {
-            require(
-                identityOwner(vehicleIdentity) == msg.sender,
-                "OWNER role: not the current owner of this vehicle"
-            );
-        }
+        // WM-2 C2 (D54): a role is authority, not consent. The attester must also
+        // be the vehicle's current owner or a valid veriKey delegate of it, and
+        // may attest an event once.
+        require(
+            msg.sender == identityOwner(vehicleIdentity) ||
+                validDelegate(vehicleIdentity, "veriKey", msg.sender),
+            "Attester is not the vehicle's owner or delegate"
+        );
+        require(!hasAttested[eventId][msg.sender], "Already attested");
+        hasAttested[eventId][msg.sender] = true;
 
         // ---- On-chain attestation signature verification (security fix) ----
         // Bind the signature to (contract, chain, vehicle, event) to stop
@@ -389,14 +447,6 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
             signature
         );
         require(recovered == msg.sender, "Invalid attestation signature");
-
-        // Review-02 H-A (handback decision 4): without this guard a
-        // role-holder could resubmit its own valid attestation and inflate
-        // the attestation count. Each attester is counted once per event.
-        // Checked after the signature, so a forged or replayed signature
-        // still reports "Invalid attestation signature".
-        require(!hasAttested[eventId][msg.sender], "Already attested by this attester");
-        hasAttested[eventId][msg.sender] = true;
 
         // Create attestation
         EventAttestation memory attestation = EventAttestation({
@@ -419,7 +469,8 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     // ============ QUERY FUNCTIONS ============
 
     /**
-     * @dev Get all event IDs for a vehicle
+     * @notice Get all event IDs for a vehicle
+     * @dev vehicleRegistered.
      * @param vehicleIdentity Vehicle DID
      * @return Array of event IDs
      */
@@ -433,7 +484,8 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Get event details
+     * @notice Get event details
+     * @dev Reverts if the event does not exist.
      * @param vehicleIdentity Vehicle DID
      * @param eventId Event ID
      * @return Event details
@@ -451,7 +503,7 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Get event attestations
+     * @notice Get event attestations
      * @param eventId Event ID
      * @return Array of attestations
      */
@@ -464,7 +516,7 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Get event count by type
+     * @notice Get event count by type
      * @param vehicleIdentity Vehicle DID
      * @param eventType Type of event
      * @return Count of events of that type
@@ -478,7 +530,8 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Get complete vehicle history (VID I + VID II)
+     * @notice Get complete vehicle history (VID I + VID II)
+     * @dev vehicleRegistered. CVIN extension.
      * @param vehicleIdentity Vehicle DID
      * @return birth Birth certificate
      * @return eventCount Number of lifecycle events
@@ -505,7 +558,8 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Get events by type
+     * @notice Get events by type
+     * @dev O(n) loop over all events of the vehicle; for eth_call use.
      * @param vehicleIdentity Vehicle DID
      * @param eventType Type of events to retrieve
      * @return eventIds Array of event IDs of specified type
@@ -532,9 +586,11 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
     }
 
     /**
-     * @dev Get odometer history (for fraud detection)
+     * @notice Get odometer history (for fraud detection)
+     * @dev O(n) loop; values are returned as recorded, without a monotonicity check.
      * @param vehicleIdentity Vehicle DID
      * @return odometerReadings Array of odometer readings with timestamps
+     * @return timestamps Block timestamps of the corresponding events
      */
     function getOdometerHistory(address vehicleIdentity)
         external
@@ -558,6 +614,7 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
 
     /**
      * @dev Initialize allowed issuers for each event type
+     *      Called once from the constructor; the matrix cannot be changed later.
      */
     function _initializeAllowedIssuers() internal {
         // MAINTENANCE: Dealer, Service Center, Owner
@@ -606,6 +663,8 @@ contract MOBIVIDRegistryV2 is MOBIVIDRegistry {
 
     /**
      * @dev Check if issuer is verified (government, manufacturer, etc.)
+     *      Verified roles: MANUFACTURER, GOVERNMENT_DMV, POLICE, DEALER,
+     *      INSPECTION_STATION. Sets LifecycleEvent.verified.
      * @param issuer Address to check
      * @return True if verified issuer
      */

@@ -1,0 +1,136 @@
+{
+ "moved": [
+  {
+   "standard": "ERC-721",
+   "op": "deployRegistry",
+   "before": 2721476,
+   "after": 2787288
+  },
+  {
+   "standard": "ERC-721",
+   "op": "createIdentity",
+   "before": 542378,
+   "after": 545101
+  },
+  {
+   "standard": "ERC-735",
+   "op": "createIdentity",
+   "before": 1371394,
+   "after": 1598928
+  },
+  {
+   "standard": "ERC-735",
+   "op": "addDelegateOrClaim",
+   "before": 290177,
+   "after": 295805
+  },
+  {
+   "standard": "ERC-735",
+   "op": "updateAttribute",
+   "before": 75160,
+   "after": 80788
+  },
+  {
+   "standard": "ERC-735",
+   "op": "transferOwnership",
+   "before": 28702,
+   "after": 28768
+  },
+  {
+   "standard": "ERC-1155",
+   "op": "deployRegistry",
+   "before": 2277168,
+   "after": 2380231
+  },
+  {
+   "standard": "ERC-1155",
+   "op": "createIdentity",
+   "before": 103881,
+   "after": 107238
+  },
+  {
+   "standard": "ERC-1155",
+   "op": "addDelegateOrClaim",
+   "before": 57115,
+   "after": 57137
+  },
+  {
+   "standard": "ERC-1155",
+   "op": "revoke",
+   "before": 30625,
+   "after": 30647
+  },
+  {
+   "standard": "ERC-1155",
+   "op": "transferOwnership",
+   "before": 83608,
+   "after": 83748
+  },
+  {
+   "standard": "LSP8",
+   "op": "deployRegistry",
+   "before": 1592737,
+   "after": 1647805
+  },
+  {
+   "standard": "LSP8",
+   "op": "createIdentity",
+   "before": 149430,
+   "after": 152453
+  },
+  {
+   "standard": "LSP8",
+   "op": "updateAttribute",
+   "before": 55051,
+   "after": 55070
+  },
+  {
+   "standard": "LSP8",
+   "op": "transferOwnership",
+   "before": 80576,
+   "after": 80544
+  },
+  {
+   "standard": "LSP8",
+   "op": "revoke",
+   "before": 41838,
+   "after": 41812
+  },
+  {
+   "standard": "MOBI-VID-V2",
+   "op": "deployRegistry",
+   "before": 3952603,
+   "after": 3966355
+  },
+  {
+   "standard": "MOBI-VID-V2",
+   "op": "transferOwnership",
+   "before": 199810,
+   "after": 200023
+  },
+  {
+   "standard": "MOBI-VID-V2",
+   "op": "revoke",
+   "before": 74836,
+   "after": 75382
+  },
+  {
+   "standard": "CVIN-Combined",
+   "op": "deployRegistry",
+   "before": 1325604,
+   "after": 1372501
+  },
+  {
+   "standard": "CVIN-Combined",
+   "op": "addDelegateOrClaim",
+   "before": 289886,
+   "after": 292214
+  },
+  {
+   "standard": "CVIN-Combined",
+   "op": "revoke",
+   "before": 73688,
+   "after": 75580
+  }
+ ]
+}

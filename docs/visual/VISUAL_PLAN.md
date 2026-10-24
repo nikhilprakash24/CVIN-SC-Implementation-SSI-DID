@@ -22,7 +22,7 @@ What now exists (built and run in this session, all on the branch):
 | Layer | What it is | Where |
 |---|---|---|
 | **Data** | The simulation writes a JSON-Lines *event trace*: every vehicle position, every signed broadcast, every receiver-side verification (cold / warm / rejected, with its measured latency), every safety and attack event. | `--trace` flag on `cv2x-testbed/sumo/sumo_identity_integration.py`; traces in `docs/visual/traces/` |
-| **Still figures** | Six figure types (F1–F6) rendered from a trace, each with a provenance footer. | `cv2x-testbed/sumo/viz/render_trace.py` → `docs/visual/figures/<trace>/` |
+| **Still figures** | Six figure types (F1–F6) rendered from a trace, each with a provenance footer. | `cv2x-testbed/sumo/viz/thesis_figures.py` → `docs/visual/figures/<trace>/` |
 | **Interactive** | A single-file replay viewer: play, scrub, step, click a vehicle for its DID / VIN card, live counters, FCW / EEBL / attack log. | `docs/visual/replay/replay.html` |
 | **Real SUMO** | The network was rebuilt so real SUMO loads it; TraCI mode runs; SUMO-GUI runs headless and saves frames with vehicles painted by identity layer. | `cv2x-testbed/sumo/net_src/`, `gui_settings.xml`, `docs/visual/sumo_frames/` |
 
@@ -90,8 +90,8 @@ Nothing above a rung is required by anything below it.
 
 ### Rung 0 — Data (done)
 - `--trace PATH` on the simulation; schema in `TRACE_SCHEMA.md`.
-- Two reference traces committed: `sim_30v_30s_seed42.jsonl` (mock mobility) and
-  `sumo_traci_60s.jsonl` (real SUMO).
+- Two reference traces committed: `sim_50v_20s_seed6.jsonl.gz` (mock mobility) and
+  `sumo_traci_60s.jsonl.gz` (real SUMO).
 - **Awesome:** a trace per seed for the N=30 statistics run, so any figure can be
   shown for the median seed and the worst seed. (Phase 1.)
 
@@ -154,11 +154,11 @@ under `--screenshot-dir`; never a manual crop of a live window.
 | # | Shot | Command | Caption skeleton |
 |---|---|---|---|
 | S1 | Terminal banner + final statistics block of a run | `python3 sumo_identity_integration.py --simulate --duration 60 \| tee run.log`; render with a monospace block, not a photo | "Console output of one 60 s run: N messages, p95 latencies, attack results." |
-| S2 | F1 at t = 0.0 s (cold storm: first contacts everywhere) | `render_trace.py TRACE --only F1 --t 0 --focus veh_001` | "At t = 0 every neighbour is a first contact: 31 broadcasts, N cold verifications." |
+| S2 | F1 at t = 0.0 s (cold storm: first contacts everywhere) | `thesis_figures.py TRACE --only F1 --t 0 --focus veh_001` | "At t = 0 every neighbour is a first contact: 31 broadcasts, N cold verifications." |
 | S3 | F1 at t = 15 s (steady state, all warm) | `--t 15` | "Fifteen seconds in, every link is a cached-peer signature check." |
 | S4 | F1 at an EEBL instant | find `t` in the trace's `safety` events; `--t T` | "Emergency brake light from `veh_001`: N receivers verified the warning through the same path." |
 | S5 | F2 for the receiver with the most peers | `--only F2` (auto-picks) | "Verify once, check every message. PKI peers re-enter cold at certificate rotation." |
-| S6 | F3 for the TraCI run | `render_trace.py sumo_traci_60s.jsonl --only F3` | "All 46,363 verifications of a 60 s SUMO run against the budget." |
+| S6 | F3 for the TraCI run | `thesis_figures.py sumo_traci_60s.jsonl.gz --only F3` | "All 46,363 verifications of a 60 s SUMO run against the budget." |
 | S7 | F4 attack board | `--only F4` | "Seven injected attacks; each rejected by the receiver's verification path." |
 | S8 | F5 cold/warm | `--only F5` | "Cold pays for the credential; warm pays for one signature." |
 | S9 | SUMO-GUI frame tracking the platoon | `xvfb-run -a -s "-screen 0 1600x900x24" python3 sumo_identity_integration.py --gui --duration 45 --screenshot-dir ../../docs/visual/sumo_frames --screenshot-every 50 --gui-zoom 1500 --gui-track platoon_leader` | "SUMO-GUI, t = 25 s. Blue: SSI vehicles; ochre: PKI vehicles." |
@@ -327,7 +327,7 @@ screenshot hook, traci import fallback, GUI colouring/zoom/track, `--results`),
 `cv2x-testbed/sumo/highway_intersection.net.xml` (now netconvert output),
 `cv2x-testbed/sumo/routes.rou.xml` (sorted by departure), `cv2x-testbed/sumo/README.md`.
 Added: `cv2x-testbed/sumo/net_src/`, `cv2x-testbed/sumo/gui_settings.xml`,
-`cv2x-testbed/sumo/viz/render_trace.py`, `docs/visual/` (this plan, the phases
+`cv2x-testbed/sumo/viz/thesis_figures.py`, `docs/visual/` (this plan, the phases
 doc, the schema, two traces, figure sets, SUMO frames, the replay viewer).
 
 **Second session (2026-10-22):** Phases 0, 1 and 3 done, Phase 4 mostly done.
@@ -341,3 +341,35 @@ map, frame/trace pairs in `figures/pairs/`); GUI glyph fix; FCW guard.
 
 Next: Phase 2 (FIGURES.md captions and F7 packet anatomy), the Phase 3 video
 clip, and Phase 5 (rogue vehicle, per-stage timers).
+
+---
+
+## 9. How this sits with the work of other sessions (as of 2026-10-24)
+
+PR for this branch was closed unmerged while the trunk
+(`claude/clone-cvin-id-scs-…`) moved 367 commits. On 2026-10-24 the trunk was
+merged into this branch, and the overlap was resolved in the trunk's favour
+wherever a result of record depends on it.
+
+| Other work | Where | What this branch does with it |
+|---|---|---|
+| **SUMO visualisation plan**, approved 2026-10-09 (S-a approve, S-b no SUMO install, S-c one trace of record per figure) | `docs/PLAN_SUMO_VISUALISATION.md` | **Its trace schema `cvin-v2v-trace/1` is canonical.** This branch's own recorder was dropped in the merge. The figures, replay and SUMO views now read the canonical schema. This branch added only additive fields (`TRACE_SCHEMA.md`). |
+| V1–V3, V5 of that plan: `--trace`, `render_trace.py` (space-time, latency, animation GIF, dashboard replay, revocation), RSU layer and I1–I5 | `cv2x-testbed/sumo/render_trace.py`, `results/figures/`, `results/traces/`, register #44–#48 | Kept and untouched. The defence uses its animation and revocation figure. The thesis figures here (F1–F6) complement them and do not replace them. |
+| **V4 of that plan: install SUMO, run TraCI, S1–S3.** Deferred under default S-b ("no install", Q2) | same plan §5, §7 | **This branch does the install and the TraCI runs.** The author's request of 2026-10-15 to present the work in SUMO is read as the Q2 / S-b go-ahead. **Author: please record that decision** in the plan's decisions table. S1–S3 as pre-registered (N=30 in TraCI mode) are still not run; they are the next measurement step, not a visual one. |
+| Plan §7 "Not built: the network drawing from `highway_intersection.net.xml`" | same | **Built**, after the network file was regenerated so SUMO loads it: `viz/sumo_views.py coldmap`. |
+| Register #27 re-executed on the trunk (WM-2 A3b batch L, `f1f3596`): SSI warm **0.142 ms [0.141, 0.143]**, 7 attacks per run | `docs/MEASUREMENT_CONDITIONS.md` #27 | This branch's traced N=30 run gave 0.141 ms with identical totals (1,650,318 verifications, 210 failures), so it agrees with #27. Traced runs here are still never used as results of record. |
+| Stale-figure checker for superseded #27/#28/#22/#25 values (report 37, branch `claude/cv2x-testbed-setup-…`) | that branch | Figures here print no register value in their titles, only counts from the trace, so they should pass it. Run it over `docs/visual/` once that branch lands. |
+| Results dashboard, master atlas, result cards (branches `claude/cv2x-testbed-setup-…`, `claude/zkp-ai-identity-research-…`) | `docs/figures/results_dashboard.html`, `master_atlas.html` | The replay (`replay/replay.html`) is a candidate dashboard panel. It shares the dashboard palette convention: colour always with a text label. |
+| IDTx Phase 1 figures, generated as deterministic SVG (branch `claude/determined-meitner-…`); blueprint sheets BP-000… (branch `claude/system-blueprint-diagrams-…`); TDP drawings DWG-001/005 | `docs/idtx_core/figures/`, `docs/blueprints/`, `docs/tdp/drawings/` | These are the diagram family for chapters 3–4 (architecture, lifecycle). This branch's figures are the data family for chapters 4–5. Phase 6 (deck, poster) should draw on both, and keep generated illustrations (§6) out of chapters as before. |
+
+**Merge decisions taken here:**
+
+1. The trunk recorder is canonical. This branch's duplicate `--trace` and
+   `--trace-every` are gone.
+2. Kept from this branch: the netconvert network, sorted routes, the traci
+   import fallback, the GUI scheme with zoom, tracking and screenshots,
+   identity colouring, the FCW highway guard, and `run_v2v_stats.py --trace-dir`.
+3. The figure script was renamed `viz/render_trace.py` → `viz/thesis_figures.py`
+   so it is not confused with the trunk's `render_trace.py`.
+4. Every committed trace was regenerated with the canonical recorder and gzipped,
+   following decision S-c.

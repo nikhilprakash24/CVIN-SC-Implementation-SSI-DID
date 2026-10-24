@@ -1,0 +1,73 @@
+# After-Action Report 18 — WM-2 B2 (Gas Charter) and Result Cards
+
+**Author:** Nikhil Prakash (MASc, UBC ECE)
+**Opened:** 2026-10-15, after report 17 closed at `04dcdcc` (CI 8/8 green on `8855a4d`); closed at the end of this pass
+**Brief (the author, 2026-10-15):** accept defaults and continue to the next executable; add another form of
+results in which the results become content blocks or cards, in the style of the results dashboard.
+
+## 1. Plan
+| Step | Work | Owner | Gate |
+|---|---|---|---|
+| B2 | WM-2 step B2: a class-G gas charter, generated. Every gas figure in one class (exact, seeded, first-call, mode, range, derived, history); the metrics harness's varying cells root-caused from the raw rows of run of record `7a9a996`; every V register row that reports gas classified | orchestrator; measurement methodologist | `gas_charter.py --check` in CI; it fails when a V gas row has no class (shown to fire) |
+| RC | Result cards: one card per V register row (headline value, claim, conditions, status, source), generated from the register and the dashboard snapshot, with a `--check` in CI; published as a private page beside the dashboard | orchestrator; visualisation engineer | the generator reads only committed files; `--check` fails on a stale page; every card's value appears in its register row |
+| R | Records (register note, plan, handback addendum, session manifest), grand run last, CI | orchestrator | CI green on the closing commit |
+
+The harness code stays frozen until A6 (N-19). No new measurement is made in this pass.
+
+## 2. Execution log
+- 2026-10-15 — report opened.
+- **B2, gas charter.** `docs/testing/gas_charter.py` writes `docs/testing/GAS_CHARTER.md` from the raw rows of run of
+  record `7a9a996` and from the register. Findings:
+  - **27 of 110** crud tx cells vary in total gas across their 36 iterations, not 14. The harness's `gasDeterministic`
+    flag covers execution gas only and marks 14; the other 13 vary in calldata only.
+  - Causes: calldata zero bytes 24 cells; execution path (8 or 16 EVM steps) 6; value-dependent cost (2–5 gas) 4;
+    first-call state 4 (erc721 C1 and U1 and lsp8 U1 at 2,800 gas; lsp8 C1 at 17,100 gas, one more new slot).
+  - **A correction to my own first draft.** It called the inputs random and the fix seeding. The harness has no random
+    input: keys and credential hashes are keccak-derived with zero bytes skipped, and signing is deterministic. Cells
+    reproduce run to run; they vary from iteration to iteration because each iteration uses a new key, and the values
+    derived from it are not filtered for zero bytes. The class is G-mode (reproducible mode, range beside it), and the
+    fix at A6 is to extend the zero-byte rule, not to seed.
+  - The plan's guess "address-dependent storage" is not borne out: only lsp8 C1 changes its storage writes, and that
+    is first-call state (checked over `sstoreCount` and `zeroToNonzeroSstores` of every varying cell).
+  - The two execution mechanisms are not traced to an opcode; the charter says so.
+  - 20 V register rows that report gas are classified. The check fails when a V gas row has no class, or a class
+    names a missing row; both shown to fire by deleting #29 and adding #999 in a test import.
+  - Register §5.A gained a "Gas class" row; the CI document step runs `gas_charter.py --check`; plan B2 marked done.
+- **RC, result cards.** `docs/figures/make_result_cards.py` writes `docs/figures/result_cards.html`: one card per V
+  register row (33), in eight groups, in the results board's palette and faces. Each card carries a headline value,
+  a title, a caption, the conditions tag, the gas class (from the charter), the thesis cruxes (from the dashboard
+  snapshot), the pre-registered verdict where there is one (7), and the register row behind it. The 18 rows that are
+  E, S or U are listed below the cards with no headline value.
+  - Titles and headlines are written by hand, because the register's bold text marks emphasis as well as values. The
+    check holds them to the register: every V row has a card; no card names a non-V row; each headline is verbatim in
+    its row; every number in a card's headline, caption and verdict is in its row; a verdict saying PASS or FAIL needs
+    the word in the row. Each guard shown to fire (wrong headline, extra number, PASS not in the row, missing card,
+    card on an E row). The number check is weak for small integers, which appear in most rows.
+  - One card was corrected on review: #6 first quoted the README's "10×"; its row says the ratio depends on the
+    operation definition (10.3× bare, 6.9× with the VIN bound), and the card now says so.
+  - Rendered once at 1,280 px (light) and 400 px (dark): no horizontal scroll. The filter bar stops being sticky below
+    760 px, where it covered most of the screen.
+  - Published as a private page: https://claude.ai/artifact/4vwTQ98TuLUgaWsiBim2Bq (beside the results board,
+    https://claude.ai/artifact/1C5X9GpPcEwyCRDMYxYhpa). CI runs `make_result_cards.py --check`.
+- **Records.** Handback §10 and the session manifest (`af8a006`).
+- **Grand run (last), at `af8a006`.** ALL OK: smoke 11 adapters, L1 99, Hardhat 537, 92 demos / 1,752 steps
+  (594 mined transactions). Against the pass-17 run, the only gas changes are three MOBI demo totals moving by
+  ±12 gas (claims, creation, vin-linkage). These are the three `attestEvent` steps already declared
+  timestamp-dependent in pass 17. Everything else that changed is timings and stamps. The dashboard snapshot and page,
+  the presentation report and the result cards were regenerated afterwards, and all ten document checks pass.
+
+## 3. Closing
+The pass delivered every step of §1. **CI 8 of 8 green on `aba1d7c`**, including the two new document checks
+(`gas_charter.py --check`, `make_result_cards.py --check`).
+
+**B2 is done.** Every gas figure now has a class, and the harness's varying cells are root-caused from its raw rows.
+The step's premise was wrong twice, and both are corrected in the charter. The count is 27 varying cells, not 14,
+because the harness flag sees execution gas only. The cause is per-iteration deterministic inputs, not random inputs
+or address-dependent storage. I also had to correct my own first draft, which assumed randomness.
+
+**The result cards** give the register a second reading form beside the results board. They are held to the
+register by a check rather than copied from it by hand.
+
+**Next:**
+- WM-2 C3: #32 and #37 back to back on one host.
+- The author's decisions P2-D7 to P2-D10, D-1 to D-15, and N-23 remain open.

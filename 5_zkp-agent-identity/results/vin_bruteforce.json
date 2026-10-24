@@ -1,0 +1,32 @@
+{
+ "condition": "M0, one CPU core, CPython hashlib; the full 10^6 space enumerated (not stopped at the hit)",
+ "run": {
+  "commit": "978988e",
+  "code_clean": true,
+  "tree_clean": false,
+  "host": {
+   "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
+   "machine": "x86_64",
+   "cpus": 4,
+   "processor": "x86_64"
+  },
+  "python": "3.13.16",
+  "at": "2026-10-15T05:15:22+00:00",
+  "seed_env": null
+ },
+ "scope": "WMI, VDS, model-year and plant characters known; 6-digit serial unknown; check digit derived",
+ "space": 1000000,
+ "found": true,
+ "elapsed_s": 3.576707576999979,
+ "rate_per_s": 279586.73681642325,
+ "expectations": {
+  "Z-E7 measured rate x space < 3600 s": "PASS"
+ },
+ "extrapolation_E": {
+  "wide_space_vds_unknown": 39135393000000,
+  "this_host_one_core_days": 1620.090933703379,
+  "one_gpu_hours_at_published_rate": 0.491897850678733,
+  "note": "status E: derived from the measured rate or a published GPU rate; not run"
+ },
+ "salted_note": "with a 128-bit random salt the same enumeration needs 2^128 times as many guesses"
+}

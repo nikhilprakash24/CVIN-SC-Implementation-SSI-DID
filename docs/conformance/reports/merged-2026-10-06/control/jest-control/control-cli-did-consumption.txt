@@ -1,0 +1,64 @@
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+(node:7681) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS suites/did-consumption/did-consumption.spec.js
+  6.x Consumption - did:example - Example DID Method - DID Working Group
+    IMPLEMENTATION ::did:example::Example DID Method::DID Working Group::
+      6.2.2 JSON Consumption
+        did:example:123
+          ✓ 6.2.2 JSON Consumption - A conforming consumer for a JSON representation that is consuming a DID document with a root element that is not a JSON Object MUST report an error.
+          ✓ 6.2.2 JSON Production - If media type information is available to a conforming consumer and the media type value is application/did+json, then the data structure being consumed is a DID document, and the root element MUST be a JSON Object where all members of the object are entries of the DID document. (1 ms)
+          6.2.2 JSON Consumption - The DID document and DID document data structures JSON representation MUST be deserialized into the data model according to the following consumption rules:
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (15 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a list or unknown: A list, where each value of the JSON Array is added to the list in order, converted based on the JSON representation type of the array value, as defined in this table. (2 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a set: A set, where each value of the JSON Array is added to the set in order, converted based on the JSON representation type of the array value, as defined in this table. (2 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Object: A map, where each member of the JSON Object is added as an entry to the map. Each entry key is set as the JSON Object member name. Each entry value is set by converting the JSON Object member value according to the JSON representation type as defined in this table. Since order is not specified by JSON Objects, no insertion order is guaranteed. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Object: A map, where each member of the JSON Object is added as an entry to the map. Each entry key is set as the JSON Object member name. Each entry value is set by converting the JSON Object member value according to the JSON representation type as defined in this table. Since order is not specified by JSON Objects, no insertion order is guaranteed. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Object: A map, where each member of the JSON Object is added as an entry to the map. Each entry key is set as the JSON Object member name. Each entry value is set by converting the JSON Object member value according to the JSON representation type as defined in this table. Since order is not specified by JSON Objects, no insertion order is guaranteed. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Object: A map, where each member of the JSON Object is added as an entry to the map. Each entry key is set as the JSON Object member name. Each entry value is set by converting the JSON Object member value according to the JSON representation type as defined in this table. Since order is not specified by JSON Objects, no insertion order is guaranteed. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string.
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a list or unknown: A list, where each value of the JSON Array is added to the list in order, converted based on the JSON representation type of the array value, as defined in this table. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a set: A set, where each value of the JSON Array is added to the set in order, converted based on the JSON representation type of the array value, as defined in this table. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a list or unknown: A list, where each value of the JSON Array is added to the list in order, converted based on the JSON representation type of the array value, as defined in this table. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a set: A set, where each value of the JSON Array is added to the set in order, converted based on the JSON representation type of the array value, as defined in this table. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a list or unknown: A list, where each value of the JSON Array is added to the list in order, converted based on the JSON representation type of the array value, as defined in this table. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a set: A set, where each value of the JSON Array is added to the set in order, converted based on the JSON representation type of the array value, as defined in this table. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a list or unknown: A list, where each value of the JSON Array is added to the list in order, converted based on the JSON representation type of the array value, as defined in this table. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a set: A set, where each value of the JSON Array is added to the set in order, converted based on the JSON representation type of the array value, as defined in this table. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (10 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a list or unknown: A list, where each value of the JSON Array is added to the list in order, converted based on the JSON representation type of the array value, as defined in this table. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Array where the data model entry value is a set: A set, where each value of the JSON Array is added to the set in order, converted based on the JSON representation type of the array value, as defined in this table. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String, where the data model entry value type is string or unknown: A string. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON String where data model entry value is a datetime: A datetime. (2 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Number without a decimal or fractional component: An integer. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON Number with a decimal and fractional component, or when entry value is a double regardless of inclusion of fractional component: A double.
+            ✓ 6.2.2 JSON Consumption - JSON Boolean: A boolean. (1 ms)
+            ✓ 6.2.2 JSON Consumption - JSON null literal: A null value. (8 ms)
+      6.3.2 JSON-LD Consumption
+        did:example:123
+          ✓ 6.3.2 JSON-LD Consumption - The DID document and any DID document data structures expressed by a JSON-LD representation MUST be deserialized into the data model according to the JSON representation consumption rules as defined in § 6.2 JSON.
+
+Test Suites: 1 passed, 1 total
+Tests:       42 passed, 42 total
+Snapshots:   0 total
+Time:        1.083 s
+Ran all test suites matching /suites\/did-consumption/i.
+Test results written to: report/tmp/control-cli-did-consumption.json

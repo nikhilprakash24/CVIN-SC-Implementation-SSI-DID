@@ -342,7 +342,8 @@ _ERC1056_ABI = [
     {"type": "event", "name": "DIDRevoked", "anonymous": False,
      "inputs": [
          {"name": "identity", "type": "address", "indexed": True},
-         {"name": "revokedAt", "type": "uint256", "indexed": False}]},
+         {"name": "revokedAt", "type": "uint256", "indexed": False},
+         {"name": "previousChange", "type": "uint256", "indexed": False}]},
 ]
 _ERC1056_EVENT_SIGS = {
     "DIDOwnerChanged": "DIDOwnerChanged(address,address,uint256)",
@@ -350,7 +351,9 @@ _ERC1056_EVENT_SIGS = {
         "DIDDelegateChanged(address,bytes32,address,uint256,uint256)",
     "DIDAttributeChanged":
         "DIDAttributeChanged(address,bytes32,bytes,uint256,uint256)",
-    "DIDRevoked": "DIDRevoked(address,uint256)",
+    # Three arguments since defect D21 (cv2x lineage): the event links back to the previous change.
+    # The clone lineage resolver decoded the two-argument form; fixed at the lineage merge (PR #3).
+    "DIDRevoked": "DIDRevoked(address,uint256,uint256)",
 }
 _MOBI_ABI = [
     {"type": "function", "name": "lookupByVINHash", "stateMutability": "view",
@@ -666,7 +669,8 @@ class DIDResolver:
                  ethr_registry: Optional[str] = None,
                  mobi_registry: Optional[str] = None,
                  chain_id: Optional[int] = None,
-                 rpc_timeout_s: float = 10.0):
+                 rpc_timeout_s: float = 10.0,
+                 registries: Optional[Dict[int, str]] = None):
         """
         Initialize DID Resolver
 
@@ -685,6 +689,10 @@ class DIDResolver:
                 node's ``eth_chainId`` must match (else internalError);
                 otherwise it is taken from the node.
             rpc_timeout_s: HTTP timeout per JSON-RPC request
+            registries: ``{chain_id: ERC-1056 registry address}`` for did:ethr
+                (the cv2x workspace's WM-2 C1 form, merged 2026-10-22). A DID
+                on a chain with no entry resolves as notFound. It may also be
+                assigned after construction (``resolver.registries = {...}``).
         """
         self.blockchain_provider = blockchain_provider
         self.cache_ttl_s = cache_ttl_s
@@ -697,9 +705,14 @@ class DIDResolver:
         self.mobi_registry = mobi_registry
         self.configured_chain_id = chain_id
         self.w3 = None
+        self.registries = registries
         has_node = rpc_url is not None or blockchain_provider is not None
         has_registry = ethr_registry is not None or mobi_registry is not None
-        if has_node != has_registry:
+        # A provider object alone is accepted: its registries can be given later
+        # through ``registries`` (WM-2 C1 form). A registry without a node, or an
+        # rpc_url without any registry, is a half configuration and is refused.
+        if (has_registry and not has_node) or (
+                rpc_url is not None and not has_registry and registries is None):
             raise ValueError(
                 "on-chain mode needs an RPC (rpc_url or blockchain_provider) "
                 "and at least one registry address (ethr_registry / "
@@ -950,13 +963,20 @@ class DIDResolver:
 
         if self.on_chain:
             # Stream H-R: read the ERC-1056 registry; fail closed.
-            if self.ethr_registry is None:
+            registry = self.ethr_registry
+            if self.registries is not None and registry is None:
+                registry = self.registries.get(chain_id)
+                if registry is None:
+                    raise DIDResolutionError(
+                        "notFound",
+                        f"no ERC-1056 registry configured for chain {chain_id}: {did}")
+            if registry is None:
                 raise DIDResolutionError(
                     "methodNotSupported",
                     "this on-chain resolver has no ERC-1056 registry "
                     "configured for did:ethr (ethr_registry)")
             head = self._chain_head(did, chain_id)
-            state = self._read_erc1056(self.ethr_registry, address, head)
+            state = self._read_erc1056(registry, address, head)
             controller_did = did if state.owner == state.identity else \
                 f"{did_prefix}{state.owner.lower()}"
             doc, meta = erc1056_document(did, state, chain_id,

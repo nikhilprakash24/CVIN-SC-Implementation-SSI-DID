@@ -6,9 +6,9 @@ emailed, put on a USB stick, or opened in a defence room offline.
 
     python3 build_replay.py TRACE.jsonl OUT.html [--thin N] [--max-mb 25]
 
---thin N keeps every Nth `snap` event (positions) and drops the others; `tx`,
+--thin N keeps every Nth `step` event (positions) and drops the others; `tx`,
 `safety`, `attack`, `enroll`, `meta` and `summary` events are never thinned,
-so every counter in the replay stays exact. Without --thin, the builder thins
+so every counter in the replay stays exact. Input is cvin-v2v-trace/1, plain or .gz. Without --thin, the builder thins
 automatically (2, 3, 4, ...) until the page fits under --max-mb.
 """
 import argparse
@@ -24,9 +24,9 @@ MARKER = '<script id="embedded-trace" type="application/x-ndjson"></script>'
 def thinned(lines, n):
     out = []
     for line in lines:
-        if n > 1 and line.startswith('{"ev":"snap"'):
-            step = json.loads(line).get("step", 0)
-            if step % n:
+        if n > 1 and '"type":"step"' in line[:16]:
+            k = thinned.counter = getattr(thinned, "counter", -1) + 1
+            if k % n:
                 continue
         out.append(line)
     return out
@@ -36,9 +36,13 @@ def build(trace, out, thin=None, max_mb=25.0):
     template = TEMPLATE.read_text()
     if MARKER not in template:
         sys.exit(f"{TEMPLATE}: embedded-trace marker not found")
-    lines = [ln for ln in pathlib.Path(trace).read_text().splitlines() if ln.strip()]
+    import gzip
+    opener = gzip.open if str(trace).endswith(".gz") else open
+    with opener(trace, "rt") as fh:
+        lines = [ln for ln in fh.read().splitlines() if ln.strip()]
     n = thin or 1
     while True:
+        thinned.counter = -1
         body = "\n".join(thinned(lines, n)).replace("</script", "<\\/script")
         page = template.replace(
             MARKER, '<script id="embedded-trace" type="application/x-ndjson">\n'
@@ -48,8 +52,8 @@ def build(trace, out, thin=None, max_mb=25.0):
             break
         n += 1
     if n > 1:
-        # Playback timing reads meta.snapshot_every; keep it truthful.
-        page = page.replace('"snapshot_every":1', f'"snapshot_every":{n}', 1)
+        # Playback timing reads snapshot_every from the header; keep it truthful.
+        page = page.replace('"schema":"cvin-v2v-trace/1"', f'"schema":"cvin-v2v-trace/1","snapshot_every":{n}', 1)
     pathlib.Path(out).parent.mkdir(parents=True, exist_ok=True)
     pathlib.Path(out).write_text(page)
     print(f"wrote {out}: {size_mb:.1f} MB, snapshots thinned 1/{n}")

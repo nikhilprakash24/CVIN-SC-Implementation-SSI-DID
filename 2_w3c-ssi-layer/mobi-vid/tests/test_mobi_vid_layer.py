@@ -226,6 +226,45 @@ class TestBirthCertificate:
         # Same DID as the VC subject, up to EIP-55 address case.
         assert onchain.lower() == registry.vehicle_did(vehicle.address).lower()
 
+    def test_onchain_vehicle_did_resolves_from_the_chain_to_its_first_owner(
+            self, registry, accounts, vehicle, birth):
+        # WM-2 C1 (review-02 FOLLOWUP_FE finding 2, VID-R1 (b)): with a provider
+        # the resolver reads the registry, so the controller after birth is the
+        # first owner, not the vehicle address the static document named.
+        sys.path.insert(0, str(REPO_ROOT / "2_w3c-ssi-layer" / "did-resolution"))
+        from did_resolver import DIDResolver
+
+        onchain = registry.contract.functions.getVehicleDID(vehicle.address).call()
+        resolver = DIDResolver(blockchain_provider=registry.w3,
+                               registries={registry.chain_id(): registry.contract.address})
+        doc = resolver.resolve(onchain).didDocument
+        controller = doc.verificationMethod[0]
+        assert controller.id.endswith("#controller")
+        assert controller.blockchainAccountId.lower() == (
+            f"eip155:{registry.chain_id()}:{accounts['first_owner'].address}".lower())
+        # Without a provider the default document still names the vehicle.
+        static = DIDResolver().resolve(onchain).didDocument.verificationMethod[0]
+        assert static.blockchainAccountId.lower().endswith(vehicle.address.lower())
+
+    def test_revoked_identity_resolves_as_deactivated(self, registry):
+        # WM-2 C1: DIDRevoked (this registry's terminal revocation) reads as
+        # deactivation. A separate, unlocked node account, so no shared fixture
+        # identity is revoked.
+        sys.path.insert(0, str(REPO_ROOT / "2_w3c-ssi-layer" / "did-resolution"))
+        from did_resolver import DIDResolver
+
+        w3 = registry.w3
+        who = w3.eth.accounts[15]
+        did = f"did:ethr:{hex(registry.chain_id())}:{who}"
+        resolver = DIDResolver(blockchain_provider=w3,
+                               registries={registry.chain_id(): registry.contract.address})
+        assert resolver.resolve(did).didDocumentMetadata.deactivated is False
+        w3.eth.wait_for_transaction_receipt(
+            registry.contract.functions.revokeIdentity(who).transact({"from": who}))
+        res = resolver.resolve(did)
+        assert res.didDocumentMetadata.deactivated is True
+        assert res.didDocument.verificationMethod == []
+
     def test_salted_vin_hash_lookup(self, registry, vehicle, birth):
         recomputed = salted_vin_hash(VIN, birth["vinSalt"])
         assert recomputed == birth["vinHash"]
@@ -339,7 +378,9 @@ def lifecycle(registry, accounts, vehicle, birth):
                       ("RECALL", recall)):
         print(f"[gas] recordLifecycleEvent {name}: {rec['gasUsed']}")
 
-    # DMV attests to the maintenance event (multi-party sign-off)
+    # DMV attests to the maintenance event (multi-party sign-off), with the
+    # owner's consent: a veriKey delegation (WM-2 C2, D54)
+    registry.add_delegate(a["first_owner"], vehicle.address, a["dmv"].address)
     dmv_recorder = LifecycleEventRecorder(registry, a["dmv"], "BC DMV")
     attestation = dmv_recorder.attest_event(
         maintenance["eventId"], vehicle.address)

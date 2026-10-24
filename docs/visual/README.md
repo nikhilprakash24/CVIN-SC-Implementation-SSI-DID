@@ -15,6 +15,6 @@ Regenerate everything:
 ```bash
 cd cv2x-testbed/sumo
 python3 sumo_identity_integration.py --simulate --duration 30 --vehicles 30 --seed 42 \
-    --results /tmp/v2v.json --trace ../../docs/visual/traces/sim_30v_30s_seed42.jsonl
-python3 viz/render_trace.py ../../docs/visual/traces/sim_30v_30s_seed42.jsonl --t 0 15 --focus veh_001
+    --results /tmp/v2v.json --trace ../../docs/visual/traces/sim_50v_20s_seed6.jsonl.gz
+python3 viz/thesis_figures.py ../../docs/visual/traces/sim_50v_20s_seed6.jsonl.gz --t 0 15 --focus veh_001
 ```

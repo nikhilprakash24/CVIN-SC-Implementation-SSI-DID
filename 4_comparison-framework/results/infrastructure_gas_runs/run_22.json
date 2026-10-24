@@ -1,0 +1,53 @@
+{
+  "metadata": {
+    "experiment": "I4 infrastructure identity gas",
+    "prereg": "docs/design/INFRASTRUCTURE_PREREG.md",
+    "contract": "contracts/ERC1056/EthereumDIDRegistry.sol:EthereumDIDRegistry",
+    "network": "hardhat-local",
+    "chainId": 31337,
+    "solcVersion": "0.8.24",
+    "date": "2026-10-22T23:16:59.493Z",
+    "condition": "M1",
+    "commit": "ddb9b05",
+    "commitFull": "ddb9b0505c97239eb75f6f4ce128dbedfa49ebf3",
+    "dirty": false,
+    "dirtyAnyFile": true,
+    "scope": "1_blockchain-identity/scripts/infrastructure_gas.js",
+    "scopeFiles": 7,
+    "scopeSha": "f5822c451b79",
+    "node": "v22.22.0",
+    "hardhat": "2.28.6",
+    "seed": 22,
+    "inputs": {
+      "rsu_address": "0xdd5e13A6b26231d8C6448f8A775B4B1fada4cbA3",
+      "rsu_public_key": "0x04238f2c1f28cbf2d713caded6a4f4b4a341ebb3abcbf6aa0498cdba7ce9734439a7980b111be013f39c31875e8543ba0f90eee4bd38a3dd98a1cc29e2382b96f5",
+      "rotated_public_key": "0x047ea670345a5ba8f4d0933e6d2cc17930210adeed8319d093b52551a9dcd6e6316b996405811aa20226c661279b991ffc0bf4b64e5a06d79557bb20d457f9afa1"
+    }
+  },
+  "operations": {
+    "create_identity": {
+      "gasUsed": 0,
+      "note": "did:ethr is implicit: identityOwner(rsu) = rsu until changed"
+    },
+    "anchor_key_by_rsu": {
+      "gasUsed": 52606,
+      "note": "RSU publishes its verification key (setAttribute, 1 year)"
+    },
+    "anchor_service_endpoint": {
+      "gasUsed": 34050,
+      "note": "SPaT service endpoint attribute"
+    },
+    "hand_control_to_authority": {
+      "gasUsed": 51754,
+      "note": "changeOwner: the road authority controls the RSU's identity from here on"
+    },
+    "rotate_key_by_authority": {
+      "gasUsed": 35510,
+      "note": "authority rotates the RSU key (new attribute; the old one stays until it expires or is revoked)"
+    },
+    "revoke_old_key": {
+      "gasUsed": 35062,
+      "note": "revokeAttribute of the old key (ERC-1056 has no identity-level revocation; the credential registry is the revocation path for messages)"
+    }
+  }
+}

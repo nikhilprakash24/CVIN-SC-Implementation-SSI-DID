@@ -1,55 +1,34 @@
-# V2V identity event trace — schema
+# Trace schema used by the visual layer
 
-**Writer:** `cv2x-testbed/sumo/sumo_identity_integration.py --trace PATH`
-**Format:** JSON Lines (one object per line, UTF-8). Every object has `"ev"`.
-**Readers:** `cv2x-testbed/sumo/viz/render_trace.py` (figures F1–F6),
-`docs/visual/replay/replay.html` (interactive replay).
+**Canonical schema:** `cvin-v2v-trace/1`, approved by the author on 2026-10-09
+(`docs/PLAN_SUMO_VISUALISATION.md` §3, decision S-a; as-built differences in §7.1).
+It is written by `cv2x-testbed/sumo/sumo_identity_integration.py --trace PATH`
+(plain, or gzipped when PATH ends in `.gz`). This page records only what the
+visual work added. Nothing existing was renamed or removed.
 
-The trace records *what happened*; it does not change *what is measured*.
-Every latency in it is the same `time.perf_counter` sample the results JSON
-is built from. Tracing adds wall-clock time (file writes), never
-identity-verification time. Figures and the replay therefore show the same
-numbers as `results/v2v_latency.json` for the same run.
+**Readers:**
 
-## Events, in order of first appearance
+| Reader | Output |
+|---|---|
+| `cv2x-testbed/sumo/render_trace.py` (trunk, WM-1) | space-time, latency, animation GIF, dashboard replay JSON, revocation |
+| `cv2x-testbed/sumo/viz/thesis_figures.py` | thesis figures F1–F6 (road frame, contact matrix, latency strip, attack board, cold/warm, safety) |
+| `cv2x-testbed/sumo/viz/sumo_views.py` | cold map over the real network, SUMO-frame / trace-frame pairs |
+| `docs/visual/replay/replay.html` | interactive replay (reads `.jsonl` and `.jsonl.gz`) |
 
-| `ev` | When | Fields |
+## Additive fields (visual work, 2026-10-24)
+
+| Where | Added | Why |
 |---|---|---|
-| `meta` | once, at start | `generated_at`, `mode` (`simulate` or `sumo`), `seed`, `duration_s`, `step_s` (0.1), `bsm_rate_hz` (10), `neighbor_radius_m` (300), `max_neighbors` (8), `budgets{v2v_ms, sig_check_ms}`, `road` (simulate: `length_m`, `lanes`, `lane_y`; sumo: `source`), `snapshot_every` |
-| `enroll` | first time a vehicle is seen | `t`, `vehicle`, `identity` (`MOBI_VID` = SSI, `PKI`), `did` (SSI only), `vin`, `make`, `model`, `year`, `sumo_type` |
-| `snap` | every `snapshot_every` steps, before that step's broadcasts | `t`, `step`, `v`: list of `[vehicle, x_m, y_m, speed_mps, heading_deg, lane_id]` |
-| `tx` | every signed broadcast | `t`, `seq`, `sender`, `type` (`BSM`, `FCW`, `EEBL`), `emergency`, `pop` (`ssi`/`pki`), `sign_ms`, `rx`: list of `[receiver, ok, cold, latency_ms]` |
-| `safety` | FCW or EEBL raised | `t`, `app` (`FCW`/`EEBL`), `vehicle`, `warned` (receivers that verified it); FCW adds `target`, `ttc_s`, `gap_m` |
-| `attack` | after the run, one per injected attack | `t`, `name`, `rejected` |
-| `summary` | once, at end | the full results JSON (same object as `results/v2v_latency.json`) |
+| new event `enroll` | `t`, `id`, `pop` (`ssi`/`pki`), `did` (SSI only), `vin`, `make`, `model`, `year`, `vtype` | identity card in the replay; public identifiers only, never key material, signatures or credentials (audit brief 2, C15 still holds) |
+| new event `safety` | `t`, `app` (`FCW`/`EEBL`), `id`, `warned`; FCW adds `target`, `ttc_s`, `gap_m` | the safety-events figure and the replay log |
+| `attack` events | V2V attack outcomes (`tampered_*`, `stale_*`, `replay_*`, `uncredentialed_sender_rejected`) with `reason`, `expected`, `cold` = null | the attack board; before this only the infrastructure (I2) attacks were traced |
+| `step.vehicles[]` | `lane` (lane id) | lane rows in the road frame; FCW lane test |
 
-`cold = true` means the receiver had no cached key for that sender's current
-credential and ran the full path (PKI: certificate chain + validity + CRL +
-ECDSA; SSI: W3C VC structure, validity, revocation, issuer signature
-recovery, trusted-issuer check, subject/DID binding, then BSM signature
-recovery). `cold = false` is one signature check against the cached key.
-A PKI sender's pseudonym certificate rotates every 100 messages, so a PKI
-peer re-enters cold at each rotation; an SSI peer is cold once per receiver.
+The aggregates gate of `PLAN_SUMO_VISUALISATION.md` §3 still holds. A run with
+`--trace` gives the same message counts as the same seed without it. This was
+checked on seed 6 of the registered N=30 configuration: sent and verified
+counts were identical.
 
-## Sizes
+## Committed traces
 
-About 300 events per simulated second at 30 vehicles (one `tx` per vehicle
-per 100 ms step plus one `snap`). 30 s / 30 vehicles ≈ 2.4 MB; 60 s in
-TraCI mode with ~26 vehicles ≈ 3.6 MB. `--trace-every N` thins only the
-`snap` events; `tx` is never thinned, so figure counts stay exact.
-
-## Reproduce the committed traces
-
-```bash
-cd cv2x-testbed/sumo
-# mock mobility, real crypto (no SUMO needed)
-python3 sumo_identity_integration.py --simulate --duration 30 --vehicles 30 --seed 42 \
-    --results /tmp/v2v.json --trace ../../docs/visual/traces/sim_30v_30s_seed42.jsonl
-# real SUMO mobility over TraCI (pip install eclipse-sumo)
-python3 sumo_identity_integration.py --duration 60 \
-    --results /tmp/v2v.json --trace ../../docs/visual/traces/sumo_traci_60s.jsonl
-```
-
-`--results` is pointed away from `results/v2v_latency.json` on purpose: that
-file is the result of record (register row #27) and is only rewritten by the
-N=30 statistics driver.
+See `traces/README.md`. All are gzipped, following decision S-c.

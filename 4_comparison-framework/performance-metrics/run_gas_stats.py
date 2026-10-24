@@ -58,6 +58,14 @@ def one_run():
     return snap, d.get("metadata", {})
 
 
+
+def _run_stamp():
+    """The shared run stamp (WM-2 A3; scope registered in A2): commit, code_dirty, tree_dirty, scope, scope_sha."""
+    sys.path.insert(0, os.path.join(REPO, "tools", "run_identity"))
+    from stamp import stamp
+    return stamp(__file__)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs", type=int, default=30)
@@ -102,6 +110,7 @@ def main():
 
     all_deterministic = len(non_deterministic) == 0
     out = {
+        "run": _run_stamp(),
         "n_runs": n,
         "all_deterministic": all_deterministic,
         "non_deterministic_cells": non_deterministic,

@@ -2,18 +2,20 @@
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C1_create_identity | 516 | 584 | 420 | 2,226 | 7,375 | 132 | 7,817 | 132 | 3,749 | 452 |
-| C2_create_with_attributes | 2,244 | 1,164 | 612 | 2,926 | 8,403 | 132 | 8,841 | 1,448 | 4,673 | 1,512 |
-| U1_rotate_controller | 68 | 68 | 100 | 36 | 36 | 100 | 36 | 196 | 36 | 68 |
+| C1_create_identity | 516 | 584 | 420 | 2,226 | 8,402 | 132 | 7,817 | 132 | 3,749 | 452 |
+| C2_create_with_attributes | 2,244 | 1,164 | 612 | 2,926 | 9,498 | 132 | 8,841 | 1,448 | 4,673 | 1,512 |
+| U1_rotate_controller | 68 | 68 | 100 | 36 | 36 | 68 | 36 | 196 | 36 | 68 |
 | U2_add_delegate | 132 | 132 | 68 | 100 | n/a | n/a | n/a | n/a | 36 | 132 |
 | U3_set_attribute | 228 | 228 | 164 | 100 | 452 | 100 | 164 | 196 | 164 | 228 |
-| U4_transfer_vehicle | 68 | 68 | 100 | 36 | 36 | 100 | 36 | 196 | 36 | 68 |
+| U4_transfer_vehicle | 68 | 68 | 100 | 36 | 36 | 68 | 36 | 196 | 36 | 68 |
 | U5_meta_tx | 324 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 900 | n/a |
 | D1_revoke_delegate | 100 | 100 | 68 | 36 | n/a | n/a | n/a | n/a | 36 | 100 |
 | D2_revoke_attribute | 196 | n/a | n/a | 36 | 36 | 100 | 100 | 132 | 100 | 196 |
 | D3_deactivate_identity | 196 | 196 | 36 | 4 | 36 | 100 | 4 | 100 | 36 | 196 |
 | V1_issuer_key_anchor | 132 | 132 | 452 | 100 | n/a | 68 | 132 | n/a | 132 | 132 |
-| V3_anchor_status | 196 | 196 | 196 | 100 | 420 | 100 | 132 | 164 | 132 | 452 |
+| V3_anchor_status | 196 | 196 | 196 | 100 | 488 | 100 | 132 | 164 | 132 | 452 |
 | V5_revoke_credential | 164 | 164 | 196 | 36 | 36 | 100 | 100 | 132 | 100 | 68 |
+| P1_create_presentation | 196 | 260 | n/a | 100 | 420 | n/a | 132 | n/a | 132 | 196 |
+| X1_execute_call | n/a | n/a | n/a | n/a | n/a | n/a | 228 | n/a | 196 | n/a |
 
-_Run 2026-10-04T22-09-23Z_c3b7cb1 · commit c3b7cb1 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine · N=30_
+_Run 2026-10-23T00-59-31Z_1f4ace0 · commit 1f4ace0 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine · N=30_
