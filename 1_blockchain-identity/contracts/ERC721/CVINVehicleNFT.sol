@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 
 /**
  * @title CVINVehicleNFT
+ * @author CVIN research project
  * @dev ERC-721 based Vehicle Identity with DID integration
  * @notice Each NFT represents a unique vehicle identity
  *
@@ -20,25 +21,60 @@ import "@openzeppelin/contracts/utils/Strings.sol";
  * - DID resolution (did:nft:erc721:{contractAddress}:{tokenId})
  * - Role-based access (manufacturers, inspectors, service centers)
  * - Enumerable for efficient queries
+ *
+ * Design: built on OpenZeppelin Contracts 5.0.2 (ERC721, ERC721URIStorage,
+ * ERC721Enumerable, AccessControl, Strings). Sequential tokenIds start at 1
+ * (0 = "no token" sentinel in vinToTokenId). The constructor grants
+ * DEFAULT_ADMIN_ROLE and MANUFACTURER_ROLE to the deployer. Revocation is a soft
+ * `active=false` flag (deactivateVehicle); there is no burn path. Deviations from
+ * plain ERC-721: none at the interface level; the CVIN extensions (VIN maps,
+ * metadata struct, transfer history, service records, did:nft string) are additive.
+ * `_setTokenURI` (OZ 5.0.2) emits the EIP-4906 MetadataUpdate event, but EIP-4906
+ * is not declared by this contract.
+ *
+ * @custom:standard ERC-721 Non-Fungible Token (core, Metadata, Enumerable) https://eips.ethereum.org/EIPS/eip-721
+ * @custom:standard ERC-165 Standard Interface Detection https://eips.ethereum.org/EIPS/eip-165
+ * @custom:standard W3C DID Core (did:nft is not a registered DID method) https://www.w3.org/TR/did-core/
+ * @custom:security Reentrancy window: mintVehicle calls _safeMint (onERC721Received on a contract recipient)
+ *                  before the VIN maps and metadata are written. Caller must hold MANUFACTURER_ROLE.
+ * @custom:security No burn: a deactivated vehicle can still be transferred and still receive service
+ *                  records (neither path checks `active`).
+ * @custom:security transferHistory and serviceRecords are unbounded arrays; the whole-array getters can
+ *                  exceed view gas limits for long histories.
+ * @custom:security INSPECTOR_ROLE is granted by grantInspectorRole but no function checks it. Service
+ *                  records are unsigned free-form strings.
+ * @custom:security The did:nft contract address is lower-case hex, not EIP-55 checksummed.
+ * @custom:see docs/smart-contracts/03-token-standards-erc721-erc1155-lsp8.md
+ * @custom:see sandbox/options/erc-721/adapter.js (the sandbox adapter wraps only this ERC-721 contract)
  */
 contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessControl {
     // ============ State Variables ============
 
-    /// @dev Token ID counter (OpenZeppelin v5 pattern)
+    /// @dev Token ID counter (OpenZeppelin v5 pattern). Starts at 1; the next id to mint.
     uint256 private _nextTokenId = 1;
 
-    /// @dev Role definitions
+    /// @notice Role allowed to mint vehicle NFTs (mintVehicle).
+    /// @dev Role definitions. Granted to the deployer by the constructor. CVIN extension.
     bytes32 public constant MANUFACTURER_ROLE = keccak256("MANUFACTURER_ROLE");
+    /// @notice Inspector role.
+    /// @dev CVIN extension. Grantable via grantInspectorRole but not checked by any function.
     bytes32 public constant INSPECTOR_ROLE = keccak256("INSPECTOR_ROLE");
+    /// @notice Role allowed to append service records (addServiceRecord).
+    /// @dev CVIN extension.
     bytes32 public constant SERVICE_CENTER_ROLE = keccak256("SERVICE_CENTER_ROLE");
 
-    /// @dev Mapping from VIN to token ID
+    /// @notice Normalised VIN => token ID (0 if not minted).
+    /// @dev Mapping from VIN to token ID. Keyed by the normalised (upper-case) VIN only; use
+    ///      getTokenIdFromVIN for a case-insensitive lookup.
     mapping(string => uint256) public vinToTokenId;
 
-    /// @dev Mapping from token ID to VIN
+    /// @notice Token ID => normalised VIN.
+    /// @dev Mapping from token ID to VIN. Duplicates vehicleMetadata[tokenId].vin.
     mapping(uint256 => string) public tokenIdToVIN;
 
-    /// @dev Vehicle metadata
+    /// @notice On-chain vehicle metadata stored per token.
+    /// @dev Vehicle metadata. Fields: vin (normalised), make, model, year, color, manufacturer
+    ///      (minting account), mintTimestamp, active (soft-revocation flag). CVIN extension.
     struct VehicleMetadata {
         string vin;
         string make;
@@ -50,9 +86,11 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
         bool active;
     }
 
+    /// @notice Token ID => VehicleMetadata.
     mapping(uint256 => VehicleMetadata) public vehicleMetadata;
 
-    /// @dev Transfer history
+    /// @notice One ownership change (the mint is recorded with from = address(0)).
+    /// @dev Transfer history entry: from, to, timestamp, blockNumber. CVIN extension.
     struct TransferRecord {
         address from;
         address to;
@@ -60,13 +98,22 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
         uint256 blockNumber;
     }
 
+    /// @notice Token ID => ordered list of TransferRecord (mint first).
+    /// @dev Unbounded array; appended by mintVehicle and _update.
     mapping(uint256 => TransferRecord[]) public transferHistory;
 
-    /// @dev Service records (references to off-chain data)
+    /// @notice Token ID => append-only list of service record URIs.
+    /// @dev Service records (references to off-chain data). Unbounded, unsigned strings.
     mapping(uint256 => string[]) public serviceRecords;
 
     // ============ Events ============
 
+    /// @notice Emitted when a vehicle NFT is minted.
+    /// @dev CVIN extension, emitted after the ERC-721 Transfer event.
+    /// @param tokenId The new token ID
+    /// @param vin The normalised VIN
+    /// @param owner Initial holder
+    /// @param manufacturer Account holding MANUFACTURER_ROLE that minted
     event VehicleMinted(
         uint256 indexed tokenId,
         string vin,
@@ -74,6 +121,12 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
         address indexed manufacturer
     );
 
+    /// @notice Emitted on every holder-to-holder transfer (not on mint or burn).
+    /// @dev CVIN extension, emitted from _update alongside the ERC-721 Transfer event.
+    /// @param tokenId Token being transferred
+    /// @param from Previous holder
+    /// @param to New holder
+    /// @param timestamp Block timestamp of the transfer
     event VehicleTransferred(
         uint256 indexed tokenId,
         address indexed from,
@@ -81,16 +134,27 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
         uint256 timestamp
     );
 
+    /// @notice Emitted when a service record URI is appended.
+    /// @dev CVIN extension.
+    /// @param tokenId Vehicle token ID
+    /// @param recordURI The appended URI
+    /// @param addedBy Account holding SERVICE_CENTER_ROLE
     event ServiceRecordAdded(
         uint256 indexed tokenId,
         string recordURI,
         address indexed addedBy
     );
 
+    /// @notice Emitted when a vehicle is soft-revoked.
+    /// @dev CVIN extension.
+    /// @param tokenId Vehicle token ID
+    /// @param by Admin account that deactivated it
     event VehicleDeactivated(uint256 indexed tokenId, address indexed by);
 
     // ============ Constructor ============
 
+    /// @notice Deploys the collection "CVIN Vehicle Identity" (CVIN-VID).
+    /// @dev Grants DEFAULT_ADMIN_ROLE and MANUFACTURER_ROLE to msg.sender (emits RoleGranted twice).
     constructor() ERC721("CVIN Vehicle Identity", "CVIN-VID") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MANUFACTURER_ROLE, msg.sender);
@@ -108,6 +172,11 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @param color Vehicle color
      * @param metadataURI IPFS URI for comprehensive metadata
      * @return tokenId The minted token ID
+     * @dev Access: MANUFACTURER_ROLE. Normalises the VIN (ISO 3779, D13), requires it to be unique
+     *      and `to != address(0)`, `_safeMint`s, sets the token URI, writes the VIN maps and metadata
+     *      and pushes a mint TransferRecord. Emits Transfer, MetadataUpdate (OZ URIStorage) and
+     *      VehicleMinted. CVIN extension wrapping the ERC-721 mint.
+     * @custom:security _safeMint invokes onERC721Received before the VIN maps/metadata are written.
      */
     function mintVehicle(
         address to,
@@ -164,6 +233,13 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
 
     /**
      * @dev Override _update to track transfer history
+     *      ERC-721 (OZ v5) transfer hook. For a transfer that is neither a mint nor a burn,
+     *      appends a TransferRecord and emits VehicleTransferred, then defers to OZ for the
+     *      authorisation check (`auth`) and the Enumerable bookkeeping.
+     * @param to New holder (address(0) for a burn, which never happens here)
+     * @param tokenId Token being moved
+     * @param auth Account whose approval is checked by OZ (address(0) to skip)
+     * @return The previous owner, as returned by ERC721._update
      */
     function _update(address to, uint256 tokenId, address auth)
         internal
@@ -193,6 +269,8 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @notice Add service record reference
      * @param tokenId Vehicle token ID
      * @param recordURI IPFS URI of service record
+     * @dev Access: SERVICE_CENTER_ROLE. The token must exist; `active` is not checked.
+     *      Emits ServiceRecordAdded. CVIN extension.
      */
     function addServiceRecord(uint256 tokenId, string memory recordURI)
         external
@@ -207,6 +285,7 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @notice Get all service records for a vehicle
      * @param tokenId Vehicle token ID
      * @return Array of service record URIs
+     * @dev Returns the whole unbounded array. CVIN extension.
      */
     function getServiceRecords(uint256 tokenId)
         external
@@ -222,6 +301,7 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @notice Get complete transfer history for a vehicle
      * @param tokenId Vehicle token ID
      * @return Array of transfer records
+     * @dev Mint record first. Returns the whole unbounded array. CVIN extension.
      */
     function getTransferHistory(uint256 tokenId)
         external
@@ -235,6 +315,7 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @notice Get ownership chain (all previous owners)
      * @param tokenId Vehicle token ID
      * @return Array of owner addresses
+     * @dev The `to` of every TransferRecord, in order (initial holder first). CVIN extension.
      */
     function getOwnershipChain(uint256 tokenId)
         external
@@ -256,6 +337,8 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
     /**
      * @notice Deactivate vehicle (end-of-life, total loss, etc.)
      * @param tokenId Vehicle token ID
+     * @dev Access: DEFAULT_ADMIN_ROLE. Soft revoke: sets `active=false`; the token is NOT burned and
+     *      can still be transferred. Emits VehicleDeactivated. CVIN extension.
      */
     function deactivateVehicle(uint256 tokenId)
         external
@@ -270,6 +353,7 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @notice Check if vehicle is active
      * @param tokenId Vehicle token ID
      * @return True if vehicle is active
+     * @dev Returns false for a nonexistent token. CVIN extension.
      */
     function isVehicleActive(uint256 tokenId) external view returns (bool) {
         return vehicleMetadata[tokenId].active;
@@ -281,6 +365,9 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @notice Get DID for a vehicle
      * @param tokenId Vehicle token ID
      * @return DID string (did:nft:erc721:{contractAddress}:{tokenId})
+     * @dev Reverts if the token does not exist. The address is lower-case hex (not EIP-55).
+     *      Only the string is produced; there is no on-chain DID document or resolver.
+     *      CVIN extension (did:nft).
      */
     function getVehicleDID(uint256 tokenId) external view returns (string memory) {
         require(_ownerOf(tokenId) != address(0), "CVINVehicleNFT: token does not exist");
@@ -297,6 +384,8 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @notice Get token ID from VIN
      * @param vin Vehicle Identification Number
      * @return Token ID
+     * @dev Case-insensitive (same normalisation as mintVehicle); reverts on an invalid VIN shape
+     *      or if the VIN is not minted. CVIN extension.
      */
     function getTokenIdFromVIN(string memory vin) external view returns (uint256) {
         // Same normalisation as mintVehicle: a lower-cased VIN finds the upper-cased identity.
@@ -310,6 +399,7 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @notice Get VIN from token ID
      * @param tokenId Token ID
      * @return VIN string
+     * @dev Reverts if the token does not exist. CVIN extension.
      */
     function getVINFromTokenId(uint256 tokenId) external view returns (string memory) {
         require(_ownerOf(tokenId) != address(0), "CVINVehicleNFT: token does not exist");
@@ -322,6 +412,7 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @notice Get all vehicles owned by an address
      * @param owner Owner address
      * @return Array of token IDs
+     * @dev Loops ERC721Enumerable.tokenOfOwnerByIndex. CVIN extension.
      */
     function getVehiclesByOwner(address owner) external view returns (uint256[] memory) {
         uint256 balance = balanceOf(owner);
@@ -337,6 +428,8 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
     /**
      * @notice Get total number of vehicles minted
      * @return Total supply
+     * @dev `_nextTokenId - 1`, i.e. the number of tokens ever minted (equals totalSupply() because
+     *      there is no burn). CVIN extension.
      */
     function getTotalVehicles() external view returns (uint256) {
         return _nextTokenId - 1;
@@ -344,14 +437,23 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
 
     // ============ Role Management ============
 
+    /// @notice Grant MANUFACTURER_ROLE to `account`.
+    /// @dev Access: DEFAULT_ADMIN_ROLE (also enforced by grantRole). Emits RoleGranted. CVIN extension.
+    /// @param account Account to grant the role to
     function grantManufacturerRole(address account) external onlyRole(DEFAULT_ADMIN_ROLE) {
         grantRole(MANUFACTURER_ROLE, account);
     }
 
+    /// @notice Grant INSPECTOR_ROLE to `account`.
+    /// @dev Access: DEFAULT_ADMIN_ROLE. Emits RoleGranted. The role is not checked anywhere. CVIN extension.
+    /// @param account Account to grant the role to
     function grantInspectorRole(address account) external onlyRole(DEFAULT_ADMIN_ROLE) {
         grantRole(INSPECTOR_ROLE, account);
     }
 
+    /// @notice Grant SERVICE_CENTER_ROLE to `account`.
+    /// @dev Access: DEFAULT_ADMIN_ROLE. Emits RoleGranted. CVIN extension.
+    /// @param account Account to grant the role to
     function grantServiceCenterRole(address account) external onlyRole(DEFAULT_ADMIN_ROLE) {
         grantRole(SERVICE_CENTER_ROLE, account);
     }
@@ -396,6 +498,9 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
         | ((((uint256(1) << 26) - 1) << 0x41) & ~((uint256(1) << 0x49) | (uint256(1) << 0x4F) | (uint256(1) << 0x51)));
     uint256 private constant _VIN_LOWER_AZ = ((uint256(1) << 26) - 1) << 0x61;
 
+    /// @dev Lower-case "0x"-prefixed hex encoding of an address (not EIP-55 checksummed). CVIN helper.
+    /// @param addr Address to encode
+    /// @return The 42-character hex string
     function toHexString(address addr) internal pure returns (string memory) {
         bytes memory buffer = new bytes(40);
         for (uint256 i = 0; i < 20; i++) {
@@ -408,6 +513,9 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
         return string(abi.encodePacked("0x", string(buffer)));
     }
 
+    /// @dev Maps a nibble (0-15) to its lower-case ASCII hex digit. CVIN helper.
+    /// @param b Nibble value
+    /// @return c ASCII character
     function char(bytes1 b) internal pure returns (bytes1 c) {
         if (uint8(b) < 10) return bytes1(uint8(b) + 0x30);
         else return bytes1(uint8(b) + 0x57);
@@ -415,6 +523,11 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
 
     // ============ Required Overrides ============
 
+    /// @notice Metadata URI of `tokenId`.
+    /// @dev ERC-721 Metadata. Resolves the ERC721/ERC721URIStorage override; no base URI, so the stored
+    /// URI is returned unchanged. Reverts for a nonexistent token.
+    /// @param tokenId Token ID
+    /// @return The stored token URI
     function tokenURI(uint256 tokenId)
         public
         view
@@ -424,6 +537,10 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
         return super.tokenURI(tokenId);
     }
 
+    /// @notice ERC-165 interface detection.
+    /// @dev Merges ERC721, ERC721Enumerable, ERC721URIStorage (EIP-4906 id) and AccessControl.
+    /// @param interfaceId Interface identifier
+    /// @return True if supported
     function supportsInterface(bytes4 interfaceId)
         public
         view
@@ -433,6 +550,9 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
         return super.supportsInterface(interfaceId);
     }
 
+    /// @dev Required OZ v5 override for ERC721Enumerable; pure pass-through.
+    /// @param account Account whose balance changes
+    /// @param value Amount to add
     function _increaseBalance(address account, uint128 value)
         internal
         override(ERC721, ERC721Enumerable)

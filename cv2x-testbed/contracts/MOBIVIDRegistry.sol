@@ -5,6 +5,10 @@ import "./ERC1056Registry.sol";
 
 /**
  * @title MOBI VID Registry
+ * @author CVIN research project
+ * @notice MOBI VID I vehicle birth certificates on a shared ERC-1056 registry:
+ *         manufacturer-issued births, salted VIN-hash lookup, recorded ownership
+ *         transfers, on-chain key anchoring and stored delegations.
  * @dev Implements MOBI Vehicle Identity (VID) 1.0 standard on top of ERC-1056
  *
  * Standards Compliance:
@@ -20,6 +24,32 @@ import "./ERC1056Registry.sol";
  * - Ownership transfer with complete history
  * - W3C DID compliance
  * - Gas-optimized storage
+ *
+ * Design: `MOBIVIDRegistry is ERC1056Registry`; no OpenZeppelin bases. MOBI
+ * VID I/II are consortium documents with no Solidity ABI, so every interface
+ * here is the repo's own MOBI profile (CVIN extension). Deviations from the
+ * repo's MOBI_VID1_TECHNICAL_SPEC.md draft: `lookupByVINHash` (not
+ * findVehicleByVINHash), finite PERMANENT_ATTRIBUTE_VALIDITY instead of the
+ * overflowing type(uint256).max, `VehicleBirth.blockNumber`, and the K-3/K-4/
+ * D11b/D54 changes. Restores canonical ERC-1056 delegate storage and
+ * `validDelegate`, and blocks the plain `changeOwner` for born vehicles.
+ *
+ * @custom:standard MOBI Vehicle Identity (VID I / VID II) https://dlt.mobi/standards/
+ * @custom:standard ERC-1056 Ethereum Lightweight Identity https://eips.ethereum.org/EIPS/eip-1056
+ * @custom:standard W3C DID Core v1.0 https://www.w3.org/TR/did-core/
+ * @custom:standard did:ethr DID method https://github.com/decentralized-identity/ethr-did-resolver/blob/master/doc/did-method-spec.md
+ * @custom:security Birth and manufacturer-path key attributes are written with the owner as ERC-1056 actor
+ *                  without the owner's signature, so the event looks owner-authored though the manufacturer sent it.
+ * @custom:security Vehicle identities are key-less addresses chosen by the manufacturer (derived from the VIN by
+ *                  callers); control exists only through `owners[]`.
+ * @custom:security The registering manufacturer can still anchor the first key after its authorisation is revoked
+ *                  (anchorVehicleKey checks vehicleBirths[id].manufacturer, not authorizedManufacturers).
+ * @custom:security Single-EOA registry authority, auto-authorised as manufacturer; one-step hand-over with no event.
+ * @custom:security `encryptedVIN` is public ciphertext; confidentiality rests on the off-chain AEAD. The VIN-hash
+ *                  formula is not enforced (some callers use an unsalted keccak256(vin), which is dictionary-attackable).
+ * @custom:security Revocation is inherited: owner-only and terminal; no authority can decommission a vehicle.
+ * @custom:see docs/smart-contracts/02-mobi-vid.md
+ * @custom:see sandbox/options/mobi-vid/adapter.js (wraps MOBIVIDRegistryV2)
  */
 contract MOBIVIDRegistry is ERC1056Registry {
 
@@ -28,6 +58,9 @@ contract MOBIVIDRegistry is ERC1056Registry {
     /**
      * @dev Vehicle Birth Certificate (MOBI VID I)
      * Immutable anchor for vehicle identity
+     * @notice Birth record written once by registerVehicleBirth; there is no update path.
+     * @custom:note `vinHash` formula is caller-defined (not enforced on-chain); `birthCertHash` is, per the SSI
+     *              layer, a keccak256 content hash of the signed birth VC, not an IPFS hash (field comments are stale).
      */
     struct VehicleBirth {
         bytes32 vinHash;              // SHA256(VIN + salt + vehicleDID) - for searchability
@@ -42,6 +75,7 @@ contract MOBIVIDRegistry is ERC1056Registry {
 
     /**
      * @dev Ownership Transfer Record (MOBI VID II support)
+     * @notice One entry per transferVehicleOwnership; the first owner is not an entry.
      */
     struct OwnershipTransfer {
         address from;
@@ -61,30 +95,40 @@ contract MOBIVIDRegistry is ERC1056Registry {
      * with Solidity 0.8 checked arithmetic, so passing type(uint256).max
      * overflows and reverts with panic 0x11. A finite 100-year validity is
      * effectively permanent for a vehicle lifecycle and never overflows.
+     * @notice Validity (100 years) used for birth attributes and anchored vehicle keys.
      */
     uint256 public constant PERMANENT_ATTRIBUTE_VALIDITY = 100 * 365 days;
 
     // ============ STORAGE ============
 
-    // Registry authority (can authorize manufacturers)
+    /// @notice Registry authority (can authorize manufacturers)
+    /// @dev Set to the deployer; changed only by transferRegistryAuthority.
     address public registryAuthority;
 
-    // Authorized manufacturers (can register vehicle births)
+    /// @notice Authorized manufacturers (can register vehicle births)
     mapping(address => bool) public authorizedManufacturers;
 
-    // VIN hash to vehicle identity mapping (for lookups)
+    /// @notice VIN hash to vehicle identity mapping (for lookups)
     mapping(bytes32 => address) public vinHashToIdentity;
 
-    // Vehicle birth certificates (vehicleIdentity => VehicleBirth)
+    /// @notice Vehicle birth certificates (vehicleIdentity => VehicleBirth)
     mapping(address => VehicleBirth) public vehicleBirths;
 
-    // Ownership history (vehicleIdentity => array of transfers)
+    /// @notice Ownership history (vehicleIdentity => array of transfers)
+    /// @dev Starts at the first transfer; the first owner is recorded only in VehicleBirth.
     mapping(address => OwnershipTransfer[]) public ownershipHistory;
 
     // ============ EVENTS ============
 
     /**
-     * @dev Emitted when a vehicle birth certificate is registered
+     * @notice Emitted when a vehicle birth certificate is registered
+     * @dev CVIN extension (MOBI VID I profile).
+     * @param vehicleIdentity The vehicle identity (DID address)
+     * @param vinHash The registered VIN hash
+     * @param manufacturer The registering manufacturer (msg.sender)
+     * @param firstOwner The first owner
+     * @param birthCertHash Hash of the birth certificate data / VC
+     * @param timestamp Block timestamp of registration
      */
     event VehicleBirthRegistered(
         address indexed vehicleIdentity,
@@ -96,7 +140,13 @@ contract MOBIVIDRegistry is ERC1056Registry {
     );
 
     /**
-     * @dev Emitted when vehicle ownership is transferred
+     * @notice Emitted when vehicle ownership is transferred
+     * @dev CVIN extension; emitted alongside the ERC-1056 DIDOwnerChanged.
+     * @param vehicleIdentity The vehicle identity
+     * @param from Previous owner
+     * @param to New owner
+     * @param odometer Odometer reading at transfer
+     * @param timestamp Block timestamp of the transfer
      */
     event VehicleOwnershipTransferred(
         address indexed vehicleIdentity,
@@ -107,7 +157,9 @@ contract MOBIVIDRegistry is ERC1056Registry {
     );
 
     /**
-     * @dev Emitted when a manufacturer is authorized
+     * @notice Emitted when a manufacturer is authorized
+     * @param manufacturer The manufacturer address
+     * @param timestamp Block timestamp
      */
     event ManufacturerAuthorized(
         address indexed manufacturer,
@@ -115,7 +167,9 @@ contract MOBIVIDRegistry is ERC1056Registry {
     );
 
     /**
-     * @dev Emitted when manufacturer authorization is revoked
+     * @notice Emitted when manufacturer authorization is revoked
+     * @param manufacturer The manufacturer address
+     * @param timestamp Block timestamp
      */
     event ManufacturerAuthorizationRevoked(
         address indexed manufacturer,
@@ -124,6 +178,7 @@ contract MOBIVIDRegistry is ERC1056Registry {
 
     // ============ MODIFIERS ============
 
+    /// @notice Requires msg.sender to be the registry authority.
     modifier onlyRegistryAuthority() {
         require(
             msg.sender == registryAuthority,
@@ -132,6 +187,7 @@ contract MOBIVIDRegistry is ERC1056Registry {
         _;
     }
 
+    /// @notice Requires msg.sender to be an authorized manufacturer.
     modifier onlyAuthorizedManufacturer() {
         require(
             authorizedManufacturers[msg.sender],
@@ -140,6 +196,8 @@ contract MOBIVIDRegistry is ERC1056Registry {
         _;
     }
 
+    /// @notice Requires that no birth certificate exists for `vehicleIdentity`.
+    /// @param vehicleIdentity The vehicle identity
     modifier vehicleNotRegistered(address vehicleIdentity) {
         require(
             !vehicleBirths[vehicleIdentity].exists,
@@ -148,6 +206,8 @@ contract MOBIVIDRegistry is ERC1056Registry {
         _;
     }
 
+    /// @notice Requires that a birth certificate exists for `vehicleIdentity`.
+    /// @param vehicleIdentity The vehicle identity
     modifier vehicleRegistered(address vehicleIdentity) {
         require(
             vehicleBirths[vehicleIdentity].exists,
@@ -158,6 +218,8 @@ contract MOBIVIDRegistry is ERC1056Registry {
 
     // ============ CONSTRUCTOR ============
 
+    /// @notice Makes the deployer the registry authority and an authorized manufacturer.
+    /// @dev Emits ManufacturerAuthorized(deployer). The auto-authorisation is "for testing".
     constructor() {
         registryAuthority = msg.sender;
         // Automatically authorize deployer as first manufacturer (for testing)
@@ -168,7 +230,9 @@ contract MOBIVIDRegistry is ERC1056Registry {
     // ============ MANUFACTURER MANAGEMENT ============
 
     /**
-     * @dev Authorize a manufacturer to register vehicle births
+     * @notice Authorize a manufacturer to register vehicle births
+     * @dev onlyRegistryAuthority; rejects the zero address and duplicates.
+     *      Emits ManufacturerAuthorized. CVIN extension (MOBI profile).
      * @param manufacturer Address of manufacturer to authorize
      */
     function authorizeManufacturer(address manufacturer)
@@ -183,7 +247,10 @@ contract MOBIVIDRegistry is ERC1056Registry {
     }
 
     /**
-     * @dev Revoke manufacturer authorization
+     * @notice Revoke manufacturer authorization
+     * @dev onlyRegistryAuthority. Emits ManufacturerAuthorizationRevoked. Existing
+     *      births are unaffected, and the revoked manufacturer keeps its
+     *      first-key anchoring right on vehicles it registered.
      * @param manufacturer Address of manufacturer to revoke
      */
     function revokeManufacturerAuthorization(address manufacturer)
@@ -197,7 +264,9 @@ contract MOBIVIDRegistry is ERC1056Registry {
     }
 
     /**
-     * @dev Transfer registry authority (e.g., to a DAO or government)
+     * @notice Transfer registry authority (e.g., to a DAO or government)
+     * @dev onlyRegistryAuthority; one-step, non-zero check only.
+     * @custom:security Emits no event, and has no two-step acceptance.
      * @param newAuthority Address of new registry authority
      */
     function transferRegistryAuthority(address newAuthority)
@@ -217,10 +286,19 @@ contract MOBIVIDRegistry is ERC1056Registry {
      * birth certificate that serves as the anchor for all future
      * vehicle identity operations.
      *
+     * onlyAuthorizedManufacturer, vehicleNotRegistered. Rejects zero values,
+     * duplicate VIN hashes and any identity with DID history (K-4). Sets
+     * owners[vehicleIdentity] = firstOwner directly, writes the optional
+     * keccak256("mobi/vid/birth/attributes") attribute with firstOwner as the
+     * ERC-1056 actor, then emits VehicleBirthRegistered and DIDOwnerChanged
+     * (and DIDAttributeChanged if attributes are given). MOBI VID I.
+     * @notice Register the birth certificate of a new vehicle (authorized manufacturer only).
+     *
      * @param vehicleIdentity Address that will represent this vehicle (vehicle DID)
      * @param vinHash Hash of VIN for privacy-preserving searchability
      * @param encryptedVIN Encrypted VIN (only owner can decrypt)
      * @param birthCertHash IPFS hash of complete birth certificate data
+     *        (in practice a keccak256 content hash of the signed birth VC)
      * @param firstOwner DID of first owner
      * @param birthAttributes Additional attributes (manufacturer data, specs, etc.)
      */
@@ -317,9 +395,12 @@ contract MOBIVIDRegistry is ERC1056Registry {
      *      verification key — the same name registerVehicle / updateVehicleKey
      *      and the testbed resolvers already use, so one event walk finds the
      *      key whichever path published it.
+     * @notice ERC-1056 attribute name of the vehicle's verification key.
+     * @custom:security keccak name, not the did:ethr ASCII-padded name (see ERC1056Registry).
      */
     bytes32 public constant VEHICLE_KEY_ATTRIBUTE = keccak256("did/pub/secp256k1/veriKey/base64");
 
+    /// @notice True once a verification key has been anchored for the vehicle.
     /// @dev vehicle identity => a verification key has been anchored on-chain
     mapping(address => bool) public vehicleKeyAnchored;
 
@@ -328,8 +409,17 @@ contract MOBIVIDRegistry is ERC1056Registry {
     // identity => delegateType => delegate => validTo. The ERC1056Registry base (the
     // testbed's vehicle profile) stays event-only; only this registry, whose
     // attestEvent must check a vehicle owner's consent, keeps them in storage.
+    /// @notice Stored delegations: identity => delegateType => delegate => validTo.
+    /// @dev Canonical ERC-1056 storage restored (WM-2 C2, D54); read by validDelegate.
     mapping(address => mapping(bytes32 => mapping(address => uint))) public delegates;
 
+    /// @dev Emits DIDDelegateChanged via super (onlyOwner, notRevoked), then stores
+    ///      validTo = now + validity. ERC-1056 canonical storage.
+    /// @param identity The identity address
+    /// @param actor The address acting (must be the current owner)
+    /// @param delegateType Type of delegate
+    /// @param delegate The delegate address
+    /// @param validity Validity period in seconds
     function addDelegate(
         address identity,
         address actor,
@@ -341,6 +431,12 @@ contract MOBIVIDRegistry is ERC1056Registry {
         delegates[identity][delegateType][delegate] = block.timestamp + validity;
     }
 
+    /// @dev Emits DIDDelegateChanged via super (onlyOwner, notRevoked), then sets
+    ///      the stored validTo to now. ERC-1056 canonical storage.
+    /// @param identity The identity address
+    /// @param actor The address acting (must be the current owner)
+    /// @param delegateType Type of delegate
+    /// @param delegate The delegate address
     function revokeDelegate(
         address identity,
         address actor,
@@ -353,6 +449,13 @@ contract MOBIVIDRegistry is ERC1056Registry {
 
     /// @dev True while `delegate` holds an unexpired delegation of `delegateType`
     ///      for `identity`, and the identity is not revoked.
+    ///      ERC-1056 plus a revocation check. Used by MOBIVIDRegistryV2.attestEvent
+    ///      with delegateType bytes32("veriKey") (ASCII-padded, not keccak).
+    /// @notice Check whether `delegate` is a currently valid delegate of `identity`.
+    /// @param identity The identity address
+    /// @param delegateType Type of delegate
+    /// @param delegate The delegate address
+    /// @return True if the delegation is unexpired and the identity is not revoked
     function validDelegate(
         address identity,
         bytes32 delegateType,
@@ -361,6 +464,12 @@ contract MOBIVIDRegistry is ERC1056Registry {
         return !revoked[identity] && delegates[identity][delegateType][delegate] > block.timestamp;
     }
 
+    /// @notice Emitted when a vehicle verification key is anchored.
+    /// @dev CVIN extension (D11b); emitted with the DIDAttributeChanged it accompanies.
+    /// @param vehicleIdentity The vehicle identity
+    /// @param keyHash keccak256 of the public key
+    /// @param anchoredBy msg.sender (owner or registering manufacturer)
+    /// @param validTo Expiry of the key attribute
     event VehicleKeyAnchored(
         address indexed vehicleIdentity,
         bytes32 indexed keyHash,
@@ -385,6 +494,11 @@ contract MOBIVIDRegistry is ERC1056Registry {
      *      The attribute is written with the identity owner as the ERC-1056 actor,
      *      exactly as the birth attributes are, preserving the base invariant that
      *      attributes are owner-authored.
+     *      CVIN extension. vehicleRegistered, notRevoked. Accepts a 65- or
+     *      33-byte secp256k1 key. Emits DIDAttributeChanged and VehicleKeyAnchored.
+     * @notice Publish the vehicle's secp256k1 verification key with vehicle-lifetime validity.
+     * @param vehicleIdentity The vehicle identity
+     * @param publicKey Uncompressed (65-byte) or compressed (33-byte) secp256k1 public key
      */
     function anchorVehicleKey(address vehicleIdentity, bytes calldata publicKey)
         external
@@ -425,6 +539,9 @@ contract MOBIVIDRegistry is ERC1056Registry {
      *      REVIEW_02 K-3: registered vehicles must use
      *      transferVehicleOwnership; identities with no birth certificate keep
      *      plain ERC-1056 behaviour.
+     * @notice Plain ERC-1056 owner change, disabled for vehicles with a birth certificate.
+     * @param identity The identity address
+     * @param newOwner The new owner
      */
     function changeOwner(address identity, address newOwner) public override {
         require(
@@ -439,6 +556,11 @@ contract MOBIVIDRegistry is ERC1056Registry {
      *
      * This implements MOBI VID II functionality by tracking
      * ownership changes while preserving the immutable birth certificate.
+     * vehicleRegistered, onlyOwner(msg.sender), not revoked, non-zero newOwner.
+     * Appends an OwnershipTransfer, then emits DIDOwnerChanged and
+     * VehicleOwnershipTransferred.
+     * @notice Transfer a registered vehicle to `newOwner` and record the transfer (owner only).
+     * @custom:security `odometer` and `authority` are caller-supplied and unvalidated.
      *
      * @param vehicleIdentity Vehicle DID
      * @param newOwner New owner DID
@@ -485,7 +607,8 @@ contract MOBIVIDRegistry is ERC1056Registry {
     // ============ QUERY FUNCTIONS ============
 
     /**
-     * @dev Get vehicle birth certificate
+     * @notice Get vehicle birth certificate
+     * @dev Reverts if the vehicle is not registered. MOBI VID I.
      * @param vehicleIdentity Vehicle DID
      * @return Birth certificate data
      */
@@ -499,7 +622,8 @@ contract MOBIVIDRegistry is ERC1056Registry {
     }
 
     /**
-     * @dev Lookup vehicle identity by VIN hash
+     * @notice Lookup vehicle identity by VIN hash
+     * @dev MOBI VID I. Also used by the did:mobi resolution path.
      * @param vinHash Hash of VIN
      * @return vehicleIdentity Vehicle DID (or zero address if not found)
      */
@@ -512,7 +636,8 @@ contract MOBIVIDRegistry is ERC1056Registry {
     }
 
     /**
-     * @dev Get ownership history for a vehicle
+     * @notice Get ownership history for a vehicle
+     * @dev vehicleRegistered. Excludes the first owner.
      * @param vehicleIdentity Vehicle DID
      * @return Array of ownership transfers
      */
@@ -526,7 +651,7 @@ contract MOBIVIDRegistry is ERC1056Registry {
     }
 
     /**
-     * @dev Get ownership history count
+     * @notice Get ownership history count
      * @param vehicleIdentity Vehicle DID
      * @return Number of ownership transfers
      */
@@ -539,7 +664,7 @@ contract MOBIVIDRegistry is ERC1056Registry {
     }
 
     /**
-     * @dev Check if vehicle exists
+     * @notice Check if vehicle exists
      * @param vehicleIdentity Vehicle DID
      * @return True if vehicle birth certificate exists
      */
@@ -552,7 +677,8 @@ contract MOBIVIDRegistry is ERC1056Registry {
     }
 
     /**
-     * @dev Get complete vehicle information (combines birth + ERC-1056 data)
+     * @notice Get complete vehicle information (combines birth + ERC-1056 data)
+     * @dev vehicleRegistered.
      * @param vehicleIdentity Vehicle DID
      * @return birth Birth certificate
      * @return currentOwner Current owner address
@@ -581,7 +707,8 @@ contract MOBIVIDRegistry is ERC1056Registry {
     // ============ W3C DID COMPLIANCE HELPERS ============
 
     /**
-     * @dev Get DID string for vehicle
+     * @notice Get DID string for vehicle
+     * @dev W3C DID / did:ethr identifier helper; tested in MOBIVIDRegistry.regression.test.js.
      * @param vehicleIdentity Vehicle address
      * @return DID string in format: did:ethr:0x{chainId hex}:0x{40 lowercase hex}
      *
@@ -616,6 +743,7 @@ contract MOBIVIDRegistry is ERC1056Registry {
 
     /**
      * @dev Convert uint to hex string
+     *      Minimal lowercase hex without prefix ("0" for 0).
      * @param value Value to convert
      * @return Hex string
      */
@@ -643,6 +771,8 @@ contract MOBIVIDRegistry is ERC1056Registry {
 
     /**
      * @dev Convert uint to hex string with padding
+     *      Zero-padded lowercase hex of exactly 2*length chars; reverts if
+     *      `value` does not fit.
      * @param value Value to convert
      * @param length Desired string length
      * @return Hex string

@@ -6,6 +6,9 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 
 /**
  * @title CVINVehicleCredential1155
+ * @author CVIN research project
+ * @notice Soulbound ERC-1155 credential registry: token IDs are credential types and a vehicle is
+ *         the address holding a BIRTH_CERT. Only issuers mint, burn and move credentials.
  * @dev ERC-1155 multi-token vehicle credential registry for connected vehicle
  *      identity (CVIN). Each token ID is a CREDENTIAL TYPE; a vehicle is an
  *      address whose balances represent the credentials it currently holds.
@@ -42,30 +45,59 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
  * Fully spec-compliant ERC-1155 interface surface (inherits OZ 5.0.2 ERC1155);
  * the soulbound transfer restriction is an intentional application-level
  * deviation from ERC-1155's free transferability.
+ *
+ * Bases: OpenZeppelin Contracts 5.0.2 ERC1155 and AccessControl. Constructor base URI
+ * "ipfs://cvin-vehicle-credentials/{id}.json"; the deployer gets DEFAULT_ADMIN_ROLE and ISSUER_ROLE.
+ * ERC-5192 (locked/Locked) is NOT implemented: soulbound behaviour comes only from the reverting
+ * transfer overrides. Mint and issuer transfers use OZ's acceptance check, so a contract vehicle
+ * address must implement IERC1155Receiver.
+ *
+ * @custom:standard ERC-1155 Multi Token Standard (incl. Metadata URI extension) https://eips.ethereum.org/EIPS/eip-1155
+ * @custom:standard ERC-165 Standard Interface Detection https://eips.ethereum.org/EIPS/eip-165
+ * @custom:security ISSUER_ROLE is one flat registry-wide role: any issuer can revoke or move any
+ *                  credential issued by another issuer.
+ * @custom:security Credentials are fungible balances with no per-unit issuer or payload.
+ * @custom:security The identity address changes on resale (issuerTransferIdentity); off-chain callers
+ *                  should key by vinHashOf(VIN). Deregistration takes N+1 transactions.
+ * @custom:security setApprovalForAll still works but grants nothing (transfer entry points revert).
+ * @custom:see docs/smart-contracts/03-token-standards-erc721-erc1155-lsp8.md
+ * @custom:see sandbox/options/erc-1155/adapter.js
  */
 contract CVINVehicleCredential1155 is ERC1155, AccessControl {
     // ============ Roles ============
+    /// @notice Role allowed to register vehicles and issue, revoke, move and describe credentials.
+    /// @dev CVIN extension (AccessControl role); granted to the deployer.
     bytes32 public constant ISSUER_ROLE = keccak256("ISSUER_ROLE");
 
     // ============ Credential type token IDs ============
+    /// @notice Credential type 1: vehicle birth certificate; holding it means the identity exists.
     uint256 public constant BIRTH_CERT = 1;
+    /// @notice Credential type 2: jurisdictional registration.
     uint256 public constant REGISTRATION = 2;
+    /// @notice Credential type 3: periodic technical inspection certificate.
     uint256 public constant INSPECTION_CERT = 3;
+    /// @notice Credential type 4: insurance coverage certificate.
     uint256 public constant INSURANCE_CERT = 4;
+    /// @notice Credential type 5: certified maintenance/service badge.
     uint256 public constant MAINTENANCE_BADGE = 5;
 
     // ============ Vehicle identity state ============
 
+    /// @notice Vehicle address => normalised VIN (empty if unregistered).
     /// @dev vehicle address => VIN
     mapping(address => string) public vehicleVIN;
 
+    /// @notice keccak256(normalised VIN) => current BIRTH_CERT holder (see vinHashOf / vehicleForVIN).
     /// @dev keccak256(VIN) => vehicle address (uniqueness index)
     mapping(bytes32 => address) public vinHashToVehicle;
 
     /// @dev per-credential-type metadata URI (overrides the base uri)
     mapping(uint256 => string) private _tokenURIs;
 
+    /// @notice Highest allowed credential type id.
     /// @dev Highest credential type id (exclusive): the held-type set is a 256-bit bitmap.
+    /// @custom:note The "(exclusive)" above is stale: issueCredential and credentialTypesOf use
+    ///              `<= MAX_CREDENTIAL_TYPE`, so 255 itself is a valid type (inclusive bound).
     uint256 public constant MAX_CREDENTIAL_TYPE = 255;
 
     /// @dev vehicle address => bitmap of non-BIRTH credential types with a positive balance
@@ -73,13 +105,41 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
     mapping(address => uint256) private _heldTypes;
 
     // ============ Events ============
+    /// @notice Emitted when a vehicle identity is registered.
+    /// @dev CVIN extension.
+    /// @param vehicle Vehicle address
+    /// @param vinHash keccak256 of the normalised VIN
+    /// @param vin Normalised VIN
     event VehicleRegistered(address indexed vehicle, bytes32 indexed vinHash, string vin);
+    /// @notice Emitted when credentials are minted (including the BIRTH_CERT on registration).
+    /// @dev CVIN extension, alongside ERC-1155 TransferSingle.
+    /// @param vehicle Vehicle address
+    /// @param credentialType Credential type id
+    /// @param amount Units minted
+    /// @param issuer Issuing account
     event CredentialIssued(address indexed vehicle, uint256 indexed credentialType, uint256 amount, address indexed issuer);
+    /// @notice Emitted when credentials are burned.
+    /// @dev CVIN extension, alongside ERC-1155 TransferSingle.
+    /// @param vehicle Vehicle address
+    /// @param credentialType Credential type id
+    /// @param amount Units burned
+    /// @param issuer Revoking account
     event CredentialRevoked(address indexed vehicle, uint256 indexed credentialType, uint256 amount, address indexed issuer);
+    /// @notice Emitted when a credential type's URI is set.
+    /// @dev CVIN extension, alongside the ERC-1155 URI event.
+    /// @param credentialType Credential type id
+    /// @param newURI New metadata URI
     event CredentialURIUpdated(uint256 indexed credentialType, string newURI);
+    /// @notice Emitted by issuerTransferIdentity.
     /// @dev The whole identity (BIRTH_CERT + every held credential type) moved to a new address.
+    /// @param from Previous vehicle address
+    /// @param to New vehicle address
+    /// @param vinHash keccak256 of the normalised VIN (re-bound to `to`)
+    /// @param credentialTypesMoved Number of non-BIRTH credential types moved
     event IdentityRebound(address indexed from, address indexed to, bytes32 indexed vinHash, uint256 credentialTypesMoved);
 
+    /// @notice Deploys the registry with the {id} base URI template.
+    /// @dev Grants DEFAULT_ADMIN_ROLE and ISSUER_ROLE to msg.sender.
     constructor() ERC1155("ipfs://cvin-vehicle-credentials/{id}.json") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(ISSUER_ROLE, msg.sender);
@@ -90,6 +150,10 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
     /**
      * @notice Register a new vehicle identity: mints one BIRTH_CERT credential
      *         to the vehicle address and binds its VIN.
+     * @dev Access: ISSUER_ROLE. Requires a non-zero address with no BIRTH_CERT and a unique
+     *      normalised VIN (D13). Emits TransferSingle, VehicleRegistered and CredentialIssued. CVIN extension.
+     * @param vehicle Vehicle address (a contract must implement IERC1155Receiver)
+     * @param vin VIN (case-insensitive; ISO 3779 shape checked)
      */
     function registerVehicle(address vehicle, string calldata vin)
         external
@@ -117,6 +181,11 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
 
     /**
      * @notice Issue a credential of a given type to a registered vehicle.
+     * @dev Access: ISSUER_ROLE. Requires a registered vehicle, type != BIRTH_CERT, type <= 255 and
+     *      amount > 0. Emits TransferSingle and CredentialIssued. CVIN extension.
+     * @param vehicle Registered vehicle address
+     * @param credentialType Credential type id (2..255)
+     * @param amount Units to mint
      */
     function issueCredential(address vehicle, uint256 credentialType, uint256 amount)
         external
@@ -133,6 +202,12 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
 
     /**
      * @notice Revoke (burn) credentials held by a vehicle.
+     * @dev Access: ISSUER_ROLE (any issuer, not only the original one). A BIRTH_CERT can only be burned
+     *      when no other types are held (D8); burning it deletes the VIN indexes. Emits TransferSingle
+     *      and CredentialRevoked. CVIN extension.
+     * @param vehicle Vehicle address
+     * @param credentialType Credential type id
+     * @param amount Units to burn
      */
     function revokeCredential(address vehicle, uint256 credentialType, uint256 amount)
         external
@@ -165,6 +240,11 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
      *         BIRTH_CERT may only move on its own when the vehicle holds nothing else
      *         (invariant ii) — use issuerTransferIdentity to move an identity together
      *         with its credentials.
+     * @dev Access: ISSUER_ROLE. Moves the whole balance; rejects self-transfer (S2 sandbox finding).
+     *      For BIRTH_CERT the VIN is re-bound to `to`. Emits TransferSingle. CVIN extension.
+     * @param from Current holder
+     * @param to Recipient
+     * @param credentialType Credential type id to move
      */
     function issuerTransferCredential(
         address from,
@@ -193,6 +273,9 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
      *         the vehicle holds — to a new address in one transaction, re-binding the
      *         VIN indexes (defect D7). Issuer only. The recipient must not be a
      *         registered vehicle already.
+     * @dev Access: ISSUER_ROLE. Emits TransferBatch and IdentityRebound. CVIN extension.
+     * @param from Current vehicle address (must be registered)
+     * @param to New vehicle address (non-zero, unregistered)
      */
     function issuerTransferIdentity(address from, address to) external onlyRole(ISSUER_ROLE) {
         require(from != to, "CVIN1155: transfer to same holder");
@@ -216,6 +299,9 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
     }
 
     /// @dev Move the VIN indexes from the old BIRTH_CERT holder to the new one.
+    /// @param from Previous holder
+    /// @param to New holder
+    /// @return vinHash keccak256 of the re-bound VIN
     function _rebindVIN(address from, address to) private returns (bytes32 vinHash) {
         string memory vin = vehicleVIN[from];
         vinHash = keccak256(bytes(vin));
@@ -226,6 +312,10 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
 
     // ============ Metadata (attribute update) ============
 
+    /// @notice Set the metadata URI of a credential type (attribute update).
+    /// @dev Access: ISSUER_ROLE. Accepts any type id. Emits the ERC-1155 URI event and CredentialURIUpdated.
+    /// @param credentialType Credential type id
+    /// @param newURI New metadata URI
     function setTokenURI(uint256 credentialType, string calldata newURI)
         external
         onlyRole(ISSUER_ROLE)
@@ -235,6 +325,10 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
         emit CredentialURIUpdated(credentialType, newURI);
     }
 
+    /// @notice ERC-1155 Metadata URI for a credential type.
+    /// @dev Returns the per-type override if set, else the {id} template from the constructor.
+    /// @param credentialType Credential type id
+    /// @return The metadata URI
     function uri(uint256 credentialType) public view override returns (string memory) {
         string memory tokenURI = _tokenURIs[credentialType];
         if (bytes(tokenURI).length > 0) {
@@ -245,10 +339,19 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
 
     // ============ Views ============
 
+    /// @notice Whether `vehicle` holds a BIRTH_CERT.
+    /// @dev CVIN extension.
+    /// @param vehicle Address to check
+    /// @return True if registered
     function isRegistered(address vehicle) external view returns (bool) {
         return balanceOf(vehicle, BIRTH_CERT) > 0;
     }
 
+    /// @notice Whether `vehicle` holds at least one unit of `credentialType`.
+    /// @dev CVIN extension.
+    /// @param vehicle Address to check
+    /// @param credentialType Credential type id
+    /// @return True if balance > 0
     function hasCredential(address vehicle, uint256 credentialType) external view returns (bool) {
         return balanceOf(vehicle, credentialType) > 0;
     }
@@ -256,6 +359,9 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
     /**
      * @notice Every non-BIRTH credential type the vehicle currently holds (ascending).
      *         Enumerable because types are bounded to 1..255 (bitmap per vehicle).
+     * @dev Excludes BIRTH_CERT. CVIN extension.
+     * @param vehicle Vehicle address
+     * @return types Ascending list of held credential type ids
      */
     function credentialTypesOf(address vehicle) public view returns (uint256[] memory types) {
         uint256 bits = _heldTypes[vehicle];
@@ -274,6 +380,9 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
     /**
      * @notice The key of the vinHashToVehicle index for a VIN, computed with the same
      *         normalisation as registerVehicle (upper-cased, ISO 3779 shape checked).
+     * @dev Reverts on an invalid VIN shape. CVIN extension.
+     * @param vin VIN (any case)
+     * @return keccak256 of the normalised VIN
      */
     function vinHashOf(string calldata vin) public pure returns (bytes32) {
         return keccak256(bytes(_normalizeVIN(vin)));
@@ -281,6 +390,9 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
 
     /**
      * @notice VIN -> registered vehicle address, case-insensitive (zero address if none).
+     * @dev CVIN extension.
+     * @param vin VIN (any case)
+     * @return Current BIRTH_CERT holder for the VIN
      */
     function vehicleForVIN(string calldata vin) external view returns (address) {
         return vinHashToVehicle[vinHashOf(vin)];
@@ -334,11 +446,14 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
      *      through safeTransferFrom without the VIN re-binding. Mint and burn still go
      *      through _update; the only inter-address moves are the issuer paths above,
      *      which call the internal _safeTransferFrom / _safeBatchTransferFrom directly.
+     * @notice Disabled ERC-1155 transfer: always reverts (credentials are soulbound).
      */
     function safeTransferFrom(address, address, uint256, uint256, bytes memory) public pure override {
         revert("CVIN1155: credentials are soulbound (issuer-mediated transfer only)");
     }
 
+    /// @notice Disabled ERC-1155 batch transfer: always reverts (credentials are soulbound).
+    /// @dev Intentional deviation from ERC-1155 (D7); `pure` override, so even approved operators cannot use it.
     function safeBatchTransferFrom(address, address, uint256[] memory, uint256[] memory, bytes memory)
         public
         pure
@@ -351,6 +466,10 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
      * @dev Keeps the per-vehicle bitmap of held credential types in step with balances
      *      (D8 invariants). Only non-BIRTH types with a positive balance are tracked; ids
      *      above MAX_CREDENTIAL_TYPE cannot exist because issueCredential rejects them.
+     * @param from Sender (address(0) on mint)
+     * @param to Recipient (address(0) on burn)
+     * @param ids Credential type ids
+     * @param values Amounts per id
      */
     function _update(
         address from,
@@ -374,6 +493,10 @@ contract CVINVehicleCredential1155 is ERC1155, AccessControl {
 
     // ============ Required override ============
 
+    /// @notice ERC-165 interface detection.
+    /// @dev Merges ERC1155 (+ MetadataURI) and AccessControl.
+    /// @param interfaceId Interface identifier
+    /// @return True if supported
     function supportsInterface(bytes4 interfaceId)
         public
         view
