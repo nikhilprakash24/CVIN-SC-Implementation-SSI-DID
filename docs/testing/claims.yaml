@@ -123,9 +123,6 @@ claims:
   - 1_blockchain-identity/results/metrics/latest/tables/scale.csv
   - 1_blockchain-identity/results/metrics/latest/tables/scale_latency.csv
   - 1_blockchain-identity/results/metrics/latest/tables/resolve.csv
-  derived:
-  - value: '87'
-    how: 87,033 B (tables/scale.csv, h=50, R3_resolve_document, erc1056) / 1,000, rounded to KB
 - id: c32-freshness-k-erc-1056
   row: 32
   sources:

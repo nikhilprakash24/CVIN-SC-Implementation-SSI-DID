@@ -1,10 +1,10 @@
 {
   "environment": {
-    "date_utc": "2026-10-22T23:17:03.801Z",
-    "git_commit": "ddb9b05",
+    "date_utc": "2026-10-24T13:01:24.362Z",
+    "git_commit": "963439a",
     "git_dirty": true,
-    "commit": "ddb9b05",
-    "commitFull": "ddb9b0505c97239eb75f6f4ce128dbedfa49ebf3",
+    "commit": "963439a",
+    "commitFull": "963439a23b916a7ab4091e736c7c14f30854db9a",
     "dirty": false,
     "dirtyAnyFile": true,
     "scope": "1_blockchain-identity/scripts/experiment_pseudonym_pool.js",
@@ -22,7 +22,7 @@
     "registry_deploy_gas": 958726,
     "cpu_model": "Intel(R) Xeon(R) Processor @ 2.10GHz",
     "cpu_count": 4,
-    "os": "Linux 6.18.44-fc-v140"
+    "os": "Linux 6.18.44-fc-v153"
   },
   "config": {
     "pool": 20,
@@ -38,7 +38,7 @@
     "epochs": [
       {
         "epoch": 0,
-        "start_timestamp": 1792711021,
+        "start_timestamp": 1792846882,
         "pseudonyms": [
           "0x768F8e671C4dE99A2C6002d2d9e5626D85c0148f",
           "0xA39C7F1684f12Ec15f2D438AEc614bc394614E97",
@@ -89,7 +89,7 @@
       },
       {
         "epoch": 1,
-        "start_timestamp": 1792711341,
+        "start_timestamp": 1792847202,
         "pseudonyms": [
           "0x83E81d540a3bBd3424741FB2A44D396f699fDcDd",
           "0x4643263Ce938529179543675B32349c26A679Cab",
@@ -140,7 +140,7 @@
       },
       {
         "epoch": 2,
-        "start_timestamp": 1792711661,
+        "start_timestamp": 1792847522,
         "pseudonyms": [
           "0xE4d943FccDDAC6b4ca0b3B49eff09bc9e332e240",
           "0x67A20BB5EB47dfedc9Ec7EBD6D0F9B3426194210",

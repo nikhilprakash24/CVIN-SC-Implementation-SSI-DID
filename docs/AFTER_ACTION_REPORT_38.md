@@ -51,3 +51,41 @@ continue.
   metadata; debug files only in their build-info pointer), and it exempts only the result prefixes named
   (`cv2x-testbed/`), which then read "no (comment-only)". Shown to fire: listing the C2 commit `92cc4d5` fails the
   check on its first code line. The gas families and the harness re-run.
+- **I2, the re-run (one clean commit, `963439a`, one producer at a time, 13:00 to 13:25 UTC).** Gas benchmark and
+  its 30-run statistics, the MOBI backend sweep, scaling, I4 (one run and seeds 1 to 30), the pseudonym pool, the
+  security scenarios and matrix (attack results through the promote step), and the metrics harness in-process and over
+  HTTP-RPC with its analysis. Every step exited 0. What moved, all by the metadata hash in deployment code:
+
+  | Cell | Before | After | Register |
+  |---|---|---|---|
+  | ERC-735 create (benchmark, harness C1, security Sybil proxy) | 1,757,881 | 1,757,893 | #25, #34 |
+  | MOBI-VID-V2 deploy | 4,370,878 | 4,370,866 | #25 |
+  | ERC-721 deploy (benchmark, harness shared deploy) | 2,787,288 | 2,787,276 | #34 |
+  | ERC-735 lifetime, scaling Exp. B (band 6,724,999 to 16,659,210) | 11,692,092 | 11,692,104 | #26 |
+  | ERC-735 lifetime, harness 17-event lifecycle | 5,797,549 | 5,797,561 | #35 |
+
+  Batch cells scale with the batch (+120 for 10, +1,200 for 100). No other gas cell moved in any family; the 33.7×
+  spread, the rankings and #36's dominance sets and frontier are identical. One cell outside the change also differed:
+  the MOBI third-party attestation receipt in the backend sweep, 222,058 to 222,070, inside the range #28 already
+  records (its signed message includes the block time, so its calldata varies run to run).
+- **The harness's latency moved by host noise, so rows #31 and #39 are restated** from the new run, with the old values
+  as history (h = 50 ERC-1056 median 91.113 to 85.585 ms in-process). Both rows are descriptive only. Finding: #39's
+  latency sentence was older than the run it cited (the file read 169.079 ms where the row said 162.5); A5's check had
+  missed it because it reads only bold figures. Result cards #31 and #39 updated by their generator's own check.
+- **Old values in citing documents.** Five new stale-figure entries; 12 files outside the thesis corrected; the
+  thesis hits join the pending list for WM-2 D1 (33 pending in all); `docs/phase2/reviews/` joins the history globs
+  (a dated review keeps its day's figures). The RPC run's analysis step wrote 16 files that the run of record never had;
+  they were removed, so the run's file set is unchanged.
+- **A new CI gate, so this cannot recur silently.** The NatSpec pass reached the default branch with CI green while it
+  had moved three register values, because "code changed since" was reported, never enforced. `check_stamps.py
+  --check-coverage` (run by CI) now fails when any stamped result of record, or run directory, reads "yes", unless its
+  commits are listed as stamp-only or comment-only, or it is in `KNOWN_STALE` with a reason. Five entries are listed;
+  one, #26's density sweep of 2026-10-04, carries "reason to be confirmed" (task T-17). Shown to fire: before the
+  promote it flagged the attack results, the RPC run and the scaling repeats.
+- **D2.** Recorded as SC-24; chapter 6 §6.6.3 gains a threats-to-validity bullet stating that RSU-to-RSU messaging is
+  out of scope and why (the one chapter edit made before D-1, at the author's explicit request); crux C3's gap, WM-2
+  D2 (done), N-16 (closed), the note's status and the decision sheet's new §F record it.
+- **T15, the TDP corrected.** A subagent applied the review's rows to TDP-001, 003, 007, 008 and 009 (11 of 13, 6 of
+  6, 12 of 12, 16 of 17, 8 of 8; the skipped ones were already fixed or waited for this re-run and are now done here),
+  each at revision B with a revision-history row; R-04 to R-07 retired, R-14 to R-18 and I-05, I-06 added; layer 5
+  added throughout. Spot-checked here (#21 at 15.513 ms, the retirements). `check_icd.py`: 185 identifiers, 0 missing.

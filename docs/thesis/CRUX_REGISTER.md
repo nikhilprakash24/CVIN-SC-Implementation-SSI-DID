@@ -27,7 +27,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 |---|---|---|
 | #25 | V | Nine-standard gas table (deploy / create / update / delegate-or-claim / revoke / transfer per standard; MOBI-VID-V2 as application profile; ERC-4337 EntryPoint indirection +46,830 gas/op; create-identity spread 52,216 (C… |
 | #26 | V | Scaling: marginal cost O(1) in history; lifetime ranking reversal (ERC-1056 cheapest over 15 years, 1,450,146 gas on the merged contracts); verify O(1) in claim count; V2V warm verification linear at 0.156 ms/neighbour (… |
-| #34 | V | Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,881 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS… |
+| #34 | V | Harness L1 per-op gas, all nine standards (ten columns; ERC-1056 in pure and wrapper mode). C1 create: 76,830 / 145,684 / 402,567 / 656,480 / 1,757,893 (ERC-735) / 107,729 (ERC-1155) / 1,730,753 (ERC-725xy) / 135,544 (LS… |
 | #35 | V | Harness L2 lifecycle (17 MOBI VID events), all nine standards: ERC-1056 1,050,809 (wrapper 1,025,469) · ERC-1155 1,261,575 (excl. 2 n/a; no attributes stored, no delegates) · LSP8 1,508,413 (excl. 3 n/a) · ERC-4337 2,221… |
 | #36 | V | H5 dominance analysis over six declared criteria (lifetime gas ↓, zero→nonzero SSTOREs ↓, R3 RPC at h=50 ↓, R3 median ms after lifecycle ↓, core ops supported ↑, O(1) on-chain credential check ↑ [design property, assigne… |
 | #42 | V | (sandbox lineage, was #31; history row for the pre-merge contracts) Gas moved by the 2026-10-04 defect fixes (D13 VIN normalisation on three mint paths; D21 `revoked` check and `previousChange` on the vehicle-profile reg… |
@@ -85,7 +85,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 - Mobility is the mock model (no SUMO run); no radio channel; the I2I back-haul and the revocation registry are in-process (no propagation delay, no lookup cost).
 - A fresh message relayed within the 1 s window to a receiver that never heard it is not detected (as for V2V).
 - I3 bounds a message count, not a time; the verifier cache does not expire.
-- RSU-to-RSU messaging is not modelled; I2I covers controller-to-RSU and TMC-to-controller only.
+- RSU-to-RSU messaging is out of scope (author decision D2, 2026-10-24; docs/design/RSU_TO_RSU_NOTE.md); I2I covers controller-to-RSU and TMC-to-controller only.
 - The k the thesis defends is the open C4 decision; it applies to RSUs as to vehicles.
 
 **The examiner will ask:** Your title says connected vehicles; where is the infrastructure?

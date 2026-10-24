@@ -14,6 +14,7 @@ history:
 - docs/PROGRESS_APPENDIX_*.md   # generated from git subjects, which quote figures as they were (report 24)
 - docs/tdp/TDP-006_FMECA.md   # generated verbatim from docs/DEFECT_LOG.md, a history document (report 21)
 - docs/MEASUREMENT_CONDITIONS.md
+- docs/phase2/reviews/*   # dated reviews keep the figures of their day (report 38)
 - docs/tdp/REVIEW_2026-10.md   # the TDP review quotes the stale values it found (report 37)
 - docs/thesis/CHAPTER_AUDIT_2026-10.md   # quotes the stale values it found, on purpose (report 37)
 - docs/review02/*
@@ -87,7 +88,7 @@ entries:
   current: 0.363 ms (A3b re-run)
   row: 27
 - pattern: '1704992'
-  current: ERC-725xy create 1,680,816; heaviest create ERC-735 1,757,881
+  current: ERC-725xy create 1,680,816; heaviest create ERC-735 1,757,893
   row: 25
 - pattern: '52178'
   current: 52,216 (CVIN-Combined create)
@@ -102,11 +103,11 @@ entries:
   current: 545,101 (ERC-721 create)
   row: 25
 - pattern: 1598928|1404108|1535776
-  current: 1,757,881 (ERC-735 create)
+  current: 1,757,893 (ERC-735 create)
   row: 25
   note: '1,535,776 restored 2026-10-10 (audit finding A-2): its removal in pass 11 rested on register #34, which itself still carried the pre-merge harness value'
 - pattern: ~33×|~32×|32\.2×
-  current: ~34× (52,216 → 1,757,881)
+  current: ~34× (52,216 → 1,757,893)
   row: 25
 - pattern: '1450824'
   current: 1,450,146
@@ -142,7 +143,7 @@ entries:
   row: 35
   note: pre-merge harness value (run 0eef6af); audit finding A-1
 - pattern: \b5369010\b
-  current: 5,797,549 (#35)
+  current: 5,797,561 (#35)
   row: 35
   note: pre-merge harness value (run 0eef6af); audit finding A-1
 - pattern: \b2533978\b
@@ -205,7 +206,7 @@ entries:
   row: 5
   note: 'audit finding T-1: count near the word, any phrasing'
 - pattern: ~?(33|32\.2) ?[×x]\b
-  current: '33.7× (52,216 to 1,757,881; #25)'
+  current: '33.7× (52,216 to 1,757,893; #25)'
   row: 25
   note: 'audit finding T-17: ASCII x and no tilde'
 - pattern: \b93,2 ?%|\b93\.2 percent
@@ -216,7 +217,7 @@ entries:
   current: 57,667 MOBI-VID-V2 addDelegate (WM-2 C2, stored delegation)
   row: 25
 - pattern: '4225285'
-  current: 4,370,878 MOBI-VID-V2 deploy (WM-2 C2)
+  current: 4,370,866 MOBI-VID-V2 deploy (WM-2 C2)
   row: 25
 - pattern: '299143'
   current: 299,165 MOBI-VID-V2 create / birth (WM-2 C2)
@@ -249,7 +250,7 @@ entries:
   current: 57,667 MOBI-VID-V2 addDelegate (final C2 design, report 22)
   row: 25
 - pattern: '4366383'
-  current: 4,370,878 MOBI-VID-V2 deploy (final C2 design, report 22)
+  current: 4,370,866 MOBI-VID-V2 deploy (final C2 design, report 22)
   row: 25
 # U10 (report 37): superseded #27, #28, #22, #25 values the chapter audit found still quoted, and the small counts
 # (exact phrases, since a bare small integer matches too much).
@@ -289,7 +290,27 @@ entries:
   pending: ['docs/thesis/*/*.md']
   pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
 - pattern: '2751406|3952603'
-  current: ERC-721 deploy 2,787,288; MOBI-VID-V2 4,370,878
+  current: ERC-721 deploy 2,787,276; MOBI-VID-V2 4,370,866
   row: 25
   pending: ['docs/thesis/*/*.md']
   pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+# Report 38: the NatSpec pass moved deployment gas by 12 in three cells (metadata hash). Old values of record:
+- pattern: '1757881'
+  current: 1,757,893 ERC-735 create (report 38, metadata)
+  row: 25
+  pending: ['docs/thesis/*/*.md', 'docs/thesis/README.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '4370878'
+  current: 4,370,866 MOBI-VID-V2 deploy (report 38, metadata)
+  row: 25
+- pattern: '2787288'
+  current: 2,787,276 ERC-721 deploy (report 38, metadata)
+  row: 34
+- pattern: '11692092|16659198|6724987'
+  current: 11,692,104 ERC-735 lifetime (band 6,724,999 to 16,659,210; report 38)
+  row: 26
+  pending: ['docs/thesis/*/*.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '5797549'
+  current: 5,797,561 ERC-735 lifetime (report 38)
+  row: 35

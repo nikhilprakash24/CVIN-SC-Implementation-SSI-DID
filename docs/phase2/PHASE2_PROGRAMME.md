@@ -53,8 +53,8 @@ ideation, then architecture, then planning, then build waves, with the author ch
 ## 2. Phase 1 in one table (the base Phase 2 stands on)
 | Result | Value | Row |
 |---|---|---|
-| Create-identity gas across nine standards | 52,216 to 1,757,881 (33.7×) | #25 |
-| Lifecycle gas, 17 events | ERC-1056 1,050,809 cheapest; ERC-735 5,797,549 (excl. 3 n/a) | #35 |
+| Create-identity gas across nine standards | 52,216 to 1,757,893 (33.7×) | #25 |
+| Lifecycle gas, 17 events | ERC-1056 1,050,809 cheapest; ERC-735 5,797,561 (excl. 3 n/a) | #35 |
 | New storage slots over the lifecycle | 8 (ERC-1056) to 149 (ERC-735) | #49 |
 | Relayed write over direct | ERC-1056 +27,622 gas; ERC-4337 +47,116 | #50, #34 |
 | V2V verification, warm SSI | 0.142 ms [0.141, 0.143] | #27 |

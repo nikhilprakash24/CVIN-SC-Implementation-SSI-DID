@@ -2,8 +2,8 @@
 
 | Operation | ERC-1056 | ERC-1056 (wrapper) | ERC-721 | ERC-725 | ERC-735 | ERC-1155 | ERC-725xy | LSP8 | ERC-4337 | CVIN-Combined |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| C1_create_identity | 76,830 | 145,684 | 402,567 | 656,480 | 1,757,881 | 107,729 | 1,730,753 | 135,544 | 808,431 | 271,402 |
-| C2_create_with_attributes | 367,000 | 234,631 | 570,797 | 1,496,440 | 2,558,484 | 107,729 | 1,963,543 | 373,187 | 1,153,124 | 1,015,730 |
+| C1_create_identity | 76,830 | 145,684 | 402,567 | 656,480 | 1,757,893 | 107,729 | 1,730,753 | 135,544 | 808,431 | 271,402 |
+| C2_create_with_attributes | 367,000 | 234,631 | 570,797 | 1,496,440 | 2,558,496 | 107,729 | 1,963,543 | 373,187 | 1,153,124 | 1,015,730 |
 | U1_rotate_controller | 51,754 | 57,188 | 179,470 | 28,390 | 28,812 | 89,805 | 28,834 | 83,380 | 28,539 | 68,847 |
 | U2_add_delegate | 55,143 | 64,742 | 48,314 | 119,852 | n/a | n/a | n/a | n/a | 47,569 | 72,308 |
 | U3_set_attribute | 35,024 | 44,677 | 120,061 | 119,996 | 318,054 | 80,131 | 95,334 | 100,574 | 94,651 | 51,742 |
@@ -18,4 +18,4 @@
 | P1_create_presentation | 34,206 | 45,257 | n/a | 119,996 | 294,868 | n/a | 72,369 | n/a | 71,764 | 50,992 |
 | X1_execute_call | n/a | n/a | n/a | n/a | n/a | n/a | 39,328 | n/a | 39,242 | n/a |
 
-_Run 2026-10-23T00-49-12Z_1f4ace0 · commit 1f4ace0 · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
+_Run 2026-10-24T13-01-37Z_963439a · commit 963439a · solc 0.8.24 target cancun runs=200 viaIR=true · Hardhat in-process automine, executes osaka · N=30_
