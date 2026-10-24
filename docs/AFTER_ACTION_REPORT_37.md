@@ -39,3 +39,4 @@
   stale-figure checker did not catch 0.153 in the chapters, so its entries miss superseded #27 values; this goes to
   U10. The fixes are WM-2 D1's editing half, which waits on D-1.
 - **CI after U9 (`6a7fe6c` onward): 2 workflows red.** Two jobs set a subdirectory as their working directory, so the relative path to the pins file failed. Every install now reads `$GITHUB_WORKSPACE/ci/requirements-ci.txt`.
+- **CI green on `e481889`** (all four workflows), with the pinned packages. Report stays open for U7, U5, U10, U11 and U12.
