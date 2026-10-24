@@ -139,3 +139,5 @@ The pass did what the author asked and one thing the integration forced.
 **Grand run** ALL OK (Hardhat 563, Python 376, 92 demos / 1,758 steps). **New tasks:** T-17 (confirm #26's density
 sweep), T-18 (refresh the blueprint sheets, then merge), T-19 (stale-figure checker on SVG). **Still waiting on the
 author:** N-23, the report's reader, D-1, the check session, B-2 to B-4.
+
+**CI green on `18fb9f8`** (all four workflows). Report 38 is closed.
