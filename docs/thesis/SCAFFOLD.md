@@ -53,7 +53,7 @@ Legend: ✍️ written · ▫️ stub · 📊 backed by measured data (`SOURCES.
 ## Appendices (`appendices/`) — ▫️
 A: Gas tables (from `gas_comparison.tex`) · B: Security matrices ·
 C: V2V latency stats · D: Contract inventory · E: Reproduction commands ·
-F: Source register (`SOURCES.md`)
+F: Source register (`SOURCES.md`) · G: The ID-system function set and IDTx (G-A to G-I; plan in `docs/idtx_core/DETAILED_PLAN.md`)
 
 ---
 

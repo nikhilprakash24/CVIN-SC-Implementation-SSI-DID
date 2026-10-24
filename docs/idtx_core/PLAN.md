@@ -17,7 +17,7 @@ register (`docs/MEASUREMENT_CONDITIONS.md`) under its existing row and caveats.
 
 ---
 
-## 0. A decision this plan reopens (needs the author's call)
+## 0. A decision this plan reopens — DECIDED 2026-10-24: A+ (thesis is home; overflow to Appendix G or companion SP-9, returnable). Detailed plan: `DETAILED_PLAN.md`
 
 `ANALYSIS.md` §6 currently **cuts** the measured IDTx study from the thesis (one future-work paragraph; prototype
 cited as artefact; measured study → paper P5). This request makes IDTx + the minimal function set a **core**
