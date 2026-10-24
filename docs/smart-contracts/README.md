@@ -3,10 +3,22 @@
 Annotated reference for every Solidity contract in this repo: the standards (EIPs/ERCs/LSPs/W3C specs)
 each one implements and how faithfully, a per-function table, design and security caveats, and
 **where, when and how** each contract is used (deploy scripts, Hardhat tests, sandbox adapters,
-benchmarks, Python layers, docs). Source files are not modified; all annotation lives here.
+benchmarks, Python layers, docs).
+
+Two layers of annotation:
+- **Inline NatSpec in every compiled `.sol` file** (`@notice`/`@dev`/`@param`/`@return`, plus
+  `@custom:standard`, `@custom:security`, `@custom:see` and `@custom:note`). This is the short
+  version, visible in IDEs, `solc --userdoc/--devdoc` and block explorers. Exceptions: the
+  snarkjs-generated, hash-pinned `Groth16Verifier.sol`, and the uncompiled `_research-copies/`.
+- **These docs:** the long version, with standards fidelity, usage maps, Mermaid diagrams and ethers examples.
+
+Start with [00 – Architecture](00-architecture.md): the overall diagram, the standards → contracts
+matrix, the NatSpec conventions, and how the comments-only claim was verified (bytecode is identical
+once the metadata is stripped).
 
 | Doc | Contracts | Standards / protocols |
 |---|---|---|
+| [00 – Architecture](00-architecture.md) | all | overview, matrix, conventions |
 | [01 – ERC-1056 DID registry](01-erc1056-did-registry.md) | `1_blockchain-identity/contracts/ERC1056/EthereumDIDRegistry.sol`, `CVINVehicleDIDRegistry.sol` | ERC-1056, did:ethr, W3C DID Core (resolver in `2_w3c-ssi-layer/did-resolution`) |
 | [02 – MOBI VID](02-mobi-vid.md) | `1_blockchain-identity/contracts/MOBI/{ERC1056Registry,MOBIVIDRegistry,MOBIVIDRegistryV2}.sol` (identical copies in `cv2x-testbed/contracts/`) | MOBI VID I/II, ERC-1056, did:ethr, W3C VC, EIP-191 |
 | [03 – Token standards](03-token-standards-erc721-erc1155-lsp8.md) | `ERC721/{CVINVehicleNFT,CVIN_NFT_DID_ERC721,CVIN_NFT_DID_ERC721_Monolithic}.sol`, `ERC1155/CVINVehicleCredential1155.sol`, `LSP8/CVINVehicleLSP8.sol`, `_research-copies/ERC721` | ERC-721, ERC-1155, ERC-165, ERC-2981, LUKSO LSP8, ISO 3779 |
