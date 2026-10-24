@@ -23,3 +23,9 @@
   decimals and prints them labelled as a Phase 2 prediction. Its `--check` reproduces the brief's table (P0 k = 40 to
   51, P1 12 to 14, P2 52 to 65, P3 ≈ 1.9 to 2.1, 5.9 and 49) and was shown to fire on an edited P1 row. It runs in
   CI's document step and the pre-push guard.
+- **Master plan (the author's request of 2026-10-24).** `docs/MASTER_PLAN_2026-10-24.md`: all phases, milestones
+  and passes; the lineages, pull requests and the other branches of this repository (five research branches hold
+  unmerged work, none reviewed: new task T-12); the plan forward; a Phase B section of twelve open questions in the
+  form the sister session's master plan uses; the to-dos and blockers with what each unblocks; a reading order; and
+  the artifact catalogue by importance and by date, with the published pages. The sister session's master plan could
+  not be read here (the documents connector did not connect), so §6 follows its described form, not its text.
