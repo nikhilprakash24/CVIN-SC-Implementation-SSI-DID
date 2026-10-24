@@ -108,3 +108,8 @@ continue.
     corrections of 1,757,881 clear that pending entry. Result card #31 follows #31 (153.786 ms on their host).
   - **Process finding:** two sessions repeated a re-run because neither could see the other's work in progress. The
     master plan's §3.4 now asks a session to push an opened report before a re-run, so the other sees it on fetch.
+- **CI at `243c2bb`: the contracts job red** on the interface-control check: TDP-003 had gained a backticked commit
+  id, which the check reads as an identifier. Written as plain text.
+- **Grand run (last), at `243c2bb` plus that fix.** The first attempt failed in its Python stage: this container's
+  system cryptography could not load (`cffi` missing), not a test failure; with `cffi` installed, **ALL OK**: smoke 11,
+  L1 99, Hardhat 563, Python layers 376, 92 demos / 1,758 steps. Generated documents regenerated.

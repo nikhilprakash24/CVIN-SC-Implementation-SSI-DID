@@ -45,7 +45,7 @@ records the cell as n/a. Operations, in the catalogue's order, as declared by th
 | Presentation and execute | `createPresentation` (P1), `executeCall` (X1) |
 | Throughput | `prepareThroughputSenders`, `throughputOp` |
 
-Measured through this interface: #29, #34, #35, #36, #49, #50, #51 (run of record `2026-10-24T12-29-26Z_7a59058`, re-run after the NatSpec metadata change, which moved only the ERC-735 and ERC-721 deployment cells by 12 gas (report 38); before it `1f4ace0`, the A3b/A6 re-run of 2026-10-23, gas identical to the runs at 7a9a996 and a9e2a28; #49, #50 and #51 still cite 7a9a996 as their source) and #54 (P1, X1).
+Measured through this interface: #29, #34, #35, #36, #49, #50, #51 (run of record `2026-10-24T12-29-26Z_7a59058`, re-run after the NatSpec metadata change, which moved only the ERC-735 and ERC-721 deployment cells by 12 gas (report 38); before it run 1f4ace0, the A3b/A6 re-run of 2026-10-23, gas identical to the runs at 7a9a996 and a9e2a28; #49, #50 and #51 still cite 7a9a996 as their source) and #54 (P1, X1).
 The catalogue's definitions per standard are in `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md`.
 
 ## 3. IF-02 Identity provider (Python)
