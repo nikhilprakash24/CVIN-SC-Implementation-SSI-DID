@@ -30,3 +30,10 @@ The resolver the mutants target is the merged implementation (`ERC1056Reader`, f
 - **Grand run (last), at `cea9cf0`.** ALL OK: Hardhat 563 (one new test), Python 376, 92 demos / 1,758 steps. Generated documents regenerated.
 - **CI at `cb5ed18`: 10 of 11.** The resolver probe step had been inserted into the compliance-score job, which runs
   no Hardhat node, so it failed there. Moved to the Python job after its suite step, where the node on 8548 runs.
+
+## 3. Closing
+**CI green on `558fc9d`** (all four workflows). Both probes run in CI: the D54 probe kills 8 of 8 mutants with
+behaviour tests only, after one new test closed the gap the probe found; the resolver probe kills 9 of 9. The lesson
+carried forward: a mutant killed only by a gas pin is a hollow kill, so probes run behaviour tests.
+
+**Next:** the remaining unblocked items, from report 37.
