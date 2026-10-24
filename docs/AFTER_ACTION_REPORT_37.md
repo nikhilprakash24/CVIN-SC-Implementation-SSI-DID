@@ -86,3 +86,5 @@ audit and the TDP review list every other drifted figure.
 
 **New decisions for the author:** D2 (RSU-to-RSU; recommendation scope out) and B-1 to B-4 (the open branches).
 **Next executable work:** T-15 (correct the TDP from its review). Then WM-2 D1 waits on D-1, and E1 on the check session.
+
+**CI green on `165db04`** (all four workflows). Report 37 is closed.
