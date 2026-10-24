@@ -113,3 +113,29 @@ continue.
 - **Grand run (last), at `243c2bb` plus that fix.** The first attempt failed in its Python stage: this container's
   system cryptography could not load (`cffi` missing), not a test failure; with `cffi` installed, **ALL OK**: smoke 11,
   L1 99, Hardhat 563, Python layers 376, 92 demos / 1,758 steps. Generated documents regenerated.
+- **CI green on `6a574a2`** (all four workflows).
+- **I3, B-1 (the author's "integrate", read as the recommended integration steps).** `claude/exploration-plan` merged
+  (docs only; its baseline line marked as the 2026-10-15 history). `claude/system-blueprint-diagrams-fd8apg` is **not**
+  merged: a trial merge in a worktree showed its 23 generated sheets carry superseded values in their SVG text (0.153 ms
+  in five places, #21's old PKI 0.253 ms, #32-derived P* rows), which the stale-figure checker cannot see because it
+  reads Markdown only (WM-2 G item T-F16). Its X-series tables regenerated cleanly from current data and both of their
+  README observations still hold, so the work is sound; it needs a refresh of the sheet sources against the register
+  before merging (new task T-18). B-2 to B-4 stay as recommended: simulation visuals and the TSR series kept apart
+  (the TSR session has PR #19 open to the default branch), X1 documents only when wanted.
+
+## 3. Closing
+The pass did what the author asked and one thing the integration forced.
+
+- **Integration.** This branch now holds the default branch's NatSpec pass, contract reference and Roots thread, the
+  other session's re-run, and the exploration workspace. The first re-run of each producer is the run of record; this
+  pass kept its own runs only where it was alone (security, I4 seeds, HTTP-RPC). The way back to the default branch is
+  PR #16's route, which the relaying session maintains.
+- **The finding.** A comments-only change to the contracts moved five register gas figures by 12 gas through the
+  metadata hash, and reached the default branch with CI green. The bytecode is proved identical apart from the hash, the
+  gas families are re-run and the rows restated, and **CI now fails when a result of record describes code the trunk no
+  longer has**, unless the commit is proved stamp-only or comment-only or the result is listed with a reason.
+- **D2** is recorded as SC-24 and stated in chapter 6 and crux C3. **The TDP** is at revision B with layer 5 in it.
+
+**Grand run** ALL OK (Hardhat 563, Python 376, 92 demos / 1,758 steps). **New tasks:** T-17 (confirm #26's density
+sweep), T-18 (refresh the blueprint sheets, then merge), T-19 (stale-figure checker on SVG). **Still waiting on the
+author:** N-23, the report's reader, D-1, the check session, B-2 to B-4.

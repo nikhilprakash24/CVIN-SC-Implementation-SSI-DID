@@ -31,7 +31,7 @@ container (Node 22.22.0, Python 3.13.16), using the same steps as CI:
 | Check | Result |
 |---|---|
 | `npx hardhat compile` | 47 Solidity files, evm cancun |
-| `npx hardhat test` | **369 passing**, 23 pending |
+| `npx hardhat test` | **369 passing**, 23 pending (history: the 2026-10-15 baseline; current totals in `sandbox/grand/report/GRAND_REPORT.md`) |
 | `check_artifacts_fresh.js` (cv2x-testbed) | fresh |
 | `pytest 2_w3c-ssi-layer cv2x-testbed/tests` (Hardhat node on :8548) | **358 passed**, 0 skipped |
 | `w3c_compliance_checker.py` | **94.3%** |
