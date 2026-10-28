@@ -10,3 +10,5 @@ The four most recent chat artifacts, saved here as source material for the websi
 | `multi-image-composition-process-guide.md` | [Multi-Image Composition — Process Guide](https://claude.ai/artifact/Nw9gTr9Z3iTE21dMXYLerN) | Process for composing reference images into consistent scenes (tools, prompt pattern, 12-step loop, fixes). |
 
 Both HTML pages open from disk with no build step. The Direction sheet refers to the Frontline HTML as `dealer-investor-site.html`; here it is `frontline/index.html`.
+
+Plans for building from this material are in `plans/`: an overview and three parallel tracks (A Ledger, B Instrument Panel, C Briefing with an embedded-deck placeholder).
