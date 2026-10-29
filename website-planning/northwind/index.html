@@ -1,0 +1,380 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Northwind Investor Room</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout concept: a quiet single column (editorial measure) with a sticky left-hand slide index on wide screens; each section is a companion to one slide of the deck. */
+:root{
+  --bg:#f5f7f8; --surface:#ffffff; --fg:#16202a; --muted:#5b6670; --line:#d9dfe3;
+  --accent:#1f6f6b; --accent-soft:#e3efee; --warn:#b4772a;
+  --display:"Sora",system-ui,sans-serif;
+  --body:"Source Serif 4",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111619; --surface:#181f24; --fg:#e8ecef; --muted:#9aa5ad; --line:#2a333a;
+  --accent:#5fb3ad; --accent-soft:#1b2f2e; --warn:#d9a054; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111619; --surface:#181f24; --fg:#e8ecef; --muted:#9aa5ad; --line:#2a333a;
+  --accent:#5fb3ad; --accent-soft:#1b2f2e; --warn:#d9a054; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(1.9rem,4.5vw,3rem);letter-spacing:-.02em}
+h2{font-size:1.5rem}
+h3{font-size:1.05rem}
+p{margin:0}
+.eyebrow{font-family:var(--display);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.brand{font-family:var(--display);font-weight:600;letter-spacing:.02em;text-decoration:none;color:var(--fg)}
+.brand small{display:block;font-weight:400;font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.topnav{display:flex;gap:18px;font-family:var(--display);font-size:.85rem}
+.topnav a{color:var(--muted);text-decoration:none}
+.topnav a:hover{color:var(--fg)}
+@media (max-width:640px){.topnav{display:none}}
+
+/* hero */
+.hero{padding-block:64px 48px;display:grid;gap:28px}
+.hero p.lede{font-size:1.2rem;max-width:34em;color:var(--muted)}
+.hero .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{font-family:var(--display);font-size:.9rem;padding:11px 18px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;text-decoration:none}
+.btn.quiet{background:transparent;color:var(--accent)}
+.deckstatus{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:.78rem;color:var(--muted)}
+.deckstatus i{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+
+/* metrics strip */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metrics div{padding:20px 0;border-right:1px solid var(--line);padding-right:16px}
+.metrics div:last-child{border-right:0}
+.metrics .v{font-family:var(--mono);font-size:1.7rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.metrics .l{font-family:var(--display);font-size:.78rem;color:var(--muted);margin-top:4px}
+@media (max-width:640px){.metrics div{border-right:0;border-bottom:1px solid var(--line);padding:14px 0}.metrics div:last-child{border-bottom:0}}
+
+/* body grid */
+.grid{display:grid;grid-template-columns:200px minmax(0,1fr);gap:48px;padding-block:56px}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr);gap:24px}}
+.index{position:sticky;top:calc(env(safe-area-inset-top,0px) + 80px);align-self:start;display:grid;gap:4px}
+@media (max-width:860px){.index{position:static;display:flex;flex-wrap:wrap;gap:8px}}
+.index a{font-family:var(--display);font-size:.82rem;color:var(--muted);text-decoration:none;padding:6px 10px;border-left:2px solid transparent;border-radius:0 4px 4px 0}
+.index a.on{color:var(--fg);border-left-color:var(--accent);background:var(--accent-soft)}
+@media (max-width:860px){.index a{border:1px solid var(--line);border-radius:999px;padding:5px 12px}.index a.on{border-color:var(--accent)}}
+.index a .num{color:var(--muted);margin-right:6px;font-size:.75rem}
+
+main{display:grid;gap:72px;min-width:0}
+section.s{display:grid;gap:18px;scroll-margin-top:100px;min-width:0}
+.shead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.slide-ref{font-family:var(--display);font-size:.72rem;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:3px 8px;white-space:nowrap}
+section.s > p{max-width:62ch}
+
+/* tabs */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;padding:10px 14px;font-family:var(--display);font-size:.88rem;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+.panel{display:grid;gap:12px;max-width:62ch}
+
+/* chart */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px;display:grid;gap:14px}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-family:var(--display);font-size:.8rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--sw)}
+
+/* scenario slider */
+.scen{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px;display:grid;gap:16px}
+.scen label{font-family:var(--display);font-size:.85rem;display:flex;justify-content:space-between}
+.scen input[type=range]{width:100%;accent-color:var(--accent)}
+.scen .out{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.scen .out div{border-top:1px solid var(--line);padding-top:10px}
+.scen .out b{font-family:var(--mono);font-weight:500;font-size:1.3rem;display:block}
+.scen .out small{font-family:var(--display);font-size:.75rem;color:var(--muted)}
+.note{font-family:var(--display);font-size:.78rem;color:var(--muted)}
+
+/* terms table */
+.terms{width:100%;border-collapse:collapse;font-size:.95rem}
+.terms th,.terms td{text-align:left;padding:10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.terms th{font-family:var(--display);font-weight:500;font-size:.8rem;color:var(--muted);width:38%}
+.tablewrap{overflow-x:auto}
+
+/* team */
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.team article{display:grid;gap:4px}
+.team .avatar{width:48px;height:48px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:600;font-size:.9rem;margin-bottom:6px}
+.team small{font-family:var(--display);color:var(--muted);font-size:.8rem}
+
+/* faq */
+details{border-top:1px solid var(--line)}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;padding:14px 0;font-family:var(--display);font-size:.95rem;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--muted);font-family:var(--mono)}
+details[open] summary::after{content:"–"}
+details p{padding-bottom:16px;max-width:62ch;color:var(--muted)}
+
+/* contact */
+.contact{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:24px;display:grid;gap:14px;max-width:560px}
+.field{display:grid;gap:6px;font-family:var(--display);font-size:.82rem;color:var(--muted)}
+.field input,.field select,.field textarea{font:inherit;font-family:var(--body);font-size:1rem;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px 12px;width:100%}
+.contact .done{color:var(--accent);font-family:var(--display);font-size:.9rem}
+.copyline{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:.9rem}
+.copyline button{background:none;border:1px solid var(--line);border-radius:4px;padding:3px 10px;font-family:var(--display);font-size:.75rem;color:var(--muted)}
+
+footer{border-top:1px solid var(--line);padding-block:28px 40px;font-family:var(--display);font-size:.78rem;color:var(--muted);display:grid;gap:8px}
+
+@media (prefers-reduced-motion:no-preference){
+  .metrics .v{transition:opacity .4s}
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#overview">Northwind<small>Investor room · Series A</small></a>
+    <nav class="topnav">
+      <a href="#traction">Traction</a><a href="#model">Model</a><a href="#round">The round</a><a href="#team">Team</a><a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero" id="overview">
+    <div>
+      <p class="eyebrow">Series A · opened October 2026</p>
+    </div>
+    <h1>Fleet maintenance software for mid-sized logistics operators.</h1>
+    <p class="lede">Northwind replaces the clipboard, the spreadsheet and the phone call that sit between a truck breaking down and a truck getting fixed. This page carries the detail the deck leaves out.</p>
+    <div class="row">
+      <a class="btn" href="#round">Read the round terms</a>
+      <a class="btn quiet" href="#contact">Request the data room</a>
+      <span class="deckstatus"><i></i>Deck v4 · 14 slides · updated 24 Oct 2026</span>
+    </div>
+  </section>
+
+  <div class="metrics" id="metrics">
+    <div><span class="v num" data-to="2.4" data-prefix="$" data-suffix="M">$0.0M</span><div class="l">ARR, Sept 2026</div></div>
+    <div><span class="v num" data-to="312" data-suffix="">0</span><div class="l">Fleets on platform</div></div>
+    <div><span class="v num" data-to="118" data-suffix="%">0%</span><div class="l">Net revenue retention</div></div>
+    <div><span class="v num" data-to="19" data-suffix=" mo">0 mo</span><div class="l">Payback on CAC</div></div>
+  </div>
+
+  <div class="grid">
+    <nav class="index" id="index">
+      <a href="#traction"><span class="num">04</span>Traction</a>
+      <a href="#model"><span class="num">07</span>Model</a>
+      <a href="#funds"><span class="num">09</span>Use of funds</a>
+      <a href="#round"><span class="num">11</span>The round</a>
+      <a href="#team"><span class="num">12</span>Team</a>
+      <a href="#faq"><span class="num">—</span>Questions</a>
+      <a href="#contact"><span class="num">14</span>Contact</a>
+    </nav>
+
+    <main>
+      <section class="s" id="traction">
+        <div class="shead"><h2>Traction</h2><span class="slide-ref">Expands slide 4</span></div>
+        <p>Revenue is contracted annually and billed monthly per vehicle. The three views below are the same business cut three ways; the deck shows only the first.</p>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-tab="t1">By quarter</button>
+          <button role="tab" aria-selected="false" data-tab="t2">By cohort</button>
+          <button role="tab" aria-selected="false" data-tab="t3">By segment</button>
+        </div>
+        <div class="panel" id="t1">
+          <p>ARR grew from $0.9M to $2.4M over the last four quarters. Growth has come from new fleets rather than price increases; average price per vehicle has stayed within 3% of $38/month.</p>
+          <div class="chart"><svg viewBox="0 0 560 220" role="img" aria-label="ARR by quarter, Q4 2025 to Q3 2026"></svg><div class="legend"><span style="--sw:var(--accent)">ARR, $M</span></div></div>
+        </div>
+        <div class="panel" id="t2" hidden>
+          <p>Every quarterly cohort since Q1 2025 is above 100% net retention at month 12. Expansion comes from operators adding vehicles after the first depot goes live.</p>
+          <div class="tablewrap"><table class="terms"><tr><th>Cohort</th><td class="num">Month 6</td><td class="num">Month 12</td></tr><tr><th>Q1 2025</th><td class="num">104%</td><td class="num">121%</td></tr><tr><th>Q2 2025</th><td class="num">102%</td><td class="num">117%</td></tr><tr><th>Q3 2025</th><td class="num">106%</td><td class="num">115%</td></tr><tr><th>Q4 2025</th><td class="num">103%</td><td class="num">—</td></tr></table></div>
+        </div>
+        <div class="panel" id="t3" hidden>
+          <p>Regional carriers with 40 to 400 trucks are 71% of ARR. Last-mile fleets are newer and smaller but close in half the time.</p>
+          <div class="tablewrap"><table class="terms"><tr><th>Segment</th><td class="num">Share of ARR</td><td class="num">Median sales cycle</td></tr><tr><th>Regional carriers</th><td class="num">71%</td><td class="num">54 days</td></tr><tr><th>Last-mile fleets</th><td class="num">19%</td><td class="num">26 days</td></tr><tr><th>Municipal and utility</th><td class="num">10%</td><td class="num">140 days</td></tr></table></div>
+        </div>
+      </section>
+
+      <section class="s" id="model">
+        <div class="shead"><h2>Model</h2><span class="slide-ref">Expands slide 7</span></div>
+        <p>Move the two inputs the plan is most sensitive to. Everything else is held at the Q3 2026 actuals. Figures are illustrative and not a forecast.</p>
+        <div class="scen">
+          <label for="fleets">New fleets per quarter <b class="num" id="fleetsV">30</b></label>
+          <input type="range" id="fleets" min="10" max="80" value="30" step="5">
+          <label for="price">Price per vehicle per month <b class="num" id="priceV">$38</b></label>
+          <input type="range" id="price" min="28" max="56" value="38" step="2">
+          <div class="out">
+            <div><b class="num" id="oArr">$—</b><small>ARR in 8 quarters</small></div>
+            <div><b class="num" id="oBurn">—</b><small>Months of runway</small></div>
+            <div><b class="num" id="oGm">—</b><small>Gross margin</small></div>
+          </div>
+          <p class="note">Assumes 85 vehicles per new fleet, 2.1% monthly logo churn, and operating costs rising 4% per quarter from a $410k monthly base.</p>
+        </div>
+      </section>
+
+      <section class="s" id="funds">
+        <div class="shead"><h2>Use of funds</h2><span class="slide-ref">Expands slide 9</span></div>
+        <p>The round funds 24 months at the current plan. Engineering spend is front-loaded; sales spend ramps from quarter three once the second onboarding team is trained.</p>
+        <div class="chart">
+          <svg viewBox="0 0 560 64" role="img" aria-label="Allocation of $12M: engineering 42%, sales and onboarding 31%, operations 15%, reserve 12%"></svg>
+          <div class="legend">
+            <span style="--sw:var(--accent)">Engineering 42%</span>
+            <span style="--sw:color-mix(in srgb,var(--accent) 60%,var(--bg))">Sales and onboarding 31%</span>
+            <span style="--sw:color-mix(in srgb,var(--accent) 35%,var(--bg))">Operations 15%</span>
+            <span style="--sw:var(--line)">Reserve 12%</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="s" id="round">
+        <div class="shead"><h2>The round</h2><span class="slide-ref">Expands slide 11</span></div>
+        <div class="tablewrap"><table class="terms">
+          <tr><th>Raising</th><td class="num">$12.0M Series A</td></tr>
+          <tr><th>Pre-money valuation</th><td class="num">$48.0M</td></tr>
+          <tr><th>Instrument</th><td>Preferred equity, 1× non-participating liquidation preference</td></tr>
+          <tr><th>Lead</th><td>In discussion. Term sheet target: 15 December 2026</td></tr>
+          <tr><th>Committed so far</th><td class="num">$3.5M from existing investors (pro rata)</td></tr>
+          <tr><th>Minimum check</th><td class="num">$250k</td></tr>
+          <tr><th>Board</th><td>Two founders, one lead investor seat, one independent</td></tr>
+          <tr><th>Prior rounds</th><td class="num">Seed $3.2M (2024) at $14M post</td></tr>
+        </table></div>
+        <p class="note">Full cap table, financial model and customer contracts are in the data room.</p>
+      </section>
+
+      <section class="s" id="team">
+        <div class="shead"><h2>Team</h2><span class="slide-ref">Expands slide 12</span></div>
+        <div class="team">
+          <article><div class="avatar">AM</div><h3>Ana Moreau</h3><small>CEO and co-founder</small><p>Ran maintenance operations for a 1,200-truck regional carrier for seven years before starting Northwind.</p></article>
+          <article><div class="avatar">DO</div><h3>Daniel Okafor</h3><small>CTO and co-founder</small><p>Built telematics ingestion systems at two fleet software companies. Holds the platform's two patents.</p></article>
+          <article><div class="avatar">RS</div><h3>Rina Sato</h3><small>VP Sales</small><p>Joined in 2025 from a payroll SaaS company where she grew the mid-market team from 3 to 22 reps.</p></article>
+          <article><div class="avatar">—</div><h3>Open role</h3><small>VP Engineering</small><p>Search underway. Shortlist of four candidates; hire planned for Q1 2027 from this round.</p></article>
+        </div>
+      </section>
+
+      <section class="s" id="faq">
+        <div class="shead"><h2>Questions we get asked</h2><span class="slide-ref">Not in the deck</span></div>
+        <div>
+          <details><summary>Why hasn't an incumbent fleet-management vendor built this?</summary><p>Incumbents sell to the fleet owner on fuel and routing. Maintenance sits with a different buyer, the shop manager, and needs parts, labor and warranty workflows the incumbents have never had to model. Two have tried through acquisition and both products were sunset within three years.</p></details>
+          <details><summary>What happens to churn when a fleet is acquired?</summary><p>Eleven of our fleets have been acquired since 2024. Nine kept Northwind; in six of those the acquirer rolled it out to additional depots. The two losses were to acquirers already standardized on an ERP maintenance module.</p></details>
+          <details><summary>How dependent is the product on telematics data?</summary><p>About 60% of fleets connect a telematics feed; the rest run on odometer entries from the shop. The product works without the feed, but connected fleets show a 30% higher expansion rate, so onboarding pushes hard for the integration.</p></details>
+          <details><summary>What is the plan if the round takes longer than expected?</summary><p>Current runway at the present burn is 14 months. The plan with no new capital reaches cash-flow breakeven in 11 months by freezing the second onboarding team hire, at the cost of roughly a third of forecast growth.</p></details>
+        </div>
+      </section>
+
+      <section class="s" id="contact">
+        <div class="shead"><h2>Request the data room</h2><span class="slide-ref">Expands slide 14</span></div>
+        <p>Access is granted within one business day. Write to us directly or leave your details below.</p>
+        <div class="copyline"><span id="mail">investors@northwind.example</span><button type="button" id="copyMail">Copy</button></div>
+        <form class="contact" id="reqForm" novalidate>
+          <label class="field">Name<input id="fName" name="name" required autocomplete="name"></label>
+          <label class="field">Firm<input id="fFirm" name="firm" autocomplete="organization"></label>
+          <label class="field">Email<input id="fEmail" name="email" type="email" required autocomplete="email"></label>
+          <label class="field">Typical check size<select id="fSize" name="size"><option>Under $250k</option><option>$250k to $1M</option><option>$1M to $3M</option><option>$3M or more</option></select></label>
+          <div class="row" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn" type="submit">Send request</button><span class="note" id="formNote"></span></div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <span>Northwind Systems, Inc. · Confidential. Shared with prospective investors under NDA.</span>
+    <span>Figures as of 30 September 2026 unless stated. Model outputs on this page are illustrative only and do not constitute a forecast or an offer of securities.</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* count-up metrics */
+  document.querySelectorAll('.metrics .v').forEach(el=>{
+    const to=parseFloat(el.dataset.to), pre=el.dataset.prefix||'', suf=el.dataset.suffix||'';
+    const dec=(el.dataset.to.split('.')[1]||'').length;
+    const fmt=v=>pre+v.toFixed(dec)+suf;
+    if(reduce){el.textContent=fmt(to);return}
+    const t0=performance.now(), dur=900;
+    const step=now=>{const p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3); el.textContent=fmt(to*e); if(p<1)requestAnimationFrame(step)};
+    requestAnimationFrame(step);
+  });
+
+  /* tabs */
+  const tabs=document.querySelectorAll('.tabs [role=tab]');
+  tabs.forEach(b=>b.addEventListener('click',()=>{
+    tabs.forEach(x=>x.setAttribute('aria-selected',x===b));
+    ['t1','t2','t3'].forEach(id=>document.getElementById(id).hidden=(id!==b.dataset.tab));
+  }));
+
+  /* ARR bar chart, drawn to one scale */
+  (function(){
+    const svg=document.querySelector('#t1 svg'); const data=[['Q4 25',0.9],['Q1 26',1.3],['Q2 26',1.8],['Q3 26',2.4]];
+    const W=560,H=220,L=44,R=16,T=18,B=34,max=3; const pw=W-L-R, ph=H-T-B; const y=v=>T+ph-(v/max)*ph;
+    let s='';
+    [0,1,2,3].forEach(v=>{s+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-size="11" font-family="JetBrains Mono,monospace" fill="var(--muted)">${v}.0</text>`});
+    const bw=pw/data.length*0.5;
+    data.forEach(([q,v],i)=>{const x=L+pw/data.length*(i+0.5)-bw/2;
+      s+=`<rect x="${x}" y="${y(v)}" width="${bw}" height="${y(0)-y(v)}" rx="2" fill="var(--accent)" opacity="${i===data.length-1?1:0.7}"/>`;
+      s+=`<text x="${x+bw/2}" y="${y(v)-6}" text-anchor="middle" font-size="12" font-family="JetBrains Mono,monospace" fill="var(--fg)">$${v.toFixed(1)}M</text>`;
+      s+=`<text x="${x+bw/2}" y="${H-12}" text-anchor="middle" font-size="11" font-family="Sora,sans-serif" fill="var(--muted)">${q}</text>`});
+    svg.innerHTML=s;
+  })();
+
+  /* use-of-funds stacked bar */
+  (function(){
+    const svg=document.querySelector('#funds svg'); const parts=[[42,'var(--accent)'],[31,'color-mix(in srgb,var(--accent) 60%,var(--bg))'],[15,'color-mix(in srgb,var(--accent) 35%,var(--bg))'],[12,'var(--line)']];
+    let x=0,s='';
+    parts.forEach(([p,c])=>{const w=560*p/100; s+=`<rect x="${x}" y="8" width="${w-2}" height="40" rx="3" fill="${c}"/><text x="${x+8}" y="33" font-size="12" font-family="JetBrains Mono,monospace" fill="${p===12?'var(--muted)':'#fff'}">${p}%</text>`; x+=w});
+    svg.innerHTML=s;
+  })();
+
+  /* scenario model */
+  const fleets=document.getElementById('fleets'), price=document.getElementById('price');
+  function model(){
+    const nf=+fleets.value, pr=+price.value;
+    document.getElementById('fleetsV').textContent=nf;
+    document.getElementById('priceV').textContent='$'+pr;
+    let fleetCount=312, cash=12.0e6+2.1e6, opex=410e3, runway=null;
+    for(let q=0;q<8;q++){
+      for(let m=0;m<3;m++){
+        fleetCount=fleetCount*(1-0.021)+nf/3;
+        const rev=fleetCount*85*pr, cogs=rev*0.22;
+        cash+=rev-cogs-opex;
+        if(cash<0&&runway===null)runway=q*3+m+1;
+      }
+      opex*=1.04;
+    }
+    const arr=fleetCount*85*pr*12;
+    document.getElementById('oArr').textContent='$'+(arr/1e6).toFixed(1)+'M';
+    document.getElementById('oBurn').textContent=runway===null?'24+':String(runway);
+    document.getElementById('oGm').textContent='78%';
+  }
+  fleets.addEventListener('input',model); price.addEventListener('input',model); model();
+
+  /* section index highlight */
+  const links=[...document.querySelectorAll('#index a')];
+  const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}})},{rootMargin:'-30% 0px -60% 0px'});
+  secs.forEach(s=>io.observe(s));
+
+  /* copy email */
+  document.getElementById('copyMail').addEventListener('click',function(){
+    const t=document.getElementById('mail').textContent;
+    const done=()=>{this.textContent='Copied';setTimeout(()=>this.textContent='Copy',1500)};
+    try{navigator.clipboard.writeText(t).then(done).catch(()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('mail'));const sel=getSelection();sel.removeAllRanges();sel.addRange(r)})}catch(e){}
+  });
+
+  /* request form */
+  document.getElementById('reqForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const n=document.getElementById('fName'), em=document.getElementById('fEmail'), note=document.getElementById('formNote');
+    if(!n.value.trim()||!em.validity.valid){note.textContent='Add your name and a valid email to send the request.';return}
+    note.textContent='Request noted. Connect this form to your inbox or CRM before launch.';
+    note.classList.add('done');
+  });
+})();
+</script>
+
+</body></html>
