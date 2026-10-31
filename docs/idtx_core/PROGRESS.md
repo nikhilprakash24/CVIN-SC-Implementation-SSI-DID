@@ -7,7 +7,7 @@
 ```
 Phase 1  function set, IDTx, benchmark gap   [■■■■■■■■■■]  100%   COMPLETE (examiner fixes applied)
 Phase 2  compare to other ID systems         [■■■■■■■■□□]  ~80%   IN PROGRESS
-Phase 3  nearest benchmarks, benchmark v0     [■■■■■□□□□□]  ~50%   IN PROGRESS
+Phase 3  nearest benchmarks, benchmark v0     [■■■■■■■■□□]  ~80%   IN PROGRESS
 Phase 4  same, for AI agents                  [□□□□□□□□□□]    0%   planned
 Phase 5  10-substrate × function-set matrix   [□□□□□□□□□□]    0%   planned
 Phase 6  IDTx + compound scenarios visualized [□□□□□□□□□□]    0%   planned
@@ -127,14 +127,16 @@ Home: companion SP-9 + Ch 7 future work. Builds on p1/BENCHMARK_GAP.md (31 sourc
 | WP | Task | Agent | Status |
 |---|---|---|---|
 | 3.1 | Deep benchmark profiling (A1–A5) | LS+SS | ✅ done → `p3/BENCHMARK_PROFILES.md` |
-| 3.2 | Gap matrix vs the 5 ingredients (workload, admission rule, metrics+conditions, harness, reproduction) | ED | ⬜ after 3.1 |
-| 3.3 | Benchmark v0 spec (workload = fn set + IDTx classes + 17-event lifecycle; admission = compliance suite; metrics = register M-conditions; harness = this repo) | ED+CE | ⬜ after 3.2 |
-| 3.4 | "What would make it a benchmark" reproduction kit + call for external runs | ED | ⬜ after 3.3 |
+| 3.2 | Gap matrix vs the 5 ingredients | ED | ✅ done → `p3/BENCHMARK_V0.md` §3.2 |
+| 3.3 | Benchmark v0 spec | ED+CE | ✅ done → `p3/BENCHMARK_V0.md` §3.3 |
+| 3.4 | Reproduction kit + A5 milestone ladder | ED | ✅ done → `p3/BENCHMARK_V0.md` §3.4 |
 | 3.5 | Close Phase-2 T2/T3 [sec] cells (free primaries) | SS | ✅ done — T2/T3 non-provisional; 35/120 |
-| 3.6 | Examiner pass | SK | ⬜ last |
+| 3.6 | Examiner pass | SK | 🔵 running |
 
 - `2026-10-31` ED — Phase 3 launched. 3.1 (deep benchmark profiling) + 3.5 (close Phase-2 provisional CAV cells) in parallel; 3.2–3.4 are editor synthesis after 3.1; examiner last.
 
 - `2026-10-31` LS+SS — WP 3.1 ✅: `p3/BENCHMARK_PROFILES.md`. 10 free artefacts read at source; 7 obj.11 abstract-only cells upgraded to read-in-full. Findings: closest *as a benchmark* = BLOCKBENCH/DIABLO (4/5 axes) but identity-blind (no identity workload); closest *identity* benchmark = Satybaldy26 (pins A3, fails 4/5, IDTx ✗). Universal gaps: A5 (independent reproduction) across identity artefacts; A2 (admission rule) across all identity *performance* studies; and the IDTx in-transaction property absent from **every** artefact. **CONSEQUENTIAL CORRECTION (back-propagated to p1):** Frutuoso26 read in full — its issuer-accreditation check is enforced **off-chain at the client**; on-chain addClaim gates only on the sender's own key, no token transfer measured. Downgraded IDTx ✓→◐. So NO artefact ships a true in-transaction identity-gating workload — strengthens the gap. Fixed in `p1/BENCHMARK_GAP.md` (4 places) and `p1/THESIS_DRAFT.md` (2 places) this turn.
 
 - `2026-10-31` SS — WP 3.5 ✅: Phase-2 T2/T3 now **non-provisional**. 16 tag flips via free primaries (AAMVA mDL Impl. Guidelines v1.6 §4.2 selective disclosure + device-retrieval offline; RFC 9901 + SD-JWT-VC for the salted-digest mechanism; Brecht SCMS for V2X offline verify + pseudonym rotation). COMPARISON.md unverified ledger 42→35/120; residual [sec] narrowed to exact ISO-mdoc / 1609.2 wire-format encoding that the trade-offs do not turn on. FIGURES_P2.md count reconciled 42→35 (fixed stale drift immediately, as the first examiner's M5 taught). Phase-2 CAV argument no longer rests on unread paywalled specs.
+
+- `2026-10-31` ED — WP 3.2–3.4 ✅: `p3/BENCHMARK_V0.md`. §3.2 gap matrix (5 axes justified from TPC/SPEC/BLOCKBENCH independently of the IDTx term, answering the Phase-1 gerrymandering objection); two universal failures (conformance suites lack A3 cost; perf studies lack A2 admission + A5 reproduction) and the absolute absence (in-transaction identity-gating in no artefact). §3.3 benchmark v0 = W1 lifecycle (fn set, register #35/#49/#51) + W2 17-event composition + W3 IDTx classes (the tier no artefact has) | admission = pass-or-justified-n-a compliance suite | metrics = register M-conditions | harness = this repo. §3.4 reproduction kit + milestone ladder v0→v1(A5)→v1.x(cross-paradigm); A5 applied evenhandedly (this thesis's own v0 also lacks reproduction at publication). Launched examiner (3.6).
