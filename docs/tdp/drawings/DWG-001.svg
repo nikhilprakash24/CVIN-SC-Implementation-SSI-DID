@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="990" viewBox="0 0 1400 990" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="990" viewBox="0 0 1400 990" xml:space="preserve" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e3ecf9"/></marker><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#ffb454" stroke-width="1"/></pattern></defs>
 <rect width="1400" height="990" fill="#0f2d5c"/>
 <text x="44" y="104" font-size="10.5" text-anchor="start" fill="#93a9cb" font-weight="normal">SIDE ELEVATION — the seven planes of the testbed, Phase 1 code per plane; a plane depends only on the planes below it and on P5</text>
@@ -73,6 +73,7 @@
 <text x="942" y="683.5" font-size="9.5" text-anchor="middle" fill="#7cc9ff" font-weight="bold">7</text>
 <text x="144" y="286" font-size="9.5" text-anchor="start" fill="#ffb454" font-weight="normal">register 62 rows: V 45 · S 10 · E 7 · U 0   |   producers of record 20   |   CI jobs 11</text>
 <text x="144" y="196" font-size="9.5" text-anchor="start" fill="#ffb454" font-weight="normal">suites at the last grand run: L1 {'passing': 99, 'failing': 0}  L1+L2 {'passing': 563, 'failing': 0}  L3+L4 {'passed': 376}</text>
+<text x="144" y="466" font-size="9.5" text-anchor="start" fill="#ffb454" font-weight="normal">layer 5 (5_zkp-agent-identity): ZK-VIN proof of VIN predicates (P3), ZkVinGate on P2, the Steward on P4 — DWG-007</text>
 <line x1="46" y1="122" x2="46" y2="746" stroke="#93a9cb" stroke-width="0.8"/>
 <line x1="42" y1="122" x2="50" y2="122" stroke="#93a9cb" stroke-width="0.8"/>
 <line x1="42" y1="746" x2="50" y2="746" stroke="#93a9cb" stroke-width="0.8"/>
@@ -141,8 +142,8 @@
 <rect x="1010" y="56" width="346" height="48" stroke="#e3ecf9" fill="none" stroke-width="1" rx="0"/>
 <line x1="1010" y1="72" x2="1356" y2="72" stroke="#e3ecf9" stroke-width="0.8"/>
 <text x="1016" y="68" font-size="9.5" text-anchor="start" fill="#93a9cb" font-weight="normal">REV   DATE         DESCRIPTION                 REF</text>
-<text x="1016" y="86" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">A     2026-10-15   initial issue               AAR-20</text>
-<text x="1016" y="99" font-size="9.5" text-anchor="start" fill="#93a9cb" font-weight="normal">—     —            —                           —</text>
+<text x="1016" y="86" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">A     2026-10-15   initial issue                        AAR-20</text>
+<text x="1016" y="99" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">B     2026-10-31   DWG-007 added; test paths; Layer 5 o AAR-39</text>
 <text x="44" y="798" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="bold">NOTES</text>
 <text x="44" y="814.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">1. Planes and interfaces per docs/phase2/ARCHITECTURE.md section 1 and 2; Phase 1 code per plane as listed there.</text>
 <text x="44" y="826.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">2. P0 has no SUMO run of record (SC-22): every message-path result uses MockMobility (--simulate).</text>
@@ -150,8 +151,9 @@
 <text x="44" y="851.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">4. P2 gas is M1 (in-process Hardhat, chain 31337); no M2 (public testnet) run exists (N-11).</text>
 <text x="44" y="864.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">5. Counts on P5 and P6 are read from docs/figures/dashboard_snapshot.json (the last grand run; its commit is in the snapshot).</text>
 <text x="44" y="876.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">6. Balloon numbers refer to the bill of materials; each item names the directory or file it stands for.</text>
+<text x="44" y="889.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">7. Layer 5 (zero-knowledge VIN predicates and the agent wrapper, register #56 to #62) sits across P2 to P4 and is drawn on DWG-007.</text>
 <text x="1000" y="118" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="bold">BILL OF MATERIALS (balloon → item)</text>
-<rect x="1000" y="126" width="356" height="206" stroke="#e3ecf9" fill="none" stroke-width="0.8" rx="0"/>
+<rect x="1000" y="126" width="356" height="232" stroke="#e3ecf9" fill="none" stroke-width="0.8" rx="0"/>
 <text x="1006" y="138" font-size="9.5" text-anchor="start" fill="#93a9cb" font-weight="normal">NO  ITEM                      SOURCE</text>
 <text x="1006" y="154" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">1   P6 PRESENTATION           </text>
 <text x="1006" y="165" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    docs/figures/</text>
@@ -167,6 +169,8 @@
 <text x="1006" y="295" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    cv2x-testbed/sumo/sumo_identity_integration.py</text>
 <text x="1006" y="310" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">7   P0 MOBILITY               </text>
 <text x="1006" y="321" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    cv2x-testbed/sumo/sumo_identity_integration.py (Mock</text>
+<text x="1006" y="336" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">8   Layer 5                   </text>
+<text x="1006" y="347" font-size="8.5" text-anchor="start" fill="#7cc9ff" font-weight="normal">    5_zkp-agent-identity/</text>
 <rect x="960" y="822" width="396" height="134" stroke="#e3ecf9" fill="none" stroke-width="1.6" rx="0"/>
 <line x1="960" y1="866" x2="1356" y2="866" stroke="#e3ecf9" stroke-width="0.8"/>
 <line x1="960" y1="910" x2="1356" y2="910" stroke="#e3ecf9" stroke-width="0.8"/>
@@ -176,7 +180,7 @@
 <text x="968" y="880" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">DRAWING NO.</text>
 <text x="968" y="898" font-size="14" text-anchor="start" fill="#7cc9ff" font-weight="bold">DWG-001</text>
 <text x="1166" y="880" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">SHEET        REV      SCALE</text>
-<text x="1166" y="898" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="normal">1 OF 6       A        NTS</text>
+<text x="1166" y="898" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="normal">1 OF 7       B        NTS</text>
 <text x="968" y="923" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">DRAWN  make_blueprints.py</text>
 <text x="968" y="935" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">CHECKED  CI (--check, byte for byte)</text>
 <text x="968" y="947" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">ISSUE 2026-10-15  N. Prakash, UBC ECE</text>

@@ -1,10 +1,10 @@
 # TDP-010 — Thesis Adaptation Map: the Specification onto Chapter 3
 
 **Author:** Nikhil Prakash (MASc, UBC ECE)
-**Written:** 2026-10-21 (after-action report 25; runbook phase 10). **Revision:** A.
+**Written:** 2026-10-21 (after-action report 25; runbook phase 10). **Revision:** B (2026-10-31, report 39).
 **Binds:** `docs/STYLE_AND_RIGOUR_GUIDE.md`; `docs/tdp/README.md` (TDP-000). **Supersedes:** nothing.
 **What this is.** Each shall-statement of TDP-002 mapped to the section of chapter 3 (`docs/thesis/chapter3-methodology/README.md`,
-539 lines at `b7ea6f4`) that carries its commitment, with the state of the current text against it and the sentence
+539 lines at `b7ea6f4`; 632 lines at `b50864c`, where sections 3.1 to 3.8 are unchanged line for line and a new section 3.9 on the zero-knowledge extension was appended, so every line reference below still holds) that carries its commitment, with the state of the current text against it and the sentence
 that would carry it in the thesis register. Where the commitment is a result, an interpretation or a limitation, the
 map names chapter 5, 6 or 7 instead. Section 3 lists the places where chapter 3 now contradicts the register or omits
 what passes 16 to 24 established. Section 4 says how the recent work (C1, C2, the I-24 and I-05 briefs, the decision
@@ -17,7 +17,7 @@ after decisions D-1 to D-15). Every number carries its register row and is statu
 |---|---|
 | State | **carries**: the current text states the commitment. **absent**: nothing in chapter 3 states it. **contradicts**: the current text says something the register does not hold, with the line number. **partial**: present without its limit |
 | Sentence | the sentence to paste, in the thesis register (declarative, no hedging adverb, the row in brackets). A sentence is written once here and not again in D1 |
-| Chapter | 3.x the chapter 3 section (existing, or "new 3.9" and "new 3.10" per the outline in section 5); 5, 6, 7 when the commitment is not method |
+| Chapter | 3.x the chapter 3 section (existing, or "new 3.10" and "new 3.11" per the outline in section 5; the chapter's own 3.9 is the zero-knowledge extension added 2026-10-22); 5, 6, 7 when the commitment is not method |
 
 ## 2. The map
 
@@ -26,7 +26,7 @@ after decisions D-1 to D-15). Every number carries its register row and is statu
 | Req | Chapter | State | Sentence |
 |---|---|---|---|
 | SYS-01 identical operation set, n/a never emulated | 3.2 | carries (lines 79 to 137) | keep; add after line 132: "Totals that exclude events a substrate lacks are marked 'excl. n/a' and are not compared with full totals [#35]." |
-| SYS-02 one evidence register | new 3.9 | absent | "Every number in chapters 5 to 7 is a row of the claim register with status V, carrying its condition tag, source path and commit; a number without a row is labelled an estimate or a target [`docs/MEASUREMENT_CONDITIONS.md` section 2]." |
+| SYS-02 one evidence register | new 3.10 | absent | "Every number in chapters 5 to 7 is a row of the claim register with status V, carrying its condition tag, source path and commit; a number without a row is labelled an estimate or a target [`docs/MEASUREMENT_CONDITIONS.md` section 2]." |
 | SYS-03 declared condition tags | 3.1.3 | partial (lines 60 to 75 name the platform, not the tags) | "Measurements are tagged M0 (in-process, no chain), M1 (Hardhat local), M1-H (the metrics harness), M1-H/HTTP (over a local JSON-RPC hop) or M2 (public testnet); no M2 measurement exists in this thesis [register section 1]." |
 
 ### 2.2 Cost and storage (PRF, RQ1)
@@ -77,15 +77,22 @@ after decisions D-1 to D-15). Every number carries its register row and is statu
 |---|---|---|---|
 | INF-01 to INF-05 | new 3.4.8 (V2I and I2I method) and 5.4.1 | absent (chapter 3 has no infrastructure method; chapter 5 section 5.4.1 has the results) | "Roadside units, signal controllers and a traffic-management centre are `did:ethr` identities credentialed by a road authority; SPaT is signed at 10 Hz and verified with the same window, replay, binding and revocation rules as a BSM; five questions were pre-registered with bands and falsifiers before any run, and every departure is a dated amendment [`docs/design/INFRASTRUCTURE_PREREG.md`; #44 to #48]. The back-haul is in-process and the revocation registry has no propagation delay." |
 
+### 2.6a Layer 5 (L5) and the basic-set coverage (SYS-04)
+
+| Req | Chapter | State | Sentence |
+|---|---|---|---|
+| L5-01 to L5-07 | 3.9 (as written 2026-10-22) and 5.10 | carries (3.9.1 states Z-E1 to Z-E7 with conditions and verdict rules; 3.9.2 the amendments; 3.9.3 the tags M0, M1, Sim, E; 3.9.4 the manual-burden method) | keep; one addition to 3.9.3: "All layer-5 runs of record are at commit `978988e` with the producing code clean; the manual-burden run at `e780d40` reproduces them [#57 to #62]." |
+| SYS-04 basic-set coverage | 3.2 (new 3.2.4) | absent | "The catalogue is mapped onto the basic digital-ID function set, Set A for identity and keys and Set B for credentials; coverage is reported per substrate under two counts, strict (every mapped function present) and native (every mapped function a native primitive), which admit different substrates [#53, #54]." |
+
 ### 2.7 Evidence and reproducibility (EVD)
 
 | Req | Chapter | State | Sentence |
 |---|---|---|---|
-| EVD-01 run stamp with scope | new 3.9 | absent | "Every producer stamps its output with the commit, a dirty flag computed over its resolved import closure and declared inputs, and the whole-tree flag beside it; a run with a dirty producing-code flag is discarded and the discard recorded [`tools/run_identity/stamp.py`]." |
-| EVD-02 promote from a clean run | new 3.9 | absent | "A result reaches its tracked path only through a promote step that refuses a dirty run, another commit, a changed scope, an edited output or an undeclared destination [`tools/run_identity/promote.py`]." |
-| EVD-03 pre-registration, dated amendments | new 3.10 | absent | "Pre-registered experiments commit their questions, measures, bands and falsifiers before the first run; departures are dated amendments marked post hoc where made after the run; verdicts are reported as they fell, including the two FAIL verdicts and the one ratio outside its band [#33, #38, #44]." |
-| EVD-04 generated documents | new 3.9 | absent | "Figures, registers and tables are generated from committed data by committed scripts and compared in continuous integration; none is edited by hand." |
-| EVD-05 every guard shown to fire | new 3.9 | absent | "Every guard has a probe that fails on the broken version and runs in continuous integration; a guard never seen to trip is not treated as evidence." |
+| EVD-01 run stamp with scope | new 3.10 | absent | "Every producer stamps its output with the commit, a dirty flag computed over its resolved import closure and declared inputs, and the whole-tree flag beside it; a run with a dirty producing-code flag is discarded and the discard recorded [`tools/run_identity/stamp.py`]." |
+| EVD-02 promote from a clean run | new 3.10 | absent | "A result reaches its tracked path only through a promote step that refuses a dirty run, another commit, a changed scope, an edited output or an undeclared destination [`tools/run_identity/promote.py`]." |
+| EVD-03 pre-registration, dated amendments | new 3.11; the chapter's 3.9 already carries it for layer 5 | partial (3.9.1 and 3.9.2 state the protocol for Z-E1 to Z-E7 and amendments A1, A2; the Phase 1 pre-registrations I1 to I5, M4, M5 are not stated) | "Pre-registered experiments commit their questions, measures, bands and falsifiers before the first run; departures are dated amendments marked post hoc where made after the run; verdicts are reported as they fell, including the two FAIL verdicts and the one ratio outside its band [#33, #38, #44]." |
+| EVD-04 generated documents | new 3.10 | absent | "Figures, registers and tables are generated from committed data by committed scripts and compared in continuous integration; none is edited by hand." |
+| EVD-05 every guard shown to fire | new 3.10 | absent | "Every guard has a probe that fails on the broken version and runs in continuous integration; a guard never seen to trip is not treated as evidence." |
 | EVD-06 full suite, no skips | 3.1.3 or new 3.9 | absent | "The contract suite, the Python suites and the demo runner run in continuous integration with a skipped test counted as a failure and the test count gated against the grand report." |
 
 ## 3. Chapter 3 against the register and passes 16 to 24: the drift table
@@ -128,17 +135,18 @@ Items 1 to 4 and 11 are contradictions; the rest are omissions. None requires a 
 | Section | Content | Requirements carried |
 |---|---|---|
 | 3.1 Research design | design; Scope v3 questions with their hypotheses stated as split where the evidence splits them; platform with condition tags | SYS-03 |
-| 3.2 The comparative framework | the operation catalogue; mapping; n/a never faked; the identity-dependent limit | SYS-01, PRF-07 |
+| 3.2 The comparative framework | the operation catalogue; mapping; n/a never faked; the basic-set coverage; the identity-dependent limit | SYS-01, SYS-04, PRF-07 |
 | 3.3 Cost measurement | 3.3.1 exact gas; 3.3.2 determinism for the benchmark; 3.3.3 the public-testnet witness (not run); **3.3.4 the metrics harness** (catalogue, lifecycle, storage, read cost, run identity by tree hash, the gas charter and the seeding rule); 3.3.5 the lifetime model | PRF-01 to PRF-06 |
 | 3.4 Message-path measurement | 3.4.1 what is measured; 3.4.2 cold and warm; 3.4.3 the seeded protocol; 3.4.4 injected attacks (five); 3.4.5 mobility and scope; **3.4.6 freshness window and replay**; **3.4.7 revocation freshness: the re-check cadence, the two refresh modes, the model, the clock rule**; **3.4.8 infrastructure messaging: identities, SPaT, I2I, the five pre-registered questions** | RTV-01 to RTV-04, SEC-02 to SEC-04, INF-01 to INF-05 |
 | 3.5 Security method | 3.5.1 the strict-reason harness; 3.5.2 taxonomy; 3.5.3 threat matrix; **3.5.4 observability: the pseudonym pool**; the consent rule and the chain-id limit | SEC-01, SEC-05, SEC-07 |
 | 3.6 Standards expression | the structural self-score; the external suite; the resolver with and without a provider | STD-01, STD-02 |
 | 3.7 Lifecycle profile | the backend sweep; fidelity; **3.7.3 database parity**; the MOBI-VID-inspired wording | STD-03, STD-04 |
 | 3.8 Threats to validity | the current five plus the eight of drift item 14, in the order of TDP-009 | SEC-06 and every limit column of TDP-002 |
-| **3.9 Evidence discipline** | register, condition tags, stamps, promote, generated documents, probes, the pre-push guard, no skips | SYS-02, EVD-01, EVD-02, EVD-04 to EVD-06 |
-| **3.10 Pre-registration** | the protocol; amendments; verdicts as they fell | EVD-03 |
+| 3.9 Zero-knowledge extension | as written: pre-registration, amendments, conditions, the manual-burden method | L5-01 to L5-07 |
+| **3.10 Evidence discipline** | register, condition tags, stamps, promote, generated documents, probes, the pre-push guard, no skips | SYS-02, EVD-01, EVD-02, EVD-04 to EVD-06 |
+| **3.11 Pre-registration** | the protocol generalised from 3.9 to I1 to I5, M4 and M5; amendments; verdicts as they fell | EVD-03 |
 
-Section 3.9 and 3.10 are the two the examiner will not find in a conventional methodology chapter and will ask
+Sections 3.10 and 3.11 are the two the examiner will not find in a conventional methodology chapter and will ask
 about first (scope reconciliation section 5, question 15 and the audit's "how do you know your numbers are current").
 
 ## 6. What this map does not do
@@ -148,3 +156,10 @@ about first (scope reconciliation section 5, question 15 and the audit's "how do
 - It does not restate the IDTx taxonomy or the freshness theory; both have their briefs.
 - It carries no number that is not a V row; the two FAIL verdicts and the one outside-band ratio appear because the
   method sentence that reports verdicts as they fell is incomplete without them.
+
+## 7. Revision history
+
+| Rev | Date | Change |
+|---|---|---|
+| A | 2026-10-21 | initial issue (report 25) |
+| B | 2026-10-31 | chapter 3 re-read at `b50864c` (632 lines; 3.1 to 3.8 unchanged, 3.9 added for layer 5); proposed sections renumbered 3.10 and 3.11; section 2.6a for L5-01 to L5-07 and SYS-04; EVD-03 partial; drift item 15 (report 39) |

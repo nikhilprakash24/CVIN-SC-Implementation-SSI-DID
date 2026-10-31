@@ -306,3 +306,11 @@ Outputs: `docs/zkp/` (plans 1 and 2 with phased prompts; reports A, B, C; source
 `5_zkp-agent-identity/` (zkid, ZK-VIN circuit and artefacts, ZkVinGate, Schnorr verifier, the Steward, attacks, bench,
 figures, demo, tests, mutation probe); `1_blockchain-identity/hardhat.zkp.config.js`; `.github/workflows/zkp-layer5.yml`;
 README section. Report: `docs/AFTER_ACTION_REPORT_28.md`.
+
+## Pass 39 — TDP revision B completed (2026-10-31)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_39.md` | plan, log, closing | standing rule |
+| `docs/tdp/requirements.yaml`, `make_vcrm.py`, TDP-002, TDP-005 | SYS-04, L5-01 to L5-07; file-backed verdicts | runbook phase 1 |
+| `docs/tdp/make_blueprints.py`, `drawings/DWG-001..007.svg` | Rev B revision block; DWG-007; whitespace fix | runbook phase 2 |
+| `docs/tdp/TDP-004_...md`, `TDP-010_...md`, `README.md`, `TDP-RUNBOOK.md`, `TDP-PLAN.md` | Rev B | runbook phase 12 |

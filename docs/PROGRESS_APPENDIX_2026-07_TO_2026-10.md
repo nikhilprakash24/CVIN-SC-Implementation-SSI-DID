@@ -304,11 +304,69 @@
 | `df64ce9` | 2026-10-22 | Status and report 26: report 25 was taken by the TDP session; the check takes the next free number |
 | `87334d6` | 2026-10-22 | Status: two remaining references to report 25 corrected |
 
-## report 27 (2026-10-22 to 2026-10-22, 2 commits)
+## report 27 (2026-10-22 to 2026-10-23, 9 commits)
 
 | Commit | Date | Subject |
 |---|---|---|
 | `fa275da` | 2026-10-22 | After-action report 27 opened: TDP runbook phases 8 and 9 |
 | `ad6d6c5` | 2026-10-22 | TDP runbook phases 8 and 9: requirement-to-test trace with its guard (TDP-005 section 3); ICD gate check_icd.py in CI with a probe; TDP-003 … |
+| `ec7e19b` | 2026-10-22 | Report 27 closed: CI 8/8 green on ad6d6c5 |
+| `81dc3ac` | 2026-10-22 | Merge PR #7: the integrated trunk into the cv2x-testbed workspace (Plan 5) |
+| `9990db7` | 2026-10-22 | Merge PR #9: keep the workspace in sync (WM-2 A3b and A6) |
+| `40cdbcd` | 2026-10-23 | Unblocked work list, 2026-10-23: twelve items that need no decision, nine that wait and why, a proposed order |
+| `62a41c6` | 2026-10-23 | After the merge of PRs 3-9: status addendum (A3, A3b, A6 done elsewhere; 62 rows; next A5), unblocked list revised, the two report-26 drafts… |
+| `35eead9` | 2026-10-22 | Merge PR #11: keep the workspace in sync (WM-2 A5) |
+| `f67efb6` | 2026-10-23 | Unblocked list: A5 done by another session (50888c7) |
 
-189 commits in 24 groups.
+## report 35 (2026-10-23 to 2026-10-23, 6 commits)
+
+| Commit | Date | Subject |
+|---|---|---|
+| `cf60516` | 2026-10-23 | Report 35 opened: WM-2 B3 (latency charter) and A7 (Python suites in the test register) |
+| `0236430` | 2026-10-23 | WM-2 B3: latency charter (14 rows classed; #26, #31, #39, #57 descriptive only, noted in the register); the harness records no CPU (N-26); c… |
+| `9383158` | 2026-10-23 | WM-2 A7: the grand runner keeps a per-test record of the Python layers; the test register gives each of the 376 Python tests a TC id (L3 78,… |
+| `b49c9a1` | 2026-10-23 | Plan WM-2: B3 and A7 done (report 35) |
+| `09c5363` | 2026-10-23 | Pass 35 grand run ALL OK at b49c9a1 (Hardhat 562, Python 376); generated documents regenerated |
+| `55bf410` | 2026-10-23 | Reports 35 and 26 closed: CI 11/11 green on 09c5363 |
+
+## report 36 (2026-10-23 to 2026-10-24, 16 commits)
+
+| Commit | Date | Subject |
+|---|---|---|
+| `2dbfc30` | 2026-10-23 | Report 36 opened: mutation probes for the C1 and C2 tests |
+| `cea9cf0` | 2026-10-23 | Mutation probes for the C1 and C2 tests: resolver 0/9 survive; D54 probe on behaviour tests found one survivor (revoked identity), closed by… |
+| `cb5ed18` | 2026-10-23 | Pass 36 grand run ALL OK at cea9cf0 (Hardhat 563); generated documents regenerated |
+| `558fc9d` | 2026-10-23 | CI: run the chain-resolver mutants in the Python job, which has the node (report 36) |
+| `6a7fe6c` | 2026-10-24 | Close report 36 (CI green); report 37: pinned CI Python packages (U9), I-05 model as code (U8) |
+| `3406bca` | 2026-10-24 | Master plan and atlas: phases, integration, plan forward, Phase B open questions, blockers, reading list, catalogue (report 37) |
+| `99e30e4` | 2026-10-24 | Chapter audit (U6, read-only) and the visual master atlas (report 37) |
+| `8984cad` | 2026-10-24 | Atlas: U6 shown done (report 37) |
+| `e481889` | 2026-10-24 | CI: read the pins file from the workspace root, for jobs that run in a subdirectory (report 37) |
+| `56448d1` | 2026-10-24 | Report 37: CI green with the pins |
+| `5f09e93` | 2026-10-24 | Stale-figure checker: superseded #27/#28/#22/#25 values and small counts; 24 files corrected outside the thesis; thesis hits pending on D1 (… |
+| `8b35320` | 2026-10-24 | RSU-to-RSU design note (U5 = WM-2 D2) and the read-only TDP review (U7) (report 37) |
+| `28dd0b9` | 2026-10-24 | Progress report draft 2 (U11); index, history and handback hygiene (U12); unblocked list marked done (report 37) |
+| `165db04` | 2026-10-24 | Branch review (T-12); master plan and atlas updated; report 37 closing |
+| `1fba094` | 2026-10-24 | Report 37 closed: CI green on 165db04 |
+| `7b53fb5` | 2026-10-24 | Merge PR #17's sync: the default branch's NatSpec, contract-reference and Roots documents into the workspace |
+
+## report 38 (2026-10-24 to 2026-10-24, 8 commits)
+
+| Commit | Date | Subject |
+|---|---|---|
+| `7c8a78a` | 2026-10-24 | Merge PR #17's sync (NatSpec pass, contract reference, Roots documents); test register regenerated; report 38 opened |
+| `963439a` | 2026-10-24 | Stamp checker: comment-only commits, verified, exempt only results without deployment gas; bytecode equivalence tool (report 38) |
+| `57dfab4` | 2026-10-24 | Re-run of record after the NatSpec pass: five deployment-gas cells moved by 12, rows 25, 26, 31, 34, 35, 39 restated; CI gate on code change… |
+| `243c2bb` | 2026-10-24 | Merge the integration branch (the other session's NatSpec re-run, PR #17, Roots); one run of record per producer; rows 26, 34, 35, 39 comple… |
+| `6a574a2` | 2026-10-24 | TDP-003: commit id as plain text (ICD check); grand run ALL OK; generated documents regenerated (report 38) |
+| `c9dc64b` | 2026-10-24 | Merge claude/exploration-plan (B-1, docs only): related-work workspace scaffold |
+| `18fb9f8` | 2026-10-24 | Merge the exploration workspace (B-1); master plan tasks; report 38 closing |
+| `b50864c` | 2026-10-24 | Report 38 closed: CI green on 18fb9f8 |
+
+## report 39 (2026-10-31 to 2026-10-31, 1 commits)
+
+| Commit | Date | Subject |
+|---|---|---|
+| `e02e603` | 2026-10-31 | After-action report 39 opened: TDP revision B completed (records, Layer 5 requirements, TDP-004 and TDP-010) |
+
+227 commits in 28 groups.

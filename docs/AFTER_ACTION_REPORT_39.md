@@ -27,3 +27,29 @@ JSON the generator can read; otherwise Layer 5 appears on DWG-001 as a plane ann
 
 ## 3. Execution log
 - 2026-10-31 — report opened.
+- **Q1, requirements.** SYS-04 (basic-set coverage, #53, #54) and a new group L5 with seven requirements (#56 to
+  #62), each a shall-statement on what its row measured and nothing more, with the row's limit; #39 cited by SYS-03
+  and #55 by RTV-03. `make_vcrm.py` gained file-backed verdicts (`file:<path>:<key>`), so the pre-registered Z-E
+  verdicts are read from the layer-5 result files, including Z-E6 FAIL as it fell. 44 requirements: 43 VERIFIED,
+  1 PARTIAL (SEC-06, D64 open). The uncited V rows are now the eight history and snapshot rows only (#1, #2, #3, #22,
+  #29, #39 is now cited, #42, #43).
+- **Q2, TDP-004 and the drawings.** DD-02 and DD-05 re-quoted from the A3b rows (#21 at 15.513 ms with 5 RPCs; #55's
+  one-host comparison, probe 3.2 times cheaper, no knee); DD-12 for layer 5. DWG-007 drawn from the three committed
+  layer-5 result files (pipeline, expectations as they fell, the Steward's loop, the attack table per defence and
+  variant); DWG-001 carries a layer-5 annotation and bill-of-materials item. The revision block now lists revisions
+  (Rev B row on every sheet, 7 sheets). One rendering defect found on inspection: SVG collapses runs of spaces, so
+  column-aligned text lost its alignment; `xml:space="preserve"` on the root fixes it for every sheet.
+- **Q3, TDP-010.** Chapter 3 re-read at `b50864c`: 632 lines, sections 3.1 to 3.8 unchanged line for line, a new 3.9
+  (zero-knowledge extension) appended; every line reference holds. The proposed sections renumbered 3.10 and 3.11;
+  section 2.6a maps L5-01 to L5-07 (carried by 3.9) and SYS-04 (absent); EVD-03 moved from absent to partial because
+  3.9.1 and 3.9.2 state the protocol for layer 5 only; drift item 15 reworded.
+- **Q4, records.** TDP-000 Rev B with the review in the tree; runbook phases 11 and 12 marked executed with their
+  reports; TDP-PLAN section 6; this report; handback and manifest. Probe: four guards fire; every document check passes.
+
+## 4. Closing
+The pass delivered Q1 to Q4. CI result on the closing commit: recorded in the "Report 39 closed" commit.
+
+**Every runbook phase has now run once.** Phases 1 to 7 recur on their triggers; the package is at revision B
+throughout, with 44 requirements, 7 drawings, 4 guards.
+
+**Next:** for the package, phase 1 when A3 closes or D64 is fixed; for the thesis, D1 with TDP-010 once D-1 is decided.

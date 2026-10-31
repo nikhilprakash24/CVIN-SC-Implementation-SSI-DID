@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="990" viewBox="0 0 1400 990" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="990" viewBox="0 0 1400 990" xml:space="preserve" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e3ecf9"/></marker><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#ffb454" stroke-width="1"/></pattern></defs>
 <rect width="1400" height="990" fill="#0f2d5c"/>
 <text x="44" y="104" font-size="10.5" text-anchor="start" fill="#93a9cb" font-weight="normal">EXPLODED VIEW — ten substrate cylinders between the JS adapter manifold (benchmarks) and the Python provider manifold (testbed)</text>
@@ -281,8 +281,8 @@
 <rect x="1010" y="56" width="346" height="48" stroke="#e3ecf9" fill="none" stroke-width="1" rx="0"/>
 <line x1="1010" y1="72" x2="1356" y2="72" stroke="#e3ecf9" stroke-width="0.8"/>
 <text x="1016" y="68" font-size="9.5" text-anchor="start" fill="#93a9cb" font-weight="normal">REV   DATE         DESCRIPTION                 REF</text>
-<text x="1016" y="86" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">A     2026-10-15   initial issue               AAR-20</text>
-<text x="1016" y="99" font-size="9.5" text-anchor="start" fill="#93a9cb" font-weight="normal">—     —            —                           —</text>
+<text x="1016" y="86" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">A     2026-10-15   initial issue                        AAR-20</text>
+<text x="1016" y="99" font-size="8.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">B     2026-10-31   DWG-007 added; test paths; Layer 5 o AAR-39</text>
 <text x="44" y="798" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="bold">NOTES</text>
 <text x="44" y="814.0" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">1. Each cylinder is one contract set under 1_blockchain-identity/contracts/&lt;standard&gt;/; MOBI-VID-V2 is an application profile measured beside the</text>
 <text x="44" y="826.5" font-size="9.3" text-anchor="start" fill="#e3ecf9" font-weight="normal">   nine.</text>
@@ -324,7 +324,7 @@
 <text x="968" y="880" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">DRAWING NO.</text>
 <text x="968" y="898" font-size="14" text-anchor="start" fill="#7cc9ff" font-weight="bold">DWG-002</text>
 <text x="1166" y="880" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">SHEET        REV      SCALE</text>
-<text x="1166" y="898" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="normal">2 OF 6       A        NTS</text>
+<text x="1166" y="898" font-size="11" text-anchor="start" fill="#e3ecf9" font-weight="normal">2 OF 7       B        NTS</text>
 <text x="968" y="923" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">DRAWN  make_blueprints.py</text>
 <text x="968" y="935" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">CHECKED  CI (--check, byte for byte)</text>
 <text x="968" y="947" font-size="8.5" text-anchor="start" fill="#93a9cb" font-weight="normal">ISSUE 2026-10-15  N. Prakash, UBC ECE</text>
