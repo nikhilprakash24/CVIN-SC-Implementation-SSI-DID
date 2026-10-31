@@ -31,7 +31,7 @@ AR-2, AR-3, AR-5, AR-9, AR-16, AR-41
 
 | Finding | Evidence |
 |---|---|
-| **Writing state is the part of gas the storage choice controls.** Over one 17-event lifecycle, zero→nonzero SSTOREs range from 8 (ERC-1056) to 149 (ERC-735), and lifetime gas from 1,050,809 to 5,797,549. This is an association, not a cause: some standards' cost is mostly per-identity contract code. | #49, #35 |
+| **Writing state is the part of gas the storage choice controls.** Over one 17-event lifecycle, zero→nonzero SSTOREs range from 8 (ERC-1056) to 149 (ERC-735), and lifetime gas from 1,050,809 to 5,797,561. This is an association, not a cause: some standards' cost is mostly per-identity contract code. | #49, #35 |
 | **Not writing state moves the cost to every reader.** ERC-1056 keeps attributes in event logs. Resolving one of its documents after 50 lifecycle events takes 112 RPC calls and 87 KB. State-storing standards stay flat in calls, while their bytes grow. | #31, #51 |
 | **Caching recovers the read cost at a bounded staleness.** The ERC-1056 cached verifier accepts at most k − 1 messages after a revocation. These rows predate the D51 fix, which now decides validity in chain time; they are due for re-run (A3b). | #32, #37 |
 | **A database is faster, and the cache did not match it as pre-registered.** On the 2026-10-04 re-run, on-chain writes were about 1,600 to 6,000 times slower. The "equal once cached" test **failed** (ratio 0.041). Keeping the cache fresh costs 15.403 ms and 6 RPC calls. | #33 |
