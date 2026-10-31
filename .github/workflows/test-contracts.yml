@@ -91,6 +91,10 @@ jobs:
         python3 -m pip install --quiet -r "$GITHUB_WORKSPACE/ci/requirements-ci.txt"
         python3 docs/figures/make_dashboard_data.py --check
         python3 docs/testing/build_register.py --check
+        python3 docs/testing/build_register.py --check-complete
+        bash docs/testing/probe_check_complete.sh
+        python3 docs/testing/check_charters.py
+        python3 docs/testing/check_charters.py --probe
         python3 docs/testing/check_docs_numbers.py
         python3 docs/testing/check_claims.py --check
         bash docs/testing/probe_check_claims.sh
