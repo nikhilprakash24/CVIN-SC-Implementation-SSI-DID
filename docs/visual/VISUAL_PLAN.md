@@ -358,7 +358,7 @@ wherever a result of record depends on it.
 | **V4 of that plan: install SUMO, run TraCI, S1–S3.** Open author decision **N-4 / P2-D4** (`docs/DECISION_SHEET_2026-10-20.md` §B: default *no*, recommendation *no* for Phase 2) | same plan §5, §7; decision sheet | **This branch installed SUMO in its own session for illustrations only.** No register row, result of record or test depends on it; without SUMO every script falls back to `--simulate` and every figure except the cold map, the GUI frames and the pairs still builds. Merging this branch does **not** decide N-4. If the author keeps *no*, the SUMO-based figures stay as appendix or defence illustrations, labelled with their mobility source. If *yes*, S1–S3 (N=30 in TraCI mode) become the next measurement step. |
 | Plan §7 "Not built: the network drawing from `highway_intersection.net.xml`" | same | **Built**, after the network file was regenerated so SUMO loads it: `viz/sumo_views.py coldmap`. |
 | Register #27 re-executed on the trunk (WM-2 A3b batch L, `f1f3596`): SSI warm **0.142 ms [0.141, 0.143]**, 7 attacks per run | `docs/MEASUREMENT_CONDITIONS.md` #27 | This branch's traced N=30 run gave 0.141 ms with identical totals (1,650,318 verifications, 210 failures), so it agrees with #27. Traced runs here are still never used as results of record. |
-| Stale-figure checker for superseded #27/#28/#22/#25 values (report 37, branch `claude/cv2x-testbed-setup-…`) | that branch | Figures here print no register value in their titles, only counts from the trace, so they should pass it. Run it over `docs/visual/` once that branch lands. |
+| Stale-figure checker for superseded #27/#28/#22/#25 values (report 37) | `docs/testing/check_docs_numbers.py`, on the trunk and run in CI | `docs/visual/` passes it: 0 stale figures (2026-10-31). It caught superseded gas values that this branch had quoted in `deck/README.md`; they were removed. |
 | Results dashboard, master atlas, result cards (branches `claude/cv2x-testbed-setup-…`, `claude/zkp-ai-identity-research-…`) | `docs/figures/results_dashboard.html`, `master_atlas.html` | The replay (`replay/replay.html`) is a candidate dashboard panel. It shares the dashboard palette convention: colour always with a text label. |
 | IDTx Phase 1 figures, generated as deterministic SVG (branch `claude/determined-meitner-…`); blueprint sheets BP-000… (branch `claude/system-blueprint-diagrams-…`); TDP drawings DWG-001/005 | `docs/idtx_core/figures/`, `docs/blueprints/`, `docs/tdp/drawings/` | These are the diagram family for chapters 3–4 (architecture, lifecycle). This branch's figures are the data family for chapters 4–5. Phase 6 (deck, poster) should draw on both, and keep generated illustrations (§6) out of chapters as before. |
 
@@ -407,7 +407,5 @@ Next: Phases 6–8 (deck and poster, illustrations, final QA).
 - **Poster:** an A1 PDF (`poster/`, from `poster/build_poster.py`).
 - **Sources:** both use only committed figures and register values. The gas
   slide is a native chart from the results of record (#25).
-- **Found in passing:** the README key-results gas table is stale against #25
-  (see `deck/README.md`).
 
 Next: Phase 7 (illustrations from prompts P1–P5) and Phase 8 (final QA).

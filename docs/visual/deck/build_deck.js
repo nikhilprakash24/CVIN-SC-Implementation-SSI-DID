@@ -233,7 +233,7 @@ s.addChart(pres.charts.BAR, [{ name: "createIdentity gas", labels: gas.map(g => 
 stat(s, 9.55, 1.5, 3.2, "33.7×", "spread, ERC-735 against CVIN-Combined", C.text1, "spread");
 para(s, `Source: 4_comparison-framework/results/gas_benchmark.json (register #25, commit ${A._gas_meta.commit}). MOBI-VID-V2 is an application profile, not a base standard.`,
   9.55, 3.55, 3.2, 2.6, { fontSize: 13, color: C.text2 });
-s.addNotes("Native chart from the results of record. The README key-results table still shows pre-2026-10-09 cells for ERC-721, ERC-735, ERC-1155, LSP8 and MOBI-VID-V2; this chart follows the results file and register #25.");
+s.addNotes("Native chart from the results of record (gas_benchmark.json, register #25); the README key-results table carries the same values.");
 
 // 11 Limits
 pres.addSection({ title: "Close" });

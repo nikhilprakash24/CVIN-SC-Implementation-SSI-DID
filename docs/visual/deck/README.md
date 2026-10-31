@@ -13,10 +13,8 @@ one message anatomised · gas per identity · what the pictures may claim · wha
 
 Every data slide uses a committed figure PNG unchanged (`docs/visual/FIGURES.md`).
 The gas slide is a native PowerPoint chart read from
-`4_comparison-framework/results/gas_benchmark.json` (register #25). That file
-and the register agree; **the README key-results table does not.** It still
-shows the older cells (ERC-721 542,378; ERC-735 1,535,776; ERC-1155, LSP8 and
-MOBI-VID-V2 also differ), so the README table needs regenerating.
+`4_comparison-framework/results/gas_benchmark.json` (register #25); the README key-results table
+agrees with both.
 
 ## Rebuild
 
