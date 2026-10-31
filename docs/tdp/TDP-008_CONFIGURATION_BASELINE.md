@@ -38,7 +38,7 @@ versions, the runs of record with their identities, the toolchain pins, the buil
 | Register rows | Producer | Code commit | Result commit or run id | Identity fields |
 |---|---|---|---|---|
 | #25 | `benchmark_gas.js` | `d0cc19c` | `4_comparison-framework/results/gas_benchmark.json` | `metadata.dirty` false; 30 of 30 runs byte-identical |
-| #29, #30, #31, #34, #35, #36, #49, #50, #51 | `benchmarks/run.js` | `7a59058` | run `2026-10-24T12-29-26Z_7a59058` (`results/metrics/latest/`; was `2026-10-09T02-09-36Z_7a9a996`) | `measured.{benchmarksTree, contractsTree, hardhatConfigBlob, lockfileBlob}`; `dirty` false; Hardhat 2.28.6, Node v22.22.2, ethers 6.17.0 |
+| #29, #30, #31, #34, #35, #36, #49, #50, #51 | `benchmarks/run.js` | `291a801` | run `2026-10-31T03-29-43Z_291a801` (`results/metrics/latest/`; was 2026-10-24T12-29-26Z_7a59058, before that `2026-10-09T02-09-36Z_7a9a996`) | `measured.{benchmarksTree, contractsTree, hardhatConfigBlob, lockfileBlob}`; `dirtyMeasured` false (`dirty` true: an earlier producer's output of the same re-run was uncommitted); Hardhat 2.28.6, Node v22.22.0, ethers 6.17.0 |
 | #21, #22, #23 | `experiment_pki_vs_erc1056.py` | `1c1b8e1` | results `1d0e3a2` | `git_dirty` false; cryptography 49.0.0 |
 | #27 | `run_v2v_stats.py` | `58a6513` | results `d78e344` | 30 seeded runs, Xeon 2.10 GHz x 4; pre-merge lineage (re-run scheduled, A3b) |
 | #32 | `experiment_freshness_k.py` | `8216507` | results `bcff389` | `git_dirty` false; host 2.10 GHz |

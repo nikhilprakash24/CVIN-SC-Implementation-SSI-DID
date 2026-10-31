@@ -154,6 +154,16 @@ struct VehicleBirth {
 
 ### 2. Smart Contract: MOBIVIDRegistry.sol
 
+> **Design draft, not the deployed contract.** The Solidity below is the pre-implementation sketch. The
+> contract that is compiled, tested and measured is `1_blockchain-identity/contracts/MOBI/MOBIVIDRegistry.sol`
+> (byte-identical copy in `cv2x-testbed/contracts/`); its annotated reference is
+> `docs/smart-contracts/02-mobi-vid.md`, and its API reference is under `docs/smart-contracts/api/`. Known differences:
+> - The draft passes `type(uint256).max` as attribute validity. ERC-1056 computes
+>   `block.timestamp + validity`, so that overflows and reverts (defect D18, `docs/DEFECT_LOG.md`); the
+>   contract uses `PERMANENT_ATTRIBUTE_VALIDITY` (100 years).
+> - `findVehicleByVINHash` is `lookupByVINHash` in the contract.
+> - Delegations and roles follow the contract, not this sketch.
+
 #### Contract Structure
 
 ```solidity

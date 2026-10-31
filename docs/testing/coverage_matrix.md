@@ -23,7 +23,7 @@ T = exercised by a passing demo · T* = passing demo that flags steps (DEFECT or
 Totals: G 13, N 78, T 51, T* 40.
 The two baselines (centralized registry, IEEE 1609.2-style PKI) are Python providers with no feature demos by design; their G cells are exercised by the Python suites and the experiments, not by demos.
 
-Test register: 1210 TC entries in `docs/testing/test_register.yaml`.
+Test register: 1212 TC entries in `docs/testing/test_register.yaml`.
 
 **Manifest / demo mismatches** (shown as N above):
 - erc-1056-vehicle / Claims / credentials: manifest says not applicable, but a passing demo exists
@@ -42,7 +42,7 @@ Count of registered tests (per-option contract tests, harness and stats tests, t
 | erc-1056-vehicle | 15 | 12 | · | · | · | · | · | · | · | 27 |
 | erc-1155 | 4 | 27 | · | · | 7 | · | · | · | · | 38 |
 | erc-4337 | 9 | 6 | 1 | · | · | · | · | · | · | 16 |
-| erc-721 | 10 | 10 | · | · | · | · | · | · | · | 20 |
+| erc-721 | 10 | 11 | · | · | · | · | · | · | · | 21 |
 | erc-725xy | 5 | 9 | · | · | 1 | · | · | · | · | 15 |
 | erc-735 | 8 | 20 | 2 | · | 7 | · | · | · | · | 37 |
 | harness-adapters | · | · | · | 13 | · | · | · | · | · | 13 |
@@ -54,5 +54,5 @@ Count of registered tests (per-option contract tests, harness and stats tests, t
 | v2v-path | 8 | 14 | 15 | · | · | · | · | · | · | 37 |
 | vc-layer | · | · | 4 | · | · | · | · | · | · | 4 |
 | zkp-agent | 8 | 5 | 2 | · | · | · | · | · | · | 15 |
-| zkp-vin | 16 | 5 | 10 | · | · | · | · | · | · | 31 |
-| **all** | 200 | 191 | 59 | 15 | 34 | 2 | 0 | 20 | 6 | 527 |
+| zkp-vin | 16 | 6 | 10 | · | · | · | · | · | · | 32 |
+| **all** | 200 | 193 | 59 | 15 | 34 | 2 | 0 | 20 | 6 | 529 |

@@ -35,8 +35,10 @@ import "@openzeppelin/contracts/utils/Strings.sol";
  * @custom:standard ERC-721 Non-Fungible Token (core, Metadata, Enumerable) https://eips.ethereum.org/EIPS/eip-721
  * @custom:standard ERC-165 Standard Interface Detection https://eips.ethereum.org/EIPS/eip-165
  * @custom:standard W3C DID Core (did:nft is not a registered DID method) https://www.w3.org/TR/did-core/
- * @custom:security Reentrancy window: mintVehicle calls _safeMint (onERC721Received on a contract recipient)
- *                  before the VIN maps and metadata are written. Caller must hold MANUFACTURER_ROLE.
+ * @custom:security Fixed: mintVehicle used to call _safeMint (onERC721Received on a contract recipient)
+ *                  before writing the VIN index, so a MANUFACTURER_ROLE receiver could re-enter and mint
+ *                  the same VIN twice. The VIN maps are now written first; metadata is still written
+ *                  after the callback (getVehicleMetadata reads empty inside it).
  * @custom:security No burn: a deactivated vehicle can still be transferred and still receive service
  *                  records (neither path checks `active`).
  * @custom:security transferHistory and serviceRecords are unbounded arrays; the whole-array getters can
@@ -173,10 +175,11 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
      * @param metadataURI IPFS URI for comprehensive metadata
      * @return tokenId The minted token ID
      * @dev Access: MANUFACTURER_ROLE. Normalises the VIN (ISO 3779, D13), requires it to be unique
-     *      and `to != address(0)`, `_safeMint`s, sets the token URI, writes the VIN maps and metadata
+     *      and `to != address(0)`, writes the VIN maps, `_safeMint`s, sets the token URI, writes the metadata
      *      and pushes a mint TransferRecord. Emits Transfer, MetadataUpdate (OZ URIStorage) and
      *      VehicleMinted. CVIN extension wrapping the ERC-721 mint.
-     * @custom:security _safeMint invokes onERC721Received before the VIN maps/metadata are written.
+     * @custom:security The VIN maps are written before _safeMint's onERC721Received callback, so the callback
+     *                  cannot mint the same VIN again; metadata is written after it.
      */
     function mintVehicle(
         address to,
@@ -195,14 +198,15 @@ contract CVINVehicleNFT is ERC721, ERC721URIStorage, ERC721Enumerable, AccessCon
 
         uint256 tokenId = _nextTokenId++;
 
+        // Store mappings BEFORE _safeMint: its onERC721Received callback must already see the VIN
+        // as minted, or a manufacturer-role receiver could re-enter and mint the same VIN twice
+        // (checks-effects-interactions; test mintReentrancy.regression.test.js).
+        vinToTokenId[vin] = tokenId;
+        tokenIdToVIN[tokenId] = vin;
 
         // Mint NFT
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, metadataURI);
-
-        // Store mappings
-        vinToTokenId[vin] = tokenId;
-        tokenIdToVIN[tokenId] = vin;
 
         // Store metadata
         vehicleMetadata[tokenId] = VehicleMetadata({

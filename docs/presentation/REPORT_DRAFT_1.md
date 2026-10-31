@@ -1,6 +1,6 @@
 # Self-Sovereign Identity for Connected Vehicles — Results, Work and Implementation
 
-**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `cea9cf0` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
+**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `48e9c04` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
 
 > Scope of every number: smart-contract gas is exact `receipt.gasUsed` on a local Hardhat chain (condition M1); latency is in-process cryptography with simulated mobility and no radio (condition M0). Nothing here was measured on a public network or a real road.
 
@@ -14,7 +14,7 @@
 | Do the identities meet W3C DID / VC? | internal checker 94.3 % (41 pass, 1 partial, 2 fail of 44); external DID suite 335/336 | #4, #24 |
 | Are the identity contracts attack-resistant? | 43 of 43 applicable attack cells defended (11 not applicable), strict harness | #28 |
 | Can infrastructure (RSUs, controllers) use the same identity layer? | I1 PASS (SPaT/BSM warm ratio 1.197), I2 PASS (15 registered checks), I3 PASS (revocation within k − 1 messages) | #44–#46 |
-| How large is the test and evidence base? | 563 Hardhat tests, 376 Python-layer tests, 92 feature demos (1,758 steps); 45 verified register rows | grand report |
+| How large is the test and evidence base? | 564 Hardhat tests, 376 Python-layer tests, 92 feature demos (1,758 steps); 45 verified register rows | grand report |
 
 ## 2. Research questions and hypotheses
 
@@ -46,7 +46,7 @@
 | Standard | deploy | create | update | update via 4337 | delegate / claim | revoke | transfer |
 |---|---|---|---|---|---|---|---|
 | ERC-1056 | 958,726 | 52,594 | 35,494 | — | 54,831 | 35,046 | 51,754 |
-| ERC-721 | 2,787,276 | 545,101 | 119,737 | — | 48,302 | 27,677 | 174,670 |
+| ERC-721 | 2,787,288 | 545,101 | 119,737 | — | 48,302 | 27,677 | 174,670 |
 | ERC-725 | — | 519,384 | 137,096 | — | 119,996 | 43,388 | 28,390 |
 | ERC-725xy | — | 1,680,816 | 49,937 | — | — | — | 28,834 |
 | ERC-735 | — | 1,757,893 | 83,341 | — | 298,358 | 72,195 | 28,812 |
@@ -84,7 +84,7 @@
 | ERC-735 | 295,242 | 295,277 | 295,289 (native) | 5/5 |
 | ERC-1155 | 107,729 | 80,131 | 63,031 (emulated) | 3/5 |
 | CVIN-Combined | 51,766 | 34,690 | 336,896 (native) | 5/5 |
-| MOBI-VID-V2 | 299,165 | 307,254 | 222,070 (native) | 5/5 |
+| MOBI-VID-V2 | 299,165 | 307,254 | 222,082 (native) | 5/5 |
 *`4_comparison-framework/results/mobi_vid_backends.json`.*
 
 ### 3.4 Security (register #28)
@@ -163,7 +163,7 @@
 | cost | erc1056, erc1056w |
 | costRead | erc1056, erc1056w, erc1155, erc725xy |
 | all | erc1056, erc1056w, erc721, erc1155, erc725xy, erc4337 |
-*Run of record `2026-10-24T12-29-26Z_7a59058`; criteria: Lifetime gas, Zero→nonzero SSTOREs, R3 RPC calls at h=50, R3 median ms after lifecycle, Core ops supported, O(1) on-chain credential check (view).*
+*Run of record `2026-10-31T03-29-43Z_291a801`; criteria: Lifetime gas, Zero→nonzero SSTOREs, R3 RPC calls at h=50, R3 median ms after lifecycle, Core ops supported, O(1) on-chain credential check (view).*
 
 ### 3.10 Infrastructure messaging, V2I and I2I (registers #44–#48)
 
@@ -244,7 +244,7 @@ flowchart LR
 
 | Layer | What it contains | How it is tested |
 |---|---|---|
-| Contracts | ERC-1056, ERC-721, ERC-725, ERC-725xy, ERC-735, ERC-1155, ERC-4337, LSP8, CVIN-Combined; MOBI VID V2 profile | 563 Hardhat tests (L1 mechanisms, L2 system, security harness) |
+| Contracts | ERC-1056, ERC-721, ERC-725, ERC-725xy, ERC-735, ERC-1155, ERC-4337, LSP8, CVIN-Combined; MOBI VID V2 profile | 564 Hardhat tests (L1 mechanisms, L2 system, security harness) |
 | W3C SSI layer | VC issuance and verification, DID resolution, MOBI VID I/II | Python layers (376 tests: L3, L4 and the SSI-layer suites); external DID suite 335/336 |
 | V2X testbed | identity providers, message-path harness, infrastructure layer, trace and renderers | seeded 30-run statistics; no-change gates; 31 infrastructure tests |
 | Comparison and sandbox | producers of the results of record; per-option sandboxes with adapters and demos | grand runner; 92 demos, 1,758 steps |

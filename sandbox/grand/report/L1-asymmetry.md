@@ -1,6 +1,6 @@
 # L1 identity mechanisms — cross-option asymmetry (from tests)
 
-Generated 2026-10-24T12:49:22.050Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
+Generated 2026-10-31T03:20:27.949Z by `cd 1_blockchain-identity && npx hardhat test test/L1-identity-mechanisms/*.test.js` (11 options × 9 mechanisms, 99 records; each record is a fresh deploy + create).
 
 ✓ gas = the adapter ran the mechanism (exact gasUsed of the measured transaction; 0 = no transaction, e.g. implicit creation or a view) · — = NotApplicable (reason below) · ✗ = adapter error or failed assertion · · = not run
 
@@ -10,7 +10,7 @@ Generated 2026-10-24T12:49:22.050Z by `cd 1_blockchain-identity && npx hardhat t
 | controller-change | ✓ 68835 | ✓ 68842 | ✓ 53882 | ✓ 89793 | ✓ 28527 | ✓ 179562 | ✓ 28378 | ✓ 28822 | ✓ 28800 | ✓ 80568 | ✓ 180171 |
 | key-or-delegate | ✓ 72284 | ✓ 72219 | ✓ 35044 | — | ✓ 47569 | — | ✓ 137096 | — | — | — | ✓ 57655 |
 | attribute | ✓ 51622 | ✓ 52016 | ✓ 37180 | ✓ 96478 | ✓ 94471 | ✓ 120137 | — | ✓ 95166 | — | ✓ 100346 | ✓ 37529 |
-| claim | ✓ 316477 | — | — | ✓ 80131 | — | — | — | — | ✓ 322950 | ✓ 148879 | ✓ 287354 |
+| claim | ✓ 316465 | — | — | ✓ 80131 | — | — | — | — | ✓ 322950 | ✓ 148879 | ✓ 287354 |
 | revoke | ✓ 70883 | ✓ 32868 | ✓ 75370 | ✓ 72614 | — | ✓ 27677 | ✓ 41399 | ✓ 33870 | ✓ 78143 | ✓ 42116 | ✓ 75404 |
 | transfer | — | — | — | ✓ 89793 | ✓ 28527 | ✓ 179562 | — | — | — | ✓ 80568 | ✓ 180171 |
 | signed-op | — | ✓ 96065 | — | — | ✓ 69393 | — | ✓ 28358 | ✓ 76352 | — | — | — |

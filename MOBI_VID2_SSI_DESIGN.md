@@ -34,6 +34,11 @@ This document outlines the complete implementation plan for:
 | **Issuers** | Manufacturers only | Multiple parties |
 | **Examples** | VIN, make, model, year | Maintenance, accidents, recalls |
 
+> **Design draft, not the deployed contract.** The deployed lifecycle registry is
+> `1_blockchain-identity/contracts/MOBI/MOBIVIDRegistryV2.sol` (reference: `docs/smart-contracts/02-mobi-vid.md`).
+> Its `EventType` enum has no `OWNERSHIP_TRANSFER` member: ownership transfer is the ERC-1056 `changeOwner` path
+> inherited from VID I. Event attestation (`attestEvent`) verifies the attester's EIP-191 signature on chain.
+
 ### Lifecycle Events
 
 ```solidity

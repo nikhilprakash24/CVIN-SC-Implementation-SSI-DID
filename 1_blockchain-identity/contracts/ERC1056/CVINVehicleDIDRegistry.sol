@@ -375,7 +375,9 @@ contract CVINVehicleDIDRegistry {
      *      identityOwner(oldOwnerDID) == newOwnerDID. Moves the VIN to
      *      newOwnerDID and emits VehicleOwnershipTransferred(old, old, new).
      * @custom:note The in-body comment "Verify caller is the new owner" is stale:
-     *      msg.sender is not checked.
+     *      msg.sender is not checked. That is safe: the result is fixed by the ERC-1056
+     *      owner's own changeOwner, so any caller can only perform the sync it already
+     *      authorised (a permissionless follow-up, not a takeover).
      * @param oldOwnerDID Old owner's DID (address)
      * @param newOwnerDID New owner's DID (address)
      */

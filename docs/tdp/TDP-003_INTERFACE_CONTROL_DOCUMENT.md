@@ -42,7 +42,7 @@ records the cell as n/a. Operations, in the catalogue's order, as declared by th
 | Credential | `prepareIssuer`, `anchorIssuerKey` (V1), `anchorStatus` (V3), `revokeCredential` (V5), `statusCheck` (V6) |
 | Throughput | `prepareThroughputSenders`, `throughputOp` |
 
-Measured through this interface: #29, #34, #35, #36, #49, #50, #51 (run of record `2026-10-24T12-29-26Z_7a59058`, re-run at the trunk merge of 2026-10-21; it replaces the run of 2026-10-09) and #54 (P1, X1).
+Measured through this interface: #29, #34, #35, #36, #49, #50, #51 (run of record `2026-10-31T03-29-43Z_291a801`, re-run for the `mintVehicle` fix of PR #24; it replaces run 2026-10-24T12-29-26Z_7a59058, the trunk re-run that replaced the run of 2026-10-09) and #54 (P1, X1).
 The catalogue's definitions per standard are in `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md`.
 
 ## 3. IF-02 Identity provider (Python)

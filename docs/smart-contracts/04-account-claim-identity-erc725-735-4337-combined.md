@@ -17,16 +17,16 @@ All contracts live under `1_blockchain-identity/contracts/` and are self-contain
 | Spec | Status | Purpose / canonical interface | Fidelity in this repo |
 |---|---|---|---|
 | **ERC-725 v1 (2017 "Identity")** | Draft. It was superseded by the v2 split into 725X/725Y. | Proxy identity with ERC-734-style keys: `getKey`, `addKey`, `removeKey`, `execute`, `approve`, events `KeyAdded`/`KeyRemoved`/`ExecutionRequested`/`Executed`/`Approved`. | `CVIN_DID_ERC725.sol` keeps the v1 surface but is a **skeleton**. `execute` (L149-153) only emits `Executed` and **performs no call**. `approve` (L158-160) has an empty body. Authorisation is a single `_owner` (L83, L121, L131, L150) rather than purpose-1 MANAGEMENT keys. Keys do not take part in authorisation at all. There is no `keyHasPurpose`, no `getKeysByPurpose`, and no execution IDs. |
-| **ERC-725 v2: ERC-725X (executor)** | Draft/Living, maintained in the LUKSO `erc725/smart-contracts` repo. | `execute(uint256 op, address target, uint256 value, bytes data)` with ops CALL=0, CREATE=1, CREATE2=2, STATICCALL=3, DELEGATECALL=4, and `executeBatch`. Events `Executed(op, target, value, bytes4 selector)` and `ContractCreated(op, addr, value, salt)`. ERC-165 ID `0x7545acac`. | `CVINVehicleERC725XY.sol` is faithful. All 5 ops run the real opcode (L336-456). Revert data is bubbled up (L462-477). CREATE2 takes the salt from the trailing 32 bytes of `data`, following the reference convention (L435-456). The interface IDs match (L72-74). Deviations: plain `onlyOwner` instead of OZ `OwnableUnset`, `require` strings instead of custom errors, and no LSP20 reverse-verification. The header (L29-53) explains why the reference package is not inherited: it calls OZ4's 3-arg `verifyCallResult`, but the project uses OZ 5.0.2. |
+| **ERC-725 v2: ERC-725X (executor)** | Draft/Living, maintained in the LUKSO `erc725/smart-contracts` repo. | `execute(uint256 op, address target, uint256 value, bytes data)` with ops CALL=0, CREATE=1, CREATE2=2, STATICCALL=3, DELEGATECALL=4, and `executeBatch`. Events `Executed(op, target, value, bytes4 selector)` and `ContractCreated(op, addr, value, salt)`. ERC-165 ID `0x7545acac`. | `CVINVehicleERC725XY.sol` is faithful. All 5 ops run the real opcode (L340-460). Revert data is bubbled up (L466-481). CREATE2 takes the salt from the trailing 32 bytes of `data`, following the reference convention (L439-460). The interface IDs match (L72-74). Deviations: plain `onlyOwner` instead of OZ `OwnableUnset`, `require` strings instead of custom errors, and no LSP20 reverse-verification. The header (L29-53) explains why the reference package is not inherited: it calls OZ4's 3-arg `verifyCallResult`, but the project uses OZ 5.0.2. |
 | **ERC-725Y (key/value store)** | Same as ERC-725X. | `getData`, `getDataBatch`, `setData`, `setDataBatch`, event `DataChanged(bytes32 indexed, bytes)`. ERC-165 ID `0x629aa694`. | Faithful (L189-244). CVIN extension: well-known keys `keccak256("cvin:vin"/"cvin:make"/"cvin:model"/"cvin:year")` (L86-92) plus `setVehicleBirthAttributes` and `getVehicleVIN` (L258-275). These keys are **not** LSP2 JSON-schema keys. |
 | **ERC-734 (Key Manager)** | Draft, never finalised. | Keys with purposes 1=MANAGEMENT, 2=ACTION, 3=CLAIM, 4=ENCRYPTION, and an execute/approve flow. | No standalone implementation. It appears in a simplified form in `CVIN_DID_ERC725.sol` (`addKey(bytes32,uint256 purpose,uint256 type)`) and as the "owner = MANAGEMENT key" substitution in `CVINVehicleClaimHolder.sol` (L8-13, L158-160). |
 | **ERC-735 (Claim Holder)** | Draft issue #735, never an EIP. | `getClaim`, `getClaimIdsByTopic`, `addClaim(topic, scheme, issuer, signature, data, uri)`, `removeClaim`, `changeClaim`/`approve`, events `ClaimRequested`/`ClaimAdded`/`ClaimRemoved`/`ClaimChanged`. claimId = `keccak256(issuer, topic)`. | `CVINVehicleClaimHolder.sol` reproduces the draft interface (`IERC735`, L18-140) and claimId rule (L354). Documented deviations (L157-197): owner instead of ERC-734 keys; the request/approve flow is collapsed into a synchronous `addClaim` (`ClaimRequested` is still emitted, L370-378); **on-chain** EIP-191 ECDSA verification at add time; an (issuer, topic) whitelist (D25a); VIN binding on topic 1 (D25b); sticky issuer revocation (K-2). There is no `changeClaim`; calling `addClaim` again for the same (issuer, topic) updates the claim and emits `ClaimChanged`. |
 | **ERC-4337 (Account Abstraction), v0.7 shapes** | Final ERC. The canonical EntryPoint is v0.7/v0.8. | `IAccount.validateUserOp(PackedUserOperation, bytes32 userOpHash, uint256 missingAccountFunds) returns (uint256 validationData)`. EntryPoint provides `handleOps`, `getUserOpHash`, nonces, deposits and paymasters. | `CVINVehicleAccount.sol` has a v0.7-shaped `PackedUserOperation` (L51-61), `IAccount` (L67-78) and SimpleAccount-style validation that returns 0/1 and does not revert (L198-237). `CVINMinimalEntryPoint.sol` is **explicitly NOT canonical** (L9-30): a single `handleOp`; no bundling, paymaster, aggregation, deposits, gas accounting or initCode; a plain sequential nonce; and it reverts on inner failure. `getUserOpHash` follows the v0.7 layout (L60-76). Omitted from the account: `validAfter`/`validUntil` packing and factory/CREATE2 counterfactual deployment. |
-| **EIP-191 (signed data, `\x19Ethereum Signed Message:\n32`)** | Final. | Prefixing for personal_sign. | Used by the ERC-735 holder (`_recoverSigner`, L627-660) and the ERC-4337 account (`_validateSignature`, L220-237). **Not** used by `CVINCombinedIdentity`, which ecrecovers a raw digest (L561-575). As a result, issuer signatures do not carry over between the two claim contracts (noted at ERC735 L615-620). |
-| **EIP-2 (low-s)** | Final. | Rules out malleable `s` values. | Enforced only in the ERC-735 holder (L652-655). The 4337 account and the Combined registry do not check `s`. Combined's revocation key is the digest, not the signature, so a malleated copy still cannot get around revocation (Combined L41-45). |
+| **EIP-191 (signed data, `\x19Ethereum Signed Message:\n32`)** | Final. | Prefixing for personal_sign. | Used by the ERC-735 holder (`_recoverSigner`, L627-660) and the ERC-4337 account (`_validateSignature`, L220-237). **Not** used by `CVINCombinedIdentity`, which ecrecovers a raw digest (L562-576). As a result, issuer signatures do not carry over between the two claim contracts (noted at ERC735 L615-620). |
+| **EIP-2 (low-s)** | Final. | Rules out malleable `s` values. | Enforced only in the ERC-735 holder (L652-655). The 4337 account and the Combined registry do not check `s`. Combined's revocation key is the digest, not the signature, so a malleated copy still cannot get around revocation (Combined L41-45). Checked in Phase 3: this is not exploitable in either contract, because the 4337 account consumes a nonce per operation and claims are keyed by `keccak256(issuer, topic)`, never by signature bytes. |
 | **ERC-1271 / EIP-712** | Final. | Contract signatures and typed-data hashing. | **Not used** anywhere in this group. ERC735 L167-168 states that ERC-1271 issuers are unsupported, and 4337 L35 says "no EIP-1271". |
-| **ERC-165** | Final. | `supportsInterface`. | Only `CVINVehicleERC725XY` implements it (L495-500). |
-| **ERC-1056 (Lightweight Identity / did:ethr)** | Draft. | `identityOwner`, `changeOwner`, `addDelegate`, `revokeDelegate`, `validDelegate`, `setAttribute`, `revokeAttribute`, `changed`, and the `DID*Changed` events with the `previousChange` linked list. | It is the ERC-1056 half of `CVINCombinedIdentity` (L226-336), with the same event shapes and `changed` pointer. The `*Signed` meta-transaction variants and `nonce` mapping are omitted. `changeOwner` has no zero-address check, same as the reference. |
+| **ERC-165** | Final. | `supportsInterface`. | Only `CVINVehicleERC725XY` implements it (L499-504). |
+| **ERC-1056 (Lightweight Identity / did:ethr)** | Draft. | `identityOwner`, `changeOwner`, `addDelegate`, `revokeDelegate`, `validDelegate`, `setAttribute`, `revokeAttribute`, `changed`, and the `DID*Changed` events with the `previousChange` linked list. | It is the ERC-1056 half of `CVINCombinedIdentity` (L227-337), with the same event shapes and `changed` pointer. The `*Signed` meta-transaction variants and `nonce` mapping are omitted. `changeOwner` has no zero-address check, same as the reference. |
 | **W3C DID Core / did:ethr** | W3C Rec / method spec. | DID document resolved from events. | Indirect only: the Combined contract's event chain is what the sandbox `did-resolution` demo walks. |
 
 ---
@@ -77,36 +77,36 @@ Path: `1_blockchain-identity/contracts/ERC725xy/CVINVehicleERC725XY.sol` (`pragm
 | Name | Type | Line |
 |---|---|---|
 | `_INTERFACEID_ERC165/725X/725Y` | `bytes4 internal constant` | 72-74 |
-| `OPERATION_CALL..DELEGATECALL` (0-4) | `uint256 public constant` | 78-82 |
-| `VIN_KEY, MAKE_KEY, MODEL_KEY, YEAR_KEY` | `bytes32 public constant` = keccak256("cvin:…") | 86-92 |
-| `_owner` | `address private` | 96 |
-| `_store` | `mapping(bytes32=>bytes) internal` | 99 |
+| `OPERATION_CALL..DELEGATECALL` (0-4) | `uint256 public constant` | 78-86 |
+| `VIN_KEY, MAKE_KEY, MODEL_KEY, YEAR_KEY` | `bytes32 public constant` = keccak256("cvin:…") | 90-96 |
+| `_owner` | `address private` | 100 |
+| `_store` | `mapping(bytes32=>bytes) internal` | 103 |
 
-**Events:** `OwnershipTransferred` (L105), `Executed(op idx, target idx, value, bytes4 selector idx)` (L112), `ContractCreated(op, addr, value, salt)` (L124), `DataChanged(bytes32 idx, bytes)` (L134).
-**Modifier:** `onlyOwner` (L138).
+**Events:** `OwnershipTransferred` (L109), `Executed(op idx, target idx, value, bytes4 selector idx)` (L116), `ContractCreated(op, addr, value, salt)` (L128), `DataChanged(bytes32 idx, bytes)` (L138).
+**Modifier:** `onlyOwner` (L142).
 
 | Function | Vis/Mut | What it does | Access | Events | Origin |
 |---|---|---|---|---|---|
-| `constructor(address initialOwner)` L149 | payable | Sets owner (non-zero) | — | OwnershipTransferred | ERC-725 |
-| `receive()` L156 | external payable | Accepts ETH | any | — | ERC-725 |
-| `owner()` L162 | public view | | any | — | ERC-173 |
-| `transferOwnership(address)` L172 | public | Rotates the controller (non-zero) | owner | OwnershipTransferred | ERC-173 |
-| `renounceOwnership()` L180 | public | owner = 0 (single step, no 2-step confirm unlike LSP14) | owner | OwnershipTransferred | ERC-173/OZ |
-| `getData(bytes32)` L189 | public view | | any | — | ERC-725Y |
-| `getDataBatch(bytes32[])` L196 | public view | | any | — | ERC-725Y |
-| `setData(bytes32,bytes)` L215 | public payable | Store write | owner | DataChanged | ERC-725Y |
-| `setDataBatch(bytes32[],bytes[])` L223 | public payable | Equal-length, non-empty arrays | owner | DataChanged ×n | ERC-725Y |
-| `_setData` L241 | internal | | — | DataChanged | ERC-725Y |
-| `setVehicleBirthAttributes(string,string,string,uint256)` L258 | external | Writes 4 CVIN keys (year abi-encoded) | owner | DataChanged ×4 | CVIN extension |
-| `getVehicleVIN()` L273 | external view | `string(_store[VIN_KEY])` | any | — | CVIN extension |
-| `execute(uint256,address,uint256,bytes)` L287 | public payable | Dispatches to `_execute` | owner | Executed / ContractCreated | ERC-725X |
-| `executeBatch(uint256[],address[],uint256[],bytes[])` L305 | public payable | Loop over `_execute` | owner | per op | ERC-725X |
-| `_execute` L336 | internal | Op dispatch and parameter checks (CREATE* need target=0; STATIC/DELEGATE need value=0) | — | — | ERC-725X |
-| `_executeCall` L369 / `_executeStaticCall` L384 / `_executeDelegateCall` L397 | internal | Low-level call; event emitted **before** the call | — | Executed | ERC-725X |
-| `_deployCreate` L411 / `_deployCreate2` L435 | internal | Assembly create/create2 | — | ContractCreated | ERC-725X |
-| `_verifyCallResult` L462 | internal pure | Bubbles up the revert | — | — | ERC-725X (ref) |
-| `_selectorOf` L482 | internal pure | First 4 bytes | — | — | ERC-725X |
-| `supportsInterface(bytes4)` L495 | public pure | 165/725X/725Y | any | — | ERC-165 |
+| `constructor(address initialOwner)` L153 | payable | Sets owner (non-zero) | — | OwnershipTransferred | ERC-725 |
+| `receive()` L160 | external payable | Accepts ETH | any | — | ERC-725 |
+| `owner()` L166 | public view | | any | — | ERC-173 |
+| `transferOwnership(address)` L176 | public | Rotates the controller (non-zero) | owner | OwnershipTransferred | ERC-173 |
+| `renounceOwnership()` L184 | public | owner = 0 (single step, no 2-step confirm unlike LSP14) | owner | OwnershipTransferred | ERC-173/OZ |
+| `getData(bytes32)` L193 | public view | | any | — | ERC-725Y |
+| `getDataBatch(bytes32[])` L200 | public view | | any | — | ERC-725Y |
+| `setData(bytes32,bytes)` L219 | public payable | Store write | owner | DataChanged | ERC-725Y |
+| `setDataBatch(bytes32[],bytes[])` L227 | public payable | Equal-length, non-empty arrays | owner | DataChanged ×n | ERC-725Y |
+| `_setData` L245 | internal | | — | DataChanged | ERC-725Y |
+| `setVehicleBirthAttributes(string,string,string,uint256)` L262 | external | Writes 4 CVIN keys (year abi-encoded) | owner | DataChanged ×4 | CVIN extension |
+| `getVehicleVIN()` L277 | external view | `string(_store[VIN_KEY])` | any | — | CVIN extension |
+| `execute(uint256,address,uint256,bytes)` L291 | public payable | Dispatches to `_execute` | owner | Executed / ContractCreated | ERC-725X |
+| `executeBatch(uint256[],address[],uint256[],bytes[])` L309 | public payable | Loop over `_execute` | owner | per op | ERC-725X |
+| `_execute` L340 | internal | Op dispatch and parameter checks (CREATE* need target=0; STATIC/DELEGATE need value=0) | — | — | ERC-725X |
+| `_executeCall` L373 / `_executeStaticCall` L388 / `_executeDelegateCall` L401 | internal | Low-level call; event emitted **before** the call | — | Executed | ERC-725X |
+| `_deployCreate` L415 / `_deployCreate2` L439 | internal | Assembly create/create2 | — | ContractCreated | ERC-725X |
+| `_verifyCallResult` L466 | internal pure | Bubbles up the revert | — | — | ERC-725X (ref) |
+| `_selectorOf` L486 | internal pure | First 4 bytes | — | — | ERC-725X |
+| `supportsInterface(bytes4)` L499 | public pure | 165/725X/725Y | any | — | ERC-165 |
 
 **Caveats:** DELEGATECALL lets the owner overwrite `_owner` or the store, as the spec permits. `msg.value` sent with `executeBatch` is not reconciled against `sum(values)`; the reference contract checks this and this one does not. There is no reentrancy guard; access control is owner-only. `setData` is payable but the ETH has no use.
 
@@ -220,28 +220,28 @@ Path: `1_blockchain-identity/contracts/CVINCombined/CVINCombinedIdentity.sol`. I
 | `revokedClaims` | `mapping(bytes32=>bool) public` | 123 | keccak(issuer, raw digest) |
 
 **Events:** `DIDOwnerChanged`, `DIDDelegateChanged`, `DIDAttributeChanged` (ERC-1056 shapes, L132-158); `DIDClaimChanged(identity idx, claimId, topic, removed, previousChange)` (CVIN, L178); `ClaimAdded(claimId idx, identity idx, topic idx, scheme, issuer, sig, data, uri)` (L196); `ClaimRemoved(claimId idx, identity idx, topic idx, issuer)` (L211). The last two are ERC-735-*style* but have different signatures from the draft, because they add `identity`, move the indexing, and drop fields from `ClaimRemoved`.
-**Modifier:** `onlyIdentityOwner(identity)` (L221).
+**Modifier:** `onlyIdentityOwner(identity)` (L222).
 
 | Function | Vis/Mut | What it does | Access | Events | Origin |
 |---|---|---|---|---|---|
-| `identityOwner(address)` L232 | public view | Override or self | any | — | ERC-1056 |
-| `changeOwner(address,address)` L244 | external | Sets owner; bumps `changed` | identity owner | DIDOwnerChanged | ERC-1056 |
-| `addDelegate(address,bytes32,address,uint256)` L261 | external | validTo = now + validity | identity owner | DIDDelegateChanged | ERC-1056 |
-| `revokeDelegate(address,bytes32,address)` L278 | external | validTo = now | identity owner | DIDDelegateChanged | ERC-1056 |
-| `validDelegate(address,bytes32,address)` L294 | external view | expiry > now | any | — | ERC-1056 |
-| `setAttribute(address,bytes32,bytes,uint256)` L314 | external | Event only, plus `changed` | identity owner | DIDAttributeChanged | ERC-1056 |
-| `revokeAttribute(address,bytes32,bytes)` L329 | external | validTo = 0 | identity owner | DIDAttributeChanged | ERC-1056 |
-| `addClaim(identity,topic,scheme,issuer,sig,data,uri)` L358 | external | Raw-digest ecrecover over `keccak(this,identity,topic,data)`; revocation check; upsert. **No issuer whitelist, no VIN binding** | identity owner | ClaimAdded, DIDClaimChanged(removed=false) | ERC-735 style |
-| `removeClaim(address,bytes32)` L410 | external | Issuer removal is recorded as revoked | identity owner or issuer | ClaimRemoved, DIDClaimChanged(true) | ERC-735 style (+K-2) |
-| `revokeClaimContent(address,uint256,bytes)` L447 | external | Same as in the ERC-735 holder | any (own content only) | ClaimRemoved/DIDClaimChanged if anchored | CVIN ext. |
-| `_deleteClaim` L463 | private | Swap-and-pop | — | ClaimRemoved, DIDClaimChanged | — |
-| `getClaim(address,bytes32)` L489 | external view | | any | — | ERC-735 style |
-| `getClaimIdsByTopic(address,uint256)` L513 | external view | | any | — | ERC-735 style |
-| `hasValidClaim(address,uint256,address)` L528 | external view | False when issuer==0 (K-11) | any | — | CVIN ext. |
-| `_claimDigest` L548 / `_recoverRawDigest` L561 | internal | Raw ecrecover; returns 0 on a bad length or v | — | — | ERC-1056-ref style |
+| `identityOwner(address)` L233 | public view | Override or self | any | — | ERC-1056 |
+| `changeOwner(address,address)` L245 | external | Sets owner; bumps `changed` | identity owner | DIDOwnerChanged | ERC-1056 |
+| `addDelegate(address,bytes32,address,uint256)` L262 | external | validTo = now + validity | identity owner | DIDDelegateChanged | ERC-1056 |
+| `revokeDelegate(address,bytes32,address)` L279 | external | validTo = now | identity owner | DIDDelegateChanged | ERC-1056 |
+| `validDelegate(address,bytes32,address)` L295 | external view | expiry > now | any | — | ERC-1056 |
+| `setAttribute(address,bytes32,bytes,uint256)` L315 | external | Event only, plus `changed` | identity owner | DIDAttributeChanged | ERC-1056 |
+| `revokeAttribute(address,bytes32,bytes)` L330 | external | validTo = 0 | identity owner | DIDAttributeChanged | ERC-1056 |
+| `addClaim(identity,topic,scheme,issuer,sig,data,uri)` L359 | external | Raw-digest ecrecover over `keccak(this,identity,topic,data)`; revocation check; upsert. **No issuer whitelist, no VIN binding** | identity owner | ClaimAdded, DIDClaimChanged(removed=false) | ERC-735 style |
+| `removeClaim(address,bytes32)` L411 | external | Issuer removal is recorded as revoked | identity owner or issuer | ClaimRemoved, DIDClaimChanged(true) | ERC-735 style (+K-2) |
+| `revokeClaimContent(address,uint256,bytes)` L448 | external | Same as in the ERC-735 holder | any (own content only) | ClaimRemoved/DIDClaimChanged if anchored | CVIN ext. |
+| `_deleteClaim` L464 | private | Swap-and-pop | — | ClaimRemoved, DIDClaimChanged | — |
+| `getClaim(address,bytes32)` L490 | external view | | any | — | ERC-735 style |
+| `getClaimIdsByTopic(address,uint256)` L514 | external view | | any | — | ERC-735 style |
+| `hasValidClaim(address,uint256,address)` L529 | external view | False when issuer==0 (K-11) | any | — | CVIN ext. |
+| `_claimDigest` L549 / `_recoverRawDigest` L562 | internal | Raw ecrecover; returns 0 on a bad length or v | — | — | ERC-1056-ref style |
 
 **Caveats**
-- **Comment corrected in this pass:** the `DIDClaimChanged` NatSpec (L160-177) used to say that addClaim and removeClaim "advance `changed[identity]`". The code deliberately does **not** do this (L396-401, L457-458, K-6); `previousChange` there is only a correlation value. The NatSpec now says so and carries a `@custom:note`.
+- **Comment corrected in this pass:** the `DIDClaimChanged` NatSpec (L160-177) used to say that addClaim and removeClaim "advance `changed[identity]`". The code deliberately does **not** do this (L397-402, L458-459, K-6); `previousChange` there is only a correlation value. The NatSpec now says so and carries a `@custom:note`.
 - Any address can anchor claims about itself from any signer, because no issuer registry exists here, unlike the ERC-735 holder. A verifier must therefore filter by `issuer`, which is why `hasValidClaim` takes an issuer.
 - There is no zero-address check on `changeOwner`, and no `*Signed` meta-transaction functions.
 - `revokeDelegate` sets validTo = `block.timestamp`, so `validDelegate` (strict `>`) is false in that same block.

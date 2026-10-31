@@ -1,6 +1,6 @@
-# Analysis — 2026-10-24T12-29-26Z_7a59058
+# Analysis — 2026-10-31T03-29-43Z_291a801
 
-_Run 2026-10-24T12-29-26Z_7a59058 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
+_Run 2026-10-31T03-29-43Z_291a801 · computed from crud/lifecycle/scale/resolve.json · baseline ERC-1056_
 
 ### A1 — Cost relative to the ERC-1056 baseline (ratio; >1 = more expensive; n/a = no primitive; † = lifetime excludes n/a events)
 
@@ -50,7 +50,7 @@ _Run 2026-10-24T12-29-26Z_7a59058 · computed from crud/lifecycle/scale/resolve.
 | Lifetime gas ↓ | 1,050,809 | 1,025,469 | 2,706,685 | 3,155,103 | 5,797,561 | 1,261,575 | 2,956,507 | 1,508,413 | 2,221,290 | 2,559,537 |
 | Zero→nonzero SSTOREs ↓ | 8 | 9 | 92 | 83 | 149 | 21 | 38 | 42 | 37 | 81 |
 | R3 RPC calls at h=50 ↓ | 112 | 55 | 7 | 61 | 3 | 3 | 2 | 3 | 61 | 107 |
-| R3 median ms after lifecycle ↓ | 28.35 | 22.92 | 11.46 | 23.55 | 19.45 | 4.60 | 6.80 | 7.84 | 13.28 | 23.41 |
+| R3 median ms after lifecycle ↓ | 21.89 | 16.84 | 9.06 | 18.41 | 17.39 | 3.69 | 5.21 | 6.69 | 11.07 | 21.92 |
 | Core ops supported ↑ | 18 | 17 | 16 | 17 | 13 | 14 | 15 | 13 | 18 | 17 |
 | O(1) on-chain credential check (view) ↑ | no | no | yes | yes | yes | yes | yes | yes | yes | yes |
 | **Dominated by** (cost axes: lifetime, SSTOREs) | — | — | ERC-1056, ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337, CVIN-Combined | ERC-1056, ERC-1056 (wrapper), ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined | ERC-1056, ERC-1056 (wrapper), ERC-721, ERC-725, ERC-1155, ERC-725xy, LSP8, ERC-4337, CVIN-Combined | ERC-1056, ERC-1056 (wrapper) | ERC-1056, ERC-1056 (wrapper), ERC-1155, ERC-4337 | ERC-1056, ERC-1056 (wrapper), ERC-1155 | ERC-1056, ERC-1056 (wrapper), ERC-1155 | ERC-1056, ERC-1056 (wrapper), ERC-1155, LSP8, ERC-4337 |
@@ -78,7 +78,7 @@ Criterion 'O(1) on-chain credential check' is a design property (a contract can 
 | 3.2.8 ▲ Controller rotation: U1 (gas) | 51,754 | 57,188 | 179,470 | 28,390 | 28,812 | 89,805 | 28,834 | 83,380 | 28,539 | 68,847 |
 | 3.2.8 ▲ Deletion: D3 deactivate (gas) | 34,230 | 43,809 | 27,689 | 23,091 | 28,596 | 39,565 | 23,182 | 43,044 | 28,323 | 51,016 |
 | 3.3.2 ▲ Limited-resource resolution: R3 RPC calls at h=50 | 112 | 55 | 7 | 61 | 3 | 3 | 2 | 3 | 61 | 107 |
-| 3.3.2 ▲ Resolution median ms after lifecycle | 28.35 | 22.92 | 11.46 | 23.55 | 19.45 | 4.60 | 6.80 | 7.84 | 13.28 | 23.41 |
+| 3.3.2 ▲ Resolution median ms after lifecycle | 21.89 | 16.84 | 9.06 | 18.41 | 17.39 | 3.69 | 5.21 | 6.69 | 11.07 | 21.92 |
 | 3.4.1 Auditability: linked event chain vs state snapshot | full linked history (previousChange chain) | full linked history (previousChange chain) | events + current state (no chain pointer) | current state (events unlinked) | events + current state (no chain pointer) | current state (events unlinked) | current state (events unlinked) | current state (events unlinked) | current state (events unlinked) | full linked history (previousChange chain) |
 | 3.4.7 Verification relationships: delegate keys | delegates with TTL | delegates with TTL | approval (no expiry) | delegates with TTL | none | none | none | none | recovery guardian only | delegates with TTL |
 | 3.4.8 Relayed / signed operations (meta-tx) | yes | no | no | no | no | no | no | no | yes | no |

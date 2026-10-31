@@ -1,5 +1,5 @@
 {
-  "runId": "2026-10-24T12-29-26Z_7a59058",
+  "runId": "2026-10-31T03-29-43Z_291a801",
   "baseline": "erc1056",
   "criteria": [
     {
@@ -38,7 +38,7 @@
       "lifetime": 1050809,
       "z2nz": 8,
       "r3rpc": 112,
-      "r3ms": 28.347,
+      "r3ms": 21.893,
       "caps": 18,
       "onchainVerify": 0
     },
@@ -46,7 +46,7 @@
       "lifetime": 1025469,
       "z2nz": 9,
       "r3rpc": 55,
-      "r3ms": 22.916,
+      "r3ms": 16.843,
       "caps": 17,
       "onchainVerify": 0
     },
@@ -54,7 +54,7 @@
       "lifetime": 2706685,
       "z2nz": 92,
       "r3rpc": 7,
-      "r3ms": 11.458,
+      "r3ms": 9.057,
       "caps": 16,
       "onchainVerify": 1
     },
@@ -62,7 +62,7 @@
       "lifetime": 3155103,
       "z2nz": 83,
       "r3rpc": 61,
-      "r3ms": 23.555,
+      "r3ms": 18.41,
       "caps": 17,
       "onchainVerify": 1
     },
@@ -70,7 +70,7 @@
       "lifetime": 5797561,
       "z2nz": 149,
       "r3rpc": 3,
-      "r3ms": 19.451,
+      "r3ms": 17.388,
       "caps": 13,
       "onchainVerify": 1
     },
@@ -78,7 +78,7 @@
       "lifetime": 1261575,
       "z2nz": 21,
       "r3rpc": 3,
-      "r3ms": 4.597,
+      "r3ms": 3.69,
       "caps": 14,
       "onchainVerify": 1
     },
@@ -86,7 +86,7 @@
       "lifetime": 2956507,
       "z2nz": 38,
       "r3rpc": 2,
-      "r3ms": 6.805,
+      "r3ms": 5.21,
       "caps": 15,
       "onchainVerify": 1
     },
@@ -94,7 +94,7 @@
       "lifetime": 1508413,
       "z2nz": 42,
       "r3rpc": 3,
-      "r3ms": 7.84,
+      "r3ms": 6.693,
       "caps": 13,
       "onchainVerify": 1
     },
@@ -102,7 +102,7 @@
       "lifetime": 2221290,
       "z2nz": 37,
       "r3rpc": 61,
-      "r3ms": 13.276,
+      "r3ms": 11.067,
       "caps": 18,
       "onchainVerify": 1
     },
@@ -110,7 +110,7 @@
       "lifetime": 2559537,
       "z2nz": 81,
       "r3rpc": 107,
-      "r3ms": 23.414,
+      "r3ms": 21.924,
       "caps": 17,
       "onchainVerify": 1
     }

@@ -142,7 +142,7 @@ A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path 
 | SYS-03 | No M2 (public testnet) measurement exists on the trunk (N-11). |
 | PRF-01 | M1 only (local Hardhat, cancun); operation definitions differ per standard and are declared per row. |
 | PRF-02 | H1's update and lifetime halves are not supported (#35); the split verdict is the one to report. |
-| PRF-03 | Run of record 2026-10-24T12-29-26Z_7a59058 (A3b re-run on the one trunk); the harness flag that marks measured-code dirtiness is live since WM-2 A6 (2026-10-23; D33, N-19). |
+| PRF-03 | Run of record 2026-10-31T03-29-43Z_291a801 (re-run for the mintVehicle fix, PR |
 | PRF-04 | A model over an assumed profile, not a measurement of a fleet. |
 | PRF-05 | SSTORE opcodes counted, not net slots; per-identity contract code not counted (#49). |
 | PRF-07 | Gas only; who pays and who is trusted are not measured; the ERC-1056 signed digest omits the chain id (D52). |
