@@ -314,3 +314,10 @@ README section. Report: `docs/AFTER_ACTION_REPORT_28.md`.
 | `docs/tdp/requirements.yaml`, `make_vcrm.py`, TDP-002, TDP-005 | SYS-04, L5-01 to L5-07; file-backed verdicts | runbook phase 1 |
 | `docs/tdp/make_blueprints.py`, `drawings/DWG-001..007.svg` | Rev B revision block; DWG-007; whitespace fix | runbook phase 2 |
 | `docs/tdp/TDP-004_...md`, `TDP-010_...md`, `README.md`, `TDP-RUNBOOK.md`, `TDP-PLAN.md` | Rev B | runbook phase 12 |
+
+## Pass 43 — merge the default branch; pull request #25 (2026-10-31)
+| Artifact | What it is | Why |
+|---|---|---|
+| `docs/AFTER_ACTION_REPORT_43.md` | relation, plan, log, closing | standing rule |
+| merge commit `261aa12` | the default branch (PR #19, #21, #16, investor room) in the trunk | the author's request |
+| PR #25 | trunk → default branch | convention |

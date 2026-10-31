@@ -23,3 +23,18 @@ session's push; every previous landing on the default branch went through a pull
 
 ## 3. Execution log
 - 2026-10-31 — report opened.
+- **M1.** T merged into W at `261aa12` (merge commit, no history rewritten). One auto-merged file, the generated test
+  register; `build_register.py --check` passes on the merged tree, so the auto-merge equals the regeneration. Every
+  document check named in the three workflows passes locally except the Hardhat test-count gate, which needs a test run
+  this container cannot make; the pre-push guard's feature-matrix step cannot run here either (no compiled artifacts,
+  as in reports 25 to 39). Pushed.
+- **M2.** Pull request **#25**, W → T, opened with the relation and the convention stated:
+  https://github.com/nikhilprakash24/CVIN-SC-Implementation-SSI-DID/pull/25. The merge into the default branch is the
+  author's click (M2-a).
+- **Records.** Handback addendum, manifest.
+
+## 4. Closing
+M1 and M2 delivered. CI on the merge commit: recorded in the "Report 43 closed" commit.
+
+**Next:** the author merges #25 (merge commit, not squash). After that the two branches are one history again and
+the master plan's branch table can mark the default branch synced at `261aa12`.

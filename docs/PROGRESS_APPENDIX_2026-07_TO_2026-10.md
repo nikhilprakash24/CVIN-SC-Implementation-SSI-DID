@@ -371,12 +371,31 @@
 | `219a844` | 2026-10-31 | TDP revision B completed (report 39): SYS-04 and the L5 group in the specification, file-backed verdicts, DWG-007 for layer 5, revision bloc… |
 | `8cf93fe` | 2026-10-31 | Drawings: space runs as no-break spaces so column alignment survives rendering; DWG-004 staleness note updated to A3b and #55 (report 39 add… |
 
-## report 40 (2026-10-31 to 2026-10-31, 3 commits)
+## report 40 (2026-10-31 to 2026-10-31, 6 commits)
 
 | Commit | Date | Subject |
 |---|---|---|
 | `7144544` | 2026-10-31 | After-action report 40 opened: SVG stale-figure checker, blueprint refresh and merge (claim pushed before the work) |
 | `c38f6a9` | 2026-10-31 | Stale-figure checker reads the text of tracked SVG drawings (T-19, report 40) |
 | `f98cf45` | 2026-10-31 | Merge the blueprint set at Rev C, refreshed on the trunk's results (lock: 96 values traced); blueprint check in the pre-push guard; CI is 12… |
+| `dc1a78a` | 2026-10-31 | Report 39 closed: CI green on 8cf93fe |
+| `3b9a5ba` | 2026-10-31 | Report 40 closed: CI green on f98cf45 |
+| `f3c150e` | 2026-10-31 | Atlas: blueprint merge shown done (report 40) |
 
-232 commits in 29 groups.
+## report 41 (2026-10-31 to 2026-10-31, 4 commits)
+
+| Commit | Date | Subject |
+|---|---|---|
+| `a29e02f` | 2026-10-31 | After-action report 41 opened: the stale-figure checker reads HTML and TeX (claim pushed before the work) |
+| `dc79377` | 2026-10-31 | Stale-figure checker reads HTML (text and script data) and TeX; dated dossiers and the 10-03 verification snapshot classed as history (T-19 … |
+| `c048b9f` | 2026-10-31 | Report 41 closed: CI green on dc79377 |
+| `2e09060` | 2026-10-31 | Row #26 density sweep confirmed current, its stamp exception explained (T-17); the September project summary dated, index updated (T-20); re… |
+
+## report 43 (2026-10-31 to 2026-10-31, 2 commits)
+
+| Commit | Date | Subject |
+|---|---|---|
+| `0d21926` | 2026-10-31 | After-action report 43 opened: merge the default branch into the trunk and open the pull request back |
+| `261aa12` | 2026-10-31 | Merge the default branch (PR #19 test register and charters, PR #21 Roots receipts, PR #16, investor room) into the trunk (report 43) |
+
+241 commits in 31 groups.
