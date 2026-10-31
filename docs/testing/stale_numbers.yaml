@@ -14,11 +14,14 @@ history:
 - docs/PROGRESS_APPENDIX_*.md   # generated from git subjects, which quote figures as they were (report 24)
 - docs/tdp/TDP-006_FMECA.md   # generated verbatim from docs/DEFECT_LOG.md, a history document (report 21)
 - docs/MEASUREMENT_CONDITIONS.md
+- docs/phase2/reviews/*   # dated reviews keep the figures of their day (report 38)
+- docs/roots/*   # Roots G-R1 versioned snapshots, dated; they quote the figures current when each version was written (1,757,881 before the NatSpec restatement); the Roots thread adopts 1,757,893 at its next version
+- docs/blueprints/AUDIT_REV_*.md   # dated number audits of the blueprint set; they quote the stale values they found (report 40)
+- docs/artifacts/*.html   # provenance dossiers, dated July 2026 snapshots by their manifest's own note (report 41)
+- docs/figures/verification_dashboard.html   # the verification snapshot of 2026-10-03 at cac1729; current totals are the grand report (report 41)
 - docs/tdp/REVIEW_2026-10.md   # the TDP review quotes the stale values it found (report 37)
 - docs/thesis/CHAPTER_AUDIT_2026-10.md   # quotes the stale values it found, on purpose (report 37)
 - docs/review02/*
-- docs/phase2/reviews/*   # review records quote the figures their reviewers read
-- docs/roots/*   # Roots G-R1 versioned snapshots, dated; they quote the figures current when each version was written (1,757,881 before the NatSpec restatement); the Roots thread adopts 1,757,893 at its next version
 - docs/reconciliation/*
 - docs/prior-survey/*
 - docs/planning/*
@@ -144,7 +147,7 @@ entries:
   row: 35
   note: pre-merge harness value (run 0eef6af); audit finding A-1
 - pattern: \b5369010\b
-  current: 5,797,549 (#35)
+  current: 5,797,561 (#35)
   row: 35
   note: pre-merge harness value (run 0eef6af); audit finding A-1
 - pattern: \b2533978\b
@@ -218,7 +221,7 @@ entries:
   current: 57,667 MOBI-VID-V2 addDelegate (WM-2 C2, stored delegation)
   row: 25
 - pattern: '4225285'
-  current: 4,370,878 MOBI-VID-V2 deploy (WM-2 C2)
+  current: 4,370,866 MOBI-VID-V2 deploy (WM-2 C2)
   row: 25
 - pattern: '299143'
   current: 299,165 MOBI-VID-V2 create / birth (WM-2 C2)
@@ -251,7 +254,7 @@ entries:
   current: 57,667 MOBI-VID-V2 addDelegate (final C2 design, report 22)
   row: 25
 - pattern: '4366383'
-  current: 4,370,878 MOBI-VID-V2 deploy (final C2 design, report 22)
+  current: 4,370,866 MOBI-VID-V2 deploy (final C2 design, report 22)
   row: 25
 # U10 (report 37): superseded #27, #28, #22, #25 values the chapter audit found still quoted, and the small counts
 # (exact phrases, since a bare small integer matches too much).
@@ -291,10 +294,25 @@ entries:
   pending: ['docs/thesis/*/*.md']
   pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
 - pattern: '2751406|3952603'
-  current: ERC-721 deploy 2,787,288; MOBI-VID-V2 4,370,878
+  current: ERC-721 deploy 2,787,276; MOBI-VID-V2 4,370,866
   row: 25
   pending: ['docs/thesis/*/*.md']
   pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+# Report 38: the NatSpec pass moved deployment gas by 12 in three cells (metadata hash). Old values of record:
 - pattern: '1757881'
-  current: 1,757,893 (ERC-735 create since the NatSpec metadata change, PR #15; re-run 2026-10-24)
+  current: 1,757,893 ERC-735 create (report 38, metadata)
   row: 25
+- pattern: '4370878'
+  current: 4,370,866 MOBI-VID-V2 deploy (report 38, metadata)
+  row: 25
+- pattern: '2787288'
+  current: 2,787,276 ERC-721 deploy (report 38, metadata)
+  row: 34
+- pattern: '11692092|16659198|6724987'
+  current: 11,692,104 ERC-735 lifetime (band 6,724,999 to 16,659,210; report 38)
+  row: 26
+  pending: ['docs/thesis/*/*.md']
+  pending_reason: chapter edits are WM-2 D1, which waits on decision D-1
+- pattern: '5797549'
+  current: 5,797,561 ERC-735 lifetime (report 38)
+  row: 35

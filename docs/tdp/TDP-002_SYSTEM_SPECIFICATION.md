@@ -54,6 +54,12 @@ Convention. "Shall" marks a requirement. The threshold values are the ones the t
 - Verification: Inspection; register #25, #27, #34
 - Limit: No M2 (public testnet) measurement exists on the trunk (N-11).
 
+**SYS-04 Basic digital-ID set coverage.** The operation catalogue shall be mapped onto the basic digital-ID function set (Set A identity and keys, Set B credentials) and each substrate's coverage reported per function, with admission counted strictly (every mapped function present) and natively (every mapped function a native primitive) as two separate counts.
+
+- Derived from: RQ1 and RQ3 (the catalogue as the extension of the basic set); docs/BASIC_ID_SET_EXTENSION.md
+- Verification: Analysis; register #53, #54
+- Limit: The F-numbering inside the sets is pending the canon archive ([B1]); strict native admission (ERC-4337 only) is a stricter question than the canon's pattern-realised admission (#54).
+
 ### 3.2 Cost and storage (RQ1) (PRF)
 
 **PRF-01 Nine-standard gas table, deterministic.** The gas benchmark shall report exact receipt gas for deploy, create, update, delegate-or-claim, revoke and transfer on every substrate, and thirty consecutive runs of one commit shall be byte-identical.
@@ -185,7 +191,7 @@ Convention. "Shall" marks a requirement. The threshold values are the ones the t
 **RTV-03 Freshness-k curve with both refresh modes.** The amortised verification cost shall be measured as a function of the re-check cadence k for a full-resolution refresh and a one-call probe refresh, and the host of each run shall be stated with its local cost.
 
 - Derived from: H3; crux C4; docs/LATENCY_BUDGET.md section 4
-- Verification: Test; register #32, #37, #52
+- Verification: Test; register #32, #37, #52, #55
 - Limit: The knee is the most host-sensitive figure; no finite k reached P*(0.5)=100 on
 
 **RTV-04 Signed message size.** The size of a signed safety message shall be reported for the certificate-carrying PKI design and the credential-referencing SSI design.
@@ -264,6 +270,50 @@ Convention. "Shall" marks a requirement. The threshold values are the ones the t
 - Verification: Test
 - Limit: Three MOBI demo steps hash block.timestamp and are declared timestamp-dependent (B1).
 
+### 3.8 Layer 5, zero-knowledge vehicle identity and the agent wrapper (RQ5, H6) (L5)
+
+**L5-01 ZK-VIN circuit size.** The ZK-VIN circuit's constraint, wire and signal counts shall be recorded from the compiler and pinned by the SHA-256 of its committed artefacts.
+
+- Derived from: H6; Plan 1 (docs/zkp/PLAN_1_ZKP_AND_AGENT_IDENTITY.md); register
+- Verification: Inspection; register #56
+- Limit: A property of the committed circuit, not a timing; the Groth16 keys come from an insecure single-party setup (research code).
+
+**L5-02 ZK-VIN proving and verification time (Z-E1, Z-E2, Z-E4).** ZK-VIN proof verification off chain shall take under 100 ms (median of 30), proving under 10 s (median of 10), and a proof shall be under 1,024 bytes as calldata, with each verdict computed by the producing script.
+
+- Derived from: pre-registered Z-E1, Z-E2, Z-E4 (Plan 1 section 1.1); H6
+- Verification: Test; register #57
+- Limit: Host-dependent; the proving time has N = 10 and is descriptive only under the latency charter; the sizes are unaffected.
+
+**L5-03 On-chain Groth16 verification in the gate (Z-E3).** Admission through the ZK-VIN gate with on-chain Groth16 verification shall cost under 350,000 gas, exact receipt gas, with the anchor and verifier deployments reported beside it.
+
+- Derived from: pre-registered Z-E3; H6; the IDTx with a knowledge-of-opening dependency (I-24 brief)
+- Verification: Test; register #58
+- Limit: M1 only; view figures are gas estimates, not receipts.
+
+**L5-04 Sigma-protocol primitive counts.** The reference sigma-protocol primitives shall report exact group-operation counts per operation, with timings recorded as host-dependent and descriptive.
+
+- Derived from: H6 (P2, manual burden); register
+- Verification: Test; register #59
+- Limit: Pure-Python reference code, not constant time and not an optimised library; counts exact, timings not comparable across hosts.
+
+**L5-05 Unsalted VIN hash reversal (Z-E7).** An unsalted SHA-256 of a VIN with only the serial unknown shall be shown reversible by enumeration in under one hour on one core, the full space enumerated and the rate recorded.
+
+- Derived from: pre-registered Z-E7; goal G7; defect D64
+- Verification: Test; register #60
+- Limit: The extrapolations beyond the measured space (VDS unknown; GPU rate) are estimates (E), cited not measured.
+
+**L5-06 Predicate-narrowing attack and the bounded custodian (Z-E5, Z-E6).** The undefended narrowing attack shall recover the model year exactly within the information-theoretic bound on every seed, and the Steward shall hold adversary leakage under its budget while serving at least 90 percent of honest requests on every seed of both variants, each verdict computed by the simulator and reported as it fell.
+
+- Derived from: pre-registered Z-E5, Z-E6 with amendments A1 (prior) and A2 (post hoc, insider variant); H6 (P5)
+- Verification: Test; register #61
+- Limit: A simulation (Sim) with scripted agents, not people or deployed adversaries; Z-E6 FAIL on service (25 of 60 runs below 90 percent, minimum 70.0); a global budget alone bounds leakage as well as the Steward does; the insider variant is post hoc.
+
+**L5-07 Manual-burden inventory.** The operation and value counts of operating the ZK identity by hand shall be measured from the code, and the derived times and error probabilities shall be labelled estimates from cited rates.
+
+- Derived from: H6 (P2); register
+- Verification: Analysis; register #62
+- Limit: Counts V; times and error probabilities E (cited human rates, not measured on people).
+
 ## 4. Verification
 
 4.1 **Methods.** T test (the measurement runs and its output is compared with a declared threshold or recorded as a verdict); A analysis (a derivation from measured data, with its inputs named); I inspection (the artefact exists in the tracked tree and, where stated, a CI step exercises it); D demonstration (a run shows the behaviour; counts, not thresholds).
@@ -282,4 +332,4 @@ The deliverable is the repository at a named commit: contracts, scripts, tests, 
 
 6.2 **Acronyms.** BSM basic safety message; SPaT signal phase and timing; RSU roadside unit; TMC traffic management centre; DID decentralised identifier; VC verifiable credential; VIN vehicle identification number; PKI public-key infrastructure; EVM Ethereum virtual machine; RPC remote procedure call; CI continuous integration.
 
-6.3 **Count.** 36 requirements in 7 groups.
+6.3 **Count.** 44 requirements in 8 groups.

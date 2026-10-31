@@ -1,7 +1,7 @@
 # TDP-000 — Technical Data Package: Index and Conventions
 
 **Author:** Nikhil Prakash (MASc, UBC ECE)
-**Written:** 2026-10-15 (after-action report 20). **Revision:** A.
+**Written:** 2026-10-15 (after-action report 20). **Revision:** B (2026-10-31, report 39: the review and its corrections of passes 37 and 38, layer 5 in the specification, DWG-007).
 **Binds:** `docs/STYLE_AND_RIGOUR_GUIDE.md` (numbers, claims, process). **Supersedes:** nothing; this is the first issue.
 **Relation to the thesis documents:** a second reading of the same evidence, in the register of an engineering
 technical data package. The thesis documents (`docs/thesis/`, `COMPOSITION.md`) argue; this package specifies,
@@ -23,7 +23,7 @@ code and toolchain behind every figure.
 |---|---|---|---|---|---|
 | TDP-000 | this index and conventions | hand-written | MIL-STD-31000B (TDP elements) | — | `check_docs_numbers.py` |
 | TDP-001 | `TDP-001_PROGRAM_SUMMARY.md` — programme summary: the Heilmeier Catechism answered from the evidence; technology readiness per subsystem; the exams | hand-written | DARPA Heilmeier Catechism; DoD Technology Readiness Assessment Guidebook | register V rows; crux register | `check_docs_numbers.py` |
-| TDP-002 | `TDP-002_SYSTEM_SPECIFICATION.md` — system specification: 36 shall-statements in 7 groups | **generated** by `make_vcrm.py` | MIL-STD-961E (six-section specification) | `requirements.yaml` | `make_vcrm.py --check` (CI) |
+| TDP-002 | `TDP-002_SYSTEM_SPECIFICATION.md` — system specification: 44 shall-statements in 8 groups | **generated** by `make_vcrm.py` | MIL-STD-961E (six-section specification) | `requirements.yaml` | `make_vcrm.py --check` (CI) |
 | TDP-003 | `TDP-003_INTERFACE_CONTROL_DOCUMENT.md` — interface control document: the interfaces between planes, the message and credential formats, the evidence formats | hand-written | MIL-STD-498 IDD/IRS (interface description) | source files named per interface | `check_icd.py --check` (CI): every backticked identifier exists in the section's source; `check_docs_numbers.py` |
 | TDP-004 | `TDP-004_DESIGN_DESCRIPTION_AND_BLUEPRINTS.md` — design description with the six drawings | hand-written text; **generated** drawings `drawings/DWG-00n.svg` by `make_blueprints.py` | MIL-STD-498 SDD; MIL-STD-31000B with ASME Y14.100 drawing conventions | `dashboard_snapshot.json`, result files, source constants, workflows | `make_blueprints.py --check` (CI) |
 | TDP-005 | `TDP-005_VERIFICATION_CROSS_REFERENCE_MATRIX.md` — requirement → method → evidence rows → status; requirement-to-test trace | **generated** by `make_vcrm.py` | MIL-STD-961E section 4 (verification cross-reference) | register, snapshot, tree, workflows | `make_vcrm.py --check` (CI) |
@@ -32,11 +32,12 @@ code and toolchain behind every figure.
 | TDP-008 | `TDP-008_CONFIGURATION_BASELINE.md` — as-built baseline: commits, runs of record, toolchain pins, producers | hand-written | MIL-STD-498 SVD (software version description) | `meta.json`, `package.json`, workflows, `producers.json` | `check_docs_numbers.py` |
 | TDP-009 | `TDP-009_RISK_REGISTER.md` — programme risks on the DoD five-by-five matrix | hand-written | DoD Risk, Issue and Opportunity Management Guide (likelihood × consequence) | crux gaps; deferred items; defects | `check_docs_numbers.py` |
 | TDP-010 | `TDP-010_THESIS_ADAPTATION_MAP.md` — the specification mapped onto chapter 3: state of the current text per requirement, the sentence that carries it, the drift table, chapter 3 outline v2 | hand-written | — | TDP-002; chapter 3; register; passes 21 to 24 | `check_docs_numbers.py` |
+| REVIEW | `REVIEW_2026-10.md` — the read-only review of the hand-written documents (runbook phase 11, report 37); its rows were applied as revision B of TDP-001, 003, 007, 008, 009 (report 38) | review record | `docs/TEAM_STRUCTURE.md` section 4a | — | history (not re-checked) |
 | TDP-PLAN | `TDP-PLAN.md` — the plan that produced this package and what remains | hand-written | — | — | — |
 | TDP-RUNBOOK | `TDP-RUNBOOK.md` — the same plan as phases with self-contained prompts for another session | hand-written | — | — | — |
 
 Drawings: `drawings/DWG-001.svg` general arrangement; `DWG-002` substrate assembly; `DWG-003` verification engine;
-`DWG-004` freshness governor; `DWG-005` evidence line; `DWG-006` threat envelope. Each carries a title block, a
+`DWG-004` freshness governor; `DWG-005` evidence line; `DWG-006` threat envelope; `DWG-007` ZK-VIN gate and the Steward (layer 5). Each carries a title block, a
 revision block, numbered notes and a bill of materials whose items name source files.
 
 ## 3. Conventions

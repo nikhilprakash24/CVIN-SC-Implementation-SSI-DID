@@ -114,7 +114,16 @@ def evaluate(reqs, reg, snap, ci):
         if th:
             actual = lookup(snap, th["path"])
             th_result = {"actual": actual, "met": compare(actual, th["op"], th["value"]), **th}
-        verdict = lookup(snap, r["verdict_from"]) if r.get("verdict_from") else None
+        verdict = None
+        if r.get("verdict_from"):
+            vf = r["verdict_from"]
+            if vf.startswith("file:"):
+                _, path, key = vf.split(":", 2)
+                verdict = lookup(json.loads((ROOT / path).read_text()), key)
+            else:
+                verdict = lookup(snap, vf)
+        if isinstance(verdict, dict):
+            verdict = "; ".join(f"{k}: {v}" for k, v in verdict.items())
         all_rows_v = bool(rows) and len(v_rows) == len(rows)
         held_by_inspection = not rows and r["method"] in ("I", "D")
         problems = []

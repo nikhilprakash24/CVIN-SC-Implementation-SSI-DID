@@ -57,7 +57,7 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 | Step | Work | Gate |
 |---|---|---|
 | D1 | Chapters 1, 4, 6, 7 checked against the register and the crux register; C3 and C8 sentences written where the cruxes say they are missing | every number a V row; stale check clean |
-| D2 | **note written (pass 37, report 37):** `docs/design/RSU_TO_RSU_NOTE.md`; recommendation D2-a (scope out); waits on the author's D2 | author decides build or scope out |
+| D2 | **done (pass 38, report 38):** the note (`docs/design/RSU_TO_RSU_NOTE.md`) and the author's decision D2-a, out of scope, recorded as SC-24 and stated in chapter 6 §6.6.3 and crux C3 | author decides build or scope out |
 
 ### E. Review. *Owner: orchestrator; reviewers per `docs/TEAM_STRUCTURE.md` §4a.*
 | Step | Work | Gate |

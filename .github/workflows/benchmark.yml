@@ -142,6 +142,24 @@ jobs:
           4_comparison-framework/results/gas_comparison.tex
         if-no-files-found: error
 
+  blueprint-data-check:
+    # Plan 2 P2: every measured value on the blueprint sheets is read from the
+    # results of record through docs/blueprints/data.py. This fails if a source
+    # file is missing, a value differs from docs/blueprints/data.lock.json, or a
+    # committed SVG is out of date with a fresh generation. Standard library only.
+    name: Blueprint sheets match the results of record
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Check data drift and stale sheets
+      run: python3 docs/blueprints/make_blueprints.py --check
+
   metrics-harness:
     name: CRUD-and-beyond metrics harness (adapter gate + run)
     runs-on: ubuntu-latest

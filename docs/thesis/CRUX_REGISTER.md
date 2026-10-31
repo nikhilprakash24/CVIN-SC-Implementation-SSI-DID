@@ -85,7 +85,7 @@ A crux is a question the thesis must answer for an examiner. State: **evidenced*
 - Mobility is the mock model (no SUMO run); no radio channel; the I2I back-haul and the revocation registry are in-process (no propagation delay, no lookup cost).
 - A fresh message relayed within the 1 s window to a receiver that never heard it is not detected (as for V2V).
 - I3 bounds a message count, not a time; the verifier cache does not expire.
-- RSU-to-RSU messaging is not modelled; I2I covers controller-to-RSU and TMC-to-controller only.
+- RSU-to-RSU messaging is out of scope (author decision D2, 2026-10-24; docs/design/RSU_TO_RSU_NOTE.md); I2I covers controller-to-RSU and TMC-to-controller only.
 - The k the thesis defends is the open C4 decision; it applies to RSUs as to vehicles.
 
 **The examiner will ask:** Your title says connected vehicles; where is the infrastructure?

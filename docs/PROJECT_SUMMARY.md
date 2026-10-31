@@ -1,3 +1,7 @@
+> **Dated snapshot (2026-09-24, the restoration day).** Its counts (29 commits, 47 tests) and gas figures are those of
+> that day. Current state: `docs/MASTER_PLAN_2026-10-24.md`; every current number: `docs/MEASUREMENT_CONDITIONS.md`;
+> current test totals: `sandbox/grand/report/GRAND_REPORT.md` (report 42, task T-20).
+
 # Project Summary — What Has Been Built (Trunk `nikhilprakash24/CVIN-SC-Implementation-SSI-DID`)
 
 **Author:** Nikhil Prakash (MASc, UBC ECE) — nikhil.prakash1995@gmail.com
