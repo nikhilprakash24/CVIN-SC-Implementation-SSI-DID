@@ -27,3 +27,5 @@ tasks of the master plan that need no answer. Documents and checker reasons only
 
 ## 3. Closing
 Both tasks done; one follow-up (T-21) waits on the next #26 run. The master plan's task table records all three.
+
+**CI green on `2e09060`** (all four workflows). Report 42 is closed.
