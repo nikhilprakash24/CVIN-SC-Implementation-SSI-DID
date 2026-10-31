@@ -1,0 +1,80 @@
+{
+  "generated_at": "2026-10-31T03:18:22+00:00",
+  "commit": "063f24e",
+  "seed": 1,
+  "encoding": "compact JSON as packaged in-process by the harness (not ASN.1 UPER)",
+  "populations": {
+    "ssi": {
+      "vehicle": "veh_000",
+      "total_bytes": 1739,
+      "fields": [
+        {
+          "field": "message",
+          "group": "payload (BSM fields)",
+          "bytes": 134,
+          "preview": null
+        },
+        {
+          "field": "sender_did",
+          "group": "identity material",
+          "bytes": 57,
+          "preview": "did:ethr:0x1:0x659Ed64e41aa2\u2026"
+        },
+        {
+          "field": "signature",
+          "group": "signature",
+          "bytes": 132,
+          "preview": "471ec82b4a7fdfba0eded605193c\u2026"
+        },
+        {
+          "field": "credential",
+          "group": "identity material",
+          "bytes": 1408,
+          "preview": "{\"@context\":[\"https://www.w3\u2026"
+        },
+        {
+          "field": "identity_type",
+          "group": "metadata",
+          "bytes": 8,
+          "preview": null
+        }
+      ]
+    },
+    "pki": {
+      "vehicle": "veh_007",
+      "total_bytes": 882,
+      "fields": [
+        {
+          "field": "message",
+          "group": "payload (BSM fields)",
+          "bytes": 135,
+          "preview": null
+        },
+        {
+          "field": "signature",
+          "group": "signature",
+          "bytes": 144,
+          "preview": "3045022100b78195bdd35acbb8f6\u2026"
+        },
+        {
+          "field": "certificate",
+          "group": "identity material",
+          "bytes": 558,
+          "preview": "-----BEGIN CERTIFICATE-----\n\u2026"
+        },
+        {
+          "field": "timestamp",
+          "group": "metadata",
+          "bytes": 28,
+          "preview": null
+        },
+        {
+          "field": "identity_type",
+          "group": "metadata",
+          "bytes": 17,
+          "preview": null
+        }
+      ]
+    }
+  }
+}

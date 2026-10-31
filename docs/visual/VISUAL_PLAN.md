@@ -373,3 +373,10 @@ wherever a result of record depends on it.
    so it is not confused with the trunk's `render_trace.py`.
 4. Every committed trace was regenerated with the canonical recorder and gzipped,
    following decision S-c.
+
+**Third session (2026-10-31):** trunk merged again at `9a846de`; PR #23 opened.
+Phase 2 is complete with F7 (`viz/packet_anatomy.py`): the SSI package is about
+twice the PKI package because the 1,408-byte credential rides on every message
+(`FIGURES.md` V-11). Phase 3 is complete with the 20 s MP4 and 10 s GIF of the
+replay. Next: Phase 5 (rogue vehicle on the road, per-stage timers), then
+Phases 6–8.

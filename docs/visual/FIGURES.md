@@ -94,6 +94,24 @@ radio channel and no MAC, with in-process delivery to the 8 nearest within
 
 ### Defence and appendix
 
+**V-11 · One message, anatomised** · `figures/packet_anatomy/F7_packet_anatomy.png` (+ `.svg`, sizes in `.json`)
+> One real signed BSM per population, built by the harness's own identity
+> layers (`python3 cv2x-testbed/sumo/viz/packet_anatomy.py --seed 1`). The SSI package is
+> 1,739 bytes: 134 payload, 132 signature, 57 sender DID and **1,408 credential**.
+> The PKI package is 882 bytes: 135 payload, 144 signature and 558 certificate.
+> These are compact-JSON sizes as the harness packages them in-process, not
+> over-the-air sizes, since 1609.2 and J2735 use ASN.1 UPER. The composition is
+> the point. The harness attaches the W3C credential to every message, but a
+> receiver needs it only at first contact. Chapter 6 should state the
+> bandwidth cost of that choice, and the alternative of sending the credential
+> on first contact or on request.
+
+**V-12 · Replay video** · `replay/replay_20s.mp4` (H.264, 1500 px, 10 fps), `replay/replay_10s.gif` (720 px, seconds 10–20)
+> Twenty seconds of seed 6 at real time. Each frame is one 100 ms step of the
+> embedded replay, captured deterministically by scrubbing, not screen-recorded.
+> The GIF covers the EEBL at t = 15 s.
+
+
 **V-10 · Interactive replay** · `replay/replay_sim_median.html`, `replay/replay_sumo.html`; stills in `figures/replay/`
 > Offline pages with the trace embedded. Space plays, → steps, a click opens a
 > vehicle's identity card. The footer carries the schema, mobility, seed,
@@ -107,7 +125,6 @@ figure for seed 1 with RSUs. Use the animation in the defence beside V-10.
 
 ## Not yet drawn
 
-- **F7 · one message, anatomised.** The signed SSI and PKI packages with field
-  sizes. Needs a `--dump-packages` flag; Phase 2 item 4.
+
 - **F8 · where cold latency goes** (per-stage timers) and **F9 · rejections by
   reason** (rogue vehicle). Phase 5.
