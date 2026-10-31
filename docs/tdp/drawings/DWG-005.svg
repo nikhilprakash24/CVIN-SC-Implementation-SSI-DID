@@ -76,7 +76,7 @@
 <rect x="744" y="260" width="215" height="104" stroke="#7cc9ff" fill="none" stroke-width="1.2" rx="0"/>
 <text x="752" y="275" font-size="10" text-anchor="start" fill="#7cc9ff" font-weight="bold">8 DOCUMENTS + CI</text>
 <line x1="744" y1="281" x2="959" y2="281" stroke="#7cc9ff" stroke-width="0.8"/>
-<text x="752" y="295.0" font-size="8.8" text-anchor="start" fill="#e3ecf9" font-weight="normal">11 CI jobs; document step</text>
+<text x="752" y="295.0" font-size="8.8" text-anchor="start" fill="#e3ecf9" font-weight="normal">12 CI jobs; document step</text>
 <text x="752" y="307.5" font-size="8.8" text-anchor="start" fill="#e3ecf9" font-weight="normal">runs 16 --check commands;</text>
 <text x="752" y="320.0" font-size="8.8" text-anchor="start" fill="#e3ecf9" font-weight="normal">stale-figure checker over</text>
 <text x="752" y="332.5" font-size="8.8" text-anchor="start" fill="#e3ecf9" font-weight="normal">every tracked .md</text>
@@ -91,15 +91,16 @@
 <text x="60" y="496" font-size="10.5" text-anchor="start" fill="#e3ecf9" font-weight="bold">CI JOBS (parsed from .github/workflows)</text>
 <text x="60" y="514" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">1. gas-benchmarks         benchmark.yml</text>
 <text x="60" y="528" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">2. nine-standard-gas      benchmark.yml</text>
-<text x="60" y="542" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">3. metrics-harness        benchmark.yml</text>
-<text x="60" y="556" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">4. hardhat-tests          test-contracts.yml</text>
-<text x="60" y="570" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">5. vc-layer-tests         w3c-compliance.yml</text>
-<text x="60" y="584" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">6. python-full-suite      w3c-compliance.yml</text>
-<text x="60" y="598" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">7. compliance-score       w3c-compliance.yml</text>
-<text x="60" y="612" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">8. python-layers          w3c-compliance.yml</text>
-<text x="60" y="626" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">9. python                 zkp-layer5.yml</text>
-<text x="60" y="640" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">10. zkvin                  zkp-layer5.yml</text>
-<text x="60" y="654" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">11. contracts              zkp-layer5.yml</text>
+<text x="60" y="542" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">3. blueprint-data-check   benchmark.yml</text>
+<text x="60" y="556" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">4. metrics-harness        benchmark.yml</text>
+<text x="60" y="570" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">5. hardhat-tests          test-contracts.yml</text>
+<text x="60" y="584" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">6. vc-layer-tests         w3c-compliance.yml</text>
+<text x="60" y="598" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">7. python-full-suite      w3c-compliance.yml</text>
+<text x="60" y="612" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">8. compliance-score       w3c-compliance.yml</text>
+<text x="60" y="626" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">9. python-layers          w3c-compliance.yml</text>
+<text x="60" y="640" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">10. python                 zkp-layer5.yml</text>
+<text x="60" y="654" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">11. zkvin                  zkp-layer5.yml</text>
+<text x="60" y="668" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">12. contracts              zkp-layer5.yml</text>
 <text x="480" y="496" font-size="10.5" text-anchor="start" fill="#e3ecf9" font-weight="bold">DOCUMENT CHECKS IN THE hardhat-tests JOB (parsed)</text>
 <text x="480" y="514" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">1. docs/figures/make_dashboard_data.py --check</text>
 <text x="480" y="528" font-size="9.5" text-anchor="start" fill="#e3ecf9" font-weight="normal">2. docs/testing/build_register.py --check</text>

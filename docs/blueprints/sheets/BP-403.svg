@@ -1,0 +1,699 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<title>BP-403 — Attack matrix — two lenses</title>
+<defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#5c78ad" stroke-width="0.35" opacity="0.55"/></pattern><pattern id="grid2" width="200" height="200" patternUnits="userSpaceOnUse"><path d="M 200 0 L 0 0 0 200" fill="none" stroke="#5c78ad" stroke-width="0.7" opacity="0.6"/></pattern></defs>
+<rect width="1600" height="1000" fill="#0b2a5b"/>
+<rect x="46" y="46" width="1508" height="908" fill="url(#grid)"/>
+<rect x="46" y="46" width="1508" height="908" fill="url(#grid2)"/>
+<rect x="28" y="28" width="1544" height="944" fill="none" stroke="#f2f6ff" stroke-width="2.6"/>
+<rect x="46" y="46" width="1508" height="908" fill="none" stroke="#f2f6ff" stroke-width="1.2"/>
+<text x="140.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">8</text>
+<text x="140.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">8</text>
+<text x="328.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">7</text>
+<text x="328.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">7</text>
+<line x1="234.5" y1="28" x2="234.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="234.5" y1="954" x2="234.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="517.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">6</text>
+<text x="517.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">6</text>
+<line x1="423.0" y1="28" x2="423.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="423.0" y1="954" x2="423.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="705.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">5</text>
+<text x="705.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">5</text>
+<line x1="611.5" y1="28" x2="611.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="611.5" y1="954" x2="611.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="894.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">4</text>
+<text x="894.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">4</text>
+<line x1="800.0" y1="28" x2="800.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="800.0" y1="954" x2="800.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1082.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">3</text>
+<text x="1082.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">3</text>
+<line x1="988.5" y1="28" x2="988.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="988.5" y1="954" x2="988.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1271.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">2</text>
+<text x="1271.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">2</text>
+<line x1="1177.0" y1="28" x2="1177.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1177.0" y1="954" x2="1177.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1459.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">1</text>
+<text x="1459.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">1</text>
+<line x1="1365.5" y1="28" x2="1365.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1365.5" y1="954" x2="1365.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="125.66666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">A</text>
+<text x="1563" y="125.66666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">A</text>
+<text x="37" y="277.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">B</text>
+<text x="1563" y="277.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">B</text>
+<line x1="28" y1="197.33333333333334" x2="46" y2="197.33333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="197.33333333333334" x2="1572" y2="197.33333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="428.33333333333337" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">C</text>
+<text x="1563" y="428.33333333333337" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">C</text>
+<line x1="28" y1="348.6666666666667" x2="46" y2="348.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="348.6666666666667" x2="1572" y2="348.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="579.6666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">D</text>
+<text x="1563" y="579.6666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">D</text>
+<line x1="28" y1="500.0" x2="46" y2="500.0" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="500.0" x2="1572" y2="500.0" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="731.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">E</text>
+<text x="1563" y="731.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">E</text>
+<line x1="28" y1="651.3333333333334" x2="46" y2="651.3333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="651.3333333333334" x2="1572" y2="651.3333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="882.3333333333334" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">F</text>
+<text x="1563" y="882.3333333333334" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">F</text>
+<line x1="28" y1="802.6666666666667" x2="46" y2="802.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="802.6666666666667" x2="1572" y2="802.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="800.0" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
+<text x="800.0" y="990" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
+<text x="28" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" letter-spacing="2">CVIN-SSI PROGRAMME</text>
+<text x="1572" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="end" letter-spacing="2">BP-403  REV C</text>
+<text x="90" y="215" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">LENS 1 — EXECUTABLE REVERT SUITE (securityScenarios.test.js)</text>
+<line x1="90" y1="220" x2="600.0" y2="220" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<rect x="240" y="229" width="115" height="58" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="297.5" y="245" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">Unauthorized</text>
+<text x="297.5" y="255" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">issuance</text>
+<text x="297.5" y="281" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">G1 G4</text>
+<rect x="355" y="229" width="115" height="58" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="412.5" y="245" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">Unauthorized</text>
+<text x="412.5" y="255" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">attribute</text>
+<text x="412.5" y="265" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">write</text>
+<text x="412.5" y="281" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">G1</text>
+<rect x="470" y="229" width="115" height="58" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="527.5" y="245" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">Unauthorized</text>
+<text x="527.5" y="255" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">delegate/claim</text>
+<text x="527.5" y="281" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">G2 G4</text>
+<rect x="585" y="229" width="115" height="58" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="642.5" y="245" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">Unauthorized</text>
+<text x="642.5" y="255" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">revocation</text>
+<text x="642.5" y="281" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">G4</text>
+<rect x="700" y="229" width="115" height="58" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="757.5" y="245" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">Identity</text>
+<text x="757.5" y="255" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">hijack</text>
+<text x="757.5" y="281" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">G8</text>
+<rect x="815" y="229" width="115" height="58" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="872.5" y="245" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">Signature</text>
+<text x="872.5" y="255" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">replay</text>
+<text x="872.5" y="281" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">G3</text>
+<rect x="90" y="287" width="150" height="30" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="306" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-1056</text>
+<rect x="240" y="287" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="244" y="291" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc5415958952779705107"><rect x="244" y="291" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc5415958952779705107)">
+<line x1="222" y1="313" x2="244" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="231" y1="313" x2="253" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="240" y1="313" x2="262" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="249" y1="313" x2="271" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="258" y1="313" x2="280" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="267" y1="313" x2="289" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="276" y1="313" x2="298" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="285" y1="313" x2="307" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="294" y1="313" x2="316" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="303" y1="313" x2="325" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="312" y1="313" x2="334" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="321" y1="313" x2="343" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="330" y1="313" x2="352" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="339" y1="313" x2="361" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="348" y1="313" x2="370" y2="291" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="297.5" y="306" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="355" y="287" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="359" y="291" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="412.5" y="306" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="470" y="287" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="474" y="291" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="527.5" y="306" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="585" y="287" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="589" y="291" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="642.5" y="306" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="700" y="287" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="704" y="291" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="757.5" y="306" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="815" y="287" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="819" y="291" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="872.5" y="306" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="90" y="317" width="150" height="30" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="336" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-721</text>
+<rect x="240" y="317" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="244" y="321" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="297.5" y="336" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="355" y="317" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="359" y="321" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="412.5" y="336" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="470" y="317" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="474" y="321" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="527.5" y="336" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="585" y="317" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="589" y="321" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="642.5" y="336" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="700" y="317" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="704" y="321" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="757.5" y="336" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="815" y="317" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="819" y="321" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc6475939966026478924"><rect x="819" y="321" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc6475939966026478924)">
+<line x1="797" y1="343" x2="819" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="806" y1="343" x2="828" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="815" y1="343" x2="837" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="824" y1="343" x2="846" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="833" y1="343" x2="855" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="842" y1="343" x2="864" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="851" y1="343" x2="873" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="860" y1="343" x2="882" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="869" y1="343" x2="891" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="878" y1="343" x2="900" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="887" y1="343" x2="909" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="896" y1="343" x2="918" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="905" y1="343" x2="927" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="914" y1="343" x2="936" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="923" y1="343" x2="945" y2="321" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="872.5" y="336" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="90" y="347" width="150" height="30" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="366" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-725</text>
+<rect x="240" y="347" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="244" y="351" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc2479387854449115939"><rect x="244" y="351" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc2479387854449115939)">
+<line x1="222" y1="373" x2="244" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="231" y1="373" x2="253" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="240" y1="373" x2="262" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="249" y1="373" x2="271" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="258" y1="373" x2="280" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="267" y1="373" x2="289" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="276" y1="373" x2="298" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="285" y1="373" x2="307" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="294" y1="373" x2="316" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="303" y1="373" x2="325" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="312" y1="373" x2="334" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="321" y1="373" x2="343" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="330" y1="373" x2="352" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="339" y1="373" x2="361" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="348" y1="373" x2="370" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="297.5" y="366" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="355" y="347" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="359" y="351" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="412.5" y="366" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="470" y="347" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="474" y="351" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="527.5" y="366" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="585" y="347" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="589" y="351" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="642.5" y="366" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="700" y="347" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="704" y="351" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="757.5" y="366" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="815" y="347" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="819" y="351" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc4358532689035175666"><rect x="819" y="351" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc4358532689035175666)">
+<line x1="797" y1="373" x2="819" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="806" y1="373" x2="828" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="815" y1="373" x2="837" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="824" y1="373" x2="846" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="833" y1="373" x2="855" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="842" y1="373" x2="864" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="851" y1="373" x2="873" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="860" y1="373" x2="882" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="869" y1="373" x2="891" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="878" y1="373" x2="900" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="887" y1="373" x2="909" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="896" y1="373" x2="918" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="905" y1="373" x2="927" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="914" y1="373" x2="936" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="923" y1="373" x2="945" y2="351" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="872.5" y="366" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="90" y="377" width="150" height="30" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="396" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-735</text>
+<rect x="240" y="377" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="244" y="381" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc5561845941395876256"><rect x="244" y="381" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc5561845941395876256)">
+<line x1="222" y1="403" x2="244" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="231" y1="403" x2="253" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="240" y1="403" x2="262" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="249" y1="403" x2="271" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="258" y1="403" x2="280" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="267" y1="403" x2="289" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="276" y1="403" x2="298" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="285" y1="403" x2="307" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="294" y1="403" x2="316" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="303" y1="403" x2="325" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="312" y1="403" x2="334" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="321" y1="403" x2="343" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="330" y1="403" x2="352" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="339" y1="403" x2="361" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="348" y1="403" x2="370" y2="381" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="297.5" y="396" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="355" y="377" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="359" y="381" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="412.5" y="396" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="470" y="377" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="474" y="381" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="527.5" y="396" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="585" y="377" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="589" y="381" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="642.5" y="396" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="700" y="377" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="704" y="381" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="757.5" y="396" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="815" y="377" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="819" y="381" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="872.5" y="396" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="90" y="407" width="150" height="30" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="426" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-1155</text>
+<rect x="240" y="407" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="244" y="411" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="297.5" y="426" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="355" y="407" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="359" y="411" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="412.5" y="426" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="470" y="407" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="474" y="411" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="527.5" y="426" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="585" y="407" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="589" y="411" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="642.5" y="426" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="700" y="407" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="704" y="411" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="757.5" y="426" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="815" y="407" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="819" y="411" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc6548014776953170844"><rect x="819" y="411" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc6548014776953170844)">
+<line x1="797" y1="433" x2="819" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="806" y1="433" x2="828" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="815" y1="433" x2="837" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="824" y1="433" x2="846" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="833" y1="433" x2="855" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="842" y1="433" x2="864" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="851" y1="433" x2="873" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="860" y1="433" x2="882" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="869" y1="433" x2="891" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="878" y1="433" x2="900" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="887" y1="433" x2="909" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="896" y1="433" x2="918" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="905" y1="433" x2="927" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="914" y1="433" x2="936" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="923" y1="433" x2="945" y2="411" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="872.5" y="426" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="90" y="437" width="150" height="30" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="456" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-4337</text>
+<rect x="240" y="437" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="244" y="441" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc6805670426506792147"><rect x="244" y="441" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc6805670426506792147)">
+<line x1="222" y1="463" x2="244" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="231" y1="463" x2="253" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="240" y1="463" x2="262" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="249" y1="463" x2="271" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="258" y1="463" x2="280" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="267" y1="463" x2="289" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="276" y1="463" x2="298" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="285" y1="463" x2="307" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="294" y1="463" x2="316" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="303" y1="463" x2="325" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="312" y1="463" x2="334" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="321" y1="463" x2="343" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="330" y1="463" x2="352" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="339" y1="463" x2="361" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="348" y1="463" x2="370" y2="441" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="297.5" y="456" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="355" y="437" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="359" y="441" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="412.5" y="456" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="470" y="437" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="474" y="441" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="527.5" y="456" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="585" y="437" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="589" y="441" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="642.5" y="456" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="700" y="437" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="704" y="441" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="757.5" y="456" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="815" y="437" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="819" y="441" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="872.5" y="456" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="90" y="467" width="150" height="30" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="486" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">LSP8</text>
+<rect x="240" y="467" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="244" y="471" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="297.5" y="486" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="355" y="467" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="359" y="471" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="412.5" y="486" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="470" y="467" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="474" y="471" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc7651944664659812301"><rect x="474" y="471" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc7651944664659812301)">
+<line x1="452" y1="493" x2="474" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="461" y1="493" x2="483" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="470" y1="493" x2="492" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="479" y1="493" x2="501" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="488" y1="493" x2="510" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="497" y1="493" x2="519" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="506" y1="493" x2="528" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="515" y1="493" x2="537" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="524" y1="493" x2="546" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="533" y1="493" x2="555" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="542" y1="493" x2="564" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="551" y1="493" x2="573" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="560" y1="493" x2="582" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="569" y1="493" x2="591" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="578" y1="493" x2="600" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="527.5" y="486" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="585" y="467" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="589" y="471" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="642.5" y="486" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="700" y="467" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="704" y="471" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="757.5" y="486" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="815" y="467" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="819" y="471" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc4322807556991221887"><rect x="819" y="471" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc4322807556991221887)">
+<line x1="797" y1="493" x2="819" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="806" y1="493" x2="828" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="815" y1="493" x2="837" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="824" y1="493" x2="846" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="833" y1="493" x2="855" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="842" y1="493" x2="864" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="851" y1="493" x2="873" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="860" y1="493" x2="882" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="869" y1="493" x2="891" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="878" y1="493" x2="900" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="887" y1="493" x2="909" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="896" y1="493" x2="918" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="905" y1="493" x2="927" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="914" y1="493" x2="936" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="923" y1="493" x2="945" y2="471" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="872.5" y="486" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="90" y="497" width="150" height="30" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="516" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">MOBI-VID-V2</text>
+<rect x="240" y="497" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="244" y="501" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="297.5" y="516" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="355" y="497" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="359" y="501" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="412.5" y="516" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="470" y="497" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="474" y="501" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="527.5" y="516" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="585" y="497" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="589" y="501" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="642.5" y="516" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="700" y="497" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="704" y="501" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="757.5" y="516" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="815" y="497" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="819" y="501" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc6693901765569341993"><rect x="819" y="501" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc6693901765569341993)">
+<line x1="797" y1="523" x2="819" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="806" y1="523" x2="828" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="815" y1="523" x2="837" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="824" y1="523" x2="846" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="833" y1="523" x2="855" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="842" y1="523" x2="864" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="851" y1="523" x2="873" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="860" y1="523" x2="882" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="869" y1="523" x2="891" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="878" y1="523" x2="900" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="887" y1="523" x2="909" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="896" y1="523" x2="918" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="905" y1="523" x2="927" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="914" y1="523" x2="936" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="923" y1="523" x2="945" y2="501" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="872.5" y="516" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="90" y="527" width="150" height="30" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="546" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">CVIN-Combined</text>
+<rect x="240" y="527" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="244" y="531" width="107" height="22" rx="0" fill="none" stroke="#5c78ad" stroke-width="1.0" opacity="1.0"/>
+<clipPath id="hc3898111520098665001"><rect x="244" y="531" width="107" height="22"/></clipPath>
+<g clip-path="url(#hc3898111520098665001)">
+<line x1="222" y1="553" x2="244" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="231" y1="553" x2="253" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="240" y1="553" x2="262" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="249" y1="553" x2="271" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="258" y1="553" x2="280" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="267" y1="553" x2="289" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="276" y1="553" x2="298" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="285" y1="553" x2="307" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="294" y1="553" x2="316" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="303" y1="553" x2="325" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="312" y1="553" x2="334" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="321" y1="553" x2="343" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="330" y1="553" x2="352" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="339" y1="553" x2="361" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+<line x1="348" y1="553" x2="370" y2="531" stroke="#5c78ad" stroke-width="0.6" opacity="1.0"/>
+</g>
+<text x="297.5" y="546" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">n/a</text>
+<rect x="355" y="527" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="359" y="531" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="412.5" y="546" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="470" y="527" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="474" y="531" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="527.5" y="546" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="585" y="527" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="589" y="531" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="642.5" y="546" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="700" y="527" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="704" y="531" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="757.5" y="546" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="815" y="527" width="115" height="30" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<rect x="819" y="531" width="107" height="22" rx="0" fill="none" stroke="#9be7a5" stroke-width="1.4" opacity="1.0"/>
+<text x="872.5" y="546" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="middle" font-weight="normal" opacity="1.0">DEFENDED</text>
+<rect x="90" y="557" width="840" height="30" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.4" opacity="1.0"/>
+<text x="96" y="576" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="bold" opacity="1.0">TOTAL</text>
+<text x="297.5" y="576" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">4/4</text>
+<text x="412.5" y="576" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">9/9</text>
+<text x="527.5" y="576" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">8/8</text>
+<text x="642.5" y="576" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">9/9</text>
+<text x="757.5" y="576" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">9/9</text>
+<text x="872.5" y="576" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">4/4</text>
+<text x="942" y="576" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#9be7a5" text-anchor="start" font-weight="bold" opacity="1.0">43 / 43 applicable (54 cells, 11 N/A)</text>
+<text x="90" y="613" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">LENS 2 — COMPARATIVE THREAT MATRIX (security_matrix.csv)</text>
+<line x1="90" y1="618" x2="566.0" y2="618" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<rect x="240" y="627" width="115" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="297.5" y="643" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">impersonation</text>
+<rect x="355" y="627" width="115" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="412.5" y="643" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">replay</text>
+<rect x="470" y="627" width="115" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="527.5" y="643" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">identity theft</text>
+<text x="527.5" y="653" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">(G8)</text>
+<rect x="585" y="627" width="115" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="642.5" y="643" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">Sybil (G5)</text>
+<rect x="700" y="627" width="115" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="757.5" y="643" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">recovery (G6)</text>
+<rect x="815" y="627" width="115" height="36" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="872.5" y="643" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">privacy (G7)</text>
+<rect x="90" y="663" width="150" height="22" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="678" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-1056</text>
+<rect x="240" y="663" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="297.5" y="678" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="355" y="663" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="412.5" y="678" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="470" y="663" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="527.5" y="678" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="585" y="663" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="642.5" y="678" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V</text>
+<rect x="700" y="663" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="757.5" y="678" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V*</text>
+<rect x="815" y="663" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="872.5" y="678" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="90" y="685" width="150" height="22" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="700" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-721</text>
+<rect x="240" y="685" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="297.5" y="700" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="355" y="685" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="412.5" y="700" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#5c78ad" text-anchor="middle" font-weight="bold" opacity="1.0">N*</text>
+<rect x="470" y="685" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="527.5" y="700" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V</text>
+<rect x="585" y="685" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="642.5" y="700" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="700" y="685" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="757.5" y="700" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V*</text>
+<rect x="815" y="685" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="872.5" y="700" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V</text>
+<rect x="90" y="707" width="150" height="22" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="722" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-725</text>
+<rect x="240" y="707" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="297.5" y="722" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="355" y="707" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="412.5" y="722" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#5c78ad" text-anchor="middle" font-weight="bold" opacity="1.0">N*</text>
+<rect x="470" y="707" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="527.5" y="722" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="585" y="707" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="642.5" y="722" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="700" y="707" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="757.5" y="722" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V*</text>
+<rect x="815" y="707" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="872.5" y="722" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="90" y="729" width="150" height="22" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="744" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-735</text>
+<rect x="240" y="729" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="297.5" y="744" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="355" y="729" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="412.5" y="744" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="470" y="729" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="527.5" y="744" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="585" y="729" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="642.5" y="744" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="700" y="729" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="757.5" y="744" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V*</text>
+<rect x="815" y="729" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="872.5" y="744" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V</text>
+<rect x="90" y="751" width="150" height="22" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="766" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-1155</text>
+<rect x="240" y="751" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="297.5" y="766" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="355" y="751" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="412.5" y="766" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#5c78ad" text-anchor="middle" font-weight="bold" opacity="1.0">N*</text>
+<rect x="470" y="751" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="527.5" y="766" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="585" y="751" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="642.5" y="766" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="700" y="751" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="757.5" y="766" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="815" y="751" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="872.5" y="766" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V</text>
+<rect x="90" y="773" width="150" height="22" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="788" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-4337</text>
+<rect x="240" y="773" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="297.5" y="788" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="355" y="773" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="412.5" y="788" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="470" y="773" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="527.5" y="788" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="585" y="773" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="642.5" y="788" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="700" y="773" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="757.5" y="788" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="815" y="773" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="872.5" y="788" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="90" y="795" width="150" height="22" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">LSP8</text>
+<rect x="240" y="795" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="297.5" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="355" y="795" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="412.5" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#5c78ad" text-anchor="middle" font-weight="bold" opacity="1.0">N*</text>
+<rect x="470" y="795" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="527.5" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V</text>
+<rect x="585" y="795" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="642.5" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="700" y="795" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="757.5" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="815" y="795" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="872.5" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V</text>
+<rect x="90" y="817" width="150" height="22" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="832" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">MOBI-VID-V2</text>
+<rect x="240" y="817" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="297.5" y="832" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="355" y="817" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="412.5" y="832" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D*</text>
+<rect x="470" y="817" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="527.5" y="832" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="585" y="817" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="642.5" y="832" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="700" y="817" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="757.5" y="832" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V*</text>
+<rect x="815" y="817" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="872.5" y="832" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="90" y="839" width="150" height="22" rx="0" fill="none" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="96" y="854" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">CVIN-Combined</text>
+<rect x="240" y="839" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="297.5" y="854" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="middle" font-weight="bold" opacity="1.0">D</text>
+<rect x="355" y="839" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="412.5" y="854" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="470" y="839" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="527.5" y="854" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<rect x="585" y="839" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="642.5" y="854" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V</text>
+<rect x="700" y="839" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="757.5" y="854" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="middle" font-weight="bold" opacity="1.0">V*</text>
+<rect x="815" y="839" width="115" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="872.5" y="854" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="middle" font-weight="bold" opacity="1.0">P</text>
+<text x="1000" y="290" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">READING THE HULL</text>
+<line x1="1000" y1="295" x2="1136.0" y2="295" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="1000" y="316" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">Lens 1 is binary and complete for G1–G4:</text>
+<text x="1000" y="332" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">every applicable attack reverts, and the</text>
+<text x="1000" y="348" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">authorized twin succeeds (differential control).</text>
+<text x="1000" y="364" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0"></text>
+<text x="1000" y="380" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">Lens 2 is where the frontier appears:</text>
+<text x="1000" y="396" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">  cheap self-registration ⇒ Sybil-exposed</text>
+<text x="1000" y="412" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">  issuer-gated ⇒ Sybil-resistant, costlier</text>
+<text x="1000" y="428" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">  recovery: ERC-4337 only (guardian slot)</text>
+<text x="1000" y="444" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">  theft-resistant: ERC-1155 (soulbound)</text>
+<text x="1000" y="460" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">  VIN privacy: MOBI VID (hash + encrypt)</text>
+<text x="1000" y="476" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0"></text>
+<text x="1000" y="492" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">Selection is a requirements-driven move</text>
+<text x="1000" y="508" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">along this frontier, not a winner (H5).</text>
+<rect x="1000" y="620" width="520" height="70" rx="0" fill="none" stroke="#ffd166" stroke-width="1.4" opacity="1.0"/>
+<text x="1010" y="642" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">Found-and-fixed, reported as evidence:</text>
+<text x="1010" y="660" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">MOBI attestEvent accepted unverified signatures (G2/G3). Fixed with ecrecover;</text>
+<text x="1010" y="676" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">121,110 → 192,718 gas (July), 222,058–222,082 current build (#28). Replay passes.</text>
+<rect x="46" y="46" width="1060" height="116" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.4" opacity="0.95"/>
+<text x="54" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">GENERAL NOTES</text>
+<line x1="46" y1="66" x2="1106" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="54" y="80" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">1. Lens 1 cell = malicious transaction reverted with the documented expected reason of the named defence, with a differential control that the authorized</text>
+<text x="54" y="94" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   action succeeds. &#x27;—&#x27; = structurally N/A for that standard&#x27;s model (11 cells).</text>
+<text x="54" y="108" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2. Lens 2 legend: D defended · P partial · V vulnerable · N n/a; * = reasoned from the verified source (structural absence), others executed. Sybil cost</text>
+<text x="54" y="122" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   proxy = create gas (BP-501).</text>
+<text x="54" y="136" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">3. Reading: no column is all-D in Lens 2 — no standard dominates (H5). Recovery is ERC-4337&#x27;s alone; soulbound theft resistance is ERC-1155&#x27;s; on-chain VIN</text>
+<text x="54" y="150" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   privacy is MOBI&#x27;s.</text>
+<rect x="1134" y="46" width="420" height="92" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<text x="1142" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">REVISIONS</text>
+<line x1="1134" y1="66" x2="1554" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1142" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">REV</text>
+<text x="1184" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">DESCRIPTION</text>
+<text x="1464" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">DATE</text>
+<text x="1142" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">A</text>
+<text x="1184" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">INITIAL RELEASE</text>
+<text x="1464" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-15</text>
+<text x="1142" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">B</text>
+<text x="1184" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">P1 NUMBER AUDIT (AUDIT_REV_B.md)</text>
+<text x="1464" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-22</text>
+<text x="1142" y="133" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">C</text>
+<text x="1184" y="133" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">P2 DATA-BOUND VALUES (data.py)</text>
+<text x="1464" y="133" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-31</text>
+<line x1="1178" y1="66" x2="1178" y2="138" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<line x1="1458" y1="66" x2="1458" y2="138" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+
+<rect x="1034" y="782" width="520" height="48" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="0.95"/>
+<text x="1042" y="795" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="1">REFERENCE DOCUMENTS / SOURCE OF TRUTH</text>
+<text x="1042" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">4_comparison-framework/security-analysis/results/attack_results.csv / .json (Lens 1, solc 0.8.24, OZ 5.0.2, hardhat-local)</text>
+<text x="1042" y="823" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">4_comparison-framework/security-analysis/results/security_matrix.csv (Lens 2) · docs/THREAT_MODEL.md §5</text>
+<rect x="1034" y="836" width="520" height="118" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="2.0" opacity="1.0"/>
+<line x1="1034" y1="866" x2="1554" y2="866" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<line x1="1034" y1="914" x2="1554" y2="914" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<line x1="1334" y1="836" x2="1334" y2="866" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="1042" y="848" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">PROGRAMME</text>
+<text x="1042" y="861" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="start" font-weight="bold" opacity="1.0">CVIN-SSI PROGRAMME</text>
+<text x="1342" y="848" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DRAWING NO.</text>
+<text x="1342" y="861" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">BP-403</text>
+<text x="1042" y="878" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">TITLE</text>
+<text x="1042" y="894" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#f2f6ff" text-anchor="start" font-weight="bold" opacity="1.0">ATTACK MATRIX — TWO LENSES</text>
+<text x="1042" y="908" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">Lens 1: 54 executable cells, 43/43 applicable DEFENDED. Lens 2: the softer goals a revert…</text>
+<text x="1040" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DRAWN</text>
+<text x="1040" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">N. PRAKASH</text>
+<line x1="1144" y1="914" x2="1144" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1150" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">CHECKED</text>
+<text x="1150" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">MEASUREMENT_CONDITIONS.md</text>
+<line x1="1314" y1="914" x2="1314" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1320" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">APPROVED</text>
+<text x="1320" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">—</text>
+<line x1="1384" y1="914" x2="1384" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1390" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DATE</text>
+<text x="1390" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-31</text>
+<line x1="1464" y1="914" x2="1464" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1470" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">SCALE</text>
+<text x="1470" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">NTS</text>
+<line x1="1514" y1="914" x2="1514" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1520" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">SHEET</text>
+<text x="1520" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">20 OF 23</text>
+<line x1="1554" y1="914" x2="1554" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+</svg>

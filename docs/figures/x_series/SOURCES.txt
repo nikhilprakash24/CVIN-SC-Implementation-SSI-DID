@@ -1,0 +1,8 @@
+1_blockchain-identity/results/metrics-rpc/latest/resolve.json
+1_blockchain-identity/results/metrics/latest/crud.json
+1_blockchain-identity/results/metrics/latest/lifecycle.json
+1_blockchain-identity/results/metrics/latest/meta.json
+1_blockchain-identity/results/metrics/latest/resolve.json
+4_comparison-framework/results/gas_benchmark.json
+4_comparison-framework/security-analysis/results/security_matrix.csv
+cv2x-testbed/results/freshness_k.json

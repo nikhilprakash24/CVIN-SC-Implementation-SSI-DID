@@ -67,7 +67,7 @@ reported as a result (1.2.9).
 | Hosts | one container per run; CPU model, count and kernel in every Python experiment header, not in the harness `meta.json` (N-26); latency compared within a run only | each result file's `environment` |
 | Seeds | `CVIN_SEED=1` for the L1, Hardhat-tree and demo stages; experiment seeds 1 to 30 recorded per run | `sandbox/lib/determinism.js`; result files |
 | Isolation | a fresh Hardhat node per run (started by path so the recorded process id is the node's); port checked free afterwards; nothing else on the host during a latency run, stated in the run log | run logs under `cv2x-testbed/sumo/results/run_logs/` |
-| CI | 11 jobs across 4 workflows; full history checkout for the stamp check | `.github/workflows/` |
+| CI | 12 jobs across 4 workflows (the blueprint data check in `benchmark.yml`); full history checkout for the stamp check | `.github/workflows/` |
 
 ## 5. Exams
 

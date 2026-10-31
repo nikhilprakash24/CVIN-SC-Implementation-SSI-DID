@@ -44,6 +44,7 @@ CHECKS=(
   "docs/tdp/make_vcrm.py --check"
   "docs/tdp/make_fmeca.py --check"
   "docs/tdp/make_blueprints.py --check"
+  "docs/blueprints/make_blueprints.py --check"
 )
 for c in "${CHECKS[@]}"; do
   echo "== $c"

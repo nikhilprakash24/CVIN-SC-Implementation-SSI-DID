@@ -166,7 +166,7 @@ That is item Q-B7 in §6 and task T-12 in §7.
 | Python layer tests | 376 | the same run |
 | Demos | 92, with 1,758 logged steps | the same run |
 | Defects | 66 logged; 42 fixed, 6 partly, 18 open (as of 10-22) | `docs/DEFECT_LOG.md`, `docs/STATUS_2026-10-22.md` |
-| CI | 11 jobs in four workflows, green on `558fc9d` | `.github/workflows/` |
+| CI | 12 jobs in four workflows (the blueprint data check added 2026-10-31), green on every closing commit | `.github/workflows/` |
 | Mutation probes | IDTx, verifier, ZK, D54 (8 of 8 killed), resolver (9 of 9 killed) | AAR 36 |
 | Thesis chapters | 1 to 7 drafted; chapter 2 written §2.1 to §2.9; chapter 6 has §6.8 and §6.9 | `docs/thesis/` |
 
@@ -234,8 +234,8 @@ Each task names what it blocks. "You" means the author. The order is the order o
 | T-12 | Review the five open branches, **done 10-24** | this session | nothing | Q-B7 |
 | T-15 | Correct the TDP's stale figures and add layer 5, **done 10-24 (report 38)** | this session | nothing | the TDP current |
 | T-17 | Confirm why #26's density sweep (2026-10-04) was not re-run at A3b, or re-run it | this session | nothing | an empty KNOWN_STALE reason |
-| T-18 | Refresh the blueprint branch's 23 sheet sources against the register, then merge it (B-1, second half) | this session | nothing | the blueprint set on the trunk |
-| T-19 | Extend the stale-figure checker to SVG and other generated text (WM-2 G, T-F16) | this session | nothing | figures checked like Markdown |
+| T-18 | Refresh the blueprint branch's 23 sheet sources against the register, then merge it (B-1, second half), **done 10-31 (report 40)** | this session | nothing | the blueprint set on the trunk |
+| T-19 | Extend the stale-figure checker to SVG (WM-2 G, T-F16), **done 10-31 (report 40)**; other generated text (HTML, TeX) still unscanned | this session | nothing | figures checked like Markdown |
 | T-16 | D2 answered 10-24 (out of scope); B-1 taken as recommended (exploration merged, blueprints after T-18); B-2 to B-4 open | you | nothing | the branch merges |
 | T-13 | The rest of the decision sheet (P2-D*, C1-d*, C2-d*) | you | nothing | the records |
 | T-14 | Commit signing, optional | you, with a key | nothing | verified commits |
@@ -294,7 +294,7 @@ for which latency figures may not be compared.
 | `sandbox/grand/run.py` and its report | runs every suite and demo | one command reproduces the test base |
 | `docs/testing/` | claims check, charters, stamps, test register | CI proves the register matches the results |
 | `tools/prepush_check.sh` | CI's document guards, locally | stops a stale figure before it is pushed |
-| `.github/workflows/` | 11 CI jobs | every closing commit is green |
+| `.github/workflows/` | 12 CI jobs | every closing commit is green |
 | `docs/tdp/` | the Technical Data Package | an engineering view of the same system |
 | `5_zkp-agent-identity/` | layer 5 | RQ5 |
 

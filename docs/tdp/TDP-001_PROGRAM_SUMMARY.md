@@ -88,7 +88,7 @@ attached: the rule is one step per pass with a closing CI result, not a calendar
 
 | Exam | Pass condition | Where it is read |
 |---|---|---|
-| Every pass | grand run ALL OK; CI 11 of 11 jobs (four workflows) green on the closing commit; every number in a changed document has a V row; every new guard shown to fire | the after-action report's closing section |
+| Every pass | grand run ALL OK; CI 12 of 12 jobs (four workflows) green on the closing commit; every number in a changed document has a V row; every new guard shown to fire | the after-action report's closing section |
 | WM-2 close (midterm) | the seven closing conditions of `docs/milestones/README.md`: plan status per item, milestone report, an audit by reviewers without the orchestrator's context, findings dispositioned, grand run and CI green, the next plan, a consolidated handback | `docs/milestones/WM-2_REPORT.md` (to be written) |
 | Thesis freeze | Scope v3 adopted; H1 and H5 reported as split verdicts; every chapter number a V row; chapter 2 written | the scope reconciliation's decisions D-1 to D-15 |
 | Defence (final) | the fifteen examiner questions of `docs/phase2/SCOPE_RECONCILIATION.md` section 5 each answered from a named file | the crux register: every crux "evidenced" or its gap stated as a limitation |

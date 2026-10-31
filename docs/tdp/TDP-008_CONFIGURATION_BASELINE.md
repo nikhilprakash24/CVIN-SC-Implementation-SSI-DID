@@ -32,7 +32,7 @@ versions, the runs of record with their identities, the toolchain pins, the buil
 | Evidence tools | `tools/run_identity/` | `stamp.py`, `promote.py`, `producers.json` (20 producers), `scopes.json` (generated) |
 | Layer 5 (ZKP and agent-wrapped identity) | `5_zkp-agent-identity/`; `1_blockchain-identity/hardhat.zkp.config.js` | circom 2.2.2 (#56); snarkjs 0.7.6, node v22.22.0 (#57); Groth16 keys from a single-party setup, insecure for deployment (#57); artefact SHA-256 in `artifacts/MANIFEST.json`, checked in CI |
 | Documents | `docs/` | register, charters, generated pages, this package |
-| CI | `.github/workflows/` | `test-contracts.yml` (1 job), `w3c-compliance.yml` (4 jobs), `benchmark.yml` (3 jobs), `zkp-layer5.yml` (3 jobs); CI Python packages pinned in `ci/requirements-ci.txt` |
+| CI | `.github/workflows/` | `test-contracts.yml` (1 job), `w3c-compliance.yml` (4 jobs), `benchmark.yml` (4 jobs, the blueprint data check added 2026-10-31), `zkp-layer5.yml` (3 jobs); CI Python packages pinned in `ci/requirements-ci.txt` |
 
 ## 3. Runs of record and their identities
 
