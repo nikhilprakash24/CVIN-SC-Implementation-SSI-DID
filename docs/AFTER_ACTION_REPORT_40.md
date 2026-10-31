@@ -16,3 +16,8 @@ regenerates its sheets; it re-runs no producer of record.
 ## 2. Execution log
 - 2026-10-31 — report opened. Branch state: the TDP session's report 39 (TDP revision B completed, DWG-007 for layer 5)
   is on this branch; the blueprint branch gained Rev C (`70a21b4`) today.
+- **S1, the checker reads SVG.** `check_docs_numbers.py` now scans tracked `.svg` files as well as Markdown: each
+  `<text>` element's content, with tags removed, entities decoded and no-break spaces read as spaces, is one line. The
+  same entries, history globs and pending rule apply. Scope 159 → 173 files; the trunk's existing drawings are clean.
+  Shown to fire on the hard case: `warm <tspan>0.153</tspan>&#160;ms` injected into DWG-001 is caught; restored, clean.
+  CI and the pre-push guard already run this checker, so SVG is covered with no new step.

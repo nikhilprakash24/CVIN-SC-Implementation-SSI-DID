@@ -4,7 +4,7 @@
 Superseded values, their current replacements and register rows are listed in
 docs/testing/stale_numbers.yaml.
 
-Scope: every tracked Markdown file except the `history` globs (dated records, plans, reviews and
+Scope: every tracked Markdown and SVG file (the SVG's text elements; report 40) except the `history` globs (dated records, plans, reviews and
 generated run reports, which keep the values of their time on purpose). Before matching, a line is
 normalised so formatting cannot hide a value: thousands separators (`1,404,108`, `1 404 108`,
 thin/no-break spaces) are removed between digit groups, and `ms` / `%` are separated from the number
@@ -47,14 +47,33 @@ def normalise(line: str) -> str:
 
 
 def files():
-    tracked = subprocess.run(["git", "ls-files", "*.md"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.split()
+    tracked = subprocess.run(["git", "ls-files", "*.md", "*.svg"], cwd=ROOT, capture_output=True, text=True,
+                             check=True).stdout.split()
     return [ROOT / p for p in tracked if not any(fnmatch.fnmatch(p, g) for g in CFG["history"])]
+
+
+SVG_TEXT = re.compile(r"<text\b[^>]*>(.*?)</text>", re.S)
+
+
+def lines_of(f):
+    """(line number, text) pairs. Markdown: every line. SVG (report 40, T-19): the text content of each <text>
+    element, tags removed, entities decoded, no-break spaces read as spaces, numbered by the line it starts on."""
+    raw = f.read_text(errors="replace")
+    if f.suffix != ".svg":
+        return list(enumerate(raw.splitlines(), 1))
+    import html
+    out = []
+    for m in SVG_TEXT.finditer(raw):
+        text = html.unescape(re.sub(r"<[^>]+>", "", m.group(1))).replace("\u00a0", " ").replace("\u202f", " ")
+        if text.strip():
+            out.append((raw.count("\n", 0, m.start()) + 1, text))
+    return out
 
 
 def main():
     hits, pending, pend_seen = [], [], set()
     for f in files():
-        for n, raw in enumerate(f.read_text(errors="replace").splitlines(), 1):
+        for n, raw in lines_of(f):
             line = normalise(raw)
             if MARKERS.search(line):
                 continue
