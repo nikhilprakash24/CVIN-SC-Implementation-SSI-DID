@@ -82,7 +82,7 @@
   <div class="tile"><b id="h_tx">–</b><span>signed broadcasts so far</span></div>
   <div class="tile"><b id="h_rx">–</b><span>verifications so far</span></div>
   <div class="tile"><b id="h_cold">–</b><span>cold (first contact)</span></div>
-  <div class="tile"><b id="h_fail">–</b><span>rejected</span></div>
+  <div class="tile"><b id="h_fail">–</b><span>rejected (by reason)</span></div>
   <div class="tile"><b id="h_lat">–</b><span>last step: median warm / max cold, ms</span></div>
 </div>
 <main>
@@ -90,6 +90,7 @@
   <div class="legend">
     <span><i class="sw" style="background:var(--ssi)"></i>SSI / MOBI VID vehicle</span>
     <span><i class="sw" style="background:var(--pki)"></i>PKI vehicle</span>
+    <span><i class="sw" style="background:var(--ink);border:2px solid var(--spray)"></i>rogue (Phase 5 attacker)</span>
     <span><i class="ln" style="border-top:3px solid var(--cold)"></i>cold: full credential verify</span>
     <span><i class="ln" style="border-top:1px solid var(--warm)"></i>warm: signature check</span>
     <span><i class="ln" style="border-top:2px dashed var(--fail)"></i>rejected</span>
@@ -55566,15 +55567,15 @@
       switch (r.type) {
         case 'header': header = r; break;
         case 'enroll': pop[r.id] = r.pop;
-          enroll[r.id] = { vehicle: r.id, identity: r.pop === 'ssi' ? 'MOBI_VID' : 'PKI', did: r.did, vin: r.vin, make: r.make, model: r.model, year: r.year }; break;
+          enroll[r.id] = { vehicle: r.id, identity: r.pop === 'ssi' ? 'MOBI_VID' : (r.pop === 'rogue' ? 'ROGUE' : 'PKI'), did: r.did, vin: r.vin, make: r.make, model: r.model, year: r.year, vtype: r.vtype }; break;
         case 'step': lastT = Math.max(lastT, r.t);
           snaps.push({ t: r.t, step: step++, v: r.vehicles.map(v => { if (!(v.id in pop)) pop[v.id] = v.pop; return [v.id, v.x, v.y, v.speed || 0, v.heading || 0, v.lane || 'lane']; }) }); break;
         case 'tx': {
           if (!VEH.has(r.kind)) { infra++; break; }
-          const e = { t: r.t, sender: r.from, type: r.kind, emergency: r.kind !== 'BSM', pop: pop[r.from] || 'pki', rx: [] };
+          const e = { t: r.t, sender: r.from, type: r.kind, emergency: r.kind !== 'BSM', pop: pop[r.from] || 'pki', attack: r.attack || null, rx: [] };
           txById.set(r.msg, e);
           const k = r.t.toFixed(3); if (!txByStep.has(k)) txByStep.set(k, []); txByStep.get(k).push(e); break; }
-        case 'rx': { const e = txById.get(r.msg); if (e) e.rx.push([r.to, !!r.ok, r.path === 'cold', r.verify_ms || 0]); break; }
+        case 'rx': { const e = txById.get(r.msg); if (e) e.rx.push([r.to, !!r.ok, r.path === 'cold', r.verify_ms || 0, r.ok ? null : (r.why || r.reason || 'rejected')]); break; }
         case 'safety': safety.push({ t: r.t, app: r.app, vehicle: r.id, warned: r.warned, target: r.target, ttc_s: r.ttc_s, gap_m: r.gap_m }); break;
         case 'attack': attacks.push({ t: r.t, name: r.id, rejected: !!r.rejected, reason: r.reason }); break;
       }
@@ -55695,8 +55696,9 @@
     // vehicles
     for (const [vid, v] of Object.entries(pos)) {
       const id = enroll[vid];
-      ctx.fillStyle = id && id.identity === 'MOBI_VID' ? css('--ssi') : css('--pki');
-      ctx.strokeStyle = css('--ink'); ctx.lineWidth = vid === selected ? 2.5 : 0.6;
+      const rogue = id && id.identity === 'ROGUE';
+      ctx.fillStyle = rogue ? css('--ink') : (id && id.identity === 'MOBI_VID' ? css('--ssi') : css('--pki'));
+      ctx.strokeStyle = rogue ? css('--spray') : css('--ink'); ctx.lineWidth = rogue ? 2.5 : (vid === selected ? 2.5 : 0.6);
       ctx.beginPath(); ctx.roundRect(v.p[0] - 9, v.p[1] - 5, 18, 10, 2); ctx.fill(); ctx.stroke();
     }
     // emergency broadcasters
@@ -55710,7 +55712,7 @@
     accumulate();
     const nS = snap.v.filter(v => enroll[v[0]] && enroll[v[0]].identity === 'MOBI_VID').length;
     $('h_veh').textContent = `${snap.v.length} (${nS} / ${snap.v.length - nS})`;
-    $('h_tx').textContent = cum.tx; $('h_rx').textContent = cum.rx; $('h_cold').textContent = cum.cold; $('h_fail').textContent = cum.fail;
+    $('h_tx').textContent = cum.tx; $('h_rx').textContent = cum.rx; $('h_cold').textContent = cum.cold; $('h_fail').textContent = cum.fail + (cum.why && Object.keys(cum.why).length ? '  ' + Object.entries(cum.why).map(([k, v]) => `${k} ${v}`).join(' · ') : '');
     warmL.sort((a, b) => a - b);
     $('h_lat').textContent = `${warmL.length ? warmL[warmL.length >> 1].toFixed(3) : '–'} / ${coldMax ? coldMax.toFixed(3) : '–'}`;
     $('tlabel').textContent = `t = ${snap.t.toFixed(1)} s`;
@@ -55724,10 +55726,10 @@
   let cumKeys = null, cumRows = null;
   function buildCum() {
     cumKeys = [...txByStep.keys()].map(Number).sort((a, b) => a - b);
-    cumRows = []; let c = { tx: 0, rx: 0, cold: 0, fail: 0 };
+    cumRows = []; let c = { tx: 0, rx: 0, cold: 0, fail: 0, why: {} };
     for (const k of cumKeys) {
       for (const e of txByStep.get(k.toFixed(3))) {
-        c.tx++; for (const [, ok, cold] of e.rx) { c.rx++; if (!ok) c.fail++; else if (cold) c.cold++; }
+        c.tx++; for (const [, ok, cold, , why] of e.rx) { c.rx++; if (!ok) { c.fail++; c.why = { ...c.why, [why]: (c.why[why] || 0) + 1 }; } else if (cold) c.cold++; }
       }
       cumRows.push({ ...c });
     }
@@ -55758,7 +55760,7 @@
     const e = enroll[vid]; if (!e) return;
     const s = snaps[idx].v.find(v => v[0] === vid);
     $('card').textContent =
-      `${vid}  ${e.identity === 'MOBI_VID' ? 'SSI / MOBI VID' : 'PKI (X.509 pseudonym cert)'}\n` +
+      `${vid}  ${e.identity === 'MOBI_VID' ? 'SSI / MOBI VID' : (e.identity === 'ROGUE' ? 'ROGUE ' + (e.vtype || '') : 'PKI (X.509 pseudonym cert)')}\n` +
       `VIN  ${e.vin}   ${e.make} ${e.model} ${e.year}\n` +
       (e.did ? `DID  ${e.did}\n` : `cert issued by centralized CA, rotates every 100 messages\n`) +
       (s ? `pos  x=${s[1].toFixed(1)} m  y=${s[2].toFixed(1)} m  speed ${s[3].toFixed(1)} m/s  lane ${s[5]}` : 'not on road at this instant') +

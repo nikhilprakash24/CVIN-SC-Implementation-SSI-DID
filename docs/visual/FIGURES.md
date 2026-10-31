@@ -123,8 +123,60 @@ figure for seed 1 with RSUs. Use the animation in the defence beside V-10.
 
 ---
 
+### Phase 5 — the attacker on the road
+
+Traces at commit `3dddf6c`: `traces/sim_50v_20s_seed6_rogue_{uncredentialed,replay,tamper}.jsonl.gz`
+(seed 6, 50 vehicles, 20 s, mock mobility). The rogue joins at t = 10 s and
+drives at 25 m/s in the middle lane. It broadcasts every step to its 8 nearest
+vehicles within 300 m.
+
+```bash
+cd cv2x-testbed/sumo
+python3 sumo_identity_integration.py --simulate --duration 20 --vehicles 50 --seed 6 --rogue uncredentialed \
+    --stage-timers --results /tmp/r.json --trace ../../docs/visual/traces/sim_50v_20s_seed6_rogue_uncredentialed.jsonl.gz
+# replay and tamper: same, --rogue replay / --rogue tamper, without --stage-timers
+cd ../.. && V=cv2x-testbed/sumo/viz
+python3 $V/thesis_figures.py docs/visual/traces/sim_50v_20s_seed6_rogue_uncredentialed.jsonl.gz --t 12 --focus rogue_001 --only F1 F2 F8 F9 --receiver veh_035
+python3 $V/thesis_figures.py docs/visual/traces/sim_50v_20s_seed6_rogue_replay.jsonl.gz --only F9
+python3 $V/thesis_figures.py docs/visual/traces/sim_50v_20s_seed6_rogue_tamper.jsonl.gz --only F9
+```
+
+| Mode | Rogue messages | Receptions | Rejected (reason) | Accepted |
+|---|--:|--:|---|--:|
+| uncredentialed (valid key and DID, no credential) | 100 | 617 | 617 (no_credential) | 0 |
+| replay (nearest genuine package re-sent verbatim, same step) | 100 | 517 | 500 (replay) | **17** |
+| tamper (nearest genuine package, position moved 50 m) | 100 | 517 | 500 (signature) + 17 (binding) | 0 |
+
+**V-13 · The rogue on the road** · `figures/sim_50v_20s_seed6_rogue_uncredentialed/F1_road_frame_t012.png`
+> t = 12 s. The rogue (ink, orange outline) holds a valid secp256k1 key and a
+> `did:ethr` DID but no credential. All six of its links in this step are
+> rejected; genuine traffic around it continues unchanged.
+
+**V-14 · Rejected, and why** · `…/F9_rejections.png` for each mode
+> Every receiver-side rejection by the verifier's reason, plus any rogue
+> message that was accepted. **In replay mode, 17 replays were accepted.** They
+> reached receivers that had not received the original, because those
+> receivers were not among the original sender's 8 nearest, and the replay
+> was inside the freshness window. Sixteen of the 17 were warm: the receiver
+> already knew the genuine sender. The content is genuine and fresh, so
+> authenticity holds. The rogue extends the message's reach, and the verifier
+> has no position-plausibility check. All accepted replays fall in the first
+> 1.6 s after the rogue joins.
+
+**V-15 · Where cold latency goes** · `…/F8_cold_stages.png`
+> Median per stage of successful first-contact verifications (`--stage-timers`).
+> SSI: credential verification and DID binding 0.259 ms; signature recovery
+> 0.167 ms. PKI: X.509 chain, validity and CRL 0.126 ms; ECDSA verify 0.097 ms.
+> The stage timers add their own overhead, so the figure shows proportions; the
+> results of record are #27.
+
+**V-16 · A receiver hit by the rogue** · `…/F2_contact_matrix_veh_035.png`
+> One receiver's peers over time. The rogue appears from t = 10 s as a row of
+> rejections, never cached.
+
+**Replay** · `replay/replay_rogue_replay.html`: the replay-mode run offline,
+with the per-reason rejection counter.
+
 ## Not yet drawn
 
 
-- **F8 · where cold latency goes** (per-stage timers) and **F9 · rejections by
-  reason** (rogue vehicle). Phase 5.

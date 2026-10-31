@@ -23,11 +23,17 @@ visual work added. Nothing existing was renamed or removed.
 | new event `safety` | `t`, `app` (`FCW`/`EEBL`), `id`, `warned`; FCW adds `target`, `ttc_s`, `gap_m` | the safety-events figure and the replay log |
 | `attack` events | V2V attack outcomes (`tampered_*`, `stale_*`, `replay_*`, `uncredentialed_sender_rejected`) with `reason`, `expected`, `cold` = null | the attack board; before this only the infrastructure (I2) attacks were traced |
 | `step.vehicles[]` | `lane` (lane id) | lane rows in the road frame; FCW lane test |
+| `rx` (V2V) | `why` on rejections: `stale`, `future`, `replay`, `malformed`, `chain`, `validity`, `revoked`, `signature`, `no_credential`, `credential_invalid`, `binding`. `reason` stays `rejected` | F9; replay counter (Phase 5) |
+| `rx` (V2V, `--stage-timers` only) | `stages` {`freshness_ms`, `signature_ms`, `credential_ms`, `bookkeeping_ms`} on successful cold verifications | F8 (Phase 5); never in the results JSON |
+| rogue (`--rogue MODE` only) | `enroll` with `pop` = `rogue` and `vtype` = `rogue:MODE`; `step.vehicles[]` entry with `pop` = `rogue`; `tx` with `attack` = MODE and `sign_ms` = null; `rx` as above | Phase 5 figures and replay |
 
 The aggregates gate of `PLAN_SUMO_VISUALISATION.md` §3 still holds. A run with
 `--trace` gives the same message counts as the same seed without it. This was
 checked on seed 6 of the registered N=30 configuration: sent and verified
-counts were identical.
+counts were identical. After Phase 5 it was rechecked on seed 7. The
+pre-change code, the new default, `--trace --stage-timers` and
+`--rogue uncredentialed` give identical totals, attack tests and per-population
+sent, verified, failed, cold-n and warm-n.
 
 ## Committed traces
 

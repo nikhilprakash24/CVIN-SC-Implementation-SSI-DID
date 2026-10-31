@@ -380,3 +380,22 @@ twice the PKI package because the 1,408-byte credential rides on every message
 (`FIGURES.md` V-11). Phase 3 is complete with the 20 s MP4 and 10 s GIF of the
 replay. Next: Phase 5 (rogue vehicle on the road, per-stage timers), then
 Phases 6–8.
+
+**Phase 5 (2026-10-31):** done. The rogue vehicle runs in three modes
+(uncredentialed, replay, tamper), with rejection reasons in both verifiers,
+cold-path stage timers, F8, F9, the rogue in F1 and F2 and in the replay
+viewer, and `replay/replay_rogue_replay.html`. The no-change gate holds
+(`TRACE_SCHEMA.md`). Two findings for the author:
+
+1. **Relay of a fresh genuine message is accepted** by receivers that did not
+   hear the original (17 of 517 replays in seed 6), for SSI and PKI alike. The
+   freshness window plus per-receiver replay cache stops re-delivery, not
+   relay. A position-plausibility check (sender position against radio range)
+   would close it. This belongs in `docs/THREAT_MODEL.md` as a stated limit,
+   not a defect of either identity design.
+2. **SSI's extra cold cost is the credential step:** 0.259 ms against 0.126 ms
+   for the X.509 chain. Signature recovery (0.167 ms) against ECDSA verify
+   (0.097 ms) is the rest. These are proportions only, measured with stage
+   timers on.
+
+Next: Phases 6–8 (deck and poster, illustrations, final QA).

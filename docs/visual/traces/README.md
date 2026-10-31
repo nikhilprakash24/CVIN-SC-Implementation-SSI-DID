@@ -10,6 +10,7 @@ and the `code_dirty` flag.
 | `sim_50v_20s_seed6.jsonl.gz` | Seed 6 of the registered N=30 configuration (50 vehicles, 20 s, mock mobility). It is the median seed by SSI warm p95 in the traced N=30 run of 2026-10-22 | `python3 sumo_identity_integration.py --simulate --duration 20 --vehicles 50 --seed 6 --results /tmp/s6.json --trace ../../docs/visual/traces/sim_50v_20s_seed6.jsonl.gz` |
 | `sim_50v_20s_seed1.jsonl.gz` | Seed 1 of the same configuration, the worst seed by SSI warm p95 | same, `--seed 1` |
 | `sumo_traci_60s.jsonl.gz` | Real SUMO 1.28 over TraCI, headless, 60 s | `python3 sumo_identity_integration.py --duration 60 --results /tmp/t.json --trace ../../docs/visual/traces/sumo_traci_60s.jsonl.gz` |
+| `sim_50v_20s_seed6_rogue_{uncredentialed,replay,tamper}.jsonl.gz` | Seed 6 with a Phase 5 rogue from t = 10 s, at commit `3dddf6c`; uncredentialed also has `--stage-timers` | see `../FIGURES.md` §Phase 5 |
 | `sumo_gui_45s.jsonl.gz` | SUMO-GUI under Xvfb, 45 s: the run that produced `../sumo_frames/` and `../figures/pairs/` | `xvfb-run -a -s "-screen 0 1600x900x24" python3 sumo_identity_integration.py --gui --duration 45 --screenshot-dir ../../docs/visual/sumo_frames --screenshot-every 50 --gui-zoom 400 --gui-track platoon_leader --trace ../../docs/visual/traces/sumo_gui_45s.jsonl.gz --results /tmp/g.json` |
 
 **How the median and worst seeds were chosen.** On 2026-10-22, at commit
