@@ -44,10 +44,10 @@ never be committed.
 
 | Source | Reference | Role | Repo location |
 |---|---|---|---|
-| **MOBI VID I** (Vehicle Birth Certificate) | MOBI Vehicle Identity | Birth-certificate credential model | `2_w3c-ssi-layer/mobi-vid/birth_certificate.py` |
-| **MOBI VID II** (Lifecycle Events, 11 types) | MOBI Vehicle Identity | Lifecycle-event model + attestation | `2_w3c-ssi-layer/mobi-vid/lifecycle_events.py` |
+| **MOBI VID I** (Vehicle Birth Certificate) | MOBI VID0002/TS/2024, VID I Technical Specifications, Version 2.0 (v1.0: 2019); public PDF at https://dlt.mobi/standards/ (read 2026-10-31) | Birth-certificate credential model | `2_w3c-ssi-layer/mobi-vid/birth_certificate.py` |
+| **MOBI VID II** (Lifecycle Events, 11 types) | MOBI VID0003/UC/2021, VID II Use Cases and Business Requirements, Version 1.3 (public PDF); VID0004/RI/2024 Reference Implementation Architecture v2.0 is member-only; https://dlt.mobi/standards/ (read 2026-10-31) | Lifecycle-event model + attestation | `2_w3c-ssi-layer/mobi-vid/lifecycle_events.py` |
 | **IEEE 1609.2** | V2X security services | PKI baseline for the V2V latency comparison | `cv2x-testbed/identity/` (PKI provider) |
-| **SAE J2735** | V2X message set (BSM/DENM) | V2V message model referenced in the testbed | `cv2x-testbed/` |
+| **SAE J2735** | SAE J2735_202409, V2X Communications Message Set Dictionary, current edition issued 2024-09-15 (supersedes J2735_202309, 2023-09-21), https://doi.org/10.4271/J2735_202409 (catalogue page read 2026-10-31) | V2V message model referenced in the testbed | `cv2x-testbed/` |
 
 ## 4. Toolchain & libraries
 
@@ -126,3 +126,21 @@ own reference set may extend or replace them.
 | WangChen23 | Wang, Q., Chen, S. (2023). Account Abstraction, Analysed. IEEE Blockchain 2023, pp. 323-331. | https://doi.org/10.1109/Blockchain60715.2023.00057 | §2.2.4 ERC-4337 mechanism and security review |
 | Yildiz23 | Yildiz, H., Küpper, A., Thatmann, D., Göndör, S., Herbke, P. (2023). Toward Interoperable Self-Sovereign Identities. IEEE Access 11:114080-114116. | https://doi.org/10.1109/ACCESS.2023.3313723 | §2.1.3 SSI interoperability reference model |
 | Zeydan23 | Zeydan, E., Mangues, J., Arslan, S., Turk, Y. (2023). Blockchain-based Self-Sovereign Identity Solution for Vehicular Networks. DRCN 2023. | https://doi.org/10.1109/DRCN57075.2023.10108183 | §2.3.3, §2.7 SSI vs NFT for vehicles, qualitative |
+
+## 8. Literature added for chapter 2 (verified 2026-10-31)
+
+Added while resolving chapter 2's `[SOURCE NEEDED]` markers (`docs/PLAN_CH2_SOURCES.md`). Rows with a DOI were
+checked against Crossref on 2026-10-31; the two without a DOI were checked against their PDFs, opened that day.
+Chapter 2 cites these as `[Key, S8]`.
+
+| Key | Full reference | URL/DOI | What it supports in ch. 2 |
+|---|---|---|---|
+| Borges25 | Borges, V.E.F.d.C., Sobrinho, Á., Santos, D., Perkusich, A. (2025). A Self-Sovereign Identity-Based Authentication and Reputation Protocol for IoV Applications. IEEE Access 13:105693-105711. | https://doi.org/10.1109/ACCESS.2025.3579929 | §2.4.4 closest work: verifiable credentials for C-V2X, compared with blockchain schemes, not with IEEE 1609.2 |
+| Buran25 | Buran, E.A., Prehofer, C., Chenna, S. (2025). Performance Evaluation of Self-Sovereign Identity. TDI 2025 (3rd Int. Workshop on Trends in Digital Identity), CEUR-WS Vol-3968. | https://ceur-ws.org/Vol-3968/short2.pdf | §2.6.3 measured latency, CPU, memory and scalability of the walt.id SSI stack on a Raspberry Pi 4 and an x86 PC |
+| Prakash20 | Prakash, N., Michelson, D., Feng, C. (2020). CVIN: Connected Vehicle Information Network. IEEE VTC2020-Spring. | https://doi.org/10.1109/VTC2020-Spring48590.2020.9128642 | §2.3.4 the author's prior design of MOBI VID on Hyperledger Indy/Aries; proposes an evaluation, reports no measurements |
+| Satybaldy25 | Satybaldy, A. (2025). Benchmarking Decentralized Identity Systems: A Multi-Dimensional Evaluation. Peer-to-Peer Financial Systems Workshop 2025. | https://cdn.prod.website-files.com/64d3ab1d18bce900e3c41885/696a243545c3febc4d69a495_2025%20(2).pdf | §2.2.6 closest benchmark: Ethr-DID vs Hedera HCS-DID vs XRPL XLS-40d (across ledgers, one Ethereum standard) |
+
+**Search coverage, 2026-10-31** (for the absence claims in §2.2.6 and §2.4.4): Consensus (Semantic Scholar, OpenAlex,
+PubMed) and web search including research-category indexes; queries on multi-standard Ethereum identity gas
+comparisons, SSI/DID versus IEEE 1609.2 latency in SUMO/Veins/OMNeT++ simulation, MOBI VID implementations, and
+SSI agent performance on IoT devices. Not searched directly: IEEE Xplore, ACM DL, Google Scholar.

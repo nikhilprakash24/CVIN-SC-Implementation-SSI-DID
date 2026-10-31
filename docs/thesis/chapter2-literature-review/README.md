@@ -11,7 +11,8 @@ written as `[@KEY]` are defined in `docs/zkp/SOURCES_ZKP.md`, the verified regis
 zero-knowledge and agent-identity work. Standards named with a section of `SOURCES.md` (for example
 "ERC-1056, `SOURCES.md` §1") are the entries of the root source register. Keys written as
 `[Author21, S7]` are prior academic works added to `SOURCES.md` §7 for this chapter; each was checked on
-2026-10-22 against its DOI metadata record (title, authors, year and venue). This set is a working
+2026-10-22 against its DOI metadata record (title, authors, year and venue). Keys written as `[Author25, S8]` were added on 2026-10-31
+(`SOURCES.md` §8), checked against Crossref or, without a DOI, against the opened PDF. This set is a working
 set. The researcher's own reference set may extend or replace any of these sources before
 submission, and where a claim still lacks a source it is marked `[SOURCE NEEDED: ...]` rather than
 filled from memory.
@@ -204,8 +205,11 @@ systems [Wang23Hades, S7]. Vehicle-lifecycle systems report gas for one bespoke 
 ERC-721 or ERC-1155 (Section 2.3.2). Studies of gas cost drivers analyse contracts in general, not
 identity standards. The search for this chapter found no study that implements several of these
 identity standards for one workload and compares their gas, security and W3C conformance side by
-side `[SOURCE NEEDED: the researcher's own literature search should confirm the absence of a
-multi-standard Ethereum identity benchmark; this draft's search covered Consensus and Crossref only]`.
+side. The closest benchmark compares one Ethereum method, Ethr-DID, with DID methods on two other ledgers
+for latency, cost and metadata leakage [Satybaldy25, S8]: a comparison across ledgers, not across Ethereum
+standards `[SOURCE NEEDED: the researcher's own search should confirm the absence of a multi-standard Ethereum
+identity benchmark; this draft's searches (Consensus, Crossref, web indexes; 2026-10-22 and 2026-10-31,
+SOURCES.md §8) did not reach IEEE Xplore, ACM DL or Google Scholar directly]`.
 That absence is the first half of the gap in Section 2.8.
 
 | Substrate | Identity model | Native claims on-chain | Recovery story | Register entry |
@@ -271,18 +275,20 @@ compares more than two families of substrate, or that measures them.
 MOBI is an industry consortium of manufacturers and mobility firms. Its VID standard, announced in
 2019 with a working group chaired by Groupe Renault and Ford, gives a new vehicle a
 blockchain-anchored "birth certificate" tied to its Vehicle Identification Number (VIN) [@MOBI-VID]
-(MOBI VID I, `SOURCES.md` §3). VID II extends the model to lifecycle events; the thesis implements
-eleven event types and a multi-party attestation model from it (MOBI VID II, `SOURCES.md` §3). The
-register entry for the 2019 announcement is marked partial (a press release seen through search
-results) `[SOURCE NEEDED: the
-published MOBI VID I and VID II specification documents, with version and date, for a clause-level
-citation]`. Until those are cited, the thesis claims its MOBI profile is "checked against" the VID
-model as described, not "compliant" with it (rule 1.2.2 of the style guide).
+(MOBI VID I, `SOURCES.md` §3), now published as technical specification VID0002/TS/2024, version 2.0.
+VID II extends the model to lifecycle events; the thesis implements
+eleven event types and a multi-party attestation model from it; its public document is the use-case
+and business-requirements specification VID0003/UC/2021, version 1.3, while the reference implementation
+architecture (VID0004/RI/2024) is open to MOBI members only (MOBI VID II, `SOURCES.md` §3). The thesis has
+not yet mapped its profile clause by clause against these documents, so it claims its MOBI profile is
+"checked against" the VID model as described, not "compliant" with it (rule 1.2.2 of the style guide).
 
 What matters for this review is the shape of the standard. MOBI VID specifies *what* a vehicle
 identity contains and *how its lifecycle is structured*. It does not prescribe the substrate. The
-academic literature found here contains no evaluation of MOBI VID across blockchain backends
-`[SOURCE NEEDED: any academic paper that implements or evaluates MOBI VID]`. Hypothesis H4 tests
+academic literature found here contains no evaluation of MOBI VID across blockchain backends. The nearest
+work is the author's own earlier design of MOBI VID on Hyperledger Indy and Aries, which proposed an
+evaluation but reported no measurements [Prakash20, S8]; other papers found cite the standard without
+implementing it. Hypothesis H4 tests
 exactly that portability.
 
 ---
@@ -292,8 +298,7 @@ exactly that portability.
 ### 2.4.1 Standards: IEEE 1609.2, IEEE 1609.2.1 and SAE J2735
 
 V2X safety applications exchange messages defined by SAE J2735, notably the Basic Safety Message
-broadcast by every equipped vehicle (SAE J2735, `SOURCES.md` §3)
-`[SOURCE NEEDED: SAE J2735 standard document with edition and date]`. Those messages are signed and
+broadcast by every equipped vehicle (SAE J2735_202409, issued 2024-09-15, `SOURCES.md` §3). Those messages are signed and
 verified under IEEE 1609.2, which defines the secure message formats and certificate formats,
 including pseudonym certificates; its 2022 edition supersedes the 2016 edition and its amendments
 [@IEEE1609.2] (IEEE 1609.2, `SOURCES.md` §3). The companion IEEE 1609.2.1 standard specifies
@@ -343,7 +348,9 @@ those problems; it relocates trust anchoring and revocation to a ledger and to t
 comparison therefore times the per-message path of both, which is what RQ4 measures, and treats the
 provisioning and revocation story as a security question (RQ2), not a latency one. No prior work
 found here places SSI credential verification and PKI verification in the same simulated V2V
-message path `[SOURCE NEEDED: confirm by the researcher's own search]`.
+message path. The closest work uses verifiable credentials for C-V2X authentication and compares their
+overhead with other blockchain schemes, not with IEEE 1609.2 [Borges25, S8] `[SOURCE NEEDED: confirm by the
+researcher's own search; coverage to date in SOURCES.md §8]`.
 
 ### 2.4.5 Revocation freshness: the cost of knowing
 
@@ -512,10 +519,11 @@ were genuine [@ZKGATEWAY2026].
 
 For the thesis, these works justify treating the custodian as a bounded component under test, not as
 a trusted oracle. The custodian's honest-service level was pre-registered, and Chapter 5 reports it
-as failed (Z-E6). The literature reviewed here does not yet offer a measured baseline for a
-credential custodian in a vehicle setting
-`[SOURCE NEEDED: any measured evaluation of an automated credential custodian or wallet agent
-for vehicles or IoT devices]`.
+as failed (Z-E6). The nearest measured baseline is a performance evaluation of an SSI software stack (walt.id) on a
+Raspberry Pi 4 standing in for an embedded device, which reports latency, CPU, memory and scalability
+[Buran25, S8]. It measures the wallet and issuer services, not an automated custodian acting for a vehicle,
+so the literature reviewed here still offers no measured baseline for a credential custodian in a vehicle
+setting.
 
 ## 2.7 The Identity-Dependent Transaction, Positioned
 
