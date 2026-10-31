@@ -363,10 +363,20 @@
 | `18fb9f8` | 2026-10-24 | Merge the exploration workspace (B-1); master plan tasks; report 38 closing |
 | `b50864c` | 2026-10-24 | Report 38 closed: CI green on 18fb9f8 |
 
-## report 39 (2026-10-31 to 2026-10-31, 1 commits)
+## report 39 (2026-10-31 to 2026-10-31, 3 commits)
 
 | Commit | Date | Subject |
 |---|---|---|
 | `e02e603` | 2026-10-31 | After-action report 39 opened: TDP revision B completed (records, Layer 5 requirements, TDP-004 and TDP-010) |
+| `219a844` | 2026-10-31 | TDP revision B completed (report 39): SYS-04 and the L5 group in the specification, file-backed verdicts, DWG-007 for layer 5, revision bloc… |
+| `8cf93fe` | 2026-10-31 | Drawings: space runs as no-break spaces so column alignment survives rendering; DWG-004 staleness note updated to A3b and #55 (report 39 add… |
 
-227 commits in 28 groups.
+## report 40 (2026-10-31 to 2026-10-31, 3 commits)
+
+| Commit | Date | Subject |
+|---|---|---|
+| `7144544` | 2026-10-31 | After-action report 40 opened: SVG stale-figure checker, blueprint refresh and merge (claim pushed before the work) |
+| `c38f6a9` | 2026-10-31 | Stale-figure checker reads the text of tracked SVG drawings (T-19, report 40) |
+| `f98cf45` | 2026-10-31 | Merge the blueprint set at Rev C, refreshed on the trunk's results (lock: 96 values traced); blueprint check in the pre-push guard; CI is 12… |
+
+232 commits in 29 groups.

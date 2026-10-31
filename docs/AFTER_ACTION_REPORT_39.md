@@ -47,7 +47,9 @@ JSON the generator can read; otherwise Layer 5 appears on DWG-001 as a plane ann
   reports; TDP-PLAN section 6; this report; handback and manifest. Probe: four guards fire; every document check passes.
 
 ## 4. Closing
-The pass delivered Q1 to Q4. CI result on the closing commit: recorded in the "Report 39 closed" commit.
+The pass delivered Q1 to Q4. **CI green on all four workflows on the closing commit `8cf93fe`** (Smart Contract Tests
+41164231981, W3C SSI Compliance Tests 41164232021, Performance Benchmarks 41164231944, Layer 5 41164231902), read over
+the public Actions API; the superseded `219a844` was green as well.
 
 **Every runbook phase has now run once.** Phases 1 to 7 recur on their triggers; the package is at revision B
 throughout, with 44 requirements, 7 drawings, 4 guards.
