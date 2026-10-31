@@ -53,3 +53,7 @@ The pass delivered Q1 to Q4. CI result on the closing commit: recorded in the "R
 throughout, with 44 requirements, 7 drawings, 4 guards.
 
 **Next:** for the package, phase 1 when A3 closes or D64 is fixed; for the thesis, D1 with TDP-010 once D-1 is decided.
+- **Addendum, same day.** The first whitespace fix (`xml:space="preserve"`, then `white-space: pre`) did not take in
+  Chromium; the generator now writes runs of spaces as no-break spaces, which every renderer keeps. Inspection of the
+  re-render also found one sentence on DWG-004 that predated A3b ("re-run pending"); corrected, and #55 added to the
+  staleness note. Follow-up commit after `219a844`.

@@ -50,8 +50,10 @@ class Sheet:
 
     def text(self, x, y, t, size=11, anchor="start", color=INK, weight="normal", rotate=None):
         tr = f' transform="rotate({rotate} {x} {y})"' if rotate is not None else ""
+        # runs of spaces become no-break spaces: SVG renderers collapse ordinary runs, which breaks column alignment
+        t = re.sub(r"  +", lambda m: "\u00a0" * len(m.group()), str(t))
         self.add(f'<text x="{x}" y="{y}" font-size="{size}" text-anchor="{anchor}" fill="{color}" '
-                 f'font-weight="{weight}"{tr}>{escape(str(t))}</text>')
+                 f'font-weight="{weight}"{tr}>{escape(t)}</text>')
 
     def lines(self, x, y, items, size=10.5, dy=14, color=INK):
         for i, t in enumerate(items):
@@ -88,7 +90,7 @@ class Sheet:
 
     def render(self):
         return ('<?xml version="1.0" encoding="UTF-8"?>\n'
-                f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" xml:space="preserve" '
+                f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
                 f'font-family="{FONT}">\n'
                 '<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" '
                 f'orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="{INK}"/></marker>'
@@ -486,8 +488,8 @@ def dwg_004():
     sh.box(60, sy, 900, 96, "STALENESS BOUND (the price of the cache)", [
         "A revoked sender is accepted for at most k − 1 further messages after revocation; k = ∞ never stops (#32: 0 / 4 / 24 for k = 1 / 5 / 25, 35/35 trials; #37: 280/280 trials; #46 RSU analogue above).",
         "A count of messages, not a time: the cache does not expire; at 10 Hz the count converts to time only for a sender that keeps transmitting.",
-        "Fail-open case found and fixed: a verifier whose clock lags the chain by more than 900 s accepted a revoked key (D51; fixed at WM-2 C0; #32/#37 re-run pending at A3b).",
-        "The thesis defends no k as 'fitting': zero staleness (k = 1) and P*(0.5) >= 100 were not achieved together on either host (D-12 withdrawn; #52 reaches it at k = 25 on a third host).",
+        "Fail-open case found and fixed: a verifier whose clock lags the chain by more than 900 s accepted a revoked key (D51; fixed at WM-2 C0; #32 and #37 re-run on the fixed provider at A3b, report 33).",
+        "The thesis defends no k as 'fitting': zero staleness (k = 1) and P*(0.5) >= 100 were not achieved together on either host (D-12 withdrawn; #52 reaches it at k = 25 on a third host; #55, same host and both modes, finds no knee).",
     ], INK, 10.5, 9)
     notes = [
         "Sources: cv2x-testbed/results/freshness_k.json (#32, full refresh) and freshness_k_probe.json (#37, probe), read through the dashboard snapshot; I3 from infrastructure_revocation.json (#46).",
