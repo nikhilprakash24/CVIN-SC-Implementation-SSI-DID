@@ -49,6 +49,140 @@ def load(p):
     return json.loads((ROOT / p).read_text())
 
 
+# --- Test bodies that record no structured result (TSR Phase 3 / WM-2 A7; replan 2026-10-22 §3) -----------------
+# Static parse of test source, so the register is reproducible without running a suite. Rules and subjects live in
+# docs/testing/unit_rules.yaml; each entry records the rule that mapped it. No test title is edited (replan R-2).
+import hashlib
+import re
+
+UNIT_RULES = ROOT / "docs/testing/unit_rules.yaml"
+_MOCHA = re.compile(r"""^(\s*)(describe|context|it)(?:\.only|\.skip)?\(\s*(["'`])(.*?)\3""")
+_PYDEF = re.compile(r"^(\s*)(?:async\s+)?def (test_\w+)\s*\(")
+_PYCLS = re.compile(r"^(\s*)class (Test\w*)")
+_DOCQ = ('"' * 3, "'" * 3, "r" + '"' * 3)
+
+
+def _first(rules, text, default=None):
+    for pat, val in rules:
+        if re.search(pat, text, re.I):
+            return val, pat
+    return default, None
+
+
+def _tc(sut, op, cls, key):
+    return f"TC-{sut}-{op}-{cls}-" + hashlib.sha1(key.encode()).hexdigest()[:8]
+
+
+def unit_entries(rules_path=None, root=None):
+    root = root or ROOT
+    r = yaml.safe_load((rules_path or UNIT_RULES).read_text())
+    out, unmapped = [], []
+
+    def classify(rel, title, desc):
+        cls, why = None, None
+        for frag, c in r["class_by_path"]:
+            if frag in rel:
+                cls, why = c, f"path:{frag}"
+                break
+        if cls in (None, "R"):
+            c2, pat = _first(r["class_rules"], f"{desc} / {title}")
+            if c2:
+                cls, why = c2, f"title:{pat}"
+            elif cls == "R":
+                cls, why = "N", "path:regression (no title rule fired; a regression test asserts a fixed defect)"
+            else:
+                cls, why = "F", "default"
+        op, pat = _first(r["op_rules"], title)
+        where = "title"
+        if op is None:
+            op, pat = _first(r["op_rules"], desc)
+            where = "describe"
+        if op is None:
+            op, pat = _first([(re.escape(f), o) for f, o in r["file_op_defaults"]], rel)
+            where = "file"
+        return cls, why, op or "?", f"{where}:{pat}" if pat else "none"
+
+    def add(rel, line, layer, title, desc):
+        sut, _ = _first([(re.escape(f), s) for f, s in r["subject_by_path"]], rel, "?")
+        cls, cwhy, ops, owhy = classify(rel, title, desc)
+        key = f"{rel}::{desc}::{title}"
+        for op in ops.split(";"):
+            out.append({"id": _tc(sut, op, cls, key), "layer": layer, "sut": sut, "op": op, "class": cls,
+                        "evidence": "E3", "verdict": "asserted", "location": f"{rel}:{line}", "title": title,
+                        "mapped_by": f"class {cwhy}; op {owhy}", "source": "docs/testing/unit_rules.yaml"})
+            if sut == "?" or op == "?":
+                unmapped.append(f"{rel}:{line} {title}")
+
+    for base in r["sources"]["mocha"]:
+        for f in sorted((root / base).rglob("*.js")):
+            rel, stack = str(f.relative_to(root)), []
+            for i, ln in enumerate(f.read_text().splitlines(), 1):
+                m = _MOCHA.match(ln)
+                if not m:
+                    continue
+                ind, kind, title = len(m.group(1)), m.group(2), m.group(4)
+                while stack and stack[-1][0] >= ind:
+                    stack.pop()
+                if kind == "it":
+                    add(rel, i, "L2u", title, " / ".join(t for _, t in stack))
+                else:
+                    stack.append((ind, title))
+    for base in r["sources"]["pytest"]:
+        for f in sorted((root / base).rglob("test_*.py")):
+            rel, cls_name, lines = str(f.relative_to(root)), "", f.read_text().splitlines()
+            for i, ln in enumerate(lines, 1):
+                mc = _PYCLS.match(ln)
+                if mc:
+                    cls_name = mc.group(2)
+                md = _PYDEF.match(ln)
+                if not md:
+                    continue
+                if not md.group(1):
+                    cls_name = ""
+                doc = ""
+                for j in range(i, min(i + 4, len(lines))):
+                    t = lines[j].strip()
+                    if t.startswith(_DOCQ):
+                        doc = t.lstrip("r").strip("\"' ")
+                        break
+                title = md.group(2)[5:].replace("_", " ") + (f" — {doc}" if doc else "")
+                add(rel, i, "py", title, f.stem + (f" / {cls_name}" if cls_name else ""))
+    ids = [e["id"] for e in out]
+    dup = sorted({i for i in ids if ids.count(i) > 1})
+    return out, unmapped, dup
+
+
+def check_complete(root=None, rules_path=None):
+    """Guard (replan T5): every tracked test file is registered from source, registered from its results, or
+    excluded with a reason; and every registered source file's parsed count equals an independent token count."""
+    import subprocess
+    root = root or ROOT
+    r = yaml.safe_load((rules_path or UNIT_RULES).read_text())
+    files = subprocess.check_output(["git", "ls-files"], cwd=root, text=True).splitlines()
+    tests = [f for f in files if re.search(r"(^|/)test_[^/]*\.py$|\.test\.js$|/test/[^/]*\.js$", f)
+             and "node_modules/" not in f]
+    covered = [b + "/" for b in r["sources"]["mocha"] + r["sources"]["pytest"]]
+    covered += [p for p, _ in r["results_derived"]] + [p for p, _ in r["excluded"]]
+    problems = [f"not registered and not excluded: {f}" for f in tests if not any(f.startswith(c) for c in covered)]
+    units, _, _ = unit_entries(rules_path, root)
+    parsed = {}
+    for t in units:
+        parsed.setdefault(t["location"].rsplit(":", 1)[0], set()).add(t["location"])
+    for base in r["sources"]["mocha"]:
+        for f in sorted((root / base).rglob("*.js")):
+            rel = str(f.relative_to(root))
+            n = len(re.findall(r"(?<![\w.$])it(?:\.only|\.skip)?\s*\(", f.read_text()))
+            if n != len(parsed.get(rel, ())):
+                problems.append(f"{rel}: {n} it( tokens, {len(parsed.get(rel, ()))} registered")
+    for base in r["sources"]["pytest"]:
+        for f in sorted((root / base).rglob("test_*.py")):
+            rel = str(f.relative_to(root))
+            n = len(re.findall(r"^\s*(?:async\s+)?def test_\w+", f.read_text(), re.M))
+            if n != len(parsed.get(rel, ())):
+                problems.append(f"{rel}: {n} test functions, {len(parsed.get(rel, ()))} registered")
+    return problems
+
+
 def build():
     tcs = []
     l1 = load("sandbox/grand/report/L1-asymmetry.json")
@@ -100,6 +234,12 @@ def build():
                         "op": t["name"], "class": "F", "evidence": "E3",
                         "verdict": {"passed": "pass", "failed": "fail"}.get(t["outcome"], t["outcome"]),
                         "location": f'{t["file"]}::{t["name"]}', "source": "sandbox/grand/report/py_layers.json"})
+    units, unmapped, udup = unit_entries()
+    if unmapped:
+        raise SystemExit(f"unmapped tests (fix docs/testing/unit_rules.yaml): {unmapped[:5]}")
+    if udup:
+        raise SystemExit(f"two tests share path, describe chain and title: {udup[:5]}")
+    tcs.extend(units)
     tcs.sort(key=lambda t: t["id"])
     ids = [t["id"] for t in tcs]
     dup = sorted({i for i in ids if ids.count(i) > 1})
@@ -167,10 +307,35 @@ def render(tcs, rows, fam_order, mismatches=()):
               f"Test register: {len(tcs)} TC entries in `docs/testing/test_register.yaml`."]
     if mismatches:
         lines += ["", "**Manifest / demo mismatches** (shown as N above):"] + [f"- {m}" for m in mismatches]
+    units = [t for t in tcs if t["source"] == "docs/testing/unit_rules.yaml"]
+    if units:
+        cls_order = ["F", "N", "A", "W", "G", "L", "S", "D", "I"]
+        lines += ["", "## Unit and Python test bodies — subject × property class", "",
+                  "Count of registered tests (per-option contract tests, harness and stats tests, testbed Python tests, Phase 2 "
+                  "prototypes, promote-step tests), mapped by `docs/testing/unit_rules.yaml`; each register entry records "
+                  "the rule that mapped it. F functional · N negative · A adversarial · W conformance · G gas · L latency "
+                  "· S scale · D determinism · I integration. A test counted under two functions is counted once here.", "",
+                  "| Subject | " + " | ".join(cls_order) + " | total |", "|---|" + "---:|" * (len(cls_order) + 1)]
+        seen = {}
+        for t in units:
+            seen.setdefault((t["sut"], t["location"]), t["class"])
+        for sut in sorted({k[0] for k in seen}):
+            n = [sum(1 for (s_, _), c in seen.items() if s_ == sut and c == k) for k in cls_order]
+            lines.append(f"| {sut} | " + " | ".join(str(x) if x else "·" for x in n) + f" | {sum(n)} |")
+        lines.append(f"| **all** | " + " | ".join(str(sum(1 for c in seen.values() if c == k)) for k in cls_order)
+                     + f" | {len(seen)} |")
     return reg_text, "\n".join(lines) + "\n"
 
 
 def main():
+    if "--check-complete" in sys.argv:
+        problems = check_complete()
+        for p in problems:
+            print("INCOMPLETE:", p)
+        if problems:
+            sys.exit(1)
+        print("every tracked test file is registered, results-derived or excluded with a reason")
+        return
     reg_text, cov_text = render(*build())
     if "--check" in sys.argv:
         stale = [str(p.relative_to(ROOT)) for p, t in ((OUT_REG, reg_text), (OUT_COV, cov_text))
