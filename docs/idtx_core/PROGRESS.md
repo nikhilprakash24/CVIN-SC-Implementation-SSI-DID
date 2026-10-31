@@ -7,7 +7,7 @@
 ```
 Phase 1  function set, IDTx, benchmark gap   [■■■■■■■■■■]  100%   COMPLETE (examiner fixes applied)
 Phase 2  compare to other ID systems         [■■■■■■■■□□]  ~80%   IN PROGRESS
-Phase 3  nearest benchmarks, benchmark v0     [□□□□□□□□□□]    0%   planned
+Phase 3  nearest benchmarks, benchmark v0     [■■□□□□□□□□]  ~15%   IN PROGRESS
 Phase 4  same, for AI agents                  [□□□□□□□□□□]    0%   planned
 Phase 5  10-substrate × function-set matrix   [□□□□□□□□□□]    0%   planned
 Phase 6  IDTx + compound scenarios visualized [□□□□□□□□□□]    0%   planned
@@ -118,3 +118,19 @@ Verify-the-fixes re-examination: **all 12 objections RESOLVED**, no new contradi
 **Remaining weakness (honest, flagged):** T2/T3 — the offline-freshness and privacy tradeoffs that anchor the CAV-domain argument — still rest on [sec] paywalled cells (ISO 18013-5, IEEE 1609.2). Marked provisional; primary read is a Phase 3 item (free SD-JWT-VC/mdoc material can carry much of T3).
 
 **Next:** Phase 3 (nearest benchmarks + benchmark v0) ready on your word — here or in the chat sidecar.
+
+---
+
+## PHASE 3 — nearest benchmarks + benchmark v0 (started 2026-10-31)
+Home: companion SP-9 + Ch 7 future work. Builds on p1/BENCHMARK_GAP.md (31 sources) and p2/COMPARISON.md.
+
+| WP | Task | Agent | Status |
+|---|---|---|---|
+| 3.1 | Profile the nearest artefacts in depth (DID Rubric, DIF/VC suites, NIST 800-63, EUDI conformance, BLOCKBENCH/Caliper/DIABLO, SSI perf papers, Satybaldy26, Frutuoso26) on the 5 benchmark axes | LS+SS | 🔵 running |
+| 3.2 | Gap matrix vs the 5 ingredients (workload, admission rule, metrics+conditions, harness, reproduction) | ED | ⬜ after 3.1 |
+| 3.3 | Benchmark v0 spec (workload = fn set + IDTx classes + 17-event lifecycle; admission = compliance suite; metrics = register M-conditions; harness = this repo) | ED+CE | ⬜ after 3.2 |
+| 3.4 | "What would make it a benchmark" reproduction kit + call for external runs | ED | ⬜ after 3.3 |
+| 3.5 | Close the Phase-2 T2/T3 [sec] cells from free SD-JWT-VC/mdoc material | SS | 🔵 running |
+| 3.6 | Examiner pass | SK | ⬜ last |
+
+- `2026-10-31` ED — Phase 3 launched. 3.1 (deep benchmark profiling) + 3.5 (close Phase-2 provisional CAV cells) in parallel; 3.2–3.4 are editor synthesis after 3.1; examiner last.
