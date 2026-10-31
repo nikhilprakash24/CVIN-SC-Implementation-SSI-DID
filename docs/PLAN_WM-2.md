@@ -36,14 +36,14 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 | A4 | **done (pass 15, report 15):** `tools/run_identity/promote.py`, piloted on the security matrix (D56 in part); 13 refusal tests in CI; a clean run's dry-run shows all 54 cells identical to the committed matrix (not promoted: A3 promotes it after C2). Promote step, piloted on one producer: write to `runs/<id>/`, promote copies to the result path only if the stamp is clean | a dirty run refuses to promote (test) |
 | A5 | **done (pass 34, report 34, plan `docs/PLAN_WM-2_A5.md`):** `docs/testing/claims.yaml` (62 ids, every V row's result files) and `check_claims.py --check` in CI and the pre-push check, with a probe (fails on an edited bold number, a V row without sources, an unknown row); nine stale claim cells rewritten to their result files with history (#21, #22, #26, #27, #31, #32, #37, #44, #48); 5 derived values declared with their arithmetic. Limits: only bold numbers in the claim cell are checked; #1–#3 rest on hand-assembled files. P3.2 `claims.yaml`: stable string ids for every register row, generated from or checked against the register; every V row names an existing source file; **the numbers quoted in each V row are checked against their result file** (audit T-F3: an edited #44 passed every guard) | CI fails on a V row without a source, a source without a row, or a quoted number that differs from the file |
 | A6 | **done (pass 33, report 33):** `dirtyMeasured` from the shared helper (`1f4ace0`); harness re-run `2026-10-23T00-49-12Z_1f4ace0` and HTTP-RPC `2026-10-23T00-59-31Z_1f4ace0`, every gas cell identical, frontiers unchanged; #39 had already returned to V (2026-10-21). N-19 with the next harness run of record: switch `dirtyMeasured` to the shared helper (one line; scope already registered in A2), re-run the harness on a clean tree, re-stamp #29, #30, #34–#36; **re-run the HTTP-RPC condition on the merged contracts (#39, now U)** | measured-code hashes recorded; cells moved listed; #39 back to V or rewritten |
-| A7 | N-15: the Python suites (L3, L4, SSI layer) in the TSR test register (audit P-F8) | every Python test has a TC entry |
+| A7 | **done (pass 35, report 35):** the grand runner keeps `py_layers.json`; 376 Python tests in the test register (L3 78, L4 19, SSI 279). N-15: the Python suites (L3, L4, SSI layer) in the TSR test register (audit P-F8) | every Python test has a TC entry |
 
 ### B. Determinism and statistics (TSR P4-3, phase 6). *Owner: measurement methodologist.*
 | Step | Work | Gate |
 |---|---|---|
 | B1 | **done (pass 17, report 17):** incidental randomness seeded (L1 99/99 cells and demos 1,749/1,752 steps identical across seeded runs; 3 MOBI steps declared timestamp-dependent); I4 over declared seeds 1–30, reproducible; rule in guide 1.1.10; #47 re-stated. N-18 and the I4 range: seed the random inputs of the L1 mechanism tests and of `infrastructure_gas.js`; or, where a seeded input would hide a real cost, report min–max by rule | two runs byte-identical where seeded; rule written |
 | B2 | **done (pass 18, report 18):** `docs/testing/GAS_CHARTER.md`, generated and CI-checked; 27 varying cells root-caused (the harness flag marks 14, execution only); 20 V gas rows classified; "address-dependent storage" not borne out. Charter for class G (gas): exact vs range, the 14 non-deterministic harness cells root-caused (calldata zero bytes, address-dependent storage) | every gas row says exact or range |
-| B3 | Charter for class L (latency): within-run comparison, host and library record, N ≥ 30 or "descriptive only" | every latency row conforms or is relabelled |
+| B3 | **done (pass 35, report 35):** `docs/testing/LATENCY_CHARTER.md`, CI-checked; 14 rows classed, 4 relabelled descriptive only; the harness records no CPU (N-26). Charter for class L (latency): within-run comparison, host and library record, N ≥ 30 or "descriptive only" | every latency row conforms or is relabelled |
 
 ### C. Carried fixes from review-2, and the infrastructure verifier. *Owner: SSI/W3C specialist; contracts engineer; V2X specialist; security specialist.*
 | Step | Work | Gate |
@@ -57,7 +57,7 @@ chapters cite only V rows. No new experiment is started in WM-2 except re-runs f
 | Step | Work | Gate |
 |---|---|---|
 | D1 | Chapters 1, 4, 6, 7 checked against the register and the crux register; C3 and C8 sentences written where the cruxes say they are missing | every number a V row; stale check clean |
-| D2 | N-16 RSU-to-RSU messaging: design note only (what it adds to C3; whether the thesis needs it) | author decides build or scope out |
+| D2 | **note written (pass 37, report 37):** `docs/design/RSU_TO_RSU_NOTE.md`; recommendation D2-a (scope out); waits on the author's D2 | author decides build or scope out |
 
 ### E. Review. *Owner: orchestrator; reviewers per `docs/TEAM_STRUCTURE.md` §4a.*
 | Step | Work | Gate |
@@ -98,6 +98,7 @@ No SUMO install (N-4), no Sepolia run (N-11), no new pre-registered experiment, 
 nine-standard contract set beyond C2, no chapter prose beyond the sentences D1 finds missing.
 
 ## 7. Revisions
+- 2026-10-23 (pass 35) — B3 and A7 done (report 35). Next: D1 (needs D-1), D2, and the read-only chapter audit.
 - 2026-10-23 (pass 34) — A5 done (report 34). Next: A7 (Python suites in the test register), B3, D1.
 - 2026-10-23 (pass 33) — on the one trunk (Plan 5): A3b and A6 done (report 33). Next: A5 (claims.yaml with number checks), then A7, B3, D1.
 - 2026-10-22 (pass 31) — C3, C1 (gap: checker offline) and C2 (D54 open) recognised as done by the clone lineage merged in PR #3; A6 largely done by the merge re-runs (harness run `2026-10-21T03-28-59Z_a9e2a28`, #39 re-run `2026-10-21T09-02-58Z_bd55af2`); A3b partly (#33). Next: A3.

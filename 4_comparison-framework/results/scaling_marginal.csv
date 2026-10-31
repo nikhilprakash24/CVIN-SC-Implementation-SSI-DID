@@ -6,5 +6,5 @@ ERC-1155,issueCredential,80131,42816,-37315,-87.8,0.0588,yes
 CVIN-Combined,addClaim,292049,274987,-17062,-40.243,0.059,yes
 MOBI-VID-V2,recordLifecycleEvent,307254,255954,-51300,-120.706,0.0588,yes
 
-# Conditions,K=50 appends/standard on a fresh chain,"solc 0.8.24 (optimizer 200, viaIR)",OZ 5.0.2,chainId 31337,measured 2026-10-22
+# Conditions,K=50 appends/standard on a fresh chain,"solc 0.8.24 (optimizer 200, viaIR)",OZ 5.0.2,chainId 31337,measured 2026-10-24
 # Legend,"gasUsed = exact receipt.gasUsed; slope/R^2 are exact least-squares fits vs op index. O(1)=yes means marginal append cost does not grow with history (a negative slope is a one-off cold-slot first write, amortized thereafter)."

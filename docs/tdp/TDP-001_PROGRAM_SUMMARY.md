@@ -34,11 +34,11 @@ Three things, each with evidence already on the trunk.
 
 1. **One operation catalogue over nine substrates, with the operation definitions declared.** The same seventeen
    lifecycle events and the same per-operation catalogue run on every standard; a substrate without a primitive is
-   recorded as not applicable, never emulated (TDP-002 SYS-01). Creation gas spans 52,216 to 1,757,881, a factor of
+   recorded as not applicable, never emulated (TDP-002 SYS-01). Creation gas spans 52,216 to 1,757,893, a factor of
    33.7 (#25); over the lifecycle the cheapest standard leads by between 1.20 and 5.52 times, not ten (#35). The
    ratio depends on the definition, and the register says which (#6).
 2. **The chain off the hot path, with the price of freshness measured.** Warm verification of a safety message with a
-   pre-issued credential takes 0.153 ms (#27); reading the key and revocation state from the chain at message time
+   pre-issued credential takes 0.142 ms (#27); reading the key and revocation state from the chain at message time
    takes 9.654 ms against 0.253 ms for the in-process certificate baseline (#21). A verifier that re-checks every k
    messages honours a revoked key for at most k minus 1 further messages, measured as 0, 4 and 24 for k of 1, 5 and
    25 (#32), for vehicles and for roadside units (#46).
@@ -115,7 +115,7 @@ level is withheld where the environment condition is not met, whatever the code 
 |---|---|---|---|
 | P2 Ledger: nine substrates and the MOBI profile behind one adapter | 4 | every substrate compiles, passes its suite and the strict revert harness (#28), and reproduces its gas byte for byte over 30 runs (#25) on the laboratory chain (M1) | no run on a public or permissioned network (N-11); the relevant environment for gas is any EVM network, but latency and fees do not transfer (scope reconciliation section 3.2) |
 | P3 Credential: W3C VC layer, four-method resolver, MOBI VID I/II | 4 | 335 of 336 external DID tests (#24); 94.3 percent on the internal structural checker (#4); credentials signed off-chain verify with the primitive the EVM uses (chapter 4 section 4.1) | the resolver synthesised documents from the identifier until WM-2 C1 (in progress); one credential suite; 2 of 8 MOBI VID I MUSTs met (SC-14a) |
-| P1 Messaging and P4 Trust: BSM and SPaT signing and verification, freshness, replay, revocation re-check | 3 | critical function proved: warm verify 0.153 ms (#27), 15 registered attacks rejected for their reasons in 30 of 30 runs (#45), staleness bounded at k minus 1 (#32, #46), D51 fail-open found and fixed | mock mobility, no radio, no channel, one host per run (SC-22); a laboratory environment for V2X would need a channel model at least; TRL 4 is withheld on that condition |
+| P1 Messaging and P4 Trust: BSM and SPaT signing and verification, freshness, replay, revocation re-check | 3 | critical function proved: warm verify 0.142 ms (#27), 15 registered attacks rejected for their reasons in 30 of 30 runs (#45), staleness bounded at k minus 1 (#32, #46), D51 fail-open found and fixed | mock mobility, no radio, no channel, one host per run (SC-22); a laboratory environment for V2X would need a channel model at least; TRL 4 is withheld on that condition |
 | P0 Mobility | 2 | MockMobility exists and is deterministic for a seed; the SUMO network and routes are committed | no SUMO run of record; the TraCI path falls back to mock when the binary is absent (N-4) |
 | P5 Evidence: stamps, promote, register, checkers, generated documents | n/a (process) | the DoD scale rates technology, not procedure; the machinery is held instead by its probes in CI (TDP-002 EVD-01 to EVD-06) | — |
 

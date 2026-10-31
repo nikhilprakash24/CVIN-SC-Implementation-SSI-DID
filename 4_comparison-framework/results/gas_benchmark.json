@@ -33,7 +33,7 @@
   },
   "ERC-721": {
     "deployRegistry": {
-      "gasUsed": 2787288,
+      "gasUsed": 2787276,
       "txCount": 1,
       "notes": "Single shared NFT contract; deployer receives DEFAULT_ADMIN_ROLE and MANUFACTURER_ROLE in constructor."
     },
@@ -134,7 +134,7 @@
       "notes": "No shared registry in ERC-735: each vehicle identity is its own claim-holder contract. Deployment cost is counted under createIdentity."
     },
     "createIdentity": {
-      "gasUsed": 1757881,
+      "gasUsed": 1757893,
       "txCount": 1,
       "notes": "Per-vehicle claim-holder contract deployment (constructor stores VIN + vinHash, deployer becomes owner). Paid once per identity."
     },
@@ -262,7 +262,7 @@
   },
   "MOBI-VID-V2": {
     "deployRegistry": {
-      "gasUsed": 4370878,
+      "gasUsed": 4370866,
       "txCount": 1,
       "notes": "Single shared registry (V2 = ERC-1056 base + MOBI VID I birth certificates + VID II lifecycle events); deployer becomes registry authority + authorized manufacturer."
     },
@@ -326,8 +326,8 @@
   },
   "metadata": {
     "solcVersion": "0.8.24",
-    "commit": "ddb9b05",
-    "commitFull": "ddb9b0505c97239eb75f6f4ce128dbedfa49ebf3",
+    "commit": "7a59058",
+    "commitFull": "7a5905803a0219119fa6b59368461d0f7e203e13",
     "dirty": false,
     "dirtyAnyFile": true,
     "scope": "1_blockchain-identity/scripts/benchmark_gas.js",
@@ -343,7 +343,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-22T23:16:49.669Z",
+    "date": "2026-10-24T12:29:04.178Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [

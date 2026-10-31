@@ -46,7 +46,7 @@ Of **119** transaction cells (36 iterations each: 1 exact + 5 warm-up + 30 sampl
 | erc725 | `C2_create_with_attributes` | 1,496,440 | 1,496,404 | 1,496,452 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
 | erc725xy | `P1_create_presentation` | 72,369 | 72,357 | 72,369 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
 | erc725xy | `V1_issuer_key_anchor` | 49,745 | 49,721 | 49,745 | 0 | 0 | calldata zero bytes | execution-deterministic | G-mode |
-| erc735 | `C2_create_with_attributes` | 2,558,484 | 2,558,460 | 2,558,509 | 25 | 8 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |
+| erc735 | `C2_create_with_attributes` | 2,558,496 | 2,558,472 | 2,558,521 | 25 | 8 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |
 | erc735 | `D2_revoke_attribute` | 96,611 | 96,601 | 96,611 | 2 | 0 | calldata zero bytes; value-dependent opcode cost (same EVM steps) | execution varies | G-mode |
 | erc735 | `P1_create_presentation` | 294,868 | 294,844 | 294,893 | 25 | 8 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |
 | erc735 | `U3_set_attribute` | 318,054 | 318,005 | 318,054 | 25 | 8 | calldata zero bytes; execution path differs (EVM steps vary) | execution varies | G-mode |

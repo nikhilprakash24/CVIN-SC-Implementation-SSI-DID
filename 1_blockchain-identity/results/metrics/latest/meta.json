@@ -1,17 +1,17 @@
 {
-  "runId": "2026-10-23T00-49-12Z_1f4ace0",
-  "commit": "1f4ace082fc32d8bc1c6b294b5203dc6bb81553a",
-  "commitShort": "1f4ace0",
+  "runId": "2026-10-24T12-29-26Z_7a59058",
+  "commit": "7a5905803a0219119fa6b59368461d0f7e203e13",
+  "commitShort": "7a59058",
   "branch": "claude/zkp-ai-identity-research-n5uho9",
   "measured": {
     "benchmarksTree": "d91134ea8124565c1f93fef96937267fb31826e9",
-    "contractsTree": "725d545cb20a1ab9a73a25065a4b3a277e40c953",
+    "contractsTree": "81089cb562bfdf6e83e0cfef10d9aa262270d374",
     "hardhatConfigBlob": "3c665d67e00f3d3290584dd0addf2e4e98470937",
     "lockfileBlob": "a2965fbad20dc0259041461e4fa6c5d19a9c08d0"
   },
-  "dirty": false,
+  "dirty": true,
   "dirtyMeasured": false,
-  "date": "2026-10-23T00:49:14.018Z",
+  "date": "2026-10-24T12:29:28.205Z",
   "node": "v22.22.0",
   "hardhat": "2.28.6",
   "ethers": "6.17.0",
@@ -83,11 +83,11 @@
     "ethUSD": 3000
   },
   "scenarioSeconds": {
-    "crud": 269.489,
-    "lifecycle": 4.927,
-    "scale": 253.743,
-    "batch": 33.096,
-    "throughput": 45.289,
-    "resolve": 8.831
+    "crud": 478.278,
+    "lifecycle": 10.148,
+    "scale": 472.473,
+    "batch": 64.421,
+    "throughput": 97.854,
+    "resolve": 16.818
   }
 }

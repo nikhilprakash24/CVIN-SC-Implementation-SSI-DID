@@ -2,7 +2,7 @@
 % Requires \usepackage{booktabs}.
 \begin{table}[htbp]
   \centering
-  \caption{Experiment B --- lifetime cost \textbf{model} (an assumption, not a measurement). Total on-chain gas to carry one vehicle identity through the canonical 15-year profile (1 birth, 30 maintenance, 4 inspections, 1 recall, 3 transfers $= 39$ events), decomposed by event class. Birth uses each standard's identity-creation cost and transfers its ownership-transfer cost (\texttt{gas\_benchmark.json}); the recurring maintenance/inspection/recall events use the Experiment~A steady-state append marginal. Rows are ranked by total (cheapest first). The last two columns give the $\pm 50\%$ event-frequency sensitivity band (birth fixed). Gas is relative on-chain work, not fiat. Solidity 0.8.24 (optimizer, 200 runs, via-IR), OpenZeppelin 5.0.2, chain id 31337, 2026-10-22.}
+  \caption{Experiment B --- lifetime cost \textbf{model} (an assumption, not a measurement). Total on-chain gas to carry one vehicle identity through the canonical 15-year profile (1 birth, 30 maintenance, 4 inspections, 1 recall, 3 transfers $= 39$ events), decomposed by event class. Birth uses each standard's identity-creation cost and transfers its ownership-transfer cost (\texttt{gas\_benchmark.json}); the recurring maintenance/inspection/recall events use the Experiment~A steady-state append marginal. Rows are ranked by total (cheapest first). The last two columns give the $\pm 50\%$ event-frequency sensitivity band (birth fixed). Gas is relative on-chain work, not fiat. Solidity 0.8.24 (optimizer, 200 runs, via-IR), OpenZeppelin 5.0.2, chain id 31337, 2026-10-24.}
   \label{tab:scaling-lifetime}
   \footnotesize
   \setlength{\tabcolsep}{5pt}
@@ -15,7 +15,7 @@
     2 & ERC-1155 & 107,729 & 1,498,560 & 258,894 & \textbf{1,865,183} & 986,456 & 2,743,910 \\
     3 & CVIN-Combined & 52,216 & 9,624,020 & 155,241 & \textbf{9,831,477} & 4,941,847 & 14,721,108 \\
     4 & MOBI-VID-V2 & 299,165 & 8,958,390 & 600,465 & \textbf{9,858,020} & 5,078,593 & 14,637,448 \\
-    5 & ERC-735 & 1,757,881 & 9,847,775 & 86,436 & \textbf{11,692,092} & 6,724,987 & 16,659,198 \\
+    5 & ERC-735 & 1,757,893 & 9,847,775 & 86,436 & \textbf{11,692,104} & 6,724,999 & 16,659,210 \\
     \bottomrule
   \end{tabular}}
 \end{table}

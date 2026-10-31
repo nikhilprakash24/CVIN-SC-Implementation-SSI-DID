@@ -103,7 +103,7 @@ The two rows come from different runs and conditions, so each is read within its
 
 | Verification | SSI (chain-backed) | PKI | Row and condition |
 |---|---|---|---|
-| V2V hot path, warm, both in-process | 0.153 ms | 0.094 ms | #27, M0 |
+| V2V hot path, warm, both in-process | 0.142 ms | 0.090 ms | #27, M0 |
 | uncached ERC-1056, which reads the chain | 9.654 ms | 0.253 ms | #21, M0 (PKI) and M1 (ERC-1056) |
 
 ## 5. The design space the evidence points to: a hybrid by data class (design, cut to future work)

@@ -16,6 +16,11 @@ A line may keep a superseded value only when it marks it as history: a whole-wor
 not excuse a value, because arrows also write ranges (`52,170 → 1,680,816` cites 52,170 as current).
 Hardened after after-action reports 11 (findings C3, C4) and 12 (range arrows).
 
+An entry may list `pending` globs: hits in those files are printed as PENDING with the entry's `pending_reason`
+and do not fail the check. This is for a superseded value found by an audit whose fix waits on a decision (report 37:
+the chapter audit's stale #27 values wait on WM-2 D1). A hit in any other file still fails; a pending glob that no
+longer has a hit is reported as CLEARED so the entry can be tightened.
+
     python3 docs/testing/check_docs_numbers.py          # report; exit 1 on any hit
 """
 import fnmatch
@@ -47,7 +52,7 @@ def files():
 
 
 def main():
-    hits = []
+    hits, pending, pend_seen = [], [], set()
     for f in files():
         for n, raw in enumerate(f.read_text(errors="replace").splitlines(), 1):
             line = normalise(raw)
@@ -62,10 +67,23 @@ def main():
                     # a substring test let "150" match inside "1500")
                     if later and cur and re.search(r"(?<![\d.])" + re.escape(cur.group(0)) + r"(?![\d])", line[later[0]:]):
                         continue                # old -> new, with the current value on the new side
-                    hits.append((str(f.relative_to(ROOT)), n, e, raw.strip()))
+                    rel = str(f.relative_to(ROOT))
+                    globs = [g for g in e.get("pending", []) if fnmatch.fnmatch(rel, g)]
+                    if globs:
+                        pending.append((rel, n, e, raw.strip()))
+                        pend_seen.update((e["pattern"], g) for g in globs)
+                    else:
+                        hits.append((rel, n, e, raw.strip()))
                     break
     for path, n, e, line in hits:
         print(f"{path}:{n}: '{e['pattern']}' superseded -> {e['current']} (register #{e['row']}): {line[:140]}")
+    for path, n, e, line in pending:
+        print(f"PENDING {path}:{n}: '{e['pattern']}' -> {e['current']} (#{e['row']}; {e.get('pending_reason', '')})")
+    for e in CFG["entries"]:
+        for g in e.get("pending", []):
+            if (e["pattern"], g) not in pend_seen:
+                print(f"CLEARED: '{e['pattern']}' has no hit left in {g}; remove that pending glob")
+    print(f"{len(pending)} pending (known, waiting on a decision)")
     print(f"{len(hits)} stale figure(s) in {len({h[0] for h in hits})} file(s); {len(files())} files scanned")
     sys.exit(1 if hits else 0)
 
