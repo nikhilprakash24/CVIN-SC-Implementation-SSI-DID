@@ -6,7 +6,7 @@
 
 ```
 Phase 1  function set, IDTx, benchmark gap   [■■■■■■■■■■]  100%   COMPLETE (examiner fixes applied)
-Phase 2  compare to other ID systems         [■■■■■■□□□□]  ~60%   IN PROGRESS
+Phase 2  compare to other ID systems         [■■■■■■■■□□]  ~80%   IN PROGRESS
 Phase 3  nearest benchmarks, benchmark v0     [□□□□□□□□□□]    0%   planned
 Phase 4  same, for AI agents                  [□□□□□□□□□□]    0%   planned
 Phase 5  10-substrate × function-set matrix   [□□□□□□□□□□]    0%   planned
@@ -93,12 +93,14 @@ Home: Appendix G-G + companion SP-9. Common axis = the Phase 1 function set; see
 | 2.1 | Comparison set + justification (8 systems) | ED+SS | ✅ done → `p2/COMPARISON.md` §1 |
 | 2.2 | Function×system matrix | SS | ✅ done → `p2/COMPARISON.md` §2 |
 | 2.3 | Trade-off matrix + prose | SS+LS | ✅ done → `p2/COMPARISON.md` §3 |
-| 2.4 | Figures (heat map; trade-off radar) | VA | 🔵 running |
+| 2.4 | Figures (heat map; trade-off profile) | VA | ✅ done → `figures/p2_*.svg` |
 | 2.3b | Verify ERC-3643/ONCHAINID + eIDAS columns | SS | ✅ done (17 cells → [src]; 35/96 open) |
-| 2.5 | Examiner pass | SK | ⬜ queued |
+| 2.5 | Examiner pass | SK | 🔵 running |
 
 - `2026-10-31` ED — Phase 2 launched. One Standards-Scholar agent doing 2.1–2.3 (grounded in the sourced ANALOGIES matrix; evidence tags carried forward). Figures + examiner to follow.
 
 - `2026-10-31` SS — WP 2.1–2.3 ✅: `p2/COMPARISON.md`. Selection criterion = one ordered trust-locus axis, 8 distinct points, each a deployed spec. ~15 cells upgraded to [src] (OIDC/SAML/OCSP/LDAP/SCIM free primaries). Headline tradeoff T1: the ledger removes the live-authority dependency but pays for it three ways — revocation becomes a public (loses query-privacy), ordered (AR-10 race), and costly (gas #49/#31) write — the same contract-readable property that enables the IDTx forecloses off-ledger privacy and adds ordering risk. 52/96 cells still not [src]; ERC-3643 (S8, closest prior art) + eIDAS columns launched for verification (2.3b) alongside figures (2.4).
 
 - `2026-10-31` SS — WP 2.3b ✅: ERC-3643/ONCHAINID (S8) and eIDAS/EUDI (S4) columns verified at free primaries (ERC-3643 EIP, ERC-725, Reg (EU) 2024/1183); 17 §2 cells + 10 §3 cells → [src]; unverified ledger 52→35/96. **Thesis payoff:** ERC-3643 transfer-gating = object-attribute ABAC, on-chain in the *receiver's* ONCHAINID claim store, evaluated *inside* the transfer as a revert-on-fail precondition (inherits the AR-10 ordering race). It differs from the thesis's `IdtxExecutor` on all three axes — ERC-3643's depended-on identity is implicit+fixed (always the receiver), welded to one operation (ERC-20 transfer), boolean topic-set check; IdtxExecutor generalizes: explicitly-named identity decoupled from the operation, arbitrary in-contract guard, `fulfil` re-check. Because ERC-1056 has no contract-readable attribute (AR-1), the thesis carries its own equality-only L3 commitment store where ONCHAINID reads claims in place. Confirms the contribution = taxonomy + freshness/ordering analysis, not the guard. Left [recalled]: S8 rotate/delegate (ERC-734 unpublished). EUDI ARF reachable; Regulation carried every S4 cell.
+
+- `2026-10-31` VA — WP 2.4 ✅: `figures/make_p2_figures.py` (stdlib, deterministic, own --check; P1 --check untouched), `figures/FIGURES_P2.md` (separate file by design). P2-1 function×system heat map (4 channels/cell: glyph+label+note+shade, color never sole), P2-2 trade-off dot-matrix (not a radar — 8 systems unreadable as overlapping polygons; ordinal levels by position+label). Known judgement calls documented in FIGURES_P2.md: meta-tx row omitted (no row in COMPARISON §2); P2-2 ordinal placements are a reading of §3's prose; evidence tags reproduced verbatim (S5 mDL + parts of S8 still provisional). Launched examiner (2.5).
