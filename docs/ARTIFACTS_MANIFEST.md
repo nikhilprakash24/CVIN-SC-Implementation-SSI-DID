@@ -2,8 +2,8 @@
 
 
 > **Dated snapshots (July 2026).** The dossiers' "key numbers" are those of their date (e.g. 52,178; 1,704,992;
-> 93.2 %) and are superseded; current values are in `docs/MEASUREMENT_CONDITIONS.md`. The stale-figure checker scans
-> Markdown only, so these HTML pages are not checked (audit finding T-16, 2026-10-10).
+> 93.2 %) and are superseded; current values are in `docs/MEASUREMENT_CONDITIONS.md`. Since report 41 the stale-figure checker
+> also reads HTML, and lists these pages as history (dated snapshots) rather than checking them as current.
 
 Per-source provenance **dossiers** — one self-contained HTML page per source /
 material — for the thesis Source Register (`SOURCES.md`). Each is a theme-aware,

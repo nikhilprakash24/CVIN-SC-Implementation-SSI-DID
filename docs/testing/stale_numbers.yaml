@@ -17,6 +17,8 @@ history:
 - docs/phase2/reviews/*   # dated reviews keep the figures of their day (report 38)
 - docs/roots/*   # Roots G-R1 versioned snapshots, dated; they quote the figures current when each version was written (1,757,881 before the NatSpec restatement); the Roots thread adopts 1,757,893 at its next version
 - docs/blueprints/AUDIT_REV_*.md   # dated number audits of the blueprint set; they quote the stale values they found (report 40)
+- docs/artifacts/*.html   # provenance dossiers, dated July 2026 snapshots by their manifest's own note (report 41)
+- docs/figures/verification_dashboard.html   # the verification snapshot of 2026-10-03 at cac1729; current totals are the grand report (report 41)
 - docs/tdp/REVIEW_2026-10.md   # the TDP review quotes the stale values it found (report 37)
 - docs/thesis/CHAPTER_AUDIT_2026-10.md   # quotes the stale values it found, on purpose (report 37)
 - docs/review02/*

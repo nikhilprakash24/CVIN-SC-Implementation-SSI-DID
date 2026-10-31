@@ -4,7 +4,7 @@
 Superseded values, their current replacements and register rows are listed in
 docs/testing/stale_numbers.yaml.
 
-Scope: every tracked Markdown and SVG file (the SVG's text elements; report 40) except the `history` globs (dated records, plans, reviews and
+Scope: every tracked Markdown, SVG (text elements; report 40), HTML and TeX file (report 41) except the `history` globs (dated records, plans, reviews and
 generated run reports, which keep the values of their time on purpose). Before matching, a line is
 normalised so formatting cannot hide a value: thousands separators (`1,404,108`, `1 404 108`,
 thin/no-break spaces) are removed between digit groups, and `ms` / `%` are separated from the number
@@ -47,9 +47,28 @@ def normalise(line: str) -> str:
 
 
 def files():
-    tracked = subprocess.run(["git", "ls-files", "*.md", "*.svg"], cwd=ROOT, capture_output=True, text=True,
+    tracked = subprocess.run(["git", "ls-files", "*.md", "*.svg", "*.html", "*.tex"], cwd=ROOT, capture_output=True, text=True,
                              check=True).stdout.split()
     return [ROOT / p for p in tracked if not any(fnmatch.fnmatch(p, g) for g in CFG["history"])]
+
+
+def _html_lines(raw):
+    """HTML (report 41): visible text and inline script data, line by line. Style blocks and tags are removed with
+    their newlines kept, so a hit's line number is the page's; entities are decoded; script text is kept because a
+    page's numbers often live in an embedded JSON snapshot."""
+    import html
+    raw = re.sub(r"<style\b.*?</style>", lambda m: "\n" * m.group(0).count("\n"), raw, flags=re.S | re.I)
+    raw = re.sub(r"<!--.*?-->", lambda m: "\n" * m.group(0).count("\n"), raw, flags=re.S)
+    raw = re.sub(r"<[^>]*>", lambda m: " " + "\n" * m.group(0).count("\n"), raw)
+    return [(n, html.unescape(l).replace("\u00a0", " ")) for n, l in enumerate(raw.splitlines(), 1) if l.strip()]
+
+
+def _tex(line):
+    """TeX (report 41): thousands groups written 1{,}757{,}881 or 1\\,757\\,881, and math markers, normalised."""
+    line = re.sub(r"(?<=\d)\{,\}(?=\d)", ",", line)
+    line = re.sub(r"(?<=\d)\\[,;:!](?=\d)", "", line)
+    line = line.replace("\\%", "%").replace("\\times", "×").replace("$", "").replace("~", " ")
+    return re.sub(r"\\(?:text|mathrm|textbf|mathbf)\{([^{}]*)\}", r"\1", line)
 
 
 SVG_TEXT = re.compile(r"<text\b[^>]*>(.*?)</text>", re.S)
@@ -59,6 +78,10 @@ def lines_of(f):
     """(line number, text) pairs. Markdown: every line. SVG (report 40, T-19): the text content of each <text>
     element, tags removed, entities decoded, no-break spaces read as spaces, numbered by the line it starts on."""
     raw = f.read_text(errors="replace")
+    if f.suffix == ".html":
+        return _html_lines(raw)
+    if f.suffix == ".tex":
+        return [(n, _tex(l)) for n, l in enumerate(raw.splitlines(), 1)]
     if f.suffix != ".svg":
         return list(enumerate(raw.splitlines(), 1))
     import html
