@@ -35,13 +35,13 @@ page whose position snapshots were thinned.
 ## Rebuild the embedded pages
 
 ```bash
-python3 cv2x-testbed/sumo/viz/build_replay.py docs/visual/traces/sim_50v_20s_median.jsonl docs/visual/replay/replay_sim_median.html
-python3 cv2x-testbed/sumo/viz/build_replay.py docs/visual/traces/sumo_traci_60s.jsonl docs/visual/replay/replay_sumo.html
+python3 cv2x-testbed/sumo/viz/build_replay.py docs/visual/traces/sim_50v_20s_seed6.jsonl.gz docs/visual/replay/replay_sim_median.html
+python3 cv2x-testbed/sumo/viz/build_replay.py docs/visual/traces/sumo_traci_60s.jsonl.gz docs/visual/replay/replay_sumo.html
 ```
 
 ## Video for slides
 
 `replay_20s.mp4` and `replay_10s.gif` were captured from `replay_sim_median.html`
 by stepping the scrubber one 100 ms step per frame in headless Chromium and
-encoding with ffmpeg at 10 fps. The script is in `docs/visual/VISUAL_PHASES_PROMPTS.md`
+encoding with ffmpeg at 10 fps. The method is described in `docs/visual/VISUAL_PHASES_PROMPTS.md`
 Phase 3, item 3. Frames are deterministic, so the video is real time.
