@@ -15,21 +15,35 @@ counterpart in that paradigm (and the cell says why). This pass upgraded the fre
 
 ---
 
-## §1 — Selection criterion and the eight systems (WP 2.1)
+## §1 — Selection criterion and the ten systems (WP 2.1)
 
 **Selection criterion (stated so an examiner cannot call the set arbitrary).**
-Each system is the *canonical, standardized* realization of **one distinct point on a single ordered axis — the locus
-of the root of trust and of identity state** — running
+Each system is the *canonical, standardized* realization of a distinct point on a **two-dimensional plane** — not a
+single ordered axis (obj. M3). The two dimensions are **(x) trust centralization** (one live authority holds everything
+→ no authority, state is a public ledger write) and **(y) presentation / evaluation locus** (where identity state is
+read: live authority call · holder-present device exchange · public/append-only lookup · in-transaction read). A single
+line through these systems would be **non-monotonic**, so the set is *not* claimed to be a clean ordering; it is claimed
+to **cover the plane** with no gap and (per point below) with the trust-locus duplicates made explicit.
 
-> centralized IdP → federated IdP → PKI certificate authority → national/government digital ID → device-held
-> credential → V2X pseudonym authority → decentralized self-sovereign ledger → on-chain-gated token.
+Honest adjacencies the one-axis framing hid:
+- **S1 (OIDC) and S2 (SAML) occupy the same trust-locus point** (a live federated IdP mints and vouches for the
+  identifier). S2 is retained not as a distinct trust locus but as the **pre-OIDC incumbent on the same point** — it
+  shows the paradigm predates OIDC, and it is dropped from any claim of "distinct axis point."
+- **S4 (eIDAS), S5 (mDL), and S6 (V2X) all have a central issuing authority**; they differ on the *y* dimension
+  (wallet-held online vs device-held offline vs pseudonym-rotated offline), **not** on trust locus. They are kept
+  separate because §3 measures the presentation/offline-freshness dimension, which genuinely separates them.
+- **S9 (FIDO2) and S10 (ledgerless SSI)** are the two comparators this pass adds: both are **authority-independent at
+  the identifier** (no issuer mints it) yet **non-ledger**, so they land at a trust-locus point the original eight left
+  empty between "central authority" and "public ledger."
 
-The eight are chosen so that (i) **no two occupy the same point** on that axis, (ii) together they **span the full
-range** from "one authority holds everything" to "no authority, state is public ledger write," and (iii) each is a
-*deployed standard with a readable specification*, not a research prototype. The thesis's own substrates (DID+VC SSI
-and the on-chain-gated token) sit at the decentralized end, so the set is built to place the contribution **against
-the strongest comparator at every other point on the axis**, not against a strawman. This is the same axis the Phase-1
-analogy matrix organized by three "worlds"; Phase 2 widens it to eight named standards.
+The ten are chosen so that (i) **the trust-locus duplicates are named, not hidden** (S1≈S2), (ii) together they **span
+the plane** from "one authority holds everything" to "no authority, state is a public ledger write," with the
+authority-independent-but-ledgerless region now populated (S9/S10), and (iii) each is a *deployed standard with a
+readable specification*, not a research prototype. The thesis's own substrates (DID+VC SSI and the on-chain-gated token)
+sit at the decentralized end, so the set places the contribution **against the strongest comparator at every other point
+on the plane** — including, now, the non-ledger self-created-key comparators that most directly contest §4's old
+"uniquely" claim. This is the same organizing idea as the Phase-1 three-"worlds" analogy matrix; Phase 2 widens it to
+ten named standards on a two-dimensional plane.
 
 | # | System | What it is (one sentence) | Why it earns its place (axis point) |
 |---|---|---|---|
@@ -41,10 +55,13 @@ analogy matrix organized by three "worlds"; Phase 2 widens it to eight named sta
 | S6 | **V2X PKI (IEEE 1609.2 / ETSI TS 102 941 / SCMS)** | The vehicular security stack: an enrollment CA bootstraps a device, a pseudonym CA issues short-lived unlinkable certs (SCMS butterfly keys), receivers verify in-message at line rate **[src: SCMS Brecht et al. 2018; 1609.2/102 941 sec]**. | The **V2X pseudonym-authority** point: the thesis's own CAV domain; privacy-by-pseudonymity with CA-side revocation. |
 | S7 | **SSI — DID + VC (this thesis's substrates)** | `did:ethr` over ERC-1056 with W3C VC Data Model 2.0 credentials: every key is an identifier, the document is event-sourced, credentials are signed off-chain with issuer key/status anchored on-chain **[src: ERC-1056; DID Core 1.0; VC DM 2.0]**. | The **decentralized self-sovereign** point: no authority creates the identifier; the substrate under the whole thesis. |
 | S8 | **ERC-3643 / ONCHAINID** | A permissioned-token standard where transfers are gated by a compliance contract that reads claims on an on-chain ONCHAINID identity contract **[src ERC-3643 isVerified/Compliance; closest prior art THESIS_DRAFT §6.8.4]**. | The **on-chain-gated** point: identity used as a *transaction precondition* — the closest deployed prior art to the IDTx. |
+| S9 | **WebAuthn / FIDO2 passkeys** | A W3C/FIDO authentication standard: the authenticator generates a credential key pair on-device at registration and the relying party stores the public key; authentication proves possession of the private key **[src WebAuthn §1/§4; FIDO CTAP2.1 §6.1.2]**. | The **self-created-key, no-issuer, no-ledger** point: holder-generated key-identity — the property §4 wrongly called S7-unique — realized with no authority and no chain. |
+| S10 | **Ledgerless SSI (did:key / did:web + VC DM 2.0)** | The full W3C DID+VC surface with no ledger: did:key derives the DID directly from a generated key (purely generative), did:web hosts a `did.json` over HTTPS, and VC DM 2.0 provides off-ledger issuance/verification/presentation **[src did:key Create/Read; did:web Create/Read; VC DM 2.0 §4.7/§7.1/§4.13]**. | The **authority-independent-but-ledgerless** point: the direct control on T1 — full self-sovereign identity with none of the public/ordered/costly write. |
 
-The axis is continuous, so adjacent systems share features (S1/S2 both IdP-centric; S4/S5 both wallet/credential;
-S7/S8 both on-chain). They are kept separate because each pins a *different* trust locus or evaluation point, which is
-exactly what §3's trade-off matrix measures.
+The plane is populated densely, so adjacent systems share features (S1/S2 same trust locus; S4/S5/S6 same issuing
+authority, different presentation locus; S7/S8 both on-chain; S9/S10 both self-created-key-but-ledgerless). They are
+kept separate (except that S1/S2 are declared the *same* trust-locus point) because each pins a *different* trust locus
+**or** evaluation/presentation locus on the plane, which is exactly what §3's trade-off matrix measures.
 
 ---
 
@@ -55,25 +72,46 @@ Rows are the Phase-1 function set (`THESIS_DRAFT.md` §3.x.2) plus the IDTx conc
 3–6-word mechanism note and a source tag. "Composed" names the primitive(s) from `PRIMITIVES.md` or the analogue's
 own building block.
 
-Reminder from `THESIS_DRAFT.md` §3.x.2: `execute` and the relayed/sponsored meta-transaction are **blockchain-account
-capabilities with no identity-world analogue** — their `Absent` cells across S1–S6 are the expected result, not a
-deficiency of those systems. The relayed/meta-tx operation is not given its own row (it is `n-a`/`Absent` everywhere
-but S7/S8, where it is a gas-sponsorship pattern over `execute`); it is noted here and in §4.
+**Coding rule (restated at the matrix head, author's own convention).** `n-a` = **the function has no counterpart in
+that paradigm** (the cell says why); `Absent` = the paradigm **has the concept but this realization lacks it**
+(tried-and-failed, a genuine deficiency). The two are not interchangeable: an `Absent` cell counts against a system, an
+`n-a` cell does not.
 
-| Function | S1 OIDC | S2 SAML 2.0 | S3 X.509 PKI | S4 eIDAS/EUDI | S5 mDL | S6 V2X/SCMS | S7 SSI (DID+VC) | S8 ERC-3643 |
-|---|---|---|---|---|---|---|---|---|
-| **createDID** | n-a — IdP provisions `sub` **[src §1.2]** | n-a — IdP-managed NameID **[recalled]** | Composed — CA issues cert, CSR+sig **[src §4.1]** | Composed — PID issued to wallet **[src]** | Composed — authority provisions mdoc **[sec]** | Composed — SCMS enrollment cert **[src]** | **Native** — key-is-DID; VIN L3 commit **[src]** | Composed — deploy ONCHAINID, `registerIdentity` **[src ERC-3643 §Identity Registry]** |
-| **resolve** | Native — UserInfo, live IdP **[src §5.3]** | Composed — IdP metadata + query **[recalled]** | Composed — chain building, AIA fetch **[src cert; §6 recalled]** | n-a — wallet presents to RP, no public lookup **[src Reg 2024/1183 Art 5a]** | Composed — device engagement, holder-present **[sec §8.2]** | Composed — in-message cert validation **[sec]** | **Native** — event-sourced log replay **[src]** | Native — on-chain claim/key reads **[src ERC-3643 isVerified]** |
-| **rotate (changeOwner)** | n-a — IdP account reset, no controller key **[recalled]** | n-a — IdP-side, no holder key **[recalled]** | Composed — CA rekey / re-issuance **[src cert]** | Composed — wallet rebinding ceremony **[src 800-63B §2.3]** | Composed — issuer re-provisions device **[sec]** | Composed — SCMS re-enrollment **[sec]** | **Native** — self-signed `changeOwner` tx **[src]** | Composed — ERC-734 key management **[recalled: ERC-734-unpublished]** |
-| **delegate** | Composed — OAuth access token to client **[src §1.3]** | Composed — delegated assertion to SP **[recalled]** | Composed — subordinate / proxy cert **[recalled]** | Composed — representation; consent to RP, no standing key **[src Reg 2024/1183 def(5a) representation]** | Absent — no key delegation **[sec]** | Absent — pseudonyms self-held, none delegated **[sec]** | **Native** — `addDelegate`, on-chain TTL **[src]** | Composed — ERC-734 purpose-scoped keys **[recalled: ERC-734-unpublished]** |
-| **attribute (set/revoke)** | Composed — IdP claims; SCIM PATCH **[src §3.5.2]** | Composed — AttributeStatement, authority-written **[src §2.7]** | Composed — subject DN / extensions **[src §4.1.2/§4.2]** | Composed — (Q)EAA attribute attestation **[src Reg 2024/1183 def(44)/(45), §9 Art 45b]** | Composed — issuer-signed mdoc data elements **[sec §8.3]** | Composed — PSID/SSP permissions in cert **[sec]** | Native (write) — `setAttribute`; **no on-chain read, AR-1** **[src]** | Native — ERC-735 `addClaim`, readable **[src ERC-3643 §Claims/ONCHAINID]** |
-| **execute (agent proxy)** | Absent — identities authenticate only **[src]** | Absent — SSO only **[recalled]** | Absent — keys sign, don't act **[recalled]** | Absent — wallet stores/presents, not executor **[src Reg 2024/1183 def EUDI Wallet]** | Absent — presented only **[sec]** | Absent — signs messages only **[sec]** | **Native** — ERC-4337/725x `execute` **[src]** | Composed — ERC-725X `execute` call **[src ERC-725 §ERC725X]** |
-| **deactivate** | Composed — SCIM DELETE / `active:false` **[src §3.6]** | Composed — IdP disables principal **[recalled]** | Composed — CRL/OCSP revoke at EOL **[src §5]** | Composed — wallet revocation, legal effect **[src 800-63 §2.2]** | Composed — issuer revokes mdoc **[sec]** | Composed — SCMS CRL revocation **[src]** | **Native** — owner→0; history persists **[src]** | Composed — registry delist (`deleteIdentity`) **[src ERC-3643 §Identity Registry]** |
-| **issueCredential** | Composed — signed ID Token (JWS) **[src §2]** | **Native** — signed `<Assertion>` **[src §2.3.3]** | **Native** — CA issues signed cert **[src §4.1]** | Native — QTSP (Q)EAA issuance **[src Reg 2024/1183 def(45), §9 Art 45b]** | **Native** — MSO-signed mdoc **[sec]** | **Native** — pseudonym cert bulk issuance **[src]** | Composed — off-chain VC; on-chain key/status anchor **[src §4.7]** | Native — trusted claim issuer `addClaim` **[src ERC-3643 §Trusted Issuers Registry]** |
-| **verifyCredential** | Composed — validate sig+iss+aud+exp **[src §3.1.3.7]** | Composed — sig + SubjectConfirmation check **[src §2.4.1.1]** | Composed — path validation + OCSP **[src OCSP §2.2]** | Composed — verify issuer sig + status **[src Reg 2024/1183 §9 Art 45b; Annex V status]** | Composed — reader checks MSO sig, offline **[sec §9]** | Composed — offline in-message cert verify **[sec]** | Composed — off-chain proof + on-chain status read (V6) **[src]** | Composed — `isVerified` claim check at transfer **[src ERC-3643 isVerified]** |
-| **revokeCredential** | Composed — token revocation (RFC 7009) **[recalled]** | Composed — short validity window (`NotOnOrAfter`) **[recalled]** | **Native** — CRL / OCSP revoked **[src §5; OCSP §2.2]** | Composed — status-list revocation **[src Bitstring §2]** | Composed — issuer status list **[sec]** | **Native** — linkage-value CRL revokes all pseudonyms **[src]** | Composed — on-chain status write (V5) **[src]** | Composed — `removeClaim` / `removeTrustedIssuer` **[src ERC-3643 §Trusted Issuers Registry]** |
-| **createPresentation** | n-a — token presentation to RS, no VP **[src §1.4]** | Composed — bearer / holder-of-key assertion to SP **[src §2.4.1.1]** | n-a — cert in TLS handshake, no holder VP **[recalled]** | Native — wallet selective-disclosure VP **[src Reg 2024/1183 Art 5a selective disclosure]** | **Native** — mdoc selective disclosure **[sec §8.2]** | Absent — cert travels in every message **[sec]** | Composed — on-chain replay-protected anchor (P1) **[src; no native ERC]** | n-a — claims read on-chain, no presentation step **[src ERC-3643 isVerified]** |
-| **IDTx (concept)** | Absent on-chain — off-chain RP decision **[src; ABAC SP 800-162 §3.2]** | Absent on-chain — off-chain SP decision **[recalled]** | Absent on-chain — off-chain RP decision on OCSP **[src]** | Absent on-chain — off-chain RP admission **[src Reg 2024/1183 Art 5a — relying-party model]** | Absent on-chain — off-chain verifier decision **[sec]** | Absent on-chain — off-chain receiver decision, *k*−1 staleness **[sec]** | **Native** — in-contract guard on named identity **[src]** | **Native** — transfer gated on identity claims **[src §6.8.4]** |
+Reminder from `THESIS_DRAFT.md` §3.x.2: `execute` and the relayed/sponsored meta-transaction are **blockchain-account
+capabilities with no identity-world analogue** — so their cells across S1–S6 and S9 are **`n-a`** (recoded this pass
+from `Absent`, which had wrongly implied a deficiency; obj. M1): those paradigms authenticate and present, they do not
+*act* as a first-class identity primitive. Likewise `delegate` is **`n-a`** for S5/S6/S9 (V2X pseudonyms are self-held,
+none delegated; a FIDO2 authenticator is scoped to one RP) — recoded from `Absent` for the same reason. The
+relayed/meta-tx operation is not given its own row (it is `n-a` everywhere but S7/S8, where it is a gas-sponsorship
+pattern over `execute`); it is noted here and in §4.
+
+**Two deployed non-ledger comparators added this pass (obj. F2):** **S9 = WebAuthn/FIDO2 passkeys** (W3C Web
+Authentication Level 2, FIDO CTAP2.1) — the authenticator self-generates the credential key pair on-device, **no
+issuing authority mints the identifier**, the RP stores the public key; it is an *authenticator*, not a credential
+system, so most Set-B rows are `n-a`. **S10 = ledgerless SSI (did:key / did:web + VC DM 2.0)** — the *full* DID+VC
+capability surface (createDID/resolve/issue/verify/present) with **no ledger**; it is the direct control on T1's claim
+that authority-independence must be bought with a public, ordered, costly write.
+
+| Function | S1 OIDC | S2 SAML 2.0 | S3 X.509 PKI | S4 eIDAS/EUDI | S5 mDL | S6 V2X/SCMS | S7 SSI (DID+VC) | S8 ERC-3643 | S9 FIDO2/WebAuthn | S10 ledgerless SSI (did:key/web) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **createDID** | n-a — IdP provisions `sub` **[src §1.2]** | n-a — IdP-managed NameID **[recalled]** | Composed — CA issues cert, CSR+sig **[src §4.1]** | Composed — PID issued to wallet **[src]** | Composed — authority provisions mdoc **[sec]** | Composed — SCMS enrollment cert **[src]** | **Native** — key-is-DID; VIN L3 commit **[src]** | Composed — deploy ONCHAINID, `registerIdentity` **[src ERC-3643 §Identity Registry]** | **Native** — authenticator self-generates key pair, no issuer **[src WebAuthn §4; CTAP2 §6.1.2]** | **Native** — key-is-DID (did:key) / host `did.json` (did:web), no ledger **[src did:key Create; did:web Create]** |
+| **resolve** | Native — UserInfo, live IdP **[src §5.3]** | Composed — IdP metadata + query **[recalled]** | Composed — chain building, AIA fetch **[src cert; §6 recalled]** | n-a — wallet presents to RP, no public lookup **[src Reg 2024/1183 Art 5a]** | Composed — device engagement, holder-present **[sec §8.2]** | Composed — in-message cert validation **[sec]** | **Native** — event-sourced log replay⁴ **[src]** | Native — on-chain claim/key reads **[src ERC-3643 isVerified]** | Composed — RP-side credential-ID→pubkey lookup⁴ **[src WebAuthn §1/§4]** | Native — did:key deterministic expand / did:web HTTPS GET⁴ **[src did:key Read; did:web Read]** |
+| **rotate (changeOwner)** | n-a — IdP account reset, no controller key **[recalled]** | n-a — IdP-side, no holder key **[recalled]** | Composed — CA rekey / re-issuance **[src cert]** | Composed — wallet rebinding ceremony **[src 800-63B §2.3]** | Composed — issuer re-provisions device **[sec]** | Composed — SCMS re-enrollment **[sec]** | **Native** — self-signed `changeOwner` tx **[src]** | Composed — ERC-734 key management **[recalled: ERC-734-unpublished]** | n-a — re-register credential, no in-place rotation **[recalled]** | Composed — did:web re-publish `did.json`; did:key immutable **[src did:web Create]** |
+| **delegate** | Composed — OAuth access token to client **[src §1.3]** | Composed — delegated assertion to SP **[recalled]** | Composed — subordinate / proxy cert **[recalled]** | Composed — representation; consent to RP, no standing key **[src Reg 2024/1183 def(5a) representation]** | n-a — pseudonyms self-held, none delegated **[sec]** | n-a — pseudonyms self-held, none delegated **[sec]** | **Native** — `addDelegate`, on-chain TTL **[src]** | Composed — ERC-734 purpose-scoped keys **[recalled: ERC-734-unpublished]** | n-a — authenticator scoped to one RP, no delegation **[src WebAuthn §4]** | Composed — DID-doc verification relationships / `capabilityDelegation` **[recalled]** |
+| **attribute (set/revoke)** | Composed — IdP claims; SCIM PATCH **[src §3.5.2]** | Composed — AttributeStatement, authority-written **[src §2.7]** | Composed — subject DN / extensions **[src §4.1.2/§4.2]** | Composed — (Q)EAA attribute attestation **[src Reg 2024/1183 def(44)/(45), §9 Art 45b]** | Composed — issuer-signed mdoc data elements **[sec §8.3]** | Composed — PSID/SSP permissions in cert **[sec]** | Native (write) — `setAttribute`; **write-only, no on-chain contract read (AR-1)** **[src]** | Native — ERC-735 `addClaim`, readable **[src ERC-3643 §Claims/ONCHAINID]** | n-a — authenticator, not a credential/attribute system **[src WebAuthn §4]** | Composed — self-asserted service/key entries in DID doc **[src did:key Doc Creation; DID Core]** |
+| **execute (agent proxy)** | n-a — identities authenticate only **[src]** | n-a — SSO only **[recalled]** | n-a — keys sign, don't act **[recalled]** | n-a — wallet stores/presents, not executor **[src Reg 2024/1183 def EUDI Wallet]** | n-a — presented only **[sec]** | n-a — signs messages only **[sec]** | **Native** — ERC-4337/725x `execute` **[src]** | Composed — ERC-725X `execute` call **[src ERC-725 §ERC725X]** | n-a — authenticate only, not an executor **[src WebAuthn §4]** | n-a — no execution substrate (not a chain account) **[recalled]** |
+| **deactivate** | Composed — SCIM DELETE / `active:false` **[src §3.6]** | Composed — IdP disables principal **[recalled]** | Composed — CRL/OCSP revoke at EOL **[src §5]** | Composed — wallet revocation, legal effect **[src 800-63 §2.2]** | Composed — issuer revokes mdoc **[sec]** | Composed — SCMS CRL revocation **[src]** | **Native** — owner→0; history persists **[src]** | Composed — registry delist (`deleteIdentity`) **[src ERC-3643 §Identity Registry]** | Composed — RP deletes stored credential **[recalled]** | Composed — did:web remove/empty `did.json`; did:key n-a **[recalled]** |
+| **issueCredential** | Composed — signed ID Token (JWS) **[src §2]** | **Native** — signed `<Assertion>` **[src §2.3.3]** | **Native** — CA issues signed cert **[src §4.1]** | Native — QTSP (Q)EAA issuance **[src Reg 2024/1183 def(45), §9 Art 45b]** | **Native** — MSO-signed mdoc **[sec]** | **Native** — pseudonym cert bulk issuance **[src]** | Composed — off-chain VC; on-chain key/status anchor **[src §4.7]** | Native — trusted claim issuer `addClaim` **[src ERC-3643 §Trusted Issuers Registry]** | n-a — proves key possession, no third-party credential **[src WebAuthn §4]** | **Native** — VC issuer signs off-ledger **[src VC DM 2.0 §4.7]** |
+| **verifyCredential** | Composed — validate sig+iss+aud+exp **[src §3.1.3.7]** | Composed — sig + SubjectConfirmation check **[src §2.4.1.1]** | Composed — path validation + OCSP **[src OCSP §2.2]** | Composed — verify issuer sig + status **[src Reg 2024/1183 §9 Art 45b; Annex V status]** | Composed — reader checks MSO sig, offline **[sec §9]** | Composed — offline in-message cert verify **[sec]** | Composed — off-chain proof + on-chain status read (V6) **[src]** | Composed — `isVerified` claim check at transfer **[src ERC-3643 isVerified]** | Composed — authentication-ceremony assertion signature check **[src WebAuthn §4]** | Composed — verify VC proof + resolve issuer DID, no ledger **[src VC DM 2.0 §7.1]** |
+| **revokeCredential** | Composed — token revocation (RFC 7009) **[recalled]** | Composed — short validity window (`NotOnOrAfter`) **[recalled]** | **Native** — CRL / OCSP revoked **[src §5; OCSP §2.2]** | Composed — status-list revocation **[src Bitstring §2]** | Composed — issuer status list **[sec]** | **Native** — linkage-value CRL revokes all pseudonyms **[src]** | Composed — on-chain status write (V5) **[src]** | Composed — `removeClaim` / `removeTrustedIssuer` **[src ERC-3643 §Trusted Issuers Registry]** | n-a — no credential; RP removes registration **[recalled]** | Composed — status-list (Bitstring), hosted off-ledger **[recalled]** |
+| **createPresentation** | n-a — token presentation to RS, no VP **[src §1.4]** | Composed — bearer / holder-of-key assertion to SP **[src §2.4.1.1]** | n-a — cert in TLS handshake, no holder VP **[recalled]** | Native — wallet selective-disclosure VP **[src Reg 2024/1183 Art 5a selective disclosure]** | **Native** — mdoc selective disclosure **[sec §8.2]** | Absent — cert travels in every message **[sec]** | Composed — on-chain replay-protected anchor (P1) **[src; no native ERC]** | n-a — claims read on-chain, no presentation step **[src ERC-3643 isVerified]** | n-a — assertion to RP, no VP **[src WebAuthn §4]** | **Native** — VC DM 2.0 Verifiable Presentation, holder-assembled **[src VC DM 2.0 §4.13]** |
+| **IDTx (concept)** | Absent on-chain — off-chain RP decision **[src; ABAC SP 800-162 §3.2]** | Absent on-chain — off-chain SP decision **[recalled]** | Absent on-chain — off-chain RP decision on OCSP **[src]** | Absent on-chain — off-chain RP admission **[src Reg 2024/1183 Art 5a — relying-party model]** | Absent on-chain — off-chain verifier decision **[sec]** | Absent on-chain — off-chain receiver decision, *k*−1 staleness **[sec]** | **Native** — in-contract guard on named identity **[src]** | **Native** — transfer gated on identity claims **[src §6.8.4]** | n-a — authentication / off-chain decision, no transaction **[src]** | **n-a — full DID+VC but no ledger ⇒ off-chain decision, not in-tx evaluation (tests T1)** **[src]** |
+
+> **Footnote 4 (`resolve`, obj. m4).** "Native" resolve is not one operation. S7 (did:ethr) and S8 resolve by **replaying
+> an append-only on-chain log** (grows with history, `ANALYSIS.md` §3 #31); S10 did:web and S9 resolve by a **single
+> endpoint call** (one HTTPS GET of `did.json`; one RP-side credential-ID lookup), and S10 did:key by **deterministic
+> expansion** with no call at all. Same label, three very different freshness/cost/availability profiles — the
+> distinction §3 T1 and §4 turn on.
 
 ### Per-cell notes that carry weight
 
@@ -91,11 +129,22 @@ but S7/S8, where it is a gas-sponsorship pattern over `execute`); it is noted he
   CA-signed CRL / OCSP status [src]; SCMS can revoke *all* of a device's unlinkable pseudonyms from one linkage-value
   CRL entry [src]. S7's on-chain status write (V5) is Composed and trades query-privacy for direct contract-readability
   — the pivot §4 returns to.
-- **IDTx row is the contribution boundary.** Only S7 and S8 can evaluate an identity dependency *inside a transaction*;
-  S1–S6 all make an off-chain **identity-dependent decision** (`ANALYSIS.md` §4.1), which shares the freshness
-  dimension but is not a transaction. S8 is the closest prior art; the thesis's claim over it is the
-  **storage-locus × encoding × evaluation-point taxonomy** and the **on-chain freshness/ordering analysis**, not the
-  guard mechanism (THESIS_DRAFT §6.8.4).
+- **IDTx row is the contribution boundary — and S9/S10 sharpen it.** Only S7 and S8 can evaluate an identity dependency
+  *inside a transaction*; S1–S6, S9, and S10 all make an off-chain **identity-dependent decision** (`ANALYSIS.md` §4.1),
+  which shares the freshness dimension but is not a transaction. S10 is the decisive control: it carries the *entire*
+  authority-independent DID+VC surface (createDID/resolve/issue/verify/present all Native or Composed, no issuer) yet its
+  IDTx cell is **`n-a` because it has no ledger** — so the in-transaction evaluation, not authority-independence, is what
+  requires the chain. S8 is the closest prior art; the thesis's claim over it is the **storage-locus × encoding ×
+  evaluation-point taxonomy** and the **on-chain freshness/ordering analysis**, not the guard mechanism (THESIS_DRAFT §6.8.4).
+- **S9/S10 load-bearing cells.** S9 `createDID` is **Native** — the authenticator generates the key pair on-device and
+  no authority mints the identifier (WebAuthn §4; CTAP2 §6.1.2): this is exactly the "self-created key-identity" §4 used
+  to call S7-unique, and it exists here with no ledger at all. S10 `createDID` is **Native** by a different route
+  (did:key is purely generative; did:web hosts `did.json`), again no issuer, no ledger. Both therefore sit at a distinct
+  trust-locus point from S1–S8 and both have IDTx `n-a`.
+- **m2 — S7>S8 on delegate/rotate rests on a `[recalled]` S8 cell; the comparison is dropped.** S8's `rotate` and
+  `delegate` are keyed on **ERC-734** (unpublished draft, 404 at eips.ethereum.org this pass), so those two S8 cells are
+  `[recalled: ERC-734-unpublished]`. §4 therefore makes **no** "S7 beats S8 on delegate/rotate" claim — the S8 side is
+  unverified at primary.
 
 ---
 
@@ -103,32 +152,45 @@ but S7/S8, where it is a gas-sponsorship pattern over `execute`); it is noted he
 
 Eight axes, one row per system. Cells are compressed; the prose below states the genuine tradeoffs.
 
-| Axis | S1 OIDC | S2 SAML | S3 X.509 PKI | S4 eIDAS/EUDI | S5 mDL | S6 V2X/SCMS | S7 SSI (DID+VC) | S8 ERC-3643 |
-|---|---|---|---|---|---|---|---|---|
-| **Trust locus** (root of trust) | OpenID Provider **[src]** | SAML IdP/authority **[src]** | CA chain to root **[src]** | Member-state QTSP + EU trust list **[src]** | Issuing authority (IACA) **[sec]** | SCMS root + pseudonym CA **[src]** | Controlling key + ledger consensus **[src]** | Compliance contract + claim issuers **[src ERC-3643 Compliance + Trusted Issuers]** |
-| **Availability dependence** (auth needs it live?) | **IdP must be live** **[src §5.3]** | IdP must be live for SSO **[recalled]** | OCSP responder live (CRL cacheable) **[src]** | Issuer for issuance; presentation offline **[src Reg 2024/1183 Art 5a]** | **Fully offline** at presentation **[sec]** | **Fully offline** at receive **[sec]** | Ledger node / RPC for reads **[src]** | Ledger live for every transfer **[src ERC-3643 transfer]** |
-| **Revocation / freshness latency** | token TTL; revoke via RFC 7009 **[recalled]** | assertion `NotOnOrAfter` window **[recalled]** | CRL period / OCSP real-time **[src]** | status-list refresh interval **[src]** | status list; stale if offline **[sec]** | CRL distribution; cached ⇒ *k*−1 msgs **[sec]** | on-chain write ⇒ next-block, public **[src]** | on-chain claim ⇒ next-block **[src ERC-3643 isVerified]** |
-| **Privacy & linkability** | IdP sees every login (NASCAR problem) **[recalled]** | IdP sees every SSO **[recalled]** | cert is public, linkable **[src]** | selective disclosure, unlinkability goal **[src Reg 2024/1183 Art 5a selective disclosure]** | **selective disclosure** per presentation **[sec]** | **pseudonym rotation**, unlinkable by design **[src]** | public ledger, **inherently linkable** **[src]** | public ledger + claims, linkable **[src ERC-3643 §Claims on-chain]** |
-| **Cost model** | infra / per-IdP, no per-op fee **[recalled]** | infra, no per-op fee **[recalled]** | CA fee per cert; OCSP infra **[recalled]** | national infra; wallet free to holder **[src Reg 2024/1183 Art 5a]** | provisioning infra **[sec]** | SCMS infra; bulk pseudonyms **[sec]** | **gas per write**; reads growth-priced **[src #31/#49]** | **gas per transfer** (compliance check) **[src ERC-3643 transfer]** |
-| **Governance** (who changes the rules) | OpenID Foundation + each OP **[recalled]** | OASIS + each deployment **[recalled]** | CA/Browser Forum + root programs **[recalled]** | EU law + member states **[src]** | ISO + issuing authorities **[sec]** | IEEE/ETSI + SCMS manager **[sec]** | W3C/EIP + chain governance **[src]** | token issuer + ERC authors **[recalled: off-spec]** |
-| **Offline operation** | No — needs IdP **[src]** | No — needs IdP **[recalled]** | Partial — cached CRL **[src]** | Yes at presentation **[src Reg 2024/1183 Art 5a]** | **Yes — designed offline** **[sec]** | **Yes — designed offline** **[sec]** | No — needs ledger read **[src]** | No — needs ledger **[src ERC-3643 transfer]** |
-| **Recovery / key rotation** | IdP account recovery **[recalled]** | IdP-side reset **[recalled]** | CA rekey / re-issue **[src]** | wallet rebinding ceremony **[src]** | issuer re-provision **[sec]** | SCMS re-enrollment **[sec]** | self-signed `changeOwner`; **lost key = lost identity** **[src]** | ERC-734 key management contract **[recalled: ERC-734-unpublished]** |
+| Axis | S1 OIDC | S2 SAML | S3 X.509 PKI | S4 eIDAS/EUDI | S5 mDL | S6 V2X/SCMS | S7 SSI (DID+VC) | S8 ERC-3643 | S9 FIDO2 | S10 ledgerless SSI |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **Trust locus** (root of trust) | OpenID Provider **[src]** | SAML IdP/authority **[src]** | CA chain to root **[src]** | Member-state QTSP + EU trust list **[src]** | Issuing authority (IACA) **[sec]** | SCMS root + pseudonym CA **[src]** | Controlling key + ledger consensus **[src]** | Compliance contract + claim issuers **[src ERC-3643 Compliance + Trusted Issuers]** | Holder-generated key; RP stores pubkey (no authority) **[src WebAuthn §4]** | Controlling key; did:web adds DNS/host trust **[src did:web]** |
+| **Availability dependence** (auth needs it live?) | **IdP must be live** **[src §5.3]** | IdP must be live for SSO **[recalled]** | OCSP responder live, **or stapled at handshake (RFC 6066 §8) ⇒ none live** **[src RFC 6066 §8]** | Issuer for issuance; presentation offline **[src Reg 2024/1183 Art 5a]** | **Fully offline** at presentation **[sec]** | **Fully offline** at receive **[sec]** | Ledger node / RPC for reads **[src]** | Ledger live for every transfer **[src ERC-3643 transfer]** | RP live at auth; no third-party authority **[src WebAuthn §4]** | did:key none at resolve; did:web HTTPS host live **[src did:key/did:web Read]** |
+| **Revocation / freshness latency** | token TTL; revoke via RFC 7009 **[recalled]** | assertion `NotOnOrAfter` window **[recalled]** | CRL period / OCSP real-time; short-lived certs ⇒ TTL freshness **[src]** | status-list refresh interval **[src]** | status list; stale if offline **[sec]** | CRL distribution; cached ⇒ *k*−1 msgs **[sec]** | on-chain write ⇒ next-block, public **[src]** | on-chain claim ⇒ next-block **[src ERC-3643 isVerified]** | RP deletes credential; no global revocation list **[recalled]** | status-list refresh; no ledger **[recalled]** |
+| **Privacy & linkability** | IdP sees every login (NASCAR problem) **[recalled]** | IdP sees every SSO **[recalled]** | cert is public, linkable **[src]** | selective disclosure, unlinkability goal **[src Reg 2024/1183 Art 5a selective disclosure]** | **selective disclosure** per presentation **[sec]** | **pseudonym rotation**, unlinkable by design **[src]** | public ledger, **inherently linkable** **[src]** | public ledger + claims, linkable **[src ERC-3643 §Claims on-chain]** | **per-RP scoped keys**, non-correlatable across RPs **[src WebAuthn §4]** | did:key per-use unlinkable + VC selective disclosure; **did:web is a fixed correlator** **[src VC DM 2.0 §4.13]** |
+| **Cost model** | infra / per-IdP, no per-op fee **[recalled]** | infra, no per-op fee **[recalled]** | CA fee per cert; OCSP infra **[recalled]** | national infra; wallet free to holder **[src Reg 2024/1183 Art 5a]** | provisioning infra **[sec]** | SCMS infra; bulk pseudonyms **[sec]** | **gas per write**; reads growth-priced **[src #31/#49]** | **gas per transfer** (compliance check) **[src ERC-3643 transfer]** | no per-op fee; authenticator hardware **[recalled]** | **no gas**; did:web hosting infra only **[src did:key Intro]** |
+| **Governance** (who changes the rules) | OpenID Foundation + each OP **[recalled]** | OASIS + each deployment **[recalled]** | CA/Browser Forum + root programs **[recalled]** | EU law + member states **[src]** | ISO + issuing authorities **[sec]** | IEEE/ETSI + SCMS manager **[sec]** | W3C/EIP + chain governance **[src]** | token issuer + ERC authors **[recalled: off-spec]** | W3C + FIDO Alliance **[recalled]** | W3C + DNS/registrar (did:web) **[recalled]** |
+| **Offline operation** | No — needs IdP **[src]** | No — needs IdP **[recalled]** | Partial — cached CRL / stapled status **[src]** | Yes at presentation **[src Reg 2024/1183 Art 5a]** | **Yes — designed offline** **[sec]** | **Yes — designed offline** **[sec]** | No — needs ledger read **[src]** | No — needs ledger **[src ERC-3643 transfer]** | No — RP online at auth **[recalled]** | **did:key yes** (deterministic); did:web no **[src did:key Intro]** |
+| **Recovery / key rotation** | IdP account recovery **[recalled]** | IdP-side reset **[recalled]** | CA rekey / re-issue **[src]** | wallet rebinding ceremony **[src]** | issuer re-provision **[sec]** | SCMS re-enrollment **[sec]** | self-signed `changeOwner`; **lost key = lost identity** **[src]** | ERC-734 key management contract **[recalled: ERC-734-unpublished]** | re-register; multi-device passkey sync **[recalled]** | did:web re-publish; **did:key lost key = lost identity** **[src did:web]** |
 
 ### The genuine axis-level tradeoffs
 
-**T1 — The ledger trades a live-authority dependency for a public, ordered, costly write (the headline).**
-Across S1–S4, *verifying* an identity's current status needs a live authority at decision time: OIDC queries the
-UserInfo endpoint [src §5.3], X.509 the OCSP responder [src §2.2], eIDAS a status list. S7/S8 remove that dependency —
-status (V6) is read directly from ledger state, so there is no responder to be down and no CA to trust at the moment of
-decision. The cost is exact and three-fold, and it is the Phase-1 finding (`THESIS_DRAFT` §6.8.3, `ANALYSIS.md` §5):
-the revocation that OCSP serves as a *private, cacheable pull* becomes an **on-chain write** that is (a) **public** —
-every revocation is visible and linkable, losing the Bitstring Status List's query-privacy; (b) **ordered** — it takes
-a block position, which opens the **mempool ordering race** between a dependency's change and the dependent transaction
-that a later re-check (`fulfil`) closes *inside execution* but not in the mempool (AR-10); and (c) **costly** — gas per
-write (#49) and reads priced in history growth (#31). S1–S4 have none of these three because their "write" is a private
-update to an authority's own store.
+**T1 — The ledger removes the *live-CA-at-decision* dependency (relative to S1/S2), but does not beat offline freshness, and pays a public, ordered, costly write (the headline — restated, obj. F1).**
+The property S7/S8 genuinely remove is a **live authority *at the moment of decision*** of the S1/S2 kind: OIDC queries
+the live UserInfo endpoint [src §5.3], a classic SAML/IdP SSO needs the IdP live. For these, S7/S8 read status (V6)
+directly from ledger state — no responder to be down, no CA to trust at decision time. **But the claim is narrower than
+the earlier draft's "across S1–S4," for two reasons an examiner will press.** (i) **X.509 (S3) already achieves
+status-at-handshake with no responder live at decision:** OCSP **stapling** (RFC 6066 §8 Certificate Status Request
+[src]) delivers a CA-signed status inside the TLS handshake, **short-lived certificates** make the certificate's own TTL
+the freshness bound, and a **cached CRL** serves offline — so S3 is *partial-offline*, not live-authority-bound, and the
+headline does not apply to it cleanly. (ii) **S5/S6 and the new S10 are decision-time authority-independent with no
+ledger at all:** mDL and V2X verify offline against a device-held signature [sec], and **did:key/did:web (S10)** resolve
+and verify VCs with no live issuer and no chain. So the honest statement is: **S7/S8 remove the live-CA-at-decision
+dependency relative to S1/S2, and *match* — do not beat — the offline freshness-independence of S5/S6/S10, while paying
+a cost those systems do not.** That cost is exact and three-fold, the Phase-1 finding (`THESIS_DRAFT` §6.8.3,
+`ANALYSIS.md` §5): the revocation that OCSP/status-list serves as a *private, cacheable pull* becomes an **on-chain
+write** that is (a) **public** — every revocation is visible and linkable, losing the Bitstring Status List's
+query-privacy; (b) **ordered** — it takes a block position, opening the **mempool ordering race** between a dependency's
+change and the dependent transaction that a later re-check (`fulfil`) closes *inside execution* but not in the mempool
+(AR-10); and (c) **costly** — gas per write (#49) and reads priced in history growth (#31).
 
-**T2 — Offline operation and on-chain freshness are mutually exclusive, and the CAV domain sits on the wrong side for S7.**
+**S7's residual availability dependency (named, obj. F1).** "No live authority at decision" does **not** mean "no live
+dependency": S7/S8 reads require a **ledger node or RPC provider to be live and in sync** at decision time (§3
+availability row [src]). The thesis trades a trusted CA/IdP for an *untrusted-but-still-live* ledger endpoint; it does
+not eliminate the liveness requirement, only moves it off the authority and onto consensus infrastructure. S10 did:key
+has no such dependency; S10 did:web depends on an HTTPS host.
+
+**T2 — Offline operation and on-chain freshness are mutually exclusive, and the CAV domain sits on the wrong side for S7.** *(Provisional — contingent on `[sec]` cells, obj. M4: the S5 mDL and S6 V2X offline-verification cells this tradeoff rests on are corroborated from secondary sources only; the primary standards (ISO/IEC 18013-5, IEEE 1609.2) remain paywalled and unread this pass. The shape of the tradeoff is firm; the S5/S6 specifics are down-stated from settled to provisional pending a primary read. Free SD-JWT-VC / mdoc material can carry much of this in Phase 3.)*
 S5 (mDL) and S6 (V2X) are *designed offline*: a receiver verifies an mdoc or a 1609.2 message with no network call,
 which is non-negotiable for a vehicle verifying a safety message at line rate [sec]. The price is staleness: a cached
 V2X verifier accepts at most **k−1 messages after a revocation** (`ANALYSIS.md` §3, #32/#37, pre-D51-fix and
@@ -139,7 +201,7 @@ honest position (THESIS_DRAFT §6.8) is that the on-chain IDTx governs *transact
 ownership transfer), not the safety-message path, where the off-chain identity-dependent *decision* with its k−1 bound
 remains the right tool.
 
-**T3 — Privacy is bought three different ways, and the ledger forecloses all three.**
+**T3 — Privacy is bought three different ways, and the ledger forecloses all three.** *(Provisional — contingent on `[sec]` cells, obj. M4: the S5 selective-disclosure and S6 pseudonym-rotation privacy cells are `[sec]` (ISO/IEC 18013-5, IEEE 1609.2 / ETSI TS 102 941 paywalled, unread this pass); the SCMS linkage-value mechanism is `[src]` via Brecht et al. 2018, but the mDL selective-disclosure detail is not. Down-stated from settled to provisional; free SD-JWT-VC / mdoc primaries can firm this in Phase 3.)*
 S4/S5 buy unlinkability with **selective disclosure** (reveal only the needed attribute per presentation); S6 buys it
 with **pseudonym rotation** (many short-lived unlinkable certs, revocable en masse by linkage value — the one design
 that gets privacy *and* efficient revocation together) [src]. Both rest on the credential staying off the public record.
@@ -158,19 +220,53 @@ wallet rebinding ceremony recovers the holder — buying both governance legitim
 infrastructure. The thesis substrate is at the extreme: maximal self-sovereignty, minimal recovery and governance
 recourse.
 
+**T5 — The Cost row is marginal-only, which flatters the authority systems and penalizes SSI (obj. M6).** The §3 Cost
+axis measures **marginal per-operation cost**, on which S7/S8 look expensive ("gas per write") and eIDAS/SCMS look cheap
+("no per-op fee"). This is a measurement artifact of the axis, not a true economic ranking. **S4 (eIDAS) and S6 (SCMS)
+each carry a large one-time / ongoing capital cost the marginal axis hides**: eIDAS presupposes national QTSP and
+trust-list PKI infrastructure and member-state wallet programs; SCMS presupposes a multi-tier CA hierarchy (root,
+enrollment, pseudonym, linkage authorities) with butterfly-key provisioning at fleet scale. **S7/S8 externalize their
+capital cost onto a shared public ledger** (no bespoke PKI to stand up) and pay it back as marginal gas. The honest
+comparison therefore needs **two cost views**: a *marginal* view (gas-per-write, where SSI is High and authority
+systems Low) and an *amortized-capital* view (national PKI / SCMS infrastructure, where the authority systems carry
+large sunk and ongoing cost and SSI carries little). A claim that "SSI is costly" is true only on the marginal axis and
+is not a total-cost-of-ownership statement — §4 carries this caveat forward. S9 (hardware authenticators) and S10
+did:key (free, no infra) sit at the low-capital end of both views.
+
 ---
 
 ## §4 — Where the thesis's on-chain SSI sits (honest placement)
 
-**What S7 (and the IDTx over it) genuinely wins.** On the function matrix S7 is the **only system with `createDID`,
-`resolve`, `rotate`, `delegate`, and `execute` all Native** (§2), because the identifier *is* a key and the registry is
-contract-readable — no authority mediates creation, rotation, or delegation, and the identity can itself act
-(`execute`). On the trade-off matrix it uniquely removes the **live-authority dependency** at decision time (T1): a
-revocation is reflected at the next block with no responder to query, which is the freshness property the IDTx is built
-to exploit. Against the closest prior art, S8/ERC-3643, the thesis does not claim the guard mechanism — it claims the
-**storage-locus × encoding × evaluation-point taxonomy** and the **on-chain freshness/ordering analysis** (THESIS_DRAFT
-§6.8.4): object-attribute ABAC (NIST SP 800-162 §3.2 [src]) realized on a public ledger, with the dimension ABAC's PDP
-model never needed — *where* the depended-on state lives and *when* it is read.
+**What S7 (and the IDTx over it) genuinely wins — the *combination*, not any single Native cell (obj. F1/F2/M2).**
+The headline is **not** "S7 uniquely does X." It is:
+
+> **S7's distinction is that it combines FIDO2-like self-created key-identity (S9) *with* ERC-3643/S8-like
+> contract-readable on-chain evaluation (S8) inside a single EVM-derived function set — the *combination* within this
+> function set, not any single Native cell, and not a property no other system has.**
+
+Each half of that combination exists elsewhere, which is exactly why the two new comparators were added. **The
+self-created key-identity is not unique to S7:** S9 (FIDO2) generates the key pair on-device with no issuer, and S10
+(did:key/did:web) carries the full authority-independent DID+VC surface — both with **no ledger** (§2 `createDID` all
+Native). **The in-transaction evaluation is not unique to S7 either:** S8 (ERC-3643) reads claims on-chain to gate a
+transfer. What no *other* single system does is hold **both** at once on one substrate. Relatedly, the earlier
+"S7 is the only column with `createDID`/`resolve`/`rotate`/`delegate`/`execute` all Native" line is **withdrawn as
+tautological (obj. M2):** those are EVM-substrate operations, so an EVM-native identity is Native on them *by
+construction*; "Native within the EVM-derived function set by construction" is the honest phrasing, and it carries no
+contribution weight. The contribution weight sits on the **taxonomy and freshness analysis**, not the row-count.
+
+On the trade-off matrix S7/S8 **remove the live-CA-at-decision dependency** relative to S1/S2 (T1) — a revocation is
+reflected at the next block with no responder to query — but they **match, not beat**, the offline freshness-independence
+of S5/S6/S10, and they retain a residual **ledger-node/RPC liveness** dependency. Against the closest prior art,
+S8/ERC-3643, the thesis does **not** claim the guard mechanism, and makes **no** "beats S8 on delegate/rotate" claim
+(those S8 cells are `[recalled: ERC-734-unpublished]`, obj. m2). It claims the **storage-locus × encoding ×
+evaluation-point taxonomy** and the **on-chain freshness/ordering analysis** (THESIS_DRAFT §6.8.4): object-attribute
+ABAC (NIST SP 800-162 §3.2 [src]) realized on a public ledger, with the dimension ABAC's PDP model never needed —
+*where* the depended-on state lives and *when* it is read.
+
+**One concession the completeness narrative owes (obj. m3).** On `createPresentation` the thesis substrate is
+**Composed** — a replay-protected on-chain anchor (P1) with **no native ERC** — whereas S4 (eIDAS), S5 (mDL), and the
+new S10 (VC DM 2.0) each have a **native verifiable-presentation primitive**. The EVM substrate lacks a presentation
+primitive that three comparators have natively; the thesis realizes presentation as a pattern, not a primitive.
 
 **The costs Phase 1 established, carried forward unsoftened.** The seed is explicit that these are not closed:
 
@@ -195,17 +291,34 @@ model never needed — *where* the depended-on state lives and *when* it is read
    (`ANALYSIS.md` §3, A3b); cited for its *shape*, not its superseded values. Clean measurement is post-thesis (P5).
 
 **Net placement.** S7 is the right substrate for identity used as an *on-chain transaction precondition* with next-block
-freshness and no live authority (its home: tolls, claim anchoring, ownership transfer). It is the *wrong* substrate for
-the offline, line-rate, privacy-by-pseudonymity path that V2X (S6) occupies — and the thesis says so. The honest
-summary: the IDTx buys freshness and authority-independence by paying in publicity, cost, an unresolved ordering race,
-and (on the two measured paths) an open replay exposure.
+freshness and no live authority at decision (its home: tolls, claim anchoring, ownership transfer), and its distinction
+is the **combination** of self-created key-identity with contract-readable in-transaction evaluation on one EVM-derived
+substrate — not sole possession of either half (S9/S10 have the first, S8 the second). It is the *wrong* substrate for
+the offline, line-rate, privacy-by-pseudonymity path that V2X (S6) occupies — and the thesis says so. On cost, "SSI is
+costly" holds only on the **marginal** (gas-per-write) axis; on an **amortized-capital** axis the authority systems
+(eIDAS national PKI, SCMS multi-tier CA) carry large sunk infrastructure that SSI externalizes onto a shared ledger
+(obj. M6), so the cost claim is not a total-cost-of-ownership verdict. The honest summary: the IDTx buys **in-transaction
+freshness** and **decision-time authority-independence** (the latter shared with S5/S6/S10) by paying in publicity, a
+residual ledger-liveness dependency, marginal cost, an unresolved ordering race, and (on the two measured paths) an open
+replay exposure.
 
 ---
 
 ## Closing ledger — cells still `[recalled]` or `[sec]` (unverified at primary this pass)
 
-**Count of function×system cells (§2) not at `[src]`: 35 of 96** — comprising **[sec]** cells blocked by paywalls and
-**[recalled]** cells not reachable/not chased this pass. WP 2.3b upgraded 17 §2 cells: the whole **S8 ERC-3643 /
+**Matrix dimensions after this pass: 12 function rows × 10 systems = 120 cells** (was 12 × 8 = 96; the WP-F2 pass added
+the **S9 FIDO2/WebAuthn** and **S10 ledgerless-SSI** columns, 24 new cells).
+
+**Count of function×system cells (§2) not at `[src]`: 42 of 120** — the 35 of 96 carried from the prior pass (the
+Absent→n-a recode in obj. M1 changes cell *values*, not evidence tags, so that subtotal is unchanged) **plus 7 of the 24
+new cells**: S9 `rotate`, `deactivate`, `revokeCredential` and S10 `delegate`, `execute`, `deactivate`,
+`revokeCredential` are `[recalled]` (lifecycle/relationship specifics not pinned to a section read this pass); the other
+17 new cells are `[src]`, read this pass at **W3C WebAuthn Level 2** (§1 Introduction, §4 Terminology), **FIDO CTAP2.1**
+(§6.1.2 `authenticatorMakeCredential`), **W3C did:key** (Abstract/Introduction/Operations/Create/Read), **W3C did:web**
+(Target system / Create / Read), **W3C VC Data Model 2.0** (§4.7 Issuer, §7.1 Verification, §4.13 Verifiable
+Presentations), and **RFC 6066** (§8 Certificate Status Request, for the T1 stapling note). All six are free primaries.
+
+WP 2.3b upgraded 17 §2 cells: the whole **S8 ERC-3643 /
 ONCHAINID** column except `rotate`/`delegate` (ERC-734 is an unpublished draft, not an EIP — unreachable at primary),
 read at **ERC-3643** (eips.ethereum.org/EIPS/eip-3643: `isVerified`, Identity Registry, Trusted Issuers Registry,
 Claim Topics Registry) and **ERC-725** (eip-725 §ERC725X `execute`); and seven **S4 eIDAS/EUDI** cells, read at
