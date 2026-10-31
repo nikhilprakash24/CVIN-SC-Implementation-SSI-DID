@@ -6,7 +6,7 @@
 
 ```
 Phase 1  function set, IDTx, benchmark gap   [■■■■■■■■■■]  100%   COMPLETE (examiner fixes applied)
-Phase 2  compare to other ID systems         [□□□□□□□□□□]    0%   planned
+Phase 2  compare to other ID systems         [■■□□□□□□□□]  ~15%   IN PROGRESS
 Phase 3  nearest benchmarks, benchmark v0     [□□□□□□□□□□]    0%   planned
 Phase 4  same, for AI agents                  [□□□□□□□□□□]    0%   planned
 Phase 5  10-substrate × function-set matrix   [□□□□□□□□□□]    0%   planned
@@ -82,3 +82,18 @@ Phase 2 (compare to other ID systems) can begin now; it reuses the function set 
 
 ## Second examiner pass — propagation gaps closed (2026-10-24)
 A blind verify-the-fixes re-examination confirmed the framing fixes landed in the thesis, but caught that obj. 9/10 fixes and the obj. 3 retreat had been applied to support files only. Now back-propagated into `THESIS_DRAFT.md` (ZkVinGate no longer "unlinkable across scopes"; addClaim raw-digest replay caveat added to the primitive bullet) and `ANALYSIS.md` (the stale "true IDTx are few / count is a finding" sentence superseded by a correction note); obj. 6 "twelve" off-by-one reworded to defer to G-B. Second-pass verdict: **defensible** once these gaps closed — which they now are. This was a genuine editor miss (support-file fixes not propagated), caught by the re-examination — logged as the reason the verify pass was worth running.
+
+---
+
+## PHASE 2 — comparison with other ID systems (started 2026-10-31)
+Home: Appendix G-G + companion SP-9. Common axis = the Phase 1 function set; seed = `p1/ANALOGIES.md`.
+
+| WP | Task | Agent | Status |
+|---|---|---|---|
+| 2.1 | Comparison set + justification (8 systems) | ED+SS | 🔵 running |
+| 2.2 | Score each system on the function set (native/composed/absent + mechanism) | SS | 🔵 running |
+| 2.3 | Trade-off axes (trust locus, availability, revocation latency, privacy, cost, governance, offline, recovery) | SS+LS | 🔵 running |
+| 2.4 | Figures (function×system heat map; per-system trade-off radar) | VA | ⬜ queued |
+| 2.5 | Examiner pass | SK | ⬜ queued |
+
+- `2026-10-31` ED — Phase 2 launched. One Standards-Scholar agent doing 2.1–2.3 (grounded in the sourced ANALOGIES matrix; evidence tags carried forward). Figures + examiner to follow.
