@@ -9,7 +9,7 @@ counts:
   L2u:F:asserted: 115
   L2u:G:asserted: 36
   L2u:L:asserted: 2
-  L2u:N:asserted: 151
+  L2u:N:asserted: 153
   L2u:W:asserted: 15
   L3:F:pass: 78
   L4:F:pass: 19
@@ -4139,6 +4139,18 @@ tests:
   location: 1_blockchain-identity/test/L1-identity-mechanisms
   reason: 'no off-chain-authorised execution on ERC-721: no permit, meta-transaction or signed entry point (manifest: Delegated / signed execution not-applicable)'
   source: sandbox/grand/report/L1-asymmetry.json
+- id: TC-erc-721-V1-N-185ea858
+  layer: L2u
+  sut: erc-721
+  op: V1
+  class: N
+  evidence: E3
+  verdict: asserted
+  location: 1_blockchain-identity/test/L2-identity-system/per-option/ERC721/mintReentrancy.regression.test.js:13
+  title: a manufacturer-role receiver cannot mint the same VIN twice from onERC721Received
+  mapped_by: class title:should not|not allow|cannot|can't|reject|revert|invalid|fail|disallow|refuse|wrong|missing|expired|duplicate|non-owner|unauthori[sz]ed|unknown|malformed|forbid|only (the )?owner|onlyowner|must
+    not; op title:issuer key|grantRole|ISSUER_ROLE|authori[sz]e (issuer|manufacturer)|trusted issuer|allow-list|allowlist|role
+  source: docs/testing/unit_rules.yaml
 - id: TC-erc-721-V7-F
   layer: L1
   sut: erc-721
@@ -12110,7 +12122,7 @@ tests:
   class: A
   evidence: E3
   verdict: asserted
-  location: 5_zkp-agent-identity/test-contracts/zkvin_gate.test.js:74
+  location: 5_zkp-agent-identity/test-contracts/zkvin_gate.test.js:88
   title: rejects a tampered proof whose signals all match
   mapped_by: class title:attack|attacker|hijack|replay|forg|tamper|theft|thief|steal|stolen|malleab|poison|bypass|impersonat|spoof|front-?run|sybil; op title:issue|issuance|sign_document|proof
   source: docs/testing/unit_rules.yaml
@@ -12132,7 +12144,7 @@ tests:
   class: A
   evidence: E3
   verdict: asserted
-  location: 5_zkp-agent-identity/test-contracts/zkvin_gate.test.js:88
+  location: 5_zkp-agent-identity/test-contracts/zkvin_gate.test.js:102
   title: Schnorr proof of key knowledge verifies on chain through ecrecover; tampering fails
   mapped_by: class title:attack|attacker|hijack|replay|forg|tamper|theft|thief|steal|stolen|malleab|poison|bypass|impersonat|spoof|front-?run|sybil; op title:issue|issuance|sign_document|proof
   source: docs/testing/unit_rules.yaml
@@ -12403,6 +12415,18 @@ tests:
   mapped_by: class title:should not|not allow|cannot|can't|reject|revert|invalid|fail|disallow|refuse|wrong|missing|expired|duplicate|non-owner|unauthori[sz]ed|unknown|malformed|forbid|only (the )?owner|onlyowner|must
     not; op file:5_zkp\-agent\-identity
   source: docs/testing/unit_rules.yaml
+- id: TC-zkp-vin-K11-N-a08f6f1f
+  layer: L2u
+  sut: zkp-vin
+  op: K11
+  class: N
+  evidence: E3
+  verdict: asserted
+  location: 5_zkp-agent-identity/test-contracts/zkvin_gate.test.js:74
+  title: only the governor configures services; unknown services and a changed region are rejected
+  mapped_by: class title:should not|not allow|cannot|can't|reject|revert|invalid|fail|disallow|refuse|wrong|missing|expired|duplicate|non-owner|unauthori[sz]ed|unknown|malformed|forbid|only (the )?owner|onlyowner|must
+    not; op file:5_zkp\-agent\-identity
+  source: docs/testing/unit_rules.yaml
 - id: TC-zkp-vin-K5-F-fcb65034
   layer: py
   sut: zkp-vin
@@ -12444,7 +12468,7 @@ tests:
   class: N
   evidence: E3
   verdict: asserted
-  location: 5_zkp-agent-identity/test-contracts/zkvin_gate.test.js:80
+  location: 5_zkp-agent-identity/test-contracts/zkvin_gate.test.js:94
   title: only the identity's ERC-1056 owner anchors; after an ownership transfer the old owner cannot
   mapped_by: class title:should not|not allow|cannot|can't|reject|revert|invalid|fail|disallow|refuse|wrong|missing|expired|duplicate|non-owner|unauthori[sz]ed|unknown|malformed|forbid|only (the )?owner|onlyowner|must
     not; op title:addClaim|add claim|issueCredential|issue credential|anchor|attest|claim
