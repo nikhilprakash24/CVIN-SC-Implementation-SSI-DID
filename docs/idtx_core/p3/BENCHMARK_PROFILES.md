@@ -245,6 +245,74 @@ IDTx mark is **◐ not ✓**; (ii) **no token transfer** is measured (Phase-1 BE
 
 ---
 
+### Artefact 8 — ERC-3643 / T-REX reference implementation (EIP-3643 + github.com/TokenySolutions/T-REX) — **[src EIP-3643 spec read at source this pass; sec T-REX repo via EIP + public listing]**
+
+**Resolved from the EIP-3643 spec at source — this artefact FALSIFIES the Phase-1/WP-3.1 "absolute absence" claim and
+is the reason this pass retracts it.** ERC-3643's `transfer(_to, _amount)` runs, **in the same transaction before value
+moves**, `require(_tokenIdentityRegistry.isVerified(_to))` and `require(_tokenCompliance.canTransfer(from, to, amount))`
+(spec §Main functions, `transfer` reference body, read at source). `isVerified(_to)` instructs the on-chain Identity
+Registry to check that the **receiver's** on-chain Identity (ONCHAINID ERC-734/735) holds the claims required by the
+Claim Topics Registry, signed by an issuer in the Trusted Issuers Registry — i.e. the admissibility of the transfer is
+**a function of the state of another named identity (the receiver), evaluated in-transaction**, which is the IDTx
+definition (`ANALYSIS.md` §4.1) verbatim, enforced **on-chain**. Unlike Frutuoso26 (where accreditation is a client-side
+check), here the identity dependency is on-chain. It is **shipped**: the T-REX reference implementation is a public repo
+(`github.com/TokenySolutions/T-REX`) with a public functional/unit test suite (Hardhat), audited (Kaspersky, Hacken per
+EIP §Security Considerations); the mechanism is deployed at scale (see note on a16z RWA hooks below). **But as a
+*benchmark* it is not one:** its test suite is a **functional/conformance unit suite**, not a reusable *performance*
+workload — it asserts correctness of eligibility/compliance behaviour, not latency/throughput/cost under pinned
+conditions.
+
+| A1 | A2 | A3 | A4 | A5 | IDTx (Id-gate) |
+|:--:|:--:|:--:|:--:|:--:|:--:|
+| ✗ | ✗ | ✗ | ✓ | ✓ | ✓ (on-chain, shipped) |
+
+- **A1 ✗** — ships a functional/unit test suite, **not** a named, fixed *performance* workload others run to compare cost; no reusable operation set with measurement intent. [src]
+- **A2 ✗** — unit tests have correctness pass/fail, but there is **no benchmark admission rule** over performance results (same category as the BENCHMARK_GAP §1c "revert-on-unverified is a contract check, not a benchmark rule"). [src]
+- **A3 ✗** — no latency/throughput/cost metric defined with pinned measurement conditions; the suite asserts behaviour, not performance. [src]
+- **A4 ✓** — a public, runnable reference implementation + test suite others execute unchanged (`github.com/TokenySolutions/T-REX`). **The harness exists.** [sec]
+- **A5 ✓** — the reference suite is run by many independent integrators and the standard is independently deployed at scale; this is a runnable, independently-exercised artefact (not a reproduction of a performance *result*, because no performance benchmark is defined). [sec]
+- **IDTx ✓ (on-chain, shipped)** — `isVerified(_to)` + `canTransfer(from,to,amount)` gate the transfer on the receiver's on-chain identity state, in-transaction, before value moves (EIP-3643 spec at source). **This is an in-transaction identity-gated-transfer workload mechanism, shipped.**
+
+**obj.11 status:** **new artefact, read at source this pass (EIP-3643 spec).** This is the decisive correction: the
+in-transaction, on-chain identity-gated transfer the thesis targets **exists and is shipped**. What T-REX does *not*
+provide is a complete A1–A5 *benchmark* packaging it as a reusable, admission-gated, metric-defined performance workload.
+
+---
+
+### Artefact 9 — ERC-1404 / CMTAT (restricted-transfer security tokens; github.com/CMTA/CMTAT) — **[sec ERC-1404 mechanism; src Taurus/CMTA Sepolia measurement read at source this pass]**
+
+**Resolved — a second on-chain identity/allowlist-gated-transfer example, independent of ERC-3643.** ERC-1404 (Simple
+Restricted Token Standard) exposes `detectTransferRestriction(from, to, value)`, called **on-chain inside the transfer
+path**, which returns a restriction code unless the counterparties satisfy the token's allowlist/eligibility rules;
+CMTAT (CMTA Token, `github.com/CMTA/CMTAT`) implements this as a modular validation/allowlist layer with conditional
+transfer. Taurus (with CMTA) built and **measured** a CMTAT + ERC-1404 restricted-transfer proof-of-concept **on the
+Sepolia Ethereum testnet** (Taurus blog, read at source: "The tests were conducted on the Sepolia Ethereum testnet").
+The transfer is gated on the counterparties' allowlist/identity state — an in-transaction identity-gated transfer — but
+the PoC is a demonstration, not a reusable named performance workload with pinned, reproducible conditions.
+
+| A1 | A2 | A3 | A4 | A5 | IDTx (Id-gate) |
+|:--:|:--:|:--:|:--:|:--:|:--:|
+| ✗ | ✗ | ◐ | ✓ | ✓ | ✓ (on-chain, shipped) |
+
+- **A1 ✗** — CMTAT ships a functional implementation + test suite and Taurus a PoC; neither is a named, reusable *performance* workload others target. [sec]
+- **A2 ✗** — the on-chain `detectTransferRestriction` restriction code is a contract check, not a benchmark admission rule over results. [sec]
+- **A3 ◐** — Taurus reported Sepolia measurements of the restricted-transfer PoC [src], but not a pinned, reusable metric set with stated conditions (demonstration, not benchmark-grade conditions). [src]
+- **A4 ✓** — CMTAT is a public, runnable implementation + test suite (`github.com/CMTA/CMTAT`); the harness exists. [sec]
+- **A5 ✓** — CMTAT is independently deployed and used across CMTA members; runnable and independently exercised (not a reproduction of a defined performance benchmark). [sec]
+- **IDTx ✓ (on-chain, shipped)** — the allowlist/eligibility gate runs on-chain inside the transfer, gating on counterparty identity state. [sec mechanism / src measured on Sepolia]
+
+**Deployment-scale note (a16z RWA allowlist transfer hooks) — [sec].** Production RWA tokens (BlackRock BUIDL, Apollo
+ACRED, Ondo OUSG/USTB and peers) enforce allowlist/identity-gated transfers via on-chain transfer hooks, a pattern a16z
+has documented as standard RWA practice. This is deployed, multi-billion-dollar evidence that the on-chain
+identity-gated-transfer *mechanism* is production-scale, **not** a lab curiosity — it is cited here only as corroboration
+of the F1 retraction, not scored as a benchmark artefact.
+
+**obj.11 status:** **new artefact; the ERC-1404 mechanism is secondary, the Sepolia measurement read at source (Taurus
+blog) this pass.** Second independent on-chain identity-gated-transfer example; reinforces that the mechanism (and a
+runnable, measured harness) already exists.
+
+---
+
 ## §2 — Synthesis
 
 **Which axis is the common failure.** Partition the artefacts and the picture is sharp. The *general blockchain
@@ -256,11 +324,22 @@ A2 (admission rule) and A5 (independent reproduction)**. A2 is absent from *ever
 artefact (Satybaldy26, Frutuoso26, Lagos26, Buldini25, DeSalve26, Siqueira23): each is descriptive/comparative, none
 states a pass/fail gate. A5 is absent from *every* identity artefact including the conformance/assurance frameworks
 (NIST, EUDI LSPs) — no SSI/DID performance study has a non-author re-run on record. **So the common failure splits by
-family: A5 is the universal gap across the identity artefacts (the cleanest single statement of the benchmark gap,
-matching BENCHMARK_GAP §3), while A2 is universal among the identity *performance* studies specifically.** Above all, the
-**non-axis IDTx property is the single thing absent from every artefact without exception** — the general benchmarks have
-no identity semantics at all, and the identity artefacts measure lifecycle administration, credential presentation, or
-(Frutuoso) an identity-bound claim whose dependency is checked off-chain.
+family: A5-as-benchmark-reproduction is the universal gap across the identity *benchmark/performance* artefacts (the
+cleanest single statement of the benchmark gap, matching BENCHMARK_GAP §3 — and note A5 is a maturity property, not a
+Gray/TPC defining axis, BENCHMARK_V0 §3.2), while A2 is universal among the identity *performance* studies
+specifically. (T-REX/CMTAT are independently *deployed/run* as shipped code — A5 ✓ in that sense — but neither is a
+performance benchmark whose *result* is reproduced.)**
+
+**RETRACTION (F1, examiner pass).** An earlier version of this synthesis claimed the **non-axis IDTx property is the
+single thing absent from every artefact without exception**. **That claim is false and is withdrawn.** Artefacts 8–9,
+read this pass, show the on-chain in-transaction identity-gated-transfer mechanism **exists and is shipped**: ERC-3643 /
+T-REX runs `isVerified(_to)` + `canTransfer(from,to,amount)` on-chain before value moves (EIP-3643 spec at source), and
+ERC-1404 / CMTAT gates transfers on counterparty allowlist/identity state on-chain (measured by Taurus on Sepolia). The
+mechanism is deployed at multi-billion-dollar scale (a16z-documented RWA transfer hooks). What the general benchmarks
+(BLOCKBENCH/DIABLO) lack is an identity workload; what the SSI *performance* studies measure is lifecycle administration
+or credential presentation; and Frutuoso26 checks its dependency off-chain. But the gate itself is **present, on-chain
+and shipped** in ERC-3643/T-REX and ERC-1404/CMTAT. The defensible claim is therefore narrow: see the narrowed gap claim
+below and in `BENCHMARK_V0.md` §3.2.
 
 **Which comes closest, and why it still falls short.** Two different "closest" answers, depending on the question. (a)
 *Closest to a complete benchmark on the five axes:* **BLOCKBENCH / DIABLO at 4 of 5** (A1, A3, A4, A5; A2 partial) — but
@@ -271,12 +350,20 @@ latency/cost + an entropy MLS) and ships a replication package. It still falls s
 set but tied to 3 SDKs, self-authored, not a standard), A2 ✗ (no admission rule), A4 ◐ (an *anonymous* review snapshot,
 not a maintained harness), A5 ✗ (no independent re-run) — and, decisively, **IDTx ✗**: its five operations are
 single-DID lifecycle administration, none gated on another identity. (c) *Closest to the IDTx mechanism:* **Frutuoso et
-al. 2026** — but the full read this pass shows its identity-dependency (issuer accreditation) is enforced **client-side,
-off-chain**, with only the sender's own key/signature checked in-transaction, so even the one artefact nearest the
-contribution does not actually ship a reusable *in-transaction* identity-gating workload. **Net: no single artefact is
-both a complete benchmark and identity-gating; the gap the thesis targets (a shared reusable identity workload + an
-admission rule + in-transaction IDTx semantics, with an independent reproduction) is unoccupied, exactly as
-BENCHMARK_GAP §2 worded it — and this deeper pass strengthens, rather than weakens, that conclusion.**
+al. 2026** — the full read this pass shows its identity-dependency (issuer accreditation) is enforced **client-side,
+off-chain**. (c′) *Closest shipped on-chain gate:* **ERC-3643 / T-REX** (Artefact 8) and **ERC-1404 / CMTAT**
+(Artefact 9) — these **do** ship the in-transaction, on-chain identity-gated transfer, but neither packages it as a
+complete A1–A5 *benchmark* (A1/A2/A3-as-benchmark ✗; they are functional suites and a measured PoC, not reusable
+admission-gated metric-defined performance workloads).
+
+**Net (NARROWED, F1 examiner pass).** The on-chain identity-gated-transfer mechanism **exists, is shipped (T-REX), and
+is deployed at scale**; what does not exist is a **complete A1–A5 benchmark** that packages it as a reusable,
+admission-gated, metric-defined performance workload — and no artefact packages the thesis's broader IDTx taxonomy (the
+full dependency-kind × locus × evaluation-point space, not just receiver-allowlist transfer) as a workload. The
+mechanism, the on-chain gate, and runnable harnesses already exist (conceded); the **complete benchmark** and the
+**taxonomy-as-workload** do not. Within EVM substrates (m9: the surveyed scope is EVM-only), no artefact is both a
+complete benchmark *and* a packaged IDTx-taxonomy workload — which is the honest residual, not an "unoccupied cell /
+absolute absence."
 
 ---
 
@@ -296,6 +383,11 @@ BENCHMARK_GAP §2 worded it — and this deeper pass strengthens, rather than we
 | 8 | EUDI ARF / FCAF conformance page | [src] eudi.dev | [sec] via Sokolov26 | **upgraded**; functional-conformance-only confirmed at source |
 | 9 | Satybaldy et al. 2026 | [full] alphaXiv full text | [full] (P1) | deepened; VM/iterations pinned, anonymous-snapshot ⇒ A4 ◐ |
 | 10 | Frutuoso et al. 2026 | [full] arXiv HTML | **[abs]** (P1) | **upgraded**; 3 cells corrected (IDTx ✓→◐, A4 ✗→◐, no token transfer) |
+| 11 | ERC-3643 / T-REX (EIP-3643 spec) | [src] eips.ethereum.org, `transfer` body read at source | not profiled (P1 §1c mentioned Frutuoso only) | **new; the F1 falsifier** — IDTx ✓ on-chain shipped, A4/A5 ✓ (harness exists), A1/A2/A3-as-benchmark ✗ |
+| 12 | ERC-1404 / CMTAT (Taurus Sepolia PoC) | [src] taurushq.com measurement read at source; [sec] ERC-1404 mechanism | not profiled (P1) | **new; second on-chain gate** — IDTx ✓, measured on Sepolia, not a complete benchmark |
+
+**New artefacts profiled at source this pass (F1): 2** (#11 ERC-3643/T-REX via the EIP-3643 spec at source; #12
+ERC-1404/CMTAT via the Taurus Sepolia measurement at source + the ERC-1404 mechanism [sec]).
 
 **Count of abstract-only artefacts upgraded to read-in-full/at-source this pass: 7** (#2 DID Core test suite, #3 VC test
 suite, #4 Caliper, #5 BLOCKBENCH, #6 DIABLO, #7 NIST 800-63-4, #10 Frutuoso26) — plus #8 EUDI upgraded from secondary to a
@@ -308,7 +400,7 @@ corrected the one artefact Phase 1 had scored IDTx ✓.
 - **De Salve et al. 2026** — IEEE Access, DOI 10.1109/access.2025.3649167 (open-access but not chased this pass). [abs]
 - **Siqueira et al. 2023 ×2** — IEEE DAPPS / ICBC (paywalled). [abs]
 - **Buran 2025, Alizadeh 2022** — not re-read this pass. [abs]
-- **Sokolov et al. 2026** — arXiv 2609.26220, **free but only the abstract was read this pass**; the FCAF *conformance* framing was instead confirmed at the EUDI ARF source (#8). Full-text read is a candidate for the next pass. [abs]
+- **Sokolov et al. 2026** — arXiv 2609.26220, **free but only the abstract was read this pass**; the FCAF *conformance* framing was instead confirmed at the EUDI ARF source (#8). Full-text read is a candidate for the next pass. [abs] **(m10) The EUDI reproduction cells (Artefact 4 A5, and the eIDAS/EUDI A5 cell in `BENCHMARK_V0.md` §3.2) are marked PROVISIONAL** — they rest on Sokolov26 abstract-only.
 - **DIF interop suites** — framed from the survey [Mazzocca24], not re-read as individual suites this pass. [sec]
 - **Gromit / GFBE / BBSF / DLPS / BlockCompass / bBench** — same class as BLOCKBENCH/DIABLO; not individually re-read. [abs]
 
@@ -325,6 +417,13 @@ benchmarks (BLOCKBENCH, DIABLO, 4/5 axes) are identity-blind by construction; th
 (Satybaldy26) is strong on metrics-with-conditions but fails A2/A4/A5 and measures identity *administration*, not
 identity *dependency*; and the one artefact nearest the IDTx mechanism (Frutuoso26) turns out, on a full read, to check
 its identity-dependency **off-chain at the client** and to ship no transfer workload. **A5 (independent reproduction) is
-the cleanest universal failure across the identity artefacts; A2 (admission rule) is universal among the identity
-performance studies; and in-transaction IDTx semantics are absent from all of them.** No artefact read this pass ships a
-reusable in-transaction identity-gating workload.
+the cleanest universal failure across the identity *benchmark* artefacts; A2 (admission rule) is universal among the
+identity performance studies.**
+
+**But the in-transaction identity-gating *mechanism* is NOT absent (F1 retraction):** ERC-3643 / T-REX and
+ERC-1404 / CMTAT ship it on-chain, and it is deployed at scale. The narrowed, defensible headline for SP-9 / Ch 7 is:
+**the on-chain identity-gated-transfer mechanism exists, is shipped (T-REX), and is deployed at scale; what does not
+exist is a complete A1–A5 benchmark packaging it as a reusable, admission-gated, metric-defined performance workload —
+and no artefact packages the thesis's broader IDTx taxonomy (dependency-kind × locus × evaluation-point, not just
+receiver-allowlist transfer) as a workload.** The contribution is a **new workload class**, not the discovery of an
+empty benchmark cell.

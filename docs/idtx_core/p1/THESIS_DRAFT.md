@@ -177,12 +177,16 @@ are not new either: an IDTx evaluates the attributes of the object/resource iden
 **object-attribute ABAC** (NIST SP 800-162 §3.2 evaluates subject, object, and environment attributes — object-attribute
 policies gate precisely on the state of the named resource, not only the caller). The earlier framing that "ABAC gates
 the caller whereas an IDTx names another identity" is withdrawn as a mischaracterisation of ABAC (examiner obj. 2).
-Permissioned tokens over an identity registry — ERC-3643 with ONCHAINID — are the closest on-chain prior art. The
-nearest *measured* study, Frutuoso et al. (2026, arXiv 2607.16383), is often taken to measure an IDTx workload, but
-reading it in full (Phase 3, WP 3.1) shows its issuer-accreditation check is enforced **off-chain at the client**;
-its on-chain `addClaim` gates only on the sender's own key and signature, and it measures no token transfer — so even
-the closest prior art does not measure an *in-transaction* identity-gating workload, which sharpens rather than softens
-the gap.
+Permissioned tokens over an identity registry — ERC-3643 with ONCHAINID — are the closest on-chain prior art, and the
+thesis concedes the mechanism is **shipped on-chain**: ERC-3643/T-REX's `transfer()` runs `isVerified(_to)` +
+`canTransfer(from,to,amount)` in-transaction before value moves (EIP-3643, read at source, WP 3.1), gating the transfer
+on the *receiver's* on-chain identity state — a true in-transaction IDTx — and ERC-1404/CMTAT does the same on-chain
+(measured by Taurus on Sepolia); the pattern is deployed at scale (a16z-documented RWA transfer hooks). The nearest
+*measured academic* study, Frutuoso et al. (2026, arXiv 2607.16383), is often taken to measure an IDTx workload, but
+reading it in full (WP 3.1) shows its issuer-accreditation check is enforced **off-chain at the client**. So the
+mechanism exists on-chain and is shipped; what is new here is not the gate but (i) and (ii) below — the taxonomy and the
+on-chain freshness/ordering analysis — and the packaging of the *full* taxonomy (not just receiver-allowlist transfer)
+as a measurable workload.
 
 The contribution claimed here is therefore narrow and explicit: **the IDTx is object-attribute ABAC realised on-chain**,
 and what is new is (i) the **storage-locus × encoding × evaluation-point taxonomy** (§6.8.3), which classifies *where*
@@ -205,12 +209,14 @@ The benchmark-gap claim is stated in a form that a neutral reader can recognise 
 i.e. without invoking the thesis's own coined term (decision D-GAP, revised per examiner obj. 4; evidence in
 Appendix G-F, 31 sources):
 
-> No existing benchmark pairs a **shared, reusable identity-gating workload** — operations whose admissibility depends
-> on the state of a named identity — with an **admission/conformance rule**. Performance benchmarks that exist measure
-> the identity *lifecycle* (create/resolve/update/deactivate) with no gating workload; conformance suites supply a
-> workload and an admission rule but measure spec conformance, not cost; and the one study that measures an
-> identity-gating study (Frutuoso et al. 2026) is ad hoc, with no reusable harness, and on a full read enforces its
-identity check off-chain rather than in-transaction (WP 3.1).
+> The on-chain identity-gated-transfer **mechanism exists, is shipped (ERC-3643/T-REX), and is deployed at scale**;
+> what does not exist is a **complete benchmark** that packages it as a *shared, reusable, admission-gated,
+> metric-defined performance workload* — nor one that packages the broader **IDTx taxonomy** (the full
+> dependency-kind × locus × evaluation-point space, not just receiver-allowlist transfer) as a workload. Performance
+> benchmarks that exist measure the identity *lifecycle* (create/resolve/update/deactivate) with no gating workload;
+> conformance suites supply a workload and an admission rule but measure spec conformance, not cost; the shipped gates
+> (ERC-3643/T-REX, ERC-1404/CMTAT) are functional suites and PoCs, not reusable performance benchmarks; and the nearest
+> *academic* study, Frutuoso et al. 2026, enforces its identity check off-chain rather than in-transaction (WP 3.1).
 
 Two honesty constraints the examiner pressed and the thesis accepts: the gap is **not** defined as "no one has
 benchmarked an IDTx" (that would be trivially true of any new term); and independent reproduction is **not** used as a
@@ -224,11 +230,17 @@ explicitly: that work benchmarks the DID *lifecycle* (create/resolve/update/deac
 in the terms of §6.8.1 is exactly the administration/authentication classes that are *excluded* from being IDTx. The
 qualitative aids (W3C DID Method Rubric) give no workload; the conformance suites (W3C DID/VC, DIF, eIDAS/EUDI) give a
 workload and an admission rule but measure spec conformance, not performance; general blockchain benchmarks (BLOCKBENCH,
-DIABLO, Caliper) satisfy all five axes but carry no identity workload. The gap this thesis names is therefore specific:
-a measured workload whose unit is an identity-dependent *transaction*, with an admission rule and an independent
-reproduction. Chapter 7 proposes the ingredients of such a benchmark (the twelve functions + the IDTx classes + the
-17-event lifecycle as the workload; the twelve-test suite as the admission rule; the register's measurement conditions
-as the metrics; this repository as the harness) and issues it as future work.
+DIABLO, Caliper) are complete on the defining axes but ship no identity workload (though Caliper, being
+bring-your-own-workload, *can host* one — the harness is largely solved). And the thesis concedes (F1 correction) that
+the on-chain identity-gating *mechanism* is shipped (ERC-3643/T-REX, ERC-1404/CMTAT) and deployed at scale — so the
+contribution is **not** the discovery of an empty benchmark cell. The contribution this thesis names is a **new workload
+class**: the IDTx taxonomy (dependency-kind × locus × evaluation-point) rendered as a measurable performance workload,
+packaged with an admission rule and measured across ten substrates — the full taxonomy, not just the receiver-allowlist
+transfer the shipped gates already cover. Chapter 7 proposes the ingredients (the function set + the IDTx classes + the
+17-event lifecycle as the workload, with ERC-3643 compliance semantics adopted as one external workload referent; the
+twelve-test suite as the per-operation classification toward an admission rule; the register's measurement conditions as
+the metrics; this repository as the harness) and issues it as future work, with independent reproduction named as a
+maturity milestone for *any* candidate, this one included.
 
 ---
 
