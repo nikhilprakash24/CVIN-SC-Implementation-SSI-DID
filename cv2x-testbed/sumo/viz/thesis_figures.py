@@ -139,6 +139,9 @@ def load_trace(path):
                         ev["rejections"].append({"t": r["t"], "pop": tx["pop"], "to": r["to"],
                                                  "why": r.get("why") or r.get("reason") or "rejected",
                                                  "attack": tx.get("attack")})
+                    if r["ok"] and tx.get("attack"):
+                        ev["rogue_accepted"].append({"t": r["t"], "to": r["to"], "attack": tx["attack"],
+                                                     "path": r.get("path")})
                     if r.get("stages"):
                         ev["stages"].append({"pop": tx["pop"], "total": r.get("verify_ms"),
                                              **r["stages"]})
@@ -574,9 +577,12 @@ def fig_rejections(ev, path, out):
     """Rejections over time by reason (rogue and injected), one row per reason."""
     meta = ev["meta"][0]
     rej = ev["rejections"]
+    acc = ev["rogue_accepted"]
     reasons = sorted({r["why"] for r in rej}, key=lambda w: -sum(1 for r in rej if r["why"] == w))
-    fig, ax = plt.subplots(figsize=(13, 1.2 + 0.55 * len(reasons) + 1.6))
-    fig.subplots_adjust(top=0.72, bottom=0.2, left=0.16, right=0.98)
+    rows = reasons + (["ACCEPTED"] if acc else [])
+    h = 3.4 + 0.5 * len(rows)
+    fig, ax = plt.subplots(figsize=(13, h))
+    fig.subplots_adjust(top=1 - 1.25 / h, bottom=1.35 / h, left=0.16, right=0.98)
     for y, w in enumerate(reasons):
         pts = [r for r in rej if r["why"] == w]
         for pop, mk in (("rogue", "x"), ("ssi", "|"), ("pki", "|")):
@@ -584,17 +590,20 @@ def fig_rejections(ev, path, out):
             if sel:
                 ax.scatter(sel, [y] * len(sel), marker=mk, s=28, color=POP_COLOR[pop] if pop != "rogue" else SPRAY,
                            lw=1.1, label=f"{w}: from {pop} (n={len(sel)})")
-    ax.set_yticks(range(len(reasons))); ax.set_yticklabels(reasons, fontsize=9, fontfamily="DejaVu Sans Mono")
-    ax.set_ylim(-0.6, len(reasons) - 0.4); ax.invert_yaxis()
+    if acc:
+        ax.scatter([a["t"] for a in acc], [len(reasons)] * len(acc), marker="o", s=46, facecolors="none",
+                   edgecolors=FAIL, lw=1.4, label=f"rogue message ACCEPTED (n={len(acc)})")
+    ax.set_yticks(range(len(rows))); ax.set_yticklabels(rows, fontsize=9, fontfamily="DejaVu Sans Mono")
+    ax.set_ylim(-0.6, len(rows) - 0.4); ax.invert_yaxis()
     ax.set_xlim(0, meta["duration_s"])
     ax.set_xlabel("simulated time, s")
     ax.grid(axis="x")
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.32), ncol=3, fontsize=8)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.9 / (h - 2.6)), ncol=3, fontsize=8)
     modes = sorted({r["attack"] for r in rej if r.get("attack")})
     stencil_title(fig, "Rejected, and why",
                   f"Every receiver-side rejection in the run, by the verifier's reason ({len(rej)} in total). "
-                  f"Rogue mode: {', '.join(modes) or 'none'}. The attack-board probes at the end of the run are not "
-                  "receiver traffic and are not drawn here.",
+                  f"Rogue mode: {', '.join(modes) or 'none'}; rogue messages accepted: {len(acc)}. "
+                  "Attack-board probes after the run are not receiver traffic and are not drawn.",
                   provenance(path, meta))
     save(fig, out, "F9_rejections")
 
