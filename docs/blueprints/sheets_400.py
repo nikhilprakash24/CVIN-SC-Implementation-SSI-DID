@@ -1,12 +1,13 @@
 """400-series: hull integrity — threat model, guarantee inheritance, attack matrix."""
 from bplib import *  # noqa: F401,F403
+from data import D, raw, lens1, lens2  # noqa: E402  (P2: every measured value comes from data.py)
 
 
 def bp401():
     s = Sheet("BP-401", "Threat model — adversaries, trust bulkheads, security goals", "Hull-integrity schematic of docs/THREAT_MODEL.md: who attacks where, what is assumed, what must hold",
               notes=["Computationally bounded adversary: cannot forge secp256k1 / P-256 signatures or find keccak256 / SHA-256 pre-images (BP-101 parts are unbreakable by assumption).",
                      "Explicitly out of scope: consensus-level (51%) attacks, primitive breaks, verifier or HSM compromise, side channels, MEV / fee-market manipulation, governance attacks on upgradeable contracts (the tested contracts are non-upgradeable).",
-                     "Lens 1 (executable reverts, 54 scenarios) proves G1–G4 with a differential control: the authorized action succeeds, the attack reverts with the named reason. Lens 2 (matrix) scores G5–G8."],
+                     "Lens 1 (executable reverts, " + D("sec.cells") + " scenarios) proves G1–G4 with a differential control: the authorized action succeeds, the attack reverts with the named reason. Lens 2 (matrix) scores G5–G8."],
               notes_width=1060,
               refs=["docs/THREAT_MODEL.md §1–§6", "1_blockchain-identity/test/security/securityScenarios.test.js (Lens 1) · 4_comparison-framework/security-analysis/results/security_matrix.json (Lens 2)"])
     # hull: a long rounded shape with bulkheads; adversaries outside pressing in
@@ -49,7 +50,7 @@ def bp401():
     s.section_label(gx, gy, "SECURITY GOALS (§4) — WHAT EACH BULKHEAD MUST HOLD, AND WHICH LENS PROVES IT")
     rows = [("G1", "authenticity: only the controlling key creates / modifies / issues on behalf", "A1 A2", "Lens 1: attribute write, hijack"),
             ("G2", "non-forgeability: claim / attestation verifies only if signed by an authorized issuer over the bound context", "A2", "Lens 1: delegate / claim; attestEvent fix"),
-            ("G3", "replay resistance: nonce / domain / chain binding", "A1", "Lens 1: signature replay (4/4)"),
+            ("G3", "replay resistance: nonce / domain / chain binding", "A1", "Lens 1: signature replay (" + D("sec.col5.total") + ")"),
             ("G4", "authorization integrity: no acting beyond role (issue / attest / revoke)", "A2", "Lens 1: issuance, revocation"),
             ("G5", "Sybil cost: N identities cost / gate ∝ N", "A2", "Lens 2: issuance cost / gating"),
             ("G6", "recoverability after key compromise", "A3", "Lens 2: ERC-4337 only (guardian)"),
@@ -101,13 +102,13 @@ def bp402():
         s.text(lx + 8, yy + 29, b, size=9, mono=True, color=LINE_SOFT)
     rx = 780
     s.section_label(rx, ly, "DETAIL C — NOT INHERITED: THE APPLICATION'S OWN OBLIGATIONS (measured here)", color=WARN)
-    own = [("authorization logic (G1, G4)", "onlyOwner / role gates — 54 scenarios, 43/43 defended (BP-403)"),
+    own = [("authorization logic (G1, G4)", "onlyOwner / role gates — " + D("sec.cells") + " scenarios, " + D("sec.total") + " defended (BP-403)"),
            ("claim-level signature binding (G2)", "digest = (registry, identity, topic, data); attestEvent fix"),
            ("payload-level replay (G3)", "registry nonce, VP challenge + domain, presentation key"),
            ("key custody (T3) and recovery (G6)", "HSM out of scope; recovery native on ERC-4337 only"),
            ("issuer honesty at t=0 (T2)", "a lying manufacturer is not detected by any substrate"),
            ("off-chain cache staleness", "freshness-k: revocation honoured within ≤ k−1 messages (BP-302)"),
-           ("verifier correctness (T4)", "conformance 94.3% is not the same as a correct verifier")]
+           ("verifier correctness (T4)", "conformance " + D("w3c.score") + " is not the same as a correct verifier")]
     for i, (a, b) in enumerate(own):
         yy = ly + 18 + i * 40
         s.rect(rx, yy, 680, 34, sw=1.4, stroke=WARN)
@@ -133,12 +134,18 @@ LENS2 = {  # security_matrix.csv: impersonation, replay, identity_theft, sybil, 
     "ERC-735": ["D", "P", "P", "P", "V*", "V"], "ERC-1155": ["D", "N*", "D", "D", "P", "V"], "ERC-4337": ["D", "D", "P", "P", "D", "P"],
     "LSP8": ["D", "N*", "V", "D", "P", "V"], "MOBI-VID-V2": ["D", "D*", "P", "D", "V*", "D"], "CVIN-Combined": ["D", "P", "P", "V", "V*", "P"],
 }
+# P2: the tables above are replaced by the CSVs of record; the literals stay only as
+# the expected shape, and generation fails if the CSV columns stop matching ATTACKS.
+_hdr = __import__("data")._attack_rows()[0]
+assert [h.lower() for h in _hdr] == [a.lower() for a in ATTACKS], f"attack_results.csv columns changed: {_hdr}"
+LENS1 = lens1()
+LENS2 = lens2()
 L2COLS = ["impersonation", "replay", "identity theft (G8)", "Sybil (G5)", "recovery (G6)", "privacy (G7)"]
 
 
 def bp403():
-    s = Sheet("BP-403", "Attack matrix — two lenses", "Lens 1: 54 executable cells, 43/43 applicable DEFENDED. Lens 2: the softer goals a revert test cannot express",
-              notes=["Lens 1 cell = malicious transaction reverted with the documented expected reason of the named defence, with a differential control that the authorized action succeeds. '—' = structurally N/A for that standard's model (11 cells).",
+    s = Sheet("BP-403", "Attack matrix — two lenses", "Lens 1: " + D("sec.cells") + " executable cells, " + D("sec.total") + " applicable DEFENDED. Lens 2: the softer goals a revert test cannot express",
+              notes=["Lens 1 cell = malicious transaction reverted with the documented expected reason of the named defence, with a differential control that the authorized action succeeds. '—' = structurally N/A for that standard's model (" + D("sec.na") + " cells).",
                      "Lens 2 legend: D defended · P partial · V vulnerable · N n/a; * = reasoned from the verified source (structural absence), others executed. Sybil cost proxy = create gas (BP-501).",
                      "Reading: no column is all-D in Lens 2 — no standard dominates (H5). Recovery is ERC-4337's alone; soulbound theft resistance is ERC-1155's; on-chain VIN privacy is MOBI's."],
               refs=["4_comparison-framework/security-analysis/results/attack_results.csv / .json (Lens 1, solc 0.8.24, OZ 5.0.2, hardhat-local)", "4_comparison-framework/security-analysis/results/security_matrix.csv (Lens 2) · docs/THREAT_MODEL.md §5"],
@@ -166,9 +173,9 @@ def bp403():
     ty = y + 72 + 9 * rh
     s.rect(x, ty, lw + 6 * cw, rh, sw=1.4, fill=GROUND_DK)
     s.text(x + 6, ty + 19, "TOTAL", size=10, mono=True, weight="bold")
-    for j, t in enumerate(["4/4", "9/9", "8/8", "9/9", "9/9", "4/4"]):
+    for j, t in enumerate([D(f"sec.col{j}.total") for j in range(6)]):
         s.text(x + lw + j * cw + cw / 2, ty + 19, t, size=10, anchor="middle", mono=True, color=OK, weight="bold")
-    s.text(x + lw + 6 * cw + 12, ty + 19, "43 / 43 applicable (54 cells, 11 N/A)", size=11, mono=True, color=OK, weight="bold")
+    s.text(x + lw + 6 * cw + 12, ty + 19, "" + D("sec.total").replace("/", " / ") + " applicable (" + D("sec.cells") + " cells, " + D("sec.na") + " N/A)", size=11, mono=True, color=OK, weight="bold")
     # lens 2
     x2, y2 = 90, ty + 56
     s.section_label(x2, y2, "LENS 2 — COMPARATIVE THREAT MATRIX (security_matrix.csv)")
@@ -194,7 +201,7 @@ def bp403():
     s.rect(fx, fy + 330, 520, 70, sw=1.4, stroke=ACCENT)
     s.text(fx + 10, fy + 352, "Found-and-fixed, reported as evidence:", size=11, weight="bold", color=ACCENT)
     s.text(fx + 10, fy + 370, "MOBI attestEvent accepted unverified signatures (G2/G3). Fixed with ecrecover;", size=10, mono=True)
-    s.text(fx + 10, fy + 386, "121,110 → 192,718 gas (July), 192,671 current build (#28). Replay passes.", size=10, mono=True)
+    s.text(fx + 10, fy + 386, "" + D("attest.before") + " → " + D("attest.july") + " gas (July), " + D("attest.now") + " current build (#28). Replay passes.", size=10, mono=True)
     return s
 
 

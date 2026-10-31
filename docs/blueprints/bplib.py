@@ -37,6 +37,7 @@ CHECKED = "MEASUREMENT_CONDITIONS.md"
 APPROVED = "—"
 DATE = "2026-10-15"
 DATE_B = "2026-10-22"
+DATE_C = "2026-10-31"
 
 
 def esc(s: str) -> str:
@@ -50,11 +51,11 @@ class Sheet:
     subtitle: str = ""
     sheet_no: int = 1
     sheet_of: int = 1
-    rev: str = "B"
+    rev: str = "C"
     scale: str = "NTS"
     notes: List[str] = field(default_factory=list)
     notes_width: int = 400
-    revisions: List[Tuple[str, str, str]] = field(default_factory=lambda: [("A", "INITIAL RELEASE", DATE), ("B", "P1 NUMBER AUDIT (AUDIT_REV_B.md)", DATE_B)])
+    revisions: List[Tuple[str, str, str]] = field(default_factory=lambda: [("A", "INITIAL RELEASE", DATE), ("B", "P1 NUMBER AUDIT (AUDIT_REV_B.md)", DATE_B), ("C", "P2 DATA-BOUND VALUES (data.py)", DATE_C)])
     parts: List[Tuple[int, str, str]] = field(default_factory=list)  # (balloon, name, spec)
     parts_title: str = "PARTS LIST"
     parts_pos: Tuple[int, int] = (0, 0)  # 0,0 = auto (lower-left)
@@ -298,7 +299,7 @@ class Sheet:
         if self.subtitle:
             sub = self.subtitle if len(self.subtitle) <= 92 else self.subtitle[:89].rstrip() + "…"
             s.text(x + 8, y + 72, sub, size=10, color=LINE_SOFT)
-        cols = [("DRAWN", DRAWN, 110), ("CHECKED", CHECKED, 170), ("APPROVED", APPROVED, 70), ("DATE", DATE, 80), ("SCALE", self.scale, 50), ("SHEET", f"{self.sheet_no} OF {self.sheet_of}", 40)]
+        cols = [("DRAWN", DRAWN, 110), ("CHECKED", CHECKED, 170), ("APPROVED", APPROVED, 70), ("DATE", self.revisions[-1][2], 80), ("SCALE", self.scale, 50), ("SHEET", f"{self.sheet_no} OF {self.sheet_of}", 40)]
         cx = x
         for label, val, cw in cols:
             s.text(cx + 6, y + 90, label, size=8, color=LINE_SOFT, mono=True)

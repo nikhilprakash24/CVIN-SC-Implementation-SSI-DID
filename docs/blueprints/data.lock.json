@@ -1,0 +1,1025 @@
+{
+ "attest.before": {
+  "value": 121110,
+  "shown": "121,110",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#28"
+ },
+ "attest.exec": {
+  "value": 169295,
+  "shown": "169,295",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#28"
+ },
+ "attest.july": {
+  "value": 192718,
+  "shown": "192,718",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#28"
+ },
+ "attest.now": {
+  "value": 192671,
+  "shown": "192,671",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#28"
+ },
+ "canon.p1": {
+  "value": 62441,
+  "shown": "62,441",
+  "source": "docs/BASIC_ID_SET_EXTENSION.md",
+  "row": "canon S1"
+ },
+ "fk.1.P0.25": {
+  "value": 2,
+  "shown": "2",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.1.P0.5": {
+  "value": 4,
+  "shown": "4",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.1.P1.0": {
+  "value": 8,
+  "shown": "8",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.1.mean": {
+  "value": 11.755668796,
+  "shown": "11.76",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.1.median": {
+  "value": 10.945720999999999,
+  "shown": "10.946",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.1.p95": {
+  "value": 16.15257405,
+  "shown": "16.153",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.25.P0.25": {
+  "value": 29,
+  "shown": "29",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.25.P0.5": {
+  "value": 58,
+  "shown": "58",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.25.P1.0": {
+  "value": 117,
+  "shown": "117",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.25.mean": {
+  "value": 0.8495246240000001,
+  "shown": "0.85",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.25.median": {
+  "value": 0.42482949999999997,
+  "shown": "0.425",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.25.p95": {
+  "value": 0.7644553999999993,
+  "shown": "0.764",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.5.P0.25": {
+  "value": 10,
+  "shown": "10",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.5.P0.5": {
+  "value": 21,
+  "shown": "21",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.5.P1.0": {
+  "value": 42,
+  "shown": "42",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.5.mean": {
+  "value": 2.37905616,
+  "shown": "2.38",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.5.median": {
+  "value": 0.45567100000000005,
+  "shown": "0.456",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.5.p95": {
+  "value": 10.4792277,
+  "shown": "10.479",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.fit_pct": {
+  "value": 7,
+  "shown": "7",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#32"
+ },
+ "fk.inf.P0.25": {
+  "value": 55,
+  "shown": "55",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.inf.P0.5": {
+  "value": 110,
+  "shown": "110",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.inf.P1.0": {
+  "value": 220,
+  "shown": "220",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.inf.mean": {
+  "value": 0.4532316,
+  "shown": "0.453",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.inf.median": {
+  "value": 0.4279885,
+  "shown": "0.428",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.inf.p95": {
+  "value": 0.6311948999999992,
+  "shown": "0.631",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.knee": {
+  "value": 146.05628962040782,
+  "shown": "146",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.knee.stale_s": {
+  "value": 14.5,
+  "shown": "14.5 s",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.t_chain": {
+  "value": 10.5177325,
+  "shown": "10.52",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.t_chain1": {
+  "value": 10.5177325,
+  "shown": "10.5",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "fk.t_local": {
+  "value": 0.4279885,
+  "shown": "0.428",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "gas.4337.indirection": {
+  "value": 46830,
+  "shown": "46,830",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.CVIN-Combined.addDelegateOrClaim": {
+  "value": 287570,
+  "shown": "287,570",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.CVIN-Combined.createIdentity": {
+  "value": 52216,
+  "shown": "52,216",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.CVIN-Combined.deployRegistry": {
+  "value": 1490166,
+  "shown": "1,490,166",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.CVIN-Combined.revoke": {
+  "value": 69721,
+  "shown": "69,721",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.CVIN-Combined.transferOwnership": {
+  "value": 51747,
+  "shown": "51,747",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.CVIN-Combined.updateAttribute": {
+  "value": 35116,
+  "shown": "35,116",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1056.addDelegateOrClaim": {
+  "value": 54831,
+  "shown": "54,831",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1056.createIdentity": {
+  "value": 52594,
+  "shown": "52,594",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1056.deployRegistry": {
+  "value": 958726,
+  "shown": "958,726",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1056.revoke": {
+  "value": 35046,
+  "shown": "35,046",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1056.transferOwnership": {
+  "value": 51754,
+  "shown": "51,754",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1056.updateAttribute": {
+  "value": 35494,
+  "shown": "35,494",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1155.addDelegateOrClaim": {
+  "value": 57147,
+  "shown": "57,147",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1155.createIdentity": {
+  "value": 103913,
+  "shown": "103,913",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1155.deployRegistry": {
+  "value": 2304865,
+  "shown": "2,304,865",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1155.revoke": {
+  "value": 30625,
+  "shown": "30,625",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1155.transferOwnership": {
+  "value": 83947,
+  "shown": "83,947",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-1155.updateAttribute": {
+  "value": 49130,
+  "shown": "49,130",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-4337.addDelegateOrClaim": {
+  "value": 47557,
+  "shown": "47,557",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-4337.createIdentity": {
+  "value": 759088,
+  "shown": "759,088",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-4337.deployRegistry": {
+  "value": 456294,
+  "shown": "456,294",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-4337.revoke": {
+  "value": 25429,
+  "shown": "25,429",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-4337.transferOwnership": {
+  "value": 28539,
+  "shown": "28,539",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-4337.updateAttribute": {
+  "value": 49343,
+  "shown": "49,343",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-4337.updateAttributeVia4337": {
+  "value": 96173,
+  "shown": "96,173",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-721.addDelegateOrClaim": {
+  "value": 48302,
+  "shown": "48,302",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-721.createIdentity": {
+  "value": 542378,
+  "shown": "542,378",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-721.deployRegistry": {
+  "value": 2721476,
+  "shown": "2,721,476",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-721.revoke": {
+  "value": 27677,
+  "shown": "27,677",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-721.transferOwnership": {
+  "value": 174670,
+  "shown": "174,670",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-721.updateAttribute": {
+  "value": 119737,
+  "shown": "119,737",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-725.addDelegateOrClaim": {
+  "value": 119996,
+  "shown": "119,996",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-725.createIdentity": {
+  "value": 519384,
+  "shown": "519,384",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-725.revoke": {
+  "value": 43388,
+  "shown": "43,388",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-725.transferOwnership": {
+  "value": 28390,
+  "shown": "28,390",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-725.updateAttribute": {
+  "value": 137096,
+  "shown": "137,096",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-725xy.createIdentity": {
+  "value": 1680816,
+  "shown": "1,680,816",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-725xy.transferOwnership": {
+  "value": 28834,
+  "shown": "28,834",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-725xy.updateAttribute": {
+  "value": 49937,
+  "shown": "49,937",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-735.addDelegateOrClaim": {
+  "value": 292730,
+  "shown": "292,730",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-735.createIdentity": {
+  "value": 1535776,
+  "shown": "1,535,776",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-735.revoke": {
+  "value": 72195,
+  "shown": "72,195",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-735.transferOwnership": {
+  "value": 28746,
+  "shown": "28,746",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ERC-735.updateAttribute": {
+  "value": 77713,
+  "shown": "77,713",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.LSP8.createIdentity": {
+  "value": 149615,
+  "shown": "149,615",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.LSP8.deployRegistry": {
+  "value": 1614592,
+  "shown": "1,614,592",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.LSP8.revoke": {
+  "value": 42141,
+  "shown": "42,141",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.LSP8.transferOwnership": {
+  "value": 80600,
+  "shown": "80,600",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.LSP8.updateAttribute": {
+  "value": 55114,
+  "shown": "55,114",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.MOBI-VID-V2.addDelegateOrClaim": {
+  "value": 35277,
+  "shown": "35,277",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.MOBI-VID-V2.createIdentity": {
+  "value": 299143,
+  "shown": "299,143",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.MOBI-VID-V2.deployRegistry": {
+  "value": 4058713,
+  "shown": "4,058,713",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.MOBI-VID-V2.revoke": {
+  "value": 75052,
+  "shown": "75,052",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.MOBI-VID-V2.transferOwnership": {
+  "value": 200023,
+  "shown": "200,023",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.MOBI-VID-V2.updateAttribute": {
+  "value": 307166,
+  "shown": "307,166",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.create.spread": {
+  "value": 32.18967366324498,
+  "shown": "32.2×",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ratio.721_over_1056": {
+  "value": 10.31254515724227,
+  "shown": "≈10×",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "gas.ratio.vinbound": {
+  "value": 6.9475073013270485,
+  "shown": "≈7×",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#6"
+ },
+ "gas.vinbound.createVehicleDID": {
+  "value": 78068,
+  "shown": "78,068",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#6"
+ },
+ "http.factor": {
+  "value": "2–2.5",
+  "shown": "2–2.5",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#39"
+ },
+ "http.r3.erc1056.h50": {
+  "value": 202.881,
+  "shown": "203",
+  "source": "1_blockchain-identity/results/metrics-rpc/latest/scale.json",
+  "row": "#39"
+ },
+ "life.cvin.gas": {
+  "value": 2533978,
+  "shown": "2,533,978",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.cvin.newslots": {
+  "value": 81,
+  "shown": "81",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc1056.gas": {
+  "value": 1050787,
+  "shown": "1,050,787",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc1056.newslots": {
+  "value": 8,
+  "shown": "8",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc1056w.gas": {
+  "value": 1025381,
+  "shown": "1,025,381",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc1056w.newslots": {
+  "value": 9,
+  "shown": "9",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc1155.gas": {
+  "value": 1150981,
+  "shown": "1,150,981",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc1155.newslots": {
+  "value": 18,
+  "shown": "18",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc4337.gas": {
+  "value": 2221290,
+  "shown": "2,221,290",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc4337.newslots": {
+  "value": 37,
+  "shown": "37",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc721.gas": {
+  "value": 2701239,
+  "shown": "2,701,239",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc721.newslots": {
+  "value": 92,
+  "shown": "92",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc725.gas": {
+  "value": 3155103,
+  "shown": "3,155,103",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc725.newslots": {
+  "value": 83,
+  "shown": "83",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc725xy.gas": {
+  "value": 2956507,
+  "shown": "2,956,507",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc725xy.newslots": {
+  "value": 38,
+  "shown": "38",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc735.gas": {
+  "value": 5369010,
+  "shown": "5,369,010",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.erc735.newslots": {
+  "value": 145,
+  "shown": "145",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.lsp8.gas": {
+  "value": 1505258,
+  "shown": "1,505,258",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.lsp8.newslots": {
+  "value": 42,
+  "shown": "42",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#35"
+ },
+ "life.ratio.721": {
+  "value": 2.570681784224586,
+  "shown": "2.57×",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#30"
+ },
+ "life.ratio.725": {
+  "value": 3.0026094727095023,
+  "shown": "3.00×",
+  "source": "1_blockchain-identity/results/metrics/latest/lifecycle.json",
+  "row": "#30"
+ },
+ "m0.resolve.ethr.cold": {
+  "value": 0.0089,
+  "shown": "0.0089",
+  "source": "docs/figures/resolution_latency_M0.json",
+  "row": "—"
+ },
+ "parity.mobi.birth.gas": {
+  "value": 398298,
+  "shown": "398,298",
+  "source": "cv2x-testbed/results/lifecycle_parity.json",
+  "row": "#33"
+ },
+ "parity.mobi.birth.median": {
+  "value": 17.689009,
+  "shown": "17.69",
+  "source": "cv2x-testbed/results/lifecycle_parity.json",
+  "row": "#33"
+ },
+ "pki.P0.25": {
+  "value": 98,
+  "shown": "98",
+  "source": "cv2x-testbed/results/pki_vs_erc1056.json",
+  "row": "#21"
+ },
+ "pki.P0.5": {
+  "value": 197,
+  "shown": "197",
+  "source": "cv2x-testbed/results/pki_vs_erc1056.json",
+  "row": "#21"
+ },
+ "pki.P1.0": {
+  "value": 395,
+  "shown": "395",
+  "source": "cv2x-testbed/results/pki_vs_erc1056.json",
+  "row": "#21"
+ },
+ "pki.verify.median": {
+  "value": 0.25293699999999997,
+  "shown": "0.253",
+  "source": "cv2x-testbed/results/pki_vs_erc1056.json",
+  "row": "#21"
+ },
+ "pki.verify.p95": {
+  "value": 0.32867004999999994,
+  "shown": "0.329",
+  "source": "cv2x-testbed/results/pki_vs_erc1056.json",
+  "row": "#21"
+ },
+ "probe.t_chain": {
+  "value": 2.7579040000000004,
+  "shown": "2.76",
+  "source": "cv2x-testbed/results/freshness_k_probe.json",
+  "row": "#37"
+ },
+ "probe.t_local": {
+  "value": 0.5398655,
+  "shown": "0.54",
+  "source": "cv2x-testbed/results/freshness_k_probe.json",
+  "row": "#37"
+ },
+ "pstar.extrap": {
+  "value": 609,
+  "shown": "609",
+  "source": "docs/LATENCY_BUDGET.md",
+  "row": "#26"
+ },
+ "sec.cells": {
+  "value": 54,
+  "shown": "54",
+  "source": "4_comparison-framework/security-analysis/results/attack_results.csv",
+  "row": "#28"
+ },
+ "sec.col0.total": {
+  "value": "4/4",
+  "shown": "4/4",
+  "source": "4_comparison-framework/security-analysis/results/attack_results.csv",
+  "row": "#28"
+ },
+ "sec.col1.total": {
+  "value": "9/9",
+  "shown": "9/9",
+  "source": "4_comparison-framework/security-analysis/results/attack_results.csv",
+  "row": "#28"
+ },
+ "sec.col2.total": {
+  "value": "8/8",
+  "shown": "8/8",
+  "source": "4_comparison-framework/security-analysis/results/attack_results.csv",
+  "row": "#28"
+ },
+ "sec.col3.total": {
+  "value": "9/9",
+  "shown": "9/9",
+  "source": "4_comparison-framework/security-analysis/results/attack_results.csv",
+  "row": "#28"
+ },
+ "sec.col4.total": {
+  "value": "9/9",
+  "shown": "9/9",
+  "source": "4_comparison-framework/security-analysis/results/attack_results.csv",
+  "row": "#28"
+ },
+ "sec.col5.total": {
+  "value": "4/4",
+  "shown": "4/4",
+  "source": "4_comparison-framework/security-analysis/results/attack_results.csv",
+  "row": "#28"
+ },
+ "sec.defended": {
+  "value": 43,
+  "shown": "43",
+  "source": "4_comparison-framework/security-analysis/results/attack_results.csv",
+  "row": "#28"
+ },
+ "sec.na": {
+  "value": 11,
+  "shown": "11",
+  "source": "4_comparison-framework/security-analysis/results/attack_results.csv",
+  "row": "#28"
+ },
+ "sec.total": {
+  "value": "43/43",
+  "shown": "43/43",
+  "source": "4_comparison-framework/security-analysis/results/attack_results.csv",
+  "row": "#28"
+ },
+ "span.4337": {
+  "value": 759088,
+  "shown": "759k",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "span.contract": {
+  "value": [
+   519384,
+   1680816
+  ],
+  "shown": "519k–1.68M",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "span.event": {
+  "value": [
+   52216,
+   52594
+  ],
+  "shown": "52,216–52,594",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "span.shared": {
+  "value": [
+   103913,
+   542378
+  ],
+  "shown": "104k–542k",
+  "source": "4_comparison-framework/results/gas_benchmark.json",
+  "row": "#25"
+ },
+ "t9.cache": {
+  "value": 65536,
+  "shown": "65,536",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "t9.max_age": {
+  "value": 1.0,
+  "shown": "1.0",
+  "source": "cv2x-testbed/results/freshness_k.json",
+  "row": "#32"
+ },
+ "tests.hardhat": {
+  "value": 369,
+  "shown": "369",
+  "source": "README.md",
+  "row": "status"
+ },
+ "tests.python": {
+  "value": 358,
+  "shown": "358",
+  "source": "README.md",
+  "row": "status"
+ },
+ "tests.total": {
+  "value": 739,
+  "shown": "739",
+  "source": "README.md",
+  "row": "status"
+ },
+ "v2v.attacks_per_run": {
+  "value": 5,
+  "shown": "5",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.failures": {
+  "value": 150,
+  "shown": "150",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.margin": {
+  "value": 654.4502617801047,
+  "shown": "≈650×",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.pki.warm": {
+  "value": 0.0939,
+  "shown": "0.094",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.runs": {
+  "value": 30,
+  "shown": "30",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.ssi.P0.25": {
+  "value": 163,
+  "shown": "163",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.ssi.P0.5": {
+  "value": 327,
+  "shown": "327",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.ssi.P1.0": {
+  "value": 654,
+  "shown": "654",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.ssi.cold": {
+  "value": 0.3991,
+  "shown": "0.399",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.ssi.warm": {
+  "value": 0.1528,
+  "shown": "0.153",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.ssi.warm.hi": {
+  "value": 0.1538,
+  "shown": "0.154",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.ssi.warm.lo": {
+  "value": 0.1513,
+  "shown": "0.151",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "v2v.verified": {
+  "value": 1650318,
+  "shown": "1,650,318",
+  "source": "cv2x-testbed/sumo/results/v2v_latency_stats.json",
+  "row": "#27"
+ },
+ "w3c.checks": {
+  "value": 44,
+  "shown": "44",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#4"
+ },
+ "w3c.ext": {
+  "value": "335/336",
+  "shown": "335/336",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#24"
+ },
+ "w3c.fail": {
+  "value": 2,
+  "shown": "2",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#4"
+ },
+ "w3c.floor": {
+  "value": 93.0,
+  "shown": "93.0%",
+  "source": "README.md",
+  "row": "status"
+ },
+ "w3c.partial": {
+  "value": 1,
+  "shown": "1",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#4"
+ },
+ "w3c.pass": {
+  "value": 41,
+  "shown": "41",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#4"
+ },
+ "w3c.score": {
+  "value": 94.3,
+  "shown": "94.3%",
+  "source": "docs/MEASUREMENT_CONDITIONS.md",
+  "row": "#4"
+ }
+}

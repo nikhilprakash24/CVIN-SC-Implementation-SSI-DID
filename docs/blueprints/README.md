@@ -12,12 +12,15 @@ Engineering-drawing views of the vehicle-identity system, from the primitives up
 | `SECURITY_GUARANTEE_INHERITANCE.md` | Why an identity record inherits the ledger's security, and where that stops |
 | `INTEGRATION.md` | Where each sheet goes in the thesis, the docs and the defence |
 | `AUDIT_REV_B.md` | P1 number audit: 17 corrections, Rev A → Rev B |
+| `AUDIT_REV_C.md` | P2 data binding: every value read from the results of record, CI drift check |
+| `data.py`, `data.lock.json` | The data layer and the accepted value of each of its 169 keys |
 
 The complementary exploratory set, which Claude initiated and the author did not direct, is kept apart in `docs/figures/x_series/`.
 
 ## Regenerate
 
 ```bash
+python3 docs/blueprints/make_blueprints.py --check    # data drift / stale SVG check (CI runs this)
 python3 docs/blueprints/make_blueprints.py            # SVG → docs/blueprints/sheets/
 NODE_PATH=/opt/node-tools/node_modules node docs/blueprints/render_png.js   # PNG via Chromium
 ```

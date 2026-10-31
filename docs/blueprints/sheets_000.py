@@ -1,5 +1,6 @@
 """000-series: index and general arrangement."""
 from bplib import *  # noqa: F401,F403
+from data import D, raw, lens1, lens2  # noqa: E402  (P2: every measured value comes from data.py)
 
 INDEX = [
     ("BP-000", "Drawing index, legend, how to read a sheet", "index"),
@@ -21,7 +22,7 @@ INDEX = [
     ("BP-304", "State machine — vehicle identity over its life", "UML state"),
     ("BP-401", "Threat model — adversaries, trust bulkheads, security goals", "hull integrity"),
     ("BP-402", "Security-guarantee inheritance — ledger gives, application adds", "inheritance ladder"),
-    ("BP-403", "Attack matrix — 54 cells, 43/43 applicable defended", "matrix"),
+    ("BP-403", "Attack matrix — " + D("sec.cells") + " cells, " + D("sec.total") + " applicable defended", "matrix"),
     ("BP-501", "Gas ladder — create-identity cost, ten substrates", "instrument panel"),
     ("BP-502", "Latency budget — J2945/1, P*(f), freshness-k curve", "instrument panel"),
     ("BP-601", "Deployment and test harness — the shipyard", "SV-1 / wiring"),
@@ -49,7 +50,7 @@ def bp000():
     y += 24; s.line(lx, y, lx + 90, y, sw=1.2, dash="6,5"); s.text(lx + 100, y + 4, "off-chain, untrusted, or adversary-reachable flow", size=11)
     y += 24; s.arrow(lx, y, lx + 90, y); s.text(lx + 100, y + 4, "message / call, numbered in sequence sheets", size=11)
     y += 24; s.balloon(3, lx + 45, y); s.text(lx + 100, y + 4, "balloon — part number, resolved in the PARTS LIST", size=11)
-    y += 28; s.rect(lx, y - 10, 90, 20, fill=GROUND_DK, sw=1.0); s.text(lx + 45, y + 4, "52,594 #25", size=10, anchor="middle", mono=True, color=ACCENT)
+    y += 28; s.rect(lx, y - 10, 90, 20, fill=GROUND_DK, sw=1.0); s.text(lx + 45, y + 4, "" + D("gas.ERC-1056.createIdentity") + " #25", size=10, anchor="middle", mono=True, color=ACCENT)
     s.text(lx + 100, y + 4, "measured value with its claim-register row", size=11)
     y += 28; s.hatch_rect(lx, y - 10, 90, 20); s.text(lx + 100, y + 4, "hatched — out of scope / not implemented / n/a", size=11)
     y += 28; s.rect(lx, y - 10, 90, 20, stroke=WARN, sw=1.4); s.text(lx + 100, y + 4, "adversary / attack / failure", size=11, color=WARN)
@@ -79,7 +80,7 @@ LAYERS = [
     # (deck, name, contents, what it supplies upward)
     ("L6", "APPLICATION", "vehicle · owner wallet · issuer portals (DMV, insurer, service centre) · V2V BSM at 10 Hz", "SAE J2945/1 budget: 100 ms interval, identity share f·100 ms"),
     ("L5", "SSI LAYER (W3C)", "DID resolver (4 methods) · VC issuer / holder / verifier · selective disclosure · revocation registry · MOBI VID I/II", "T4 verifier correctness · T2 issuer honesty at t=0"),
-    ("L4", "IDENTITY SUBSTRATE", "nine standards + MOBI VID registry · basic digital-ID set F1–F12 · 18 catalogue ops", "G1–G4 authorization barriers (43/43 defended, #28)"),
+    ("L4", "IDENTITY SUBSTRATE", "nine standards + MOBI VID registry · basic digital-ID set F1–F12 · 18 catalogue ops", "G1–G4 authorization barriers (" + D("sec.total") + " defended, #28)"),
     ("L3", "EXECUTION (EVM)", "deterministic state machine · gas metering · SSTORE / SLOAD / LOG / CALL · ecrecover precompile", "faithful execution; exact, deterministic cost"),
     ("L2", "CONSENSUS + LEDGER", "block production · finality · immutable history · fee market · the same ledger that settles value", "T1 chain integrity (the inherited guarantee)"),
     ("L1", "NETWORK + PEOPLE", "p2p gossip · validators / operators · stake and governance · client diversity", "liveness · honest-majority / stake-majority"),

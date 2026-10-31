@@ -1,17 +1,18 @@
 """100-series: primitives and engines (the anchor sheets)."""
 from bplib import *  # noqa: F401,F403
+from data import D, raw, lens1, lens2  # noqa: E402  (P2: every measured value comes from data.py)
 
 CREATE_GAS = [  # register #25, re-executed 2026-10-04, M1 cancun
-    ("CVIN-Combined", 52216, "shared registry · event log + claims"),
-    ("ERC-1056", 52594, "shared registry · event log"),
-    ("ERC-1155", 103913, "shared · soulbound balances"),
-    ("LSP8", 149615, "shared collection · bytes32 token (minimal)"),
-    ("MOBI-VID-V2", 299143, "application profile · birth anchor"),
-    ("ERC-725", 519384, "contract per identity · key map"),
-    ("ERC-721", 542378, "shared · token = identity, rich struct"),
-    ("ERC-4337", 759088, "account per identity (minimal EntryPoint)"),
-    ("ERC-735", 1535776, "contract per identity · claim store"),
-    ("ERC-725xy", 1680816, "contract per identity · X executor + Y store"),
+    ("CVIN-Combined", raw("gas.CVIN-Combined.createIdentity"), "shared registry · event log + claims"),
+    ("ERC-1056", raw("gas.ERC-1056.createIdentity"), "shared registry · event log"),
+    ("ERC-1155", raw("gas.ERC-1155.createIdentity"), "shared · soulbound balances"),
+    ("LSP8", raw("gas.LSP8.createIdentity"), "shared collection · bytes32 token (minimal)"),
+    ("MOBI-VID-V2", raw("gas.MOBI-VID-V2.createIdentity"), "application profile · birth anchor"),
+    ("ERC-725", raw("gas.ERC-725.createIdentity"), "contract per identity · key map"),
+    ("ERC-721", raw("gas.ERC-721.createIdentity"), "shared · token = identity, rich struct"),
+    ("ERC-4337", raw("gas.ERC-4337.createIdentity"), "account per identity (minimal EntryPoint)"),
+    ("ERC-735", raw("gas.ERC-735.createIdentity"), "contract per identity · claim store"),
+    ("ERC-725xy", raw("gas.ERC-725xy.createIdentity"), "contract per identity · X executor + Y store"),
 ]
 
 
@@ -63,7 +64,7 @@ def bp101():
         if i < len(steps) - 1:
             s.arrow(x + 150, by + 48, x + 168, by + 48, head=7)
         x += 168
-    s.text(bx, by + 100, "Identical on-chain (Solidity ecrecover, 3,000 gas) and off-chain (coincurve recovery, 0.153 ms warm verify #27).", size=10, color=ACCENT, mono=True)
+    s.text(bx, by + 100, "Identical on-chain (Solidity ecrecover, 3,000 gas) and off-chain (coincurve recovery, " + D("v2v.ssi.warm") + " ms warm verify #27).", size=10, color=ACCENT, mono=True)
     # privacy sub-assembly
     px, py = 560, 585
     s.section_label(px, py, "DETAIL B — VIN PRIVACY SUB-ASSEMBLY (MOBI VID I, see BP-204)")
@@ -96,8 +97,8 @@ def bp102():
                      (4, "calldata", "4 gas/zero byte, 16/non-zero; part of the 21,000+ intrinsic"),
                      (5, "SLOAD", "2,100 cold / 100 warm; the read path a verifier pays"),
                      (6, "CREATE (deploy)", "32,000 + 200/code byte; contract-per-identity standards pay it per vehicle"),
-                     (7, "CALL / STATICCALL", "external call; ERC-4337 EntryPoint indirection = +46,830 gas/op (#25)"),
-                     (8, "ecrecover precompile", "3,000 gas; attestEvent fix 121,110 → 192,718 (July); 192,671 current build (#28)"),
+                     (7, "CALL / STATICCALL", "external call; ERC-4337 EntryPoint indirection = +" + D("gas.4337.indirection") + " gas/op (#25)"),
+                     (8, "ecrecover precompile", "3,000 gas; attestEvent fix " + D("attest.before") + " → " + D("attest.july") + " (July); " + D("attest.now") + " current build (#28)"),
                      (9, "msg.sender / block.timestamp", "authorization and TTL inputs; zero cost"),
                      (10, "tx intrinsic", "21,000 gas base per transaction; txCount matters (U4 on ERC-1056 = 2 tx)")],
               parts_width=700,
@@ -105,8 +106,8 @@ def bp102():
                     "1_blockchain-identity/benchmarks/lib/MetricsCollector.js"])
     # a transaction anatomy drawing
     x, y = 560, 150
-    s.section_label(x, y, "DETAIL A — ANATOMY OF ONE REGISTRY TRANSACTION (setAttribute on ERC-1056, 35,494 gas #25; split is illustrative, E)")
-    segs = [("intrinsic 21,000", 21000, 10), ("calldata", 1500, 4), ("auth: SLOAD owner", 2100, 5), ("LOG3 event", 3000, 3), ("SSTORE changed", 2900, 2), ("exec / memory", 4994, 9)]
+    s.section_label(x, y, "DETAIL A — ANATOMY OF ONE REGISTRY TRANSACTION (setAttribute on ERC-1056, " + D("gas.ERC-1056.updateAttribute") + " gas #25; split is illustrative, E)")
+    segs = [("intrinsic 21,000", 21000, 10), ("calldata", 1500, 4), ("auth: SLOAD owner", 2100, 5), ("LOG3 event", 3000, 3), ("SSTORE changed", 2900, 2), ("exec / memory", raw("gas.ERC-1056.updateAttribute") - 30500, 9)]
     total = sum(g for _, g, _ in segs)
     xx = x
     width = 860
@@ -118,14 +119,14 @@ def bp102():
             s.text(xx + wseg / 2, y + 58, f"{g:,}", size=10, anchor="middle", mono=True, color=ACCENT)
         s.balloon(n, xx + wseg / 2, y + 84, r=10)
         xx += wseg
-    s.dim(x, y + 110, x + width, y + 110, "35,494 gas total (#25, gas_benchmark.json updateAttribute); segment split = E")
+    s.dim(x, y + 110, x + width, y + 110, "" + D("gas.ERC-1056.updateAttribute") + " gas total (#25, gas_benchmark.json updateAttribute); segment split = E")
     # cost classes
     cx, cy = 560, 300
-    s.section_label(cx, cy, "DETAIL B — WHY THE SUBSTRATES SPREAD 32× (BP-501): WHICH PRIMITIVE EACH DESIGN PAYS AT CREATE")
-    rows = [("event-log registry (ERC-1056, CVIN)", "③ LOG + ② one pointer", "no new slots for attributes", "52,2xx–52,5xx"),
-            ("shared token / balance (1155, LSP8, 721)", "① several new slots", "struct / history arrays", "104k–542k"),
-            ("contract per identity (725, 735, 725xy)", "⑥ CREATE per vehicle + ①", "code bytes × 200 + storage", "519k–1.68M"),
-            ("account abstraction (4337)", "⑥ CREATE + ⑦ CALL per op", "EntryPoint indirection", "759k (+46,830/op)")]
+    s.section_label(cx, cy, "DETAIL B — WHY THE SUBSTRATES SPREAD " + D("gas.create.spread") + " (BP-501): WHICH PRIMITIVE EACH DESIGN PAYS AT CREATE")
+    rows = [("event-log registry (ERC-1056, CVIN)", "③ LOG + ② one pointer", "no new slots for attributes", "" + D("span.event") + ""),
+            ("shared token / balance (1155, LSP8, 721)", "① several new slots", "struct / history arrays", "" + D("span.shared") + ""),
+            ("contract per identity (725, 735, 725xy)", "⑥ CREATE per vehicle + ①", "code bytes × 200 + storage", "" + D("span.contract") + ""),
+            ("account abstraction (4337)", "⑥ CREATE + ⑦ CALL per op", "EntryPoint indirection", "" + D("span.4337") + " (+" + D("gas.4337.indirection") + "/op)")]
     s.table(cx, cy + 14, [("DESIGN FAMILY", 300), ("PRIMITIVE PAID", 220), ("STATE LEFT BEHIND", 220), ("CREATE GAS #25", 140)], rows, size=10, lh=22)
     # gas schedule mini-table
     gx, gy = 560, 450
@@ -157,8 +158,8 @@ def bp103():
                      (9, "ecrecover (signed paths)", "signer == identityOwner; nonce++ (G3)"),
                      (10, "block.timestamp", "validTo = now + validity for ④ and ⑦")],
               parts_width=640,
-              refs=["1_blockchain-identity/contracts/ERC1056/EthereumDIDRegistry.sol", "CVINVehicleDIDRegistry.sol (VIN wrapper: createVehicleDID, 78,068 gas #25)",
-                    "create 52,594 · setAttribute 35,494 · addDelegate 54,831 · changeOwner 51,754 (all #25)"])
+              refs=["1_blockchain-identity/contracts/ERC1056/EthereumDIDRegistry.sol", "CVINVehicleDIDRegistry.sol (VIN wrapper: createVehicleDID, " + D("gas.vinbound.createVehicleDID") + " gas #6)",
+                    "create " + D("gas.ERC-1056.createIdentity") + " · setAttribute " + D("gas.ERC-1056.updateAttribute") + " · addDelegate " + D("gas.ERC-1056.addDelegateOrClaim") + " · changeOwner " + D("gas.ERC-1056.transferOwnership") + " (all #25)"])
     # engine block: storage on left, functions middle, events right
     x, y = 480, 150
     s.section_label(x, y, "SECTION A-A — STORAGE")
@@ -200,7 +201,7 @@ def bp103():
         s.text(px + 8, ly + 38, b, size=11, mono=True, weight="bold"); s.text(px + 8, ly + 54, f"{e} · {p}", size=9, mono=True, color=LINE_SOFT)
         s.arrow(px - 40 if i else bx + 120, ly + 42, px, ly + 42, head=7)
         px += 240
-    s.text(lx, ly + 90, "Resolver cost: hops = number of changes; eth_getLogs per hop. Measured read path at h=50: 203 ms median over HTTP RPC, over the J2945/1 budget (#39) — hence the cache on BP-302.", size=10, color=ACCENT, mono=True)
+    s.text(lx, ly + 90, "Resolver cost: hops = number of changes; eth_getLogs per hop. Measured read path at h=50: " + D("http.r3.erc1056.h50") + " ms median over HTTP RPC, over the J2945/1 budget (#39) — hence the cache on BP-302.", size=10, color=ACCENT, mono=True)
     # signed envelope
     sx, sy = 480, 560
     s.section_label(sx, sy, "DETAIL C — SIGNED (META-TX) ENVELOPE, ERC-1056 REFERENCE PATTERN")
@@ -233,7 +234,7 @@ def bp104():
               notes=["The canon (cvin-sandbox-v1.3, 2026-06-05) admits a substrate when all twelve pass. This repository keeps that gate and adds exact cost per function (BASIC_ID_SET_EXTENSION §2–3).",
                      "F-numbers F1–F4, F9–F12 are quoted as the branch documents give them; exact numbering of the canon archive is [B1] pending. Function names are exact.",
                      "Strict admission (every mapped op native): ERC-1056 pure, ERC-725, ERC-4337, CVIN-Combined. Others are measured with the gap carried as a finding, never excluded.",
-                     "No ERC provides F8 natively — the canon's structural finding; P1 realises it as a replay-protected anchor pattern (62,441 gas on the canon's O1 trace, non-comparable condition)."],
+                     "No ERC provides F8 natively — the canon's structural finding; P1 realises it as a replay-protected anchor pattern (" + D("canon.p1") + " gas on the canon's O1 trace, non-comparable condition)."],
               refs=["docs/BASIC_ID_SET_EXTENSION.md §1–§4 (mapping, coverage A6, reconciliation)", "docs/CVIN-DATA-COLLECTION-FRAMEWORK.md §2 (catalogue), §2.2c (P1, X1)",
                     "1_blockchain-identity/results/metrics/latest/tables/analysis_basic_set.md (A6, run of record)"])
     x, y = INNER[0] + 10, INNER[1] + 300
@@ -276,7 +277,7 @@ def bp105():
               notes=["Design rule: events are cheap (common path); safety-critical claims must be O(1) readable on-chain by another contract (a road-side unit cannot walk a log inside the EVM).",
                      "Claim signature is over the RAW digest keccak256(this, identity, topic, data): bound to this registry and this subject. Verified with ecrecover at ADD time, so getClaim is O(1) with no re-verification.",
                      "Issuer revocation is sticky (REVIEW_02 K-2): keccak256(issuer, digest) is recorded; re-anchoring the same signed content reverts. Claims do not advance changed[] (K-6).",
-                     "Cheapest create measured (52,216 gas #25) while keeping claims: the favourable corner of the frontier (H5)."],
+                     "Cheapest create measured (" + D("gas.CVIN-Combined.createIdentity") + " gas #25) while keeping claims: the favourable corner of the frontier (H5)."],
               parts=[(1, "identityOwner / changeOwner", "ERC-1056 semantics; the single gate for both halves"),
                      (2, "delegates + DIDDelegateChanged", "session keys with TTL (U2 / D1 / R4)"),
                      (3, "setAttribute → DIDAttributeChanged", "event-only attributes (U3 / D2 / P1)"),
@@ -344,15 +345,15 @@ def bp106():
     x0, y0 = INNER[0] + 10, INNER[1] + 110
     cw, ch = 290, 170
     cells = [
-        ("ERC-1056", 52594, "address is DID", "event log", ["owners", "changed", "delegates"], ["attrs (events)"], []),
-        ("CVIN-Combined", 52216, "address is DID", "event log + claims", ["owners", "changed", "delegates", "claims"], ["attrs (events)"], []),
-        ("ERC-1155", 103913, "address is DID", "soulbound balances", ["balances[type]", "vinHash maps"], [], ["delegates", "attributes"]),
-        ("LSP8", 149615, "token = keccak(VIN)", "per-token key/value", ["tokenOwner", "data[token][key]"], [], ["operators", "delegates"]),
-        ("ERC-721", 542378, "token = identity", "rich struct", ["owner", "metadata struct", "history[]", "service[]"], [], ["delegate TTL", "D2"]),
-        ("ERC-725", 519384, "contract / identity", "key map", ["keys[]", "key purposes", "owner"], [], ["execute (stub)"]),
-        ("ERC-4337", 759088, "account / identity", "storage + EntryPoint", ["owner", "guardian", "attributes"], ["userOp path ⑦"], ["bundler/paymaster"]),
-        ("ERC-735", 1535776, "contract / identity", "claim store", ["owner", "claims struct", "topic index"], [], ["delegates", "V1 anchor"]),
-        ("ERC-725xy", 1680816, "contract / identity", "X executor + Y store", ["owner", "data[key]", "execute"], [], ["delegates (no LSP6)"]),
+        ("ERC-1056", raw("gas.ERC-1056.createIdentity"), "address is DID", "event log", ["owners", "changed", "delegates"], ["attrs (events)"], []),
+        ("CVIN-Combined", raw("gas.CVIN-Combined.createIdentity"), "address is DID", "event log + claims", ["owners", "changed", "delegates", "claims"], ["attrs (events)"], []),
+        ("ERC-1155", raw("gas.ERC-1155.createIdentity"), "address is DID", "soulbound balances", ["balances[type]", "vinHash maps"], [], ["delegates", "attributes"]),
+        ("LSP8", raw("gas.LSP8.createIdentity"), "token = keccak(VIN)", "per-token key/value", ["tokenOwner", "data[token][key]"], [], ["operators", "delegates"]),
+        ("ERC-721", raw("gas.ERC-721.createIdentity"), "token = identity", "rich struct", ["owner", "metadata struct", "history[]", "service[]"], [], ["delegate TTL", "D2"]),
+        ("ERC-725", raw("gas.ERC-725.createIdentity"), "contract / identity", "key map", ["keys[]", "key purposes", "owner"], [], ["execute (stub)"]),
+        ("ERC-4337", raw("gas.ERC-4337.createIdentity"), "account / identity", "storage + EntryPoint", ["owner", "guardian", "attributes"], ["userOp path ⑦"], ["bundler/paymaster"]),
+        ("ERC-735", raw("gas.ERC-735.createIdentity"), "contract / identity", "claim store", ["owner", "claims struct", "topic index"], [], ["delegates", "V1 anchor"]),
+        ("ERC-725xy", raw("gas.ERC-725xy.createIdentity"), "contract / identity", "X executor + Y store", ["owner", "data[key]", "execute"], [], ["delegates (no LSP6)"]),
     ]
     for i, (name, gas, idm, stm, stored, emitted, missing) in enumerate(cells):
         cx = x0 + (i % 3) * (cw + 20)
@@ -370,7 +371,7 @@ def bp106():
             s.rect(cx + 150, yy, 130, 18, sw=1.0, dash="4,3"); s.text(cx + 156, yy + 13, em, size=9, mono=True); yy += 22
         for ms in missing:
             s.hatch_rect(cx + 150, yy, 130, 18); s.text(cx + 156, yy + 13, ms, size=9, mono=True, color=LINE_SOFT); yy += 22
-    s.text(x0, y0 + 3 * (ch + 18) + 10, "solid = stored (SSTORE) · dashed = emitted (LOG) · hatched = no primitive (n/a) · dark fill = cheapest family. Spread 52,216 → 1,680,816 = 32.2×.", size=10, mono=True, color=ACCENT)
+    s.text(x0, y0 + 3 * (ch + 18) + 10, "solid = stored (SSTORE) · dashed = emitted (LOG) · hatched = no primitive (n/a) · dark fill = cheapest family. Spread " + D("gas.CVIN-Combined.createIdentity") + " → " + D("gas.ERC-725xy.createIdentity") + " = " + D("gas.create.spread") + ".", size=10, mono=True, color=ACCENT)
     return s
 
 

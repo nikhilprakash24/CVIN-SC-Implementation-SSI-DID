@@ -1,12 +1,13 @@
 """300-series: operations — sequences (SV-10c) and the lifecycle state machine."""
 from bplib import *  # noqa: F401,F403
+from data import D, raw, lens1, lens2  # noqa: E402  (P2: every measured value comes from data.py)
 
 
 def bp301():
     s = Sheet("BP-301", "Sequence — vehicle birth registration", "SV-10c event trace: manufacturer issues, chain anchors, owner holds, DMV verifies (use case 1)",
               notes=["Every message is numbered; solid = on-chain transaction or trusted call, dashed = off-chain / untrusted transport.",
                      "Pass/fail in the use-case suite is computed: a forged or replayed birth certificate fails at message 12 (12/12 use cases; test_use_cases.py, no register row).",
-                     "MOBI-VID-V2 birth: 14.13 ms median (#33, M4 parity harness); gas 299,143 (#25 definition; #33 measures 398,298 under its own definition, never mix)."],
+                     "MOBI-VID-V2 birth: " + D("parity.mobi.birth.median") + " ms median (#33 file; the register text differs, see AUDIT_REV_C); gas " + D("gas.MOBI-VID-V2.createIdentity") + " (#25 definition; #33 measures " + D("parity.mobi.birth.gas") + " under its own definition, never mix)."],
               notes_width=1060,
               refs=["cv2x-testbed/scripts/test_use_cases.py — use case 1 (manufacturing & birth registration)", "2_w3c-ssi-layer/mobi-vid/birth_certificate.py · BP-204 (data flow) · BP-202 (verify pipeline)"])
     x0, y0, y1 = 100, 215, 820
@@ -22,7 +23,7 @@ def bp301():
     y = s.msg(X["VC ISSUER"], X["VC ISSUER"], y, 4, "contentHash = keccak256(signed VC)", self_call=True) + 30
     y = s.msg(X["VC ISSUER"], X["REGISTRY"], y, 5, "registerBirth(vehicle, vinHash, contentHash)", note="tx signed by manufacturer key; role MANUFACTURER") + 36
     y = s.msg(X["REGISTRY"], X["LEDGER"], y, 6, "SSTORE vinHash, birthCertHash, manufacturer; LOG", note="ordinary transaction: same validators, same finality as a value transfer") + 40
-    y = s.msg(X["LEDGER"], X["VC ISSUER"], y, 7, "receipt: gasUsed 299,143 (#25), block n", dash="6,4") + 32
+    y = s.msg(X["LEDGER"], X["VC ISSUER"], y, 7, "receipt: gasUsed " + D("gas.MOBI-VID-V2.createIdentity") + " (#25), block n", dash="6,4") + 32
     y = s.msg(X["VC ISSUER"], X["OWNER WALLET"], y, 8, "envelope {VC, disclosures, vinSalt, VIN ciphertext}", dash="6,4", note="off-chain delivery; nothing here is on the ledger") + 40
     y = s.msg(X["VERIFIER (DMV)"], X["OWNER WALLET"], y, 9, "challenge, domain", dash="6,4") + 30
     y = s.msg(X["OWNER WALLET"], X["VERIFIER (DMV)"], y, 10, "VP {VC, disclosures[S], challenge, domain}  [BP-203]", dash="6,4") + 30
@@ -37,8 +38,8 @@ def bp301():
 def bp302():
     s = Sheet("BP-302", "Sequence — V2V BSM verification at 10 Hz", "SV-10c: sender signs, receiver verifies from cache, refreshes chain state every k messages (freshness-k)",
               notes=["Budget: SAE J2945/1 fixes the BSM interval at 100 ms; the identity share is f·100 ms with f = 0.5 working assumption (LATENCY_BUDGET §1). P*(f) = floor(f·100 / t) neighbours.",
-                     "Measured: SSI warm verify 0.153 ms [0.151, 0.154], cold 0.399 ms, PKI 0.094 ms (#27, N=30, 1,650,318 verifications, 150 failures = 5 injected attacks × 30 runs, all rejected).",
-                     "Freshness-k sweep (#32): t_eff = 0.428 ms + 10.52 ms / k (full 4-RPC refresh); P*(0.5)=100 at k ≈ 146 (full refresh). One-call probe refresh 2.76 ms, but on the #37 host no finite k reaches P* = 100 (host-dependent knee). Revocation staleness ≤ k − 1 messages (≤ 14.5 s at k = 146, 10 Hz).",
+                     "Measured: SSI warm verify " + D("v2v.ssi.warm") + " ms [" + D("v2v.ssi.warm.lo") + ", " + D("v2v.ssi.warm.hi") + "], cold " + D("v2v.ssi.cold") + " ms, PKI " + D("v2v.pki.warm") + " ms (#27, N=" + D("v2v.runs") + ", " + D("v2v.verified") + " verifications, " + D("v2v.failures") + " failures = " + D("v2v.attacks_per_run") + " injected attacks × " + D("v2v.runs") + " runs, all rejected).",
+                     "Freshness-k sweep (#32): t_eff = " + D("fk.t_local") + " ms + " + D("fk.t_chain") + " ms / k (full 4-RPC refresh); P*(0.5)=100 at k ≈ " + D("fk.knee") + " (full refresh). One-call probe refresh " + D("probe.t_chain") + " ms, but on the #37 host no finite k reaches P* = 100 (host-dependent knee). Revocation staleness ≤ k − 1 messages (≤ 14.5 s at k = 146, 10 Hz).",
                      "Excluded: radio / MAC / PHY latency; mobility is simulated. Identity verification is not the V2V bottleneck once the chain is off the hot path (H3)."],
               notes_width=1060,
               refs=["cv2x-testbed/sumo/sumo_identity_integration.py --simulate · run_v2v_stats.py (N=30) · results/freshness_k*.md", "docs/LATENCY_BUDGET.md §2–§4 · cv2x-testbed/identity/freshness.py (T-9 policy) · erc1056_provider.py (refresh_every=k)"])
@@ -52,26 +53,26 @@ def bp302():
     y = s.msg(X["SENDER VEHICLE"], X["SENDER VEHICLE"], y, 1, "BSM{pos, speed, heading, t}; sig = ECDSA(sk_delegate, keccak(BSM))", self_call=True) + 26
     y = s.msg(X["SENDER VEHICLE"], X["RADIO (sim)"], y, 2, "broadcast BSM + sig + did  (every 100 ms)", dash="6,4") + 28
     y = s.msg(X["RADIO (sim)"], X["RECEIVER VERIFIER"], y, 3, "receive (A1 may replay / inject here)", dash="6,4") + 30
-    y = s.msg(X["RECEIVER VERIFIER"], X["RECEIVER VERIFIER"], y, 4, "T-9 freshness: |t − now| ≤ 1.0 s; replay cache 65,536", self_call=True) + 26
+    y = s.msg(X["RECEIVER VERIFIER"], X["RECEIVER VERIFIER"], y, 4, "T-9 freshness: |t − now| ≤ " + D("t9.max_age") + " s; replay cache " + D("t9.cache") + "", self_call=True) + 26
     y = s.msg(X["RECEIVER VERIFIER"], X["KEY / REVOCATION CACHE"], y, 5, "lookup(did)") + 26
     # branch box
     bx, by = x0 + 560, y
     s.rect(bx, by, 820, 150, sw=1.4, dash="6,4"); s.text(bx + 8, by + 14, "alt  [msg count mod k == 0  or  miss]  — refresh", size=10, mono=True, color=ACCENT)
     y = by + 36
-    y = s.msg(X["KEY / REVOCATION CACHE"], X["LEDGER (RPC)"], y, 6, "changed(did) probe (1 RPC, 2.76 ms #37) or full resolve (4 RPC, 10.5 ms #32)") + 28
+    y = s.msg(X["KEY / REVOCATION CACHE"], X["LEDGER (RPC)"], y, 6, "changed(did) probe (1 RPC, " + D("probe.t_chain") + " ms #37) or full resolve (4 RPC, " + D("fk.t_chain1") + " ms #32)") + 28
     y = s.msg(X["LEDGER (RPC)"], X["KEY / REVOCATION CACHE"], y, 7, "head block / events → key, validTo, revocation", dash="6,4") + 24
     s.line(bx, y + 4, bx + 820, y + 4, stroke=LINE_SOFT, sw=0.8, dash="3,3"); s.text(bx + 8, y + 18, "[else] — hit: 0 RPC", size=10, mono=True, color=ACCENT)
     y = by + 150 + 30
     y = s.msg(X["KEY / REVOCATION CACHE"], X["RECEIVER VERIFIER"], y, 8, "key, valid? (validTo > now)", dash="6,4") + 28
-    y = s.msg(X["RECEIVER VERIFIER"], X["RECEIVER VERIFIER"], y, 9, "ecrecover(keccak(BSM), sig) == key → accept  (0.153 ms warm #27)", self_call=True) + 26
+    y = s.msg(X["RECEIVER VERIFIER"], X["RECEIVER VERIFIER"], y, 9, "ecrecover(keccak(BSM), sig) == key → accept  (" + D("v2v.ssi.warm") + " ms warm #27)", self_call=True) + 26
     # instrument strip
     ix, iy = 100, y1 + 20
-    rows = [("per-neighbour cost t", "0.153 ms warm / 0.399 cold", "#27"), ("t_eff(k) full refresh", "0.428 + 10.52 / k  ms", "#32 (±7 %)"), ("k for P*(0.5) = 100", "≈ 146 full; none on #37 host", "#32 / #37"),
-            ("P*(0.5) at k = ∞", "110 (mean) · 609 extrap. (#26)", "#32, #26"), ("staleness bound", "≤ k − 1 msgs; 14.5 s at k=146", "#32")]
+    rows = [("per-neighbour cost t", "" + D("v2v.ssi.warm") + " ms warm / " + D("v2v.ssi.cold") + " cold", "#27"), ("t_eff(k) full refresh", "" + D("fk.t_local") + " + " + D("fk.t_chain") + " / k  ms", "#32 (±" + D("fk.fit_pct") + " %)"), ("k for P*(0.5) = 100", "≈ " + D("fk.knee") + " full; none on #37 host", "#32 / #37"),
+            ("P*(0.5) at k = ∞", "" + D("fk.inf.P0.5") + " (mean) · " + D("pstar.extrap") + " extrap. (#26)", "#32, #26"), ("staleness bound", "≤ k − 1 msgs; " + D("fk.knee.stale_s") + " at k=" + D("fk.knee") + "", "#32")]
     s.table(ix, iy, [("QUANTITY", 220), ("VALUE", 300), ("ROW", 120)], rows, size=10, lh=19)
-    s.text(ix + 660, iy + 20, "Uncached (k = 1): 10.9 ms, P*(0.5) = 4", size=10, mono=True, color=WARN)
+    s.text(ix + 660, iy + 20, "Uncached (k = 1): " + D("fk.1.median") + " ms, P*(0.5) = " + D("fk.1.P0.5") + "", size=10, mono=True, color=WARN)
     s.text(ix + 660, iy + 36, "→ not viable even in sparse traffic.", size=10, mono=True, color=WARN)
-    s.text(ix + 660, iy + 60, "Cached (k → ∞): 0.45 ms mean, P*(0.5) = 110", size=10, mono=True, color=OK)
+    s.text(ix + 660, iy + 60, "Cached (k → ∞): " + D("fk.inf.mean") + " ms mean, P*(0.5) = " + D("fk.inf.P0.5") + "", size=10, mono=True, color=OK)
     s.text(ix + 660, iy + 76, "→ viable in dense traffic.", size=10, mono=True, color=OK)
     s.text(ix + 660, iy + 100, "Cost lives at issuance, not at", size=10, mono=True, color=ACCENT)
     s.text(ix + 660, iy + 114, "verification (COMPOSITION Part I).", size=10, mono=True, color=ACCENT)
