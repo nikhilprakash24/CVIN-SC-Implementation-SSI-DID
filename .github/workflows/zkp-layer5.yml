@@ -89,3 +89,5 @@ jobs:
           5_zkp-agent-identity/hh-artifacts/build-info 5_zkp-agent-identity/contracts/
     - name: Contract bytecode unchanged unless the manifest is updated (comment-only edits pass)
       run: cd .. && node tools/bytecode_manifest.js --check
+    - name: Contract API reference current with the NatSpec (docs/smart-contracts/api/)
+      run: cd .. && node tools/make_contract_api_docs.js --check

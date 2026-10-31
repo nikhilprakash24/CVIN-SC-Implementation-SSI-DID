@@ -1,4 +1,10 @@
+> **Stale description.** The contract here has the same code as `1_blockchain-identity/contracts/ERC725/CVIN_DID_ERC725.sol`,
+> which is a stub: `execute` only emits an event and `approve` is empty. It is not the functional ERC-725
+> this README describes. For a real ERC-725X/Y account see `contracts/ERC725xy/CVINVehicleERC725XY.sol`;
+> reference: `docs/smart-contracts/04-account-claim-identity-erc725-735-4337-combined.md`.
+
 Overview
+
 This repository contains the ERC725 base contract named "CVIN_SCBasedAccOrID-DID-ERC725Basic," which is designed for creating decentralized identities (DIDs) and smart contract-based accounts. ERC725 provides a flexible, secure, and extensible way to manage identities on the blockchain.
 
 Key Features and Functionalities

@@ -1,4 +1,12 @@
 
+
+> **Stale research copy: do not use or deploy.** These files predate OpenZeppelin 5 and are not compiled by
+> any Hardhat config. `contracts/CVIN_NFT_DID_ERC721_monolithic.sol` (and `_alt`) still has the balance bug fixed
+> in the live contract: `_balances` moves by `tokenId` instead of 1 (lines 150, 161, 173). The toll copy also
+> lacks the toll scenario. The live, tested contracts are in `1_blockchain-identity/contracts/ERC721/`; see
+> `docs/smart-contracts/03-token-standards-erc721-erc1155-lsp8.md` (section "Duplicates / stale copies") and the
+> regression test `test/L2-identity-system/per-option/ERC721/balanceCountsTokens.regression.test.js`.
+
 # Implementation III: ERC-721 Non-Fungible Token Standard
 
 ## Overview

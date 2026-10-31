@@ -12,6 +12,10 @@ Two layers of annotation:
   snarkjs-generated, hash-pinned `Groth16Verifier.sol`, and the uncompiled `_research-copies/`.
 - **These docs:** the long version, with standards fidelity, usage maps, Mermaid diagrams and ethers examples.
 
+The **[API reference](api/README.md)** (one page per source, generated from the NatSpec by
+`tools/make_contract_api_docs.js` and checked in CI) lists every public function, event, error,
+modifier and state variable with its parameters.
+
 Start with [00 – Architecture](00-architecture.md): the overall diagram, the standards → contracts
 matrix, the NatSpec conventions, and how the comments-only claim was verified (bytecode is identical
 once the metadata is stripped).
