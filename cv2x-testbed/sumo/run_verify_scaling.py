@@ -59,8 +59,11 @@ OUT_JSON = (REPO_ROOT / "4_comparison-framework" / "results"
             / "scaling_verify.json")
 
 # Import the REAL SSI identity layer without running the main simulation.
+# Imported from its own directory, not as `sumo.…`: the eclipse-sumo wheel
+# installs a top-level `sumo` package that would shadow this folder.
 sys.path.insert(0, str(CV2X_ROOT))
-from sumo.sumo_identity_integration import SSIIdentityLayer  # noqa: E402
+sys.path.insert(0, str(SUMO_DIR))
+from sumo_identity_integration import SSIIdentityLayer  # noqa: E402
 
 P_VALUES = [5, 10, 20, 40, 80]
 P_MAX = max(P_VALUES)

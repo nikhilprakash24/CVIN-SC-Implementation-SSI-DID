@@ -1,63 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- SUMO Road Network: Highway + Intersection -->
-<net version="1.20" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/net_file.xsd">
 
-    <location netOffset="0.00,0.00" convBoundary="0.00,0.00,5000.00,1000.00" origBoundary="-10000.00,-10000.00,10000.00,10000.00" projParameter="!"/>
+<!-- generated on 2026-10-15T05:40:09.689228+00:00 by Eclipse SUMO netconvert 1.28.0
+<netconvertConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
 
-    <!-- Edge Types -->
-    <type id="highway" priority="13" numLanes="3" speed="29.06"/>  <!-- 65 mph -->
-    <type id="urban" priority="9" numLanes="2" speed="13.89"/>     <!-- 31 mph -->
+    <input>
+        <node-files value="highway_intersection.nod.xml"/>
+        <edge-files value="highway_intersection.edg.xml"/>
+    </input>
 
-    <!-- Nodes (Junctions) -->
-    <node id="start_west" type="priority" x="0.00" y="500.00"/>
-    <node id="intersection" type="traffic_light" x="2500.00" y="500.00"/>
-    <node id="end_east" type="priority" x="5000.00" y="500.00"/>
-    <node id="start_north" type="priority" x="2500.00" y="1000.00"/>
-    <node id="start_south" type="priority" x="2500.00" y="0.00"/>
+    <output>
+        <output-file value="../highway_intersection.net.xml"/>
+    </output>
 
-    <!-- Edges (Roads) -->
-    <!-- Main Highway (East-West) -->
-    <edge id="highway_west" from="start_west" to="intersection" type="highway" priority="13">
-        <lane id="highway_west_0" index="0" speed="29.06" length="2500.00"/>
-        <lane id="highway_west_1" index="1" speed="29.06" length="2500.00"/>
-        <lane id="highway_west_2" index="2" speed="29.06" length="2500.00"/>
+    <tls_building>
+        <tls.default-type value="static"/>
+    </tls_building>
+
+    <junctions>
+        <no-turnarounds value="true"/>
+    </junctions>
+
+</netconvertConfiguration>
+-->
+
+<net version="1.20" junctionCornerDetail="5" limitTurnSpeed="5.50" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/net_file.xsd">
+
+    <location netOffset="0.00,0.00" convBoundary="0.00,0.00,5000.00,1000.00" origBoundary="0.00,0.00,5000.00,1000.00" projParameter="!"/>
+
+    <edge id=":intersection_0" function="internal">
+        <lane id=":intersection_0_0" index="0" speed="13.89" length="17.60" shape="2495.20,504.00 2495.20,486.40"/>
+        <lane id=":intersection_0_1" index="1" speed="13.89" length="17.60" shape="2498.40,504.00 2498.40,486.40"/>
+    </edge>
+    <edge id=":intersection_2" function="internal">
+        <lane id=":intersection_2_0" index="0" speed="7.33" length="11.73" shape="2498.40,504.00 2498.75,500.15 2499.80,497.40 2501.55,495.75 2504.00,495.20"/>
+        <lane id=":intersection_2_1" index="1" speed="6.51" length="9.03" shape="2498.40,504.00 2498.75,501.55 2499.80,499.80 2501.55,498.75 2504.00,498.40"/>
+    </edge>
+    <edge id=":intersection_4" function="internal">
+        <lane id=":intersection_4_0" index="0" speed="6.51" length="9.03" shape="2489.60,492.00 2492.05,491.65 2493.80,490.60 2494.85,488.85 2495.20,486.40"/>
+    </edge>
+    <edge id=":intersection_5" function="internal">
+        <lane id=":intersection_5_0" index="0" speed="29.06" length="14.40" shape="2489.60,492.00 2504.00,492.00"/>
+        <lane id=":intersection_5_1" index="1" speed="29.06" length="14.40" shape="2489.60,495.20 2504.00,495.20"/>
+        <lane id=":intersection_5_2" index="2" speed="29.06" length="14.40" shape="2489.60,498.40 2504.00,498.40"/>
     </edge>
 
-    <edge id="highway_east" from="intersection" to="end_east" type="highway" priority="13">
-        <lane id="highway_east_0" index="0" speed="29.06" length="2500.00"/>
-        <lane id="highway_east_1" index="1" speed="29.06" length="2500.00"/>
-        <lane id="highway_east_2" index="2" speed="29.06" length="2500.00"/>
+    <edge id="highway_east" from="intersection" to="end_east" priority="13">
+        <lane id="highway_east_0" index="0" speed="29.06" length="2496.00" shape="2504.00,492.00 5000.00,492.00"/>
+        <lane id="highway_east_1" index="1" speed="29.06" length="2496.00" shape="2504.00,495.20 5000.00,495.20"/>
+        <lane id="highway_east_2" index="2" speed="29.06" length="2496.00" shape="2504.00,498.40 5000.00,498.40"/>
+    </edge>
+    <edge id="highway_west" from="start_west" to="intersection" priority="13">
+        <lane id="highway_west_0" index="0" speed="29.06" length="2489.60" shape="0.00,492.00 2489.60,492.00"/>
+        <lane id="highway_west_1" index="1" speed="29.06" length="2489.60" shape="0.00,495.20 2489.60,495.20"/>
+        <lane id="highway_west_2" index="2" speed="29.06" length="2489.60" shape="0.00,498.40 2489.60,498.40"/>
+    </edge>
+    <edge id="north_approach" from="start_north" to="intersection" priority="9">
+        <lane id="north_approach_0" index="0" speed="13.89" length="496.00" shape="2495.20,1000.00 2495.20,504.00"/>
+        <lane id="north_approach_1" index="1" speed="13.89" length="496.00" shape="2498.40,1000.00 2498.40,504.00"/>
+    </edge>
+    <edge id="south_approach" from="intersection" to="end_south" priority="9">
+        <lane id="south_approach_0" index="0" speed="13.89" length="486.40" shape="2495.20,486.40 2495.20,0.00"/>
+        <lane id="south_approach_1" index="1" speed="13.89" length="486.40" shape="2498.40,486.40 2498.40,0.00"/>
     </edge>
 
-    <!-- Intersection Approaches (North-South) -->
-    <edge id="north_approach" from="start_north" to="intersection" type="urban" priority="9">
-        <lane id="north_approach_0" index="0" speed="13.89" length="500.00"/>
-        <lane id="north_approach_1" index="1" speed="13.89" length="500.00"/>
-    </edge>
-
-    <edge id="south_approach" from="start_south" to="intersection" type="urban" priority="9">
-        <lane id="south_approach_0" index="0" speed="13.89" length="500.00"/>
-        <lane id="south_approach_1" index="1" speed="13.89" length="500.00"/>
-    </edge>
-
-    <!-- Traffic Light Logic -->
     <tlLogic id="intersection" type="static" programID="0" offset="0">
-        <!-- Phase 1: Highway green (EW), Urban red (NS) - 60 seconds -->
-        <phase duration="60" state="GGGGrrGGGGrr"/>
-        <!-- Phase 2: Yellow -->
-        <phase duration="3" state="yyyyrryyyyrr"/>
-        <!-- Phase 3: Highway red (EW), Urban green (NS) - 30 seconds -->
-        <phase duration="30" state="rrrrGGrrrrGG"/>
-        <!-- Phase 4: Yellow -->
-        <phase duration="3" state="rrrryyrrrryy"/>
+        <phase duration="39" state="GGGGrrrr"/>
+        <phase duration="6"  state="yyyyrrrr"/>
+        <phase duration="39" state="rrrrGGGG"/>
+        <phase duration="6"  state="rrrryyyy"/>
     </tlLogic>
 
-    <!-- Connections (turns at intersection) -->
-    <connection from="highway_west" to="highway_east" fromLane="0" toLane="0"/>
-    <connection from="highway_west" to="highway_east" fromLane="1" toLane="1"/>
-    <connection from="highway_west" to="highway_east" fromLane="2" toLane="2"/>
+    <junction id="end_east" type="dead_end" x="5000.00" y="500.00" incLanes="highway_east_0 highway_east_1 highway_east_2" intLanes="" shape="5000.00,490.40 5000.00,500.00"/>
+    <junction id="end_south" type="dead_end" x="2500.00" y="0.00" incLanes="south_approach_0 south_approach_1" intLanes="" shape="2493.60,0.00 2500.00,0.00"/>
+    <junction id="intersection" type="traffic_light" x="2500.00" y="500.00" incLanes="north_approach_0 north_approach_1 highway_west_0 highway_west_1 highway_west_2" intLanes=":intersection_0_0 :intersection_0_1 :intersection_2_0 :intersection_2_1 :intersection_4_0 :intersection_5_0 :intersection_5_1 :intersection_5_2" shape="2493.60,504.00 2500.00,504.00 2500.44,501.78 2501.00,501.00 2501.78,500.44 2502.78,500.11 2504.00,500.00 2504.00,490.40 2501.78,489.96 2501.00,489.40 2500.44,488.62 2500.11,487.62 2500.00,486.40 2493.60,486.40 2493.16,488.62 2492.60,489.40 2491.82,489.96 2490.82,490.29 2489.60,490.40 2489.60,500.00 2491.82,500.44 2492.60,501.00 2493.16,501.78 2493.49,502.78">
+        <request index="0" response="11110000" foes="11110000" cont="0"/>
+        <request index="1" response="11110000" foes="11110000" cont="0"/>
+        <request index="2" response="11100000" foes="11100000" cont="0"/>
+        <request index="3" response="11100000" foes="11100000" cont="0"/>
+        <request index="4" response="00000000" foes="00000011" cont="0"/>
+        <request index="5" response="00000000" foes="00001111" cont="0"/>
+        <request index="6" response="00000000" foes="00001111" cont="0"/>
+        <request index="7" response="00000000" foes="00001111" cont="0"/>
+    </junction>
+    <junction id="start_north" type="dead_end" x="2500.00" y="1000.00" incLanes="" intLanes="" shape="2500.00,1000.00 2493.60,1000.00"/>
+    <junction id="start_west" type="dead_end" x="0.00" y="500.00" incLanes="" intLanes="" shape="0.00,500.00 0.00,490.40"/>
 
-    <connection from="north_approach" to="south_approach" fromLane="0" toLane="0"/>
-    <connection from="north_approach" to="south_approach" fromLane="1" toLane="1"/>
+    <connection from="highway_west" to="south_approach" fromLane="0" toLane="0" via=":intersection_4_0" tl="intersection" linkIndex="4" dir="r" state="O"/>
+    <connection from="highway_west" to="highway_east" fromLane="0" toLane="0" via=":intersection_5_0" tl="intersection" linkIndex="5" dir="s" state="O"/>
+    <connection from="highway_west" to="highway_east" fromLane="1" toLane="1" via=":intersection_5_1" tl="intersection" linkIndex="6" dir="s" state="O"/>
+    <connection from="highway_west" to="highway_east" fromLane="2" toLane="2" via=":intersection_5_2" tl="intersection" linkIndex="7" dir="s" state="O"/>
+    <connection from="north_approach" to="south_approach" fromLane="0" toLane="0" via=":intersection_0_0" tl="intersection" linkIndex="0" dir="s" state="o"/>
+    <connection from="north_approach" to="south_approach" fromLane="1" toLane="1" via=":intersection_0_1" tl="intersection" linkIndex="1" dir="s" state="o"/>
+    <connection from="north_approach" to="highway_east" fromLane="1" toLane="1" via=":intersection_2_0" tl="intersection" linkIndex="2" dir="l" state="o"/>
+    <connection from="north_approach" to="highway_east" fromLane="1" toLane="2" via=":intersection_2_1" tl="intersection" linkIndex="3" dir="l" state="o"/>
+
+    <connection from=":intersection_0" to="south_approach" fromLane="0" toLane="0" dir="s" state="M"/>
+    <connection from=":intersection_0" to="south_approach" fromLane="1" toLane="1" dir="s" state="M"/>
+    <connection from=":intersection_2" to="highway_east" fromLane="0" toLane="1" dir="l" state="M"/>
+    <connection from=":intersection_2" to="highway_east" fromLane="1" toLane="2" dir="l" state="M"/>
+    <connection from=":intersection_4" to="south_approach" fromLane="0" toLane="0" dir="r" state="M"/>
+    <connection from=":intersection_5" to="highway_east" fromLane="0" toLane="0" dir="s" state="M"/>
+    <connection from=":intersection_5" to="highway_east" fromLane="1" toLane="1" dir="s" state="M"/>
+    <connection from=":intersection_5" to="highway_east" fromLane="2" toLane="2" dir="s" state="M"/>
 
 </net>

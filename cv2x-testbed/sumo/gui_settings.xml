@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SUMO-GUI view settings for unattended screenshot runs
+     (docs/visual/VISUAL_PLAN.md §3). The scheme "cvin-thesis" is selected over
+     TraCI in start_sumo; vehicle colours are set per vehicle by identity layer
+     (SSI blue, PKI ochre) in assign_vehicle_identity. -->
+<viewsettings>
+    <scheme name="cvin-thesis">
+        <background backgroundColor="252,252,251,255" showGrid="0"/>
+        <edges laneEdgeMode="0" scaleMode="0" laneShowBorders="1" showLinkDecals="1" showRails="0" hideConnectors="0" widthExaggeration="1" minSize="1" showDirection="0" showSublanes="0" showLaneDirection="0" edgeName_show="0" internalEdgeName_show="0" streetName_show="0" edgeValue_show="0">
+            <colorScheme name="uniform">
+                <entry color="225,224,217,255" name="road"/>
+                <entry color="225,224,217,255" name="sidewalk"/>
+                <entry color="225,224,217,255" name="bike lane"/>
+                <entry color="225,224,217,255" name="green verge"/>
+                <entry color="225,224,217,255" name="waterway"/>
+                <entry color="225,224,217,255" name="railway"/>
+                <entry color="225,224,217,255" name="rails on road"/>
+                <entry color="225,224,217,255" name="no passenger"/>
+                <entry color="225,224,217,255" name="closed"/>
+                <entry color="225,224,217,255" name="connector"/>
+                <entry color="225,224,217,255" name="forbidden"/>
+            </colorScheme>
+        </edges>
+        <vehicles vehicleMode="0" vehicleQuality="2" minVehicleSize="1" vehicle_exaggeration="6" vehicle_minSize="1" vehicle_constantSize="0" showBlinker="0" drawMinGap="0" showBTRange="0" vehicleName_show="1" vehicleName_size="30" vehicleName_color="82,81,78,255"/>
+        <junctions junctionMode="0" drawLinkTLIndex="0" drawLinkJunctionIndex="0" junctionName_show="0" tlsPhaseIndex_show="0"/>
+        <legend showSizeLegend="1" showColorLegend="0" showVehicleColorLegend="0"/>
+    </scheme>
+    <delay value="0"/>
+</viewsettings>

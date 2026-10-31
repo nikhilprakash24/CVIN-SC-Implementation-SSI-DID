@@ -15,24 +15,25 @@
     <!-- North-South routes through intersection -->
     <route id="north_south" edges="north_approach south_approach"/>
 
-    <!-- Flows: Spawn vehicles over time -->
-    <!-- Highway traffic: 30 vehicles total, spawn every 2-5 seconds -->
+    <!-- Flows and vehicles, sorted by departure time (SUMO requires it) -->
+    <!-- Highway traffic: cars from t=0, trucks from t=10, semis from t=20 -->
     <flow id="highway_flow_cars" type="passenger_car" route="highway_ew" begin="0" end="120" number="25" departLane="best" departSpeed="max"/>
-    <flow id="highway_flow_trucks" type="delivery_truck" route="highway_ew" begin="10" end="130" number="10" departLane="best" departSpeed="max"/>
-    <flow id="highway_flow_semi" type="semi_truck" route="highway_ew" begin="20" end="140" number="5" departLane="best" departSpeed="max"/>
 
-    <!-- Intersection traffic: 10 vehicles -->
+    <!-- Lead platoon vehicles (individual ids for identity tracking) -->
+    <vehicle id="platoon_leader" type="passenger_car" route="highway_ew" depart="5" departLane="1" departSpeed="25.0" color="0,1,0"/>
+    <vehicle id="platoon_follower_1" type="passenger_car" route="highway_ew" depart="6" departLane="1" departSpeed="25.0" color="0,1,0"/>
+    <vehicle id="platoon_follower_2" type="passenger_car" route="highway_ew" depart="7" departLane="1" departSpeed="25.0" color="0,1,0"/>
+
+    <flow id="highway_flow_trucks" type="delivery_truck" route="highway_ew" begin="10" end="130" number="10" departLane="best" departSpeed="max"/>
+
+    <!-- Intersection traffic: 8 vehicles north to south -->
     <flow id="intersection_flow_ns" type="passenger_car" route="north_south" begin="15" end="135" number="8" departLane="best" departSpeed="max"/>
+
+    <flow id="highway_flow_semi" type="semi_truck" route="highway_ew" begin="20" end="140" number="5" departLane="best" departSpeed="max"/>
 
     <!-- Emergency vehicle: 1 -->
     <vehicle id="emergency_001" type="emergency" route="highway_ew" depart="60" departLane="2" departSpeed="max" color="1,0,0">
         <param key="has.bluelight.device" value="true"/>
     </vehicle>
-
-    <!-- Individual vehicles with specific IDs (for identity tracking) -->
-    <!-- Lead platoon vehicles -->
-    <vehicle id="platoon_leader" type="passenger_car" route="highway_ew" depart="5" departLane="1" departSpeed="25.0" color="0,1,0"/>
-    <vehicle id="platoon_follower_1" type="passenger_car" route="highway_ew" depart="6" departLane="1" departSpeed="25.0" color="0,1,0"/>
-    <vehicle id="platoon_follower_2" type="passenger_car" route="highway_ew" depart="7" departLane="1" departSpeed="25.0" color="0,1,0"/>
 
 </routes>

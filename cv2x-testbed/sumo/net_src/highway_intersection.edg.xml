@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Edge ids are referenced by routes.rou.xml; keep them stable. -->
+<edges>
+    <edge id="highway_west"   from="start_west"   to="intersection" numLanes="3" speed="29.06" priority="13"/>
+    <edge id="highway_east"   from="intersection" to="end_east"     numLanes="3" speed="29.06" priority="13"/>
+    <edge id="north_approach" from="start_north"  to="intersection" numLanes="2" speed="13.89" priority="9"/>
+    <edge id="south_approach" from="intersection" to="end_south"    numLanes="2" speed="13.89" priority="9"/>
+</edges>
