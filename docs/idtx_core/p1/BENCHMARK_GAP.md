@@ -77,7 +77,7 @@ sense of ANALYSIS.md §4.1 (not merely identity *administration* — create/upda
 
 | Artefact | What it is | A1 | A2 | A3 | A4 | A5 | IDTx? | Citation |
 |---|---|:--:|:--:|:--:|:--:|:--:|:--:|---|
-| **Frutuoso et al. 2026 — ERC-3643 + ONCHAINID academic credentials** | repurposes T-REX/ONCHAINID (ERC-734/735/3643) as an issuer-accreditation whitelist; reference impl. evaluated on gas/scalability/latency/security vs a hash-anchoring baseline | ◐ (bespoke lifecycle) | ✗ | ✓ | ✗ | ✗ | ✓ (transfer/claim gated on another identity's trusted-issuer & claim state — *is* an IDTx-class workload, but evaluated ad hoc) | [Frutuoso26] |
+| **Frutuoso et al. 2026 — ERC-3643 + ONCHAINID academic credentials** | repurposes T-REX/ONCHAINID (ERC-734/735/3643) as an issuer-accreditation whitelist; reference impl. evaluated on gas/scalability/latency/security vs a hash-anchoring baseline | ◐ (bespoke lifecycle) | ✗ | ✓ | ◐ (public repo DiGo-certify-app) | ✗ | ◐ (**corrected WP 3.1, read in full:** issuer *accreditation* is checked **off-chain at the client**; on-chain `addClaim` is gated only on the sender's **own** key `onlyClaimKey` + signature validity, not on another named identity's registry state, and **no token transfer is measured** — closest *mechanism*, not a true in-transaction identity-gating workload) | [Frutuoso26] |
 | **RandX [Zondi26]; SBT access control [Madhwal25]; Web3ID [Hao25]** | identity/credential-gated token ops; each reports its own gas/latency numbers | ◐ | ✗ (revert-on-unverified is a contract check, not a benchmark rule) | ◐ | ✗ | ✗ | ◐/✓ (gating present) | [Zondi26; Madhwal25; Hao25] |
 
 **No shared evaluation across the ERC-3643/ONCHAINID family exists.** Each paper rolls its own workload, metrics and
@@ -119,9 +119,11 @@ cover — and precisely where this thesis contributes: (i) no admission/conforma
 (ii) no independent reproduction (single, newly published study, A5 ✗); (iii) crucially, **no IDTx semantics** — its
 workload is DID-document administration, so by ANALYSIS.md §4.2 it sits entirely in the *excluded* classes
 (administration/authentication), with none of the four true IDTx (MOBI birth, the two `addClaim` variants, `payToll`)
-represented. The ERC-3643/ONCHAINID work [Frutuoso26] is the only place an IDTx-*class* workload (a claim/transfer
-gated on another identity's trusted-issuer and claim state) is actually measured, but it is a single bespoke study
-with no shared workload, no admission rule and no reusable harness — it confirms the mechanism is prior art
+represented. The ERC-3643/ONCHAINID work [Frutuoso26] is the closest prior art, but reading it in full (WP 3.1)
+shows its identity-dependency is enforced **off-chain at the client** — on-chain `addClaim` gates only on the sender's
+own key and signature, and no token transfer is measured — so it does not actually measure an *in-transaction*
+identity-gating (IDTx) workload; it is a single bespoke study with no shared workload, no admission rule and no
+reusable harness — it confirms the mechanism is prior art
 (as ANALYSIS.md §4.3 already concedes) while leaving the benchmark gap open.
 
 **Net.** The contribution survives if and only if it is framed as "no benchmark unifies a reusable identity workload,
@@ -155,7 +157,7 @@ Against the five axes plus the IDTx property, the gap to close is:
 - [ ] **IDTx dependency semantics.** The workload must include transactions whose admissibility depends on another
   named identity's state, across the three-axis taxonomy (dependency kind × locus/encoding × evaluation point), with
   the ordering-race and stale-dependency threats (§4.5) as explicit measured conditions. *Today:* measured only once,
-  ad hoc, in [Frutuoso26]; never as a benchmark.
+  never, in-transaction — the closest, [Frutuoso26], enforces its identity check off-chain at the client (WP 3.1); never as a benchmark.
 
 A benchmark exists when all six boxes are ticked by **one** artefact that someone other than its author has run. No
 surveyed artefact ticks more than four, and none ticks A5 together with the IDTx row.
@@ -239,7 +241,7 @@ W3C DID Core at source). Classified from abstract (via Consensus / alphaXiv / Fi
 
 **Academic — ERC-3643 / ONCHAINID / identity-gating & on-chain identity:**
 - [Frutuoso26] Frutuoso et al., *Identity-Bound Academic Credentials on Blockchain: On-Chain Issuer Accreditation with
-  ERC-3643 and OnchainID*, arXiv 2607.16383, 2026. DOI 10.48550/arxiv.2607.16383 — only measured IDTx-class workload.
+  ERC-3643 and OnchainID*, arXiv 2607.16383, 2026. DOI 10.48550/arxiv.2607.16383 — closest IDTx mechanism; identity check enforced off-chain (WP 3.1), not a measured in-transaction workload.
 - [Zondi26] Zondi et al., *RandX: Decentralizing the South African Rand through Blockchain* (VC-gated ERC-20),
   IST-Africa 2026.
 - [Madhwal25] Madhwal et al., *A Blockchain-Based Access Control Architecture Using Non-Transferable NFTs*, IEEE

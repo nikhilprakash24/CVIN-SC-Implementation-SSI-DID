@@ -177,9 +177,12 @@ are not new either: an IDTx evaluates the attributes of the object/resource iden
 **object-attribute ABAC** (NIST SP 800-162 §3.2 evaluates subject, object, and environment attributes — object-attribute
 policies gate precisely on the state of the named resource, not only the caller). The earlier framing that "ABAC gates
 the caller whereas an IDTx names another identity" is withdrawn as a mischaracterisation of ABAC (examiner obj. 2).
-Permissioned tokens over an identity registry — ERC-3643 with ONCHAINID — are the closest on-chain prior art, and the
-one place an IDTx-class workload has actually been *measured* is Frutuoso et al. (2026, arXiv 2607.16383), ad hoc and
-with no shared workload.
+Permissioned tokens over an identity registry — ERC-3643 with ONCHAINID — are the closest on-chain prior art. The
+nearest *measured* study, Frutuoso et al. (2026, arXiv 2607.16383), is often taken to measure an IDTx workload, but
+reading it in full (Phase 3, WP 3.1) shows its issuer-accreditation check is enforced **off-chain at the client**;
+its on-chain `addClaim` gates only on the sender's own key and signature, and it measures no token transfer — so even
+the closest prior art does not measure an *in-transaction* identity-gating workload, which sharpens rather than softens
+the gap.
 
 The contribution claimed here is therefore narrow and explicit: **the IDTx is object-attribute ABAC realised on-chain**,
 and what is new is (i) the **storage-locus × encoding × evaluation-point taxonomy** (§6.8.3), which classifies *where*
@@ -206,7 +209,8 @@ Appendix G-F, 31 sources):
 > on the state of a named identity — with an **admission/conformance rule**. Performance benchmarks that exist measure
 > the identity *lifecycle* (create/resolve/update/deactivate) with no gating workload; conformance suites supply a
 > workload and an admission rule but measure spec conformance, not cost; and the one study that measures an
-> identity-gating workload (Frutuoso et al. 2026) is ad hoc, with no reusable harness.
+> identity-gating study (Frutuoso et al. 2026) is ad hoc, with no reusable harness, and on a full read enforces its
+identity check off-chain rather than in-transaction (WP 3.1).
 
 Two honesty constraints the examiner pressed and the thesis accepts: the gap is **not** defined as "no one has
 benchmarked an IDTx" (that would be trivially true of any new term); and independent reproduction is **not** used as a

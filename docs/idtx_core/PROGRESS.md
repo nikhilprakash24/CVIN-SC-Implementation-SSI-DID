@@ -7,7 +7,7 @@
 ```
 Phase 1  function set, IDTx, benchmark gap   [■■■■■■■■■■]  100%   COMPLETE (examiner fixes applied)
 Phase 2  compare to other ID systems         [■■■■■■■■□□]  ~80%   IN PROGRESS
-Phase 3  nearest benchmarks, benchmark v0     [■■□□□□□□□□]  ~15%   IN PROGRESS
+Phase 3  nearest benchmarks, benchmark v0     [■■■■□□□□□□]  ~35%   IN PROGRESS
 Phase 4  same, for AI agents                  [□□□□□□□□□□]    0%   planned
 Phase 5  10-substrate × function-set matrix   [□□□□□□□□□□]    0%   planned
 Phase 6  IDTx + compound scenarios visualized [□□□□□□□□□□]    0%   planned
@@ -126,7 +126,7 @@ Home: companion SP-9 + Ch 7 future work. Builds on p1/BENCHMARK_GAP.md (31 sourc
 
 | WP | Task | Agent | Status |
 |---|---|---|---|
-| 3.1 | Profile the nearest artefacts in depth (DID Rubric, DIF/VC suites, NIST 800-63, EUDI conformance, BLOCKBENCH/Caliper/DIABLO, SSI perf papers, Satybaldy26, Frutuoso26) on the 5 benchmark axes | LS+SS | 🔵 running |
+| 3.1 | Deep benchmark profiling (A1–A5) | LS+SS | ✅ done → `p3/BENCHMARK_PROFILES.md` |
 | 3.2 | Gap matrix vs the 5 ingredients (workload, admission rule, metrics+conditions, harness, reproduction) | ED | ⬜ after 3.1 |
 | 3.3 | Benchmark v0 spec (workload = fn set + IDTx classes + 17-event lifecycle; admission = compliance suite; metrics = register M-conditions; harness = this repo) | ED+CE | ⬜ after 3.2 |
 | 3.4 | "What would make it a benchmark" reproduction kit + call for external runs | ED | ⬜ after 3.3 |
@@ -134,3 +134,5 @@ Home: companion SP-9 + Ch 7 future work. Builds on p1/BENCHMARK_GAP.md (31 sourc
 | 3.6 | Examiner pass | SK | ⬜ last |
 
 - `2026-10-31` ED — Phase 3 launched. 3.1 (deep benchmark profiling) + 3.5 (close Phase-2 provisional CAV cells) in parallel; 3.2–3.4 are editor synthesis after 3.1; examiner last.
+
+- `2026-10-31` LS+SS — WP 3.1 ✅: `p3/BENCHMARK_PROFILES.md`. 10 free artefacts read at source; 7 obj.11 abstract-only cells upgraded to read-in-full. Findings: closest *as a benchmark* = BLOCKBENCH/DIABLO (4/5 axes) but identity-blind (no identity workload); closest *identity* benchmark = Satybaldy26 (pins A3, fails 4/5, IDTx ✗). Universal gaps: A5 (independent reproduction) across identity artefacts; A2 (admission rule) across all identity *performance* studies; and the IDTx in-transaction property absent from **every** artefact. **CONSEQUENTIAL CORRECTION (back-propagated to p1):** Frutuoso26 read in full — its issuer-accreditation check is enforced **off-chain at the client**; on-chain addClaim gates only on the sender's own key, no token transfer measured. Downgraded IDTx ✓→◐. So NO artefact ships a true in-transaction identity-gating workload — strengthens the gap. Fixed in `p1/BENCHMARK_GAP.md` (4 places) and `p1/THESIS_DRAFT.md` (2 places) this turn.
