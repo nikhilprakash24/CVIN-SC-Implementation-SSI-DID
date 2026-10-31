@@ -34,7 +34,9 @@ session's push; every previous landing on the default branch went through a pull
 - **Records.** Handback addendum, manifest.
 
 ## 4. Closing
-M1 and M2 delivered. CI on the merge commit: recorded in the "Report 43 closed" commit.
+M1 and M2 delivered. **CI green on all four workflows on the merge commit `261aa12`** (push runs 41206205492 to
+41206205532; pull-request runs 41206233201 to 41206233240) **and on the pull request's head `9058159`** (runs
+41206279273 to 41206284375), read over the public Actions API.
 
 **Next:** the author merges #25 (merge commit, not squash). After that the two branches are one history again and
 the master plan's branch table can mark the default branch synced at `261aa12`.

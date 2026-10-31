@@ -391,11 +391,13 @@
 | `c048b9f` | 2026-10-31 | Report 41 closed: CI green on dc79377 |
 | `2e09060` | 2026-10-31 | Row #26 density sweep confirmed current, its stamp exception explained (T-17); the September project summary dated, index updated (T-20); re… |
 
-## report 43 (2026-10-31 to 2026-10-31, 2 commits)
+## report 43 (2026-10-31 to 2026-10-31, 4 commits)
 
 | Commit | Date | Subject |
 |---|---|---|
 | `0d21926` | 2026-10-31 | After-action report 43 opened: merge the default branch into the trunk and open the pull request back |
 | `261aa12` | 2026-10-31 | Merge the default branch (PR #19 test register and charters, PR #21 Roots receipts, PR #16, investor room) into the trunk (report 43) |
+| `9058159` | 2026-10-31 | Report 43: merge logged, pull request #25 opened; handback addendum; manifest |
+| `4f81159` | 2026-10-31 | Report 42 closed: CI green on 2e09060 |
 
-241 commits in 31 groups.
+243 commits in 31 groups.
