@@ -52,7 +52,7 @@ sense of ANALYSIS.md §4.1 (not merely identity *administration* — create/upda
 | **W3C DID Core test suite / impl. report** | *conformance* suite: "determines whether or not a given implementation is conformant"; interop = can create/parse DIDs & documents; 46 implementations submitted | ◐ (conformance inputs) | ✓ (spec pass/fail) | ✗ (no latency/throughput/cost) | ✓ (suite) | ✓ (46 impls) | ✗ | [W3C-DIDCore] |
 | **W3C VC test suite / DIF interop suites** | conformance + interoperability of VC issue/verify and protocol profiles; not a performance measure | ◐ | ✓ | ✗ | ✓ | ◐ | ✗ | [W3C-DIDCore] (same class; VC/DIF read as conformance per survey [Mazzocca24]) |
 | **NIST SP 800-63(-4)** | identity-assurance *assessment framework*: defines IAL/AAL/FAL requirement levels for proofing/authn/federation; a risk-and-requirements model, not a measured workload | ✗ | ◐ (assurance-level criteria, assessed by an auditor, not a run) | ✗ | ✗ | ✗ | ✗ | [NIST-80063b] |
-| **eIDAS 2.0 / EUDI Wallet conformance (ARF, FCAF) & Large-Scale Pilots** | *functional conformance* assessment + certification against the Architecture & Reference Framework; pilots are deployments, not a shared measured workload; "Functional Conformance Assessment Framework provide[s] increasingly structured wallet-side evidence" but no rerunnable performance object | ◐ (conformance scenarios) | ✓ (certification) | ✗ | ◐ | ✗ | ✗ | [Sokolov26] |
+| **eIDAS 2.0 / EUDI Wallet conformance (ARF, FCAF) & Large-Scale Pilots** | *functional conformance* assessment + certification against the Architecture & Reference Framework; pilots are deployments, not a shared measured workload; "Functional Conformance Assessment Framework provide[s] increasingly structured wallet-side evidence" but no rerunnable performance object | ◐ (conformance scenarios) | ✓ (certification) | ✗ | ◐ | ✗ | ✗ | [Sokolov26] *(reproduction/metric cells provisional — Sokolov26 abstract-only, m10)* |
 | **BLOCKBENCH** [Dinh] | blockchain data-processing benchmark; workloads = YCSB/Smallbank + micro (CPU/IO/analytics) on Ethereum/Parity/Fabric | ✓ | ◐ | ✓ | ✓ | ✓ | ✗ (no identity workload) | [Dinh17a; Dinh17b] |
 | **Hyperledger Caliper** | benchmarking *tool/harness*: user supplies the workload; measures TPS/latency/resource use | ✗ (BYO workload) | ✗ | ◐ (metrics defined; conditions user-set) | ✓ | ✓ (widely used, e.g. [Mazzoni21], [Vidal25]) | ✗ | [Mazzoni21] |
 | **DIABLO** | blockchain benchmark suite of realistic DApp workloads (6 chains, 4–5 DApps); stresses from distributed load | ✓ | ◐ | ✓ | ✓ | ✓ ([Lebedev23] bare-metal re-run) | ✗ (no identity DApp) | [Gramoli23; Lebedev23] |
@@ -174,9 +174,12 @@ Against the five axes plus the IDTx property, the gap to close is:
 - [ ] **A4 — A public, reusable harness.** A runnable kit, not a replication snapshot. Candidate: this repo's
   10-substrate adapter/conformance harness (`adapters.conformance.test.js`). *Today:* Caliper/DIABLO are reusable but
   identity-blind; Satybaldy/Lagos/Buldini ship code but tied to their own op sets.
-- [ ] **A5 — At least one independent reproduction.** The thing no SSI benchmark has yet. Needs a reproduction kit and
-  a call for external runs (DETAILED_PLAN Phase 3.4). This is the single axis on which *even the strongest*
-  counter-example fails, and the cleanest statement of the gap.
+- [ ] **A5 — At least one independent reproduction.** A *maturity* property, not a gap-defining axis (revised per
+  Phase-3 examiner M4; cf. `p3/BENCHMARK_V0.md` §3.2): it is applied **symmetrically** — the benchmark v0 this
+  programme proposes also lacks an independent reproduction at publication, so A5 is a milestone for any candidate,
+  this work included, not a stick to fail others with. It is not one of the Gray/TPC criteria (relevance, portability,
+  scalability, simplicity); those are treated in `p3/BENCHMARK_V0.md`. Needs a reproduction kit and a call for external
+  runs (Phase 3.4).
 - [ ] **IDTx dependency semantics.** The workload must include transactions whose admissibility depends on another
   named identity's state, across the three-axis taxonomy (dependency kind × locus/encoding × evaluation point), with
   the ordering-race and stale-dependency threats (§4.5) as explicit measured conditions. *Today (corrected, F1):* the
