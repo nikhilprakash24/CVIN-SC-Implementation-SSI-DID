@@ -1,0 +1,40 @@
+/* Layout: one reading column (~70ch) with full-width tables and figure plates; a contents list after the title. */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap");
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --ink: #14171c; --ink-2: #4a515b; --muted: #77808b;
+  --rule: #dde2e8; --accent: #2a78d6; --ok: #0a7d0a; --bad: #c13434; --plate: #fcfcfb;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #101317; --surface: #171b21; --ink: #e9ecf0; --ink-2: #b6bdc6; --muted: #8a939e;
+  --rule: #2a3038; --accent: #5b9ae8; --ok: #3cc43c; --bad: #ec6b6b; --plate: #fcfcfb; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #101317; --surface: #171b21; --ink: #e9ecf0; --ink-2: #b6bdc6; --muted: #8a939e;
+  --rule: #2a3038; --accent: #5b9ae8; --ok: #3cc43c; --bad: #ec6b6b; --plate: #fcfcfb; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 15px/1.6 var(--f-body); }
+.wrap { max-width: 980px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 64px; display: flex; flex-direction: column; gap: 14px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(26px, 4vw, 36px); font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 22px; font-weight: 600; margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--rule); }
+h3 { font-size: 17px; font-weight: 600; margin-top: 10px; color: var(--ink); }
+p { margin: 0; max-width: 72ch; }
+.note { color: var(--ink-2); border-left: 3px solid var(--accent); padding: 6px 12px; background: var(--surface); max-width: none; }
+code { font-family: var(--f-mono); font-size: 0.86em; color: var(--ink-2); overflow-wrap: anywhere; }
+.toc ol { margin: 0; padding-left: 0; list-style: none; columns: 2 260px; color: var(--ink-2); }
+.toc a { color: var(--accent); text-decoration: none; }
+.toc a:hover, .toc a:focus-visible { text-decoration: underline; }
+.tbl { overflow-x: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--f-display); font-weight: 500; color: var(--ink-2); font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+tbody tr:last-child td { border-bottom: none; }
+td { font-variant-numeric: tabular-nums; }
+td.ok { color: var(--ok); font-weight: 600; }
+td.bad { color: var(--bad); font-weight: 600; }
+.cap, figcaption { color: var(--muted); font-size: 13px; max-width: 80ch; }
+figure { margin: 6px 0 0; display: flex; flex-direction: column; gap: 6px; }
+figure img { background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; padding: 8px; max-width: 100%; height: auto; }
+pre.mermaid { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 12px; overflow-x: auto; margin: 0; }
+@media (max-width: 520px) { body { font-size: 14px; } .wrap { padding-inline: 16px; } }

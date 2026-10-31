@@ -31,6 +31,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
 
 from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
+from identity.freshness import REASON_BAD_SIGNATURE, REASON_REVOKED, REASON_UNRESOLVED, REASON_UNTRUSTED
 from identity.base import (
     IdentityProvider,
     IdentityType,
@@ -41,12 +42,14 @@ from identity.base import (
 _ABI_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                          'contracts', 'ERC1056Registry_abi.json')
 
-# Maximum assumed difference between this host's clock and the chain's block
-# timestamps. Attribute validity (`validTo`) is chain time; when a validTo lies
-# within this window of the wall clock, the chain's latest block timestamp is
-# fetched (one extra RPC) to decide. A local Hardhat node with automine runs a
-# few seconds ahead of the wall clock, so a revocation (validTo = block.timestamp)
-# can look "still valid" by the wall clock alone.
+# Attribute validity (`validTo`) is chain time. Since WM-2 C0 (defect D51) a full
+# resolution always decides it against the chain's latest block timestamp (one
+# eth_getBlockByNumber per resolution that meets a key). Before, the wall clock
+# decided whenever validTo lay more than CLOCK_SKEW_S from it, so a verifier whose
+# clock ran more than 15 minutes behind the chain accepted a revoked key
+# (a revocation sets validTo = block.timestamp, which looked "far in the future").
+# CLOCK_SKEW_S is now only the probe path's margin: a cached key re-resolves when its
+# validTo is within this margin of the chain time learned at the last resolution.
 CLOCK_SKEW_S = 900
 
 
@@ -99,6 +102,9 @@ class ERC1056Provider(IdentityProvider):
         # Freshness window + replay cache for verify_message (review 02, T-9).
         # On by default; the same FreshnessPolicy as the PKI providers.
         self.freshness = FreshnessPolicy()
+        # Why the last REJECTED verify failed (identity.freshness REASON_*);
+        # written on rejection paths only, never on the accept path.
+        self.last_reject_reason = None
         # Chain this provider's registry lives on; verify_message binds DIDs to
         # it (review 02 Pass 3: an unbound chain segment let a re-encoded DID
         # miss the replay cache). Cached so verification adds no RPC.
@@ -232,8 +238,11 @@ class ERC1056Provider(IdentityProvider):
             self._sender_state.pop(signer_key, None)
         return identity_data
 
-    @staticmethod
-    def _probe_unchanged(cached: Dict, info: Tuple) -> bool:
+    def _chain_now_estimate(self) -> int:
+        """Chain time = wall clock + the chain-minus-wall offset seen at the last full resolution (D51)."""
+        return int(time.time()) + getattr(self, '_chain_offset_s', 0)
+
+    def _probe_unchanged(self, cached: Dict, info: Tuple) -> bool:
         """The probe's getIdentityInfo equals the cached state and the cached key is not near expiry."""
         owner, last_changed, is_revoked, _revoked_at = info
         if (int(last_changed) != int(cached.get('last_changed', -1))
@@ -241,8 +250,8 @@ class ERC1056Provider(IdentityProvider):
                 or str(owner).lower() != str(cached.get('owner', '')).lower()):
             return False
         valid_to = cached.get('public_key_valid_to')
-        if valid_to is not None and int(valid_to) <= int(time.time()) + CLOCK_SKEW_S:
-            return False   # time-based expiry does not move `changed`: re-resolve
+        if valid_to is not None and int(valid_to) <= self._chain_now_estimate() + CLOCK_SKEW_S:
+            return False   # time-based expiry does not move `changed`: re-resolve (chain time, D51)
         return True
 
     def _probe_identity_info(self, address: str):
@@ -639,6 +648,7 @@ class ERC1056Provider(IdentityProvider):
             # Format: did:ethr:0x{chain_id}:{address}
             parts = did.split(':')
             if len(parts) != 4 or parts[0] != 'did' or parts[1] != 'ethr':
+                self.last_reject_reason = REASON_UNTRUSTED
                 return False, metrics
 
             # Bind the DID to this registry's chain and canonicalise it. The DID
@@ -650,15 +660,19 @@ class ERC1056Provider(IdentityProvider):
                 did_chain = int(parts[2], 16)
                 vehicle_address = Web3.to_checksum_address(parts[3])
             except ValueError:
+                self.last_reject_reason = REASON_UNTRUSTED
                 return False, metrics
             if did_chain != self._local_chain_id():
+                self.last_reject_reason = REASON_UNTRUSTED
                 return False, metrics
             signer_key = f"did:ethr:0x{did_chain:x}:{vehicle_address}"
 
             # Freshness window + replay cache (T-9), before any RPC
             timestamp = signed_message.get('timestamp')
             message_bytes = signed_bytes(message, timestamp)
-            if self.freshness.check(timestamp, signer_key, message_bytes) is not None:
+            stale = self.freshness.check(timestamp, signer_key, message_bytes)
+            if stale is not None:
+                self.last_reject_reason = stale
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
@@ -667,6 +681,7 @@ class ERC1056Provider(IdentityProvider):
             identity_data = self._sender_identity(signer_key, vehicle_address, metrics)
 
             if not identity_data:
+                self.last_reject_reason = REASON_UNRESOLVED
                 return False, metrics
 
             # Check revocation. getIdentityInfo (the eth_call inside the
@@ -674,11 +689,13 @@ class ERC1056Provider(IdentityProvider):
             # read together with the `changed` pointer the key was resolved
             # from; a second isRevoked eth_call is redundant (review 02, T-5).
             if identity_data.get('is_revoked', True):
+                self.last_reject_reason = REASON_REVOKED
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
             # Get public key (resolved from DIDAttributeChanged events)
             if not identity_data.get('public_key'):
+                self.last_reject_reason = REASON_UNRESOLVED
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
             public_key = identity_data.get('_public_key_obj')
@@ -710,6 +727,7 @@ class ERC1056Provider(IdentityProvider):
             return True, metrics
 
         except Exception as e:
+            self.last_reject_reason = REASON_BAD_SIGNATURE
             print(f"Verification error: {e}")
             metrics.verification_time_ms = (time.time() - start_time) * 1000
             return False, metrics
@@ -957,6 +975,8 @@ class ERC1056Provider(IdentityProvider):
             if best is None or order > best[2]:
                 best = (value.hex(), valid_to, order)
 
+        if clock.chain_now is not None:
+            self._chain_offset_s = clock.chain_now - clock.wall
         if best is None:
             return None, None, hops
         return best[0], best[1], hops
@@ -964,9 +984,10 @@ class ERC1056Provider(IdentityProvider):
 
 class _ValidityClock:
     """
-    Decides `validTo > now` in chain time. Uses the wall clock when validTo is
-    more than CLOCK_SKEW_S away from it (no RPC), otherwise fetches the latest
-    block timestamp once (1 eth_getBlockByNumber) and compares against it.
+    Decides `validTo > now` in chain time: the latest block timestamp, fetched
+    once per resolution (1 eth_getBlockByNumber) on the first key it meets.
+    The wall clock is never consulted for the decision (D51); it is kept only to
+    learn the chain-minus-wall offset for the probe path.
     """
 
     def __init__(self, w3):
@@ -975,12 +996,8 @@ class _ValidityClock:
         self.chain_now = None
 
     def is_valid(self, valid_to: int) -> bool:
-        if valid_to > self.wall + CLOCK_SKEW_S:
-            return True
-        if valid_to <= self.wall - CLOCK_SKEW_S:
-            return False
         if self.chain_now is None:
-            self.chain_now = max(self.wall, int(self.w3.eth.get_block('latest')['timestamp']))
+            self.chain_now = int(self.w3.eth.get_block('latest')['timestamp'])
         return valid_to > self.chain_now
 
 

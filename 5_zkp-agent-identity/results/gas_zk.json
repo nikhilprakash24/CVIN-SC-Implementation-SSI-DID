@@ -1,0 +1,34 @@
+{
+  "condition": "M1 (Hardhat in-process EVM, chain 31337, solc 0.8.24, optimizer 200 + viaIR, evm cancun); exact receipt.gasUsed; view figures are eth_estimateGas and include the 21,000 base",
+  "run": {
+    "commit": "978988e",
+    "code_clean": true,
+    "tree_clean": false,
+    "host": {
+      "platform": "linux",
+      "arch": "x64",
+      "cpus": 4,
+      "cpu_model": "Intel(R) Xeon(R) Processor @ 2.80GHz",
+      "mem_gb": 16
+    },
+    "node": "v22.22.0",
+    "snarkjs": "0.7.6",
+    "at": "2026-10-15T05:15:13.814Z"
+  },
+  "hardhat": "2.28.6",
+  "gas": {
+    "deploy_groth16_verifier": 500396,
+    "deploy_zkvin_gate": 529395,
+    "anchor_commitment": 51558,
+    "set_service": 138474,
+    "verify_proof_view_estimate": 256038,
+    "admit_with_groth16": 301163,
+    "deploy_schnorr_verifier": 211332,
+    "schnorr_prove_tx": 28775,
+    "schnorr_verify_view_estimate": 27388
+  },
+  "expectations": {
+    "Z-E3 admit (on-chain Groth16 verification in the gate) < 350,000 gas": "PASS"
+  },
+  "reference": "Phase 1 ERC-1056 createIdentity 52,594 gas (register #6, M1) for scale"
+}

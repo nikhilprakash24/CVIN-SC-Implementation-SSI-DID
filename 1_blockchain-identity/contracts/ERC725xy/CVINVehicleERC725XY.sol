@@ -3,6 +3,9 @@ pragma solidity ^0.8.24;
 
 /**
  * @title CVINVehicleERC725XY
+ * @author CVIN research project
+ * @notice Owner-controlled ERC-725X (executor) + ERC-725Y (key/value store) smart
+ *         account acting as a vehicle identity; the account address is the stable identifier.
  * @dev Full ERC-725 (X + Y) smart-account vehicle identity for the CVIN thesis.
  *
  *      ERC-725 combines two sub-standards into one owner-controlled smart
@@ -48,14 +51,30 @@ pragma solidity ^0.8.24;
  * types perform the real low-level opcode and bubble up the callee's revert
  * data; ERC-725Y stores real bytes and emits DataChanged on every write.
  * ============================================================================
+ *
+ *      Deviations from the erc725 reference: plain {onlyOwner} instead of OZ
+ *      `OwnableUnset`, `require` strings instead of custom errors, no LSP20
+ *      reverse-verification, single-step renounce (no LSP14 2-step). CVIN extension:
+ *      `cvin:*` well-known data keys (NOT LSP2 JSON-schema keys) plus
+ *      {setVehicleBirthAttributes} / {getVehicleVIN}.
+ * @custom:standard ERC-725 (X + Y) https://eips.ethereum.org/EIPS/eip-725
+ * @custom:standard ERC-165 https://eips.ethereum.org/EIPS/eip-165
+ * @custom:standard ERC-173 (ownership surface) https://eips.ethereum.org/EIPS/eip-173
+ * @custom:security DELEGATECALL lets the owner overwrite `_owner` or the store (permitted by the spec).
+ * @custom:security `executeBatch` does not reconcile `msg.value` against the sum of `values` (the reference does).
+ * @custom:security No reentrancy guard; protection relies on owner-only access. `setData` is payable but the ETH has no use.
+ * @custom:see docs/smart-contracts/04-account-claim-identity-erc725-735-4337-combined.md (section 2)
+ * @custom:see sandbox/options/erc-725xy/adapter.js
  */
 contract CVINVehicleERC725XY {
     // ============ ERC-165 / ERC-725 interface IDs (match the erc725 reference) ============
+    /// @dev ERC-165 interface IDs reported by {supportsInterface}.
     bytes4 internal constant _INTERFACEID_ERC165 = 0x01ffc9a7;
     bytes4 internal constant _INTERFACEID_ERC725X = 0x7545acac;
     bytes4 internal constant _INTERFACEID_ERC725Y = 0x629aa694;
 
     // ============ ERC-725X operation types ============
+    /// @notice ERC-725X operation type codes accepted by {execute}.
     uint256 public constant OPERATION_CALL = 0;
     uint256 public constant OPERATION_CREATE = 1;
     uint256 public constant OPERATION_CREATE2 = 2;
@@ -73,14 +92,23 @@ contract CVINVehicleERC725XY {
     bytes32 public constant YEAR_KEY = keccak256("cvin:year");
 
     // ============ State ============
+    /// @dev Controlling key of the account (the only address allowed to write/execute).
     address private _owner;
 
     /// @dev ERC-725Y store: bytes32 data key => bytes data value
     mapping(bytes32 => bytes) internal _store;
 
     // ============ Events (EIP-725 canonical shapes) ============
+    /// @notice Emitted when the controlling key changes (including construction and renounce).
+    /// @param previousOwner Previous owner (zero at construction).
+    /// @param newOwner New owner (zero on renounce).
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
+    /// @notice Emitted for CALL / STATICCALL / DELEGATECALL, before the call is made (ERC-725X).
+    /// @param operationType The operation type code.
+    /// @param target The called address.
+    /// @param value Wei forwarded (0 for STATICCALL/DELEGATECALL).
+    /// @param selector First 4 bytes of the calldata, or zero.
     event Executed(
         uint256 indexed operationType,
         address indexed target,
@@ -88,6 +116,11 @@ contract CVINVehicleERC725XY {
         bytes4 indexed selector
     );
 
+    /// @notice Emitted after a successful CREATE / CREATE2 (ERC-725X).
+    /// @param operationType OPERATION_CREATE or OPERATION_CREATE2.
+    /// @param contractAddress The deployed contract.
+    /// @param value Wei sent to the constructor.
+    /// @param salt CREATE2 salt, or zero for CREATE.
     event ContractCreated(
         uint256 indexed operationType,
         address indexed contractAddress,
@@ -95,9 +128,13 @@ contract CVINVehicleERC725XY {
         bytes32 indexed salt
     );
 
+    /// @notice Emitted on every ERC-725Y write.
+    /// @param dataKey The data key.
+    /// @param dataValue The new value.
     event DataChanged(bytes32 indexed dataKey, bytes dataValue);
 
     // ============ Modifiers ============
+    /// @dev Restricts to the current owner. Reverts "ERC725: caller is not the owner".
     modifier onlyOwner() {
         require(msg.sender == _owner, "ERC725: caller is not the owner");
         _;
@@ -105,6 +142,8 @@ contract CVINVehicleERC725XY {
 
     // ============ Constructor ============
     /**
+     * @notice Creates the vehicle identity account.
+     * @dev Payable so the account can be funded at deploy. Reverts on zero owner. Emits {OwnershipTransferred}.
      * @param initialOwner The controlling key (owner) of this vehicle identity account.
      */
     constructor(address initialOwner) payable {
@@ -117,6 +156,9 @@ contract CVINVehicleERC725XY {
     receive() external payable {}
 
     // ============ Ownership (key rotation) ============
+    /// @notice Returns the controlling key.
+    /// @dev ERC-173.
+    /// @return The owner address.
     function owner() public view returns (address) {
         return _owner;
     }
@@ -124,6 +166,8 @@ contract CVINVehicleERC725XY {
     /**
      * @notice Rotate the controlling key of this vehicle identity to `newOwner`.
      * @dev The account address (the identity) is unchanged; only the controller rotates.
+     *      Owner only; reverts on zero address. Emits {OwnershipTransferred}. ERC-173.
+     * @param newOwner The new controlling key.
      */
     function transferOwnership(address newOwner) public onlyOwner {
         require(newOwner != address(0), "ERC725: new owner is the zero address");
@@ -131,16 +175,24 @@ contract CVINVehicleERC725XY {
         _owner = newOwner;
     }
 
+    /// @notice Permanently removes the controlling key (owner becomes zero).
+    /// @dev Owner only, single step (no LSP14 2-step confirmation). Emits {OwnershipTransferred}.
     function renounceOwnership() public onlyOwner {
         emit OwnershipTransferred(_owner, address(0));
         _owner = address(0);
     }
 
     // ============ ERC-725Y: generic key/value data store ============
+    /// @notice Reads one ERC-725Y value.
+    /// @param dataKey The data key.
+    /// @return dataValue The stored bytes (empty if unset).
     function getData(bytes32 dataKey) public view returns (bytes memory dataValue) {
         return _store[dataKey];
     }
 
+    /// @notice Reads several ERC-725Y values.
+    /// @param dataKeys The data keys.
+    /// @return dataValues The stored values, in key order.
     function getDataBatch(bytes32[] memory dataKeys)
         public
         view
@@ -156,10 +208,18 @@ contract CVINVehicleERC725XY {
         return dataValues;
     }
 
+    /// @notice Writes one ERC-725Y value.
+    /// @dev Owner only. Emits {DataChanged}. Payable per the reference interface; ETH is unused.
+    /// @param dataKey The data key.
+    /// @param dataValue The value to store.
     function setData(bytes32 dataKey, bytes memory dataValue) public payable onlyOwner {
         _setData(dataKey, dataValue);
     }
 
+    /// @notice Writes several ERC-725Y values.
+    /// @dev Owner only. Arrays must be equal-length and non-empty. Emits {DataChanged} per key.
+    /// @param dataKeys The data keys.
+    /// @param dataValues The values, aligned with `dataKeys`.
     function setDataBatch(bytes32[] memory dataKeys, bytes[] memory dataValues)
         public
         payable
@@ -175,6 +235,9 @@ contract CVINVehicleERC725XY {
         }
     }
 
+    /// @dev Internal ERC-725Y write; emits {DataChanged}.
+    /// @param dataKey The data key.
+    /// @param dataValue The value to store.
     function _setData(bytes32 dataKey, bytes memory dataValue) internal {
         _store[dataKey] = dataValue;
         emit DataChanged(dataKey, dataValue);
@@ -186,6 +249,11 @@ contract CVINVehicleERC725XY {
      *         attributes (VIN, make, model, year) into the ERC-725Y store in a
      *         single transaction. Strings are stored as their UTF-8 bytes; the
      *         year is stored abi-encoded as a uint256.
+     * @dev CVIN extension. Owner only. Emits {DataChanged} four times.
+     * @param vin Vehicle Identification Number (stored under VIN_KEY).
+     * @param make Manufacturer (MAKE_KEY).
+     * @param model Model (MODEL_KEY).
+     * @param year Model year (YEAR_KEY, abi-encoded).
      */
     function setVehicleBirthAttributes(
         string calldata vin,
@@ -200,6 +268,8 @@ contract CVINVehicleERC725XY {
     }
 
     /// @notice Convenience view returning the stored VIN decoded as a string.
+    /// @dev CVIN extension.
+    /// @return The VIN stored under VIN_KEY.
     function getVehicleVIN() external view returns (string memory) {
         return string(_store[VIN_KEY]);
     }
@@ -207,6 +277,7 @@ contract CVINVehicleERC725XY {
     // ============ ERC-725X: generic executor ============
     /**
      * @notice Execute a generic operation from this account (owner-gated).
+     * @dev ERC-725X. Emits {Executed} or {ContractCreated}; bubbles up callee revert data.
      * @param operationType 0=CALL, 1=CREATE, 2=CREATE2, 3=STATICCALL, 4=DELEGATECALL
      * @param target       Address to interact with (must be address(0) for CREATE/CREATE2).
      * @param value        Native tokens (wei) to forward (must be 0 for STATICCALL/DELEGATECALL).
@@ -224,6 +295,12 @@ contract CVINVehicleERC725XY {
 
     /**
      * @notice Batch version of {execute}. All arrays must have equal, non-zero length.
+     * @dev ERC-725X. Owner only. `msg.value` is not checked against the sum of `values`.
+     * @param operationsType Operation type per entry.
+     * @param targets Target per entry.
+     * @param values Wei per entry.
+     * @param datas Calldata / bytecode per entry.
+     * @return Per-entry results as returned by {execute}.
      */
     function executeBatch(
         uint256[] memory operationsType,
@@ -249,6 +326,13 @@ contract CVINVehicleERC725XY {
         return results;
     }
 
+    /// @dev Operation dispatcher. CREATE/CREATE2 require `target == address(0)`;
+    ///      STATICCALL/DELEGATECALL require `value == 0`; unknown types revert.
+    /// @param operationType Operation type code.
+    /// @param target Target address.
+    /// @param value Wei to forward.
+    /// @param data Calldata or creation bytecode.
+    /// @return Call return data or packed created address.
     function _execute(
         uint256 operationType,
         address target,
@@ -277,6 +361,11 @@ contract CVINVehicleERC725XY {
         revert("ERC725X: unknown operation type");
     }
 
+    /// @dev CALL with value; emits {Executed} before the call.
+    /// @param target Target address.
+    /// @param value Wei to forward.
+    /// @param data Calldata.
+    /// @return Callee return data.
     function _executeCall(
         address target,
         uint256 value,
@@ -288,6 +377,10 @@ contract CVINVehicleERC725XY {
         return _verifyCallResult(success, returnData);
     }
 
+    /// @dev STATICCALL; emits {Executed} before the call.
+    /// @param target Target address.
+    /// @param data Calldata.
+    /// @return Callee return data.
     function _executeStaticCall(address target, bytes memory data)
         internal
         returns (bytes memory)
@@ -297,6 +390,10 @@ contract CVINVehicleERC725XY {
         return _verifyCallResult(success, returnData);
     }
 
+    /// @dev DELEGATECALL in this account's storage context; emits {Executed} before the call.
+    /// @param target Code address.
+    /// @param data Calldata.
+    /// @return Callee return data.
     function _executeDelegateCall(address target, bytes memory data)
         internal
         returns (bytes memory)
@@ -307,6 +404,10 @@ contract CVINVehicleERC725XY {
         return _verifyCallResult(success, returnData);
     }
 
+    /// @dev CREATE via assembly; emits {ContractCreated} with zero salt.
+    /// @param value Wei for the constructor.
+    /// @param creationCode Contract creation bytecode.
+    /// @return The created address, abi.encodePacked.
     function _deployCreate(uint256 value, bytes memory creationCode)
         internal
         returns (bytes memory)
@@ -326,6 +427,10 @@ contract CVINVehicleERC725XY {
     /**
      * @dev CREATE2 with the erc725 reference convention: the last 32 bytes of `data` are
      *      the salt, the preceding bytes are the contract creation bytecode.
+     *      Emits {ContractCreated}.
+     * @param value Wei for the constructor.
+     * @param data Creation bytecode followed by a 32-byte salt.
+     * @return The created address, abi.encodePacked.
      */
     function _deployCreate2(uint256 value, bytes memory data)
         internal
@@ -351,6 +456,9 @@ contract CVINVehicleERC725XY {
     }
 
     /// @dev Bubble up the callee's revert reason on failure; return data on success.
+    /// @param success Low-level call success flag.
+    /// @param returnData Low-level call return/revert data.
+    /// @return `returnData` when `success`.
     function _verifyCallResult(bool success, bytes memory returnData)
         internal
         pure
@@ -369,6 +477,8 @@ contract CVINVehicleERC725XY {
     }
 
     /// @dev First 4 bytes (function selector) of `data`, or 0x00000000 if shorter.
+    /// @param data Calldata.
+    /// @return selector The selector.
     function _selectorOf(bytes memory data) internal pure returns (bytes4 selector) {
         if (data.length >= 4) {
             // solhint-disable-next-line no-inline-assembly
@@ -379,6 +489,9 @@ contract CVINVehicleERC725XY {
     }
 
     // ============ ERC-165 ============
+    /// @notice ERC-165 check: true for ERC-165, ERC-725X (0x7545acac) and ERC-725Y (0x629aa694).
+    /// @param interfaceId The interface identifier.
+    /// @return True if supported.
     function supportsInterface(bytes4 interfaceId) public pure returns (bool) {
         return
             interfaceId == _INTERFACEID_ERC165 ||

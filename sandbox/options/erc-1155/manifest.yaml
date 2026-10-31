@@ -1,0 +1,165 @@
+option: ERC-1155
+slug: erc-1155
+kind: on-chain
+contracts:
+- 1_blockchain-identity/contracts/ERC1155/CVINVehicleCredential1155.sol
+provider: null
+benchmark_key: ERC-1155
+experiments: []
+benchmark_ops:
+  deployRegistry: Single shared multi-token credential contract; deployer receives DEFAULT_ADMIN_ROLE and ISSUER_ROLE
+    in constructor.
+  createIdentity: 'registerVehicle (issuer-only): mints one soulbound BIRTH_CERT token, binds VIN string + vinHash
+    mappings to the vehicle address.'
+  updateAttribute: 'No key/attribute model in ERC-1155. Measured closest analogue: setTokenURI per-credential-type
+    metadata URI override (issuer-only).'
+  addDelegateOrClaim: 'issueCredential (issuer-only): mints an INSPECTION_CERT credential token to a registered
+    vehicle (claim analogue; delegates are not part of ERC-1155).'
+  revoke: revokeCredential (issuer-only burn) of the inspection credential. Burning the BIRTH_CERT would deregister
+    the whole identity.
+  transferOwnership: 'issuerTransferCredential of the BIRTH_CERT on a vehicle holding nothing else: re-binds VIN
+    + registration mappings to the new vehicle address. Credentials are soulbound - the standard transfer entry
+    points revert for everyone (D7 fix); an identity that still holds credentials moves atomically through issuerTransferIdentity
+    (not benchmarked: its cost grows with the number of held types).'
+families:
+- name: Identity creation (explicit)
+  stance: measured-in-comparison
+  functions:
+  - BIRTH_CERT
+  - VehicleRegistered
+  - isRegistered
+  - registerVehicle
+  measured:
+  - registerVehicle
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Ownership / controller change
+  stance: implemented
+  functions:
+  - safeBatchTransferFrom
+  - safeTransferFrom
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Key / delegate management
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Attributes / data store
+  stance: implemented
+  functions:
+  - CredentialURIUpdated
+  - URI
+  - setTokenURI
+  - uri
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Claims / credentials
+  stance: measured-in-comparison
+  functions:
+  - CredentialIssued
+  - CredentialRevoked
+  - CredentialURIUpdated
+  - INSPECTION_CERT
+  - ISSUER_ROLE
+  - MAX_CREDENTIAL_TYPE
+  - credentialTypesOf
+  - hasCredential
+  - issueCredential
+  - issuerTransferCredential
+  - issuerTransferIdentity
+  - revokeCredential
+  measured:
+  - issueCredential
+  - issuerTransferIdentity
+  - revokeCredential
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Revocation / status
+  stance: measured-in-comparison
+  functions:
+  - CredentialRevoked
+  - RoleRevoked
+  - revokeCredential
+  - revokeRole
+  measured:
+  - revokeCredential
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Delegated / signed (off-chain-authorised) execution
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Lifecycle events / history
+  stance: implemented
+  functions:
+  - RoleAdminChanged
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: Authorisation / roles
+  stance: measured-in-comparison
+  functions:
+  - DEFAULT_ADMIN_ROLE
+  - ISSUER_ROLE
+  - RoleAdminChanged
+  - RoleGranted
+  - RoleRevoked
+  - getRoleAdmin
+  - grantRole
+  - hasRole
+  - issuerTransferCredential
+  - issuerTransferIdentity
+  - renounceRole
+  - revokeRole
+  measured:
+  - issuerTransferIdentity
+  reason: measured via benchmark_gas.js
+  reviewed: false
+- name: Token economics (approvals, royalties, payments)
+  stance: implemented
+  functions:
+  - ApprovalForAll
+  - balanceOf
+  - balanceOfBatch
+  - isApprovedForAll
+  - setApprovalForAll
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: VIN linkage
+  stance: implemented
+  functions:
+  - vehicleForVIN
+  - vehicleVIN
+  - vinHashOf
+  - vinHashToVehicle
+  measured: []
+  reason: present in the option's surface but not used by the comparison — asymmetry to discuss
+  reviewed: false
+- name: DID / resolution helpers
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+- name: Off-chain creation (identity exists before any transaction)
+  stance: not-applicable
+  functions: []
+  reason: creation requires a transaction (mint or deployment) — auto; review
+  reviewed: false
+- name: Message signing / verification (off-chain hot path)
+  stance: not-applicable
+  functions: []
+  measured: []
+  reason: no function or method in this family on this option — auto; review whether the standard defines it
+  reviewed: false
+surface:
+  functions: 34
+  events: 12
+  provider_methods: 0

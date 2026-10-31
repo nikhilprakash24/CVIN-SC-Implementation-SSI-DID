@@ -17,10 +17,12 @@ import json
 
 try:
     from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
+    from identity.freshness import REASON_BAD_SIGNATURE, REASON_NO_TRUST_ANCHOR, REASON_REVOKED, REASON_VALIDITY
 except ImportError:  # run as a script from identity/standard/
     import os as _os, sys as _sys
     _sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', '..'))
     from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
+    from identity.freshness import REASON_BAD_SIGNATURE, REASON_NO_TRUST_ANCHOR, REASON_REVOKED, REASON_VALIDITY
 
 
 class VehiclePKIIdentity:
@@ -41,6 +43,9 @@ class VehiclePKIIdentity:
         # Freshness window + replay cache applied when this identity verifies
         # peers' messages (review 02, T-9). On by default.
         self.freshness = FreshnessPolicy()
+        # Why the last REJECTED verify failed (identity.freshness REASON_*);
+        # written on rejection paths only, never on the accept path.
+        self.last_reject_reason = None
 
     def generate_keypair(self):
         """Generate ECDSA P-256 keypair for vehicle."""
@@ -234,6 +239,7 @@ class VehiclePKIIdentity:
 
             anchor = ca_certificate if ca_certificate is not None else getattr(self, 'trust_anchor', None)
             if anchor is None:
+                self.last_reject_reason = REASON_NO_TRUST_ANCHOR
                 return False, (time.time() - start_time) * 1000
 
             # Load certificate
@@ -249,17 +255,21 @@ class VehiclePKIIdentity:
             # Check certificate revocation
             cert_serial = cert.serial_number
             if cert_serial in crl:
+                self.last_reject_reason = REASON_REVOKED
                 return False, (time.time() - start_time) * 1000
 
             # Check certificate validity period
             now = datetime.utcnow()
             if now < cert.not_valid_before or now > cert.not_valid_after:
+                self.last_reject_reason = REASON_VALIDITY
                 return False, (time.time() - start_time) * 1000
 
             # Freshness window + replay cache (T-9)
             timestamp = signed_message.get('timestamp')
             message_bytes = signed_bytes(message, timestamp)
-            if self.freshness.check(timestamp, cert_serial, message_bytes) is not None:
+            stale = self.freshness.check(timestamp, cert_serial, message_bytes)
+            if stale is not None:
+                self.last_reject_reason = stale
                 return False, (time.time() - start_time) * 1000
 
             # Verify signature (covers the generation time)
@@ -277,6 +287,7 @@ class VehiclePKIIdentity:
 
         except Exception as e:
             verification_time = (time.time() - start_time) * 1000
+            self.last_reject_reason = REASON_BAD_SIGNATURE
             print(f"Verification failed: {e}")
             return False, verification_time
 

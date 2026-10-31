@@ -52,13 +52,17 @@ resolution and the revocation check for the ERC-1056 provider):
 |---|---|---|---|---|---|---|---|
 | PKI, cert travels with message | M0, in-process | 0.321 ms | 0.366 ms | 77 | **155** | 311 | viable, dense traffic |
 | ERC-1056, key + revocation read from chain **at message time**, uncached | M1, local RPC, 7 round trips | 18.158 ms | 23.741 ms | 1 | **2** | 5 | not viable |
-| ERC-1056, keys pre-resolved, one `changed()` freshness call per message | M1 (analytic: one round trip ≈ 2.5 ms floor measured for `check_revocation`) | ≈2.5 ms (estimate) | — | 10 | **20** | 40 | marginal |
-| ERC-1056, keys pre-resolved and cached, verification fully off-chain | M0 (analytic: signature check only; secp256k1 verify measured within `sign`/`verify` paths ≈0.4 ms) | ≈0.4 ms (estimate) | — | 62 | **125** | 250 | viable, dense traffic |
+| ERC-1056, keys pre-resolved, one `changed()` freshness call per message (k = 1) | M1, **measured** 2026-10-03 (`cv2x-testbed/results/freshness_k.md`, n=200) | 2.697 ms | 3.436 ms | 9 | **18** | 37 | marginal |
+| ERC-1056, keys pre-resolved and cached, verification fully off-chain (k = ∞) | M0, **measured** 2026-10-03 (same run) | 0.441 ms | 0.500 ms | 56 | **113** | 226 | viable, dense traffic |
 
-Verdicts use P*(0.5). The two "estimate" rows are derived from measured
-components and are labelled **E** in the claim register until measured
-directly (the next experiment: a cached-verifier variant of
-`experiment_pki_vs_erc1056.py`).
+Verdicts use P*(0.5). The two cached rows were estimates until 2026-10-03; they
+are now measured by `cv2x-testbed/scripts/experiment_freshness_k.py` (register
+#29), which also sweeps k ∈ {1, 5, 25, 100, ∞}: median verify 2.70 / 0.45 / 0.46 /
+0.44 / 0.44 ms, RPC per message 1.00 / 0.20 / 0.04 / 0.01 / 0, and a revoked sender
+rejected after 1 / 2 / 22 / 97 / never messages. The estimates were within 10 % of
+the measured medians (0.4 → 0.44; 2.5 → 2.70). Note the run's host is a 2.80 GHz
+Xeon versus 2.10 GHz for the PKI-vs-ERC-1056 run above, so chain-bound rows run
+~15–20 % faster here (uncached 15.0 vs 18.2 ms); compare rows within a run.
 
 ## 4. What this says about H3
 
@@ -80,8 +84,16 @@ state every *k* messages rather than every message has
 
     t_eff ≈ 0.4 ms + 2.5 ms / k
 
-which crosses P*(0.5) = 100 at *k* ≈ 25 (one refresh per 2.5 s at 10 Hz).
-This is the design point to evaluate under SUMO.
+which was predicted to cross P*(0.5) = 100 at *k* ≈ 25 (one refresh per 2.5 s at
+10 Hz). **Measured:** on the median, P* saturates at ≈110 from k = 5 (a cache hit
+is the typical message); on the *mean*, which is what the amortised model
+predicts, P*(0.5) = 50 / 74 / 103 / 111 at k = 5 / 25 / 100 / ∞, so the crossing is
+between k = 25 and k = 100 — later than predicted because the per-hit cost is
+0.44 ms rather than 0.40 and refreshes add tail. The freshness bound on
+revocation (a revoked sender is rejected within k messages) holds for every
+finite k. The design point to evaluate under SUMO is therefore k ≈ 25–100
+(revocation latency 2.5–10 s at 10 Hz) — a quantitative trade-off the thesis can
+state exactly.
 
 > **Measured 2026-10-04 (register #32, `cv2x-testbed/results/freshness_k.*`).** The sweep over
 > k ∈ {1, 5, 25, ∞} fits t_eff = 0.428 ms + 10.52 ms / k within ±7 %. The refresh in this provider is
@@ -91,10 +103,12 @@ This is the design point to evaluate under SUMO.
 > further messages from that sender (0 / 4 / 24 for k = 1 / 5 / 25), so at 10 Hz and k = 146 a
 > revoked key is honoured for up to ≈14.5 s.
 >
-> **Update (register #37).** A one-call probe refresh cuts t_chain to ≈2.8 ms while keeping the k − 1
-> staleness bound. But on a second host, with t_local ≈ 0.5 ms, **no k reaches P*(0.5) = 100 in either
-> mode** (k = ∞ gives ≈80). The knee is therefore host-dependent and must always be quoted with its
-> t_local.
+> **Update (registers #37, #42).** A one-call probe refresh cuts t_chain about 3× (5.85 vs 18.80 ms on
+> one host, back to back) while keeping the k − 1 staleness bound, and it beats the full refresh at
+> every finite k. On the 2.80 GHz test hosts **no k reaches P*(0.5) = 100 in either mode**: t_local is
+> 0.5–0.7 ms there, and k = ∞ gives P* ≈ 60–80. The knee is host- and session-dependent, so it must
+> always be quoted with its t_local (on #32's 2.10 GHz host, t_local 0.428 ms gave k ≈ 146 with the
+> full refresh).
 
 ## 5. Caveats
 
@@ -108,10 +122,10 @@ This is the design point to evaluate under SUMO.
 - P* assumes serial processing on one core; parallel verification scales
   P* by the core count for the off-chain rows but not for the RPC-bound
   rows (which serialize on the node).
-- The bundle lineage reported an off-chain warm verify of 0.165 ms
+- <!-- history: superseded by #27 --> The bundle lineage reported an off-chain warm verify of 0.165 ms
   (N=30) and a saturation of ≈772 neighbours at 0.130 ms/neighbour. Both were
-  **re-executed on this trunk 2026-10-04**: warm verify **0.153 ms [0.151, 0.154]**
-  (register #27), and **0.164 ms/neighbour, P* ≈ 609** (register #26; an
+  **re-executed on this trunk 2026-10-04**: warm verify **0.153 ms [0.151, 0.154]** (since superseded:
+  0.142 ms [0.141, 0.143] at the 2026-10-22 re-run, register #27), and **0.164 ms/neighbour, P* ≈ 609** (register #26; an
   extrapolation beyond the tested P ≤ 80). The change from the bundle values is
   environmental (same-host A/B), not code.
 

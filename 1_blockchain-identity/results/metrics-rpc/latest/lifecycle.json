@@ -8,12 +8,12 @@
         "op": "C2_create_with_attributes",
         "actor": "manufacturer",
         "supported": true,
-        "gasUsed": 366870,
+        "gasUsed": 366892,
         "txCount": 9,
         "logBytes": 2272,
         "sstoreCount": 10,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 170.585036
+        "latencyMs": 118.748922
       },
       {
         "eventNo": 2,
@@ -26,7 +26,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 17.129337
+        "latencyMs": 26.533627
       },
       {
         "eventNo": 3,
@@ -39,7 +39,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 20.017523
+        "latencyMs": 14.036454
       },
       {
         "eventNo": 4,
@@ -52,7 +52,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 23.774547
+        "latencyMs": 12.051029
       },
       {
         "eventNo": 5,
@@ -65,7 +65,7 @@
         "logBytes": 288,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 26.904543
+        "latencyMs": 14.222669
       },
       {
         "eventNo": 6,
@@ -78,7 +78,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 20.161824
+        "latencyMs": 12.959235
       },
       {
         "eventNo": 7,
@@ -91,7 +91,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 21.180818
+        "latencyMs": 13.011653
       },
       {
         "eventNo": 8,
@@ -104,7 +104,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 24.169355
+        "latencyMs": 15.419027
       },
       {
         "eventNo": 9,
@@ -117,7 +117,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 27.384523
+        "latencyMs": 13.688827
       },
       {
         "eventNo": 10,
@@ -130,7 +130,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 27.284046
+        "latencyMs": 12.200541
       },
       {
         "eventNo": 11,
@@ -143,7 +143,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 26.076999
+        "latencyMs": 11.160916
       },
       {
         "eventNo": 12,
@@ -156,7 +156,7 @@
         "logBytes": 384,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 50.080527
+        "latencyMs": 22.982682
       },
       {
         "eventNo": 13,
@@ -169,7 +169,7 @@
         "logBytes": 128,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 21.405546
+        "latencyMs": 11.446489
       },
       {
         "eventNo": 14,
@@ -182,7 +182,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 26.080318
+        "latencyMs": 12.288632
       },
       {
         "eventNo": 15,
@@ -195,7 +195,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 22.098698
+        "latencyMs": 11.31078
       },
       {
         "eventNo": 16,
@@ -208,7 +208,7 @@
         "logBytes": 128,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 22.680047
+        "latencyMs": 12.51047
       },
       {
         "eventNo": 17,
@@ -221,20 +221,20 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 18.270922
+        "latencyMs": 13.267366
       }
     ],
-    "lifetimeGas": 1050787,
+    "lifetimeGas": 1050809,
     "skippedEvents": [],
     "lifetimeTxCount": 26,
     "lifetimeLogBytes": 6464,
     "lifetimeZeroToNonzeroSstores": 8,
-    "sharedDeployGas": 2709021,
+    "sharedDeployGas": 2712263,
     "perIdentityDeployGas": 0,
     "apportioned": {
-      "1": 3759808,
-      "1000": 1053496,
-      "1000000": 1050790
+      "1": 3763072,
+      "1000": 1053521,
+      "1000000": 1050812
     }
   },
   {
@@ -246,12 +246,12 @@
         "op": "C2_create_with_attributes",
         "actor": "manufacturer",
         "supported": true,
-        "gasUsed": 234551,
+        "gasUsed": 234595,
         "txCount": 3,
         "logBytes": 2400,
         "sstoreCount": 12,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 150.251322
+        "latencyMs": 166.660423
       },
       {
         "eventNo": 2,
@@ -264,7 +264,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 19.8084
+        "latencyMs": 16.648819
       },
       {
         "eventNo": 3,
@@ -277,7 +277,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 21.86252
+        "latencyMs": 16.679637
       },
       {
         "eventNo": 4,
@@ -290,7 +290,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 23.548612
+        "latencyMs": 18.122058
       },
       {
         "eventNo": 5,
@@ -303,7 +303,7 @@
         "logBytes": 288,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 28.548688
+        "latencyMs": 15.596214
       },
       {
         "eventNo": 6,
@@ -316,7 +316,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 30.655822
+        "latencyMs": 15.648362
       },
       {
         "eventNo": 7,
@@ -329,7 +329,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 45.955467
+        "latencyMs": 17.470865
       },
       {
         "eventNo": 8,
@@ -342,7 +342,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 57.076583
+        "latencyMs": 29.839376
       },
       {
         "eventNo": 9,
@@ -355,7 +355,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 23.288518
+        "latencyMs": 39.619599
       },
       {
         "eventNo": 10,
@@ -368,7 +368,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 63.619633
+        "latencyMs": 27.40749
       },
       {
         "eventNo": 11,
@@ -376,12 +376,12 @@
         "op": "U2_add_delegate",
         "actor": "owner",
         "supported": true,
-        "gasUsed": 64708,
+        "gasUsed": 64730,
         "txCount": 1,
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 24.658365
+        "latencyMs": 29.450106
       },
       {
         "eventNo": 12,
@@ -389,12 +389,12 @@
         "op": "rotate_delegate (U2+D1)",
         "actor": "owner",
         "supported": true,
-        "gasUsed": 106584,
+        "gasUsed": 106606,
         "txCount": 2,
         "logBytes": 384,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 37.133094
+        "latencyMs": 42.430387
       },
       {
         "eventNo": 13,
@@ -407,7 +407,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 19.929674
+        "latencyMs": 13.361141
       },
       {
         "eventNo": 14,
@@ -420,7 +420,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 29.763682
+        "latencyMs": 14.350439
       },
       {
         "eventNo": 15,
@@ -433,7 +433,7 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 19.877145
+        "latencyMs": 13.818293
       },
       {
         "eventNo": 16,
@@ -446,7 +446,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 26.786825
+        "latencyMs": 14.63802
       },
       {
         "eventNo": 17,
@@ -459,20 +459,20 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 21.544739
+        "latencyMs": 15.172402
       }
     ],
-    "lifetimeGas": 1025381,
+    "lifetimeGas": 1025469,
     "skippedEvents": [],
     "lifetimeTxCount": 20,
     "lifetimeLogBytes": 6592,
     "lifetimeZeroToNonzeroSstores": 9,
-    "sharedDeployGas": 2709021,
+    "sharedDeployGas": 2712263,
     "perIdentityDeployGas": 0,
     "apportioned": {
-      "1": 3734402,
-      "1000": 1028090,
-      "1000000": 1025384
+      "1": 3737732,
+      "1000": 1028181,
+      "1000000": 1025472
     }
   },
   {
@@ -484,12 +484,12 @@
         "op": "C2_create_with_attributes",
         "actor": "manufacturer",
         "supported": true,
-        "gasUsed": 565262,
+        "gasUsed": 567985,
         "txCount": 1,
         "logBytes": 416,
         "sstoreCount": 27,
         "zeroToNonzeroSstores": 23,
-        "latencyMs": 27.626498
+        "latencyMs": 16.953846
       },
       {
         "eventNo": 2,
@@ -497,12 +497,12 @@
         "op": "V1_issuer_key_anchor",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 419990,
+        "gasUsed": 422713,
         "txCount": 1,
         "logBytes": 416,
         "sstoreCount": 24,
         "zeroToNonzeroSstores": 16,
-        "latencyMs": 31.667125
+        "latencyMs": 16.772416
       },
       {
         "eventNo": 3,
@@ -515,7 +515,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 5,
-        "latencyMs": 17.677093
+        "latencyMs": 15.985298
       },
       {
         "eventNo": 4,
@@ -528,7 +528,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 16.756358
+        "latencyMs": 13.588655
       },
       {
         "eventNo": 5,
@@ -541,7 +541,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 17.110916
+        "latencyMs": 14.886233
       },
       {
         "eventNo": 6,
@@ -554,7 +554,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 17.168603
+        "latencyMs": 13.720062
       },
       {
         "eventNo": 7,
@@ -567,7 +567,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 15.927734
+        "latencyMs": 11.473445
       },
       {
         "eventNo": 8,
@@ -580,7 +580,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 15.177741
+        "latencyMs": 20.756049
       },
       {
         "eventNo": 9,
@@ -593,7 +593,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 17.233488
+        "latencyMs": 22.938331
       },
       {
         "eventNo": 10,
@@ -606,7 +606,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 16.099103
+        "latencyMs": 12.139034
       },
       {
         "eventNo": 11,
@@ -619,7 +619,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 17.805917
+        "latencyMs": 11.97978
       },
       {
         "eventNo": 12,
@@ -632,7 +632,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.833403
+        "latencyMs": 12.425367
       },
       {
         "eventNo": 13,
@@ -645,7 +645,7 @@
         "logBytes": 288,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 6,
-        "latencyMs": 22.510853
+        "latencyMs": 14.102085
       },
       {
         "eventNo": 14,
@@ -658,7 +658,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 22.298859
+        "latencyMs": 12.677393
       },
       {
         "eventNo": 15,
@@ -671,7 +671,7 @@
         "logBytes": 256,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 16.197664
+        "latencyMs": 13.421496
       },
       {
         "eventNo": 16,
@@ -684,7 +684,7 @@
         "logBytes": 288,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 6,
-        "latencyMs": 19.762725
+        "latencyMs": 12.415455
       },
       {
         "eventNo": 17,
@@ -697,20 +697,20 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 16.08501
+        "latencyMs": 11.800474
       }
     ],
-    "lifetimeGas": 2701239,
+    "lifetimeGas": 2706685,
     "skippedEvents": [],
     "lifetimeTxCount": 17,
     "lifetimeLogBytes": 4288,
     "lifetimeZeroToNonzeroSstores": 92,
-    "sharedDeployGas": 2721476,
+    "sharedDeployGas": 2787288,
     "perIdentityDeployGas": 0,
     "apportioned": {
-      "1": 5422715,
-      "1000": 2703960,
-      "1000000": 2701242
+      "1": 5493973,
+      "1000": 2709472,
+      "1000000": 2706688
     }
   },
   {
@@ -727,7 +727,7 @@
         "logBytes": 1120,
         "sstoreCount": 41,
         "zeroToNonzeroSstores": 34,
-        "latencyMs": 143.775608
+        "latencyMs": 123.73515
       },
       {
         "eventNo": 2,
@@ -740,7 +740,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 5,
-        "latencyMs": 18.224052
+        "latencyMs": 12.2963
       },
       {
         "eventNo": 3,
@@ -753,7 +753,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 20.797247
+        "latencyMs": 11.71855
       },
       {
         "eventNo": 4,
@@ -766,7 +766,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 18.452158
+        "latencyMs": 12.147841
       },
       {
         "eventNo": 5,
@@ -779,7 +779,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 19.598755
+        "latencyMs": 12.38616
       },
       {
         "eventNo": 6,
@@ -792,7 +792,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 22.408312
+        "latencyMs": 11.39463
       },
       {
         "eventNo": 7,
@@ -805,7 +805,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 15.681755
+        "latencyMs": 12.023383
       },
       {
         "eventNo": 8,
@@ -818,7 +818,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 14.953991
+        "latencyMs": 12.120238
       },
       {
         "eventNo": 9,
@@ -831,7 +831,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 18.138621
+        "latencyMs": 16.041634
       },
       {
         "eventNo": 10,
@@ -844,7 +844,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 16.036286
+        "latencyMs": 13.143575
       },
       {
         "eventNo": 11,
@@ -857,7 +857,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 14.745025
+        "latencyMs": 11.72139
       },
       {
         "eventNo": 12,
@@ -870,7 +870,7 @@
         "logBytes": 192,
         "sstoreCount": 11,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 59.006283
+        "latencyMs": 28.29352
       },
       {
         "eventNo": 13,
@@ -883,7 +883,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 14.285144
+        "latencyMs": 12.283233
       },
       {
         "eventNo": 14,
@@ -896,7 +896,7 @@
         "logBytes": 128,
         "sstoreCount": 5,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 16.588834
+        "latencyMs": 16.802006
       },
       {
         "eventNo": 15,
@@ -909,7 +909,7 @@
         "logBytes": 64,
         "sstoreCount": 6,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 18.162097
+        "latencyMs": 12.823341
       },
       {
         "eventNo": 16,
@@ -922,7 +922,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 15.934224
+        "latencyMs": 12.69811
       },
       {
         "eventNo": 17,
@@ -935,7 +935,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 15.271823
+        "latencyMs": 12.987104
       }
     ],
     "lifetimeGas": 3155103,
@@ -960,12 +960,12 @@
         "op": "C2_create_with_attributes",
         "actor": "manufacturer",
         "supported": true,
-        "gasUsed": 2285484,
-        "txCount": 2,
-        "logBytes": 2464,
-        "sstoreCount": 34,
-        "zeroToNonzeroSstores": 34,
-        "latencyMs": 87.128652
+        "gasUsed": 2558509,
+        "txCount": 3,
+        "logBytes": 2560,
+        "sstoreCount": 35,
+        "zeroToNonzeroSstores": 35,
+        "latencyMs": 74.149489
       },
       {
         "eventNo": 2,
@@ -986,12 +986,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 294653,
-        "txCount": 1,
-        "logBytes": 960,
-        "sstoreCount": 12,
-        "zeroToNonzeroSstores": 11,
-        "latencyMs": 30.838501
+        "gasUsed": 345945,
+        "txCount": 2,
+        "logBytes": 1056,
+        "sstoreCount": 13,
+        "zeroToNonzeroSstores": 12,
+        "latencyMs": 40.660658
       },
       {
         "eventNo": 4,
@@ -999,12 +999,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 294628,
-        "txCount": 1,
-        "logBytes": 960,
-        "sstoreCount": 12,
-        "zeroToNonzeroSstores": 11,
-        "latencyMs": 30.947353
+        "gasUsed": 345920,
+        "txCount": 2,
+        "logBytes": 1056,
+        "sstoreCount": 13,
+        "zeroToNonzeroSstores": 12,
+        "latencyMs": 41.197297
       },
       {
         "eventNo": 5,
@@ -1012,12 +1012,12 @@
         "op": "U3_set_attribute",
         "actor": "owner",
         "supported": true,
-        "gasUsed": 317777,
+        "gasUsed": 318017,
         "txCount": 1,
         "logBytes": 1024,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 12,
-        "latencyMs": 25.063467
+        "latencyMs": 21.452314
       },
       {
         "eventNo": 6,
@@ -1025,12 +1025,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 340719,
+        "gasUsed": 340959,
         "txCount": 1,
         "logBytes": 1088,
         "sstoreCount": 14,
         "zeroToNonzeroSstores": 13,
-        "latencyMs": 22.365173
+        "latencyMs": 19.330677
       },
       {
         "eventNo": 7,
@@ -1038,12 +1038,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 340719,
+        "gasUsed": 340959,
         "txCount": 1,
         "logBytes": 1088,
         "sstoreCount": 14,
         "zeroToNonzeroSstores": 13,
-        "latencyMs": 22.38899
+        "latencyMs": 18.762635
       },
       {
         "eventNo": 8,
@@ -1051,12 +1051,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 340694,
+        "gasUsed": 340934,
         "txCount": 1,
         "logBytes": 1088,
         "sstoreCount": 14,
         "zeroToNonzeroSstores": 13,
-        "latencyMs": 28.067257
+        "latencyMs": 19.928236
       },
       {
         "eventNo": 9,
@@ -1064,12 +1064,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 340694,
+        "gasUsed": 340934,
         "txCount": 1,
         "logBytes": 1088,
         "sstoreCount": 14,
         "zeroToNonzeroSstores": 13,
-        "latencyMs": 32.652724
+        "latencyMs": 15.578496
       },
       {
         "eventNo": 10,
@@ -1077,12 +1077,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 340719,
+        "gasUsed": 340959,
         "txCount": 1,
         "logBytes": 1088,
         "sstoreCount": 14,
         "zeroToNonzeroSstores": 13,
-        "latencyMs": 22.332233
+        "latencyMs": 18.296791
       },
       {
         "eventNo": 11,
@@ -1116,12 +1116,12 @@
         "op": "U4_transfer_vehicle",
         "actor": "owner→newOwner",
         "supported": true,
-        "gasUsed": 28746,
+        "gasUsed": 28812,
         "txCount": 1,
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 17.545228
+        "latencyMs": 11.708966
       },
       {
         "eventNo": 14,
@@ -1129,12 +1129,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 294628,
-        "txCount": 1,
-        "logBytes": 960,
-        "sstoreCount": 12,
-        "zeroToNonzeroSstores": 11,
-        "latencyMs": 22.180754
+        "gasUsed": 345920,
+        "txCount": 2,
+        "logBytes": 1056,
+        "sstoreCount": 13,
+        "zeroToNonzeroSstores": 12,
+        "latencyMs": 29.592643
       },
       {
         "eventNo": 15,
@@ -1147,7 +1147,7 @@
         "logBytes": 480,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 19.836738
+        "latencyMs": 20.838122
       },
       {
         "eventNo": 16,
@@ -1155,12 +1155,12 @@
         "op": "U4_transfer_vehicle",
         "actor": "newOwner→thirdOwner",
         "supported": true,
-        "gasUsed": 28746,
+        "gasUsed": 28812,
         "txCount": 1,
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 16.181971
+        "latencyMs": 17.421348
       },
       {
         "eventNo": 17,
@@ -1168,29 +1168,29 @@
         "op": "D3_deactivate_identity",
         "actor": "admin/owner",
         "supported": true,
-        "gasUsed": 28530,
+        "gasUsed": 28596,
         "txCount": 1,
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 15.769589
+        "latencyMs": 16.384385
       }
     ],
-    "lifetimeGas": 5369010,
+    "lifetimeGas": 5797549,
     "skippedEvents": [
       2,
       11,
       12
     ],
-    "lifetimeTxCount": 15,
-    "lifetimeLogBytes": 12576,
-    "lifetimeZeroToNonzeroSstores": 145,
+    "lifetimeTxCount": 19,
+    "lifetimeLogBytes": 12960,
+    "lifetimeZeroToNonzeroSstores": 149,
     "sharedDeployGas": 0,
-    "perIdentityDeployGas": 1535776,
+    "perIdentityDeployGas": 1757881,
     "apportioned": {
-      "1": 5369010,
-      "1000": 5369010,
-      "1000000": 5369010
+      "1": 5797549,
+      "1000": 5797549,
+      "1000000": 5797549
     }
   },
   {
@@ -1202,12 +1202,12 @@
         "op": "C2_create_with_attributes",
         "actor": "manufacturer",
         "supported": true,
-        "gasUsed": 103901,
+        "gasUsed": 107717,
         "txCount": 1,
         "logBytes": 544,
         "sstoreCount": 3,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 19.32447
+        "latencyMs": 13.284625
       },
       {
         "eventNo": 2,
@@ -1220,7 +1220,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 23.246355
+        "latencyMs": 11.555918
       },
       {
         "eventNo": 3,
@@ -1228,12 +1228,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 57507,
+        "gasUsed": 80119,
         "txCount": 1,
         "logBytes": 352,
-        "sstoreCount": 1,
-        "zeroToNonzeroSstores": 1,
-        "latencyMs": 22.475278
+        "sstoreCount": 2,
+        "zeroToNonzeroSstores": 2,
+        "latencyMs": 13.71145
       },
       {
         "eventNo": 4,
@@ -1241,12 +1241,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 57507,
+        "gasUsed": 63019,
         "txCount": 1,
         "logBytes": 352,
-        "sstoreCount": 1,
+        "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 23.509965
+        "latencyMs": 13.67365
       },
       {
         "eventNo": 5,
@@ -1254,12 +1254,12 @@
         "op": "U3_set_attribute",
         "actor": "owner",
         "supported": true,
-        "gasUsed": 57135,
+        "gasUsed": 63019,
         "txCount": 1,
         "logBytes": 352,
-        "sstoreCount": 1,
+        "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 20.494009
+        "latencyMs": 15.06086
       },
       {
         "eventNo": 6,
@@ -1267,12 +1267,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 40035,
+        "gasUsed": 42804,
         "txCount": 1,
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 20.052228
+        "latencyMs": 11.8204
       },
       {
         "eventNo": 7,
@@ -1280,12 +1280,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 40035,
+        "gasUsed": 42804,
         "txCount": 1,
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 24.416608
+        "latencyMs": 11.859733
       },
       {
         "eventNo": 8,
@@ -1293,12 +1293,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 40035,
+        "gasUsed": 42804,
         "txCount": 1,
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 17.688353
+        "latencyMs": 12.531016
       },
       {
         "eventNo": 9,
@@ -1306,12 +1306,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 40035,
+        "gasUsed": 42804,
         "txCount": 1,
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 14.676542
+        "latencyMs": 14.317243
       },
       {
         "eventNo": 10,
@@ -1319,12 +1319,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 40035,
+        "gasUsed": 42804,
         "txCount": 1,
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 17.662099
+        "latencyMs": 12.20088
       },
       {
         "eventNo": 11,
@@ -1358,12 +1358,12 @@
         "op": "U4_transfer_vehicle",
         "actor": "owner→newOwner",
         "supported": true,
-        "gasUsed": 248734,
-        "txCount": 4,
-        "logBytes": 768,
-        "sstoreCount": 11,
-        "zeroToNonzeroSstores": 5,
-        "latencyMs": 76.8389
+        "gasUsed": 215455,
+        "txCount": 1,
+        "logBytes": 672,
+        "sstoreCount": 17,
+        "zeroToNonzeroSstores": 6,
+        "latencyMs": 199.004226
       },
       {
         "eventNo": 14,
@@ -1371,12 +1371,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 57519,
+        "gasUsed": 63031,
         "txCount": 1,
         "logBytes": 352,
-        "sstoreCount": 1,
+        "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 27.039123
+        "latencyMs": 21.85993
       },
       {
         "eventNo": 15,
@@ -1384,12 +1384,12 @@
         "op": "V5_revoke_credential",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 30997,
+        "gasUsed": 36511,
         "txCount": 1,
         "logBytes": 352,
-        "sstoreCount": 1,
+        "sstoreCount": 2,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 22.178976
+        "latencyMs": 34.908082
       },
       {
         "eventNo": 16,
@@ -1397,12 +1397,12 @@
         "op": "U4_transfer_vehicle",
         "actor": "newOwner→thirdOwner",
         "supported": true,
-        "gasUsed": 248782,
-        "txCount": 4,
-        "logBytes": 768,
-        "sstoreCount": 11,
-        "zeroToNonzeroSstores": 5,
-        "latencyMs": 127.519556
+        "gasUsed": 221767,
+        "txCount": 1,
+        "logBytes": 672,
+        "sstoreCount": 17,
+        "zeroToNonzeroSstores": 6,
+        "latencyMs": 221.17423
       },
       {
         "eventNo": 17,
@@ -1410,28 +1410,28 @@
         "op": "D3_deactivate_identity",
         "actor": "admin/owner",
         "supported": true,
-        "gasUsed": 37443,
-        "txCount": 1,
-        "logBytes": 352,
-        "sstoreCount": 3,
+        "gasUsed": 145636,
+        "txCount": 4,
+        "logBytes": 1408,
+        "sstoreCount": 9,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 18.860063
+        "latencyMs": 63.75895
       }
     ],
-    "lifetimeGas": 1150981,
+    "lifetimeGas": 1261575,
     "skippedEvents": [
       11,
       12
     ],
-    "lifetimeTxCount": 21,
-    "lifetimeLogBytes": 6080,
-    "lifetimeZeroToNonzeroSstores": 18,
-    "sharedDeployGas": 2304865,
+    "lifetimeTxCount": 18,
+    "lifetimeLogBytes": 6944,
+    "lifetimeZeroToNonzeroSstores": 21,
+    "sharedDeployGas": 2871435,
     "perIdentityDeployGas": 0,
     "apportioned": {
-      "1": 3455846,
-      "1000": 1153286,
-      "1000000": 1150983
+      "1": 4133010,
+      "1000": 1264446,
+      "1000000": 1261578
     }
   },
   {
@@ -1448,7 +1448,7 @@
         "logBytes": 1376,
         "sstoreCount": 11,
         "zeroToNonzeroSstores": 11,
-        "latencyMs": 109.476649
+        "latencyMs": 58.350087
       },
       {
         "eventNo": 2,
@@ -1461,7 +1461,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 23.54672
+        "latencyMs": 14.493089
       },
       {
         "eventNo": 3,
@@ -1474,7 +1474,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 20.063674
+        "latencyMs": 12.583922
       },
       {
         "eventNo": 4,
@@ -1487,7 +1487,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 17.777371
+        "latencyMs": 14.666962
       },
       {
         "eventNo": 5,
@@ -1500,7 +1500,7 @@
         "logBytes": 192,
         "sstoreCount": 3,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 25.265221
+        "latencyMs": 14.486411
       },
       {
         "eventNo": 6,
@@ -1513,7 +1513,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 25.174319
+        "latencyMs": 15.668745
       },
       {
         "eventNo": 7,
@@ -1526,7 +1526,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 17.768557
+        "latencyMs": 12.997897
       },
       {
         "eventNo": 8,
@@ -1539,7 +1539,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 28.087125
+        "latencyMs": 13.806611
       },
       {
         "eventNo": 9,
@@ -1552,7 +1552,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 26.535785
+        "latencyMs": 16.489579
       },
       {
         "eventNo": 10,
@@ -1565,7 +1565,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 25.638921
+        "latencyMs": 13.315129
       },
       {
         "eventNo": 11,
@@ -1604,7 +1604,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 24.394974
+        "latencyMs": 11.533055
       },
       {
         "eventNo": 14,
@@ -1617,7 +1617,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 23.635252
+        "latencyMs": 12.696932
       },
       {
         "eventNo": 15,
@@ -1630,7 +1630,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 22.783328
+        "latencyMs": 13.974153
       },
       {
         "eventNo": 16,
@@ -1643,7 +1643,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 22.68523
+        "latencyMs": 11.970536
       },
       {
         "eventNo": 17,
@@ -1656,7 +1656,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 19.919611
+        "latencyMs": 11.401279
       }
     ],
     "lifetimeGas": 2956507,
@@ -1684,12 +1684,12 @@
         "op": "C2_create_with_attributes",
         "actor": "manufacturer",
         "supported": true,
-        "gasUsed": 387113,
+        "gasUsed": 390275,
         "txCount": 2,
         "logBytes": 3264,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 12,
-        "latencyMs": 77.123267
+        "latencyMs": 34.363003
       },
       {
         "eventNo": 2,
@@ -1710,12 +1710,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 54874,
+        "gasUsed": 54893,
         "txCount": 1,
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 19.095849
+        "latencyMs": 13.278987
       },
       {
         "eventNo": 4,
@@ -1723,12 +1723,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 54874,
+        "gasUsed": 54893,
         "txCount": 1,
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 17.861727
+        "latencyMs": 13.317739
       },
       {
         "eventNo": 5,
@@ -1736,12 +1736,12 @@
         "op": "U3_set_attribute",
         "actor": "owner",
         "supported": true,
-        "gasUsed": 100573,
+        "gasUsed": 100574,
         "txCount": 1,
         "logBytes": 416,
         "sstoreCount": 3,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 18.31927
+        "latencyMs": 13.104775
       },
       {
         "eventNo": 6,
@@ -1749,12 +1749,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 123477,
+        "gasUsed": 123478,
         "txCount": 1,
         "logBytes": 480,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 24.895698
+        "latencyMs": 13.169981
       },
       {
         "eventNo": 7,
@@ -1762,12 +1762,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 123477,
+        "gasUsed": 123478,
         "txCount": 1,
         "logBytes": 480,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 23.318894
+        "latencyMs": 12.573495
       },
       {
         "eventNo": 8,
@@ -1775,12 +1775,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 123477,
+        "gasUsed": 123478,
         "txCount": 1,
         "logBytes": 480,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 23.465162
+        "latencyMs": 13.689008
       },
       {
         "eventNo": 9,
@@ -1788,12 +1788,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 123477,
+        "gasUsed": 123478,
         "txCount": 1,
         "logBytes": 480,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 18.11601
+        "latencyMs": 13.332148
       },
       {
         "eventNo": 10,
@@ -1801,12 +1801,12 @@
         "op": "U3_set_attribute",
         "actor": "serviceCenter",
         "supported": true,
-        "gasUsed": 123477,
+        "gasUsed": 123478,
         "txCount": 1,
         "logBytes": 480,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 17.40145
+        "latencyMs": 14.849409
       },
       {
         "eventNo": 11,
@@ -1840,12 +1840,12 @@
         "op": "U4_transfer_vehicle",
         "actor": "owner→newOwner",
         "supported": true,
-        "gasUsed": 80600,
+        "gasUsed": 80568,
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 8,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 20.488266
+        "latencyMs": 14.139951
       },
       {
         "eventNo": 14,
@@ -1853,12 +1853,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 54874,
+        "gasUsed": 54893,
         "txCount": 1,
         "logBytes": 352,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 22.724714
+        "latencyMs": 11.284511
       },
       {
         "eventNo": 15,
@@ -1866,12 +1866,12 @@
         "op": "V5_revoke_credential",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 32212,
+        "gasUsed": 32231,
         "txCount": 1,
         "logBytes": 288,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 19.383642
+        "latencyMs": 14.157751
       },
       {
         "eventNo": 16,
@@ -1879,12 +1879,12 @@
         "op": "U4_transfer_vehicle",
         "actor": "newOwner→thirdOwner",
         "supported": true,
-        "gasUsed": 80612,
+        "gasUsed": 80580,
         "txCount": 1,
         "logBytes": 256,
         "sstoreCount": 8,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 21.539377
+        "latencyMs": 13.287707
       },
       {
         "eventNo": 17,
@@ -1892,15 +1892,15 @@
         "op": "D3_deactivate_identity",
         "actor": "admin/owner",
         "supported": true,
-        "gasUsed": 42141,
+        "gasUsed": 42116,
         "txCount": 1,
         "logBytes": 352,
         "sstoreCount": 6,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 19.081671
+        "latencyMs": 25.722256
       }
     ],
-    "lifetimeGas": 1505258,
+    "lifetimeGas": 1508413,
     "skippedEvents": [
       2,
       11,
@@ -1909,12 +1909,12 @@
     "lifetimeTxCount": 15,
     "lifetimeLogBytes": 8288,
     "lifetimeZeroToNonzeroSstores": 42,
-    "sharedDeployGas": 1614592,
+    "sharedDeployGas": 1670271,
     "perIdentityDeployGas": 0,
     "apportioned": {
-      "1": 3119850,
-      "1000": 1506873,
-      "1000000": 1505260
+      "1": 3178684,
+      "1000": 1510083,
+      "1000000": 1508415
     }
   },
   {
@@ -1931,7 +1931,7 @@
         "logBytes": 1408,
         "sstoreCount": 9,
         "zeroToNonzeroSstores": 9,
-        "latencyMs": 204.170821
+        "latencyMs": 115.656968
       },
       {
         "eventNo": 2,
@@ -1944,7 +1944,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 24.848479
+        "latencyMs": 12.379085
       },
       {
         "eventNo": 3,
@@ -1957,7 +1957,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 17.143967
+        "latencyMs": 12.042631
       },
       {
         "eventNo": 4,
@@ -1970,7 +1970,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 15.808623
+        "latencyMs": 13.338082
       },
       {
         "eventNo": 5,
@@ -1983,7 +1983,7 @@
         "logBytes": 192,
         "sstoreCount": 3,
         "zeroToNonzeroSstores": 3,
-        "latencyMs": 18.609076
+        "latencyMs": 13.473509
       },
       {
         "eventNo": 6,
@@ -1996,7 +1996,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 25.012781
+        "latencyMs": 14.493903
       },
       {
         "eventNo": 7,
@@ -2009,7 +2009,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 19.256253
+        "latencyMs": 15.756976
       },
       {
         "eventNo": 8,
@@ -2022,7 +2022,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 16.354009
+        "latencyMs": 13.641159
       },
       {
         "eventNo": 9,
@@ -2035,7 +2035,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 15.810078
+        "latencyMs": 14.092552
       },
       {
         "eventNo": 10,
@@ -2048,7 +2048,7 @@
         "logBytes": 224,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 4,
-        "latencyMs": 16.16924
+        "latencyMs": 13.980917
       },
       {
         "eventNo": 11,
@@ -2061,7 +2061,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 15.702689
+        "latencyMs": 13.302279
       },
       {
         "eventNo": 12,
@@ -2074,7 +2074,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 22.420597
+        "latencyMs": 12.143433
       },
       {
         "eventNo": 13,
@@ -2087,7 +2087,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 14.47348
+        "latencyMs": 12.876718
       },
       {
         "eventNo": 14,
@@ -2100,7 +2100,7 @@
         "logBytes": 160,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 23.734455
+        "latencyMs": 13.401898
       },
       {
         "eventNo": 15,
@@ -2113,7 +2113,7 @@
         "logBytes": 128,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 20.211464
+        "latencyMs": 16.359924
       },
       {
         "eventNo": 16,
@@ -2126,7 +2126,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 19.762857
+        "latencyMs": 13.690169
       },
       {
         "eventNo": 17,
@@ -2139,7 +2139,7 @@
         "logBytes": 96,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 13.984626
+        "latencyMs": 12.792534
       }
     ],
     "lifetimeGas": 2221290,
@@ -2164,12 +2164,12 @@
         "op": "C2_create_with_attributes",
         "actor": "manufacturer",
         "supported": true,
-        "gasUsed": 1006857,
+        "gasUsed": 1015668,
         "txCount": 2,
-        "logBytes": 1632,
+        "logBytes": 2016,
         "sstoreCount": 42,
         "zeroToNonzeroSstores": 41,
-        "latencyMs": 44.490507
+        "latencyMs": 39.676535
       },
       {
         "eventNo": 2,
@@ -2182,7 +2182,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 2,
-        "latencyMs": 16.42952
+        "latencyMs": 12.027021
       },
       {
         "eventNo": 3,
@@ -2190,12 +2190,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 289750,
+        "gasUsed": 294157,
         "txCount": 1,
-        "logBytes": 512,
+        "logBytes": 704,
         "sstoreCount": 12,
         "zeroToNonzeroSstores": 11,
-        "latencyMs": 19.785381
+        "latencyMs": 15.206099
       },
       {
         "eventNo": 4,
@@ -2203,12 +2203,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 289750,
+        "gasUsed": 294157,
         "txCount": 1,
-        "logBytes": 512,
+        "logBytes": 704,
         "sstoreCount": 12,
         "zeroToNonzeroSstores": 11,
-        "latencyMs": 38.401863
+        "latencyMs": 17.284814
       },
       {
         "eventNo": 5,
@@ -2221,7 +2221,7 @@
         "logBytes": 288,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 21.320134
+        "latencyMs": 15.497631
       },
       {
         "eventNo": 6,
@@ -2234,7 +2234,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 16.847224
+        "latencyMs": 14.092779
       },
       {
         "eventNo": 7,
@@ -2247,7 +2247,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 17.721179
+        "latencyMs": 14.992603
       },
       {
         "eventNo": 8,
@@ -2260,7 +2260,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 22.612514
+        "latencyMs": 14.000226
       },
       {
         "eventNo": 9,
@@ -2273,7 +2273,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 20.166471
+        "latencyMs": 13.047408
       },
       {
         "eventNo": 10,
@@ -2286,7 +2286,7 @@
         "logBytes": 320,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 17.108664
+        "latencyMs": 14.583135
       },
       {
         "eventNo": 11,
@@ -2299,7 +2299,7 @@
         "logBytes": 192,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 15.999154
+        "latencyMs": 12.516346
       },
       {
         "eventNo": 12,
@@ -2312,7 +2312,7 @@
         "logBytes": 384,
         "sstoreCount": 4,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 34.52877
+        "latencyMs": 25.896189
       },
       {
         "eventNo": 13,
@@ -2325,7 +2325,7 @@
         "logBytes": 128,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 19.109395
+        "latencyMs": 12.572669
       },
       {
         "eventNo": 14,
@@ -2333,12 +2333,12 @@
         "op": "V3_anchor_status",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 289754,
+        "gasUsed": 294161,
         "txCount": 1,
-        "logBytes": 512,
+        "logBytes": 704,
         "sstoreCount": 12,
         "zeroToNonzeroSstores": 11,
-        "latencyMs": 26.384903
+        "latencyMs": 18.477967
       },
       {
         "eventNo": 15,
@@ -2346,12 +2346,12 @@
         "op": "V5_revoke_credential",
         "actor": "issuer",
         "supported": true,
-        "gasUsed": 89965,
+        "gasUsed": 93492,
         "txCount": 1,
-        "logBytes": 160,
+        "logBytes": 352,
         "sstoreCount": 13,
         "zeroToNonzeroSstores": 1,
-        "latencyMs": 42.898279
+        "latencyMs": 16.629318
       },
       {
         "eventNo": 16,
@@ -2364,7 +2364,7 @@
         "logBytes": 128,
         "sstoreCount": 2,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 21.608141
+        "latencyMs": 11.133376
       },
       {
         "eventNo": 17,
@@ -2377,20 +2377,20 @@
         "logBytes": 256,
         "sstoreCount": 1,
         "zeroToNonzeroSstores": 0,
-        "latencyMs": 28.544119
+        "latencyMs": 11.784524
       }
     ],
-    "lifetimeGas": 2533978,
+    "lifetimeGas": 2559537,
     "skippedEvents": [],
     "lifetimeTxCount": 19,
-    "lifetimeLogBytes": 6496,
+    "lifetimeLogBytes": 7648,
     "lifetimeZeroToNonzeroSstores": 81,
-    "sharedDeployGas": 1490166,
+    "sharedDeployGas": 1531487,
     "perIdentityDeployGas": 0,
     "apportioned": {
-      "1": 4024144,
-      "1000": 2535468,
-      "1000000": 2533979
+      "1": 4091024,
+      "1000": 2561068,
+      "1000000": 2559539
     }
   }
 ]

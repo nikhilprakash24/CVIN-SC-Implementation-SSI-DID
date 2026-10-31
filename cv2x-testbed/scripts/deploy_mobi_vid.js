@@ -4,8 +4,13 @@ const hre = require("hardhat");
 const fs = require("fs");
 const path = require("path");
 
+// Contract to deploy: "MOBIVIDRegistry" (VID I, default) or "MOBIVIDRegistryV2"
+// (VID I + VID II lifecycle events). V2 inherits V1, so the smoke test below
+// runs unchanged against either. Select with MOBI_VID_CONTRACT=MOBIVIDRegistryV2.
+const CONTRACT_NAME = process.env.MOBI_VID_CONTRACT || "MOBIVIDRegistry";
+
 async function main() {
-  console.log("🚗 Deploying MOBI VID Registry Contract...\n");
+  console.log(`🚗 Deploying MOBI VID Registry Contract (${CONTRACT_NAME})...\n`);
 
   // Get deployer account (will be registry authority and first manufacturer)
   const [deployer] = await hre.ethers.getSigners();
@@ -16,14 +21,14 @@ async function main() {
   console.log("💰 Account balance:", hre.ethers.formatEther(balance), "ETH\n");
 
   // Deploy contract
-  const MOBIVIDRegistry = await hre.ethers.getContractFactory("MOBIVIDRegistry");
+  const MOBIVIDRegistry = await hre.ethers.getContractFactory(CONTRACT_NAME);
   console.log("⏳ Deploying MOBI VID Registry contract...");
 
   const registry = await MOBIVIDRegistry.deploy();
   await registry.waitForDeployment();
 
   const contractAddress = await registry.getAddress();
-  console.log("✅ MOBIVIDRegistry deployed to:", contractAddress);
+  console.log(`✅ ${CONTRACT_NAME} deployed to:`, contractAddress);
 
   // Get deployment transaction
   const deployTx = registry.deploymentTransaction();
@@ -36,7 +41,7 @@ async function main() {
 
   // Save deployment info
   const deploymentInfo = {
-    contractName: "MOBIVIDRegistry",
+    contractName: CONTRACT_NAME,
     contractAddress: contractAddress,
     deployer: deployer.address,
     network: hre.network.name,
@@ -67,20 +72,20 @@ async function main() {
     '..',
     'artifacts',
     'contracts',
-    'MOBIVIDRegistry.sol',
-    'MOBIVIDRegistry.json'
+    `${CONTRACT_NAME}.sol`,
+    `${CONTRACT_NAME}.json`
   );
 
   if (fs.existsSync(artifactPath)) {
     const artifact = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
 
     // Save ABI
-    const abiPath = path.join(__dirname, '..', 'contracts', 'MOBIVIDRegistry_abi.json');
+    const abiPath = path.join(__dirname, '..', 'contracts', `${CONTRACT_NAME}_abi.json`);
     fs.writeFileSync(abiPath, JSON.stringify(artifact.abi, null, 2));
     console.log("💾 ABI saved to:", abiPath);
 
     // Save bytecode
-    const bytecodePath = path.join(__dirname, '..', 'contracts', 'MOBIVIDRegistry_bytecode.txt');
+    const bytecodePath = path.join(__dirname, '..', 'contracts', `${CONTRACT_NAME}_bytecode.txt`);
     fs.writeFileSync(bytecodePath, artifact.bytecode);
     console.log("💾 Bytecode saved to:", bytecodePath);
   }

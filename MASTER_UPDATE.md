@@ -1,3 +1,6 @@
+> **Superseded snapshot (2026-07).** The numbers below are those of July 2026 and are kept as a record.
+> Current state: `docs/HANDBACK_2026-10-09.md`; every current number: `docs/MEASUREMENT_CONDITIONS.md`.
+
 # Master Update — full status for audit & parallel research
 
 *One self-contained reference to consult while you do parallel research. It consolidates

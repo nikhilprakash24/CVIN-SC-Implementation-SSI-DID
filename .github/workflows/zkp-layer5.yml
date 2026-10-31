@@ -1,0 +1,77 @@
+name: Layer 5 - ZKP and the agent-wrapped identity
+
+# Plan 1 (docs/zkp/): zkid primitives, ZK-VIN (Groth16), ZkVinGate, the Steward, the attack simulator, figures and
+# citations. Results of record are produced by 5_zkp-agent-identity/bench/run_all.sh from a clean tree, not here;
+# CI checks behaviour, guards and that the committed figures and citations are current.
+
+on:
+  push:
+    branches: [ main, claude/** ]
+  pull_request:
+    branches: [ '**' ]
+  workflow_dispatch:
+
+jobs:
+  python:
+    name: zkid, Steward, attacks, guards
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 5_zkp-agent-identity
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: Install
+      run: python -m pip install --quiet -r "$GITHUB_WORKSPACE/ci/requirements-ci.txt"
+    - name: Tests (no skips allowed)
+      run: |
+        python -m pytest -q -rs | tee pytest.log
+        if grep -qE '[0-9]+ skipped' pytest.log; then echo "a test was skipped"; exit 1; fi
+    - name: Mutation probe (every mutant must be caught; guide rule 1.3.11)
+      run: bash mutate_zkid.sh
+    - name: Figures data current
+      run: python figures/make_figures.py --check
+    - name: Citations resolve
+      run: python ../docs/zkp/check_citations.py
+    - name: Full-circle demo runs
+      run: python demos/full_circle_demo.py > /dev/null
+
+  zkvin:
+    name: ZK-VIN prove, verify and false statements
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 5_zkp-agent-identity
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: 5_zkp-agent-identity/package-lock.json
+    - run: npm ci
+    - name: Artefacts match their manifest
+      run: |
+        node -e 'const fs=require("fs"),c=require("crypto");const m=JSON.parse(fs.readFileSync("artifacts/MANIFEST.json"));let bad=0;for(const[f,h]of Object.entries(m.files)){const g=c.createHash("sha256").update(fs.readFileSync(f)).digest("hex");if(g!==h){console.log("changed:",f);bad=1}}process.exit(bad)'
+    - name: Honest proof verifies; five false statements fail
+      run: node scripts/prove_and_verify.js
+
+  contracts:
+    name: ZkVinGate and Schnorr verifier (Hardhat)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 1_blockchain-identity
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: 1_blockchain-identity/package-lock.json
+    - run: npm ci
+    - run: npx hardhat compile
+    - name: Layer 5 contract tests against Phase 1's unmodified ERC-1056 registry
+      run: npx hardhat --config hardhat.zkp.config.js test

@@ -1,0 +1,184 @@
+{
+ "source_run": "harness run 2026-10-09T02-09-36Z_7a9a996 (M1-H)",
+ "f1_state_vs_gas": {
+  "rows": "#35 (lifecycle gas), #49 (zero→nonzero SSTOREs, log bytes)",
+  "standards": {
+   "ERC-1056": {
+    "lifetime_gas": 1050809,
+    "note": "",
+    "zero_to_nonzero_sstores": 8,
+    "log_bytes": 6464
+   },
+   "ERC-1056 (wrapper)": {
+    "lifetime_gas": 1025469,
+    "note": "",
+    "zero_to_nonzero_sstores": 9,
+    "log_bytes": 6592
+   },
+   "ERC-721": {
+    "lifetime_gas": 2706685,
+    "note": "",
+    "zero_to_nonzero_sstores": 92,
+    "log_bytes": 4288
+   },
+   "ERC-725": {
+    "lifetime_gas": 3155103,
+    "note": "",
+    "zero_to_nonzero_sstores": 83,
+    "log_bytes": 3072
+   },
+   "ERC-735": {
+    "lifetime_gas": 5797561,
+    "note": "(excl. 3 n/a)",
+    "zero_to_nonzero_sstores": 149,
+    "log_bytes": 12960
+   },
+   "ERC-1155": {
+    "lifetime_gas": 1261575,
+    "note": "(excl. 2 n/a)",
+    "zero_to_nonzero_sstores": 21,
+    "log_bytes": 6944
+   },
+   "ERC-725xy": {
+    "lifetime_gas": 2956507,
+    "note": "(excl. 2 n/a)",
+    "zero_to_nonzero_sstores": 38,
+    "log_bytes": 3744
+   },
+   "LSP8": {
+    "lifetime_gas": 1508413,
+    "note": "(excl. 3 n/a)",
+    "zero_to_nonzero_sstores": 42,
+    "log_bytes": 8288
+   },
+   "ERC-4337": {
+    "lifetime_gas": 2221290,
+    "note": "",
+    "zero_to_nonzero_sstores": 37,
+    "log_bytes": 3968
+   },
+   "CVIN-Combined": {
+    "lifetime_gas": 2559537,
+    "note": "",
+    "zero_to_nonzero_sstores": 81,
+    "log_bytes": 7648
+   }
+  }
+ },
+ "f1_read_cost_vs_history": {
+  "rows": "#31 (ERC-1056), #51 (all columns)",
+  "series": {
+   "ERC-1056": {
+    "h=1": {
+     "rpc": 14,
+     "bytes": 10005
+    },
+    "h=10": {
+     "rpc": 32,
+     "bytes": 24153
+    },
+    "h=50": {
+     "rpc": 112,
+     "bytes": 87033
+    }
+   },
+   "ERC-735": {
+    "h=1": {
+     "rpc": 3,
+     "bytes": 13774
+    },
+    "h=10": {
+     "rpc": 3,
+     "bytes": 44398
+    },
+    "h=50": {
+     "rpc": 3,
+     "bytes": 180558
+    }
+   },
+   "ERC-725xy": {
+    "h=1": {
+     "rpc": 2,
+     "bytes": 2312
+    },
+    "h=10": {
+     "rpc": 2,
+     "bytes": 5192
+    },
+    "h=50": {
+     "rpc": 2,
+     "bytes": 17992
+    }
+   }
+  }
+ },
+ "f2_lifecycle_parity_ms": {
+  "rows": "#33 (committed 2026-10-04 re-run; D60)",
+  "conditions": "centralized registry: M0, in-process, a lower bound; MOBI-VID-V2: M1, local Hardhat node",
+  "preregistered_fail": "history query cached vs the database's history query: 'equal once cached' band [0.5, 2] FAILED (ratio 0.041)",
+  "operations": {
+   "birth": {
+    "centralized_registry": 0.0041,
+    "mobi_vid_v2": 33.0513
+   },
+   "lifecycle_event": {
+    "centralized_registry": 0.0066,
+    "mobi_vid_v2": 15.225
+   },
+   "ownership_transfer": {
+    "centralized_registry": 0.003,
+    "mobi_vid_v2": 14.0948
+   },
+   "history_query": {
+    "centralized_registry": 0.1022,
+    "mobi_vid_v2": 111.6987
+   },
+   "history_query_cached": {
+    "mobi_vid_v2": 0.0072
+   },
+   "history_query_cached_validated": {
+    "mobi_vid_v2": 15.4277
+   }
+  }
+ },
+ "f3_write_paths_gas": {
+  "rows": "#50, #34",
+  "ERC-1056": {
+   "direct (U3)": 35024,
+   "relayed signed (U5)": 62646
+  },
+  "ERC-4337": {
+   "direct (U3)": 94651,
+   "UserOperation via EntryPoint (U5)": 141767
+  }
+ },
+ "f3_read_costs_table": {
+  "note": "three separately measured costs from different runs and hosts; not comparable as ratios (guide 1.1.7); the figure was withdrawn (AR-38)",
+  "rows": [
+   {
+    "what": "verify one V2V message, warm cached credential, no chain contact (SSI)",
+    "median_ms": 0.1422,
+    "unit": "per message",
+    "condition": "M0",
+    "host": "Xeon @ 2.10GHz, kernel fc",
+    "row": "#27"
+   },
+   {
+    "what": "one probe refresh: an eth_call to check the identity is unchanged",
+    "median_ms": 3.222,
+    "unit": "per refresh, not per message",
+    "condition": "M1",
+    "host": "Xeon @ 2.10GHz, kernel fc",
+    "row": "#37 (predates the D51 fix)"
+   },
+   {
+    "what": "verify one message with an uncached ERC-1056 resolution (key replayed from event logs)",
+    "median_ms": 15.513,
+    "unit": "per message",
+    "condition": "M1",
+    "host": "Xeon @ 2.10GHz, kernel fc",
+    "row": "#21 (predates the D51 fix)"
+   }
+  ]
+ }
+}

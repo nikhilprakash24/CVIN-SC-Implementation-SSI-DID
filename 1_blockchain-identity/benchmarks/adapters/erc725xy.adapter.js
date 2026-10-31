@@ -26,6 +26,18 @@ class ERC725XYAdapter extends IdentityAdapter {
     const k = (s) => this.ethers.keccak256(this.ethers.toUtf8Bytes(s));
     this.KEYS = { vin: k("cvin:vin"), make: k("cvin:make"), model: k("cvin:model"), year: k("cvin:year"), color: k("cvin:color"), engineNumber: k("cvin:engineNumber"), manufacturingDate: k("cvin:manufacturingDate"), autonomyLevel: k("cvin:autonomyLevel") };
     this.issuerAccounts = new Map();
+    delete this.unsupported.P1_create_presentation;
+    delete this.unsupported.X1_execute_call;
+  }
+  async createPresentation(h, presHash) {
+    const key = this.ethers.keccak256(this.ethers.concat([this._b("cvin:vp:"), presHash]));
+    h.attrKeys["vp:" + presHash] = key; // so R3 reads it back
+    const tx = await h.id.connect(h.controller).setData(key, presHash);
+    return { txs: [tx] };
+  }
+  async executeCall(h, target, data) {
+    const tx = await h.id.connect(h.controller).execute(0, target, 0, data); // OPERATION_CALL
+    return { txs: [tx] };
   }
 
   async deploy() {

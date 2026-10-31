@@ -15,7 +15,7 @@ provenance and must not be cited in chapters.
 | Question | Canonical file | Notes |
 |---|---|---|
 | What is the argument of the thesis, and how should it be written? | `COMPOSITION.md` | master through-line + writing discipline; unchanged by the merge |
-| What is measured, under what conditions, and is each number verified? | `docs/MEASUREMENT_CONDITIONS.md` | condition tags M0/M1/M2 and the claim register (#1–#31; #29–#31 and §5 are the metrics harness, tag M1-H); **the only place a chapter should look up a number's status** |
+| What is measured, under what conditions, and is each number verified? | `docs/MEASUREMENT_CONDITIONS.md` | condition tags M0/M1/M2 and the claim register (#1–#48; #44–#48 infrastructure messaging; #29–#31 and §5 are the metrics harness, tag M1-H); **the only place a chapter should look up a number's status** |
 | What are the results of record? | `4_comparison-framework/results/` (nine-standard gas, scaling, MOBI backends, V2V latency), `1_blockchain-identity/results/metrics/latest/` (operation-catalogue / lifecycle / scale / read-path harness, run-stamped `meta.json`), `cv2x-testbed/results/` (PKI vs ERC-1056), `docs/figures/results_snapshot.json` (trunk verification snapshot), `docs/conformance/` (external W3C DID test suite) | files, not prose |
 | Where do the measured results appear as thesis text? | `docs/thesis/chapter5-results/` | the measured anchor for chapter 5 |
 | What exists in the repository and does it run? | `docs/PROJECT_SUMMARY.md` | inventory + verification table; supersedes `MASTER_UPDATE.md` §2 and `INVENTORY.md` for status |
@@ -26,16 +26,44 @@ provenance and must not be cited in chapters.
 | What is the adversary model? | `docs/THREAT_MODEL.md` | Dolev–Yao adversary, A1–A4, goals G1–G8 |
 | What are the scaling experiments and their pre-registration? | `docs/SCALING_EXPERIMENTS.md` | design; results in `4_comparison-framework/results/scaling_*` |
 | Where did each idea, decision and source come from? | `PROVENANCE.md`, `SOURCES.md`, `docs/DEVELOPMENT_HISTORY.md`, `docs/artifacts/` (provenance dossiers, `docs/ARTIFACTS_MANIFEST.md`) | attribution: hypotheses, thrusts and design decisions are the author's |
-| What is the plan and what is needed from the author? | `docs/AFTER_ACTION_REPORT.md` (integration) + `META_COMMENTARY.md` (living handoff) | `MASTER_UPDATE.md` §5–§7 were the pre-merge version of the same lists |
+| What is pending for the author, and what is deferred? | `docs/MILESTONE_NEXT.md` (deferred items N-1…N-22, split into author decisions and executable work) + the handback | `docs/AFTER_ACTION_REPORT.md` and `META_COMMENTARY.md` held the pre-merge version of these lists (historical) |
 | What was this research originally asked to be, and how is it to be done? | `docs/ORIGINAL_PROMPT_AND_DIRECTION.md` | verbatim original direction (A), the author's working directives (B), and where each stands (C) |
-| How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-10-04.md` | the single file to read first when picking the work up (supersedes `HANDBACK_2026-09-30.md`) |
+| How do I resume, and what is pending for whom? | `docs/HANDBACK_2026-10-14.md` | the resume procedure (since 2026-10-24 the overall entry point is the master plan above) (WM-2 after A1, A2, A4; Phase 2 opened; a section for a session on a different assistant model); supersedes `HANDBACK_2026-10-10.md` and its predecessors (history) |
+| What is Phase 2, and where does the next Phase 2 session start? | `docs/phase2/README.md`, then `docs/phase2/sessions/SESSION_LOG.md` | charter, session protocol, idea register (generated, anchor-checked) |
+| What can each identity option actually do, from code? | `docs/FEATURE_ASYMMETRY_MATRIX.md` | generated from the compiled ABIs by `4_comparison-framework/feature-matrix/make_feature_matrix.py`; interpretation in Review 02 §4 |
+| What is the state of all the work as one picture (three contract generations, the ERC-1056 fork, coverage by layer)? | `docs/REVIEW_02_STATE_AND_PARALLEL_WORK.md` | the clean review of 2026-10-03 |
+| How do the grand sandbox, per-option sandboxes and the L1–L4 suites get built? | `docs/PLAN_SANDBOX_AND_SUITES.md` | steps S0–S10 with acceptance checks |
+| What is the relation between this branch and the parallel review-2 trunk (`clone-cvin-id-scs`, now the default branch), and what did each do? | `docs/REVIEW_03_PARALLEL_LINEAGES.md` | the clean review of the two lineages (agreements, same quantities measured twice, 21 contradictions); appendices `docs/reconciliation/RECON_{DOCS,CODE,TSR}.md` |
+| How are the two lineages merged, and which decisions does that need? | `docs/PLAN_MERGE_LINEAGES.md` | decisions M-A…M-L with defaults; steps S0–S10 with gates; what is re-executed |
+| Thinking out loud, October 2026 | `docs/META_COMMENTARY_2026-10.md` | the asymmetry as the thesis; brainstorm; what to do first |
 | How is a substrate measured operation by operation (CRUD and beyond), and what did it show? | `docs/CVIN-DATA-COLLECTION-FRAMEWORK.md` (method: 18-op catalogue, scenarios, falsifiers) + `HANDOFF-DATA-COLLECTION-FRAMEWORK.md` (results and hypothesis verdicts) | harness in `1_blockchain-identity/benchmarks/`; numbers via register #29–#31 only |
-| What did the code-level review find, and what was fixed? | `docs/REVIEW_02_CODEBASE.md` (findings K/H/S/T/Q), `docs/PLAN_REVIEW_02.md`, `docs/review02/PASS*_*.md` (per-stream changes), `docs/AFTER_ACTION_REPORT_03.md` | review 2, 2026-10-03; complements `AUDIT_01` (claims) and `RESEARCH_AUDIT` (validity) |
+| What did the code-level review find, and what was fixed? | `docs/REVIEW_02_CODEBASE.md` (findings K/H/S/T/Q), `docs/PLAN_REVIEW_02.md`, `docs/review02/PASS*_*.md` (per-stream changes), `docs/review02/AAR_REVIEW2_03.md` | review 2, 2026-10-03; complements `AUDIT_01` (claims) and `RESEARCH_AUDIT` (validity) |
 | How are the tests and results organised as one suite (subject × identity function × property × evidence), and what is the plan to get there? | `docs/planning/TESTING_SUITE_RESULTS_PLAN.md` (TSR Plan v1.0) + `docs/planning/TESTING_SUITE_SECOND_PASS_SHEET.md` (author's second pass) | as-found survey in `docs/planning/testing_suite/INVENTORY_AS_FOUND_2026-10-04.md`; `docs/testing/` is created by the plan's Phase 1 |
+| What does the TSR plan map onto in the sandbox already built here, and what is adopted from it? | `docs/reconciliation/RECON_TSR.md` (40-row mapping, 13 naming conflicts, what to adopt) | reconciliation of 2026-10-06; the merge plan's step S10 |
+| Where is any test, and how do the TSR plan and the grand sandbox fit together? | `docs/testing/README.md` | the entry point for the organised suite after the merge: three clicks to any test, the TSR→sandbox mapping, what the plan still asks for |
+| What is the current plan? | `docs/PLAN_WM-2.md` | the plan for work milestone WM-2 (results pipeline of record, determinism, carried review-2 fixes, thesis readiness); `docs/PLAN_2026-10-09.md` is WM-1's executed plan with its status table (§5) |
+| What rules bind every session (rigour and style)? | `docs/STYLE_AND_RIGOUR_GUIDE.md` | consolidated 2026-10-09, amended 2026-10-10 at WM-1's close (guards probed, amendments, counts vs times, review on close) |
+| How is the work organised as an agentic team, and what did that structure learn? | `docs/TEAM_STRUCTURE.md` | roles, ownership, acceptance gates, the review protocol (§4a), lessons of 2026-10-03 to 2026-10-10 |
+| What are all the results, the work and the implementation, in one presentable document? | `docs/presentation/REPORT_DRAFT_1.md` (+ `EXPANSION_PLAN_DRAFT2.md`) | generated by `make_presentation.py` from committed data; published page |
+| How is the work cut into milestones, and what did each one do? | `docs/milestones/README.md`, `docs/milestones/WM-1_REPORT.md` | work milestones (WM-n, commit ranges, audited) inside overall milestones (version tags) |
+| What defects were found, and what is their status? | `docs/DEFECT_LOG.md` | D1–D36; §C open items with the decision each needs; §F the WM-1 review's findings |
+| What was designed and pre-registered for infrastructure messaging, and what was built? | `docs/design/INFRASTRUCTURE_MESSAGING.md` (§7 as built), `docs/design/INFRASTRUCTURE_PREREG.md` (amendments A1–A4) | register #44–#48 |
+| What is the testbed as an engineering technical data package (specification, verification matrix, blueprints, failure-mode worksheet, interface control, test plan, baseline, risk register), in the register of a programme office rather than a thesis? | `docs/tdp/README.md` (TDP-000) and the documents it indexes; generated ones are CI-checked | after-action report 20; a second reading of the same evidence, adding no number; `docs/tdp/TDP-RUNBOOK.md` carries the phases a later session runs one at a time |
+| Where is everything, and what happens next? (one entry point) | `docs/MASTER_PLAN_2026-10-24.md` | phases, milestones, integration, plan forward, Phase B open questions, blockers, reading order, artifact catalogue; visual version `docs/figures/master_atlas.html` (added 2026-10-24, report 37) |
+| What does the author need to decide? | `docs/DECISION_SHEET_2026-10-20.md` | every open decision with a recommendation; new since: D2 (`docs/design/RSU_TO_RSU_NOTE.md`) |
+| What has the author's work produced since July, for a reader outside the project? | `docs/PROGRESS_REPORT_2026-07_TO_2026-10.md` (draft 2) + `docs/PROGRESS_APPENDIX_2026-07_TO_2026-10.md` | reader and AI-use statement still to be set by the author (N-23) |
+| How were the two lineages of October joined into one trunk? | `docs/LINEAGE_RELATION_2026-10-22.md` | Plan 5; the C2 design question; the renumbering |
+| Which figures in the chapters and the TDP lack a verified row? | `docs/thesis/CHAPTER_AUDIT_2026-10.md`, `docs/tdp/REVIEW_2026-10.md` | read-only audits of 2026-10-24; the chapter fixes are WM-2 D1 |
+| Which latency and gas figures may be compared? | `docs/testing/LATENCY_CHARTER.md`, `docs/testing/GAS_CHARTER.md` | generated, CI-checked |
+| What can run with no answer from the author? | `docs/planning/UNBLOCKED_WORK_2026-10-23.md` | U1 to U12, each marked done or open |
 | Candidate side papers | `SIDE_PAPERS.md` | — |
 | Thesis outline and chapter drafts | `docs/thesis/SCAFFOLD.md`, `docs/thesis/chapter*/` | ch. 2 is a stub pending the citation set |
 
 ## Historical (keep, do not cite)
+
+- `docs/artifacts/*.html` — July 2026 provenance dossiers; their key numbers are superseded (see `docs/ARTIFACTS_MANIFEST.md`).
+- `HANDOFF-DATA-COLLECTION-FRAMEWORK.md` — the 2026-10-04 harness handoff; its tables are the pre-merge run (current: register #29–#36).
+- `docs/HANDBACK_2026-10-10.md`, `docs/HANDBACK_2026-10-09.md` and earlier handbacks — superseded by `docs/HANDBACK_2026-10-14.md`.
 
 - `MASTER_UPDATE.md` — the single-source status as of the bundle (v0.9.0-dev,
   before push was possible). Its numbers predate the merge and the trunk

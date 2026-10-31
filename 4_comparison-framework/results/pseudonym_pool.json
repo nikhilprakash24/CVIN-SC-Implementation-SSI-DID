@@ -1,8 +1,17 @@
 {
   "environment": {
-    "date_utc": "2026-10-04T22:17:54.329Z",
-    "git_commit": "e49bcb4",
-    "git_dirty": false,
+    "date_utc": "2026-10-24T12:29:24.637Z",
+    "git_commit": "7a59058",
+    "git_dirty": true,
+    "commit": "7a59058",
+    "commitFull": "7a5905803a0219119fa6b59368461d0f7e203e13",
+    "dirty": false,
+    "dirtyAnyFile": true,
+    "scope": "1_blockchain-identity/scripts/experiment_pseudonym_pool.js",
+    "scopeFiles": 7,
+    "scopeSha": "9443525f4c51",
+    "node": "v22.22.0",
+    "hardhat": "2.28.6",
     "node_version": "v22.22.0",
     "hardhat_version": "2.28.6",
     "ethers_version": "6.17.0",
@@ -13,7 +22,7 @@
     "registry_deploy_gas": 958726,
     "cpu_model": "Intel(R) Xeon(R) Processor @ 2.80GHz",
     "cpu_count": 4,
-    "os": "Linux 6.18.44-fc-v64"
+    "os": "Linux 6.18.44-fc-v153"
   },
   "config": {
     "pool": 20,
@@ -29,7 +38,7 @@
     "epochs": [
       {
         "epoch": 0,
-        "start_timestamp": 1791152271,
+        "start_timestamp": 1792844959,
         "pseudonyms": [
           "0x768F8e671C4dE99A2C6002d2d9e5626D85c0148f",
           "0xA39C7F1684f12Ec15f2D438AEc614bc394614E97",
@@ -80,7 +89,7 @@
       },
       {
         "epoch": 1,
-        "start_timestamp": 1791152591,
+        "start_timestamp": 1792845279,
         "pseudonyms": [
           "0x83E81d540a3bBd3424741FB2A44D396f699fDcDd",
           "0x4643263Ce938529179543675B32349c26A679Cab",
@@ -131,7 +140,7 @@
       },
       {
         "epoch": 2,
-        "start_timestamp": 1791152911,
+        "start_timestamp": 1792845600,
         "pseudonyms": [
           "0xE4d943FccDDAC6b4ca0b3B49eff09bc9e332e240",
           "0x67A20BB5EB47dfedc9Ec7EBD6D0F9B3426194210",

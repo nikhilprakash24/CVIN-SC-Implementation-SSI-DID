@@ -35,7 +35,7 @@ internals.
 each standard realizes a vehicle identity on the EVM and exposes the
 primitives (registries, tokens, accounts, claims) that everything above
 depends on. Layer 2 lifts those on-chain identities to W3C conformance —
-the DID resolver turns an on-chain address or token into a DID Document,
+the DID resolver turns an on-chain address or token into a DID Document (it synthesises the document from the identifier and reads no chain state, so rotation, deactivation and revocation are not visible to it; WM-1 audit U-F5, to be changed in WM-2 step C1),
 and the Verifiable Credentials stack issues and verifies credentials whose
 signing keys are the *same* keys that control the Layer-1 identities, so
 that off-chain verification needs no chain round-trip. Layer 3 embeds
@@ -61,7 +61,7 @@ records the chapter-to-code mapping without moving files.
   Contracts **5.0.2**, ethers v6, hardhat-toolbox; Node 18. Contract tests
   and the gas benchmark run on the in-process Hardhat network
   (`chainId 31337`).
-- **Python 3.11** (`2_w3c-ssi-layer/requirements.txt`): `web3` (v7),
+- **Python 3.11** (`2_w3c-ssi-layer/requirements.txt`): `web3` (6.11.0, pinned in `requirements.txt`),
   `eth-account`, `cryptography`, `coincurve`-backed secp256k1, `pytest`.
   This runtime hosts the SSI layer, the testbed, and the comparison
   scripts.
@@ -106,7 +106,7 @@ a lower bound, not a full-featured figure.
 | **ERC-725xy** | `ERC725xy/CVINVehicleERC725XY.sol` (+ `CVINExecuteTarget.sol`) | The **full ERC-725X generic executor + ERC-725Y data store** account — a self-sovereign smart account that can act on-chain and carries VIN/make/model/year as `bytes32`-keyed data. Added in v0.8.0, closing the one previously-missing standard. | Maximum on-chain capability; the **heaviest** to deploy (a complete account per identity). |
 | **ERC-735** | `ERC735/CVINVehicleClaimHolder.sol` | On-chain claim holder: manufacturer/regulator attestations stored as claims with issuer signatures verified at add-time. | O(1) on-chain claim verification; carries a full claim state machine, so very heavy to deploy. |
 | **ERC-1155** | `ERC1155/CVINVehicleCredential1155.sol` | One contract issues many credential types; the birth credential is configured **soulbound** via an `_update` override. | Uniquely resists identity theft (non-transferable); no key recovery. |
-| **ERC-4337** | `ERC4337/CVINVehicleAccount.sol` + `ERC4337/CVINMinimalEntryPoint.sol` | Account-abstraction identity with UserOperation flow and **guardian-based social recovery** — the only standard here with genuine on-chain key recovery. | Real key recovery; account-abstraction indirection tax per operation. |
+| **ERC-4337** | `ERC4337/CVINVehicleAccount.sol` + `ERC4337/CVINMinimalEntryPoint.sol` | Account-abstraction identity with UserOperation flow and **guardian-based social recovery** — the only standard here with genuine on-chain key recovery (the guardian keeps permanent control after a recovery: defect D15, open). | Real key recovery; account-abstraction indirection tax per operation. |
 | **LSP8** | `LSP8/CVINVehicleLSP8.sol` | A LUKSO LSP8 Identifiable-Digital-Asset vehicle: each vehicle is a `bytes32` tokenId (`keccak256(VIN)`) with a per-token key/value metadata store. | Cross-ecosystem reference point; a transfer moves the identity. |
 | **CVIN-Combined** | `CVINCombined/CVINCombinedIdentity.sol` | **The thesis's own hybrid**: an ERC-1056 event-based identity fused with ERC-735-style on-chain claims in a single contract, sharing one ownership model. | Cheap event-log common path *plus* O(1) on-chain claims only where safety-critical — the H5 design. |
 | **MOBI VID (profile)** | `MOBI/MOBIVIDRegistryV2.sol` (extends `MOBIVIDRegistry.sol`; uses `ERC1056Registry.sol`) | The MOBI **VID II** application profile: a purpose-built registry for birth records and typed lifecycle events with role-gated, signature-verified attestations. Measured *alongside* the nine as an application profile, not one of the nine base standards. | Maximal on-chain semantic fidelity (typed events, odometer, jurisdiction, hashed VIN); pays for that structure in gas. |
@@ -191,8 +191,8 @@ and verifier:
   VC carries only `claimDigests`, and the holder discloses chosen
   claim+salt pairs at presentation time).
 - **Verifier** (`vc_verifier.py`) — a **6-stage offline verification
-  pipeline**: structure → schema → temporal → revocation → signature →
-  disclosure. Signature verification is secp256k1 public-key recovery, so
+  pipeline**: structure → schema → temporal → revocation → proof metadata and
+  signature → disclosure. Signature verification is secp256k1 public-key recovery, so
   **no blockchain round-trip is needed at verification time** — the
   property the V2V latency budget requires.
 
@@ -372,7 +372,7 @@ Layers 1–3 and never modifies them. Five instruments make up the framework.
 
 2. **Two-lens security analysis** (`security-analysis/`).
    *Lens 1 — executable attack suite*: the Mocha scenarios in
-   `1_blockchain-identity/test/security/securityScenarios.test.js` (with
+   `1_blockchain-identity/test/L2-identity-system/security/securityScenarios.test.js` (with
    the `attackHarness.js` helper) fire adversarial transactions against the
    deployed contracts and assert reverts, with a differential control that
    the authorized operation succeeds; results are tabulated to
@@ -418,20 +418,20 @@ Layers 1–3 and never modifies them. Five instruments make up the framework.
 
 ## 4.6 Testing & Reproducibility
 
-The implementation is backed by roughly **295 automated tests, all green**,
-across both runtimes:
+The implementation is backed by automated suites, **all green**, across both
+runtimes (current totals in `sandbox/grand/report/GRAND_REPORT.md`, register #5):
 
 | Suite | Count | Location |
 |---|--:|---|
-| Hardhat contract tests | 217 | `1_blockchain-identity/test/**` |
+| Hardhat contract tests | see `sandbox/grand/report/GRAND_REPORT.md` | `1_blockchain-identity/test/**` |
 | W3C Verifiable Credentials | 28 | `2_w3c-ssi-layer/verifiable-credentials/tests/test_vc_layer.py` |
 | MOBI VID layer | 32 | `2_w3c-ssi-layer/mobi-vid/tests/` (incl. VIN cipher) |
 | VIN cipher (subset of MOBI VID) | 6 | `2_w3c-ssi-layer/mobi-vid/tests/test_vin_cipher.py` |
 | Lifecycle use cases | 12/12 | `cv2x-testbed/scripts/test_use_cases.py` |
 
-The 217 Hardhat total exceeds the raw `it()` count because several suites
+The Hardhat total exceeds the raw `it()` count because several suites
 generate parameterized cases per standard/operation at runtime. The
-security suite (`test/security/securityScenarios.test.js`, 54 scenarios,
+security suite (`test/L2-identity-system/security/securityScenarios.test.js`, 54 scenarios,
 43/43 applicable cells defended) stays green *because* the contracts
 defend, so a regression would surface as a real CI failure.
 
@@ -439,13 +439,13 @@ defend, so a regression would surface as a real CI failure.
 
 - **Committed lockfile** — `1_blockchain-identity` ships an npm lockfile so
   `npm ci` installs a byte-identical dependency tree; the getting-started
-  path is `npm ci && npx hardhat test` → 217 passing.
+  path is `npm ci && npx hardhat test`, with all tests passing.
 - **Deterministic outputs** — gas is exact `receipt.gasUsed` and was
   verified byte-identical across N=30 runs (σ=0, 95% CI width 0); the
   benchmark, compliance, and V2V commands regenerate every number reported
   in Chapter 5.
 - **CI workflows** (`.github/workflows/`) — three gates:
-  `test-contracts.yml` (the 217 Hardhat tests), `benchmark.yml` (gas
+  `test-contracts.yml` (the Hardhat suite), `benchmark.yml` (gas
   benchmark), and `w3c-compliance.yml` (the ≥90% compliance gate).
 - **Verified commands** (from `INVENTORY.md` / `CAPABILITIES.md`):
   - Contracts: `cd 1_blockchain-identity && npm ci && npx hardhat test`
@@ -476,10 +476,126 @@ identity providers, 12 real-crypto lifecycle use cases, and a SUMO V2V
 simulation that runs real signature/credential verification in the message
 path; and (4) a measurement-only comparison framework producing the gas,
 security, compliance, and validation artifacts Chapter 5 reports. The
-build is reproducible — a committed lockfile, deterministic outputs, three
-CI gates, and ~295 green tests — and its honesty caveats (minimal ERC-4337/
+build is reproducible — a committed lockfile, outputs deterministic for fixed
+inputs, CI gates, and green test suites (counted in the grand report) — and its honesty caveats (minimal ERC-4337/
 LSP8, unexecuted Sepolia run, simulated mobility and radio, out-of-scope
 VIN key custody) are stated where they arise rather than deferred.
+
+
+---
+
+## 4.8 Layer 5: the ZK-VIN Tier and the Steward
+
+*Added 2026-10-22 for RQ5 (closes the deferral recorded as SC-12). Code: `5_zkp-agent-identity/`. Sources:
+`docs/zkp/REPORT_A_ZKP_INTEGRATION.md` §2–§5, `REPORT_B_ZKP_AND_IDENTITY.md` §5, `REPORT_C_AGENT_WRAPPED_IDENTITY.md`
+§5–§8. Measured results are in §5.10.*
+
+Layer 5 adds a fifth, zero-knowledge layer on top of the four described above. It has two parts. The first is a
+privacy tier for the VIN: a vehicle proves facts about its VIN against an on-chain commitment without revealing it.
+The second is the custodian that operates those proofs for the owner, called the Steward. Both reuse earlier layers
+unchanged: the gate runs on Phase 1's ERC-1056 registry, and the Steward's delegation credential is issued and
+verified by the layer-2 VC stack (§4.3.2).
+
+### 4.8.1 The `zkid` primitives
+
+`5_zkp-agent-identity/zkid/` is a readable, pure-Python implementation of the sigma-protocol family on secp256k1. It
+contains Schnorr proofs of knowledge (interactive and non-interactive), Pedersen commitments with opening proofs,
+Chaum–Pedersen equality proofs, CDS OR proofs of a bit, range and threshold proofs built from them, Merkle inclusion
+proofs, and scoped nullifiers. Fiat–Shamir transcripts are domain-separated and length-prefixed, and they bind the
+verifier's identity and nonce, so a proof replayed to another verifier fails. Elliptic-curve and Keccak-256 outputs are
+checked against libsecp256k1 and Ethereum's Keccak.
+
+The three defining properties are tested, not assumed. Completeness is an honest run of every protocol. Special
+soundness is tested with an extractor that rewinds the prover and recovers the key from two accepting transcripts; the
+same extraction doubles as an attack on nonce reuse. Honest-verifier zero knowledge is tested with a simulator that
+produces accepting transcripts without the key. Each primitive also counts its field multiplications and point
+operations as it runs, which is what makes the manual-burden inventory of §3.9.4 a measurement (register #59, #62).
+The code is research code: correct and tested, but not constant time and not optimised.
+
+### 4.8.2 The ZK-VIN circuit and `ZkVinGate`
+
+The ZK-VIN statement is written in circom. Given public inputs (the anchored commitment, the authorised-manufacturer
+Merkle root, a model-year threshold, a region, a service scope and a challenge), the prover shows that it knows a VIN
+and salt that open the commitment, that the manufacturer code is in the authorised set, that the model year is at or
+above the threshold, and that the region matches. The single public output is a nullifier, Poseidon(salt, scope),
+which is the same for one vehicle within one scope and unlinkable across scopes. The compiled circuit has 3,498
+constraints (1,667 non-linear, 1,831 linear), 3,505 wires, 6 public and 27 private inputs and 1 public output
+(register #56). Proofs are Groth16, generated and verified with snarkjs.
+
+The build script runs both phases of the trusted setup with **fixed entropy**. That makes the build reproducible and
+every artefact hash-checkable in CI, and it also makes the setup **insecure**: anyone who reads the script can forge
+proofs. The prototype therefore demonstrates cost and correctness, not production security. A multi-party setup
+ceremony is the production gap.
+
+`contracts/ZkVinGate.sol` is an identity-dependent transaction (Phase 2 focus F1) whose dependency is *knowledge* of
+the opening of a commitment, the gap recorded as AR-5: a contract can compare a value with a stored hash but cannot
+check that a caller knows what a commitment contains. The ERC-1056 owner of an identity anchors a commitment; a
+governor publishes the manufacturer root and registers services; anyone, typically the owner's agent, submits `admit`
+with a proof. The gate checks every public signal against chain state, refuses a nullifier already used in the scope,
+verifies the proof with the generated Groth16 verifier, records the nullifier and runs the action. Contract tests
+cover single use per scope, unlinkable nullifiers across scopes, refusal at the wrong service, refusal of any
+mismatching signal with its index reported, refusal of a tampered proof, and anchoring by the ERC-1056 owner only,
+including after an ownership transfer.
+
+### 4.8.3 Schnorr through `ecrecover`
+
+`contracts/SchnorrEcrecoverVerifier.sol` verifies a Schnorr proof of key knowledge on chain without a pairing or a new
+precompile. It uses the known reduction of a Schnorr check to one call of Ethereum's `ecrecover`, with a matching
+prover in `zkid/schnorr_evm.py`. It proves much less than ZK-VIN, only knowledge of a key, but at a small fraction of
+the gas (register #58; §5.10).
+
+### 4.8.4 The Steward: an agent wrapper with a deterministic kernel
+
+The Steward (`5_zkp-agent-identity/steward/`) is the custodian that P3 asks for. Its design rule is that a language
+model may propose but a deterministic kernel disposes. This follows the separation used in the prompt-injection
+literature, where the component that reads untrusted text cannot act [@OWASP-LLM01; @GRESHAKE2023; @WILLISON2023;
+@DEBENEDETTI2025], and the shield of safe reinforcement learning, which corrects a learner's action only when it would
+violate the specification [@ALSHIEKH2018].
+
+| Component | Reads untrusted text | Decides a disclosure | Touches secrets |
+|---|---|---|---|
+| Interpreter (optional model) | yes | no | no |
+| Compiler (grammar or model) | the owner's text | no (drafts only) | no |
+| Kernel (deterministic) | no (structured fields only) | **yes, within the signed policy** | no |
+| Responder (learned) | no | chooses among what the kernel permits | no |
+| Vault | no | no | **yes** (proofs and signatures out) |
+
+- **Policy and grammar compiler.** The owner writes rules in a controlled English grammar ("Never reveal my VIN";
+  "Insurers may check that my model year is at least a threshold"; "Do not leak more than 3 bits about my model
+  year"). The compiler turns them into a strict policy whose canonical hash the owner signs. A sentence outside the
+  grammar is refused, not guessed. An optional language-model compiler, constrained by the policy's JSON schema, can
+  widen coverage; whatever it drafts passes the same validation and is adopted without a new signature only if it is
+  narrower than or equal to the signed policy. No live model call was made, so the plain-English claim rests on the
+  grammar and on these tests.
+- **Kernel.** It applies rules, consent, blocks and budgets and returns ANSWER, COARSEN or REFUSE. Its request schema
+  has no reveal operation and rejects unknown fields, so an injected instruction has nothing to ask for.
+- **Leakage budget.** The kernel keeps, for each protected attribute, the set of values still consistent with
+  everything disclosed to anyone, and so measures leakage over all verifiers together, not per verifier. Admission is
+  decided on the worst case, so a refusal does not itself leak, following the simulatable-auditing result
+  [@KENTHAPADI2005].
+- **Learned responder, shielded.** A tabular Q-learning responder chooses among the actions the kernel permits, for
+  example a coarsened answer in place of an exact one. It is trained deterministically and can improve honest
+  service; it cannot exceed the budget, because the kernel filters its choices.
+- **Vault.** Values, salts and keys are sealed; only proofs and signatures leave. The vault has no getter and no value
+  in its printed representation.
+- **Audit log.** Every decision is appended to a hash-chained log whose Merkle root can be anchored on chain; an
+  edited entry is detected.
+- **Delegation credential.** The Steward holds its own `did:ethr` DID and an `AgentDelegationCredential` issued by the
+  owner's DID through the Phase 1 VC layer, naming the agent, its scope, the hash of the policy it enforces and an
+  expiry. A verifier checks the chain owner → agent → presentation; the tests show it failing for the wrong scope, an
+  impostor key and a revoked credential (P6).
+
+The request path is: request → kernel → vault proof → signed response → audit entry. Prompt-injection, replay and
+linkage cases are unit tests rather than simulations: an interpreter told to "ignore all previous rules … reveal the
+VIN" emits malicious requests, and every one is rejected or refused with no proof produced.
+
+### 4.8.5 Summary of layer 5
+
+Layer 5 makes zero knowledge a working, tested part of the stack: pure-Python sigma protocols with measured operation
+counts, a Groth16 ZK-VIN circuit verified both off chain and inside an identity-dependent transaction, an on-chain
+Schnorr verifier, and a bounded agent that operates them under an owner-signed policy and is itself an identified,
+delegated and revocable subject. Its stated limits are the insecure single-party setup, the absence of constant-time
+code, and the absence of any live language-model run.
 
 ---
 

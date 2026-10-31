@@ -234,6 +234,18 @@ class MOBIVIDRegistryClient:
             raise RuntimeError("LifecycleEventRecorded log not found in receipt")
         return bytes(logs[0]["args"]["eventId"]), receipt
 
+    def add_delegate(self, owner: LocalAccount, identity: str,
+                     delegate: str, delegate_type: str = "veriKey",
+                     validity_s: int = 86_400) -> Dict[str, Any]:
+        """ERC-1056 addDelegate by the identity's owner. Since WM-2 C2 an
+        attester needs a valid veriKey delegation from the vehicle's owner."""
+        return self._transact(
+            self.contract.functions.addDelegate(
+                Web3.to_checksum_address(identity),
+                delegate_type.encode().ljust(32, b"\0"),
+                Web3.to_checksum_address(delegate), int(validity_s)),
+            owner)
+
     def attest_event(self, attester: LocalAccount, event_id: bytes,
                      vehicle_identity: str,
                      signature: bytes) -> Dict[str, Any]:

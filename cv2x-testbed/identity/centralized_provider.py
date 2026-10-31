@@ -26,6 +26,7 @@ from cryptography.x509.oid import NameOID
 import json
 
 from identity.freshness import FreshnessPolicy, generation_timestamp, signed_bytes
+from identity.freshness import REASON_BAD_SIGNATURE, REASON_REVOKED, REASON_VALIDITY
 from identity.base import (
     IdentityProvider,
     IdentityType,
@@ -64,6 +65,9 @@ class CentralizedIdentityProvider(IdentityProvider):
         # Freshness window + replay cache for verify_message (review 02, T-9).
         # On by default; see identity/freshness.py for the default window.
         self.freshness = FreshnessPolicy()
+        # Why the last REJECTED verify failed (identity.freshness REASON_*);
+        # written on rejection paths only, never on the accept path.
+        self.last_reject_reason = None
 
         # Performance tracking
         self._init_ca()
@@ -336,12 +340,14 @@ class CentralizedIdentityProvider(IdentityProvider):
 
             # Check revocation (CRL)
             if cert.serial_number in self.revocation_list:
+                self.last_reject_reason = REASON_REVOKED
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
             # Check certificate validity
             now = datetime.utcnow()
             if now < cert.not_valid_before or now > cert.not_valid_after:
+                self.last_reject_reason = REASON_VALIDITY
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
@@ -355,7 +361,9 @@ class CentralizedIdentityProvider(IdentityProvider):
             # Freshness window + replay cache (T-9)
             timestamp = signed_message.get('timestamp')
             message_bytes = signed_bytes(message, timestamp)
-            if self.freshness.check(timestamp, cert.serial_number, message_bytes) is not None:
+            stale = self.freshness.check(timestamp, cert.serial_number, message_bytes)
+            if stale is not None:
+                self.last_reject_reason = stale
                 metrics.verification_time_ms = (time.time() - start_time) * 1000
                 return False, metrics
 
@@ -380,6 +388,7 @@ class CentralizedIdentityProvider(IdentityProvider):
             return True, metrics
 
         except Exception as e:
+            self.last_reject_reason = REASON_BAD_SIGNATURE
             metrics.verification_time_ms = (time.time() - start_time) * 1000
             return False, metrics
 

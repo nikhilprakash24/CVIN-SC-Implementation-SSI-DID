@@ -84,6 +84,12 @@ W3C compliance checker (93.2%); the multi-backend MOBI VID fidelity sweep (H4);
 and drafts of thesis Chapters 1, 3–7. Milestones are tagged `v0.7.0` and `v0.8.0`;
 see `CHANGELOG.md` for the itemized record.
 
+### After July (2026-09 onward)
+This file ends at July 2026. The record from September continues in
+`docs/PROGRESS_REPORT_2026-07_TO_2026-10.md` (per pass, with every High defect and its
+finder) and the after-action reports; the whole programme on one page is
+`docs/MASTER_PLAN_2026-10-24.md`.
+
 ---
 
 ## How this maps to the empirical results

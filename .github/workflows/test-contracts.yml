@@ -1,14 +1,15 @@
 name: Smart Contract Tests
 
 # Compiles and tests the Hardhat project in 1_blockchain-identity.
-# Verified locally on this trunk: 32 contracts compile (solc 0.8.24, cancun),
-# 47 tests pass. The VC-layer pytest suite runs in w3c-compliance.yml.
+# Compiles every contract (solc 0.8.24, cancun) and runs the whole Hardhat tree; current totals are
+# in sandbox/grand/report/GRAND_REPORT.md. The Python suites run in w3c-compliance.yml.
 
 on:
   push:
     branches: [ main, claude/** ]
   pull_request:
-    branches: [ main ]
+    # any base branch: the repository's default branch is not `main` (after-action report 12, audit T-11)
+    branches: [ '**' ]
   workflow_dispatch:
 
 jobs:
@@ -21,6 +22,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0   # check_stamps.py verifies the stamp-only commits from history (WM-2 A2)
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -35,5 +38,89 @@ jobs:
     - name: Compile contracts
       run: npx hardhat compile
 
+    - name: Phase 2 F1 IDTx prototype (behaviour tests against the unmodified ERC-1056 registry)
+      run: npx hardhat --config hardhat.phase2.config.js test
+
+    - name: Phase 2 F1 IDTx gate mutants (each must be caught; academic review AR-14)
+      run: bash ../phase2/idtx/mutate_idtx.sh
+
+    - name: D54 attestation-consent mutants (each must be caught by a behaviour test; WM-2 C2, after-action report 36)
+      run: bash test/L2-identity-system/per-option/MOBIVID/mutate_d54.sh
+
+    - name: Probe that the run-identity flags fire (after-action report 11; WM-2 A2, D49)
+      # The producing-code "dirty" flags were inert until 2026-10-09 (relative pathspecs from a
+      # subdirectory), and until WM-2 A2 they missed code a producer imports from outside its fixed path
+      # list (D49). This fails if tools/run_identity/scopes.json is stale or a producer imports code
+      # outside its scope, or if either stamp helper, for any producer of record, misses an edit to
+      # imported code or a new input file, or counts a results file.
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: |
+        python3 -m pip install --quiet -r "$GITHUB_WORKSPACE/ci/requirements-ci.txt"
+        bash docs/testing/probe_run_identity.sh
+        # WM-2 A4: the promote step refuses every run that is not a run of record
+        python3 -m pytest -q tools/run_identity/test_promote.py
+        # Phase 2 F2: the database lifecycle backend (parity, tamper evidence)
+        python3 -m pytest -q phase2/backends/test_sqlite_lifecycle.py
+
+    - name: Check the MOBI contract copies are byte-identical (plan S0)
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: |
+        for c in ERC1056Registry MOBIVIDRegistry MOBIVIDRegistryV2; do
+          cmp "1_blockchain-identity/contracts/MOBI/$c.sol" "cv2x-testbed/contracts/$c.sol" \
+            || { echo "::error::$c.sol differs between 1_blockchain-identity/contracts/MOBI and cv2x-testbed/contracts"; exit 1; }
+        done
+        echo "MOBI copies identical"
+
+    - name: Check the feature-asymmetry matrix is up to date (plan S0)
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: |
+        python3 4_comparison-framework/feature-matrix/make_feature_matrix.py > /dev/null
+        git diff --exit-code -- docs/FEATURE_ASYMMETRY_MATRIX.md \
+          || { echo "::error::docs/FEATURE_ASYMMETRY_MATRIX.md is stale: run the generator and commit"; exit 1; }
+        echo "feature matrix up to date"
+
+    - name: Check the dashboard snapshot and crux register are up to date (plan 2026-10-09 P1.2)
+      # Both are generated from committed result files, the claim register and
+      # docs/thesis/cruxes.yaml; a result or register change without regeneration fails here.
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: |
+        python3 -m pip install --quiet -r "$GITHUB_WORKSPACE/ci/requirements-ci.txt"
+        python3 docs/figures/make_dashboard_data.py --check
+        python3 docs/testing/build_register.py --check
+        python3 docs/testing/check_docs_numbers.py
+        python3 docs/testing/check_claims.py --check
+        bash docs/testing/probe_check_claims.sh
+        python3 docs/presentation/make_presentation.py --check
+        python3 docs/testing/check_stamps.py --check-coverage
+        python3 docs/phase2/build_phase2.py --check
+        python3 docs/phase2/focus/make_focus_figures.py --check
+        python3 docs/phase2/focus/F3_interaction_modes/classify_modes.py --check
+        python3 docs/testing/gas_charter.py --check
+        python3 docs/testing/latency_charter.py --check
+        python3 docs/phase2/briefs/i05_model.py --check
+        python3 docs/figures/make_result_cards.py --check
+        python3 docs/tdp/make_vcrm.py --check
+        python3 docs/tdp/make_fmeca.py --check
+        python3 docs/tdp/make_blueprints.py --check
+        python3 docs/tdp/check_icd.py --check
+
+    - name: Probe that the TDP document checks fire (after-action report 20; guide rule 1.3.11)
+      # Each TDP generator's --check must fail on a tampered output and pass again after restore.
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: bash docs/tdp/probe_tdp_checks.sh
+
     - name: Run tests
-      run: npx hardhat test
+      shell: bash
+      run: |
+        set -o pipefail
+        npx hardhat test | tee /tmp/hardhat_test.txt
+
+    - name: Check the test count against the grand report (after-action report 12, audit T-2)
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run: python3 docs/testing/check_test_counts.py /tmp/hardhat_test.txt

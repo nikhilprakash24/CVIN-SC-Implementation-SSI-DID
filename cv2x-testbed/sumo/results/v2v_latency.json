@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-10-04T09:19:33.391175+00:00",
+  "generated_at": "2026-10-23T00:43:21.517034+00:00",
   "mode": "simulate",
   "sim_duration_s": 20,
-  "wall_clock_s": 11.3,
+  "wall_clock_s": 10.4,
   "step_length_ms": 100,
   "bsm_rate_hz": 10,
   "neighbor_radius_m": 300.0,
@@ -15,65 +15,65 @@
   "pki": {
     "sign_ms": {
       "n": 3000,
-      "mean_ms": 0.0947,
-      "median_ms": 0.0807,
-      "p95_ms": 0.1532,
-      "min_ms": 0.0451,
-      "max_ms": 1.76
+      "mean_ms": 0.1036,
+      "median_ms": 0.0812,
+      "p95_ms": 0.1842,
+      "min_ms": 0.039,
+      "max_ms": 1.7778
     },
     "cold_ms": {
       "n": 177,
-      "mean_ms": 0.2531,
-      "median_ms": 0.2326,
-      "p95_ms": 0.348,
-      "min_ms": 0.1954,
-      "max_ms": 0.9782
+      "mean_ms": 0.2236,
+      "median_ms": 0.1983,
+      "p95_ms": 0.3487,
+      "min_ms": 0.1732,
+      "max_ms": 0.691
     },
     "warm_ms": {
       "n": 16156,
-      "mean_ms": 0.1042,
-      "median_ms": 0.0955,
-      "p95_ms": 0.1446,
-      "min_ms": 0.0775,
-      "max_ms": 2.7474
+      "mean_ms": 0.0989,
+      "median_ms": 0.089,
+      "p95_ms": 0.1458,
+      "min_ms": 0.0687,
+      "max_ms": 3.188
     },
     "messages_sent": 3000,
     "messages_verified": 16333,
-    "verification_failures": 2
+    "verification_failures": 3
   },
   "ssi": {
     "sign_ms": {
       "n": 7012,
-      "mean_ms": 0.2594,
-      "median_ms": 0.2314,
-      "p95_ms": 0.3931,
-      "min_ms": 0.1781,
-      "max_ms": 4.3385
+      "mean_ms": 0.238,
+      "median_ms": 0.2099,
+      "p95_ms": 0.3586,
+      "min_ms": 0.1572,
+      "max_ms": 2.7431
     },
     "cold_ms": {
       "n": 225,
-      "mean_ms": 0.4055,
-      "median_ms": 0.391,
-      "p95_ms": 0.4972,
-      "min_ms": 0.3408,
-      "max_ms": 0.7342
+      "mean_ms": 0.3789,
+      "median_ms": 0.3553,
+      "p95_ms": 0.5139,
+      "min_ms": 0.3075,
+      "max_ms": 0.8884
     },
     "warm_ms": {
       "n": 39601,
-      "mean_ms": 0.1785,
-      "median_ms": 0.1578,
-      "p95_ms": 0.2696,
-      "min_ms": 0.1235,
-      "max_ms": 40.6973
+      "mean_ms": 0.1593,
+      "median_ms": 0.1413,
+      "p95_ms": 0.2412,
+      "min_ms": 0.1073,
+      "max_ms": 4.7722
     },
     "messages_sent": 7012,
     "messages_verified": 39826,
-    "verification_failures": 3
+    "verification_failures": 4
   },
   "messages_sent": 10012,
   "messages_delivered": 56159,
   "messages_verified": 56159,
-  "verification_failures": 5,
+  "verification_failures": 7,
   "safety_events_detected": 12,
   "eebl_warnings_delivered": 8,
   "attack_tests": {
@@ -81,7 +81,21 @@
     "tampered_ssi_rejected": true,
     "stale_pki_rejected": true,
     "stale_ssi_rejected": true,
+    "replay_pki_rejected": true,
+    "replay_ssi_rejected": true,
     "uncredentialed_sender_rejected": true
+  },
+  "freshness": {
+    "enabled": true,
+    "max_age_s": 1.0,
+    "max_future_s": 0.1,
+    "replay_cache": true,
+    "replay_cache_size": 65536,
+    "replay_key": "(receiver, sender) + sha256(signed payload)",
+    "pki_rejected_replay": 1,
+    "ssi_rejected_replay": 1,
+    "pki_evicted_live": 0,
+    "ssi_evicted_live": 0
   },
   "budgets": {
     "v2v_budget_ms": 100.0,

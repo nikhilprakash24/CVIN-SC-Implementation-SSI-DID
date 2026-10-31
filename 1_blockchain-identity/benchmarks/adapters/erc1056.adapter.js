@@ -26,6 +26,7 @@ class ERC1056Adapter extends IdentityAdapter {
       deactivated: keccak256(toUtf8Bytes(this.payloads.deactivatedName)),
       make: keccak256(toUtf8Bytes("did/vehicle/make")),
     };
+    delete this.unsupported.P1_create_presentation;
   }
 
   async deploy() {
@@ -188,6 +189,13 @@ class ERC1056Adapter extends IdentityAdapter {
   async deactivate(h) {
     // ERC-1056 has no deactivate primitive (owner=0x0 resolves to self): publish a permanent attribute.
     const tx = await this._reg(h.controller).setAttribute(h.did, this.K.deactivated, this.ethers.toUtf8Bytes("true"), PERMANENT_VALIDITY);
+    return { txs: [tx] };
+  }
+
+  // ---- BASIC-SET F8: presentation anchor (holder-written, replay-protected by key) ----
+  async createPresentation(h, presHash) {
+    const key = this.ethers.keccak256(this.ethers.concat([this.ethers.toUtf8Bytes("did/vp/"), presHash]));
+    const tx = await this._reg(h.controller).setAttribute(h.did, key, this.ethers.getBytes(presHash), 300);
     return { txs: [tx] };
   }
 

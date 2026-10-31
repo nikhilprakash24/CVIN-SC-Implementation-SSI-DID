@@ -1,0 +1,3725 @@
+{
+  "environment": {
+    "date_utc": "2026-10-23T00:07:06+00:00",
+    "commit": "0b395705838af3554d0f33ea5f555cbd575995f9",
+    "tree_clean": false,
+    "code_clean": true,
+    "scope": "cv2x-testbed/sumo/run_infra_stats.py",
+    "scope_sha": "61d1d8e60d86",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "logical_cpus": 4,
+    "platform": "Linux-6.18.44-fc-v140-x86_64-with-glibc2.39",
+    "python": "3.13.16",
+    "libraries": {
+      "coincurve": "21.0.0",
+      "eth-account": "0.14.0",
+      "eth-keys": "0.8.0",
+      "cryptography": "50.0.1",
+      "numpy": "2.5.3",
+      "web3": "8.0.0"
+    }
+  },
+  "prereg": "docs/design/INFRASTRUCTURE_PREREG.md",
+  "config": {
+    "runs": 30,
+    "duration_s": 20,
+    "vehicles": 50,
+    "rsus": 4,
+    "refresh_k": "inf (I1 compares warm paths without a revocation re-check, as the BSM warm path has none)",
+    "condition": "M0, mock mobility, real cryptography, no radio channel"
+  },
+  "I1": {
+    "claim": "median warm SPaT verify / median warm SSI BSM verify in [0.8, 1.2]; falsified if > 2.0",
+    "ratio": {
+      "run_medians": [
+        1.1964285714285714,
+        1.2113652113652114,
+        1.1974132062627638,
+        1.182638888888889,
+        1.1957894736842105,
+        1.1888888888888889,
+        1.1814971751412429,
+        1.2005532503457814,
+        1.2096100278551531,
+        1.193435754189944,
+        1.2087682672233822,
+        1.2079831932773109,
+        1.1848739495798317,
+        1.1978319783197833,
+        1.2123287671232876,
+        1.2046703296703296,
+        1.1800418702023725,
+        1.207665505226481,
+        1.2005551700208188,
+        1.190807799442897,
+        1.1968838526912182,
+        1.2001370801919122,
+        1.1820689655172414,
+        1.1932599724896835,
+        1.1966053748231966,
+        1.1927710843373494,
+        1.1879648411088573,
+        1.201949860724234,
+        1.2151202749140895,
+        1.2092198581560285
+      ],
+      "n": 30,
+      "missing": 0,
+      "median": 1.197149,
+      "mean": 1.197638,
+      "ci95": [
+        1.193348,
+        1.201253
+      ]
+    },
+    "verdict": "PASS",
+    "spat_warm_ms": {
+      "run_medians": [
+        0.1742,
+        0.1748,
+        0.1759,
+        0.1703,
+        0.1704,
+        0.1712,
+        0.1673,
+        0.1736,
+        0.1737,
+        0.1709,
+        0.1737,
+        0.1725,
+        0.1692,
+        0.1768,
+        0.177,
+        0.1754,
+        0.1691,
+        0.1733,
+        0.173,
+        0.171,
+        0.169,
+        0.1751,
+        0.1714,
+        0.1735,
+        0.1692,
+        0.1683,
+        0.1757,
+        0.1726,
+        0.1768,
+        0.1705
+      ],
+      "n": 30,
+      "missing": 0,
+      "median": 0.1728,
+      "mean": 0.172513,
+      "ci95": [
+        0.17095,
+        0.1737
+      ]
+    },
+    "bsm_ssi_warm_ms": {
+      "run_medians": [
+        0.1456,
+        0.1443,
+        0.1469,
+        0.144,
+        0.1425,
+        0.144,
+        0.1416,
+        0.1446,
+        0.1436,
+        0.1432,
+        0.1437,
+        0.1428,
+        0.1428,
+        0.1476,
+        0.146,
+        0.1456,
+        0.1433,
+        0.1435,
+        0.1441,
+        0.1436,
+        0.1412,
+        0.1459,
+        0.145,
+        0.1454,
+        0.1414,
+        0.1411,
+        0.1479,
+        0.1436,
+        0.1455,
+        0.141
+      ],
+      "n": 30,
+      "missing": 0,
+      "median": 0.14385,
+      "mean": 0.144043,
+      "ci95": [
+        0.1434,
+        0.1448
+      ]
+    },
+    "spat_cold_ms": {
+      "run_medians": [
+        0.4935,
+        0.4706,
+        0.4512,
+        0.4556,
+        0.478,
+        0.4261,
+        0.4431,
+        0.396,
+        0.4996,
+        0.4709,
+        0.4845,
+        0.4731,
+        0.4624,
+        0.4746,
+        0.4861,
+        0.425,
+        0.4672,
+        0.4121,
+        0.4704,
+        0.4032,
+        0.4766,
+        0.5275,
+        0.4845,
+        0.4726,
+        0.4164,
+        0.4014,
+        0.4623,
+        0.4986,
+        0.4436,
+        0.4906
+      ],
+      "n": 30,
+      "missing": 0,
+      "median": 0.4705,
+      "mean": 0.460577,
+      "ci95": [
+        0.4534,
+        0.4756
+      ]
+    },
+    "spat_sign_ms": {
+      "run_medians": [
+        0.2227,
+        0.2214,
+        0.2281,
+        0.2171,
+        0.2209,
+        0.2219,
+        0.2149,
+        0.2201,
+        0.2231,
+        0.2197,
+        0.2189,
+        0.2195,
+        0.218,
+        0.233,
+        0.226,
+        0.2228,
+        0.2176,
+        0.219,
+        0.2189,
+        0.2186,
+        0.2161,
+        0.2233,
+        0.2232,
+        0.2236,
+        0.2157,
+        0.2166,
+        0.231,
+        0.2222,
+        0.2268,
+        0.2161
+      ],
+      "n": 30,
+      "missing": 0,
+      "median": 0.2205,
+      "mean": 0.221227,
+      "ci95": [
+        0.2189,
+        0.22275
+      ]
+    }
+  },
+  "I2": {
+    "claim": "each of the 15 registered checks rejected with its expected reason in every run, the 3 warm variants verified warm (amendment A6)",
+    "expected_reasons": {
+      "i2a_unsigned_spat": "unsigned",
+      "i2b_wrong_key_spat": "wrong_key",
+      "i2c_map_only_rsu_spat": "not_permitted",
+      "i2d_vehicle_signed_spat": "credential_invalid",
+      "i2e_untrusted_authority_rsu": "credential_invalid",
+      "i2f_stale_spat": "stale",
+      "i2g_forged_controller_update": "wrong_key",
+      "i2h_cross_intersection_spat": "binding",
+      "i2i_replayed_spat": "replay",
+      "i2j_future_spat": "future",
+      "i2b_w_wrong_key_spat_warm": "wrong_key",
+      "i2c_w_not_permitted_warm": "not_permitted",
+      "i2f_w_stale_spat_warm": "stale",
+      "i2k_spat_without_rsu_field": "binding",
+      "i2l_deeply_nested_spat": "malformed"
+    },
+    "runs": 30,
+    "runs_all_as_expected": 30,
+    "failures": [],
+    "verdict": "PASS"
+  },
+  "I5": {
+    "claim": "reported, no verdict; a sum of operation costs, not a path latency (amendment A3)",
+    "controller_to_vehicle_ms": {
+      "run_medians": [
+        0.8181,
+        0.8154000000000001,
+        0.8222,
+        0.8104,
+        0.8032,
+        0.8282,
+        0.7951,
+        0.8514999999999999,
+        0.8062999999999999,
+        0.7948999999999999,
+        0.8064,
+        0.8026,
+        0.7997,
+        0.8634,
+        0.8227,
+        0.8029,
+        0.7834000000000001,
+        0.8035,
+        0.7953999999999999,
+        0.7999,
+        0.7951,
+        0.8307,
+        0.8213999999999999,
+        0.8064,
+        0.789,
+        0.7839,
+        0.8199,
+        0.7917,
+        0.8742000000000001,
+        0.8008
+      ],
+      "n": 30,
+      "missing": 0,
+      "median": 0.8049,
+      "mean": 0.811277,
+      "ci95": [
+        0.80035,
+        0.81675
+      ]
+    },
+    "tmc_to_controller_ms": {
+      "run_medians": [
+        0.4202,
+        0.39790000000000003,
+        0.40059999999999996,
+        0.4268,
+        0.4101,
+        0.4601,
+        0.3966,
+        0.43820000000000003,
+        0.4427,
+        0.3909,
+        0.4085,
+        0.4062,
+        0.39239999999999997,
+        0.4293,
+        0.4051,
+        0.4215,
+        0.38470000000000004,
+        0.3872,
+        0.3886,
+        0.4098,
+        0.4138,
+        0.5908,
+        0.4082,
+        0.4093,
+        0.4114,
+        0.4008,
+        0.38070000000000004,
+        0.3813,
+        0.5673999999999999,
+        0.48949999999999994
+      ],
+      "n": 30,
+      "missing": 0,
+      "median": 0.4089,
+      "mean": 0.422353,
+      "ci95": [
+        0.4007,
+        0.417
+      ]
+    },
+    "definition": "per run, the sum of four per-run medians: controller sign + RSU warm verify + RSU SPaT sign + vehicle warm SPaT verify; across runs, the median of that sum. TMC hop = TMC sign + controller warm verify. No update period, queuing, network or tail is included; in the harness the SPaT does not consume the controller update."
+  },
+  "totals": {
+    "spat_sent": 24000,
+    "spat_verified": 138895,
+    "spat_rejected_legitimate": 0
+  },
+  "per_run": [
+    {
+      "seed": 1,
+      "spat_warm": 0.1742,
+      "spat_cold": 0.4935,
+      "spat_sign": 0.2227,
+      "bsm_ssi_warm": 0.1456,
+      "bsm_ssi_cold": 0.3719,
+      "ctrl_sign": 0.2232,
+      "ctrl_verify_warm": 0.198,
+      "tmc_sign": 0.2266,
+      "tmc_verify_warm": 0.1936,
+      "spat_sent": 800,
+      "spat_verified": 4544,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1964285714285714,
+      "i5_backhaul_ms": 0.8181,
+      "i5_tmc_hop_ms": 0.4202
+    },
+    {
+      "seed": 2,
+      "spat_warm": 0.1748,
+      "spat_cold": 0.4706,
+      "spat_sign": 0.2214,
+      "bsm_ssi_warm": 0.1443,
+      "bsm_ssi_cold": 0.3557,
+      "ctrl_sign": 0.2155,
+      "ctrl_verify_warm": 0.2037,
+      "tmc_sign": 0.2044,
+      "tmc_verify_warm": 0.1935,
+      "spat_sent": 800,
+      "spat_verified": 3962,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2113652113652114,
+      "i5_backhaul_ms": 0.8154000000000001,
+      "i5_tmc_hop_ms": 0.39790000000000003
+    },
+    {
+      "seed": 3,
+      "spat_warm": 0.1759,
+      "spat_cold": 0.4512,
+      "spat_sign": 0.2281,
+      "bsm_ssi_warm": 0.1469,
+      "bsm_ssi_cold": 0.3589,
+      "ctrl_sign": 0.2129,
+      "ctrl_verify_warm": 0.2053,
+      "tmc_sign": 0.2138,
+      "tmc_verify_warm": 0.1868,
+      "spat_sent": 800,
+      "spat_verified": 4791,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1974132062627638,
+      "i5_backhaul_ms": 0.8222,
+      "i5_tmc_hop_ms": 0.40059999999999996
+    },
+    {
+      "seed": 4,
+      "spat_warm": 0.1703,
+      "spat_cold": 0.4556,
+      "spat_sign": 0.2171,
+      "bsm_ssi_warm": 0.144,
+      "bsm_ssi_cold": 0.3659,
+      "ctrl_sign": 0.2182,
+      "ctrl_verify_warm": 0.2048,
+      "tmc_sign": 0.2257,
+      "tmc_verify_warm": 0.2011,
+      "spat_sent": 800,
+      "spat_verified": 4908,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.182638888888889,
+      "i5_backhaul_ms": 0.8104,
+      "i5_tmc_hop_ms": 0.4268
+    },
+    {
+      "seed": 5,
+      "spat_warm": 0.1704,
+      "spat_cold": 0.478,
+      "spat_sign": 0.2209,
+      "bsm_ssi_warm": 0.1425,
+      "bsm_ssi_cold": 0.3629,
+      "ctrl_sign": 0.2091,
+      "ctrl_verify_warm": 0.2028,
+      "tmc_sign": 0.2156,
+      "tmc_verify_warm": 0.1945,
+      "spat_sent": 800,
+      "spat_verified": 4986,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1957894736842105,
+      "i5_backhaul_ms": 0.8032,
+      "i5_tmc_hop_ms": 0.4101
+    },
+    {
+      "seed": 6,
+      "spat_warm": 0.1712,
+      "spat_cold": 0.4261,
+      "spat_sign": 0.2219,
+      "bsm_ssi_warm": 0.144,
+      "bsm_ssi_cold": 0.489,
+      "ctrl_sign": 0.2153,
+      "ctrl_verify_warm": 0.2198,
+      "tmc_sign": 0.2474,
+      "tmc_verify_warm": 0.2127,
+      "spat_sent": 800,
+      "spat_verified": 4771,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1888888888888889,
+      "i5_backhaul_ms": 0.8282,
+      "i5_tmc_hop_ms": 0.4601
+    },
+    {
+      "seed": 7,
+      "spat_warm": 0.1673,
+      "spat_cold": 0.4431,
+      "spat_sign": 0.2149,
+      "bsm_ssi_warm": 0.1416,
+      "bsm_ssi_cold": 0.349,
+      "ctrl_sign": 0.2246,
+      "ctrl_verify_warm": 0.1883,
+      "tmc_sign": 0.2068,
+      "tmc_verify_warm": 0.1898,
+      "spat_sent": 800,
+      "spat_verified": 5200,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1814971751412429,
+      "i5_backhaul_ms": 0.7951,
+      "i5_tmc_hop_ms": 0.3966
+    },
+    {
+      "seed": 8,
+      "spat_warm": 0.1736,
+      "spat_cold": 0.396,
+      "spat_sign": 0.2201,
+      "bsm_ssi_warm": 0.1446,
+      "bsm_ssi_cold": 0.3428,
+      "ctrl_sign": 0.2363,
+      "ctrl_verify_warm": 0.2215,
+      "tmc_sign": 0.2072,
+      "tmc_verify_warm": 0.231,
+      "spat_sent": 800,
+      "spat_verified": 4412,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2005532503457814,
+      "i5_backhaul_ms": 0.8514999999999999,
+      "i5_tmc_hop_ms": 0.43820000000000003
+    },
+    {
+      "seed": 9,
+      "spat_warm": 0.1737,
+      "spat_cold": 0.4996,
+      "spat_sign": 0.2231,
+      "bsm_ssi_warm": 0.1436,
+      "bsm_ssi_cold": 0.463,
+      "ctrl_sign": 0.2192,
+      "ctrl_verify_warm": 0.1903,
+      "tmc_sign": 0.2471,
+      "tmc_verify_warm": 0.1956,
+      "spat_sent": 800,
+      "spat_verified": 4523,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2096100278551531,
+      "i5_backhaul_ms": 0.8062999999999999,
+      "i5_tmc_hop_ms": 0.4427
+    },
+    {
+      "seed": 10,
+      "spat_warm": 0.1709,
+      "spat_cold": 0.4709,
+      "spat_sign": 0.2197,
+      "bsm_ssi_warm": 0.1432,
+      "bsm_ssi_cold": 0.3672,
+      "ctrl_sign": 0.2132,
+      "ctrl_verify_warm": 0.1911,
+      "tmc_sign": 0.2086,
+      "tmc_verify_warm": 0.1823,
+      "spat_sent": 800,
+      "spat_verified": 4437,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.193435754189944,
+      "i5_backhaul_ms": 0.7948999999999999,
+      "i5_tmc_hop_ms": 0.3909
+    },
+    {
+      "seed": 11,
+      "spat_warm": 0.1737,
+      "spat_cold": 0.4845,
+      "spat_sign": 0.2189,
+      "bsm_ssi_warm": 0.1437,
+      "bsm_ssi_cold": 0.3534,
+      "ctrl_sign": 0.2207,
+      "ctrl_verify_warm": 0.1931,
+      "tmc_sign": 0.2196,
+      "tmc_verify_warm": 0.1889,
+      "spat_sent": 800,
+      "spat_verified": 4168,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2087682672233822,
+      "i5_backhaul_ms": 0.8064,
+      "i5_tmc_hop_ms": 0.4085
+    },
+    {
+      "seed": 12,
+      "spat_warm": 0.1725,
+      "spat_cold": 0.4731,
+      "spat_sign": 0.2195,
+      "bsm_ssi_warm": 0.1428,
+      "bsm_ssi_cold": 0.3529,
+      "ctrl_sign": 0.2183,
+      "ctrl_verify_warm": 0.1923,
+      "tmc_sign": 0.2206,
+      "tmc_verify_warm": 0.1856,
+      "spat_sent": 800,
+      "spat_verified": 4239,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2079831932773109,
+      "i5_backhaul_ms": 0.8026,
+      "i5_tmc_hop_ms": 0.4062
+    },
+    {
+      "seed": 13,
+      "spat_warm": 0.1692,
+      "spat_cold": 0.4624,
+      "spat_sign": 0.218,
+      "bsm_ssi_warm": 0.1428,
+      "bsm_ssi_cold": 0.3559,
+      "ctrl_sign": 0.2157,
+      "ctrl_verify_warm": 0.1968,
+      "tmc_sign": 0.2105,
+      "tmc_verify_warm": 0.1819,
+      "spat_sent": 800,
+      "spat_verified": 5096,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1848739495798317,
+      "i5_backhaul_ms": 0.7997,
+      "i5_tmc_hop_ms": 0.39239999999999997
+    },
+    {
+      "seed": 14,
+      "spat_warm": 0.1768,
+      "spat_cold": 0.4746,
+      "spat_sign": 0.233,
+      "bsm_ssi_warm": 0.1476,
+      "bsm_ssi_cold": 0.3551,
+      "ctrl_sign": 0.2387,
+      "ctrl_verify_warm": 0.2149,
+      "tmc_sign": 0.2401,
+      "tmc_verify_warm": 0.1892,
+      "spat_sent": 800,
+      "spat_verified": 4788,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1978319783197833,
+      "i5_backhaul_ms": 0.8634,
+      "i5_tmc_hop_ms": 0.4293
+    },
+    {
+      "seed": 15,
+      "spat_warm": 0.177,
+      "spat_cold": 0.4861,
+      "spat_sign": 0.226,
+      "bsm_ssi_warm": 0.146,
+      "bsm_ssi_cold": 0.3983,
+      "ctrl_sign": 0.2198,
+      "ctrl_verify_warm": 0.1999,
+      "tmc_sign": 0.2137,
+      "tmc_verify_warm": 0.1914,
+      "spat_sent": 800,
+      "spat_verified": 4256,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2123287671232876,
+      "i5_backhaul_ms": 0.8227,
+      "i5_tmc_hop_ms": 0.4051
+    },
+    {
+      "seed": 16,
+      "spat_warm": 0.1754,
+      "spat_cold": 0.425,
+      "spat_sign": 0.2228,
+      "bsm_ssi_warm": 0.1456,
+      "bsm_ssi_cold": 0.3602,
+      "ctrl_sign": 0.215,
+      "ctrl_verify_warm": 0.1897,
+      "tmc_sign": 0.2159,
+      "tmc_verify_warm": 0.2056,
+      "spat_sent": 800,
+      "spat_verified": 4564,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2046703296703296,
+      "i5_backhaul_ms": 0.8029,
+      "i5_tmc_hop_ms": 0.4215
+    },
+    {
+      "seed": 17,
+      "spat_warm": 0.1691,
+      "spat_cold": 0.4672,
+      "spat_sign": 0.2176,
+      "bsm_ssi_warm": 0.1433,
+      "bsm_ssi_cold": 0.3477,
+      "ctrl_sign": 0.2088,
+      "ctrl_verify_warm": 0.1879,
+      "tmc_sign": 0.2068,
+      "tmc_verify_warm": 0.1779,
+      "spat_sent": 800,
+      "spat_verified": 5361,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1800418702023725,
+      "i5_backhaul_ms": 0.7834000000000001,
+      "i5_tmc_hop_ms": 0.38470000000000004
+    },
+    {
+      "seed": 18,
+      "spat_warm": 0.1733,
+      "spat_cold": 0.4121,
+      "spat_sign": 0.219,
+      "bsm_ssi_warm": 0.1435,
+      "bsm_ssi_cold": 0.3554,
+      "ctrl_sign": 0.2161,
+      "ctrl_verify_warm": 0.1951,
+      "tmc_sign": 0.2106,
+      "tmc_verify_warm": 0.1766,
+      "spat_sent": 800,
+      "spat_verified": 4494,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.207665505226481,
+      "i5_backhaul_ms": 0.8035,
+      "i5_tmc_hop_ms": 0.3872
+    },
+    {
+      "seed": 19,
+      "spat_warm": 0.173,
+      "spat_cold": 0.4704,
+      "spat_sign": 0.2189,
+      "bsm_ssi_warm": 0.1441,
+      "bsm_ssi_cold": 0.3546,
+      "ctrl_sign": 0.2145,
+      "ctrl_verify_warm": 0.189,
+      "tmc_sign": 0.2116,
+      "tmc_verify_warm": 0.177,
+      "spat_sent": 800,
+      "spat_verified": 4392,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2005551700208188,
+      "i5_backhaul_ms": 0.7953999999999999,
+      "i5_tmc_hop_ms": 0.3886
+    },
+    {
+      "seed": 20,
+      "spat_warm": 0.171,
+      "spat_cold": 0.4032,
+      "spat_sign": 0.2186,
+      "bsm_ssi_warm": 0.1436,
+      "bsm_ssi_cold": 0.359,
+      "ctrl_sign": 0.2203,
+      "ctrl_verify_warm": 0.19,
+      "tmc_sign": 0.2158,
+      "tmc_verify_warm": 0.194,
+      "spat_sent": 800,
+      "spat_verified": 4714,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.190807799442897,
+      "i5_backhaul_ms": 0.7999,
+      "i5_tmc_hop_ms": 0.4098
+    },
+    {
+      "seed": 21,
+      "spat_warm": 0.169,
+      "spat_cold": 0.4766,
+      "spat_sign": 0.2161,
+      "bsm_ssi_warm": 0.1412,
+      "bsm_ssi_cold": 0.4294,
+      "ctrl_sign": 0.2155,
+      "ctrl_verify_warm": 0.1945,
+      "tmc_sign": 0.2383,
+      "tmc_verify_warm": 0.1755,
+      "spat_sent": 800,
+      "spat_verified": 4653,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1968838526912182,
+      "i5_backhaul_ms": 0.7951,
+      "i5_tmc_hop_ms": 0.4138
+    },
+    {
+      "seed": 22,
+      "spat_warm": 0.1751,
+      "spat_cold": 0.5275,
+      "spat_sign": 0.2233,
+      "bsm_ssi_warm": 0.1459,
+      "bsm_ssi_cold": 0.3669,
+      "ctrl_sign": 0.232,
+      "ctrl_verify_warm": 0.2003,
+      "tmc_sign": 0.3334,
+      "tmc_verify_warm": 0.2574,
+      "spat_sent": 800,
+      "spat_verified": 4195,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2001370801919122,
+      "i5_backhaul_ms": 0.8307,
+      "i5_tmc_hop_ms": 0.5908
+    },
+    {
+      "seed": 23,
+      "spat_warm": 0.1714,
+      "spat_cold": 0.4845,
+      "spat_sign": 0.2232,
+      "bsm_ssi_warm": 0.145,
+      "bsm_ssi_cold": 0.3746,
+      "ctrl_sign": 0.2153,
+      "ctrl_verify_warm": 0.2115,
+      "tmc_sign": 0.2148,
+      "tmc_verify_warm": 0.1934,
+      "spat_sent": 800,
+      "spat_verified": 4841,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1820689655172414,
+      "i5_backhaul_ms": 0.8213999999999999,
+      "i5_tmc_hop_ms": 0.4082
+    },
+    {
+      "seed": 24,
+      "spat_warm": 0.1735,
+      "spat_cold": 0.4726,
+      "spat_sign": 0.2236,
+      "bsm_ssi_warm": 0.1454,
+      "bsm_ssi_cold": 0.3592,
+      "ctrl_sign": 0.2157,
+      "ctrl_verify_warm": 0.1936,
+      "tmc_sign": 0.229,
+      "tmc_verify_warm": 0.1803,
+      "spat_sent": 800,
+      "spat_verified": 4638,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1932599724896835,
+      "i5_backhaul_ms": 0.8064,
+      "i5_tmc_hop_ms": 0.4093
+    },
+    {
+      "seed": 25,
+      "spat_warm": 0.1692,
+      "spat_cold": 0.4164,
+      "spat_sign": 0.2157,
+      "bsm_ssi_warm": 0.1414,
+      "bsm_ssi_cold": 0.3567,
+      "ctrl_sign": 0.218,
+      "ctrl_verify_warm": 0.1861,
+      "tmc_sign": 0.209,
+      "tmc_verify_warm": 0.2024,
+      "spat_sent": 800,
+      "spat_verified": 5003,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1966053748231966,
+      "i5_backhaul_ms": 0.789,
+      "i5_tmc_hop_ms": 0.4114
+    },
+    {
+      "seed": 26,
+      "spat_warm": 0.1683,
+      "spat_cold": 0.4014,
+      "spat_sign": 0.2166,
+      "bsm_ssi_warm": 0.1411,
+      "bsm_ssi_cold": 0.3558,
+      "ctrl_sign": 0.2112,
+      "ctrl_verify_warm": 0.1878,
+      "tmc_sign": 0.211,
+      "tmc_verify_warm": 0.1898,
+      "spat_sent": 800,
+      "spat_verified": 4847,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1927710843373494,
+      "i5_backhaul_ms": 0.7839,
+      "i5_tmc_hop_ms": 0.4008
+    },
+    {
+      "seed": 27,
+      "spat_warm": 0.1757,
+      "spat_cold": 0.4623,
+      "spat_sign": 0.231,
+      "bsm_ssi_warm": 0.1479,
+      "bsm_ssi_cold": 0.3623,
+      "ctrl_sign": 0.2176,
+      "ctrl_verify_warm": 0.1956,
+      "tmc_sign": 0.2028,
+      "tmc_verify_warm": 0.1779,
+      "spat_sent": 800,
+      "spat_verified": 5133,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.1879648411088573,
+      "i5_backhaul_ms": 0.8199,
+      "i5_tmc_hop_ms": 0.38070000000000004
+    },
+    {
+      "seed": 28,
+      "spat_warm": 0.1726,
+      "spat_cold": 0.4986,
+      "spat_sign": 0.2222,
+      "bsm_ssi_warm": 0.1436,
+      "bsm_ssi_cold": 0.4724,
+      "ctrl_sign": 0.2093,
+      "ctrl_verify_warm": 0.1876,
+      "tmc_sign": 0.2036,
+      "tmc_verify_warm": 0.1777,
+      "spat_sent": 800,
+      "spat_verified": 4186,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.201949860724234,
+      "i5_backhaul_ms": 0.7917,
+      "i5_tmc_hop_ms": 0.3813
+    },
+    {
+      "seed": 29,
+      "spat_warm": 0.1768,
+      "spat_cold": 0.4436,
+      "spat_sign": 0.2268,
+      "bsm_ssi_warm": 0.1455,
+      "bsm_ssi_cold": 0.3509,
+      "ctrl_sign": 0.252,
+      "ctrl_verify_warm": 0.2186,
+      "tmc_sign": 0.2718,
+      "tmc_verify_warm": 0.2956,
+      "spat_sent": 800,
+      "spat_verified": 4332,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2151202749140895,
+      "i5_backhaul_ms": 0.8742000000000001,
+      "i5_tmc_hop_ms": 0.5673999999999999
+    },
+    {
+      "seed": 30,
+      "spat_warm": 0.1705,
+      "spat_cold": 0.4906,
+      "spat_sign": 0.2161,
+      "bsm_ssi_warm": 0.141,
+      "bsm_ssi_cold": 0.3659,
+      "ctrl_sign": 0.218,
+      "ctrl_verify_warm": 0.1962,
+      "tmc_sign": 0.2568,
+      "tmc_verify_warm": 0.2327,
+      "spat_sent": 800,
+      "spat_verified": 4461,
+      "spat_rejected": 0,
+      "attacks": {
+        "i2a_unsigned_spat": true,
+        "i2b_wrong_key_spat": true,
+        "i2c_map_only_rsu_spat": true,
+        "i2d_vehicle_signed_spat": true,
+        "i2e_untrusted_authority_rsu": true,
+        "i2f_stale_spat": true,
+        "i2g_forged_controller_update": true,
+        "i2h_cross_intersection_spat": true,
+        "i2i_replayed_spat": true,
+        "i2j_future_spat": true,
+        "i2b_w_wrong_key_spat_warm": true,
+        "i2c_w_not_permitted_warm": true,
+        "i2f_w_stale_spat_warm": true,
+        "i2k_spat_without_rsu_field": true,
+        "i2l_deeply_nested_spat": true
+      },
+      "attack_reasons": {
+        "i2a_unsigned_spat": {
+          "expected": "unsigned",
+          "reason": "unsigned",
+          "cold": true
+        },
+        "i2b_wrong_key_spat": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2c_map_only_rsu_spat": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": true
+        },
+        "i2d_vehicle_signed_spat": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2e_untrusted_authority_rsu": {
+          "expected": "credential_invalid",
+          "reason": "credential_invalid",
+          "cold": true
+        },
+        "i2f_stale_spat": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": true
+        },
+        "i2g_forged_controller_update": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": true
+        },
+        "i2h_cross_intersection_spat": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2i_replayed_spat": {
+          "expected": "replay",
+          "reason": "replay",
+          "cold": false
+        },
+        "i2j_future_spat": {
+          "expected": "future",
+          "reason": "future",
+          "cold": true
+        },
+        "i2b_w_wrong_key_spat_warm": {
+          "expected": "wrong_key",
+          "reason": "wrong_key",
+          "cold": false
+        },
+        "i2c_w_not_permitted_warm": {
+          "expected": "not_permitted",
+          "reason": "not_permitted",
+          "cold": false
+        },
+        "i2f_w_stale_spat_warm": {
+          "expected": "stale",
+          "reason": "stale",
+          "cold": false
+        },
+        "i2k_spat_without_rsu_field": {
+          "expected": "binding",
+          "reason": "binding",
+          "cold": true
+        },
+        "i2l_deeply_nested_spat": {
+          "expected": "malformed",
+          "reason": "malformed",
+          "cold": true
+        }
+      },
+      "ratio_spat_to_bsm_warm": 1.2092198581560285,
+      "i5_backhaul_ms": 0.8008,
+      "i5_tmc_hop_ms": 0.48949999999999994
+    }
+  ],
+  "wall_clock_s": 371.1
+}

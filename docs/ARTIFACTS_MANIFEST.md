@@ -1,5 +1,10 @@
 # Artifacts Manifest
 
+
+> **Dated snapshots (July 2026).** The dossiers' "key numbers" are those of their date (e.g. 52,178; 1,704,992;
+> 93.2 %) and are superseded; current values are in `docs/MEASUREMENT_CONDITIONS.md`. The stale-figure checker scans
+> Markdown only, so these HTML pages are not checked (audit finding T-16, 2026-10-10).
+
 Per-source provenance **dossiers** — one self-contained HTML page per source /
 material — for the thesis Source Register (`SOURCES.md`). Each is a theme-aware,
 self-contained page (no external assets, no secrets) that states what a source is,
