@@ -97,7 +97,8 @@ Home: Appendix G-G + companion SP-9. Common axis = the Phase 1 function set; see
 | 2.3b | Verify ERC-3643/ONCHAINID + eIDAS columns | SS | ✅ done (17 cells → [src]; 35/96 open) |
 | 2.5 | Examiner pass | SK | ✅ done → `p2/EXAMINER_REVIEW_P2.md` (2 FATAL, 6 MAJOR) |
 | 2.6 | Revision (FIDO2+ledgerless SSI, n-a recode, §4 rewrite) | SS/ED | ✅ done → `p2/COMPARISON.md` 12×10 |
-| 2.7 | Update figures to 10 systems + regen FIGURES_P2 | VA | 🔵 running |
+| 2.7 | Figures → 10 systems + regen FIGURES_P2 | VA | ✅ done (M5 count fixed 42/120) |
+| 2.8 | Verify-the-fixes re-examination | SK | 🔵 running |
 
 - `2026-10-31` ED — Phase 2 launched. One Standards-Scholar agent doing 2.1–2.3 (grounded in the sourced ANALOGIES matrix; evidence tags carried forward). Figures + examiner to follow.
 

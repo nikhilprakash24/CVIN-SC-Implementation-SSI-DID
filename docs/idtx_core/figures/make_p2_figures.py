@@ -127,7 +127,7 @@ def _wrap(s, n):
 
 
 # =============================================================== figure data
-# Eight systems (COMPARISON.md §1), short labels for column heads.
+# Ten systems (COMPARISON.md §1), short labels for column heads.
 SYSTEMS = [
     ("S1", ["OAuth2", "/ OIDC"]),
     ("S2", ["SAML", "2.0"]),
@@ -137,6 +137,8 @@ SYSTEMS = [
     ("S6", ["V2X PKI", "/ SCMS"]),
     ("S7", ["SSI", "(thesis)"]),
     ("S8", ["ERC-3643", "ONCHAINID"]),
+    ("S9", ["FIDO2", "/WebAuthn"]),
+    ("S10", ["did:key", "/did:web"]),
 ]
 
 # ---- P2-1: function x system matrix (COMPARISON.md §2). Classification per
@@ -149,51 +151,63 @@ FUNC_ROWS = [
     ("createDID", [
         (X, "IdP provisions sub"), (X, "IdP-managed NameID"), (C, "CA issues cert (CSR+sig)"),
         (C, "PID issued to wallet"), (C, "authority provisions mdoc"), (C, "SCMS enrollment cert"),
-        (N, "key-is-DID; VIN L3 commit"), (C, "deploy ONCHAINID contract")]),
+        (N, "key-is-DID; VIN L3 commit"), (C, "deploy ONCHAINID contract"),
+        (N, "self-gen key pair, no issuer"), (N, "key-is-DID/host did.json, no ledger")]),
     ("resolve", [
         (N, "UserInfo, live IdP"), (C, "IdP metadata + query"), (C, "chain build, AIA fetch"),
         (X, "holder presents, no lookup"), (C, "device engagement"), (C, "in-message validation"),
-        (N, "event-sourced replay"), (N, "on-chain claim/key reads")]),
+        (N, "event-sourced replay"), (N, "on-chain claim/key reads"),
+        (C, "RP cred-ID->pubkey lookup"), (N, "did:key expand / did:web GET")]),
     ("rotate (changeOwner)", [
         (X, "IdP reset, no ctrl key"), (X, "IdP-side, no holder key"), (C, "CA rekey / re-issue"),
         (C, "wallet rebinding"), (C, "issuer re-provisions"), (C, "SCMS re-enrollment"),
-        (N, "self-signed changeOwner"), (C, "ERC-734 key mgmt")]),
+        (N, "self-signed changeOwner"), (C, "ERC-734 key mgmt"),
+        (X, "re-register, no in-place rot"), (C, "did:web re-publish; key immut")]),
     ("delegate", [
         (C, "OAuth access token"), (C, "delegated assertion"), (C, "subordinate / proxy cert"),
-        (C, "consent to RP, no key"), (A, "no key delegation"), (A, "pseudonyms self-held"),
-        (N, "addDelegate, on-chain TTL"), (C, "ERC-734 scoped keys")]),
+        (C, "consent to RP, no key"), (X, "pseudonyms self-held"), (X, "pseudonyms self-held"),
+        (N, "addDelegate, on-chain TTL"), (C, "ERC-734 scoped keys"),
+        (X, "scoped to one RP, no deleg"), (C, "DID-doc capabilityDelegation")]),
     ("attribute (set/revoke)", [
         (C, "IdP claims; SCIM PATCH"), (C, "AttributeStatement"), (C, "subject DN / extensions"),
         (C, "(Q)EAA attestation"), (C, "issuer-signed elements"), (C, "PSID/SSP in cert"),
-        (N, "setAttribute; no read (AR-1)"), (N, "ERC-735 addClaim, readable")]),
+        (N, "setAttribute; no read (AR-1)"), (N, "ERC-735 addClaim, readable"),
+        (X, "authenticator, not attr sys"), (C, "self-asserted DID-doc entries")]),
     ("execute (agent proxy)", [
-        (A, "authenticate only"), (A, "SSO only"), (A, "keys sign, don't act"),
-        (A, "presented, not executor"), (A, "presented only"), (A, "signs messages only"),
-        (N, "ERC-4337/725x execute"), (C, "ERC-725X execute call")]),
+        (X, "authenticate only"), (X, "SSO only"), (X, "keys sign, don't act"),
+        (X, "presented, not executor"), (X, "presented only"), (X, "signs messages only"),
+        (N, "ERC-4337/725x execute"), (C, "ERC-725X execute call"),
+        (X, "authenticate only, no exec"), (X, "no exec substrate (not chain)")]),
     ("deactivate", [
         (C, "SCIM DELETE/active:false"), (C, "IdP disables principal"), (C, "CRL/OCSP revoke at EOL"),
         (C, "wallet revocation"), (C, "issuer revokes mdoc"), (C, "SCMS CRL revocation"),
-        (N, "owner->0; history stays"), (C, "registry delist / key rm")]),
+        (N, "owner->0; history stays"), (C, "registry delist (deleteId)"),
+        (C, "RP deletes stored cred"), (C, "did:web empty json; key n-a")]),
     ("issueCredential", [
         (C, "signed ID Token (JWS)"), (N, "signed <Assertion>"), (N, "CA issues signed cert"),
         (N, "QTSP (Q)EAA issuance"), (N, "MSO-signed mdoc"), (N, "pseudonym bulk issuance"),
-        (C, "off-chain VC; anchor"), (N, "claim issuer addClaim")]),
+        (C, "off-chain VC; anchor"), (N, "claim issuer addClaim"),
+        (X, "proves key, no 3rd-party cred"), (N, "VC issuer signs off-ledger")]),
     ("verifyCredential", [
         (C, "sig+iss+aud+exp"), (C, "sig + SubjectConfirm"), (C, "path valid. + OCSP"),
         (C, "issuer sig + status"), (C, "reader MSO sig, offline"), (C, "offline in-message"),
-        (C, "proof + status read (V6)"), (C, "on-chain claim at transfer")]),
+        (C, "proof + status read (V6)"), (C, "on-chain claim at transfer"),
+        (C, "auth-ceremony sig check"), (C, "VC proof + resolve iss, no ledger")]),
     ("revokeCredential", [
         (C, "token revoke (RFC 7009)"), (C, "short validity window"), (N, "CRL / OCSP revoked"),
         (C, "status-list revocation"), (C, "issuer status list"), (N, "linkage-value CRL (all)"),
-        (C, "on-chain status write (V5)"), (C, "remove claim / revoke iss")]),
+        (C, "on-chain status write (V5)"), (C, "remove claim / revoke iss"),
+        (X, "no cred; RP removes reg"), (C, "status-list (Bitstring) off-ledger")]),
     ("createPresentation", [
         (X, "token to RS, no VP"), (C, "bearer/HoK assertion"), (X, "cert in TLS, no VP"),
         (N, "wallet SD presentation"), (N, "mdoc selective disclosure"), (A, "cert in every message"),
-        (C, "replay-protected anchor (P1)"), (X, "claims read, no present")]),
+        (C, "replay-protected anchor (P1)"), (X, "claims read, no present"),
+        (X, "assertion to RP, no VP"), (N, "VC DM 2.0 VP, holder-assembled")]),
     ("IDTx (concept)", [
         (A, "off-chain RP (ABAC)"), (A, "off-chain SP decision"), (A, "off-chain RP on OCSP"),
         (A, "off-chain RP admission"), (A, "off-chain verifier"), (A, "off-chain recv, k-1 stale"),
-        (N, "in-contract guard, named id"), (N, "transfer gated on claims")]),
+        (N, "in-contract guard, named id"), (N, "transfer gated on claims"),
+        (X, "auth/off-chain, no tx"), (X, "DID+VC but no ledger (tests T1)")]),
 ]
 
 # Classification styling: distinct SHAPE + text label + background shade, so
@@ -224,12 +238,12 @@ def cls_glyph(cx, cy, kind, color, s=5.5):
 
 
 def fig_p2_1():
-    w, h = 940, 648
+    w, h = 1120, 664
     x0, lblw = 182, 170         # grid left edge; row-label column width
     col_w = (w - x0 - 20) / len(SYSTEMS)
     y0, row_h = 150, 38
     body = [title_block(20, 32, "P2-1  Function x system capability heat map",
-                        "12 rows (11 identity functions + the IDTx concept) x 8 real-world identity systems. "
+                        "12 rows (11 identity functions + the IDTx concept) x 10 real-world identity systems. "
                         "COMPARISON.md §2 (as of " + SRC_ASOF + ").")]
 
     # legend: four glyphs with shape + label + meaning
@@ -279,12 +293,12 @@ def fig_p2_1():
     yb = y0 + row_h * len(FUNC_ROWS) + 6
     body.append(text(20, yb + 12, "Reading:", size=7.6, color=INK, weight="bold"))
     body.append(footer(w, yb + 22, [
-        "S7 is the only system with createDID/resolve/rotate/delegate/execute all Native (the identifier is a key, the "
-        "registry is contract-readable). createPresentation has no native ERC (Composed anchor on S7). The IDTx row is the",
-        "contribution boundary: only S7/S8 evaluate an identity dependency inside a transaction; S1-S6 make an off-chain "
-        "identity-dependent DECISION (Absent on-chain), not a transaction. Source: COMPARISON.md §2 (as of " + SRC_ASOF + ").",
-        "Note: §2 collapses attribute set/revoke into one row and gives the relayed/sponsored meta-tx no row (n-a/Absent "
-        "except S7/S8 Composed, per §2 prose); it is therefore not shown as a row here. Glyph+label+shade all encode class."]))
+        "createDID is Native with no issuer not only on S7 but on S9 (FIDO2 self-generated key) and S10 (did:key/did:web, no "
+        "ledger) - the self-created key-identity is NOT S7-unique. createPresentation has no native ERC (Composed anchor on S7).",
+        "The IDTx row is the contribution boundary: only S7/S8 evaluate an identity dependency inside a transaction; S1-S6 "
+        "make an off-chain identity-dependent DECISION (Absent on-chain), and S9/S10 are n-a (authentication / no ledger, no",
+        "transaction - S10 tests T1: full DID+VC yet no in-tx evaluation). Source: COMPARISON.md §2 (as of " + SRC_ASOF + "). "
+        "§2 collapses attribute set/revoke into one row and gives the meta-tx no row; it is not shown here. Glyph+label+shade encode class."]))
     return "p2_1_function_system_heatmap.svg", doc(w, h, "\n".join(body), "P2-1 Function x system heat map")
 
 
@@ -316,6 +330,8 @@ TRADEOFF = [
     ("S6 V2X/SCMS",     [0, 2, 2, 1, 2, 2], "SCMS root + pseudonym CA",   "IEEE/ETSI + SCMS manager"),
     ("S7 SSI (thesis)", [2, 0, 0, 2, 0, 0], "Controlling key + ledger",   "W3C/EIP + chain governance"),
     ("S8 ERC-3643",     [2, 0, 0, 2, 0, 1], "Compliance contract + iss.", "token issuer + ERC authors"),
+    ("S9 FIDO2",        [2, 1, 2, 0, 0, 2], "Holder key; RP stores pubkey (no authority)", "W3C + FIDO Alliance"),
+    ("S10 ledgerless SSI", [1, 1, 1, 0, 1, 1], "Controlling key; did:web adds DNS/host trust", "W3C + DNS/registrar (did:web)"),
 ]
 
 
@@ -338,7 +354,7 @@ def level_track(x, y, tw, level, words, fav):
 
 
 def fig_p2_2():
-    w, h = 1080, 612
+    w, h = 1080, 740
     x0, lblw = 20, 128
     tx0 = x0 + lblw                      # ordinal tracks start
     tw = 104                              # per-ordinal-axis width
@@ -346,9 +362,9 @@ def fig_p2_2():
     cat_w = 150                           # width of each categorical text column
     y0, row_h = 150, 50
     body = [title_block(20, 32, "P2-2  Trade-off profile (labelled dot-matrix)",
-                        "8 systems x 8 trade-off axes. Six ordinal axes: level by POSITION on a Low/Med/High track + word label. "
+                        "10 systems x 8 trade-off axes. Six ordinal axes: level by POSITION on a Low/Med/High track + word label. "
                         "Two nominal axes (trust locus, governance) as text. COMPARISON.md §3 (as of " + SRC_ASOF + ").")]
-    body.append(text(20, 66, "Why not a radar: 8 overlapping polygons are unreadable and two axes here are nominal, not numeric; a dot-matrix stays legible and labels every level.",
+    body.append(text(20, 66, "Why not a radar: 10 overlapping polygons are unreadable and two axes here are nominal, not numeric; a dot-matrix stays legible and labels every level.",
                      size=7.4, color=MUTED, style="italic"))
 
     # column headers
@@ -432,10 +448,12 @@ def markdown():
         row = "| " + fname + " | " + " | ".join(f"{k} — {note}" for k, note in cells) + " |"
         L.append(row)
     L += ["",
-          "Row-total reading (COMPARISON.md §2 notes): S7 is the only column with createDID/resolve/rotate/delegate/"
-          "execute all `Native`. `createPresentation` has no native ERC (S7 `Composed` anchor, P1). The `IDTx` row is the "
-          "contribution boundary — only S7/S8 are `Native`; S1–S6 are `Absent` on-chain because they make an **off-chain "
-          "identity-dependent decision** (ANALYSIS.md §4.1), not a transaction.", ""]
+          "Row-total reading (COMPARISON.md §2 notes): `createDID` is `Native` with no issuer on S7 **and** on S9 (FIDO2 "
+          "self-generated key) and S10 (did:key/did:web, no ledger) — the self-created key-identity is **not** S7-unique "
+          "(obj. F2). `createPresentation` has no native ERC (S7 `Composed` anchor, P1; S4/S5/S10 have it `Native`). The "
+          "`IDTx` row is the contribution boundary — only S7/S8 are `Native`; S1–S6 are `Absent` on-chain (off-chain "
+          "**identity-dependent decision**, ANALYSIS.md §4.1) and S9/S10 are `n-a` (authentication / no ledger — no "
+          "transaction; S10 is the T1 control: full DID+VC surface yet no in-transaction evaluation).", ""]
 
     # P2-2 ordinal table
     L += ["## P2-2 Trade-off profile (`p2_2_tradeoff_profile.svg`)",
@@ -465,12 +483,25 @@ def markdown():
           "flattened to one level.",
           "- **Recovery** S8 coded Med (`ERC-734 key-management contract` enables recovery) vs S7 Low (`lost key = lost "
           "identity`); §3 states the S7 end sharply but leaves S8's recovery qualitative.",
-          "- **Privacy** has no clean Med exemplar in §3; all eight systems land at Low (linkable) or High (unlinkable).",
+          "- **Privacy** Med is now used only for **S10** (did:key is per-use unlinkable but did:web is a fixed "
+          "correlator — a split the single level flattens to Med). The other nine systems land at Low (linkable) or High "
+          "(unlinkable).",
+          "- **S9 (FIDO2) Availability** coded High (`must be live`): §3 says *RP live at auth* — but it is the RP itself, "
+          "**not a third-party authority** (FIDO2 has none), so the live-authority reading is softer than the S1/S2 High.",
+          "- **S9 (FIDO2) Revocation** coded Med (`window`): §3 says *RP deletes credential; no global revocation list* — "
+          "there is no cross-RP revocation latency to place on the next-block/window/cache-stale track, so Med is a "
+          "qualitative placeholder, not a measured latency.",
+          "- **S10 (ledgerless SSI) splits did:key vs did:web on four axes**, each flattened to the Med level the single "
+          "track allows: **Availability** (did:key none / did:web HTTPS host live), **Offline** (did:key Yes-deterministic "
+          "/ did:web No), **Recovery** (did:web re-publish / did:key lost-key-lost), and **Privacy** (above). An examiner "
+          "may reasonably read either end.",
           "",
-          "**Cells carrying lower evidence in COMPARISON.md itself (not re-judged here, carried as-is).** §2 marks 52 of "
-          "96 cells as `[sec]` (paywalled: all of S5 mDL, parts of S6 V2X) or `[recalled]` (free primaries not yet "
-          "chased: most of the S8 ERC-3643 column, parts of S4 eIDAS). These figures reproduce COMPARISON.md's "
-          "classification verbatim; they do not upgrade or down-rank an evidence tag. Treat S5 and the S8 column as "
+          "**Cells carrying lower evidence in COMPARISON.md itself (not re-judged here, carried as-is).** Per its closing "
+          "ledger, §2 marks **42 of 120** function×system cells as not-`[src]` — `[sec]` (paywalled: all of S5 mDL, parts "
+          "of S6 V2X) or `[recalled]` (free primaries not yet chased: `rotate`/`delegate` of S8 ERC-3643, parts of S4 "
+          "eIDAS, and 7 of the 24 new S9/S10 cells — S9 `rotate`/`deactivate`/`revokeCredential` and S10 `delegate`/"
+          "`execute`/`deactivate`/`revokeCredential`). These figures reproduce COMPARISON.md's classification verbatim; "
+          "they do not upgrade or down-rank an evidence tag. Treat S5, the noted S8 cells, and those S9/S10 cells as "
           "`[sec]`/`[recalled]` pending the primary read noted in COMPARISON.md's closing ledger."]
     return "\n".join(L) + "\n"
 
