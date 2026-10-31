@@ -66,9 +66,11 @@ plt.rcParams.update({
     "savefig.facecolor": SURFACE, "legend.frameon": False,
 })
 
-POP_COLOR = {"ssi": SSI, "pki": PKI}
+POP_COLOR = {"ssi": SSI, "pki": PKI, "rogue": INK}
 POP_LABEL = {"ssi": "SSI / MOBI VID (W3C VC + secp256k1)",
-             "pki": "PKI (IEEE 1609.2-style X.509 + ECDSA P-256)"}
+             "pki": "PKI (IEEE 1609.2-style X.509 + ECDSA P-256)",
+             "rogue": "rogue (Phase 5 attacker)"}
+IDENT_POP = {"MOBI_VID": "ssi", "PKI": "pki", "ROGUE": "rogue"}
 
 
 # ---------------------------------------------------------------- loading
@@ -107,7 +109,7 @@ def load_trace(path):
             elif kind == "enroll":
                 pop_of[r["id"]] = r["pop"]
                 ev["enroll"].append({"t": r["t"], "vehicle": r["id"],
-                                     "identity": "MOBI_VID" if r["pop"] == "ssi" else "PKI",
+                                     "identity": {"ssi": "MOBI_VID", "rogue": "ROGUE"}.get(r["pop"], "PKI"),
                                      "did": r.get("did"), "vin": r.get("vin"), "make": r.get("make"),
                                      "model": r.get("model"), "year": r.get("year")})
             elif kind == "step":
@@ -124,7 +126,7 @@ def load_trace(path):
                     infra_tx += 1
                     continue
                 rec = {"t": r["t"], "seq": r["msg"], "sender": r["from"], "type": r["kind"],
-                       "emergency": r["kind"] != "BSM",
+                       "emergency": r["kind"] != "BSM", "attack": r.get("attack"),
                        "pop": pop_of.get(r["from"], "pki"), "sign_ms": r.get("sign_ms"), "rx": []}
                 txs[r["msg"]] = rec
                 ev["tx"].append(rec)
@@ -133,6 +135,13 @@ def load_trace(path):
                 if tx is not None:
                     tx["rx"].append([r["to"], bool(r["ok"]), r.get("path") == "cold",
                                      r.get("verify_ms") or 0.0])
+                    if not r["ok"]:  # additive `why` (docs/visual/TRACE_SCHEMA.md)
+                        ev["rejections"].append({"t": r["t"], "pop": tx["pop"], "to": r["to"],
+                                                 "why": r.get("why") or r.get("reason") or "rejected",
+                                                 "attack": tx.get("attack")})
+                    if r.get("stages"):
+                        ev["stages"].append({"pop": tx["pop"], "total": r.get("verify_ms"),
+                                             **r["stages"]})
             elif kind == "safety":
                 ev["safety"].append({"t": r["t"], "app": r["app"], "vehicle": r["id"],
                                      "warned": r.get("warned", 0), "target": r.get("target"),
@@ -210,8 +219,7 @@ def save(fig, out, name):
 
 # ---------------------------------------------------------------- helpers
 def identity_map(ev):
-    return {e["vehicle"]: ("ssi" if e["identity"] == "MOBI_VID" else "pki")
-            for e in ev["enroll"]}
+    return {e["vehicle"]: IDENT_POP.get(e["identity"], "pki") for e in ev["enroll"]}
 
 
 def snapshot_at(ev, t):
@@ -269,9 +277,14 @@ def fig_road_frame(ev, path, out, t, focus=None):
 
     # vehicles
     for vid, (x, y, spd) in pos.items():
-        c = POP_COLOR[ident.get(vid, "pki")]
-        ax.add_patch(Rectangle((x - 22, y - 0.18), 44, 0.36, fc=c, ec=INK,
-                               lw=0.4, zorder=5))
+        p = ident.get(vid, "pki")
+        c = POP_COLOR[p]
+        ax.add_patch(Rectangle((x - 22, y - 0.18), 44, 0.36, fc=c,
+                               ec=SPRAY if p == "rogue" else INK,
+                               lw=1.6 if p == "rogue" else 0.4, zorder=6 if p == "rogue" else 5))
+        if p == "rogue":
+            ax.text(x, y - 0.32, "ROGUE", fontsize=7, color=SPRAY, ha="center", va="top",
+                    fontweight="bold", fontfamily="DejaVu Sans Mono", zorder=7)
     if focus and focus in pos:
         fx, fy, _ = pos[focus]
         r = meta["neighbor_radius_m"]
@@ -375,7 +388,7 @@ def fig_latency_strip(ev, path, out):
     series = collections.defaultdict(lambda: ([], []))
     for e in ev["tx"]:
         for rid, ok, cold, lat in e["rx"]:
-            if ok:
+            if ok and e["pop"] in ("ssi", "pki"):
                 k = (e["pop"], "cold" if cold else "warm")
                 series[k][0].append(e["t"]); series[k][1].append(lat)
     fig, ax = plt.subplots(figsize=(13, 4.6))
@@ -512,6 +525,80 @@ def fig_safety_events(ev, path, out):
     save(fig, out, "F6_safety_events")
 
 
+# ---------------------------------------------------------------- F8
+def fig_cold_stages(ev, path, out):
+    """Where cold latency goes: median per stage, per population (--stage-timers)."""
+    import statistics as st
+    meta = ev["meta"][0]
+    stages = ["freshness_ms", "signature_ms", "credential_ms", "bookkeeping_ms"]
+    names = {"freshness_ms": "freshness + replay check", "signature_ms": "message signature",
+             "credential_ms": "credential (VC verify + DID binding / X.509 chain + validity + CRL)",
+             "bookkeeping_ms": "replay record + cache"}
+    shades = {"freshness_ms": GRID, "signature_ms": INK, "credential_ms": None, "bookkeeping_ms": MUTED}
+    fig, ax = plt.subplots(figsize=(13, 4.0))
+    fig.subplots_adjust(top=0.74, bottom=0.24, left=0.17, right=0.98)
+    rows = []
+    for y, pop in enumerate(("ssi", "pki")):
+        recs = [r for r in ev["stages"] if r["pop"] == pop]
+        if not recs:
+            continue
+        med = {k: st.median(r[k] for r in recs) for k in stages}
+        tot = st.median(r["total"] for r in recs if r.get("total") is not None)
+        x = 0.0
+        for k in stages:
+            col = shades[k] or POP_COLOR[pop]
+            ax.barh(y, med[k], left=x, color=col, edgecolor=SURFACE, lw=1.2, height=0.55)
+            if med[k] > 0.04:
+                ax.text(x + med[k] / 2, y, f"{med[k]:.3f}", ha="center", va="center", fontsize=8,
+                        color="white" if col in (INK, MUTED, POP_COLOR[pop]) else INK)
+            x += med[k]
+        ax.text(x + 0.01, y, f"sum of stage medians {x:.3f} ms · median total {tot:.3f} ms · n={len(recs)}",
+                va="center", fontsize=8, color=INK2)
+        rows.append(pop)
+    ax.set_yticks(range(2)); ax.set_yticklabels([POP_LABEL[p] for p in ("ssi", "pki")], fontsize=8.5)
+    ax.invert_yaxis()
+    ax.set_xlabel("median ms per stage, cold (first-contact) verifications that succeeded")
+    ax.grid(axis="x")
+    hs = [plt.Rectangle((0, 0), 1, 1, color=(shades[k] or SSI)) for k in stages]
+    ax.legend(hs, [names[k] for k in stages], loc="upper center", bbox_to_anchor=(0.5, -0.3), ncol=2, fontsize=8)
+    stencil_title(fig, "Where cold latency goes",
+                  "Each first-contact verification split at its stage boundaries. The stage timers add their own "
+                  "perf_counter calls, so these totals sit slightly above the single-timer cold medians;\n"
+                  "they show proportions, not results of record (register #27).",
+                  provenance(path, meta))
+    save(fig, out, "F8_cold_stages")
+
+
+# ---------------------------------------------------------------- F9
+def fig_rejections(ev, path, out):
+    """Rejections over time by reason (rogue and injected), one row per reason."""
+    meta = ev["meta"][0]
+    rej = ev["rejections"]
+    reasons = sorted({r["why"] for r in rej}, key=lambda w: -sum(1 for r in rej if r["why"] == w))
+    fig, ax = plt.subplots(figsize=(13, 1.2 + 0.55 * len(reasons) + 1.6))
+    fig.subplots_adjust(top=0.72, bottom=0.2, left=0.16, right=0.98)
+    for y, w in enumerate(reasons):
+        pts = [r for r in rej if r["why"] == w]
+        for pop, mk in (("rogue", "x"), ("ssi", "|"), ("pki", "|")):
+            sel = [r["t"] for r in pts if r["pop"] == pop]
+            if sel:
+                ax.scatter(sel, [y] * len(sel), marker=mk, s=28, color=POP_COLOR[pop] if pop != "rogue" else SPRAY,
+                           lw=1.1, label=f"{w}: from {pop} (n={len(sel)})")
+    ax.set_yticks(range(len(reasons))); ax.set_yticklabels(reasons, fontsize=9, fontfamily="DejaVu Sans Mono")
+    ax.set_ylim(-0.6, len(reasons) - 0.4); ax.invert_yaxis()
+    ax.set_xlim(0, meta["duration_s"])
+    ax.set_xlabel("simulated time, s")
+    ax.grid(axis="x")
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.32), ncol=3, fontsize=8)
+    modes = sorted({r["attack"] for r in rej if r.get("attack")})
+    stencil_title(fig, "Rejected, and why",
+                  f"Every receiver-side rejection in the run, by the verifier's reason ({len(rej)} in total). "
+                  f"Rogue mode: {', '.join(modes) or 'none'}. The attack-board probes at the end of the run are not "
+                  "receiver traffic and are not drawn here.",
+                  provenance(path, meta))
+    save(fig, out, "F9_rejections")
+
+
 # ---------------------------------------------------------------- main
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
@@ -523,7 +610,7 @@ def main():
     ap.add_argument("--focus", default=None, help="vehicle to ring in F1")
     ap.add_argument("--receiver", default=None, help="receiver for F2")
     ap.add_argument("--only", nargs="*", default=None,
-                    help="subset of F1..F6 to render")
+                    help="subset of F1..F6, F8, F9 to render (F8 needs --stage-timers, F9 needs rejections)")
     ap.add_argument("--svg", action="store_true", help="also write SVG")
     args = ap.parse_args()
     global SAVE_SVG
@@ -532,7 +619,7 @@ def main():
     ev = load_trace(args.trace)
     out = args.out or (pathlib.Path(__file__).resolve().parents[3]
                        / "docs" / "visual" / "figures" / trace_name(args.trace))
-    want = set(args.only) if args.only else {"F1", "F2", "F3", "F4", "F5", "F6"}
+    want = set(args.only) if args.only else {"F1", "F2", "F3", "F4", "F5", "F6", "F8", "F9"}
     print(f"rendering from {args.trace} -> {out}")
     if "F1" in want:
         for t in args.t:
@@ -547,6 +634,10 @@ def main():
         fig_cold_warm_hist(ev, args.trace, out)
     if "F6" in want:
         fig_safety_events(ev, args.trace, out)
+    if "F8" in want and ev["stages"]:
+        fig_cold_stages(ev, args.trace, out)
+    if "F9" in want and ev["rejections"]:
+        fig_rejections(ev, args.trace, out)
 
 
 if __name__ == "__main__":

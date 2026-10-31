@@ -232,6 +232,16 @@ def _cert_validity_window(cert) -> Tuple[datetime, datetime]:
 # Identity layers
 # ===========================================================================
 
+def _short_reason(text: str) -> str:
+    """Freshness-check text -> short label used in traces and figures."""
+    t = (text or "").lower()
+    for key, label in (("stale", "stale"), ("future", "future"), ("replay", "replay"),
+                       ("missing", "malformed"), ("unparseable", "malformed")):
+        if key in t:
+            return label
+    return "malformed"
+
+
 class PKIIdentityLayer:
     """IEEE 1609.2-style PKI: pseudonym certificates + ECDSA P-256."""
 
@@ -241,6 +251,13 @@ class PKIIdentityLayer:
         self.ca_public_key = self.provider.ca_certificate.public_key()
         # Per-receiver cache: receiver_id -> {cert_fingerprint: public_key}
         self._cert_cache: Dict[str, Dict[str, Any]] = {}
+        # Visual layer (docs/visual/VISUAL_PLAN.md, Phase 5): why the last
+        # verify failed, and, only when stage_timing is on, where a verify
+        # spent its time. Neither changes the return value or the timed path
+        # when stage_timing is off (no extra perf_counter calls).
+        self.last_failure: Optional[str] = None
+        self.stage_timing = False
+        self.last_stages: Optional[Dict[str, float]] = None
 
     def enroll(self, vehicle_id: str, metadata: Optional[Dict] = None):
         return self.provider.register_vehicle(vehicle_id, metadata or {})
@@ -268,8 +285,11 @@ class PKIIdentityLayer:
         warm  = per-message ECDSA verify against the cached public key.
         """
         t0 = time.perf_counter()
+        tm = time.perf_counter if self.stage_timing else None
         cache = self._cert_cache.setdefault(receiver_id, {})
         ok = False
+        stage = "malformed"
+        self.last_failure = None
         try:
             cert_pem: str = signed["certificate"]
             signature = bytes.fromhex(signed["signature"])
@@ -278,12 +298,16 @@ class PKIIdentityLayer:
             timestamp = signed["message"].get("timestamp")
             replay_key = f"{receiver_id}|{fingerprint}"
             check_now = now
+            stage = "freshness"
             reason = self.freshness.check(timestamp, replay_key, payload, now=check_now)
             if reason is not None:
                 raise ValueError(reason)
+            if tm:
+                t_fresh = tm()
 
             cold = fingerprint not in cache
             if cold:
+                stage = "chain"
                 cert = x509.load_pem_x509_certificate(cert_pem.encode())
                 # 1. Certificate chain: pseudonym cert signed by our CA
                 self.ca_public_key.verify(
@@ -292,11 +316,13 @@ class PKIIdentityLayer:
                     ec.ECDSA(cert.signature_hash_algorithm),
                 )
                 # 2. Validity window
+                stage = "validity"
                 not_before, not_after = _cert_validity_window(cert)
                 now = datetime.now(timezone.utc)
                 if not (not_before <= now <= not_after):
                     raise ValueError("certificate outside validity window")
                 # 3. Revocation (CRL)
+                stage = "revoked"
                 if cert.serial_number in self.provider.revocation_list:
                     raise ValueError("certificate revoked")
                 public_key = cert.public_key()
@@ -304,15 +330,27 @@ class PKIIdentityLayer:
                 public_key = cache[fingerprint]
 
             # 4. Message signature (every message)
+            if tm:
+                t_cred = tm()
+            stage = "signature"
             public_key.verify(signature, payload, ec.ECDSA(hashes.SHA256()))
+            if tm:
+                t_sig = tm()
             self.freshness.accept(replay_key, payload, timestamp, now=check_now)
             if cold:
                 cache[fingerprint] = public_key
             ok = True
-        except Exception:
+        except Exception as exc:
             cold = True  # failures never warm the cache
             ok = False
-        return ok, (time.perf_counter() - t0) * 1000.0, cold
+            self.last_failure = (_short_reason(str(exc)) if stage == "freshness" else stage)
+        t_end = time.perf_counter()
+        if tm:
+            self.last_stages = ({"freshness_ms": (t_fresh - t0) * 1e3,
+                                 "credential_ms": (t_cred - t_fresh) * 1e3,
+                                 "signature_ms": (t_sig - t_cred) * 1e3,
+                                 "bookkeeping_ms": (t_end - t_sig) * 1e3} if ok else None)
+        return ok, (t_end - t0) * 1000.0, cold
 
 
 class SSIIdentityLayer:
@@ -335,6 +373,10 @@ class SSIIdentityLayer:
         self.wallets: Dict[str, Dict[str, Any]] = {}
         # Per-receiver cache: receiver_id -> {sender_did: signing_address}
         self._peer_cache: Dict[str, Dict[str, str]] = {}
+        # Visual layer: failure reason and optional stage timing (see PKI).
+        self.last_failure: Optional[str] = None
+        self.stage_timing = False
+        self.last_stages: Optional[Dict[str, float]] = None
 
     def enroll(self, vehicle_id: str, vin: str, make: str, model: str,
                year: int) -> Dict[str, Any]:
@@ -392,8 +434,10 @@ class SSIIdentityLayer:
         warm  = per-message signature recovery + cached-address comparison.
         """
         t0 = time.perf_counter()
+        tm = time.perf_counter if self.stage_timing else None
         cache = self._peer_cache.setdefault(receiver_id, {})
         ok = False
+        self.last_failure = None
         sender_did = package.get("sender_did", "")
         cold = sender_did not in cache
         try:
@@ -401,19 +445,31 @@ class SSIIdentityLayer:
             timestamp = message.get("timestamp")
             payload = _ssi_payload_bytes(message)
             replay_key = f"{receiver_id}|{sender_did}"
-            if self.freshness.check(timestamp, replay_key, payload, now=now) is not None:
+            fresh_reason = self.freshness.check(timestamp, replay_key, payload, now=now)
+            if fresh_reason is not None:
+                self.last_failure = _short_reason(fresh_reason)
                 return False, (time.perf_counter() - t0) * 1000.0, cold
+            if tm:
+                t_fresh = tm()
             recovered = Account.recover_message(
                 encode_defunct(hashlib.sha256(payload).digest()),
                 signature=package["signature"],
             )
+            if tm:
+                t_sig = tm()
             if not cold:
                 ok = (recovered.lower() == cache[sender_did].lower())
+                if not ok:
+                    self.last_failure = "signature"
             else:
                 credential = package.get("credential")
-                if credential is not None:
+                if credential is None:
+                    self.last_failure = "no_credential"
+                else:
                     valid, _report = self.verifier.verify_credential(credential)
-                    if valid:
+                    if not valid:
+                        self.last_failure = "credential_invalid"
+                    else:
                         doc = credential.to_dict() if hasattr(
                             credential, "to_dict") else credential
                         subject = doc.get("credentialSubject", {})
@@ -423,11 +479,23 @@ class SSIIdentityLayer:
                                 and recovered.lower() == did_address.lower()):
                             cache[sender_did] = recovered
                             ok = True
+                        else:
+                            self.last_failure = "binding"
+            if tm:
+                t_cred = tm()
             if ok:
                 self.freshness.accept(replay_key, payload, timestamp, now=now)
         except Exception:
             ok = False
-        return ok, (time.perf_counter() - t0) * 1000.0, cold
+            self.last_failure = self.last_failure or "malformed"
+        t_end = time.perf_counter()
+        if tm:
+            # SSI order is signature recovery, then credential; keys match PKI's.
+            self.last_stages = ({"freshness_ms": (t_fresh - t0) * 1e3,
+                                 "signature_ms": (t_sig - t_fresh) * 1e3,
+                                 "credential_ms": (t_cred - t_sig) * 1e3,
+                                 "bookkeeping_ms": (t_end - t_cred) * 1e3} if ok else None)
+        return ok, (t_end - t0) * 1000.0, cold
 
 
 # ===========================================================================
@@ -575,8 +643,27 @@ class SUMOIdentityIntegration:
                  screenshot_dir: Optional[Path] = None,
                  screenshot_every: int = 10,
                  gui_zoom: float = 300.0,
-                 gui_track: Optional[str] = None):
+                 gui_track: Optional[str] = None,
+                 rogue: Optional[str] = None, rogue_start: float = 10.0,
+                 stage_timers: bool = False):
         self.simulation_mode = simulation_mode or not SUMO_AVAILABLE
+        # Phase 5 visual layer (docs/visual/VISUAL_PLAN.md): an attacker that
+        # drives with traffic. Off by default; when on it never enters
+        # vehicle_states (so genuine neighbour sets are unchanged), never draws
+        # from self.rng, keeps its own sequence counter, and counts into
+        # self.rogue_stats only, never into self.metrics.
+        if rogue not in (None, "uncredentialed", "replay", "tamper"):
+            raise ValueError(f"unknown rogue mode {rogue!r}")
+        self.rogue_mode = rogue
+        self.rogue_start = float(rogue_start)
+        self.rogue_id = "rogue_001"
+        self.rogue_account = Account.create() if rogue else None
+        self.rogue_did = f"did:ethr:0x1:{self.rogue_account.address}" if rogue else None
+        self._rogue_seq = 0
+        self._captured: Dict[str, Tuple[Dict, str]] = {}
+        self.rogue_stats: Dict[str, Any] = {"sent": 0, "delivered": 0, "rejected": 0,
+                                            "accepted": 0, "reasons": {}}
+        self.stage_timers = bool(stage_timers)
         # SUMO-GUI capture (docs/visual/VISUAL_PLAN.md §3); inert without --gui
         self.screenshot_dir = Path(screenshot_dir) if screenshot_dir else None
         self.screenshot_every = max(1, int(screenshot_every))
@@ -592,6 +679,7 @@ class SUMOIdentityIntegration:
         self.results_path = results_path or (
             self.sumo_dir / "results" / "v2v_latency.json")
 
+        # (stage timers are switched on below, after the layers exist)
         # Identity layers (REAL crypto). Both check the BSM's signed
         # timestamp (simulation time) against the simulation clock (T-9).
         self._sim_now = 0.0
@@ -602,6 +690,7 @@ class SUMOIdentityIntegration:
                                     replay_cache_size=self.replay_cache_size)
         self.ssi = SSIIdentityLayer(clock=lambda: self._sim_now,
                                     replay_cache_size=self.replay_cache_size)
+        self.pki.stage_timing = self.ssi.stage_timing = self.stage_timers
 
         # Optional provenance registry for the MOBI VID population
         self.registry = None
@@ -831,6 +920,8 @@ class SUMOIdentityIntegration:
         pop.sent += 1
         self.metrics.messages_sent += 1
         msg_id = f"m{payload['seq']}"
+        if self.rogue_mode in ("replay", "tamper"):
+            self._captured[vehicle_id] = (package, identity.identity_type)
         if self.trace:
             self.trace.write({"type": "tx", "t": payload["timestamp"], "msg": msg_id, "from": vehicle_id,
                               "kind": message_type, "attack": None, "sign_ms": round(sign_ms, 4)})
@@ -848,10 +939,82 @@ class SUMOIdentityIntegration:
                 pop.failed += 1
                 self.metrics.verification_failures += 1
             if self.trace:
-                self.trace.write({"type": "rx", "t": payload["timestamp"], "msg": msg_id, "to": receiver_id,
-                                  "path": "cold" if cold else "warm", "ok": ok,
-                                  "reason": None if ok else "rejected", "verify_ms": round(latency_ms, 4)})
+                ev = {"type": "rx", "t": payload["timestamp"], "msg": msg_id, "to": receiver_id,
+                      "path": "cold" if cold else "warm", "ok": ok,
+                      "reason": None if ok else "rejected", "verify_ms": round(latency_ms, 4)}
+                if not ok:
+                    ev["why"] = layer.last_failure  # additive (docs/visual/TRACE_SCHEMA.md)
+                if self.stage_timers and ok and cold and layer.last_stages:
+                    ev["stages"] = {k: round(v, 5) for k, v in layer.last_stages.items()}
+                self.trace.write(ev)
         return verified_count
+
+    # ------------------------------------------------------------------
+    # Rogue vehicle (Phase 5 visual layer; --rogue MODE, mock mobility)
+    # ------------------------------------------------------------------
+
+    def _rogue_pos(self, sim_time: float) -> Optional[Tuple[float, float]]:
+        """Deterministic: 25 m/s eastbound in the middle lane from x = 1000 m."""
+        if not self.rogue_mode or sim_time < self.rogue_start:
+            return None
+        x = (1000.0 + 25.0 * (sim_time - self.rogue_start)) % MockMobility.HIGHWAY_LENGTH_M
+        return (x, 503.5)
+
+    def rogue_step(self, sim_time: float):
+        pos = self._rogue_pos(sim_time)
+        if pos is None:
+            return
+        near = sorted((math.dist(pos, st.position), vid)
+                      for vid, st in self.vehicle_states.items()
+                      if math.dist(pos, st.position) <= NEIGHBOR_RADIUS_M)
+        receivers = [vid for _, vid in near[:MAX_NEIGHBORS]]
+        if self.trace and sim_time == self.rogue_start:
+            self.trace.write({"type": "enroll", "t": round(sim_time, 3), "id": self.rogue_id, "pop": "rogue",
+                              "did": self.rogue_did, "vin": None, "make": None, "model": None, "year": None,
+                              "vtype": f"rogue:{self.rogue_mode}"})
+        layer = self.ssi
+        if self.rogue_mode == "uncredentialed":
+            self._rogue_seq += 1
+            message = {"msg_type": "BSM", "seq": -self._rogue_seq, "sender": self.rogue_id,
+                       "timestamp": round(sim_time, 3), "position": [round(pos[0], 2), pos[1]],
+                       "speed": 25.0, "heading": 90.0, "emergency": False}
+            signed = Account.sign_message(_ssi_signable(message), self.rogue_account.key)
+            package = {"message": message, "sender_did": self.rogue_did,
+                       "signature": signed.signature.hex(), "credential": None, "identity_type": "ssi_vc"}
+        else:
+            # Re-send the nearest genuine vehicle's package from this step:
+            # verbatim (replay) or with its position moved 50 m (tamper).
+            source = next((vid for _, vid in near if vid in self._captured), None)
+            if source is None:
+                return
+            captured, itype = self._captured[source]
+            layer = self.ssi if itype == "MOBI_VID" else self.pki
+            package = dict(captured)
+            if self.rogue_mode == "tamper":
+                msg = dict(captured["message"])
+                msg["position"] = [msg["position"][0] + 50.0, msg["position"][1]]
+                package["message"] = msg
+            receivers = [r for r in receivers if r != source]
+        self.rogue_stats["sent"] += 1
+        msg_id = f"r{self.rogue_stats['sent']}"
+        if self.trace:
+            self.trace.write({"type": "tx", "t": round(sim_time, 3), "msg": msg_id, "from": self.rogue_id,
+                              "kind": "BSM", "attack": self.rogue_mode, "sign_ms": None})
+        for rx in receivers:
+            ok, latency_ms, cold = layer.verify(rx, package)
+            self.rogue_stats["delivered"] += 1
+            key = "accepted" if ok else "rejected"
+            self.rogue_stats[key] += 1
+            why = None if ok else (layer.last_failure or "rejected")
+            if why:
+                self.rogue_stats["reasons"][why] = self.rogue_stats["reasons"].get(why, 0) + 1
+            if self.trace:
+                ev = {"type": "rx", "t": round(sim_time, 3), "msg": msg_id, "to": rx,
+                      "path": "cold" if cold else "warm", "ok": ok,
+                      "reason": None if ok else "rejected", "verify_ms": round(latency_ms, 4)}
+                if why:
+                    ev["why"] = why
+                self.trace.write(ev)
 
     # ------------------------------------------------------------------
     # Infrastructure message path (only with --rsu)
@@ -1226,7 +1389,10 @@ class SUMOIdentityIntegration:
                         {"id": vid, "x": round(st.position[0], 1), "y": round(st.position[1], 1),
                          "speed": round(st.speed, 2), "pop": "ssi" if self.vehicles[vid].identity_type == "MOBI_VID" else "pki",
                          "lane": st.lane_id}
-                        for vid, st in self.vehicle_states.items() if vid in self.vehicles]})
+                        for vid, st in self.vehicle_states.items() if vid in self.vehicles]
+                        + ([{"id": self.rogue_id, "x": round(rp[0], 1), "y": rp[1], "speed": 25.0,
+                             "pop": "rogue", "lane": "highway_east_1"}]
+                           if (rp := self._rogue_pos(sim_time)) else [])})
                 if (self.screenshot_dir and not self.simulation_mode
                         and self.use_gui and step % self.screenshot_every == 0):
                     try:
@@ -1239,6 +1405,8 @@ class SUMOIdentityIntegration:
                 # Periodic BSM broadcast: EVERY vehicle, EVERY 100ms step
                 for vehicle_id in vehicle_ids:
                     self.broadcast(vehicle_id, sim_time, "BSM")
+                if self.rogue_mode and self.simulation_mode:
+                    self.rogue_step(sim_time)
 
                 # Infrastructure messages (only with --rsu)
                 if self.infra is not None:
@@ -1336,6 +1504,8 @@ class SUMOIdentityIntegration:
             "safety_events_detected": m.safety_events_detected,
             "eebl_warnings_delivered": m.eebl_warnings_delivered,
             "attack_tests": self.attack_results,
+            **({"rogue": {"mode": self.rogue_mode, "start_s": self.rogue_start, **self.rogue_stats}}
+               if self.rogue_mode else {}),
             **({"infrastructure": self._infra_results()} if self.infra is not None else {}),
             "freshness": {
                 **self.pki.freshness.describe(),
@@ -1495,6 +1665,14 @@ def main():
                         help="With --gui: SUMO zoom percent (100 = whole net)")
     parser.add_argument("--gui-track", default=None,
                         help="With --gui: keep the view centred on this vehicle id")
+    parser.add_argument("--rogue", choices=["uncredentialed", "replay", "tamper"], default=None,
+                        help="--simulate only: an attacker vehicle drives with traffic from --rogue-start "
+                             "and broadcasts every step (docs/visual/VISUAL_PLAN.md Phase 5); off by default")
+    parser.add_argument("--rogue-start", type=float, default=10.0,
+                        help="Simulated time the rogue joins (default 10 s)")
+    parser.add_argument("--stage-timers", action="store_true",
+                        help="Record per-stage cold-verify timings into the trace only (adds timer overhead; "
+                             "never written to the results JSON)")
     args = parser.parse_args()
     if str(args.refresh_k).lower() in ("inf", "none"):
         refresh_k = None
@@ -1519,6 +1697,7 @@ def main():
         screenshot_every=args.screenshot_every,
         gui_zoom=args.gui_zoom,
         gui_track=args.gui_track,
+        rogue=args.rogue, rogue_start=args.rogue_start, stage_timers=args.stage_timers,
     )
     integration.run_simulation(duration_seconds=args.duration)
 
