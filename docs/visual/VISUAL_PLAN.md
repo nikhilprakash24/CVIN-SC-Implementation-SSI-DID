@@ -399,3 +399,15 @@ viewer, and `replay/replay_rogue_replay.html`. The no-change gate holds
    timers on.
 
 Next: Phases 6–8 (deck and poster, illustrations, final QA).
+
+**Phase 6 (2026-10-31):** done.
+
+- **Deck:** a 12-slide structured deck (`deck/`): .pptx, PDF and PNG per slide,
+  from `deck/build_deck.js`. It passes the pptx validator and visual QA.
+- **Poster:** an A1 PDF (`poster/`, from `poster/build_poster.py`).
+- **Sources:** both use only committed figures and register values. The gas
+  slide is a native chart from the results of record (#25).
+- **Found in passing:** the README key-results gas table is stale against #25
+  (see `deck/README.md`).
+
+Next: Phase 7 (illustrations from prompts P1–P5) and Phase 8 (final QA).
