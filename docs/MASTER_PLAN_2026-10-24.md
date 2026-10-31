@@ -233,7 +233,9 @@ Each task names what it blocks. "You" means the author. The order is the order o
 | T-11 | WM-2 F1, then E2 | this session | T-2 | WM-2 closed |
 | T-12 | Review the five open branches, **done 10-24** | this session | nothing | Q-B7 |
 | T-15 | Correct the TDP's stale figures and add layer 5, **done 10-24 (report 38)** | this session | nothing | the TDP current |
-| T-17 | Confirm why #26's density sweep (2026-10-04) was not re-run at A3b, or re-run it | this session | nothing | an empty KNOWN_STALE reason |
+| T-17 | Confirm why #26's density sweep (2026-10-04) was not re-run at A3b, **done 10-31 (report 42)**: it was; the Exp. D driver writes no stamp into the shared file | this session | nothing | an empty KNOWN_STALE reason |
+| T-20 | Mark `docs/PROJECT_SUMMARY.md` dated or refresh it, **done 10-31 (report 42)**: dated banner; the index points to the master plan | this session | nothing | no September snapshot listed as canonical |
+| T-21 | At the next Exp. D run, have `run_verify_scaling.py` write its own stamp block into `scaling_verify.json`, then drop its KNOWN_STALE entry | this session | the next #26 re-run | the stamp gate without an exception |
 | T-18 | Refresh the blueprint branch's 23 sheet sources against the register, then merge it (B-1, second half), **done 10-31 (report 40)** | this session | nothing | the blueprint set on the trunk |
 | T-19 | Extend the stale-figure checker to SVG (WM-2 G, T-F16), **done 10-31 (reports 40 and 41)**: Markdown, SVG, HTML and TeX are all read | this session | nothing | figures checked like Markdown |
 | T-16 | D2 answered 10-24 (out of scope); B-1 taken as recommended (exploration merged, blueprints after T-18); B-2 to B-4 open | you | nothing | the branch merges |

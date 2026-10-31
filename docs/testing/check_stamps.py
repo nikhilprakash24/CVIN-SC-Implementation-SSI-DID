@@ -118,9 +118,13 @@ KNOWN_STALE = {
     "4_comparison-framework/results/infrastructure_gas_run1.json":
         "the first I4 run (2026-10-09); the result of record is the range study over seeds 1-30 (#47)",
     "4_comparison-framework/results/scaling_verify.json":
-        "#26 C/D density sweep of 2026-10-04, latency descriptive only (latency charter); read 'yes' before report 38, "
-        "reason for not re-running at A3b to be confirmed (task T-17)",
-    "4_comparison-framework/results/scaling_verify_repeats/*.json": "the five repeats of the same #26 C/D sweep; as above",
+        "confirmed (report 42, T-17): the file holds two sections. Exp. C (credential richness, the file's only stamp, "
+        "2026-10-04 at d78e344) is at its stamped code: its scope differs only by the stamp-only commit 188efec. "
+        "Exp. D's section (v2v_density) was rewritten by the A3b re-run at 0b39570 and matches #26 and "
+        "scaling_verify_density.csv (P* 641.2); the 'yes' comes from Exp. D's scope, because its driver writes no "
+        "stamp of its own into this file (task T-21: add one at its next run)",
+    "4_comparison-framework/results/scaling_verify_repeats/*.json": "five Exp. D repeats of 2026-10-04 on the pre-fix driver; #26's current claim (A3b) does not use them, so "
+        "they are history (report 42)",
     "cv2x-testbed/results/freshness_k_c3/c3_*.json":
         "WM-2 C3 ran #32's and #37's configurations at their own code by design (#52)",
     "cv2x-testbed/results/freshness_k_samehost/r*_full.json": "same-host replicates at their own code (#55)",
