@@ -41,7 +41,8 @@ def _sumolib():
     cands = [pathlib.Path(os.environ["SUMO_HOME"]) / "tools"] if os.environ.get("SUMO_HOME") else []
     try:
         import sumo as _s
-        cands.append(pathlib.Path(_s.__file__).parent / "tools")
+        if getattr(_s, "__file__", None):  # not the testbed namespace folder
+            cands.append(pathlib.Path(_s.__file__).parent / "tools")
     except ImportError:
         pass
     for c in cands:

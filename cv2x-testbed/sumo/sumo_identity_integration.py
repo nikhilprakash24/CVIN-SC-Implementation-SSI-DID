@@ -71,7 +71,11 @@ def _import_traci():
         candidates.append(Path(os.environ["SUMO_HOME"]) / "tools")
     try:
         import sumo as _sumo_pkg  # eclipse-sumo wheel
-        candidates.append(Path(_sumo_pkg.__file__).parent / "tools")
+        # Without the wheel, `sumo` can resolve to this testbed's own folder
+        # as a namespace package, which has no __file__ (and no tools/).
+        _f = getattr(_sumo_pkg, "__file__", None)
+        if _f:
+            candidates.append(Path(_f).parent / "tools")
     except ImportError:
         pass
     for tools in candidates:
