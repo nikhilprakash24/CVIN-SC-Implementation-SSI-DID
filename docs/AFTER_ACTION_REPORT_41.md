@@ -35,3 +35,5 @@ documents it flags; it re-runs no producer.
 ## 3. Closing
 T-19 is complete: the stale-figure checker reads Markdown, SVG, HTML and TeX, each shown to fire, with no new CI step
 (CI and the pre-push guard already run it). Every real hit was a dated record and is classed as history with its reason.
+
+**CI green on `dc79377`** (all four workflows). Report 41 is closed.
