@@ -98,7 +98,7 @@ Home: Appendix G-G + companion SP-9. Common axis = the Phase 1 function set; see
 | 2.5 | Examiner pass | SK | ✅ done → `p2/EXAMINER_REVIEW_P2.md` (2 FATAL, 6 MAJOR) |
 | 2.6 | Revision (FIDO2+ledgerless SSI, n-a recode, §4 rewrite) | SS/ED | ✅ done → `p2/COMPARISON.md` 12×10 |
 | 2.7 | Figures → 10 systems + regen FIGURES_P2 | VA | ✅ done (M5 count fixed 42/120) |
-| 2.8 | Verify-the-fixes re-examination | SK | 🔵 running |
+| 2.8 | Verify-the-fixes re-examination | SK | ✅ done — all 12 RESOLVED, defensible |
 
 - `2026-10-31` ED — Phase 2 launched. One Standards-Scholar agent doing 2.1–2.3 (grounded in the sourced ANALOGIES matrix; evidence tags carried forward). Figures + examiner to follow.
 
@@ -111,3 +111,10 @@ Home: Appendix G-G + companion SP-9. Common axis = the Phase 1 function set; see
 - `2026-10-31` SK — WP 2.5 examiner ✅: verdict **not defensible as-is**; the taxonomy/freshness contribution survives, the row-count "only/uniquely" headline does not. 2 FATAL + 6 MAJOR + 4 minor in `p2/EXAMINER_REVIEW_P2.md`. Root cause: §4's "S7 uniquely" claim is an artifact of (a) excluding FIDO2/WebAuthn + ledgerless did:key/did:web (which share the self-created-key property) and (b) marking EVM-only ops Absent not n-a. Launched WP 2.6 revision (add the two comparators from free W3C primaries, recode n-a, mark T2/T3 contingent on [sec], port capital-cost caveat, rewrite §4 to "the combination, not only/uniquely").
 
 - `2026-10-31` SS/ED — WP 2.6 revision ✅: matrix now **12 functions × 10 systems** (added S9 WebAuthn/FIDO2, S10 ledgerless did:key/did:web, both [src] from free W3C/FIDO primaries). Load-bearing: S9 createDID=Native (self-generated key, no issuer — the property §4 wrongly called S7-unique); S10 IDTx=n-a (full DID+VC surface, no ledger — proves the ledger buys *in-transaction evaluation*, not authority-independence). §4 headline rewritten: "S7's distinction is the *combination* of FIDO2-like self-created key-identity with ERC-3643-like contract-readable on-chain evaluation within this EVM-derived function set — not any single Native cell, not a property no other system has." "uniquely" dropped; OCSP-stapling note added to T1; execute/delegate recoded Absent→n-a; T2/T3 marked provisional on [sec]; capital-cost caveat added (T5). Unverified 42/120 (35 carried + 7 new [recalled] ERC-734-adjacent). Launched 2.7 (figures to 10 systems; also fixes M5 stale FIGURES_P2 count).
+
+## PHASE 2 COMPLETE — 2026-10-31
+Verify-the-fixes re-examination: **all 12 objections RESOLVED**, no new contradictions, fixes reached the prose (the Phase-1 back-propagation failure did NOT recur). §4 "combination, not unique" headline is matrix-consistent on every leg (S9/S10 createDID Native but IDTx n-a ⇒ the combination is S7's, the parts are not). Verdict: **defensible at a defense**. Fixed one stale line in the triage sheet (M5 target was pre-column-addition). 
+**Deliverables:** `p2/COMPARISON.md` (12×10 matrix, §1–§4), `p2/EXAMINER_REVIEW_P2.md`, `figures/p2_1_*`/`p2_2_*` + `figures/FIGURES_P2.md`.
+**Remaining weakness (honest, flagged):** T2/T3 — the offline-freshness and privacy tradeoffs that anchor the CAV-domain argument — still rest on [sec] paywalled cells (ISO 18013-5, IEEE 1609.2). Marked provisional; primary read is a Phase 3 item (free SD-JWT-VC/mdoc material can carry much of T3).
+
+**Next:** Phase 3 (nearest benchmarks + benchmark v0) ready on your word — here or in the chat sidecar.
