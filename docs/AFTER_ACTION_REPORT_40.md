@@ -50,3 +50,5 @@ Both tasks are done. **T-19:** the stale-figure checker reads the text of every 
 it found 46 superseded figures that no check could see. **T-18:** the blueprint set is on the trunk, every measured
 value on it is read from a result of record, and two checks guard it: the data lock (a value changes only with its
 source) and the stale-figure checker (no superseded value in any sheet). B-1 is complete; B-2 to B-4 stay open.
+
+**CI green on `f98cf45`** (all four workflows, 12 jobs, the blueprint data check among them). Report 40 is closed.
