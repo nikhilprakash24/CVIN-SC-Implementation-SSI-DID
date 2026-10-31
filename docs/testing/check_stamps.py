@@ -39,7 +39,6 @@ CLASSES = {
     "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04.json": ("history", "a diff between two runs of record, each stamped or registered; not a measurement"),
     "4_comparison-framework/results/gas_moved_by_defect_fixes_2026-10-04_pass06.json": ("history", "same"),
     "4_comparison-framework/results/gas_moved_by_merge_2026-10-06.json": ("history", "same"),
-    "4_comparison-framework/results/gas_moved_by_natspec_2026-10-24.json": ("history", "diff between the results of record and one scratch re-run (not kept) after the NatSpec pass; logs a ±12-gas deployment shift from the metadata hash; not a measurement of record"),
     "4_comparison-framework/results/sensitivity.json": ("stamp producer", "no producer in the tree (optimizer sweep, July run); WM-2 A3 gap, pass 31"),
     "cv2x-testbed/sumo/results/v2v_latency.json": ("single run", "default output of one harness run; the results of record are v2v_latency_stats.json"),
     "cv2x-testbed/results/freshness_k_samehost.json": ("derived", "summary of the 12 stamped same-host replicates in freshness_k_samehost/ (#55, clone lineage #42); all_git_clean recorded"),
@@ -99,6 +98,18 @@ STAMP_LINE = (r"runStamp|run_stamp|_stamp\b|\bst\[|st = _stamp|\bstamp\b|scope|c
               r"PRODUCING_PATHSPECS|_code_dirty|run_identity|_sys\b|^\s*(#|//)|^\s*$|producer|environment_header\(|"
               r"H\.environment\(|def environment\(|git_dirty|\bcode_status\b|^\s*\"\"\"|`producer`|"
               r":\(top\)|return None if status is None else bool\(status\)|CPU, Python, libraries, date, commit")
+# Commits that changed producing code only in comments (report 38: the NatSpec pass). Solidity puts a hash of the
+# source in the bytecode's metadata, so such a commit changes deployment bytecode, and with it deployment gas, but not
+# behaviour. The exemption therefore applies only to the result prefixes listed, whose claims do not include deployment
+# gas; every other family re-runs. --check-coverage verifies each listed commit: in .sol files every changed line is a
+# comment or blank; in compiled artifacts and bytecode files the bytecode differs only in the trailing metadata; in
+# .dbg.json files only the build-info pointer changes. The compiled-bytecode proof over all three projects is in
+# report 38 (tools/run_identity/bytecode_equiv.py).
+COMMENT_ONLY_COMMITS = {
+    "781353f": {"why": "NatSpec pass (PR #15): comments in 19 contract sources and their recompiled testbed copies",
+                "applies_to": ["cv2x-testbed/"]},
+}
+COMMENT_LINE = r"^\s*(//|/\*|\*|\*/)|^\s*$"
 
 
 def code_paths(path):
@@ -130,6 +141,11 @@ def changed_since(commit, path):
         commits = _commits_between(m.group(0), paths)
         if commits and all(any(c.startswith(s) for s in STAMP_ONLY_COMMITS) for c in commits):
             return "no (stamp-only)"
+        exempt = {**{s: None for s in STAMP_ONLY_COMMITS},
+                  **{s: e for s, e in COMMENT_ONLY_COMMITS.items() if any(path.startswith(a) for a in e["applies_to"])}}
+        if commits and all(any(c.startswith(s) for s in exempt) for c in commits) and \
+                any(any(c.startswith(s) for s in COMMENT_ONLY_COMMITS) for c in commits):
+            return "no (comment-only)"
     return state
 
 
@@ -150,6 +166,59 @@ def verify_stamp_only():
         for line in diff.splitlines():
             if line[:1] in "+-" and not line.startswith(("+++", "---")) and not pat.search(line[1:]):
                 problems.append(f"{sha}: not a stamp line: {line[:120]}")
+    return problems
+
+
+def _strip_meta(h):
+    h = h.strip()
+    h = h[2:] if h.startswith("0x") else h
+    if len(h) < 4:
+        return h
+    return h[:-(int(h[-4:], 16) * 2 + 4)]
+
+
+def verify_comment_only():
+    """Each COMMENT_ONLY commit changes producing code only in comments; compiled files differ only in metadata."""
+    import re
+    import subprocess
+    scopes = json.loads(SCOPES.read_text())["scopes"]
+    code = sorted({q for sc in scopes.values() for q in sc["paths"]} - HELPERS)
+    pat, problems = re.compile(COMMENT_LINE), []
+    for sha in COMMENT_ONLY_COMMITS:
+        r = subprocess.run(["git", "diff-tree", "--no-commit-id", "-r", "--name-only", sha, "--", *code], cwd=ROOT,
+                           capture_output=True, text=True)
+        if r.returncode != 0:
+            problems.append(f"{sha}: not in this clone's history (a shallow checkout? CI needs fetch-depth: 0)")
+            continue
+        for f in r.stdout.split():
+            def show(rev):
+                q = subprocess.run(["git", "show", f"{rev}:{f}"], cwd=ROOT, capture_output=True, text=True)
+                return q.stdout if q.returncode == 0 else None
+            old, new = show(f"{sha}^"), show(sha)
+            if f.endswith(".sol"):
+                d = subprocess.run(["git", "show", "--format=", "-U0", sha, "--", f], cwd=ROOT, capture_output=True,
+                                   text=True).stdout
+                for line in d.splitlines():
+                    if line[:1] in "+-" and not line.startswith(("+++", "---")) and not pat.search(line[1:]):
+                        problems.append(f"{sha}: not a comment line in {f}: {line[:100]}")
+            elif f.endswith(".dbg.json"):
+                a, b = json.loads(old or "{}"), json.loads(new or "{}")
+                a.pop("buildInfo", None), b.pop("buildInfo", None)
+                if a != b:
+                    problems.append(f"{sha}: {f} changes more than its build-info pointer")
+            elif f.endswith(".json"):
+                a, b = json.loads(old or "{}"), json.loads(new or "{}")
+                for k in ("bytecode", "deployedBytecode"):
+                    if _strip_meta(a.get(k, "")) != _strip_meta(b.get(k, "")):
+                        problems.append(f"{sha}: {f} {k} differs beyond the metadata hash")
+                    a.pop(k, None), b.pop(k, None)
+                if a != b:
+                    problems.append(f"{sha}: {f} changes fields other than its bytecode")
+            elif f.endswith("_bytecode.txt"):
+                if _strip_meta(old or "") != _strip_meta(new or ""):
+                    problems.append(f"{sha}: {f} differs beyond the metadata hash")
+            else:
+                problems.append(f"{sha}: {f} is not a contract, artifact or bytecode file")
     return problems
 
 
@@ -298,6 +367,10 @@ def main():
         stamp_only = verify_stamp_only()
         for problem in stamp_only:
             print("STAMP_ONLY_COMMITS:", problem)
+        comment_only = verify_comment_only()
+        for problem in comment_only:
+            print("COMMENT_ONLY_COMMITS:", problem)
+        stamp_only = stamp_only + comment_only
         if bad:
             print("result files without a complete stamp, an aggregate or a class: " + ", ".join(bad))
         if bad or stamp_only:

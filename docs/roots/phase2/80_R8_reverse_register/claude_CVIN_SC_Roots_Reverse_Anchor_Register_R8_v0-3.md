@@ -27,6 +27,7 @@ No MD or St cell changed, so the §5 counts are unchanged (re-run by `r8_coverag
 | V3-06 | "SOL-16 (mechanism, PN-09)" / "SOL-16" → "SOL-16 (realises SOL-05; RL-01)" | RV-READ-03, RV-ALG-09 | PN-35, RL-01 (iii) |
 | V3-07 | §9 open-bound table reduced to the rows still unbounded (IDTX gas, relay overhead, qualitative rows) | §9 | PN-35 |
 | V3-08 | RV-SCF deepen-next: CEI request removed (done in R6 §4.2) | §3.10 | PN-35 |
+| V3-10 | **PAR-44 (λ) and PAR-45 (δ) declared** for R7 v0-3 PF-36 ε_K ≈ λ(σ+δ) (SLD-10 blind check); declare-only. PAR range now 01..45 | §2 | R7 v0-3 V3-06 |
 | V3-09 | RV-MET deepen-next line on CA-09 (#26 inconsistency) deleted; CA-09 closed by the repository's 2026-10-23 re-statement of #26 (0.156 ms/neighbour, *P*\* ≈ 641) | §3.18 | PN-34 |
 | V3-10 | Header: version v0-3, date 2026-10-24, progress bar | header | — |
 
@@ -156,6 +157,8 @@ R8 owns PAR- (R9 §3.1). R7's 26 parameters are absorbed by the mapping table, a
 | PAR-41 | ZK setup ceremony (t_s parties) | 06 | 35, R4 11 | single-party (prototype); MPC | R7-21 |
 | PAR-42 | Fleet size V | 11,07 | R4 04, 50 | scenario | R7-23 |
 | PAR-43 | Manoeuvre-class W budgets W_B | 14,13 | R4 02′, 15; 48, 54 | per manoeuvre class (Q-R5) | R7-25 |
+| PAR-44 | Key-theft rate λ (per key per unit time) | 06,20 | 36 (ε_K) | not set; candidates from HSM/TEE class (PAR for hardware) and field data | R7 v0-3 (SLD-10 blind check) |
+| PAR-45 | Detection-plus-revocation latency δ | 06,14 | 36 (ε_K), 48, 54 | not set; operator process time + W path | R7 v0-3 (SLD-10 blind check) |
 
 ---
 

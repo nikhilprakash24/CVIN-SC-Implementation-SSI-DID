@@ -147,8 +147,9 @@ it, whose IPFS hash covers the source text. The annotation pass was checked like
    re-run.
 
 The metadata hash is 32 bytes either way. Deployment gas can move in multiples of 12, because calldata
-costs differ for zero (4 gas) and non-zero (16 gas) bytes, but runtime gas is unaffected. Measured on
-the nine-standard benchmark, 2 of 61 cells moved, both deployments, by exactly ±12 gas: ERC-735
-`createIdentity` and MOBI-VID-V2 `deployRegistry`. The delta is logged in
-`4_comparison-framework/results/gas_moved_by_natspec_2026-10-24.json`. `tools/bytecode_manifest.js`
-deliberately ignores this metadata noise and fails only on real code changes.
+costs differ for zero (4 gas) and non-zero (16 gas) bytes, but runtime gas is unaffected. After the NatSpec pass
+(PR #15), three deployment cells of the nine-standard benchmark moved by exactly 12 gas each: ERC-721
+deploy, ERC-735 `createIdentity` and MOBI-VID-V2 `deployRegistry`. The results of record were re-run
+for this, and the comment-only proof was made with `tools/run_identity/bytecode_equiv.py`; both are
+recorded in `docs/AFTER_ACTION_REPORT_38.md`. `tools/bytecode_manifest.js` also ignores this metadata
+noise, but pins the stripped bytecode in CI so a real code change cannot pass unnoticed.

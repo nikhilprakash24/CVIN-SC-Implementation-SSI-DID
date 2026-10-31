@@ -16,7 +16,7 @@ Register #35 (lifecycle gas), #49 (zero→nonzero SSTOREs, log bytes); harness r
 | ERC-721 | 92 | 4,288 | 2,706,685 |
 | ERC-725xy | 38 | 3,744 | 2,956,507 (excl. 2 n/a) |
 | ERC-725 | 83 | 3,072 | 3,155,103 |
-| ERC-735 | 149 | 12,960 | 5,797,549 (excl. 3 n/a) |
+| ERC-735 | 149 | 12,960 | 5,797,561 (excl. 3 n/a) |
 
 ## F1-2 Read cost against history (`figures/f1_read_cost_vs_history.svg`)
 Register #31 (ERC-1056), #51 (all columns).

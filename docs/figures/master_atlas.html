@@ -1,0 +1,395 @@
+<title>CVIN-SC Master Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Public+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a register sheet. Sticky section index on top, numbered sections that are real sequence, tables as the main material. */
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#18212e; --muted:#5b6676; --rule:#d9dee6;
+  --accent:#1f5fae; --accent-soft:#e3ecf8;
+  --ok:#2c7a4b; --ok-soft:#e2f2e8; --warn:#9a6200; --warn-soft:#fbefd9; --bad:#b03a2e; --bad-soft:#f8e3e0;
+  --f-display:"Archivo",system-ui,sans-serif; --f-body:"Public Sans",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11161d; --panel:#18202a; --ink:#e4e9f0; --muted:#9aa6b6; --rule:#2c3644;
+  --accent:#78a9ea; --accent-soft:#1d2d44;
+  --ok:#6cc58f; --ok-soft:#173326; --warn:#e2b25b; --warn-soft:#3a2d12; --bad:#ec8a7f; --bad-soft:#3d1d1a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161d; --panel:#18202a; --ink:#e4e9f0; --muted:#9aa6b6; --rule:#2c3644;
+  --accent:#78a9ea; --accent-soft:#1d2d44;
+  --ok:#6cc58f; --ok-soft:#173326; --warn:#e2b25b; --warn-soft:#3a2d12; --bad:#ec8a7f; --bad-soft:#3d1d1a; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;display:grid;gap:40px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:2rem;font-weight:800;letter-spacing:-.01em}
+h2{font-size:1.35rem;font-weight:700;display:flex;gap:.6em;align-items:baseline}
+h2 .n{font-family:var(--f-mono);font-size:.8rem;color:var(--accent);font-weight:600}
+h3{font-size:1rem;font-weight:700}
+p{margin:0;max-width:68ch}
+a{color:var(--accent)}
+code,.mono{font-family:var(--f-mono);font-size:.84em}
+section{display:grid;gap:14px;scroll-margin-top:64px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--rule);padding-block:10px;overflow-x:auto;white-space:nowrap}
+nav .in{max-width:1080px;margin:0 auto;display:flex;gap:6px}
+nav a{font:600 .78rem var(--f-body);letter-spacing:.03em;text-decoration:none;color:var(--muted);padding:4px 10px;border-radius:999px}
+nav a:hover,nav a:focus-visible{color:var(--ink);background:var(--accent-soft);outline:none}
+header{display:grid;gap:10px;padding-top:28px}
+.eyebrow{font:600 .72rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+.stat{background:var(--panel);padding:12px 14px;display:grid;gap:2px}
+.stat b{font:700 1.45rem var(--f-display);font-variant-numeric:tabular-nums}
+.stat span{font-size:.78rem;color:var(--muted)}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:left;vertical-align:top;padding:8px 12px;border-bottom:1px solid var(--rule)}
+th{font:600 .72rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td{min-width:0}
+.pill{display:inline-block;font:600 .7rem var(--f-body);letter-spacing:.04em;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.p-ok{background:var(--ok-soft);color:var(--ok)} .p-warn{background:var(--warn-soft);color:var(--warn)} .p-bad{background:var(--bad-soft);color:var(--bad)} .p-info{background:var(--accent-soft);color:var(--accent)}
+/* timeline */
+.tl{position:relative;display:grid;gap:0;border-left:2px solid var(--rule);margin-left:6px}
+.tl .ev{position:relative;padding:0 0 18px 20px;display:grid;gap:2px}
+.tl .ev::before{content:"";position:absolute;left:-7px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--panel);border:2px solid var(--accent)}
+.tl .ev.big::before{background:var(--accent)}
+.tl .d{font:600 .75rem var(--f-mono);color:var(--muted)}
+.tl .t{font-weight:600}
+.tl .s{color:var(--muted);font-size:.88rem;max-width:72ch}
+/* month bars */
+.months{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:end;height:150px;padding:12px;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
+.mb{display:grid;grid-template-rows:auto 1fr auto;height:100%;gap:4px;text-align:center}
+.mb .bar{align-self:end;background:var(--accent);border-radius:4px 4px 0 0;min-height:3px}
+.mb .v{font:600 .8rem var(--f-mono);font-variant-numeric:tabular-nums}
+.mb .l{font-size:.72rem;color:var(--muted)}
+/* WM-2 grid */
+.wm{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px}
+.step{border-radius:6px;padding:8px 6px;text-align:center;font:600 .82rem var(--f-mono);border:1px solid var(--rule)}
+.step small{display:block;font:400 .66rem var(--f-body);color:var(--muted);margin-top:2px}
+.s-done{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.s-open{background:var(--panel);color:var(--ink)}
+.s-block{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.meter{height:10px;border-radius:999px;background:var(--rule);overflow:hidden}
+.meter i{display:block;height:100%;width:75%;background:var(--ok)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.8rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.cols > *{min-width:0}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;display:grid;gap:8px}
+.mermaid{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:12px;overflow-x:auto;margin:0}
+.toggle{display:inline-flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden;width:max-content}
+.toggle button{font:600 .8rem var(--f-body);border:0;background:var(--panel);color:var(--muted);padding:6px 14px;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--accent);color:var(--bg)}
+.toggle button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.tier{font:700 .72rem var(--f-mono);color:var(--accent)}
+.note{font-size:.84rem;color:var(--muted)}
+ol.read{margin:0;padding-left:1.4em;display:grid;gap:8px}
+ol.read li{max-width:76ch}
+@media (prefers-reduced-motion:no-preference){nav a{transition:background .15s,color .15s}}
+@media (max-width:520px){h1{font-size:1.6rem}.months{height:120px}}
+</style>
+
+<nav aria-label="Sections"><div class="in">
+<a href="#overview">Overview</a><a href="#phases">Phases</a><a href="#milestones">Milestones</a><a href="#integration">Integration</a><a href="#forward">Plan forward</a><a href="#phaseb">Phase B</a><a href="#blockers">Blockers</a><a href="#read">Read first</a><a href="#catalogue">Catalogue</a><a href="#pages">Pages</a>
+</div></nav>
+
+<div class="wrap">
+<header id="overview">
+  <div class="eyebrow">MASc thesis · UBC ECE · Nikhil Prakash · as of 24 Oct 2026, commit 3406bca</div>
+  <h1>CVIN-SC Master Atlas</h1>
+  <p class="lede">Blockchain identity for connected vehicles, measured rather than argued. Nine Ethereum identity standards and MOBI VID are built, tested and compared on cost, security, W3C conformance and real-time feasibility. This page is the visual form of <code>docs/MASTER_PLAN_2026-10-24.md</code>. Every figure comes from a file in the repository, and the claim register is the authority.</p>
+  <div class="stats">
+    <div class="stat"><b>45 / 62</b><span>claim register rows verified</span></div>
+    <div class="stat"><b>563</b><span>Hardhat tests passing</span></div>
+    <div class="stat"><b>376</b><span>Python layer tests passing</span></div>
+    <div class="stat"><b>92</b><span>demos, 1,758 logged steps</span></div>
+    <div class="stat"><b>15 / 20</b><span>WM-2 steps done</span></div>
+    <div class="stat"><b>37</b><span>after-action reports</span></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Layer</th><th>Directory</th><th>What it is</th><th>Answers</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>1_blockchain-identity/</code></td><td>contracts for nine standards plus MOBI VID, Hardhat tests, metrics harness</td><td>RQ1 cost, RQ2 security</td></tr>
+      <tr><td>2</td><td><code>2_w3c-ssi-layer/</code></td><td>W3C credentials, the DID resolver, MOBI VID Python layer</td><td>RQ3 W3C</td></tr>
+      <tr><td>3</td><td><code>cv2x-testbed/</code></td><td>V2X lifecycle use cases, SUMO runs, freshness and latency</td><td>RQ4 real time</td></tr>
+      <tr><td>4</td><td><code>4_comparison-framework/</code></td><td>benchmarks, scaling, security analysis, W3C checker</td><td>RQ1 to RQ4</td></tr>
+      <tr><td>5</td><td><code>5_zkp-agent-identity/</code></td><td>zero-knowledge VIN proofs, agent-wrapped identity</td><td>RQ5</td></tr>
+    </tbody></table></div>
+</header>
+
+<section id="phases">
+  <h2><span class="n">01</span>Phases and passes</h2>
+  <div class="cols">
+    <div class="tl">
+      <div class="ev"><span class="d">before 2025</span><span class="t">Phase 0. Prior work</span><span class="s">The author's earlier identity research and the CVIN-ID-SCs repository.</span></div>
+      <div class="ev big"><span class="d">2025-11-10 to 11</span><span class="t">Phase 1. Build</span><span class="s">Design, MOBI VID 1.0, use cases and SUMO in three sessions.</span></div>
+      <div class="ev"><span class="d">2026-06-21</span><span class="t">Phase 2. Thesis integration</span><span class="s">Restructured into the thesis layout.</span></div>
+      <div class="ev"><span class="d">2026-07</span><span class="t">Phase 3. Rigour passes</span><span class="s">Verification, tags v0.7.0 and v0.8.0, PR #1.</span></div>
+      <div class="ev"><span class="d">2026-09-24 to 30</span><span class="t">Phase 4. Restoration</span><span class="s">GitHub restored, testbed lineage reviewed. Reports 01 and 02.</span></div>
+      <div class="ev big"><span class="d">2026-10-03 onward</span><span class="t">Phase 5. Evidence engineering</span><span class="s">Reports 03 to 37: sandbox, defect fixing, the claim register, run identity, WM-1 closed, WM-2 under way.</span></div>
+      <div class="ev"><span class="d">2026-10-14 onward</span><span class="t">Phase 2 research ideas</span><span class="s">Documents only until the defence: 26 ideas, three focuses, two deep-dive briefs.</span></div>
+    </div>
+    <div class="card">
+      <h3>Commits per month</h3>
+      <div class="months" role="img" aria-label="Commits per month: Nov 2025 22, Jun 2026 3, Jul 2026 56, Sep 2026 30, Oct 2026 434">
+        <div class="mb"><span class="v">22</span><span class="bar" style="height:5%"></span><span class="l">Nov 25</span></div>
+        <div class="mb"><span class="v">3</span><span class="bar" style="height:1%"></span><span class="l">Jun 26</span></div>
+        <div class="mb"><span class="v">56</span><span class="bar" style="height:13%"></span><span class="l">Jul 26</span></div>
+        <div class="mb"><span class="v">30</span><span class="bar" style="height:7%"></span><span class="l">Sep 26</span></div>
+        <div class="mb"><span class="v">434</span><span class="bar" style="height:100%"></span><span class="l">Oct 26</span></div>
+      </div>
+      <p class="note">545 commits in all. Months with no commits are left out.</p>
+    </div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Reports</th><th>Dates</th><th>Theme</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">01–02</td><td>09-24 to 09-30</td><td>Restoration; testbed lineage reviewed</td></tr>
+      <tr><td class="mono">03–07</td><td>10-03 to 10-06</td><td>Sandbox and layered suites; High defects fixed; parallel work reconciled</td></tr>
+      <tr><td class="mono">08–12</td><td>10-09 to 10-10</td><td>Plan of 10-09; infrastructure messaging; adversarial review; <b>WM-1 closed</b></td></tr>
+      <tr><td class="mono">13–19</td><td>10-10 to 10-15</td><td>WM-2 A1, A2, A4, C0, B1, B2, C3; Phase 2 opened; result cards; contribution record</td></tr>
+      <tr><td class="mono">20, 25, 27</td><td>10-15 to 10-22</td><td>Technical Data Package, parallel session</td></tr>
+      <tr><td class="mono">21–24, 26</td><td>10-15 to 10-20</td><td>C1 resolver on chain, C2 consent (D54), deep-dive briefs, decision sheet, pre-push guard, chapter drafts</td></tr>
+      <tr><td class="mono">28–31</td><td>10-22</td><td>Second workstream: layer 5, clone lineage merge, chapter 2</td></tr>
+      <tr><td class="mono">32–33</td><td>10-22 to 10-23</td><td><b>One trunk</b>; A3b and A6 re-runs from clean commits</td></tr>
+      <tr><td class="mono">34–36</td><td>10-23</td><td>A5 claims check; B3 latency charter; A7; mutation probes (17 of 17 mutants killed)</td></tr>
+      <tr><td class="mono">37</td><td>10-24</td><td><span class="pill p-info">open</span> CI pins, I-05 model, chapter audit, this atlas</td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="milestones">
+  <h2><span class="n">02</span>Work milestones</h2>
+  <div class="cols">
+    <div class="card"><h3>WM-1 <span class="pill p-ok">closed 10 Oct</span></h3><p class="note">Passes 1 to 12, closed under a four-brief audit. 72 findings, all dispositioned. <code>docs/milestones/WM-1_REPORT.md</code></p></div>
+    <div class="card"><h3>WM-2 <span class="pill p-info">15 of 20</span></h3><div class="meter" aria-label="75 percent done"><i></i></div><p class="note">Groups A to C are complete. D, E and F remain. <code>docs/PLAN_WM-2.md</code></p></div>
+  </div>
+  <div class="wm" aria-label="WM-2 steps">
+    <div class="step s-done">A1<small>stamps</small></div><div class="step s-done">A2<small>helper</small></div><div class="step s-done">A3<small>producers</small></div><div class="step s-done">A3b<small>re-runs</small></div><div class="step s-done">A4<small>promote</small></div><div class="step s-done">A5<small>claims</small></div><div class="step s-done">A6<small>harness</small></div><div class="step s-done">A7<small>py register</small></div>
+    <div class="step s-done">B1<small>seeds</small></div><div class="step s-done">B2<small>gas</small></div><div class="step s-done">B3<small>latency</small></div>
+    <div class="step s-done">C0<small>verifier</small></div><div class="step s-done">C1<small>resolver</small></div><div class="step s-done">C2<small>D54</small></div><div class="step s-done">C3<small>freshness</small></div>
+    <div class="step s-block">D1<small>needs D-1</small></div><div class="step s-open">D2<small>RSU note</small></div><div class="step s-block">E1<small>needs check</small></div><div class="step s-open">E2<small>close audit</small></div><div class="step s-open">F1<small>pres. v2</small></div>
+  </div>
+  <div class="legend"><span style="--c:var(--ok)">done</span><span style="--c:var(--rule)">open, can run</span><span style="--c:var(--warn)">waits on you</span></div>
+  <p class="note">F2, a slide deck, is optional and not counted.</p>
+</section>
+
+<section id="integration">
+  <h2><span class="n">03</span>Integration and connections</h2>
+  <p>Two lineages split after report 18 and became one trunk on 22 Oct (Plan 5, report 32). The workspace's rule for who may attest a vehicle event was taken, because it implies the trunk's rule and closes defect D54.</p>
+<pre class="mermaid">
+flowchart LR
+  B[Common base<br/>report 18] --> W[Workspace W<br/>C1 C2 C3, TDP,<br/>decision sheet, briefs]
+  B --> T[Trunk T<br/>layer 5, clone lineage,<br/>Plans 1 to 4, chapter 2]
+  Z[zkp-ai-identity branch] --> T
+  W --> M{{One trunk<br/>PR 6 and 7, 22 Oct}}
+  T --> M
+  M --> N[A3b A6 A5 B3 A7<br/>PR 8 to 12]
+  N --> H[This branch today<br/>3406bca]
+  R1[research-improvements<br/>4 unmerged] -.-> H
+  R2[simulation-visual-plan<br/>3 unmerged] -.-> H
+  R3[system-blueprint-diagrams<br/>2 unmerged] -.-> H
+  R4[testing-suite-organization<br/>4 unmerged] -.-> H
+  R5[vid-build<br/>11 unmerged] -.-> H
+</pre>
+  <p class="note">Dashed lines are branches whose work is not merged and has not been reviewed. That is question Q-B7 and task T-12.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Branch</th><th>Last commit</th><th>Unmerged</th><th>What</th><th>State</th></tr></thead>
+    <tbody>
+      <tr><td><code>clone-cvin-id-scs</code> (default)</td><td>10-22</td><td>2 merges</td><td>the trunk</td><td><span class="pill p-ok">synced</span></td></tr>
+      <tr><td><code>zkp-ai-identity-research</code></td><td>10-23</td><td>0</td><td>layer 5 source</td><td><span class="pill p-ok">merged</span></td></tr>
+      <tr><td><code>cvin-research-improvements</code></td><td>10-22</td><td>4</td><td>research expansion, X1 on chain time</td><td><span class="pill p-warn">review</span></td></tr>
+      <tr><td><code>simulation-visual-plan</code></td><td>10-22</td><td>3</td><td>SUMO traces, chapter figures, replay</td><td><span class="pill p-warn">review</span></td></tr>
+      <tr><td><code>system-blueprint-diagrams</code></td><td>10-22</td><td>2</td><td>blueprint Rev B number audit</td><td><span class="pill p-warn">review</span></td></tr>
+      <tr><td><code>testing-suite-organization</code></td><td>10-22</td><td>4</td><td>TSR phases 3 and 6 as a patch series</td><td><span class="pill p-warn">review</span></td></tr>
+      <tr><td><code>exploration-plan</code></td><td>10-15</td><td>2</td><td>related-work scaffold</td><td><span class="pill p-warn">review</span></td></tr>
+      <tr><td><code>vid-build</code></td><td>10-19</td><td>11</td><td>VID build work orders WO-8, WO-9</td><td><span class="pill p-warn">review</span></td></tr>
+      <tr><td><code>sandbox-onboarding</code>, <code>wo-s0/*</code></td><td>07 to 10-19</td><td>2 to 23</td><td>onboarding, understanding report</td><td><span class="pill p-info">kept apart</span></td></tr>
+    </tbody></table></div>
+  <div class="cols">
+    <div class="card"><h3>Other sessions</h3><p class="note">The TDP session (reports 20, 25, 27) and the second workstream (reports 28 to 33) are merged. The cross-model check session has a written brief and has not run.</p></div>
+    <div class="card"><h3>Sister session</h3><p class="note">The "Build CV2X code" session keeps its own Master Plan and Programme Atlas, linked in the pages section. Its Phase B is the model for section 05. This session could not read it, because the documents connector did not connect.</p></div>
+  </div>
+</section>
+
+<section id="forward">
+  <h2><span class="n">04</span>The plan forward</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Work</th><th>Produces</th><th>Waits on</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>U6 chapter audit, read-only: 39 OK, 22 mismatch, 2 overstated, 16 unsourced, 13 stale</td><td><code>docs/thesis/CHAPTER_AUDIT_2026-10.md</code></td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
+      <tr><td>2</td><td>U7 TDP review: 45 OK, 37 stale, 11 missing; layer 5 absent</td><td><code>docs/tdp/REVIEW_2026-10.md</code></td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
+      <tr><td>3</td><td>U5 / D2 RSU-to-RSU note: recommends scope out</td><td><code>docs/design/RSU_TO_RSU_NOTE.md</code></td><td><span class="pill p-warn">your D2</span></td></tr>
+      <tr><td>4</td><td>U10 stale checker: old V2V figures found in 24 files, fixed outside the thesis</td><td>checker entries</td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
+      <tr><td>5</td><td>U11, U12 progress report draft 2, hygiene</td><td>report, index rows</td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
+      <tr><td>6</td><td>Branch review: nothing merged, 21 stale figures block the docs-only two</td><td><code>docs/planning/BRANCH_REVIEW_2026-10-24.md</code></td><td><span class="pill p-warn">your B-1 to B-4</span></td></tr>
+      <tr><td>6a</td><td>T-15 correct the TDP's stale figures, add layer 5</td><td>TDP revisions</td><td><span class="pill p-ok">nothing</span></td></tr>
+      <tr><td>7</td><td>WM-2 D1 chapter edits</td><td>chapters 1, 4, 6, 7</td><td><span class="pill p-warn">D-1</span></td></tr>
+      <tr><td>8</td><td>WM-2 E1 cross-model check</td><td><code>FINDINGS.md</code></td><td><span class="pill p-warn">you open it</span></td></tr>
+      <tr><td>9</td><td>WM-2 F1 presentation draft 2</td><td>report</td><td>E1</td></tr>
+      <tr><td>10</td><td>WM-2 E2 close audit</td><td>WM-2 closed</td><td>all above</td></tr>
+      <tr><td>11</td><td>Phase 2 session 4</td><td>records; pre-register I-05 P1</td><td><span class="pill p-warn">P2-D1</span></td></tr>
+    </tbody></table></div>
+  <p class="note">After WM-2: the thesis write-up to submission, the defence, then Phase 2 builds.</p>
+</section>
+
+<section id="phaseb">
+  <h2><span class="n">05</span>Phase B: the open questions</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Id</th><th>Question</th><th>Who</th><th>Blocks</th><th>Default</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">Q-B1</td><td>What AI-use statement goes in the README and thesis? Do reports keep the first person? (N-23)</td><td>you</td><td>progress report; sharing any page</td><td>nothing is shared</td></tr>
+      <tr><td class="mono">Q-B2</td><td>Who reads the progress report: supervisor, committee or successor?</td><td>you</td><td>its final draft</td><td>stays marked</td></tr>
+      <tr><td class="mono">Q-B3</td><td>Adopt Scope v3 and D-2 to D-15 as a block? (D-1)</td><td>you</td><td>WM-2 D1</td><td>chapters stay as drafted</td></tr>
+      <tr><td class="mono">Q-B4</td><td>What is the reference set for chapter 2 §2.1 to §2.5?</td><td>you</td><td>citing from sources read at origin</td><td>sections stay unchecked</td></tr>
+      <tr><td class="mono">Q-B5</td><td>Is IDTx a paper or a chapter 6 taxonomy? (I-24)</td><td>you</td><td>Phase 2 F1</td><td>taxonomy only</td></tr>
+      <tr><td class="mono">Q-B6</td><td>Will there be a Sepolia witness run? (D-10)</td><td>you, two secrets</td><td>most visible limitation</td><td>stated as limitation</td></tr>
+      <tr><td class="mono">Q-B7</td><td>What happens to the open research branches?</td><td>review, then you</td><td>figures, TSR series, expansion</td><td>stay unmerged</td></tr>
+      <tr><td class="mono">Q-B8</td><td>Does the thesis need RSU-to-RSU messaging? (D2)</td><td>you, after the note</td><td>crux C3 scope</td><td>scoped out</td></tr>
+      <tr><td class="mono">Q-B9</td><td>Which Phase 2 programme and ideas? (P2-D1)</td><td>you</td><td>Phase 2 session 4</td><td>none chosen</td></tr>
+      <tr><td class="mono">Q-B10</td><td>Does the cross-model check agree with passes 16 to 22?</td><td>check session</td><td>WM-2 E1, E2</td><td>WM-2 cannot close</td></tr>
+      <tr><td class="mono">Q-B11</td><td>Does I-05's model predict the probe knee, k = 12 to 14 on host 3?</td><td>a measurement</td><td>the freshness theory claim</td><td>stays a prediction</td></tr>
+      <tr><td class="mono">Q-B12</td><td>Can the metrics harness record its host? (N-26)</td><td>next harness run</td><td>#31, #39 comparable</td><td>descriptive only</td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="blockers">
+  <h2><span class="n">06</span>How the to-dos and blockers fit</h2>
+  <p>Amber boxes are yours. Blue boxes this session runs. The critical path to closing WM-2 runs through two of your answers: opening the check session and answering D-1.</p>
+<pre class="mermaid">
+flowchart LR
+  classDef you fill:#fbefd9,stroke:#9a6200,color:#18212e
+  classDef me fill:#e3ecf8,stroke:#1f5fae,color:#18212e
+  classDef goal fill:#e2f2e8,stroke:#2c7a4b,color:#18212e
+  T1[T-1 N-23<br/>AI-use statement]:::you --> T9[T-9 final<br/>progress report]:::me
+  T4[T-4 report reader]:::you --> T9
+  T2[T-2 open the<br/>check session]:::you --> E1[E1 findings]:::me --> F1[F1 presentation v2]:::me --> E2[E2 close audit]:::me
+  T3[T-3 D-1 and D-15]:::you --> D1[D1 chapter edits]:::me --> E2
+  T8[T-8 U6 U7 U5 U10]:::me --> D1
+  T12[T-12 branch review]:::me --> E2
+  E2 --> W((WM-2 closed)):::goal
+  T5[T-5 chapter 2<br/>references]:::you --> C2[chapter 2 checked]:::me
+  T6[T-6 I-24]:::you --> P2[Phase 2 F1]:::me
+  T7[T-7 Sepolia]:::you --> L[D-10 run<br/>or limitation]:::me
+</pre>
+  <div class="tbl"><table>
+    <thead><tr><th>Id</th><th>Task</th><th>Owner</th><th>Unblocks</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">T-1</td><td>Answer N-23</td><td><span class="pill p-warn">you</span></td><td>sharing every page; final report</td></tr>
+      <tr><td class="mono">T-2</td><td>Open the check session</td><td><span class="pill p-warn">you</span></td><td>E1, F1, E2</td></tr>
+      <tr><td class="mono">T-3</td><td>Answer D-1 and D-15</td><td><span class="pill p-warn">you</span></td><td>D1</td></tr>
+      <tr><td class="mono">T-4</td><td>Name the report's reader</td><td><span class="pill p-warn">you</span></td><td>final report</td></tr>
+      <tr><td class="mono">T-5</td><td>Chapter 2 reference set</td><td><span class="pill p-warn">you</span></td><td>§2.1 to §2.5 checked</td></tr>
+      <tr><td class="mono">T-6</td><td>Decide I-24</td><td><span class="pill p-warn">you</span></td><td>Phase 2 F1</td></tr>
+      <tr><td class="mono">T-7</td><td>Sepolia secrets or "limitation"</td><td><span class="pill p-warn">you</span></td><td>D-10</td></tr>
+      <tr><td class="mono">T-8</td><td>U6, U7, U5, U10</td><td><span class="pill p-info">session</span></td><td>faster D1; TDP checked</td></tr>
+      <tr><td class="mono">T-9</td><td>U11, U12, then final report</td><td><span class="pill p-info">session</span></td><td>the hand-over</td></tr>
+      <tr><td class="mono">T-10</td><td>WM-2 D1</td><td><span class="pill p-info">session</span></td><td>E2</td></tr>
+      <tr><td class="mono">T-11</td><td>WM-2 F1, then E2</td><td><span class="pill p-info">session</span></td><td>WM-2 closed</td></tr>
+      <tr><td class="mono">T-12</td><td>Review open branches</td><td><span class="pill p-info">session</span></td><td>Q-B7</td></tr>
+      <tr><td class="mono">T-13</td><td>Rest of the decision sheet</td><td><span class="pill p-warn">you</span></td><td>the records</td></tr>
+      <tr><td class="mono">T-14</td><td>Commit signing (optional)</td><td><span class="pill p-warn">you</span></td><td>verified commits</td></tr>
+      <tr><td class="mono">T-15</td><td>Correct the TDP from its review</td><td><span class="pill p-info">session</span></td><td>the TDP current</td></tr>
+      <tr><td class="mono">T-16</td><td>Answer D2 and B-1 to B-4</td><td><span class="pill p-warn">you</span></td><td>WM-2 D2; branch merges</td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="read">
+  <h2><span class="n">07</span>What to read first</h2>
+  <ol class="read">
+    <li><b>The master plan, §4 to §7</b> (<code>docs/MASTER_PLAN_2026-10-24.md</code>). The state, the plan and what needs you. 15 min.</li>
+    <li><b>The decision sheet</b> (<code>docs/DECISION_SHEET_2026-10-20.md</code>). Every decision you owe, each with a recommendation. 15 min.</li>
+    <li><b>The claim register</b> (<code>docs/MEASUREMENT_CONDITIONS.md</code>). The 45 verified claims the thesis rests on. 40 min.</li>
+    <li><b>Chapter 5, results</b> (<code>docs/thesis/chapter5-results/README.md</code>). The measured anchor. 45 min.</li>
+    <li><b>Chapter 2</b> (<code>docs/thesis/chapter2-literature-review/README.md</code>). Written by another session; it needs your references. 45 min.</li>
+    <li><b>The progress report</b> (<code>docs/PROGRESS_REPORT_2026-07_TO_2026-10.md</code>). The hand-over draft you will sign. 30 min.</li>
+    <li><b>The lineage relation</b> (<code>docs/LINEAGE_RELATION_2026-10-22.md</code>). Why the trunk looks as it does. 10 min.</li>
+    <li><b>The WM-1 report</b> (<code>docs/milestones/WM-1_REPORT.md</code>). The last closed milestone and its audit. 30 min.</li>
+    <li><b>The two Phase 2 briefs</b> (<code>docs/phase2/briefs/</code>). The research directions you decide on. 40 min.</li>
+    <li><b>The chapter audit</b> (<code>docs/thesis/CHAPTER_AUDIT_2026-10.md</code>), once written. What lacks a verified row. 20 min.</li>
+  </ol>
+</section>
+
+<section id="catalogue">
+  <h2><span class="n">08</span>Artifact catalogue</h2>
+  <div class="toggle" role="group" aria-label="Order">
+    <button type="button" id="by-imp" aria-pressed="true">By importance</button>
+    <button type="button" id="by-date" aria-pressed="false">By date</button>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th id="col1">Tier</th><th>Artifact</th><th>What</th><th>Why it matters</th></tr></thead>
+    <tbody id="cat"></tbody>
+  </table></div>
+  <p class="note">Tier 1 is what the thesis rests on. Tier 5 is ideas held until after the defence.</p>
+</section>
+
+<section id="pages">
+  <h2><span class="n">09</span>Published pages</h2>
+  <p class="note">All private, in your claude.ai gallery. Pages older than 22 Oct predate the one-trunk merge, so their numbers may be superseded. Share none of them until N-23 is answered.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Page</th><th>What</th><th>Updated</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://claude.ai/artifact/3HD23T6TaRpegV24TtFDoU">Programme Atlas</a></td><td>sister session's atlas</td><td>10-24</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/Q5Gd1ifKqgzAWUQ7xXoBQ7">Programme Master Plan and Audit Pack</a></td><td>sister session; holds its Phase B</td><td>10-23</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/MDkTRXxMhz6QRtNnvXTk52">CVIN Status Brief</a></td><td>the 10-22 status</td><td>10-23</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/Efjom4Lc5MCQffUktAxZ2C">Programme Work Log and Status</a></td><td>work log</td><td>10-22</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/XQjUa5D3Mkd2TBWTKqyYSn">Directions for Parallel Chats</a></td><td>what each chat does</td><td>10-22</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/Ls8hA1XJrzxuSuhKSBaxDU">Thesis and Paper Writing Feed</a></td><td>writing feed</td><td>10-22</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/RcmJqAZLcXmsLe1t1jXiaV">Literature and Systematic Survey Feed</a></td><td>literature feed</td><td>10-22</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/FEQqytm8Tj9otgS3t2MnQC">CVIN Research Expansion</a></td><td>research expansion</td><td>10-22</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/GZ7xSnfCHQjuYi6ZdU8Bnm">Researcher To-Do List</a></td><td>your to-dos</td><td>10-21</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/6kumQ7cg1tHRjiQJy7MmAp">CVIN Contribution Record</a></td><td>contribution visual for the professors</td><td>10-18</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/4vwTQ98TuLUgaWsiBim2Bq">CVIN Result Cards</a></td><td>result cards</td><td>10-18</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/4pD4FPyWcCNkHHYcnJFj7r">CVIN-SC Mission Control</a></td><td>earlier control page</td><td>10-15</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/1C5X9GpPcEwyCRDMYxYhpa">CVIN Results Board</a></td><td>results board</td><td>10-10</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/EKvpiR7SxXgr4T3UWCdbAH">CVIN Results Report</a></td><td>results report</td><td>10-10</td></tr>
+      <tr><td><a href="https://claude.ai/artifact/QGsLBsNaDuV65J44ZaZmnt">Thesis Multi-Chat Workflow Protocol</a></td><td>how chats divide work</td><td>10-03</td></tr>
+    </tbody></table></div>
+</section>
+</div>
+
+<script>
+(function(){
+  // [tier, date, artifact, what, why]
+  var A=[
+    [1,"2026-10-03","docs/MEASUREMENT_CONDITIONS.md","claim register, 62 rows","every thesis number must be a V row"],
+    [1,"2026-06-21","docs/thesis/ chapters 1 to 7","thesis drafts","the deliverable"],
+    [1,"2026-10-20","docs/DECISION_SHEET_2026-10-20.md","your open decisions","two sit on the critical path"],
+    [1,"2026-10-04","docs/DEFECT_LOG.md","defects D1 to D66","what was wrong and what was fixed"],
+    [1,"2026-10-04","docs/THREAT_MODEL.md","V2X threat model","RQ2 is judged against it"],
+    [1,"2026-10-09","docs/STYLE_AND_RIGOUR_GUIDE.md","rules every pass follows","why the evidence holds"],
+    [2,"2026-10-24","docs/MASTER_PLAN_2026-10-24.md","this atlas in text","the entry point"],
+    [2,"2026-10-14","docs/PLAN_WM-2.md","open milestone","what closes before the write-up"],
+    [2,"2026-10-22","docs/STATUS_2026-10-22.md","done, next, what needs you","detail behind the plan"],
+    [2,"2026-10-23","docs/planning/UNBLOCKED_WORK_2026-10-23.md","work needing no answer","U1 to U12"],
+    [2,"2026-10-20","docs/PROGRESS_REPORT_2026-07_TO_2026-10.md","hand-over draft","for the professors, after N-23"],
+    [2,"2026-10-22","docs/LINEAGE_RELATION_2026-10-22.md","merge record","why two lineages became one"],
+    [2,"2026-10-10","docs/milestones/","WM-1 report, audit, check brief","milestone evidence"],
+    [3,"2026-10-04","sandbox/grand/run.py","the grand runner","one command reproduces the test base"],
+    [3,"2026-10-10","docs/testing/","claims check, charters, stamps, test register","CI proves register and results agree"],
+    [3,"2026-10-20","tools/prepush_check.sh","CI document guards, locally","stops stale figures before a push"],
+    [3,"2025-11-10",".github/workflows/","11 CI jobs","every closing commit green"],
+    [3,"2026-10-15","docs/tdp/","Technical Data Package","engineering view of the system"],
+    [3,"2026-10-22","5_zkp-agent-identity/","layer 5","RQ5"],
+    [4,"2026-09-24","docs/AFTER_ACTION_REPORT_*.md","reports 01 to 37","how each result was reached"],
+    [4,"2026-09-30","docs/HANDBACK_*.md, SESSION_MANIFEST","handbacks and manifest","dated history"],
+    [4,"2026-07-01","MASTER_UPDATE.md","July snapshot","superseded; kept as record"],
+    [5,"2026-10-14","docs/phase2/","programme, 26 ideas, three focuses","held until after the defence"],
+    [5,"2026-10-20","docs/phase2/briefs/","I-24 and I-05 briefs","the two directions you decide"],
+    [5,"2026-10-24","docs/phase2/briefs/i05_model.py","I-05 model as code","prediction fixed before measurement"]
+  ];
+  var tb=document.getElementById("cat"),c1=document.getElementById("col1"),bi=document.getElementById("by-imp"),bd=document.getElementById("by-date");
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+  function render(mode){
+    var rows=A.slice().sort(mode==="date"?function(a,b){return a[1]<b[1]?-1:a[1]>b[1]?1:a[0]-b[0]}:function(a,b){return a[0]-b[0]||(a[1]<b[1]?1:-1)});
+    c1.textContent=mode==="date"?"First added":"Tier";
+    tb.innerHTML=rows.map(function(r){var k=mode==="date"?'<span class="mono">'+(r[1].slice(0,7)==="2026-07"?"2026-07":r[1])+'</span> <span class="tier">T'+r[0]+'</span>':'<span class="tier">TIER '+r[0]+'</span>';return "<tr><td>"+k+"</td><td><code>"+esc(r[2])+"</code></td><td>"+esc(r[3])+"</td><td>"+esc(r[4])+"</td></tr>"}).join("");
+    bi.setAttribute("aria-pressed",mode!=="date");bd.setAttribute("aria-pressed",mode==="date");
+    try{localStorage.setItem("atlas-order",mode)}catch(e){}
+  }
+  bi.addEventListener("click",function(){render("imp")});
+  bd.addEventListener("click",function(){render("date")});
+  var m="imp";try{m=localStorage.getItem("atlas-order")||"imp"}catch(e){}
+  render(m);
+})();
+</script>

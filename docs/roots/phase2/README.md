@@ -101,14 +101,14 @@ Record keys are namespaced by issuing document (the panel's re-keying); every re
 | Item | Fills | Best chat |
 |---|---|---|
 | Multi-node Besu/QBFT run with a committed genesis | MD-01/02/03/10 (finality, decentralisation, trilemma, availability) | Scale thread |
-| One measured log receipt | LIM-R7-08 (the 18× end of the storage-vs-log ratio) | Cost thread |
+| ~~One measured log receipt~~ | LIM-R7-08 | **done 2026-10-24**: EIP-7623 floor active on Hardhat 2.28.6 `osaka` (four receipts, exact match); 18× log-side denominator now measured (`70_R7_theory_ece_bounds/measure/`) |
 | Two-chain replay test for D52; 20 negative access-control tests | SLD-06, SLD-16 | Security campaign G-C1 |
 | Radio reselection counter and TTL measurement | SLD-05, SLD-07 | Latency thread |
 | E-F1-1 IDTX gas measurement | RV-IDTX executor rows | IDTX work chats |
 | Commit the Sepolia witness as a register row, or drop it | RV-IMPL Sepolia rows | Scale thread |
 | Primary sources for eight unfetched citations (incl. HSM verify times) | R7 LIM-R7-01..08 | Accuracy Ledger / Latency |
 | ~~Blind re-derivation of the composition lemma~~ | SLD-10 | **done 2026-10-24** (§6b) |
-| ~~R6/R8 v0-3 cross-reference sweep; R7 v0-3 (lead figure 320)~~ | PN-34..39 | **done 2026-10-24** (§6b); λ and δ for ε_K still to be declared as PAR by R8 |
+| ~~R6/R8 v0-3 cross-reference sweep; R7 v0-3 (lead figure 320)~~ | PN-34..39 | **done 2026-10-24** (§6b); λ and δ declared as PAR-44/45 in R8 v0-3 (2026-10-24) |
 | Ruling on SOL-16 (Q-R9-01) and on FIG-R13's attack classes | — | Author — **deferred 2026-10-24**; until ruled, SOL-16 is cited only together with SOL-05, and FIG-R13 carries its "classes proposed, not confirmed" flag |
 
 ## 6a. Author decisions

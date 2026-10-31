@@ -42,7 +42,7 @@ Each row is quoted with its own condition and host; no ratio is formed across ro
 | **Write, account-abstracted** | the owner signs a UserOperation; a bundler submits it to the EntryPoint; under ERC-4337 the account pays (no paymaster here) | 141,767 gas (+47,116 over direct); EntryPoint indirection +46,830 gas per operation in the benchmark | #34, #50 (U5), M1-H; #25, M1 |
 | **Read, on demand** | the verifier resolves the identity from its node at the moment of use | uncached ERC-1056 verify 9.654 ms median, 15.984 ms p95, 4 RPC calls | #21, M1, 2.10 GHz Xeon (F2 capture §2.2) |
 | **Read, cached** | the verifier uses an earlier resolution and re-checks it every k messages | one probe refresh 2.76 / 2.89 ms (replicates r1 / r2); this is the cost of one refresh, not of verifying one message. Staleness at most k − 1 messages | #37, M0/M1, 2.80 GHz shared Xeon; #32 (k curve, another host); #46 |
-| **Read, offline** | the verifier checks an issuer's credential in-process, with no chain contact | SSI V2V warm verify 0.153 ms [0.151, 0.154] | #27, M0, Xeon 2.10 GHz × 4 |
+| **Read, offline** | the verifier checks an issuer's credential in-process, with no chain contact | SSI V2V warm verify 0.142 ms [0.141, 0.143] | #27, M0, Xeon 2.10 GHz × 4 |
 
 #21 and #37 predate the D51 fix, which adds one RPC call to a full resolution; both are due for re-run (A3b).
 A within-run comparison of the three read cells is left to the A3b re-runs or to paper P4.

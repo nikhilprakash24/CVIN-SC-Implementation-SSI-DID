@@ -79,12 +79,12 @@ Exact `receipt.gasUsed` per standard for an identical operation set. "—"
 | ERC-721 | 545,101 | 119,737 | 48,302 | 27,677 | 174,670 |
 | ERC-4337 | 759,088 | 49,343 | 47,557 | 25,429 | 28,539 |
 | ERC-725xy | 1,680,816 | 49,937 | — | — | 28,834 |
-| ERC-735 | 1,757,881 | 83,341 | 298,358 | 72,195 | 28,812 |
+| ERC-735 | 1,757,893 | 83,341 | 298,358 | 72,195 | 28,812 |
 
 **Findings (RQ1):**
 
 1. **Identity-creation cost spans ~34×** across the nine standards, from
-   52,216 gas (CVIN-Combined) to 1,757,881 gas (ERC-735). The minimal
+   52,216 gas (CVIN-Combined) to 1,757,893 gas (ERC-735). The minimal
    event-log designs (ERC-1056, CVIN-Combined) are the cheapest; the
    claim-holder (ERC-735) and the full smart-account designs (ERC-725xy's
    X+Y account, ERC-4337) are the most expensive. ERC-735 became the

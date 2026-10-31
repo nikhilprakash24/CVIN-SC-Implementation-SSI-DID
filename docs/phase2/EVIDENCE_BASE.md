@@ -12,7 +12,7 @@ Phase 2 adds no number here.
 |---|---|---|---|
 | Nine-standard identity substrate | the same vehicle lifecycle on nine Ethereum identity standards plus two baselines, behind one adapter interface (`IdentityAdapter.js`, 11 adapters) | #25, #34; `1_blockchain-identity/benchmarks/adapters/` | ledger plane for every idea that needs a chain (I-03, I-08, I-12) |
 | Gas results, exact and lifetime | per-operation gas; lifetime ranking reversal over 15 years | #25, #26 | baseline to compare public-chain and rollup costs against (I-03) |
-| V2V verification within the budget | SSI warm verify 0.153 ms [0.151, 0.154], cold 0.399, against PKI | #27 | the hot-path cost every new credential format is measured against (I-06, I-10) |
+| V2V verification within the budget | SSI warm verify 0.142 ms [0.141, 0.143], cold 0.363, against PKI | #27 | the hot-path cost every new credential format is measured against (I-06, I-10) |
 | Freshness measured | re-check every k messages: the knee between k = 1 and k = 5 | #32, #37 | the data a freshness theory must predict (I-05) |
 | Infrastructure messaging | signed SPaT/MAP from credentialed RSUs; I1–I3 pre-registered and passed; a revoked RSU honoured for at most k − 1 messages | #44–#46 | the base of the RSU trust mesh (I-04) and of time-to-exclusion (I-07) |
 | Security, tested | 43 of 43 applicable attack cells defended under a strict harness | #28 | the tested baseline that formal methods would partly prove (I-12) |

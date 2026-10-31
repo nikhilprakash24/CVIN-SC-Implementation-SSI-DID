@@ -1,0 +1,54 @@
+{
+  "hardhat": "2.28.6",
+  "hardfork": "osaka",
+  "blockGasLimit": "60000000",
+  "rows": [
+    {
+      "case": "A calldata-only 1024 nonzero bytes",
+      "z": 0,
+      "n": 1024,
+      "tokens": 4096,
+      "exec": 0,
+      "predicted_standard": 37384,
+      "predicted_floor": 61960,
+      "gasUsed": 61960,
+      "matches": "max(standard, floor) — EIP-7623 ACTIVE"
+    },
+    {
+      "case": "B LOG3 128 bytes",
+      "z": 0,
+      "n": 128,
+      "tokens": 512,
+      "exec_predicted": 2570,
+      "predicted_standard": 25618,
+      "predicted_floor": 26120,
+      "gasUsed": 26120,
+      "logs": 1,
+      "matches": "max(standard, floor) — EIP-7623 ACTIVE"
+    },
+    {
+      "case": "B LOG3 1024 bytes",
+      "z": 0,
+      "n": 1024,
+      "tokens": 4096,
+      "exec_predicted": 9908,
+      "predicted_standard": 47292,
+      "predicted_floor": 61960,
+      "gasUsed": 61960,
+      "logs": 1,
+      "matches": "max(standard, floor) — EIP-7623 ACTIVE"
+    },
+    {
+      "case": "B LOG3 2048 bytes",
+      "z": 0,
+      "n": 2048,
+      "tokens": 8192,
+      "exec_predicted": 18298,
+      "predicted_standard": 72066,
+      "predicted_floor": 102920,
+      "gasUsed": 102920,
+      "logs": 1,
+      "matches": "max(standard, floor) — EIP-7623 ACTIVE"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "run": {
-    "commit": "ddb9b0505c97239eb75f6f4ce128dbedfa49ebf3",
+    "commit": "7a5905803a0219119fa6b59368461d0f7e203e13",
     "code_dirty": false,
     "tree_dirty": true,
     "scope": "4_comparison-framework/performance-metrics/run_gas_stats.py",
@@ -13,8 +13,8 @@
   "method": "Full 9-standard gas benchmark re-run N times on a fresh in-process Hardhat network each time; gasUsed aggregated per (standard, operation). EVM gas is deterministic for fixed calldata + pre-state, so identical values across runs (range_min_max width 0) is the expected, correct reproducibility result. range_min_max is the observed envelope, not a CI.",
   "source_metadata": {
     "solcVersion": "0.8.24",
-    "commit": "ddb9b05",
-    "commitFull": "ddb9b0505c97239eb75f6f4ce128dbedfa49ebf3",
+    "commit": "7a59058",
+    "commitFull": "7a5905803a0219119fa6b59368461d0f7e203e13",
     "dirty": false,
     "dirtyAnyFile": true,
     "scope": "1_blockchain-identity/scripts/benchmark_gas.js",
@@ -30,7 +30,7 @@
       "viaIR": true
     },
     "ozVersion": "5.0.2",
-    "date": "2026-10-22T23:16:47.548Z",
+    "date": "2026-10-24T12:29:00.238Z",
     "network": "hardhat-local",
     "chainId": 31337,
     "operations": [
@@ -134,14 +134,14 @@
     "ERC-721": {
       "deployRegistry": {
         "n": 30,
-        "median": 2787288.0,
-        "min": 2787288,
-        "max": 2787288,
+        "median": 2787276.0,
+        "min": 2787276,
+        "max": 2787276,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          2787288,
-          2787288
+          2787276,
+          2787276
         ]
       },
       "createIdentity": {
@@ -333,14 +333,14 @@
       },
       "createIdentity": {
         "n": 30,
-        "median": 1757881.0,
-        "min": 1757881,
-        "max": 1757881,
+        "median": 1757893.0,
+        "min": 1757893,
+        "max": 1757893,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          1757881,
-          1757881
+          1757893,
+          1757893
         ]
       },
       "addDelegateOrClaim": {
@@ -622,14 +622,14 @@
     "MOBI-VID-V2": {
       "deployRegistry": {
         "n": 30,
-        "median": 4370878.0,
-        "min": 4370878,
-        "max": 4370878,
+        "median": 4370866.0,
+        "min": 4370866,
+        "max": 4370866,
         "stdev": 0.0,
         "deterministic": true,
         "range_min_max": [
-          4370878,
-          4370878
+          4370866,
+          4370866
         ]
       },
       "createIdentity": {

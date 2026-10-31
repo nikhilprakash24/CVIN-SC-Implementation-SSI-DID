@@ -1,6 +1,6 @@
 # Self-Sovereign Identity for Connected Vehicles — Results, Work and Implementation
 
-**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `231e4ac` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
+**Presentation report, draft 1.** Author: Nikhil Prakash (MASc, UBC ECE). Generated from committed data at snapshot commit `cea9cf0` by `docs/presentation/make_presentation.py`; every result below is read from the results of record and carries its claim-register row (`docs/MEASUREMENT_CONDITIONS.md`). What draft 2 adds is in `docs/presentation/EXPANSION_PLAN_DRAFT2.md`.
 
 > Scope of every number: smart-contract gas is exact `receipt.gasUsed` on a local Hardhat chain (condition M1); latency is in-process cryptography with simulated mobility and no radio (condition M0). Nothing here was measured on a public network or a real road.
 
@@ -9,7 +9,7 @@
 | Question | Answer (measured) | Register |
 |---|---|---|
 | How many identity standards were implemented and measured? | 10 (nine base standards and the MOBI VID V2 profile) | #25 |
-| How far apart is the cost of creating an identity? | 33.7× (CVIN-Combined 52,216 gas to ERC-735 1,757,881) | #25 |
+| How far apart is the cost of creating an identity? | 33.7× (CVIN-Combined 52,216 gas to ERC-735 1,757,893) | #25 |
 | Does identity verification fit a V2V message budget? | SSI warm verify 0.142 ms [0.141, 0.143], N = 30 runs; budget 100 ms | #27 |
 | Do the identities meet W3C DID / VC? | internal checker 94.3 % (41 pass, 1 partial, 2 fail of 44); external DID suite 335/336 | #4, #24 |
 | Are the identity contracts attack-resistant? | 43 of 43 applicable attack cells defended (11 not applicable), strict harness | #28 |
@@ -46,14 +46,14 @@
 | Standard | deploy | create | update | update via 4337 | delegate / claim | revoke | transfer |
 |---|---|---|---|---|---|---|---|
 | ERC-1056 | 958,726 | 52,594 | 35,494 | — | 54,831 | 35,046 | 51,754 |
-| ERC-721 | 2,787,288 | 545,101 | 119,737 | — | 48,302 | 27,677 | 174,670 |
+| ERC-721 | 2,787,276 | 545,101 | 119,737 | — | 48,302 | 27,677 | 174,670 |
 | ERC-725 | — | 519,384 | 137,096 | — | 119,996 | 43,388 | 28,390 |
 | ERC-725xy | — | 1,680,816 | 49,937 | — | — | — | 28,834 |
-| ERC-735 | — | 1,757,881 | 83,341 | — | 298,358 | 72,195 | 28,812 |
+| ERC-735 | — | 1,757,893 | 83,341 | — | 298,358 | 72,195 | 28,812 |
 | ERC-1155 | 2,871,435 | 107,729 | 51,199 | — | 80,131 | 33,049 | 86,298 |
 | ERC-4337 | 456,294 | 759,088 | 49,343 | 96,173 | 47,557 | 25,429 | 28,539 |
 | LSP8 | 1,670,271 | 152,644 | 55,133 | — | — | 42,116 | 80,568 |
-| MOBI-VID-V2 | 4,370,878 | 299,165 | 307,254 | — | 57,667 | 75,404 | 200,155 |
+| MOBI-VID-V2 | 4,370,866 | 299,165 | 307,254 | — | 57,667 | 75,404 | 200,155 |
 | CVIN-Combined | 1,531,487 | 52,216 | 35,116 | — | 291,977 | 73,248 | 51,747 |
 *Exact gas, condition M1 (`4_comparison-framework/results/gas_benchmark.json`). — = operation not offered by the standard.*
 
@@ -69,7 +69,7 @@
 | ERC-1155 | 1,865,183 | 986,456 | 2,743,910 |
 | CVIN-Combined | 9,831,477 | 4,941,847 | 14,721,108 |
 | MOBI-VID-V2 | 9,858,020 | 5,078,593 | 14,637,448 |
-| ERC-735 | 11,692,092 | 6,724,987 | 16,659,198 |
+| ERC-735 | 11,692,104 | 6,724,999 | 16,659,210 |
 *A model over an assumed 15-year event profile, not a measurement; band ±50 % event frequency.*
 
 ![Dot and range per standard for lifetime gas](figures/f2_lifetime.png)
@@ -84,7 +84,7 @@
 | ERC-735 | 295,242 | 295,277 | 295,289 (native) | 5/5 |
 | ERC-1155 | 107,729 | 80,131 | 63,031 (emulated) | 3/5 |
 | CVIN-Combined | 51,766 | 34,690 | 336,896 (native) | 5/5 |
-| MOBI-VID-V2 | 299,165 | 307,254 | 222,058 (native) | 5/5 |
+| MOBI-VID-V2 | 299,165 | 307,254 | 222,070 (native) | 5/5 |
 *`4_comparison-framework/results/mobi_vid_backends.json`.*
 
 ### 3.4 Security (register #28)
@@ -163,7 +163,7 @@
 | cost | erc1056, erc1056w |
 | costRead | erc1056, erc1056w, erc1155, erc725xy |
 | all | erc1056, erc1056w, erc721, erc1155, erc725xy, erc4337 |
-*Run of record `2026-10-23T00-49-12Z_1f4ace0`; criteria: Lifetime gas, Zero→nonzero SSTOREs, R3 RPC calls at h=50, R3 median ms after lifecycle, Core ops supported, O(1) on-chain credential check (view).*
+*Run of record `2026-10-24T12-29-26Z_7a59058`; criteria: Lifetime gas, Zero→nonzero SSTOREs, R3 RPC calls at h=50, R3 median ms after lifecycle, Core ops supported, O(1) on-chain credential check (view).*
 
 ### 3.10 Infrastructure messaging, V2I and I2I (registers #44–#48)
 
