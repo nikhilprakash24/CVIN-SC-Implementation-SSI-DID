@@ -6,7 +6,7 @@
 
 ```
 Phase 1  function set, IDTx, benchmark gap   [■■■■■■■■■■]  100%   COMPLETE (examiner fixes applied)
-Phase 2  compare to other ID systems         [■■□□□□□□□□]  ~15%   IN PROGRESS
+Phase 2  compare to other ID systems         [■■■■■□□□□□]  ~45%   IN PROGRESS
 Phase 3  nearest benchmarks, benchmark v0     [□□□□□□□□□□]    0%   planned
 Phase 4  same, for AI agents                  [□□□□□□□□□□]    0%   planned
 Phase 5  10-substrate × function-set matrix   [□□□□□□□□□□]    0%   planned
@@ -90,10 +90,13 @@ Home: Appendix G-G + companion SP-9. Common axis = the Phase 1 function set; see
 
 | WP | Task | Agent | Status |
 |---|---|---|---|
-| 2.1 | Comparison set + justification (8 systems) | ED+SS | 🔵 running |
-| 2.2 | Score each system on the function set (native/composed/absent + mechanism) | SS | 🔵 running |
-| 2.3 | Trade-off axes (trust locus, availability, revocation latency, privacy, cost, governance, offline, recovery) | SS+LS | 🔵 running |
-| 2.4 | Figures (function×system heat map; per-system trade-off radar) | VA | ⬜ queued |
+| 2.1 | Comparison set + justification (8 systems) | ED+SS | ✅ done → `p2/COMPARISON.md` §1 |
+| 2.2 | Function×system matrix | SS | ✅ done → `p2/COMPARISON.md` §2 |
+| 2.3 | Trade-off matrix + prose | SS+LS | ✅ done → `p2/COMPARISON.md` §3 |
+| 2.4 | Figures (heat map; trade-off radar) | VA | 🔵 running |
+| 2.3b | Verify ERC-3643/ONCHAINID + eIDAS columns (free primaries) | SS | 🔵 running |
 | 2.5 | Examiner pass | SK | ⬜ queued |
 
 - `2026-10-31` ED — Phase 2 launched. One Standards-Scholar agent doing 2.1–2.3 (grounded in the sourced ANALOGIES matrix; evidence tags carried forward). Figures + examiner to follow.
+
+- `2026-10-31` SS — WP 2.1–2.3 ✅: `p2/COMPARISON.md`. Selection criterion = one ordered trust-locus axis, 8 distinct points, each a deployed spec. ~15 cells upgraded to [src] (OIDC/SAML/OCSP/LDAP/SCIM free primaries). Headline tradeoff T1: the ledger removes the live-authority dependency but pays for it three ways — revocation becomes a public (loses query-privacy), ordered (AR-10 race), and costly (gas #49/#31) write — the same contract-readable property that enables the IDTx forecloses off-ledger privacy and adds ordering risk. 52/96 cells still not [src]; ERC-3643 (S8, closest prior art) + eIDAS columns launched for verification (2.3b) alongside figures (2.4).
