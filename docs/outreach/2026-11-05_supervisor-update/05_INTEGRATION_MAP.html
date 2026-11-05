@@ -1,0 +1,192 @@
+<title>CVIN Map of Work and Integration</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600&display=swap">
+<style>
+/* Layout: a single reading column; one wide workstream x chapter matrix as the centrepiece, then branch ledger and merge order */
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --fg:#17202b; --muted:#5b6675; --line:#dde2e8;
+  --accent:#1f5fa8;
+  --ok:#2e7d4f; --ok-bg:#e3f2e8; --warn:#9a6400; --warn-bg:#fbf0d9; --bad:#b03a2e; --bad-bg:#f8e3e0; --none-bg:#eef1f4;
+  --f-display:"Fraunces",Georgia,serif; --f-body:"IBM Plex Sans",system-ui,sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11161d; --panel:#18202a; --fg:#e4e9ef; --muted:#97a3b2; --line:#2a3542; --accent:#7fb2ec;
+  --ok:#7fd3a0; --ok-bg:#183a27; --warn:#f0c26a; --warn-bg:#3b2f14; --bad:#f19a8f; --bad-bg:#43211d; --none-bg:#1f2833; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161d; --panel:#18202a; --fg:#e4e9ef; --muted:#97a3b2; --line:#2a3542; --accent:#7fb2ec;
+  --ok:#7fd3a0; --ok-bg:#183a27; --warn:#f0c26a; --warn-bg:#3b2f14; --bad:#f19a8f; --bad-bg:#43211d; --none-bg:#1f2833; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:40px}
+h1{font-family:var(--f-display);font-size:2.1rem;margin:0;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:1.35rem;margin:0 0 6px}
+p{margin:0;max-width:70ch}
+.sub{color:var(--muted)}
+.eyebrow{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+code{font-family:var(--f-mono);font-size:.85em}
+section{display:grid;gap:14px;min-width:0}
+.callouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.callout{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:grid;gap:6px}
+.callout b{font-size:1rem}
+.callout.bad{border-left:4px solid var(--bad)} .callout.warn{border-left:4px solid var(--warn)} .callout.ok{border-left:4px solid var(--ok)}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{font-weight:600;background:var(--none-bg);position:sticky;top:0}
+.matrix td{min-width:120px}
+.matrix td:first-child{min-width:190px}
+.cell{border-radius:5px;padding:5px 7px;font-size:.8rem;line-height:1.35}
+.c-ok{background:var(--ok-bg)} .c-warn{background:var(--warn-bg)} .c-bad{background:var(--bad-bg)}
+.pill{display:inline-block;font-family:var(--f-mono);font-size:.72rem;padding:1px 7px;border-radius:99px;white-space:nowrap}
+.p-ok{background:var(--ok-bg);color:var(--ok)} .p-warn{background:var(--warn-bg);color:var(--warn)} .p-bad{background:var(--bad-bg);color:var(--bad)} .p-none{background:var(--none-bg);color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.82rem;color:var(--muted);align-items:center}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+ol.order{margin:0;padding-left:1.4em;display:grid;gap:10px;max-width:80ch}
+ol.order li b{font-weight:600}
+.small{font-size:.8rem;color:var(--muted)}
+</style>
+
+<div class="wrap">
+<header style="display:grid;gap:10px">
+  <div class="eyebrow">CVIN-SC · MASc thesis · state of all branches, 2026-10-31</div>
+  <h1>Map of work and integration, November 2026</h1>
+  <p class="sub">Twelve months of work ran as parallel streams, each on its own branch. This map shows where each stream stands and where it enters the thesis. Every remote branch was compared with the default branch (<code>claude/clone-cvin-id-scs-…</code>, tip <code>9a846de</code>) and with the branch the handbacks call the trunk (<code>claude/cv2x-testbed-setup-…</code>). Chapter status comes from <code>docs/thesis/SCAFFOLD.md</code> and <code>CHAPTER_AUDIT_2026-10.md</code>.</p>
+</header>
+
+<section>
+  <h2>Three things to know first</h2>
+  <div class="callouts">
+    <div class="callout bad"><b>Two trunks</b><p>The default branch and <code>cv2x-testbed-setup</code> have diverged: cv2x is 24 commits ahead and 5 behind. The blueprints, related-work set and stale-figure checker are only on cv2x. Pick one trunk before merging anything else.</p></div>
+    <div class="callout warn"><b>Chapters are drafted, the numbers are not settled</b><p>All 7 chapters are written, but the audit found 22 mismatched, 16 unsourced and 13 stale claims. <code>upbeat-hawking</code> just re-ran gas after the mintVehicle fix, so numbers moved again.</p></div>
+    <div class="callout ok"><b>ZKP is already in the thesis structure</b><p>RQ5/H6 and register rows #56–#62 are adopted, and sections 3.9, 4.8, 5.10, 6.9, 7.6 exist. What is left is chapter 2 source markers (on the zkp branch) and the figures.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Pass 2: what a trial merge showed</h2>
+  <p class="sub">Each live branch was merged into a scratch copy of <code>cv2x-testbed-setup</code> (nothing was pushed). Chapter text was grepped for figure references.</p>
+  <div class="callouts">
+    <div class="callout bad"><b>Only <code>upbeat-hawking</code> conflicts</b><p>15 files, all generated results: the claim register (<code>MEASUREMENT_CONDITIONS.md</code>), the grand report, dashboard and result cards, TDP-003/008, <code>DWG-001.svg</code>. Both sides re-ran the harness. Resolution is to pick the newer run of record (<code>2026-10-31T03-29-43Z_291a801</code>) and regenerate, not to hand-merge.</p></div>
+    <div class="callout ok"><b>Everything else merges clean</b><p>Default, <code>zkp</code>, <code>simulation-visual</code>, <code>testing-suite</code> and <code>determined-meitner</code> all merge without conflict, in that order. <code>determined-meitner</code> is 67 commits behind but needs no rebase.</p></div>
+    <div class="callout bad"><b>No chapter cites a single figure</b><p>45,000 words across seven chapters; the only artifact path cited is <code>ssi_tables.json</code>. Not one BP sheet, F-series figure, IDTx figure or x-series figure is referenced. The figure integration is entirely ahead.</p></div>
+    <div class="callout warn"><b>Chapter 2: 2 markers left, both absence claims</b><p>After the zkp branch, the remaining <code>[SOURCE NEEDED]</code> are the "no multi-standard Ethereum comparison exists" claim (§2.2) and "no SSI-vs-IEEE 1609.2 overhead comparison" (§2.4). The branch logged its search coverage; these need your sign-off, not more searching.</p></div>
+    <div class="callout warn"><b>Appendix G is decided but not built</b><p><code>determined-meitner</code> adds Appendix G (ID-system function set and IDTx, parts G-A to G-I) and side paper SP-9 to the scaffold. The appendix index itself is still a 117-word stub; appendices A–G are all to be generated from artifacts at LaTeX assembly.</p></div>
+    <div class="callout warn"><b>Register touched by three branches</b><p><code>upbeat-hawking</code>, <code>zkp</code> and <code>cv2x</code> each edit <code>MEASUREMENT_CONDITIONS.md</code>; <code>zkp</code> and <code>cv2x</code> also both edit chapter 6. They merge clean but the chapter audit must be redone once all three are in.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Workstream × chapter</h2>
+  <p class="sub">What each piece of work feeds into, and whether it has reached the chapter yet.</p>
+  <div class="legend">
+    <span><span class="pill p-ok">in thesis</span> merged and written</span>
+    <span><span class="pill p-warn">on branch</span> work done, not merged or not placed</span>
+    <span><span class="pill p-bad">gap</span> nothing written yet</span>
+  </div>
+  <div class="scroll">
+  <table class="matrix">
+    <thead><tr><th>Workstream</th><th>Ch1 Intro</th><th>Ch2 Lit review</th><th>Ch3 Method</th><th>Ch4 Implementation</th><th>Ch5 Results</th><th>Ch6 Discussion</th><th>Ch7 Concl.</th><th>Appendix</th></tr></thead>
+    <tbody>
+    <tr><td><b>ZKP + agent identity</b><br><span class="small">zkp-ai-identity-research · 5_zkp-agent-identity</span></td>
+      <td><div class="cell c-ok">RQ5/H6 added</div></td>
+      <td><div class="cell c-warn">§2.5–2.6 written; 4 of 6 SOURCE NEEDED fixed on branch</div></td>
+      <td><div class="cell c-ok">§3.9 Z-E1..E7 pre-reg</div></td>
+      <td><div class="cell c-ok">§4.8 ZK-VIN, §4.8.4 Steward</div></td>
+      <td><div class="cell c-ok">§5.10 #56–#62</div></td>
+      <td><div class="cell c-ok">§6.9 agent wrapper</div></td>
+      <td><div class="cell c-ok">§7.6 future work</div></td>
+      <td><div class="cell c-bad">ZK-VIN constraints, demo transcript</div></td></tr>
+    <tr><td><b>Simulation visuals</b><br><span class="small">simulation-visual-plan · docs/visual</span></td>
+      <td>—</td><td>—</td><td>—</td>
+      <td><div class="cell c-warn">SUMO frames, replay viewer</div></td>
+      <td><div class="cell c-warn">F1–F9 figures (rogue vehicle, cold stages, rejections)</div></td>
+      <td><div class="cell c-warn">F9 rejection reasons</div></td>
+      <td>—</td>
+      <td><div class="cell c-warn">traces + replay</div></td></tr>
+    <tr><td><b>Blueprint drawings</b><br><span class="small">system-blueprint-diagrams → merged into cv2x</span></td>
+      <td><div class="cell c-warn">BP-001 system figure</div></td>
+      <td>—</td>
+      <td><div class="cell c-warn">BP-401, 104, 106, 102</div></td>
+      <td><div class="cell c-warn">BP-101, 103, 105, 201–205, 601</div></td>
+      <td><div class="cell c-warn">BP-501, 502, 403</div></td>
+      <td><div class="cell c-warn">BP-402, 302, 304</div></td>
+      <td>—</td>
+      <td><div class="cell c-warn">full 23-sheet set</div></td></tr>
+    <tr><td><b>IDTx core / comparison</b><br><span class="small">determined-meitner · docs/idtx_core</span></td>
+      <td>—</td>
+      <td><div class="cell c-ok">§2.7 IDTx</div></td>
+      <td><div class="cell c-warn">function set F1–F12 pseudocode</div></td>
+      <td>—</td>
+      <td><div class="cell c-bad">12×10 comparison not in Ch5</div></td>
+      <td><div class="cell c-warn">§6.8 drafted; 12×10 matrix, heat map on branch</div></td>
+      <td>—</td>
+      <td><div class="cell c-warn">Appendix G (decision A+)</div></td></tr>
+    <tr><td><b>Testing suite charters</b><br><span class="small">testing-suite-organization · docs/testing</span></td>
+      <td>—</td><td>—</td>
+      <td><div class="cell c-warn">charters F,N,A,W,S,D,I,Q</div></td>
+      <td><div class="cell c-warn">§4.6 testing</div></td>
+      <td>—</td><td>—</td><td>—</td>
+      <td><div class="cell c-warn">test register</div></td></tr>
+    <tr><td><b>Contracts + security review</b><br><span class="small">upbeat-hawking</span></td>
+      <td>—</td><td>—</td><td>—</td>
+      <td><div class="cell c-warn">mintVehicle fix, NatSpec, bytecode manifest</div></td>
+      <td><div class="cell c-warn">gas re-run, 564 passing</div></td>
+      <td>—</td><td>—</td>
+      <td><div class="cell c-bad">A: gas tables need regen</div></td></tr>
+    <tr><td><b>Core trunk</b><br><span class="small">cv2x-testbed-setup</span></td>
+      <td>—</td>
+      <td><div class="cell c-warn">related-work refs.bib</div></td>
+      <td>—</td><td>—</td>
+      <td><div class="cell c-warn">stale-figure checker (HTML/TeX)</div></td>
+      <td>—</td><td>—</td><td>—</td></tr>
+    <tr><td><b>Research expansion</b><br><span class="small">cvin-research-improvements (stale)</span></td>
+      <td>—</td><td>—</td><td>—</td><td>—</td>
+      <td><div class="cell c-warn">X1 toll corridor</div></td>
+      <td><div class="cell c-warn">composed scenarios</div></td>
+      <td><div class="cell c-warn">future work / RQ6–7 ideas</div></td>
+      <td>—</td></tr>
+    <tr><td><b>Thesis front matter</b></td>
+      <td colspan="7"><div class="cell c-bad">Title page, abstract, acknowledgements, ToC, list of figures: all stubs</div></td>
+      <td><div class="cell c-bad">Appendices A–F all stubs</div></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>Branch ledger</h2>
+  <p class="sub">"Ahead" and "behind" are counted against the default branch.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Branch</th><th>Ahead</th><th>Behind</th><th>Last</th><th>State</th><th>What it holds</th></tr></thead>
+    <tbody>
+    <tr><td><code>cv2x-testbed-setup</code></td><td class="num">24</td><td class="num">5</td><td class="num">10-31</td><td><span class="pill p-bad">diverged</span></td><td>Trunk per handbacks. Blueprints merged in, related-work, report 41.</td></tr>
+    <tr><td><code>upbeat-hawking</code></td><td class="num">7</td><td class="num">0</td><td class="num">10-31</td><td><span class="pill p-bad">15 conflicts vs cv2x</span></td><td>mintVehicle fix, gas of record re-run, grand report 564 passing. Conflicts are all regenerable results.</td></tr>
+    <tr><td><code>zkp-ai-identity-research</code></td><td class="num">13</td><td class="num">0</td><td class="num">10-31</td><td><span class="pill p-warn">ready</span></td><td>Chapter 2 source markers; carries cv2x merge (9 commits not on cv2x).</td></tr>
+    <tr><td><code>simulation-visual-plan</code></td><td class="num">14</td><td class="num">0</td><td class="num">10-31</td><td><span class="pill p-warn">ready</span></td><td>Phase 5 figures F1–F9, SUMO viz, traces, replay.</td></tr>
+    <tr><td><code>testing-suite-organization</code></td><td class="num">13</td><td class="num">0</td><td class="num">10-31</td><td><span class="pill p-warn">ready</span></td><td>Test register, eight test-family charters.</td></tr>
+    <tr><td><code>determined-meitner</code></td><td class="num">20</td><td class="num">67</td><td class="num">10-31</td><td><span class="pill p-warn">merges clean</span></td><td>IDTx core Phase 1–2 done (12×10 comparison, figures). Phases 3–6 planned.</td></tr>
+    <tr><td><code>cvin-research-improvements</code></td><td class="num">4</td><td class="num">143</td><td class="num">10-22</td><td><span class="pill p-bad">stale</span></td><td>Research expansion catalogue, X1 toll corridor.</td></tr>
+    <tr><td><code>vid-build</code></td><td class="num">39</td><td class="num">180</td><td class="num">10-19</td><td><span class="pill p-bad">stale</span></td><td>5_minimal-ssi-sandbox: O1–O8 vs 12-function spec, I2I, VID layer.</td></tr>
+    <tr><td><code>website-planning-artifacts</code></td><td class="num">2</td><td class="num">1</td><td class="num">10-28</td><td><span class="pill p-none">not thesis</span></td><td>Investor room plans (tracks A–C).</td></tr>
+    <tr><td><code>system-blueprint-diagrams</code>, <code>exploration-plan</code>, <code>roots/*</code></td><td class="num">—</td><td class="num">—</td><td class="num">10-24</td><td><span class="pill p-ok">merged</span></td><td>All commits already on cv2x or default.</td></tr>
+    <tr><td><code>sandbox-onboarding</code>, <code>wo-s0/*</code>, <code>docs/root-readme</code></td><td class="num">—</td><td class="num">—</td><td class="num">07–10</td><td><span class="pill p-none">separate history</span></td><td>Unrelated root (no merge base). Onboarding findings.</td></tr>
+    <tr><td><code>npat-game-planning</code></td><td class="num">—</td><td class="num">—</td><td class="num">10-04</td><td><span class="pill p-none">other project</span></td><td>Inkwell app planning. Not part of the thesis.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>Suggested merge order</h2>
+  <ol class="order">
+    <li><b>Settle one trunk.</b> Merge <code>cv2x-testbed-setup</code> and the default branch into each other so they match. Everything below lands on that.</li>
+    <li><b>Lock the numbers:</b> merge <code>upbeat-hawking</code>. Take its run of record for the 15 conflicting result files, regenerate the dashboard, cards, grand report and DWG-001 from it, then run the stale-figure checker. Every later figure and chapter fix reads these.</li>
+    <li><b>ZKP:</b> merge <code>zkp-ai-identity-research</code>. Closes chapter 2 source markers; two remain.</li>
+    <li><b>Visuals:</b> merge <code>simulation-visual-plan</code>, then place F-series and BP-sheets into chapters using <code>docs/blueprints/INTEGRATION.md</code>, one sentence of prose per figure. Today the chapters cite zero figures, so this is a full pass over all seven, not a touch-up.</li>
+    <li><b>Testing charters:</b> merge <code>testing-suite-organization</code> into Ch3 / appendix.</li>
+    <li><b>IDTx:</b> rebase <code>determined-meitner</code> (67 behind), then move the 12×10 comparison into Ch5 / Ch6 §6.8 and Appendix G.</li>
+    <li><b>Fix the chapter audit</b> against the settled register: the H5 frontier claim, stale V2V latency, attestEvent gas, W3C checker wording.</li>
+    <li><b>Decide</b> whether <code>vid-build</code> and <code>cvin-research-improvements</code> come in, become future work, or stay archived. Then write front matter and appendices.</li>
+  </ol>
+</section>
+</div>
