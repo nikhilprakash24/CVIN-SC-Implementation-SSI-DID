@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVIN Research-Side Integration Map</title>
+<style>
+:root{--ink:#1f2328;--muted:#5b6470;--line:#d9dee5;--panel:#f6f8fa;--in:#2f7d4f;--on:#b7791f;--gap:#b03a2e;--accent:#8b3a2f;--bg:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6e9ee;--muted:#a3adb8;--line:#333a44;--panel:#171b21;--bg:#0f1216}}
+:root[data-theme="dark"]{--ink:#e6e9ee;--muted:#a3adb8;--line:#333a44;--panel:#171b21;--bg:#0f1216}
+body{margin:0;padding:24px 16px;background:var(--bg);color:var(--ink);font:15px/1.5 Georgia,"Times New Roman",serif;max-width:1180px;margin-inline:auto}
+h1{font-size:26px;margin:0 0 4px}h2{font-size:19px;margin:34px 0 10px;border-bottom:1px solid var(--line);padding-bottom:4px}h3{font-size:16px;margin:18px 0 6px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;margin:10px 0 18px}
+th,td{border:1px solid var(--line);padding:6px 8px;vertical-align:top;text-align:left}
+th{background:var(--panel)}
+.k{display:inline-block;padding:1px 7px;border-radius:4px;font-size:12px;color:#fff;white-space:nowrap}
+.in{background:var(--in)}.on{background:var(--on)}.gap{background:var(--gap)}.na{background:#6b7280}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+.legend span{margin-right:12px}
+.small{font-size:13px;color:var(--muted)}
+@media (max-width:640px){table{font-size:12px}th,td{padding:4px 5px}}
+</style>
+</head>
+<body>
+<h1>CVIN Map of Work and Integration — the research side</h1>
+<div class="sub">CVIN-SC · MASc thesis · state of the research-side lanes at the freeze, 2026-10-31 · companion to the code-side branch map (05_INTEGRATION_MAP.html) · v0-2, 2026-11-05 · working document, not sent</div>
+
+<p>Twelve months of written research ran as parallel lanes in a project knowledge store (168 filed documents at the freeze) and, from September, a hub repository (<span class="mono">nikhilprakash24/cvin-sc</span>, private). This map shows where each lane stands, where it enters the unified seven-chapter thesis ruled on 30 October (D-R9), and what is filed, what sits only in the hub, and what still lives only in chat. The code-side map does the same for the branches; the two maps meet in Chapter 6 and in the numbers-of-record rule.</p>
+
+<h2>Three things to know first</h2>
+<div class="grid">
+<div class="card"><h3>One thesis, two spines until 30 October</h3>The hub holds a specification-first thesis (five chapters, ≈60,200 prose words, RQ1–RQ3); the code side holds a benchmark-first thesis (seven chapters, ≈45,000 words, RQ1–RQ5, H1–H6). The same labels mean different questions on the two sides. Ruling D-R9 adopted one unified outline on the hub spine with the applied system as Chapter 6 and the code side's questions as sub-questions. Nothing sent to a supervisor should present either side as "the thesis" alone.</div>
+<div class="card"><h3>The numbers of record are the hub's, for the interface</h3>Interface gas per function is the Lineage A protocol matrix (N = 5, D-R8, 128/128 cells); deployment gas the N = 5 run of 2026-10-23; <span class="mono">createPresentation</span> 62,458. The code side's native-analogue gas is admissible only as <em>indicative, different toolchain</em>, in its own table. Test counts are stated per suite with date and commit (133 sandbox; 564 + 376 spoke) and never summed with the September 201.</div>
+<div class="card"><h3>61 output sets are unfiled</h3>The chapter drafts of Sessions B–F, the Thesis-B trunk, the CEV ledger v2.0, the Narrative Spine, CORE 3, the closure contribution and the T-1/ISB/cost thread outputs exist in chat only (unfiled register v0-2; 21 at priority 0). Take 1 had to reconstruct ten sections by description for that reason. Filing them (D-18) is the one-hour task everything after depends on.</div>
+</div>
+
+<h2>Lane × unified chapter</h2>
+<p class="legend"><span class="k in">in</span> filed or in the hub, placed in a draft of record &nbsp; <span class="k on">on</span> produced, filed or in the hub, not yet placed &nbsp; <span class="k gap">gap</span> chat-only or not yet produced &nbsp; <span class="k na">—</span> not applicable</p>
+<table>
+<thead><tr><th>Lane / thread</th><th>Ch1 Intro</th><th>Ch2 Background</th><th>Ch3 IMinimalSSI spec</th><th>Ch4 Method</th><th>Ch5 Inventory &amp; evaluation</th><th>Ch6 Vehicular (code side)</th><th>Ch7 Discussion</th><th>Appendix</th></tr></thead>
+<tbody>
+<tr><td><b>Specification &amp; derivation</b><br><span class="small">G-A1, G-A2, Pass 3-Deep, §2.3 v2-0, completeness contribution</span></td><td><span class="k in">in</span> Table 1.1 C1–C3</td><td><span class="k na">—</span></td><td><span class="k in">in</span> §2.3 v2-0 promoted whole; CR-1…CR-3; partition 3/5/4</td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k in">in</span> §5.1 gap as structural</td><td><span class="k on">on</span> M-1 universe (filed); M-2 closure table + F11 (chat only)</td></tr>
+<tr><td><b>Evaluation of record</b><br><span class="small">§2.5 pre-reg, sandbox v1.1/v1.3, D-R7/D-R8, Phase 1 record, G-RIM Ch4 parts</span></td><td><span class="k in">in</span> evidence states</td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k in">in</span> §2.5 v1-1 + deviation note; N=5 vs N=30 roles</td><td><span class="k in">in</span> Ch4 §4.2–4.4 v1-2 protocol gas; coverage declared classes; <span class="k gap">gap</span> rubric verdicts, census date</td><td><span class="k na">—</span></td><td><span class="k on">on</span> concession set §5.4</td><td><span class="k on">on</span> protocol gas tables; App. A/B v0-2 (filed); two Ch4 lineages to re-base (R0)</td></tr>
+<tr><td><b>Standards &amp; families</b><br><span class="small">Building Paths v4.0, Family E v2.0, Family G, ERC census v0-1, G-D1</span></td><td><span class="k in">in</span> §1.3.1 third bound</td><td><span class="k on">on</span> standards-symmetry table; related-work audit</td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k in">in</span> Ch3 v0-9 §3.1, 3.3–3.6; <span class="k gap">gap</span> §3.2 census (provisional only); crosswalk Table 3.0-b owed</td><td><span class="k on">on</span> M-5 numbering of LSP8 / 725xy / MOBI-VID-V2</td><td><span class="k in">in</span> §5.3 convergence (corroborates)</td><td><span class="k on">on</span> I-1 inventory</td></tr>
+<tr><td><b>MOBI VID</b><br><span class="small">G-MV1 ×3, WO-7/WO-V seed build, populations classification</span></td><td><span class="k na">—</span></td><td><span class="k on">on</span> §2.4 vehicle identity (code-side §2.3 leads)</td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k in">in</span> §3.5 conformance mapping (licensed wording)</td><td><span class="k on">on</span> code-side VID I/II + 5-backend sweep</td><td><span class="k on">on</span> primitives-first argument</td><td><span class="k gap">gap</span> VID source text (D-14)</td></tr>
+<tr><td><b>Placement thread</b><br><span class="small">G-P1, P2, P3 (HAA-1), P4, DPA-0…3, HDA campaign</span></td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k gap">gap</span> HDA "placement as evaluation axis" collides with pre-registered §2.5 (RIM-Q14) — new slot needed</td><td><span class="k on">on</span> §4.7/§4.8 placement subsections (candidate slots)</td><td><span class="k on">on</span> hybrid anchoring vs code-side off-chain anchors</td><td><span class="k in">in</span> §5.1 placement = partition paragraph</td><td><span class="k on">on</span> HAA-1; DPA (unfiled)</td></tr>
+<tr><td><b>Security &amp; privacy</b><br><span class="small">G-C1, T-1 catalogue, ISB-1/2, B5 I2I channel</span></td><td><span class="k on">on</span> weapon argument, sober register (one paragraph)</td><td><span class="k in">in</span> §2.4 SCMS gap, tiers, K-15</td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k on">on</span> §4.6.4 revocation window (C16 proposed); §4.8.4 Ω (C17 proposed)</td><td><span class="k on">on</span> merge with code-side 54-scenario suite + attestEvent fix</td><td><span class="k on">on</span> limitations</td><td><span class="k on">on</span> S-1 risk register; T-1 (chat only); Ω/α charter values owed (D-15)</td></tr>
+<tr><td><b>Cost, scale, latency</b><br><span class="small">G-CO1 prompts 1–3, payload ladder, ISB-2, tier coverage</span></td><td><span class="k na">—</span></td><td><span class="k in">in</span> three-tier framework (adopted, not measured)</td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k in">in</span> §4.5 invocation profile (illustration); §4.6 lower bounds; <span class="k gap">gap</span> scale arithmetic recomputed by arm (FW-5)</td><td><span class="k on">on</span> code-side scaling §5.9 (M-9, short)</td><td><span class="k on">on</span> "throughput not binding" paragraph</td><td><span class="k gap">gap</span> Scale and Latency chats: no recoverable record</td></tr>
+<tr><td><b>Agentic generalisation</b><br><span class="small">G-E1, App. I wrapper spec, G-WHY, Lane H handoff</span></td><td><span class="k in">in</span> RQ3; C14 at Version 2</td><td><span class="k on">on</span> §2.7 agent identity (merge with code-side §2.6)</td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k on">on</span> code-side Steward as constructive evidence (M-7, R-1 amendment dated 10-30)</td><td><span class="k in">in</span> §5.2 φ mapping; <span class="k gap">gap</span> Stage 31 switch date (Q-XD-6)</td><td><span class="k on">on</span> App. I; G-E1 transfer table to be read cell by cell (D-06)</td></tr>
+<tr><td><b>Roots</b><br><span class="small">G-R1 Phase 1/2, panel R9, erratum</span></td><td><span class="k na">—</span></td><td><span class="k on">on</span> reservoirs CB-TL / CB-IG for §2.1–§2.2 (budget-neutral)</td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k on">on</span> figures S.12–S.14</td><td><span class="k gap">gap</span> symbol-table collision Formal Layer v2.0 vs R4 (D-23)</td></tr>
+<tr><td><b>Vision &amp; future programme</b><br><span class="small">P5 dossier, bold-claims ledger, P5C IoV, IDTX catalogue, societal integration</span></td><td><span class="k on">on</span> one sentence</td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k na">—</span></td><td><span class="k on">on</span> ICBC Class 7→5 worked example (§4.5 / §5)</td><td><span class="k on">on</span> IDTx condensed into §7.4 (M-9)</td><td><span class="k in">in</span> §5.5 future work (≤ L1 claims)</td><td><span class="k gap">gap</span> one potential-showing test (D-19) not chosen</td></tr>
+<tr><td><b>Governance &amp; SSoT</b><br><span class="small">Scaffolding v0.4 / v2.1, Manual v2.0, Registry v13.1, sectioning, CEV, cruxes, accuracy ledger</span></td><td colspan="7"><span class="k in">in</span> locked wordings and rulings govern every chapter; <span class="k gap">gap</span> SSoT ruling (v0.4 filed vs v2.1 roll, D-06); CEV v2.0 and Narrative Spine chat-only</td><td><span class="k on">on</span> ruling manifest; corrections ledger</td></tr>
+<tr><td><b>Writing lanes</b><br><span class="small">Sessions B–F, Thesis-A quarry, Thesis-B trunk, Take 1</span></td><td colspan="7"><span class="k in">in</span> Take 1 v0-2 continuous draft (chat + repo); hub Ch1–Ch5 drafts of record; <span class="k gap">gap</span> Sessions B–F drafts, trunk, Thesis-A quarry unfiled (D-18)</td><td><span class="k on">on</span> placeholder census (93)</td></tr>
+<tr><td><b>Drafting programmes</b><br><span class="small">G-GD1 (0/10), G-SD1 (0/10), G-T1 Takes 2–4</span></td><td colspan="7"><span class="k on">on</span> instruments filed; <span class="k gap">gap</span> G-SD1 gated on the AI-use agreement (R-0); Take 3 needs the trunk pasted in</td><td><span class="k on">on</span> provenance ledger, ICM, timeline (planned)</td></tr>
+<tr><td><b>Front matter</b></td><td colspan="8"><span class="k on">on</span> Abstract ≈345 words (Take 1 D-01); lay summary and preface stub in Take 1; <span class="k gap">gap</span> GenAI preface statement (needs the origin census); title (decision 5)</td></tr>
+</tbody></table>
+
+<h2>Where each thing lives</h2>
+<table>
+<thead><tr><th>Store</th><th>What</th><th>Count at freeze</th><th>State</th></tr></thead>
+<tbody>
+<tr><td>Project knowledge store (claude.ai "CVIN Thesis")</td><td>Filed documents, v0-1/v0-2 pairs; instruments; plans; threads; reports</td><td>168 docs; 1.92 of 2.00 MB</td><td><span class="k on">on</span> near cap — drafts go to chat + repo; registry rule R-F4 (retire superseded duplicates) awaits authorisation (D-1)</td></tr>
+<tr><td>Hub repository <span class="mono">cvin-sc</span> <span class="mono">main</span> @ <span class="mono">d9f9fa3</span></td><td>Sandbox v1.1 (June baseline) and v1.3 (eight options); 7 verification folders; doc corpus in 13 categories (00–12); chapter drafts; spoke import (text @839aab9, grand report @291a801)</td><td>docs 00–12; 529 SHA256SUMS entries (post-boundary)</td><td><span class="k in">in</span> pushed 2026-10-20; CI runs G0 and the suites; private</td></tr>
+<tr><td>Chat record (lanes)</td><td>Sessions B–F chapter drafts; Thesis-B trunk; Thesis-A quarry; CEV v2.0; Narrative Spine; CORE 1–3; T-1; ISB; cost prompts; closure contribution; Take 1 v0-1/v0-2</td><td>97 chats to 14 Oct + ≥7 lanes since; 61 unfiled sets</td><td><span class="k gap">gap</span> not searchable by the project; file-in owed (D-18)</td></tr>
+<tr><td>Author's notebooks</td><td>March–May full pass (100+ pages); three-circle framing; 2026 update</td><td>—</td><td><span class="k gap">gap</span> only the author can present</td></tr>
+<tr><td>Code-side repository <span class="mono">CVIN-SC-Implementation-SSI-DID</span></td><td>Applied system, claim register, roots 27 papers, phase 2, zkp, side papers, related-work workspace, this outreach folder</td><td>23 branches; 572 commits</td><td>see the code-side map</td></tr>
+</tbody></table>
+
+<h2>Where the two maps meet</h2>
+<table>
+<thead><tr><th>Join</th><th>Rule of record</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Pre-registration disclosure</td><td>§2.5 v1-1's dated note discloses the eight-option deviation (WO-1…9); the eleven ERC-1056 runs before the protocol are identified (Phase 1 record §2; FIND-R4) and still to be listed by a dated amendment — open on both sides</td><td>Phase 1 record; G-IRR §9.5</td></tr>
+<tr><td>Research questions</td><td>Hub RQ1–RQ3 principal (⟦RQ-ADOPTION⟧ still owed under Q16); code-side RQ1/H1 → RQ2a, RQ3/H2 → RQ2b, RQ2/H5 → RQ2c, H4 → RQ2d, RQ4/H3 → RQ-V, RQ5/H6 → RQ-V2 + RQ3a; H1 split (create supported, update not); "all five supported" withdrawn</td><td>Merge proposal C.3; D-R9 M-2, M-6</td></tr>
+<tr><td>Chapter 6</td><td>Code-side Ch4–Ch5 condensed ≈50%; native-analogue gas in its own labelled table (§6.7); never ratioed against protocol gas</td><td>C.2, C.4 rule 4; M-3</td></tr>
+<tr><td>Option numbering</td><td>Canonical O1–O18 via the WO-R crosswalk; CVIN-Combined = O18 reference build, not a standard; ERC-725xy/735 and LSP8 as variants of existing O-numbers; MOBI-VID-V2 an unnumbered application profile</td><td>M-4, M-5; D-R7 c.3</td></tr>
+<tr><td>ZK and the Steward</td><td>In Ch6 §6.8 and Ch7 §7.2 as the constructive rung the hub's FW-3 lacked; R-1 scope amendment dated 2026-10-30</td><td>M-7</td></tr>
+<tr><td>Locked wordings on imported text</td><td>Six "first" priority claims reworded per SC-04; "validation" → corroboration; "the minimal set" never; EUDI date only in derivation form</td><td>C-9…C-13; migration step 4</td></tr>
+<tr><td>Citations</td><td>One BibTeX namespace, IEEE numeric; the code side's three key systems converted</td><td>M-8; migration step 3</td></tr>
+<tr><td>Freeze</td><td>Spoke thesis text frozen at tag <span class="mono">thesis-of-record/text-2026-10-30</span> (839aab9); grand report at 291a801; future spoke work lands in the hub</td><td>M-10</td></tr>
+<tr><td>Known stale values on the code side</td><td>Infrastructure SPaT ratio 1.226× → 1.197×; V2V warm verify 0.153 → 0.142 ms; P* 609 → 641; ERC-4337 "second-highest" → third</td><td>code-side README; C-8</td></tr>
+</tbody></table>
+
+<h2>Decisions board (research side)</h2>
+<table>
+<thead><tr><th>ID</th><th>Decision</th><th>Owner</th><th>Blocks</th></tr></thead>
+<tbody>
+<tr><td>R-0 / AI-use</td><td>Send the AI-use disclosure and agreement brief, with the authorship timeline, before any chapter is relied on; treat the code-side documents already sent as covered by it</td><td>Candidate → supervisor</td><td>G-SD1 Stages 3–10; any draft shown</td></tr>
+<tr><td>Q16 / D-R9 M-2</td><td>Adopt hub RQ1–RQ3 + sub-questions as the thesis questions</td><td>Candidate (supervisor view)</td><td>Ch1 §1.3; Ch7 §7.7; every cross-reference</td></tr>
+<tr><td>R-ADM-1 / R-ADM-2</td><td>Coverage at declared classes vs rubric re-run; side-document manifest vs manifest rule</td><td>Supervisor</td><td>Ch5 verdict cells; §5.4 concessions</td></tr>
+<tr><td>D-04 / RIM-Q15</td><td>Contribution count: C15 withdrawn; C16/C17 admitted?; second "C16" (HDA) folded or renumbered</td><td>Candidate</td><td>Table 1.1; abstract</td></tr>
+<tr><td>D-14 (spoke) / decision 5</td><td>One title for the unified thesis</td><td>Candidate (supervisor view)</td><td>front matter</td></tr>
+<tr><td>D-18</td><td>File the 61 unfiled output sets</td><td>Candidate</td><td>Take 2; Take 3 (trunk); every reconstruction in Take 1</td></tr>
+<tr><td>D-1 (G-GD1/G-SD1)</td><td>Authorise registry rule R-F4 (retire superseded duplicates) to lift the store cap</td><td>Candidate</td><td>filing of G-SD1 Stage 2 onward</td></tr>
+<tr><td>FW-0</td><td>Execute and date the ERC census with a second rater (κ ≥ 0.80)</td><td>Candidate</td><td>§3.2; crux X2 MED → LOW</td></tr>
+<tr><td>Q-XD-2 · Q-XD-6 · D-06 · D-23 · D-15 · D-19</td><td>C11 retitled; Stage 31 switch date; SSoT roll; symbol tables; Ω/α charter values; the one potential-showing test</td><td>Candidate</td><td>as listed in the lane table</td></tr>
+<tr><td>R0 (G-IRR)</td><td>Re-base the G-RIM Chapter 4 parts on the hub's §4.2–4.4 (one Ch4 lineage)</td><td>Candidate / lane</td><td>Ch5 assembly</td></tr>
+</tbody></table>
+
+<h2>Suggested integration order (research side)</h2>
+<ol>
+<li>Send the AI-use brief with the timeline and contribution map (R-0). Nothing else is shown until it is acknowledged.</li>
+<li>File the 61 unfiled output sets (D-18); authorise R-F4 (D-1) so the store can take the G-SD1 instruments.</li>
+<li>Rule the one-line decisions: Q16, D-04/RIM-Q15, Q-XD-2, Q-XD-6, D-06, D-23, title.</li>
+<li>Execute and date the ERC census (FW-0); write the §2.5 amendment listing the eleven pre-registration traces.</li>
+<li>Re-base the two Chapter 4 lineages onto one (R0); recompute the scale arithmetic by arm (FW-5).</li>
+<li>Run the D-R9 migration steps 2–4 (crosswalk, citation unification, locked-wording sweep on imported text) — these touch both sides and must precede any chapter merge.</li>
+<li>Run Take 2 (panel rewrite) starting with Chapter 4 and Chapter 3; paste the trunk and run Take 3; then G-SD1 Stages 3–10 on the unified spine.</li>
+<li>Cut the submission draft section by section from the best take, with origin tags carrying the record; preface GenAI statement last, from the census.</li>
+</ol>
+<p class="small">Sources: Precursor Report G-PRE v0-2; Phase 1 Consolidated Record G-P1 v0-2; Hub vs Spoke Comparison v0-1 and STATUS.md D-R9; Programme Atlas G-VIZ v0-3; Unfiled Outputs Register G-VIZ v0-2; G-SD1 Master Plan v0-2; Take 1 Panel Note G-T1 v0-2; code-side outreach folder README. Every cell is editorial placement of a recorded fact; none promotes an evidence state.</p>
+</body>
+</html>
