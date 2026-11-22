@@ -42,3 +42,5 @@ for WM-2 D1, the TSR remainder and the X1 build wait for WM-2's close and D-13.
   The first push of this fix (`7557dc8`) had a colon in the step name, which made the workflow invalid YAML; it was
   pushed because the commit was not chained to the guard. Fixed in the next commit, with the workflow parsed before
   the commit.
+
+**CI green on `9a8e9f9`** (all four workflows). Report 44 is closed.
