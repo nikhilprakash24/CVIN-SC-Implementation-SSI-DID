@@ -238,7 +238,7 @@ Each task names what it blocks. "You" means the author. The order is the order o
 | T-21 | At the next Exp. D run, have `run_verify_scaling.py` write its own stamp block into `scaling_verify.json`, then drop its KNOWN_STALE entry | this session | the next #26 re-run | the stamp gate without an exception |
 | T-18 | Refresh the blueprint branch's 23 sheet sources against the register, then merge it (B-1, second half), **done 10-31 (report 40)** | this session | nothing | the blueprint set on the trunk |
 | T-19 | Extend the stale-figure checker to SVG (WM-2 G, T-F16), **done 10-31 (reports 40 and 41)**: Markdown, SVG, HTML and TeX are all read | this session | nothing | figures checked like Markdown |
-| T-16 | D2 answered 10-24 (out of scope); B-1 taken as recommended (exploration merged, blueprints after T-18); B-2 to B-4 open | you | nothing | the branch merges |
+| T-16 | D2 answered 10-24 (out of scope); B-1 taken as recommended (exploration merged, blueprints after T-18); B-2 to B-4 answered 2026-11-22 (recommendations; report 44) | you | nothing | the branch merges |
 | T-13 | The rest of the decision sheet (P2-D*, C1-d*, C2-d*) | you | nothing | the records |
 | T-14 | Commit signing, optional | you, with a key | nothing | verified commits |
 

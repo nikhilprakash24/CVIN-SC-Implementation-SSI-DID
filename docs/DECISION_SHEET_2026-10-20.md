@@ -58,4 +58,7 @@ records each answer in its file with the date, and the defaults it overturns are
 | Id | Answer | Date | Recorded in | Default overturned? |
 |---|---|---|---|---|
 | D2 | D2-a: RSU-to-RSU messaging is out of scope, and the thesis says so | 2026-10-24 | SC-24; chapter 6 §6.6.3; crux C3 gap; `docs/PLAN_WM-2.md` D2; N-16 closed; report 38 | no (the recommendation) |
-| B-1 to B-4 | not answered; the author's "integrate with the other code sessions" is read as approval of the recommended integration steps only, as report 38 records | 2026-10-24 | `docs/planning/BRANCH_REVIEW_2026-10-24.md` | — |
+| B-1 | the recommended integration (read from "integrate with the other code sessions"): exploration merged (report 38), blueprints merged at Rev C (report 40) | 2026-10-24 / 10-31 | `docs/planning/BRANCH_REVIEW_2026-10-24.md` | no |
+| B-2 | keep the simulation visuals apart until WM-2 D1 decides chapter 5's figures ("go with your recommendations") | 2026-11-22 | branch review; report 44 | no (the recommendation) |
+| B-3 | review the TSR series after WM-2 closes. Most of it has since reached the trunk through PR #19 (the author's merge) and report 43; two commits remain on the branch (CI and pre-push wiring for the completeness and charter guards) | 2026-11-22 | branch review; report 44 | no |
+| B-4 | X1 documents only: `docs/PLAN_RESEARCH_EXPANSION.md` and `docs/research-expansion/` taken onto the trunk; the X1 contracts, tests, scenario and result stay on their branch until D-13 | 2026-11-22 | branch review; report 44 | no |

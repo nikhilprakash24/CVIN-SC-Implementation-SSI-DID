@@ -35,6 +35,6 @@ two docs-only branches were trial-merged in a throwaway branch, with the pre-pus
 | Id | Decision | Options | Recommendation |
 |---|---|---|---|
 | B-1 | Merge `exploration-plan` and `system-blueprint-diagrams` after the fixes in §1 (**done**: exploration 2026-10-24, report 38; blueprints 2026-10-31 at Rev C, report 40) | yes / no | **yes**: one pass, no result changes |
-| B-2 | The simulation visuals: thesis figures or not | merge and re-run #27 / keep apart | **keep apart until WM-2 D1** decides which figures chapter 5 uses |
-| B-3 | The TSR patch series | review and take parts / close | **review**, after WM-2 closes |
-| B-4 | Scenario X1 | merge its documents only / all / keep apart | **documents only**; the build waits for D-13 |
+| B-2 | The simulation visuals: thesis figures or not (**decided 2026-11-22: kept apart**, report 44) | merge and re-run #27 / keep apart | **keep apart until WM-2 D1** decides which figures chapter 5 uses |
+| B-3 | The TSR patch series (**decided 2026-11-22: review after WM-2 closes**; most of it reached the trunk through PR #19 and report 43; two wiring commits remain, `f570d10` and `badbe52`) | review and take parts / close | **review**, after WM-2 closes |
+| B-4 | Scenario X1 (**decided 2026-11-22: documents only, taken**, report 44) | merge its documents only / all / keep apart | **documents only**; the build waits for D-13 |
