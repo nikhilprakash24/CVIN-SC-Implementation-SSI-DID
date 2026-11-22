@@ -207,6 +207,7 @@ flowchart LR
       <tr><td><code>sandbox-onboarding</code>, <code>wo-s0/*</code></td><td>07 to 10-19</td><td>2 to 23</td><td>onboarding, understanding report</td><td><span class="pill p-info">kept apart</span></td></tr>
     </tbody></table></div>
   <div class="cols">
+    <div class="card"><h3>Rule for every session</h3><p class="note">Push the opened report before a re-run of record, so others see it. One run per producer; the first counts. A contract change, comments included, moves deployment gas, and CI now fails until the gas producers re-run.</p></div>
     <div class="card"><h3>Other sessions</h3><p class="note">The TDP session (reports 20, 25, 27) and the second workstream (reports 28 to 33) are merged. The cross-model check session has a written brief and has not run.</p></div>
     <div class="card"><h3>Sister session</h3><p class="note">The "Build CV2X code" session keeps its own Master Plan and Programme Atlas, linked in the pages section. Its Phase B is the model for section 05. This session could not read it, because the documents connector did not connect.</p></div>
   </div>
@@ -219,11 +220,12 @@ flowchart LR
     <tbody>
       <tr><td>1</td><td>U6 chapter audit, read-only: 39 OK, 22 mismatch, 2 overstated, 16 unsourced, 13 stale</td><td><code>docs/thesis/CHAPTER_AUDIT_2026-10.md</code></td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
       <tr><td>2</td><td>U7 TDP review: 45 OK, 37 stale, 11 missing; layer 5 absent</td><td><code>docs/tdp/REVIEW_2026-10.md</code></td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
-      <tr><td>3</td><td>U5 / D2 RSU-to-RSU note: recommends scope out</td><td><code>docs/design/RSU_TO_RSU_NOTE.md</code></td><td><span class="pill p-warn">your D2</span></td></tr>
+      <tr><td>3</td><td>D2 decided: RSU-to-RSU out of scope, stated in chapter 6 §6.6.3 and crux C3 (SC-24)</td><td><code>docs/design/RSU_TO_RSU_NOTE.md</code></td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
       <tr><td>4</td><td>U10 stale checker: old V2V figures found in 24 files, fixed outside the thesis</td><td>checker entries</td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
       <tr><td>5</td><td>U11, U12 progress report draft 2, hygiene</td><td>report, index rows</td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
-      <tr><td>6</td><td>Branch review: nothing merged, 21 stale figures block the docs-only two</td><td><code>docs/planning/BRANCH_REVIEW_2026-10-24.md</code></td><td><span class="pill p-warn">your B-1 to B-4</span></td></tr>
-      <tr><td>6a</td><td>T-15 correct the TDP's stale figures, add layer 5</td><td>TDP revisions</td><td><span class="pill p-ok">nothing</span></td></tr>
+      <tr><td>6</td><td>Branch review: exploration merged 24 Oct; blueprint set merged 31 Oct with every value read from results of record; SVG drawings now checked for stale figures</td><td><code>docs/planning/BRANCH_REVIEW_2026-10-24.md</code></td><td><span class="pill p-warn">your B-2 to B-4</span></td></tr>
+      <tr><td>6a</td><td>T-15 TDP corrected to revision B, layer 5 added</td><td>TDP-001, 003, 007, 008, 009</td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
+      <tr><td>6b</td><td>NatSpec pass moved 5 deployment-gas cells by 12; re-run of record; CI now fails on stale code</td><td>report 38</td><td><span class="pill p-ok">done 24 Oct</span></td></tr>
       <tr><td>7</td><td>WM-2 D1 chapter edits</td><td>chapters 1, 4, 6, 7</td><td><span class="pill p-warn">D-1</span></td></tr>
       <tr><td>8</td><td>WM-2 E1 cross-model check</td><td><code>FINDINGS.md</code></td><td><span class="pill p-warn">you open it</span></td></tr>
       <tr><td>9</td><td>WM-2 F1 presentation draft 2</td><td>report</td><td>E1</td></tr>
@@ -245,7 +247,7 @@ flowchart LR
       <tr><td class="mono">Q-B5</td><td>Is IDTx a paper or a chapter 6 taxonomy? (I-24)</td><td>you</td><td>Phase 2 F1</td><td>taxonomy only</td></tr>
       <tr><td class="mono">Q-B6</td><td>Will there be a Sepolia witness run? (D-10)</td><td>you, two secrets</td><td>most visible limitation</td><td>stated as limitation</td></tr>
       <tr><td class="mono">Q-B7</td><td>What happens to the open research branches?</td><td>review, then you</td><td>figures, TSR series, expansion</td><td>stay unmerged</td></tr>
-      <tr><td class="mono">Q-B8</td><td>Does the thesis need RSU-to-RSU messaging? (D2)</td><td>you, after the note</td><td>crux C3 scope</td><td>scoped out</td></tr>
+      <tr><td class="mono">Q-B8</td><td>Does the thesis need RSU-to-RSU messaging? (D2) <b>Answered 24 Oct: out of scope.</b></td><td>you</td><td>crux C3 scope</td><td><span class="pill p-ok">closed</span></td></tr>
       <tr><td class="mono">Q-B9</td><td>Which Phase 2 programme and ideas? (P2-D1)</td><td>you</td><td>Phase 2 session 4</td><td>none chosen</td></tr>
       <tr><td class="mono">Q-B10</td><td>Does the cross-model check agree with passes 16 to 22?</td><td>check session</td><td>WM-2 E1, E2</td><td>WM-2 cannot close</td></tr>
       <tr><td class="mono">Q-B11</td><td>Does I-05's model predict the probe knee, k = 12 to 14 on host 3?</td><td>a measurement</td><td>the freshness theory claim</td><td>stays a prediction</td></tr>

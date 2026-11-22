@@ -14,7 +14,8 @@
 #   method                T test, A analysis, I inspection, D demonstration (MIL-STD-961E section 4 verification methods)
 #   evidence_rows         claim-register rows; a requirement is VERIFIED only if every row is status V
 #   threshold             optional machine check against the snapshot: path, op, value (the declared threshold)
-#   verdict_from          optional snapshot path whose text is reported verbatim (a pre-registered verdict as it fell)
+#   verdict_from          optional snapshot path whose text is reported verbatim (a pre-registered verdict as it fell);
+#                         or `file:<repo path>:<dotted key>` to read it from a committed result file outside the snapshot
 #   files                 tracked files that must exist (inspection evidence)
 #   ci                    text that must appear in a workflow under .github/workflows (inspection evidence)
 #   tests                 test-register ids (docs/testing/test_register.yaml) or, for a measurement, the producing
@@ -28,6 +29,7 @@ groups:
   RTV: Real-time verification (RQ4)
   INF: Infrastructure messaging (pre-registered I1-I5)
   EVD: Evidence and reproducibility (process)
+  L5: Layer 5, zero-knowledge vehicle identity and the agent wrapper (RQ5, H6)
 
 requirements:
   - id: SYS-01
@@ -59,6 +61,14 @@ requirements:
     tests: [docs/MEASUREMENT_CONDITIONS.md]
     limit: No M2 (public testnet) measurement exists on the trunk (N-11).
 
+  - id: SYS-04
+    title: Basic digital-ID set coverage
+    shall: The operation catalogue shall be mapped onto the basic digital-ID function set (Set A identity and keys, Set B credentials) and each substrate's coverage reported per function, with admission counted strictly (every mapped function present) and natively (every mapped function a native primitive) as two separate counts.
+    derived_from: RQ1 and RQ3 (the catalogue as the extension of the basic set); docs/BASIC_ID_SET_EXTENSION.md
+    method: A
+    evidence_rows: [53, 54]
+    tests: [1_blockchain-identity/analysis/analysis.js, docs/BASIC_ID_SET_EXTENSION.md]
+    limit: The F-numbering inside the sets is pending the canon archive ([B1]); strict native admission (ERC-4337 only) is a stricter question than the canon's pattern-realised admission (#54).
   - id: PRF-01
     title: Nine-standard gas table, deterministic
     shall: The gas benchmark shall report exact receipt gas for deploy, create, update, delegate-or-claim, revoke and transfer on every substrate, and thirty consecutive runs of one commit shall be byte-identical.
@@ -256,7 +266,7 @@ requirements:
     shall: The amortised verification cost shall be measured as a function of the re-check cadence k for a full-resolution refresh and a one-call probe refresh, and the host of each run shall be stated with its local cost.
     derived_from: H3; crux C4; docs/LATENCY_BUDGET.md section 4
     method: T
-    evidence_rows: [32, 37, 52]
+    evidence_rows: [32, 37, 52, 55]
     files: [cv2x-testbed/scripts/experiment_freshness_k.py]
     tests: [cv2x-testbed/scripts/experiment_freshness_k.py, cv2x-testbed/tests/test_freshness_k_probe.py]
     limit: The knee is the most host-sensitive figure; no finite k reached P*(0.5)=100 on #37's host; the thesis defends no k as "fitting" (D-12 withdrawn).
@@ -374,3 +384,64 @@ requirements:
     ci: fail on any skip
     tests: [sandbox/grand/run.py, docs/testing/check_test_counts.py]
     limit: Three MOBI demo steps hash block.timestamp and are declared timestamp-dependent (B1).
+
+  - id: L5-01
+    title: ZK-VIN circuit size
+    shall: The ZK-VIN circuit's constraint, wire and signal counts shall be recorded from the compiler and pinned by the SHA-256 of its committed artefacts.
+    derived_from: H6; Plan 1 (docs/zkp/PLAN_1_ZKP_AND_AGENT_IDENTITY.md); register #56
+    method: I
+    evidence_rows: [56]
+    files: [5_zkp-agent-identity/artifacts/MANIFEST.json]
+    tests: [5_zkp-agent-identity/circuits/build_circuit.sh]
+    limit: A property of the committed circuit, not a timing; the Groth16 keys come from an insecure single-party setup (research code).
+  - id: L5-02
+    title: ZK-VIN proving and verification time (Z-E1, Z-E2, Z-E4)
+    shall: ZK-VIN proof verification off chain shall take under 100 ms (median of 30), proving under 10 s (median of 10), and a proof shall be under 1,024 bytes as calldata, with each verdict computed by the producing script.
+    derived_from: pre-registered Z-E1, Z-E2, Z-E4 (Plan 1 section 1.1); H6
+    method: T
+    evidence_rows: [57]
+    verdict_from: "file:5_zkp-agent-identity/results/zkvin_bench.json:expectations"
+    tests: [5_zkp-agent-identity/scripts/prove_and_verify.js, 5_zkp-agent-identity/bench/run_all.sh]
+    limit: Host-dependent; the proving time has N = 10 and is descriptive only under the latency charter; the sizes are unaffected.
+  - id: L5-03
+    title: On-chain Groth16 verification in the gate (Z-E3)
+    shall: Admission through the ZK-VIN gate with on-chain Groth16 verification shall cost under 350,000 gas, exact receipt gas, with the anchor and verifier deployments reported beside it.
+    derived_from: pre-registered Z-E3; H6; the IDTx with a knowledge-of-opening dependency (I-24 brief)
+    method: T
+    evidence_rows: [58]
+    verdict_from: "file:5_zkp-agent-identity/results/gas_zk.json:expectations"
+    tests: [5_zkp-agent-identity/scripts/measure_gas.js, 5_zkp-agent-identity/test-contracts/zkvin_gate.test.js]
+    limit: M1 only; view figures are gas estimates, not receipts.
+  - id: L5-04
+    title: Sigma-protocol primitive counts
+    shall: The reference sigma-protocol primitives shall report exact group-operation counts per operation, with timings recorded as host-dependent and descriptive.
+    derived_from: H6 (P2, manual burden); register #59
+    method: T
+    evidence_rows: [59]
+    tests: [5_zkp-agent-identity/bench/sigma_bench.py, 5_zkp-agent-identity/tests/test_zkid.py]
+    limit: Pure-Python reference code, not constant time and not an optimised library; counts exact, timings not comparable across hosts.
+  - id: L5-05
+    title: Unsalted VIN hash reversal (Z-E7)
+    shall: An unsalted SHA-256 of a VIN with only the serial unknown shall be shown reversible by enumeration in under one hour on one core, the full space enumerated and the rate recorded.
+    derived_from: pre-registered Z-E7; goal G7; defect D64
+    method: T
+    evidence_rows: [60]
+    tests: [5_zkp-agent-identity/bench/vin_bruteforce.py]
+    limit: The extrapolations beyond the measured space (VDS unknown; GPU rate) are estimates (E), cited not measured.
+  - id: L5-06
+    title: Predicate-narrowing attack and the bounded custodian (Z-E5, Z-E6)
+    shall: The undefended narrowing attack shall recover the model year exactly within the information-theoretic bound on every seed, and the Steward shall hold adversary leakage under its budget while serving at least 90 percent of honest requests on every seed of both variants, each verdict computed by the simulator and reported as it fell.
+    derived_from: pre-registered Z-E5, Z-E6 with amendments A1 (prior) and A2 (post hoc, insider variant); H6 (P5)
+    method: T
+    evidence_rows: [61]
+    verdict_from: "file:5_zkp-agent-identity/results/attacks.json:expectations"
+    tests: [5_zkp-agent-identity/attacks/run_attacks.py, 5_zkp-agent-identity/tests/test_attacks.py, 5_zkp-agent-identity/tests/test_steward.py]
+    limit: A simulation (Sim) with scripted agents, not people or deployed adversaries; Z-E6 FAIL on service (25 of 60 runs below 90 percent, minimum 70.0); a global budget alone bounds leakage as well as the Steward does; the insider variant is post hoc.
+  - id: L5-07
+    title: Manual-burden inventory
+    shall: The operation and value counts of operating the ZK identity by hand shall be measured from the code, and the derived times and error probabilities shall be labelled estimates from cited rates.
+    derived_from: H6 (P2); register #62
+    method: A
+    evidence_rows: [62]
+    tests: [5_zkp-agent-identity/bench/manual_burden.py]
+    limit: Counts V; times and error probabilities E (cited human rates, not measured on people).

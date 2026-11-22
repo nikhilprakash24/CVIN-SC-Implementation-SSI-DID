@@ -5,7 +5,8 @@
 **Purpose:** the same plan as `TDP-PLAN.md`, cut into phases that a later session can run one at a time with no
 memory of this one. Each phase states what it reads, what it may write, its gate command and its stop condition.
 Phases 0 to 7 record what pass 20 executed (so a session can re-run or audit one); phase 10 was executed in pass 25 and
-phases 8 and 9 in pass 27; phases 11 and 12 remain. A prompt is text to paste; the words in angle brackets are filled in by the
+phases 8 and 9 in pass 27, phase 11 in pass 37 and phase 12 in passes 38 and 39. Every phase has run once; phases 1 to 7
+recur whenever their triggers fire. A prompt is text to paste; the words in angle brackets are filled in by the
 person running it.
 
 ## How to run a phase
@@ -178,7 +179,7 @@ shall-statement maps to a chapter section or is marked "not for the thesis".
 > limitation), and the sentence that would carry it, in the thesis register. Mark requirements that belong only to
 > the package. Do not edit any chapter. Commit as "TDP phase 10: thesis adaptation map", and stop.
 
-## Phase 11 — External review of the package
+## Phase 11 — External review of the package (executed 2026-10-24 by a subagent in report 37; `docs/tdp/REVIEW_2026-10.md`)
 
 **Reads:** the whole `docs/tdp/`. **Writes:** `docs/tdp/reviews/REVIEW_01.md` and a dispositions file.
 **Gate:** every finding has a disposition. **Stop:** the review protocol of `docs/TEAM_STRUCTURE.md` section 4a
@@ -191,7 +192,7 @@ is followed: frozen checkout, different model, read-only, briefs written outside
 > unrecorded context. For each finding give the file and line, the evidence, and a severity. List what was checked
 > and found sound. Write `docs/tdp/reviews/REVIEW_01.md`. Do not fix anything. Stop.
 
-## Phase 12 — Rev B issue
+## Phase 12 — Rev B issue (executed: TDP-001, 003, 007, 008, 009 in report 38; TDP-000, 004, 010 and the drawings in report 39)
 
 **Reads:** everything above. **Writes:** every hand-written TDP document's header and TDP-PLAN section 6.
 **Gate:** all checks and the probe. **Stop:** Rev B stated in every header, with the reason.

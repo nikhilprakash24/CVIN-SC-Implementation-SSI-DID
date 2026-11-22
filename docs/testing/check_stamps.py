@@ -109,6 +109,27 @@ COMMENT_ONLY_COMMITS = {
     "781353f": {"why": "NatSpec pass (PR #15): comments in 19 contract sources and their recompiled testbed copies",
                 "applies_to": ["cv2x-testbed/"]},
 }
+# Results of record that may read "code changed since: yes" without failing CI, each with its reason (report 38).
+# Every other stamped result, and every run directory, must read "no" or an exempt "no (...)": a change to producing
+# code that moves results then fails CI until the producer is re-run, or the commit is listed above as stamp-only or
+# comment-only, or the result is listed here. Added after the NatSpec pass reached the default branch with CI green
+# while it had moved three register gas values.
+KNOWN_STALE = {
+    "4_comparison-framework/results/infrastructure_gas_run1.json":
+        "the first I4 run (2026-10-09); the result of record is the range study over seeds 1-30 (#47)",
+    "4_comparison-framework/results/scaling_verify.json":
+        "confirmed (report 42, T-17): the file holds two sections. Exp. C (credential richness, the file's only stamp, "
+        "2026-10-04 at d78e344) is at its stamped code: its scope differs only by the stamp-only commit 188efec. "
+        "Exp. D's section (v2v_density) was rewritten by the A3b re-run at 0b39570 and matches #26 and "
+        "scaling_verify_density.csv (P* 641.2); the 'yes' comes from Exp. D's scope, because its driver writes no "
+        "stamp of its own into this file (task T-21: add one at its next run)",
+    "4_comparison-framework/results/scaling_verify_repeats/*.json": "five Exp. D repeats of 2026-10-04 on the pre-fix driver; #26's current claim (A3b) does not use them, so "
+        "they are history (report 42)",
+    "cv2x-testbed/results/freshness_k_c3/c3_*.json":
+        "WM-2 C3 ran #32's and #37's configurations at their own code by design (#52)",
+    "cv2x-testbed/results/freshness_k_samehost/r*_full.json": "same-host replicates at their own code (#55)",
+    "cv2x-testbed/results/freshness_k_samehost/r*_probe.json": "same-host replicates at their own code (#55)",
+}
 COMMENT_LINE = r"^\s*(//|/\*|\*|\*/)|^\s*$"
 
 
@@ -371,6 +392,13 @@ def main():
         for problem in comment_only:
             print("COMMENT_ONLY_COMMITS:", problem)
         stamp_only = stamp_only + comment_only
+        stale = [path for path, h in rows if complete(h) and path not in CLASSES and h["changed"] == "yes"
+                 and not any(fnmatch.fnmatch(path, k) for k in KNOWN_STALE)]
+        stale += [pat for pat, _l, _n, _f, _c, _d, _a, changed in aggs if "yes" in changed and pat not in KNOWN_STALE]
+        for path in stale:
+            print("CODE CHANGED SINCE THE RUN OF RECORD:", path,
+                  "(re-run its producer, list a stamp-only or comment-only commit, or add a KNOWN_STALE reason)")
+        stamp_only = stamp_only + stale
         if bad:
             print("result files without a complete stamp, an aggregate or a class: " + ", ".join(bad))
         if bad or stamp_only:

@@ -154,6 +154,7 @@ That is item Q-B7 in §6 and task T-12 in §7.
 | The cross-model check session | `docs/milestones/check_passes_16-22/` | the brief is written; the check has not run (no `FINDINGS.md`) |
 | The sister "Build CV2X code" session | its own Master Plan and Atlas (§10.3) | its Phase B section is the model for §6 here. This session could not read it, because the documents connector did not connect. |
 | Research and writing feeds | pages in §10.3 | parallel chats for the literature, writing and directions |
+| **Rule for every session (added 2026-10-24, report 38)** | this file | before a re-run of record, push the opened after-action report naming the producers, so a session that fetches sees the claim; one run per producer, the first one counts. A change to any contract source, comments included, moves deployment gas: CI's stamp gate now fails until the gas producers are re-run or the commit is proved comment-only |
 
 ---
 
@@ -165,7 +166,7 @@ That is item Q-B7 in §6 and task T-12 in §7.
 | Python layer tests | 376 | the same run |
 | Demos | 92, with 1,758 logged steps | the same run |
 | Defects | 66 logged; 42 fixed, 6 partly, 18 open (as of 10-22) | `docs/DEFECT_LOG.md`, `docs/STATUS_2026-10-22.md` |
-| CI | 11 jobs in four workflows, green on `558fc9d` | `.github/workflows/` |
+| CI | 12 jobs in four workflows (the blueprint data check added 2026-10-31), green on every closing commit | `.github/workflows/` |
 | Mutation probes | IDTx, verifier, ZK, D54 (8 of 8 killed), resolver (9 of 9 killed) | AAR 36 |
 | Thesis chapters | 1 to 7 drafted; chapter 2 written §2.1 to §2.9; chapter 6 has §6.8 and §6.9 | `docs/thesis/` |
 
@@ -231,8 +232,13 @@ Each task names what it blocks. "You" means the author. The order is the order o
 | T-10 | WM-2 D1 | this session | T-3 | E2 |
 | T-11 | WM-2 F1, then E2 | this session | T-2 | WM-2 closed |
 | T-12 | Review the five open branches, **done 10-24** | this session | nothing | Q-B7 |
-| T-15 | Correct the TDP's stale figures and add layer 5 (from the TDP review) | this session | nothing | the TDP current |
-| T-16 | Answer D2 and B-1 to B-4 | you | nothing | WM-2 D2; the branch merges |
+| T-15 | Correct the TDP's stale figures and add layer 5, **done 10-24 (report 38)** | this session | nothing | the TDP current |
+| T-17 | Confirm why #26's density sweep (2026-10-04) was not re-run at A3b, **done 10-31 (report 42)**: it was; the Exp. D driver writes no stamp into the shared file | this session | nothing | an empty KNOWN_STALE reason |
+| T-20 | Mark `docs/PROJECT_SUMMARY.md` dated or refresh it, **done 10-31 (report 42)**: dated banner; the index points to the master plan | this session | nothing | no September snapshot listed as canonical |
+| T-21 | At the next Exp. D run, have `run_verify_scaling.py` write its own stamp block into `scaling_verify.json`, then drop its KNOWN_STALE entry | this session | the next #26 re-run | the stamp gate without an exception |
+| T-18 | Refresh the blueprint branch's 23 sheet sources against the register, then merge it (B-1, second half), **done 10-31 (report 40)** | this session | nothing | the blueprint set on the trunk |
+| T-19 | Extend the stale-figure checker to SVG (WM-2 G, T-F16), **done 10-31 (reports 40 and 41)**: Markdown, SVG, HTML and TeX are all read | this session | nothing | figures checked like Markdown |
+| T-16 | D2 answered 10-24 (out of scope); B-1 taken as recommended (exploration merged, blueprints after T-18); B-2 to B-4 open | you | nothing | the branch merges |
 | T-13 | The rest of the decision sheet (P2-D*, C1-d*, C2-d*) | you | nothing | the records |
 | T-14 | Commit signing, optional | you, with a key | nothing | verified commits |
 
@@ -290,7 +296,7 @@ for which latency figures may not be compared.
 | `sandbox/grand/run.py` and its report | runs every suite and demo | one command reproduces the test base |
 | `docs/testing/` | claims check, charters, stamps, test register | CI proves the register matches the results |
 | `tools/prepush_check.sh` | CI's document guards, locally | stops a stale figure before it is pushed |
-| `.github/workflows/` | 11 CI jobs | every closing commit is green |
+| `.github/workflows/` | 12 CI jobs | every closing commit is green |
 | `docs/tdp/` | the Technical Data Package | an engineering view of the same system |
 | `5_zkp-agent-identity/` | layer 5 | RQ5 |
 

@@ -503,7 +503,7 @@ constructor, then `_initializeAllowedIssuers()`.
   SERVICE_CENTER), `addDelegate`, `attestEvent` (with a `veriKey` delegation and a
   domain-separated signature), `transferVehicleOwnership` and `revokeIdentity`. Results go to
   `4_comparison-framework/results/gas_benchmark.json` / `gas_benchmark_stats.json` under the key
-  `MOBI-VID-V2`. The recorded values are: deploy 4,370,878; create 299,165; lifecycle event
+  `MOBI-VID-V2`. The recorded values are: deploy 4,370,866; create 299,165; lifecycle event
   307,254; addDelegate 57,667; transfer 200,155; revoke 75,404. Its comment at L317–319 ("Known
   V1 bug, worked around here") is stale, because the overflow is fixed.
 - `scripts/benchmark_scaling.js` (L168) runs scaling and lifetime sweeps for V2 and writes

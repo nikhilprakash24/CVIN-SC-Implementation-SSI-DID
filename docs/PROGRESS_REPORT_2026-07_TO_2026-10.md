@@ -148,7 +148,7 @@ What makes the numbers checkable, built in these months and all exercised in CI 
 - **mutation probes** for the IDTx, the verifier, the zero-knowledge layer, the D54 fix and the chain resolver;
 - **the grand runner**, run last in every pass that changes code, and **the pre-push guard**, which runs CI's
   document checks locally;
-- **CI**: 11 jobs in four workflows, with the Python packages pinned to the versions the grand run passed on.
+- **CI**: 12 jobs in four workflows (11 until the blueprint data check of 2026-10-31), with the Python packages pinned to the versions the grand run passed on.
 
 The honest measure of the guards' worth is the number of times they fired on real mistakes, which the reports
 record (pass 22 alone: three; pass 37: the stale V2V figures in 24 files).

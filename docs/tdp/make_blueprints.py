@@ -27,7 +27,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = ROOT / "docs/tdp/drawings"
 SNAP = json.loads((ROOT / "docs/figures/dashboard_snapshot.json").read_text())
 ISSUE = "2026-10-15"
-REV = "A"
+REV = "B"
+REVISIONS = [("A", "2026-10-15", "initial issue", "AAR-20"),
+             ("B", "2026-10-31", "DWG-007 added; test paths; Layer 5 on DWG-001", "AAR-39")]
+SHEETS = 7
 W, H = 1400, 990
 BG, INK, ACC, WARN, DIM, GRID = "#0f2d5c", "#e3ecf9", "#7cc9ff", "#ffb454", "#93a9cb", "#1b4280"
 FONT = "DejaVu Sans Mono, Menlo, Consolas, monospace"
@@ -47,8 +50,10 @@ class Sheet:
 
     def text(self, x, y, t, size=11, anchor="start", color=INK, weight="normal", rotate=None):
         tr = f' transform="rotate({rotate} {x} {y})"' if rotate is not None else ""
+        # runs of spaces become no-break spaces: SVG renderers collapse ordinary runs, which breaks column alignment
+        t = re.sub(r"  +", lambda m: "\u00a0" * len(m.group()), str(t))
         self.add(f'<text x="{x}" y="{y}" font-size="{size}" text-anchor="{anchor}" fill="{color}" '
-                 f'font-weight="{weight}"{tr}>{escape(str(t))}</text>')
+                 f'font-weight="{weight}"{tr}>{escape(t)}</text>')
 
     def lines(self, x, y, items, size=10.5, dy=14, color=INK):
         for i, t in enumerate(items):
@@ -120,8 +125,8 @@ def frame(sh, number, title, sheet, notes, bom, sources):
     sh.rect(x0, y0, 346, 48, INK, sw=1)
     sh.line(x0, y0 + 16, x0 + 346, y0 + 16, INK, sw=0.8)
     sh.text(x0 + 6, y0 + 12, "REV   DATE         DESCRIPTION                 REF", 9.5, color=DIM)
-    sh.text(x0 + 6, y0 + 30, f"{REV}     {ISSUE}   initial issue               AAR-20", 9.5)
-    sh.text(x0 + 6, y0 + 43, "—     —            —                           —", 9.5, color=DIM)
+    for i, (rv, dt, desc, ref) in enumerate(REVISIONS[-2:]):
+        sh.text(x0 + 6, y0 + 30 + i * 13, f"{rv}     {dt}   {desc[:36]:<36} {ref}", 8.5)
     # notes (bottom left)
     nx, ny = 44, 798
     sh.text(nx, ny, "NOTES", 11, weight="bold")
@@ -149,7 +154,7 @@ def frame(sh, number, title, sheet, notes, bom, sources):
     sh.text(tx + 8, ty + 58, "DRAWING NO.", 8.5, color=DIM)
     sh.text(tx + 8, ty + 76, number, 14, weight="bold", color=ACC)
     sh.text(tx + 206, ty + 58, "SHEET        REV      SCALE", 8.5, color=DIM)
-    sh.text(tx + 206, ty + 76, f"{sheet} OF 6       {REV}        NTS", 11)
+    sh.text(tx + 206, ty + 76, f"{sheet} OF {SHEETS}       {REV}        NTS", 11)
     sh.text(tx + 8, ty + 101, "DRAWN  make_blueprints.py", 8.5, color=DIM)
     sh.text(tx + 8, ty + 113, "CHECKED  CI (--check, byte for byte)", 8.5, color=DIM)
     sh.text(tx + 8, ty + 125, f"ISSUE {ISSUE}  N. Prakash, UBC ECE", 8.5, color=DIM)
@@ -263,6 +268,9 @@ def dwg_001():
     sh.text(x + 84, y5 + 74, f"register {SNAP['register']['rows']} rows: V {reg['V']} · S {reg['S']} · E {reg['E']} · U {reg['U']}   |   producers of record {producers}   |   CI jobs {len(jobs)}", 9.5, color=WARN)
     y6 = y0
     sh.text(x + 84, y6 + 74, f"suites at the last grand run: L1 {t['L1']['result']}  L1+L2 {t['L1+L2']['result']}  L3+L4 {t['L3+L4']['result']}", 9.5, color=WARN)
+    # Layer 5 annotation (ZK-VIN gate and the Steward), on the credential and ledger planes
+    y3 = y0 + 3 * (h + 6)
+    sh.text(x + 84, y3 + 74, "layer 5 (5_zkp-agent-identity): ZK-VIN proof of VIN predicates (P3), ZkVinGate on P2, the Steward on P4 — DWG-007", 9.5, color=WARN)
     # dependency rule, drawn as a dimension line on the left
     yt, yb = y0, y0 + 7 * (h + 6) - 6
     sh.line(46, yt, 46, yb, DIM, sw=0.8)
@@ -276,8 +284,9 @@ def dwg_001():
         "P2 gas is M1 (in-process Hardhat, chain 31337); no M2 (public testnet) run exists (N-11).",
         "Counts on P5 and P6 are read from docs/figures/dashboard_snapshot.json (the last grand run; its commit is in the snapshot).",
         "Balloon numbers refer to the bill of materials; each item names the directory or file it stands for.",
+        "Layer 5 (zero-knowledge VIN predicates and the agent wrapper, register #56 to #62) sits across P2 to P4 and is drawn on DWG-007.",
     ]
-    bom = [(f"{p[0]} {p[1]}", p[3].split(",")[0]) for p in PLANES]
+    bom = [(f"{p[0]} {p[1]}", p[3].split(",")[0]) for p in PLANES] + [("Layer 5", "5_zkp-agent-identity/")]
     frame(sh, "DWG-001", "GENERAL ARRANGEMENT — SEVEN-PLANE SYSTEM", 1, notes, bom, ["dashboard_snapshot.json", "producers.json"])
     return sh.render()
 
@@ -479,8 +488,8 @@ def dwg_004():
     sh.box(60, sy, 900, 96, "STALENESS BOUND (the price of the cache)", [
         "A revoked sender is accepted for at most k − 1 further messages after revocation; k = ∞ never stops (#32: 0 / 4 / 24 for k = 1 / 5 / 25, 35/35 trials; #37: 280/280 trials; #46 RSU analogue above).",
         "A count of messages, not a time: the cache does not expire; at 10 Hz the count converts to time only for a sender that keeps transmitting.",
-        "Fail-open case found and fixed: a verifier whose clock lags the chain by more than 900 s accepted a revoked key (D51; fixed at WM-2 C0; #32/#37 re-run pending at A3b).",
-        "The thesis defends no k as 'fitting': zero staleness (k = 1) and P*(0.5) >= 100 were not achieved together on either host (D-12 withdrawn; #52 reaches it at k = 25 on a third host).",
+        "Fail-open case found and fixed: a verifier whose clock lags the chain by more than 900 s accepted a revoked key (D51; fixed at WM-2 C0; #32 and #37 re-run on the fixed provider at A3b, report 33).",
+        "The thesis defends no k as 'fitting': zero staleness (k = 1) and P*(0.5) >= 100 were not achieved together on either host (D-12 withdrawn; #52 reaches it at k = 25 on a third host; #55, same host and both modes, finds no knee).",
     ], INK, 10.5, 9)
     notes = [
         "Sources: cv2x-testbed/results/freshness_k.json (#32, full refresh) and freshness_k_probe.json (#37, probe), read through the dashboard snapshot; I3 from infrastructure_revocation.json (#46).",
@@ -628,7 +637,75 @@ def dwg_006():
     return sh.render()
 
 
-DRAWINGS = {"DWG-001": dwg_001, "DWG-002": dwg_002, "DWG-003": dwg_003, "DWG-004": dwg_004, "DWG-005": dwg_005, "DWG-006": dwg_006}
+def dwg_007():
+    sh = Sheet()
+    L5 = ROOT / "5_zkp-agent-identity/results"
+    gas = json.loads((L5 / "gas_zk.json").read_text())
+    bench = json.loads((L5 / "zkvin_bench.json").read_text())
+    att = json.loads((L5 / "attacks.json").read_text())
+    g = gas["gas"]
+    sh.text(44, 104, "PROCESS FLOW — layer 5: a vehicle proves a VIN predicate without the VIN (ZK-VIN) and a bounded agent (the Steward) operates the identity", 10.5, color=DIM)
+    # pipeline
+    st = [
+        ("1 VIN + SALT", ["owner's VIN and salt", "never leave the vault", "(steward/vault.py)"], INK),
+        ("2 COMMITMENT", [f"anchor on chain", f"{fmt(g['anchor_commitment'])} gas", "ZkVinGate (M1)"], INK),
+        ("3 PROVE", [f"Groth16, circom 2.2.2", f"prove median {bench['prove_ms']['median']:.1f} ms", f"(N={bench['prove_ms']['n']}, descriptive)", f"proof {bench['proof_calldata_bytes']} B calldata"], ACC),
+        ("4 VERIFY OFF CHAIN", [f"verify median {bench['verify_ms']['median']:.2f} ms", f"(N={bench['verify_ms']['n']})", f"{bench['public_signals']} public signals"], ACC),
+        ("5 ADMIT ON CHAIN", [f"ZkVinGate.admit", f"{fmt(g['admit_with_groth16'])} gas", "an IDTx: effect gated", "on knowledge of opening"], WARN),
+        ("6 SCHNORR PoK", [f"ecrecover-based verifier", f"{fmt(g['schnorr_prove_tx'])} gas (tx)", f"deploy {fmt(g['deploy_schnorr_verifier'])}"], INK),
+    ]
+    x0, y0, bw, bh, gap = 50, 126, 145, 104, 8
+    for i, (name, body, color) in enumerate(st):
+        x = x0 + i * (bw + gap)
+        sh.box(x, y0, bw, bh, name, body, color, 9.5, 8.6)
+        sh.balloon(x + bw - 10, y0 + bh - 10, i + 1)
+        if i < len(st) - 1:
+            sh.line(x + bw, y0 + bh / 2, x + bw + gap, y0 + bh / 2, INK, sw=1.6, arrow=True)
+    ex = bench["expectations"]
+    ex.update(gas["expectations"])
+    ey = y0 + bh + 22
+    sh.text(x0, ey, "PRE-REGISTERED EXPECTATIONS AS THEY FELL (Plan 1, written before any run):", 10, weight="bold")
+    for i, (k, v) in enumerate(list(ex.items()) + list(att["expectations"].items())):
+        sh.text(x0, ey + 16 + i * 13, f"{v:<5} {k[:150]}", 8.8, color=WARN if v == "FAIL" else INK)
+    # steward loop
+    sy = ey + 16 + 13 * (len(ex) + len(att["expectations"])) + 18
+    sh.text(x0, sy, "THE STEWARD — a language model proposes, a deterministic kernel disposes; leakage is audited against a bit budget per verifier set", 10, weight="bold")
+    loop = [("POLICY", ["owner's rules in", "plain English", "→ signed policy", "(policy.py, compiler.py)"]),
+            ("KERNEL", ["deterministic", "admit / refuse /", "coarsen a request", "(kernel.py)"]),
+            ("LEAKAGE AUDIT", [f"prior {att['prior_bits']} bits", f"budget {att['budget_bits']} bits", "per verifier set", "(leakage.py)"]),
+            ("LEARNER", ["responder trained on", "seeds 10,000–12,999", "evaluated on 1–30", "(learner.py)"]),
+            ("DELEGATION", ["the agent's own DID", "and credential from", "the owner (P3)", "(delegation.py)"])]
+    for i, (name, body) in enumerate(loop):
+        x = x0 + i * (bw + gap)
+        sh.box(x, sy + 12, bw, 92, name, body, ACC, 9.5, 8.6)
+        if i < len(loop) - 1:
+            sh.line(x + bw, sy + 58, x + bw + gap, sy + 58, INK, sw=1.4, arrow=True)
+    # attack table
+    ay = sy + 120
+    sh.text(x0, ay, "NARROWING ATTACK, seeds 1–30 (Sim): adversary bits (mean / max) and honest service (mean) per defence × variant", 10, weight="bold")
+    sh.text(x0, ay + 16, f"{'defence':<18}{'single bits':<16}{'sybil bits':<16}{'service single':<16}{'service sybil':<16}", 8.8, color=DIM)
+    res = att["results"]
+    for i, d in enumerate(["none", "static_cap", "budget_only", "steward_fixed", "steward", "steward_no_budget"]):
+        a, b = res[f"{d}|single"], res[f"{d}|sybil"]
+        sh.text(x0, ay + 30 + i * 13, f"{d:<18}{a['adversary_bits']['mean']:.2f} / {a['adversary_bits']['max']:.2f}      {b['adversary_bits']['mean']:.2f} / {b['adversary_bits']['max']:.2f}      {a['honest_service']['mean']:.3f}           {b['honest_service']['mean']:.3f}", 8.8, WARN if d == "steward" else INK)
+    sh.text(x0, ay + 30 + 6 * 13 + 4, f"Z-E6 parts: leakage bound held on all 60 runs = {att['z_e6_parts']['leakage_bound_held_on_all_60']}; seeds below 90 % service = {att['z_e6_parts']['seeds_below_90pct_service']}; minimum service = {att['z_e6_parts']['min_service']}", 8.8, color=WARN)
+    notes = [
+        "Every number is read from 5_zkp-agent-identity/results/{gas_zk,zkvin_bench,attacks}.json at build time; register rows #56 to #62 (status V) are their rows of record.",
+        "The Groth16 keys come from an INSECURE single-party setup and zkid is not constant time: research code, not a deployable system (layer 5 README).",
+        "Proving time has N = 10 and is descriptive only (latency charter, WM-2 B3); the verify time (N = 30) conforms; both are one host.",
+        "Z-E6 FAIL is reported as it fell: the Steward holds leakage under budget on every run but serves under 90 % of honest requests on 25 of 60; a global budget alone bounds leakage as well (register #61).",
+        "The insider variant (amendment A2) is post hoc and enters neither Z-E5 nor Z-E6; the learner was not retrained on it.",
+    ]
+    bom = [("ZK-VIN circuit", "5_zkp-agent-identity/circuits/zkvin.circom"), ("gate contract", "5_zkp-agent-identity/contracts/ZkVinGate.sol"),
+           ("Groth16 verifier", "5_zkp-agent-identity/contracts/Groth16Verifier.sol"), ("prove / verify", "5_zkp-agent-identity/scripts/prove_and_verify.js"),
+           ("gas producer", "5_zkp-agent-identity/scripts/measure_gas.js"), ("Schnorr verifier", "5_zkp-agent-identity/contracts/SchnorrEcrecoverVerifier.sol"),
+           ("the Steward", "5_zkp-agent-identity/steward/"), ("attack simulator", "5_zkp-agent-identity/attacks/run_attacks.py"),
+           ("pre-registration", "docs/zkp/PLAN_1_ZKP_AND_AGENT_IDENTITY.md")]
+    frame(sh, "DWG-007", "ZK-VIN GATE AND THE STEWARD — LAYER 5", 7, notes, bom, ["gas_zk.json", "attacks.json"])
+    return sh.render()
+
+
+DRAWINGS = {"DWG-001": dwg_001, "DWG-002": dwg_002, "DWG-003": dwg_003, "DWG-004": dwg_004, "DWG-005": dwg_005, "DWG-006": dwg_006, "DWG-007": dwg_007}
 
 
 def main():

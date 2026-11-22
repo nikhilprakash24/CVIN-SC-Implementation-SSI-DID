@@ -352,6 +352,15 @@ merely the results.
 - **Demo-grade VIN encryption.** The privacy *architecture* (hash-on-chain,
   plaintext off-chain) is the thesis claim; the specific cipher and key
   custody/HSM story are out of scope for the testbed.
+- **RSU-to-RSU messaging is out of scope** (author decision D2, 2026-10-24;
+  `docs/design/RSU_TO_RSU_NOTE.md`). The infrastructure experiment covers the
+  RSU-to-vehicle link and the controller-to-RSU and TMC-to-controller back-haul
+  (#44 to #48). A single RSU-to-RSU hop would use the same check those rows
+  verify: a credentialed sender, a permitted message type, expiry and replay
+  (#45). What it would add is relaying, where a vehicle must check both who
+  signed a warning and whether the forwarding RSU may forward it. That is a
+  protocol question shared with the V2V relay gap stated for crux C3, not a
+  property of the identity layer measured here, and it is left to future work.
 
 None of these threats undercut the central interpretive claim — that the
 standards occupy a real, multi-dimensional frontier and that selection is a

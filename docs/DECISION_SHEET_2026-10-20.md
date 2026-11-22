@@ -53,3 +53,9 @@ and the canonical registry.
 ## E. How to answer
 Reply with the ids and a word each ("D-1 yes", "D-14 §2.1 title", "N-23 add, first person stays"). The next pass
 records each answer in its file with the date, and the defaults it overturns are listed in the report with their cost.
+
+## F. Answers recorded
+| Id | Answer | Date | Recorded in | Default overturned? |
+|---|---|---|---|---|
+| D2 | D2-a: RSU-to-RSU messaging is out of scope, and the thesis says so | 2026-10-24 | SC-24; chapter 6 §6.6.3; crux C3 gap; `docs/PLAN_WM-2.md` D2; N-16 closed; report 38 | no (the recommendation) |
+| B-1 to B-4 | not answered; the author's "integrate with the other code sessions" is read as approval of the recommended integration steps only, as report 38 records | 2026-10-24 | `docs/planning/BRANCH_REVIEW_2026-10-24.md` | — |

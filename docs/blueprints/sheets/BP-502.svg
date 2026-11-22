@@ -1,0 +1,232 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<title>BP-502 — Latency budget — J2945/1, P*(f), freshness-k</title>
+<defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#5c78ad" stroke-width="0.35" opacity="0.55"/></pattern><pattern id="grid2" width="200" height="200" patternUnits="userSpaceOnUse"><path d="M 200 0 L 0 0 0 200" fill="none" stroke="#5c78ad" stroke-width="0.7" opacity="0.6"/></pattern></defs>
+<rect width="1600" height="1000" fill="#0b2a5b"/>
+<rect x="46" y="46" width="1508" height="908" fill="url(#grid)"/>
+<rect x="46" y="46" width="1508" height="908" fill="url(#grid2)"/>
+<rect x="28" y="28" width="1544" height="944" fill="none" stroke="#f2f6ff" stroke-width="2.6"/>
+<rect x="46" y="46" width="1508" height="908" fill="none" stroke="#f2f6ff" stroke-width="1.2"/>
+<text x="140.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">8</text>
+<text x="140.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">8</text>
+<text x="328.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">7</text>
+<text x="328.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">7</text>
+<line x1="234.5" y1="28" x2="234.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="234.5" y1="954" x2="234.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="517.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">6</text>
+<text x="517.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">6</text>
+<line x1="423.0" y1="28" x2="423.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="423.0" y1="954" x2="423.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="705.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">5</text>
+<text x="705.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">5</text>
+<line x1="611.5" y1="28" x2="611.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="611.5" y1="954" x2="611.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="894.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">4</text>
+<text x="894.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">4</text>
+<line x1="800.0" y1="28" x2="800.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="800.0" y1="954" x2="800.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1082.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">3</text>
+<text x="1082.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">3</text>
+<line x1="988.5" y1="28" x2="988.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="988.5" y1="954" x2="988.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1271.25" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">2</text>
+<text x="1271.25" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">2</text>
+<line x1="1177.0" y1="28" x2="1177.0" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1177.0" y1="954" x2="1177.0" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="1459.75" y="41" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">1</text>
+<text x="1459.75" y="967" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">1</text>
+<line x1="1365.5" y1="28" x2="1365.5" y2="46" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1365.5" y1="954" x2="1365.5" y2="972" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="125.66666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">A</text>
+<text x="1563" y="125.66666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">A</text>
+<text x="37" y="277.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">B</text>
+<text x="1563" y="277.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">B</text>
+<line x1="28" y1="197.33333333333334" x2="46" y2="197.33333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="197.33333333333334" x2="1572" y2="197.33333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="428.33333333333337" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">C</text>
+<text x="1563" y="428.33333333333337" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">C</text>
+<line x1="28" y1="348.6666666666667" x2="46" y2="348.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="348.6666666666667" x2="1572" y2="348.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="579.6666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">D</text>
+<text x="1563" y="579.6666666666667" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">D</text>
+<line x1="28" y1="500.0" x2="46" y2="500.0" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="500.0" x2="1572" y2="500.0" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="731.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">E</text>
+<text x="1563" y="731.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">E</text>
+<line x1="28" y1="651.3333333333334" x2="46" y2="651.3333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="651.3333333333334" x2="1572" y2="651.3333333333334" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="37" y="882.3333333333334" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">F</text>
+<text x="1563" y="882.3333333333334" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle">F</text>
+<line x1="28" y1="802.6666666666667" x2="46" y2="802.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<line x1="1554" y1="802.6666666666667" x2="1572" y2="802.6666666666667" stroke="#b9c9e8" stroke-width="0.8"/>
+<text x="800.0" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
+<text x="800.0" y="990" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" letter-spacing="3">UNCLASSIFIED // THESIS RESEARCH — MEASURED</text>
+<text x="28" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" letter-spacing="2">CVIN-SSI PROGRAMME</text>
+<text x="1572" y="20" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="end" letter-spacing="2">BP-502  REV C</text>
+<text x="120" y="215" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">THE BUDGET — ONE 100 ms BSM INTERVAL</text>
+<line x1="120" y1="220" x2="426.0" y2="220" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<rect x="120" y="235" width="1000" height="40" rx="0" fill="none" stroke="#f2f6ff" stroke-width="2.0" opacity="1.0"/>
+<rect x="120" y="235" width="500.0" height="40" rx="0" fill="#071d41" stroke="#ffd166" stroke-width="1.6" opacity="1.0"/>
+<text x="370.0" y="260" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#ffd166" text-anchor="middle" font-weight="normal" opacity="1.0">identity share f·100 ms  (f = 0.5 → 50 ms)</text>
+<text x="870.0" y="260" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">sensor fusion, application logic, network (out of scope)</text>
+<line x1="120" y1="291" x2="1120" y2="291" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<line x1="120" y1="285" x2="120" y2="297" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<line x1="1120" y1="285" x2="1120" y2="297" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="620.0" y="286" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">100 ms (SAE J2945/1, 10 Hz)</text>
+<text x="120" y="325" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">MEASURED POSITION — PER-NEIGHBOUR COST t AND SATURATION P*(f)</text>
+<line x1="120" y1="330" x2="638.5" y2="330" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<rect x="120" y="339" width="970" height="22" rx="0" fill="#071d41" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0"/>
+<text x="126" y="355" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">DESIGN / CONDITION</text>
+<text x="456" y="355" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">t (ms); P* uses the mean</text>
+<text x="686" y="355" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">P*(.25)</text>
+<text x="756" y="355" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">P*(.5)</text>
+<text x="826" y="355" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">P*(1)</text>
+<text x="896" y="355" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">VERDICT</text>
+<rect x="120" y="361" width="970" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="126" y="377" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">PKI verify, n=50 (#21, M0)</text>
+<text x="456" y="377" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">0.226 / 0.294</text>
+<text x="686" y="377" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">110</text>
+<text x="756" y="377" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">221</text>
+<text x="826" y="377" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">443</text>
+<text x="896" y="377" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="start" font-weight="normal" opacity="1.0">viable, dense</text>
+<rect x="120" y="383" width="970" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="126" y="399" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-1056 k = 1 uncached (#32)</text>
+<text x="456" y="399" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">mean 14.67 · med 14.284</text>
+<text x="686" y="399" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">1</text>
+<text x="756" y="399" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">3</text>
+<text x="826" y="399" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">6</text>
+<text x="896" y="399" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#ff7b7b" text-anchor="start" font-weight="normal" opacity="1.0">not viable</text>
+<rect x="120" y="405" width="970" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="126" y="421" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-1056 refresh every k = 25 (#32)</text>
+<text x="456" y="421" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">mean 0.94 · med 0.371</text>
+<text x="686" y="421" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">26</text>
+<text x="756" y="421" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">52</text>
+<text x="826" y="421" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">105</text>
+<text x="896" y="421" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">marginal</text>
+<rect x="120" y="427" width="970" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="126" y="443" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">ERC-1056 cached, k = ∞ (#32)</text>
+<text x="456" y="443" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">mean 0.357 · med 0.346</text>
+<text x="686" y="443" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">70</text>
+<text x="756" y="443" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">140</text>
+<text x="826" y="443" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">280</text>
+<text x="896" y="443" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="start" font-weight="normal" opacity="1.0">viable, dense</text>
+<rect x="120" y="449" width="970" height="22" rx="0" fill="none" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="126" y="465" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">SSI warm VC verify, V2V sim (#27)</text>
+<text x="456" y="465" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">0.142 [0.141, 0.143]</text>
+<text x="686" y="465" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">175</text>
+<text x="756" y="465" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">351</text>
+<text x="826" y="465" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">702</text>
+<text x="896" y="465" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#9be7a5" text-anchor="start" font-weight="normal" opacity="1.0">viable; ≈700× under 100 ms</text>
+<line x1="450" y1="339" x2="450" y2="471" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<line x1="680" y1="339" x2="680" y2="471" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<line x1="750" y1="339" x2="750" y2="471" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<line x1="820" y1="339" x2="820" y2="471" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<line x1="890" y1="339" x2="890" y2="471" stroke="#b9c9e8" stroke-width="0.8" opacity="1.0"/>
+<text x="120" y="508" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">t_eff(k) = 0.346 + 13.94 / k   — refresh every k messages (#32)</text>
+<line x1="120" y1="513" x2="655.5" y2="513" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<rect x="120" y="520" width="620" height="240" rx="0" fill="none" stroke="#b9c9e8" stroke-width="1.0" opacity="1.0"/>
+<polyline points="120.0,508.6631005976302 189.15178642660902,552.2025681591015 229.6029883440535,577.0617138068687 280.56547571559406,607.3577127953182 327.455359279827,633.7633495486872 367.90656119727157,654.9653743708426 441.13095143118807,688.2717398229047 510.28273785779703,712.2759817220939 568.9232388303101,726.6573026726403 579.434524284406,728.7008982907363 670.8482135733909,741.0049029553876 740.0,745.6839978693885" fill="none" stroke="#ffd166" stroke-width="2.0"/>
+<circle cx="120.0" cy="508.6631005976302" r="4" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.6"/>
+<circle cx="280.56547571559406" cy="606.9851974592546" r="4" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.6"/>
+<circle cx="441.13095143118807" cy="685.4448218618795" r="4" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.6"/>
+<circle cx="740.0" cy="748.7650627818476" r="4" fill="#f2f6ff" stroke="#f2f6ff" stroke-width="1.6"/>
+<line x1="120.0" y1="760" x2="120.0" y2="765" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="120.0" y="777" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">1</text>
+<line x1="280.56547571559406" y1="760" x2="280.56547571559406" y2="765" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="280.56547571559406" y="777" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">5</text>
+<line x1="441.13095143118807" y1="760" x2="441.13095143118807" y2="765" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="441.13095143118807" y="777" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">25</text>
+<line x1="617.1892123404593" y1="760" x2="617.1892123404593" y2="765" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="617.1892123404593" y="777" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">146</text>
+<line x1="740.0" y1="760" x2="740.0" y2="765" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="740.0" y="777" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">∞</text>
+<line x1="115" y1="726.7654768260012" x2="120" y2="726.7654768260012" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="112" y="730.7654768260012" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="end" font-weight="normal" opacity="1.0">0.5</text>
+<line x1="115" y1="681.6690388958153" x2="120" y2="681.6690388958153" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="112" y="685.6690388958153" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="end" font-weight="normal" opacity="1.0">1</text>
+<line x1="115" y1="636.5726009656295" x2="120" y2="636.5726009656295" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="112" y="640.5726009656295" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="end" font-weight="normal" opacity="1.0">2</text>
+<line x1="115" y1="576.9583526863728" x2="120" y2="576.9583526863728" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="112" y="580.9583526863728" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="end" font-weight="normal" opacity="1.0">5</text>
+<line x1="115" y1="531.8619147561869" x2="120" y2="531.8619147561869" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="112" y="535.8619147561869" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="end" font-weight="normal" opacity="1.0">10</text>
+<text x="430.0" y="792" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0">k (messages between chain refreshes, log)</text>
+<text x="80" y="640.0" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="middle" font-weight="normal" opacity="1.0" transform="rotate(-90 80 640.0)">ms</text>
+<line x1="120" y1="726.7654768260012" x2="740" y2="726.7654768260012" stroke="#9be7a5" stroke-width="1.2" opacity="1.0" stroke-dasharray="6,4"/>
+<text x="734" y="720.7654768260012" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="end" font-weight="normal" opacity="1.0">P*(0.5) = 100 ⇔ t = 0.5 ms</text>
+<line x1="568.9232388303101" y1="520" x2="568.9232388303101" y2="760" stroke="#9be7a5" stroke-width="1.0" opacity="1.0" stroke-dasharray="3,3"/>
+<text x="572.9232388303101" y="534" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#9be7a5" text-anchor="start" font-weight="normal" opacity="1.0">k ≈ 90</text>
+<text x="120" y="816" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">dots = measured medians (amortised mean at k = 5, 25); line = fit. Staleness: a revoked key is honoured for ≤ k − 1 further messages.</text>
+<text x="800" y="508" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c9e8" text-anchor="start" font-weight="bold" opacity="1.0" letter-spacing="2">VERDICT ON H3</text>
+<line x1="800" y1="513" x2="910.5" y2="513" stroke="#b9c9e8" stroke-width="0.9" opacity="1.0"/>
+<text x="800" y="534" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">Reading the chain at message time fails even sparse traffic (P* = 3).</text>
+<text x="800" y="550" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">Fully off-chain verification is within a small factor of PKI</text>
+<text x="800" y="566" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">(0.357 vs 0.226 ms): the substrate is not the bottleneck once the</text>
+<text x="800" y="582" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">chain is off the hot path.</text>
+<text x="800" y="598" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0"></text>
+<text x="800" y="614" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">The engineering question is freshness: how stale may a cached</text>
+<text x="800" y="630" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">key / revocation be? k trades P* against a bounded staleness —</text>
+<text x="800" y="646" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">at 10 Hz and k = 90 a revocation can lag ≤ 8.9 s.</text>
+<text x="800" y="662" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0"></text>
+<text x="800" y="678" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">Caveats: no radio / MAC / PHY; mobility simulated; single core;</text>
+<text x="800" y="694" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">P* is an extrapolation beyond the tested P ≤ 80 (#26).</text>
+<rect x="46" y="46" width="1060" height="116" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.4" opacity="0.95"/>
+<text x="54" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">GENERAL NOTES</text>
+<line x1="46" y1="66" x2="1106" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="54" y="80" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">1. Identity budget = f × 100 ms (f = 0.5 working assumption; results for f ∈ {0.25, 0.5, 1.0}). P*(f) = floor(f·100 ms / t) = neighbours serviceable per</text>
+<text x="54" y="94" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   interval; viable in dense traffic when P* ≫ 100.</text>
+<text x="54" y="108" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2. t_eff(k) = 0.346 + 13.94/k ms fits the k ∈ {1, 5, 25, ∞} sweep within ±7 % (#32). On a second host with t_local ≈ 0.40 ms no k reaches P*(0.5) = 100</text>
+<text x="54" y="122" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   (#37): the knee is host-dependent and is always quoted with its t_local.</text>
+<text x="54" y="136" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">3. All ERC-1056 round-trips are to a local Hardhat node (≈2.5 ms); a public network makes the uncached rows worse, not better, and leaves the off-chain rows</text>
+<text x="54" y="150" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">   unchanged.</text>
+<rect x="1134" y="46" width="420" height="92" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.6" opacity="1.0"/>
+<text x="1142" y="60" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="2">REVISIONS</text>
+<line x1="1134" y1="66" x2="1554" y2="66" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1142" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">REV</text>
+<text x="1184" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">DESCRIPTION</text>
+<text x="1464" y="79" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#ffd166" text-anchor="start" font-weight="normal" opacity="1.0">DATE</text>
+<text x="1142" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">A</text>
+<text x="1184" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">INITIAL RELEASE</text>
+<text x="1464" y="97" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-15</text>
+<text x="1142" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">B</text>
+<text x="1184" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">P1 NUMBER AUDIT (AUDIT_REV_B.md)</text>
+<text x="1464" y="115" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-22</text>
+<text x="1142" y="133" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">C</text>
+<text x="1184" y="133" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">P2 DATA-BOUND VALUES (data.py)</text>
+<text x="1464" y="133" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-31</text>
+<line x1="1178" y1="66" x2="1178" y2="138" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<line x1="1458" y1="66" x2="1458" y2="138" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+
+<rect x="1034" y="782" width="520" height="48" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="1.0" opacity="0.95"/>
+<text x="1042" y="795" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0" letter-spacing="1">REFERENCE DOCUMENTS / SOURCE OF TRUTH</text>
+<text x="1042" y="810" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">docs/LATENCY_BUDGET.md §1–§5 · cv2x-testbed/results/freshness_k.md, freshness_k_probe*.md (#32, #37)</text>
+<text x="1042" y="823" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="9" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">cv2x-testbed/results/pki_vs_erc1056.md (#21) · 4_comparison-framework/results/v2v_latency_stats (#27)</text>
+<rect x="1034" y="836" width="520" height="118" rx="0" fill="#071d41" stroke="#f2f6ff" stroke-width="2.0" opacity="1.0"/>
+<line x1="1034" y1="866" x2="1554" y2="866" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<line x1="1034" y1="914" x2="1554" y2="914" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<line x1="1334" y1="836" x2="1334" y2="866" stroke="#f2f6ff" stroke-width="1.0" opacity="1.0"/>
+<text x="1042" y="848" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">PROGRAMME</text>
+<text x="1042" y="861" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="12" fill="#f2f6ff" text-anchor="start" font-weight="bold" opacity="1.0">CVIN-SSI PROGRAMME</text>
+<text x="1342" y="848" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DRAWING NO.</text>
+<text x="1342" y="861" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="14" fill="#ffd166" text-anchor="start" font-weight="bold" opacity="1.0">BP-502</text>
+<text x="1042" y="878" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">TITLE</text>
+<text x="1042" y="894" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#f2f6ff" text-anchor="start" font-weight="bold" opacity="1.0">LATENCY BUDGET — J2945/1, P*(F), FRESHNESS-K</text>
+<text x="1042" y="908" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">Instrument panel: where each design sits against the 100 ms BSM interval and the identity…</text>
+<text x="1040" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DRAWN</text>
+<text x="1040" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">N. PRAKASH</text>
+<line x1="1144" y1="914" x2="1144" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1150" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">CHECKED</text>
+<text x="1150" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">MEASUREMENT_CONDITIONS.md</text>
+<line x1="1314" y1="914" x2="1314" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1320" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">APPROVED</text>
+<text x="1320" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">—</text>
+<line x1="1384" y1="914" x2="1384" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1390" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">DATE</text>
+<text x="1390" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">2026-10-31</text>
+<line x1="1464" y1="914" x2="1464" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1470" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">SCALE</text>
+<text x="1470" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">NTS</text>
+<line x1="1514" y1="914" x2="1514" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+<text x="1520" y="926" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="8" fill="#b9c9e8" text-anchor="start" font-weight="normal" opacity="1.0">SHEET</text>
+<text x="1520" y="944" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="10" fill="#f2f6ff" text-anchor="start" font-weight="normal" opacity="1.0">22 OF 23</text>
+<line x1="1554" y1="914" x2="1554" y2="954" stroke="#f2f6ff" stroke-width="0.8" opacity="1.0"/>
+</svg>

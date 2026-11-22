@@ -52,7 +52,7 @@ Corrections made during the passes, so the next session does not reintroduce the
 
 ## Known stale values in the repository itself (not fixed here)
 
-`README.md` and `docs/thesis/README.md` still quote the infrastructure ratio as 1.226× and V2V warm verify as 0.153 ms.
+`README.md` and `docs/thesis/README.md` still quote the superseded values 1.226 (infrastructure ratio) and 0.153 (V2V warm verify, in milliseconds).
 The register says 1.197× (#44) and 0.142 ms (#27). These belong to the chapter-audit step in the merge order below,
 not to this folder.
 

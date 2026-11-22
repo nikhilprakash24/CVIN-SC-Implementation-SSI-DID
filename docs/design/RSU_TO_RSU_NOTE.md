@@ -1,7 +1,7 @@
 # Design Note: RSU-to-RSU Messaging (WM-2 D2, Deferred Item N-16)
 
 **Author:** Nikhil Prakash (MASc, UBC ECE). **Written:** 2026-10-24 (after-action report 37, unblocked item U5).
-**Status:** a note for the author to decide on. Nothing is built, and nothing here is a result.
+**Status:** **decided 2026-10-24: D2-a, out of scope** (the author; SC-24). Nothing is built, and nothing here is a result.
 **Reads:** crux C3 in `docs/thesis/CRUX_REGISTER.md`; `docs/design/INFRASTRUCTURE_MESSAGING.md` §3 and §7;
 `cv2x-testbed/sumo/infrastructure_layer.py`; register rows #44 to #48.
 

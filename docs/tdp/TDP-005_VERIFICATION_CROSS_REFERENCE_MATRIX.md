@@ -9,7 +9,7 @@
 
 | Status | Count | Meaning |
 |---|---|---|
-| VERIFIED | 35 | every evidence row V; files and CI present; threshold met; nothing pending |
+| VERIFIED | 43 | every evidence row V; files and CI present; threshold met; nothing pending |
 | PARTIAL | 1 | some evidence V; at least one row non-V, a threshold unmet, an item missing, or a named trunk item still open |
 | OPEN | 0 | no V evidence |
 
@@ -22,6 +22,7 @@ Register at generation: E 7, S 10, V 45 (62 rows).
 | SYS-01 | Identical operation set across substrates | Inspection | #25 (V), #34 (V) | — | 2/2 files | **VERIFIED** | — |
 | SYS-02 | One evidence register for every number | Inspection | — | — | 3/3 files; CI step found | **VERIFIED** | — |
 | SYS-03 | Declared conditions per measurement | Inspection | #25 (V), #27 (V), #34 (V) | — | 1/1 files | **VERIFIED** | — |
+| SYS-04 | Basic digital-ID set coverage | Analysis | #53 (V), #54 (V) | — | — | **VERIFIED** | — |
 | PRF-01 | Nine-standard gas table, deterministic | Test | #25 (V) | 30/30 runs byte-identical: actual `True` → met | 2/2 files; CI step found | **VERIFIED** | — |
 | PRF-02 | Create-identity ratio stated under its definition | Analysis | #6 (V), #25 (V) | — | — | **VERIFIED** | — |
 | PRF-03 | Lifecycle gas over seventeen events | Test | #30 (V), #35 (V) | — | 2/2 files | **VERIFIED** | — |
@@ -42,7 +43,7 @@ Register at generation: E 7, S 10, V 45 (62 rows).
 | STD-04 | Database parity for lifecycle writes | Test | #33 (V) | pre-registered verdict as it fell: **FAIL** | — | **VERIFIED** | — |
 | RTV-01 | Warm credential verification inside the identity budget share | Test | #27 (V) | SSI warm verify median <= 0.5 ms: actual `0.14225` → met | 1/1 files | **VERIFIED** | — |
 | RTV-02 | Uncached chain read at message time reported | Test | #21 (V) | — | — | **VERIFIED** | — |
-| RTV-03 | Freshness-k curve with both refresh modes | Test | #32 (V), #37 (V), #52 (V) | — | 1/1 files | **VERIFIED** | — |
+| RTV-03 | Freshness-k curve with both refresh modes | Test | #32 (V), #37 (V), #52 (V), #55 (V) | — | 1/1 files | **VERIFIED** | — |
 | RTV-04 | Signed message size | Test | #23 (V) | — | — | **VERIFIED** | — |
 | INF-01 | SPaT verification cost against BSM (I1) | Test | #44 (V) | pre-registered verdict as it fell: **PASS** | — | **VERIFIED** | — |
 | INF-02 | Registered attacks rejected for their reasons (I2) | Test | #45 (V) | 30/30 runs, all 15 checks as expected: actual `30` → met | 1/1 files | **VERIFIED** | — |
@@ -55,6 +56,13 @@ Register at generation: E 7, S 10, V 45 (62 rows).
 | EVD-04 | Generated documents regenerated and checked | Inspection | — | — | 4/4 files; CI step found | **VERIFIED** | — |
 | EVD-05 | Every guard shown to fire | Demonstration | — | — | 3/3 files; CI step found | **VERIFIED** | — |
 | EVD-06 | Full suite with no skips | Test | — | — | 2/2 files; CI step found | **VERIFIED** | — |
+| L5-01 | ZK-VIN circuit size | Inspection | #56 (V) | — | 1/1 files | **VERIFIED** | — |
+| L5-02 | ZK-VIN proving and verification time (Z-E1, Z-E2, Z-E4) | Test | #57 (V) | pre-registered verdict as it fell: **Z-E1 verify median < 100 ms: PASS; Z-E2 prove median < 10 s: PASS; Z-E4 proof calldata < 1024 bytes: PASS** | — | **VERIFIED** | — |
+| L5-03 | On-chain Groth16 verification in the gate (Z-E3) | Test | #58 (V) | pre-registered verdict as it fell: **Z-E3 admit (on-chain Groth16 verification in the gate) < 350,000 gas: PASS** | — | **VERIFIED** | — |
+| L5-04 | Sigma-protocol primitive counts | Test | #59 (V) | — | — | **VERIFIED** | — |
+| L5-05 | Unsalted VIN hash reversal (Z-E7) | Test | #60 (V) | — | — | **VERIFIED** | — |
+| L5-06 | Predicate-narrowing attack and the bounded custodian (Z-E5, Z-E6) | Test | #61 (V) | pre-registered verdict as it fell: **Z-E5 undefended single-verifier attack recovers the exact value in <= 5 queries on every seed: PASS; Z-E6 Steward keeps adversary leakage <= 3.0 bits AND serves >= 90% of honest requests, on every seed of both variants: FAIL** | — | **VERIFIED** | — |
+| L5-07 | Manual-burden inventory | Analysis | #62 (V) | — | — | **VERIFIED** | — |
 
 ## 2. Reverse index: register row → requirements
 
@@ -87,8 +95,18 @@ Register at generation: E 7, S 10, V 45 (62 rows).
 | #50 | V | PRF-07 |
 | #51 | V | PRF-05 |
 | #52 | V | RTV-03 |
+| #53 | V | SYS-04 |
+| #54 | V | SYS-04 |
+| #55 | V | RTV-03 |
+| #56 | V | L5-01 |
+| #57 | V | L5-02 |
+| #58 | V | L5-03 |
+| #59 | V | L5-04 |
+| #60 | V | L5-05 |
+| #61 | V | L5-06 |
+| #62 | V | L5-07 |
 
-V rows cited by no requirement: #1, #2, #3, #22, #29, #39, #42, #43, #53, #54, #55, #56, #57, #58, #59, #60, #61, #62. A V row no requirement cites is evidence without a stated purpose; TDP-PLAN phase 3 decides whether to add a requirement or leave the row as supporting data.
+V rows cited by no requirement: #1, #2, #3, #22, #29, #39, #42, #43. A V row no requirement cites is evidence without a stated purpose; TDP-PLAN phase 3 decides whether to add a requirement or leave the row as supporting data.
 
 ## 3. Requirement-to-test trace (phase 8)
 
@@ -99,6 +117,7 @@ A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path 
 | SYS-01 | Inspection | `TC-cvin-combined-C1-F`, `TC-erc-1056-uport-C1-F`, `TC-erc-1056-vehicle-C1-F`, `TC-erc-1155-C1-F`, `TC-erc-4337-C1-F`, `TC-erc-721-C1-F`, `TC-erc-725-C1-F`, `TC-erc-725xy-C1-F`, `TC-erc-735-C1-F`, `TC-lsp8-C1-F`, `TC-mobi-vid-C1-F`, `sandbox/grand/smoke.js` |
 | SYS-02 | Inspection | `docs/testing/check_docs_numbers.py` |
 | SYS-03 | Inspection | `docs/MEASUREMENT_CONDITIONS.md` |
+| SYS-04 | Analysis | `1_blockchain-identity/analysis/analysis.js`, `docs/BASIC_ID_SET_EXTENSION.md` |
 | PRF-01 | Test | `1_blockchain-identity/scripts/benchmark_gas.js`, `4_comparison-framework/performance-metrics/run_gas_stats.py` |
 | PRF-02 | Analysis | `1_blockchain-identity/scripts/benchmark_gas.js` |
 | PRF-03 | Test | `1_blockchain-identity/benchmarks/run.js` |
@@ -132,6 +151,13 @@ A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path 
 | EVD-04 | Inspection | `docs/tdp/probe_tdp_checks.sh` |
 | EVD-05 | Demonstration | `docs/tdp/probe_tdp_checks.sh` |
 | EVD-06 | Test | `sandbox/grand/run.py`, `docs/testing/check_test_counts.py` |
+| L5-01 | Inspection | `5_zkp-agent-identity/circuits/build_circuit.sh` |
+| L5-02 | Test | `5_zkp-agent-identity/scripts/prove_and_verify.js`, `5_zkp-agent-identity/bench/run_all.sh` |
+| L5-03 | Test | `5_zkp-agent-identity/scripts/measure_gas.js`, `5_zkp-agent-identity/test-contracts/zkvin_gate.test.js` |
+| L5-04 | Test | `5_zkp-agent-identity/bench/sigma_bench.py`, `5_zkp-agent-identity/tests/test_zkid.py` |
+| L5-05 | Test | `5_zkp-agent-identity/bench/vin_bruteforce.py` |
+| L5-06 | Test | `5_zkp-agent-identity/attacks/run_attacks.py`, `5_zkp-agent-identity/tests/test_attacks.py`, `5_zkp-agent-identity/tests/test_steward.py` |
+| L5-07 | Analysis | `5_zkp-agent-identity/bench/manual_burden.py` |
 
 ## 4. Limits carried
 
@@ -140,6 +166,7 @@ A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path 
 | SYS-01 | Minimal representative implementations of ERC-4337 and LSP8 (chapter 4 caveats); "excl. n/a" totals are not comparable with full totals (#35). |
 | SYS-02 | The checker scans tracked Markdown only; HTML and SVG outputs are held by their generators' --check instead. |
 | SYS-03 | No M2 (public testnet) measurement exists on the trunk (N-11). |
+| SYS-04 | The F-numbering inside the sets is pending the canon archive ([B1]); strict native admission (ERC-4337 only) is a stricter question than the canon's pattern-realised admission (#54). |
 | PRF-01 | M1 only (local Hardhat, cancun); operation definitions differ per standard and are declared per row. |
 | PRF-02 | H1's update and lifetime halves are not supported (#35); the split verdict is the one to report. |
 | PRF-03 | Run of record 2026-10-24T12-29-26Z_7a59058 (A3b re-run on the one trunk); the harness flag that marks measured-code dirtiness is live since WM-2 A6 (2026-10-23; D33, N-19). |
@@ -173,3 +200,10 @@ A `TC-` entry is a test-register id (`docs/testing/test_register.yaml`); a path 
 | EVD-04 | The contribution record depends on git history and is regenerated at each pass's close, not checked in CI. |
 | EVD-05 | A probe proves the guard can trip, not that it trips on every fault class. |
 | EVD-06 | Three MOBI demo steps hash block.timestamp and are declared timestamp-dependent (B1). |
+| L5-01 | A property of the committed circuit, not a timing; the Groth16 keys come from an insecure single-party setup (research code). |
+| L5-02 | Host-dependent; the proving time has N = 10 and is descriptive only under the latency charter; the sizes are unaffected. |
+| L5-03 | M1 only; view figures are gas estimates, not receipts. |
+| L5-04 | Pure-Python reference code, not constant time and not an optimised library; counts exact, timings not comparable across hosts. |
+| L5-05 | The extrapolations beyond the measured space (VDS unknown; GPU rate) are estimates (E), cited not measured. |
+| L5-06 | A simulation (Sim) with scripted agents, not people or deployed adversaries; Z-E6 FAIL on service (25 of 60 runs below 90 percent, minimum 70.0); a global budget alone bounds leakage as well as the Steward does; the insider variant is post hoc. |
+| L5-07 | Counts V; times and error probabilities E (cited human rates, not measured on people). |

@@ -65,3 +65,6 @@ rows they quote; the generated ones will regenerate.
 
 - 2026-10-15, Rev A: initial issue, after-action report 20.
 - 2026-10-21, Rev A unchanged; TDP-010 added by runbook phase 10 (after-action report 25). The matrix read 30 VERIFIED, 6 PARTIAL after passes 21 and 22 cleared C1 and D54.
+- 2026-10-24, review (phase 11, report 37): 101 claims in TDP-001, 003, 007, 008, 009; 45 OK, 6 mismatch, 2 overstated, 37 stale, 11 missing, most from the A3b re-runs the documents predated.
+- 2026-10-24, Rev B of TDP-001, 003, 007, 008, 009 (phase 12, report 38): the review's rows applied; layer 5 added.
+- 2026-10-31, Rev B completed (report 39): TDP-000, TDP-004, TDP-010 and the drawings; SYS-04 and the L5 group (#53 to #62) in the specification, 44 requirements; DWG-007; verdicts read from committed result files outside the snapshot. The matrix read 43 VERIFIED, 1 PARTIAL (SEC-06, D64 open).

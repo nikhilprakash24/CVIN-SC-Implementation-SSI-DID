@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "CVIN Thrust 5 \u2014 V2X security-comparison matrix (executed attack suite)",
-    "generated": "2026-10-22T22:58:44Z",
+    "generated": "2026-10-24T13:01:36Z",
     "categories": [
       "impersonation",
       "replay",
@@ -32,8 +32,8 @@
       "on-chain": {
         "layer": "on-chain",
         "solcVersion": "0.8.24",
-        "commit": "2051159",
-        "commitFull": "205115991a560bd6d1b3dfb117d71d3374c00edf",
+        "commit": "963439a",
+        "commitFull": "963439a23b916a7ab4091e736c7c14f30854db9a",
         "dirty": false,
         "dirtyAnyFile": true,
         "scope": "1_blockchain-identity/scripts/security_scenarios.js",
@@ -44,7 +44,7 @@
         "ozVersion": "5.0.2",
         "network": "hardhat-local",
         "chainId": 31337,
-        "date": "2026-10-22T22:58:43.977Z",
+        "date": "2026-10-24T13:01:36.928Z",
         "categories": [
           "impersonation",
           "replay",
@@ -207,9 +207,9 @@
       "sybil": {
         "outcome": "PARTIAL",
         "mechanism": "permissionless per-identity contract deployment; Sybil barrier is deployment gas only (the most expensive to spam; exact createIdentity gas: matrix cost_proxy_gas)",
-        "evidence": "attacker deployed 3/3 claim-holder identities unchallenged. Cost-gated only; claims themselves still need a trusted issuer signature. createIdentity gas (Sybil-cost proxy) = 1,757,881.",
+        "evidence": "attacker deployed 3/3 claim-holder identities unchallenged. Cost-gated only; claims themselves still need a trusted issuer signature. createIdentity gas (Sybil-cost proxy) = 1,757,893.",
         "method": "executed",
-        "cost_proxy_gas": 1757881
+        "cost_proxy_gas": 1757893
       },
       "recovery": {
         "outcome": "VULNERABLE",
@@ -425,7 +425,7 @@
       "impersonation": {
         "outcome": "DEFENDED",
         "mechanism": "issuer signature recovered via secp256k1 and matched against the address embedded in the issuer DID (or a trusted-issuer registry)",
-        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0xdb950459e7d358dd5ed38069836640dadffc4e16 does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0x5408c2562228db7bbab7fc9035094785eed46a5e does not match issuer did:ethr:0x1:0x1e8323F1e49861f26B7a124b5508399dF6B29CE5']).",
+        "evidence": "baseline genuine VC verified=True; forged-issuer VC rejected (errors: ['[signature] recovered signer 0x7cc5315c126cb80012a9c52d749d7b05b0e2088e does not match issuer did:ethr:0x1:0xdddddddddddddddddddddddddddddddddddddddd']); tampered-claim VC rejected (errors: ['[signature] recovered signer 0xb7eb60431f6f6b6614ab275ceed173a7cf61b6d5 does not match issuer did:ethr:0x1:0x1cBCF10857a699d8748f84cB60561BAf2eB398e0']).",
         "method": "executed"
       },
       "replay": {
@@ -437,21 +437,21 @@
       "identity_theft": {
         "outcome": "DEFENDED",
         "mechanism": "holder binding: the VP must be signed by the key controlling the holder DID (VP proof), and the VP holder must be the credential subject (review 02 S-1); a stolen credential is unusable without the subject's key, under the subject's DID or the thief's own",
-        "evidence": "(a) thief claiming the victim's holder DID but signing with its own key: presentation rejected (errors: ['[vp_signature] presentation signed by 0xaae12e804ccaeaee422e755b6b07ed311f6257ab, not holder did:ethr:0x1:0x087c6f5d20693F01656a40441226fDe5D6117930']). (b) thief presenting the victim's credential under its OWN did:ethr, VP signed by the thief (a valid VP proof): presentation rejected (errors: [\"[holder_binding] presentation holder did:ethr:0x1:0xb6bfF2912650Cb2a0382F37C3F12D0567F140674 is not the credential subject ['did:ethr:0x1:0x087c6f5d20693F01656a40441226fDe5D6117930']\"]). A copied/stolen credential cannot be replayed by a third party.",
+        "evidence": "(a) thief claiming the victim's holder DID but signing with its own key: presentation rejected (errors: ['[vp_signature] presentation signed by 0x43bb354cca8a08b2b868f26be6bdadeebfebd218, not holder did:ethr:0x1:0x1d60713b18e035ce78Ef0dbDe7a25C081D2128CB']). (b) thief presenting the victim's credential under its OWN did:ethr, VP signed by the thief (a valid VP proof): presentation rejected (errors: [\"[holder_binding] presentation holder did:ethr:0x1:0xF129BD44C2B0fD0BdB470681F994e26890AB47Fe is not the credential subject ['did:ethr:0x1:0x1d60713b18e035ce78Ef0dbDe7a25C081D2128CB']\"]). A copied/stolen credential cannot be replayed by a third party.",
         "method": "executed",
         "variants": {
           "same_did_wrong_key": {
             "rejected": true,
             "errors": [
-              "[vp_signature] presentation signed by 0xaae12e804ccaeaee422e755b6b07ed311f6257ab, not holder did:ethr:0x1:0x087c6f5d20693F01656a40441226fDe5D6117930"
+              "[vp_signature] presentation signed by 0x43bb354cca8a08b2b868f26be6bdadeebfebd218, not holder did:ethr:0x1:0x1d60713b18e035ce78Ef0dbDe7a25C081D2128CB"
             ]
           },
           "own_did": {
             "rejected": true,
-            "thief_did": "did:ethr:0x1:0xb6bfF2912650Cb2a0382F37C3F12D0567F140674",
+            "thief_did": "did:ethr:0x1:0xF129BD44C2B0fD0BdB470681F994e26890AB47Fe",
             "vp_proof_valid": true,
             "errors": [
-              "[holder_binding] presentation holder did:ethr:0x1:0xb6bfF2912650Cb2a0382F37C3F12D0567F140674 is not the credential subject ['did:ethr:0x1:0x087c6f5d20693F01656a40441226fDe5D6117930']"
+              "[holder_binding] presentation holder did:ethr:0x1:0xF129BD44C2B0fD0BdB470681F994e26890AB47Fe is not the credential subject ['did:ethr:0x1:0x1d60713b18e035ce78Ef0dbDe7a25C081D2128CB']"
             ]
           }
         }
@@ -477,12 +477,12 @@
     }
   },
   "run": {
-    "commit": "205115991a560bd6d1b3dfb117d71d3374c00edf",
+    "commit": "963439a23b916a7ab4091e736c7c14f30854db9a",
     "code_dirty": false,
     "tree_dirty": true,
     "scope": "4_comparison-framework/security-analysis/attack_scenarios.py",
     "scope_files": 15,
     "scope_sha": "e2a50582960c",
-    "python_version": "3.13.16"
+    "python_version": "3.11.17"
   }
 }
