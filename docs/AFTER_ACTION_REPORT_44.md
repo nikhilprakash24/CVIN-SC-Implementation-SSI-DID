@@ -33,3 +33,9 @@
 ## 3. Closing
 All four branch decisions are answered and applied. No branch is waiting on the author: the simulation visuals wait
 for WM-2 D1, the TSR remainder and the X1 build wait for WM-2's close and D-13.
+- **CI at `6e480ed`: the contracts job red, for a cause outside this pass.** The GitHub runner image's system Python is
+  now 3.14; the contracts job was the only one with no `setup-python` step, so `pip install -r ci/requirements-ci.txt`
+  ran there, found no 3.14 wheel for the pinned `coincurve==21.0.0`, and failed building it from source
+  ("Expected exactly one LICENSE file in cffi distribution"). The job now pins Python 3.11, as every other job does (a
+  scan of all 12 jobs found no other Python use without a pinned interpreter). DWG-005, which draws the CI steps, is
+  regenerated.
