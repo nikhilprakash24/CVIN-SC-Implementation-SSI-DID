@@ -39,3 +39,6 @@ for WM-2 D1, the TSR remainder and the X1 build wait for WM-2's close and D-13.
   ("Expected exactly one LICENSE file in cffi distribution"). The job now pins Python 3.11, as every other job does (a
   scan of all 12 jobs found no other Python use without a pinned interpreter). DWG-005, which draws the CI steps, is
   regenerated.
+  The first push of this fix (`7557dc8`) had a colon in the step name, which made the workflow invalid YAML; it was
+  pushed because the commit was not chained to the guard. Fixed in the next commit, with the workflow parsed before
+  the commit.

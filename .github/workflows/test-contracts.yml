@@ -25,7 +25,7 @@ jobs:
       with:
         fetch-depth: 0   # check_stamps.py verifies the stamp-only commits from history (WM-2 A2)
 
-    - name: Setup Python (pinned: the runner's system Python moved to 3.14, for which the pinned coincurve has no wheel; report 44)
+    - name: Setup Python 3.11 (the runner's system Python is 3.14, which the pinned coincurve lacks a wheel for; report 44)
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
