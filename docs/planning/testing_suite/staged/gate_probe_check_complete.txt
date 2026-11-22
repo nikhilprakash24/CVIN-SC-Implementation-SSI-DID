@@ -1,0 +1,9 @@
+== probe 1: a new test file in an unregistered directory
+INCOMPLETE: not registered and not excluded: newsuite/test_probe.py
+exit 1
+== probe 2: an it( the title parser cannot read
+INCOMPLETE: 1_blockchain-identity/test/L2-identity-system/per-option/LSP8/CVINVehicleLSP8.test.js: 20 it( tokens, 19 registered
+exit 1
+== restored
+every tracked test file is registered, results-derived or excluded with a reason
+exit 0

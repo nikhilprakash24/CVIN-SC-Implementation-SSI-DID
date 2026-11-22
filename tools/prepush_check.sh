@@ -30,6 +30,8 @@ git diff --quiet -- docs/FEATURE_ASYMMETRY_MATRIX.md || fail "docs/FEATURE_ASYMM
 CHECKS=(
   "docs/figures/make_dashboard_data.py --check"
   "docs/testing/build_register.py --check"
+  "docs/testing/build_register.py --check-complete"
+  "docs/testing/check_charters.py"
   "docs/testing/check_docs_numbers.py"
   "docs/testing/check_claims.py --check"
   "docs/presentation/make_presentation.py --check"

@@ -1,0 +1,20 @@
+== MOBI contract copies byte-identical
+== feature-asymmetry matrix up to date
+== docs/figures/make_dashboard_data.py --check
+== docs/testing/build_register.py --check
+== docs/testing/check_docs_numbers.py
+== docs/testing/check_claims.py --check
+== docs/presentation/make_presentation.py --check
+== docs/testing/check_stamps.py --check-coverage
+== docs/phase2/build_phase2.py --check
+== docs/phase2/focus/make_focus_figures.py --check
+== docs/phase2/focus/F3_interaction_modes/classify_modes.py --check
+== docs/testing/gas_charter.py --check
+== docs/testing/latency_charter.py --check
+== docs/phase2/briefs/i05_model.py --check
+== docs/figures/make_result_cards.py --check
+== docs/tdp/make_vcrm.py --check
+== docs/tdp/make_fmeca.py --check
+== docs/tdp/make_blueprints.py --check
+== testbed artifact check skipped (link cv2x-testbed/node_modules -> ../1_blockchain-identity/node_modules, or set PREPUSH_TESTBED=1, to run it)
+PREPUSH OK

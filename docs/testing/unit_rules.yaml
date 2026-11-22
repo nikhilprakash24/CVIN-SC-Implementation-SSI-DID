@@ -1,0 +1,184 @@
+# Mapping rules for test bodies that record no structured result (TSR Phase 3, replan 2026-10-22 §3; WM-2 A7).
+# Read by docs/testing/build_register.py. Every entry it produces records which rule fired (`mapped_by`).
+# Order matters: first match wins. Correct a wrong mapping here, never in the generated register.
+about: >-
+  Subject from path; class and op from the test title and its describe chain. A test title is never edited
+  (replan R-2). Identifier TC-<sut>-<op>-<cls>-<hash8>, hash8 = sha1("path::describe::title")[:8] (replan R-3).
+
+sources:                    # bodies the trunk's register does not yet cover (A7 covers 2_w3c-ssi-layer and sandbox/py-suites)
+  mocha:
+    - 1_blockchain-identity/test/L2-identity-system/per-option
+    - 1_blockchain-identity/test/benchmarks
+    - phase2/idtx/test
+    - 5_zkp-agent-identity/test-contracts
+  pytest:
+    - cv2x-testbed/tests
+    - phase2/backends
+    - tools/run_identity
+    - 5_zkp-agent-identity/tests
+
+subject_by_path:            # substring of the path -> subject (sandbox slug for chain options)
+  - [5_zkp-agent-identity/tests/test_steward, zkp-agent]
+  - [5_zkp-agent-identity/tests/test_figures_check, pipeline]
+  - [5_zkp-agent-identity/, zkp-vin]
+  - [phase2/idtx/, phase2-idtx]
+  - [phase2/backends/, phase2-backends]
+  - [tools/run_identity/, pipeline]
+  - [per-option/CVINCombined/, cvin-combined]
+  - [per-option/ERC1056/CVINVehicleDIDRegistry, erc-1056-vehicle]
+  - [per-option/ERC1056/ERC1056Registry, mobi-vid]          # the MOBI layer's own ERC-1056 registry
+  - [per-option/ERC1056/, erc-1056-uport]                   # EthereumDIDRegistry, PseudonymPool
+  - [per-option/ERC1155/, erc-1155]
+  - [per-option/ERC4337/, erc-4337]
+  - [per-option/ERC721/, erc-721]
+  - [per-option/ERC725xy/, erc-725xy]
+  - [per-option/ERC735/, erc-735]
+  - [per-option/LSP8/, lsp8]
+  - [per-option/MOBIVID/, mobi-vid]
+  - [test/benchmarks/adapters.conformance, harness-adapters]
+  - [test/benchmarks/, pipeline]
+  - [did-resolution/tests/, did-resolver]
+  - [verifiable-credentials/tests/test_t3_testbed, v2v-path]
+  - [verifiable-credentials/tests/test_s3_key_binding, did-resolver]
+  - [verifiable-credentials/tests/, vc-layer]
+  - [mobi-vid/tests/, mobi-vid]
+  - [cv2x-testbed/tests/test_pki_certificate_chain, baseline-pki]
+  - [cv2x-testbed/tests/test_lifecycle_parity, baseline-centralized]
+  - [cv2x-testbed/tests/test_mobi_vid_verify, mobi-vid]
+  - [cv2x-testbed/tests/test_attack_scenarios_identity_theft, vc-layer]
+  - [cv2x-testbed/tests/test_t9_freshness, v2v-path]
+  - [cv2x-testbed/tests/test_sumo_replay_cache, v2v-path]
+  - [cv2x-testbed/tests/test_t12_comparison_framework, pipeline]
+  - [cv2x-testbed/tests/test_experiment_harness, pipeline]
+  - [cv2x-testbed/tests/, cv2x-erc1056]                    # erc1056 provider: key resolution, freshness, D51
+  - [L3-ssi/test_external_did_conformance, did-resolver]
+  - [L3-ssi/test_internal_compliance_checker, vc-layer]
+  - [L3-ssi/test_infrastructure, infrastructure]
+  - [L3-ssi/test_mobi_provider, mobi-vid]
+  - [L4-exemplar-interactions/test_lifecycle_use_cases, use-cases]
+  - [L4-exemplar-interactions/test_v2v_harness, v2v-path]
+  - [L4-exemplar-interactions/, pipeline]
+
+class_by_path:              # whole-file class, checked before the title rules
+  - [test_figures_check, D]
+  - [tools/run_identity/test_promote, D]
+  - [regression.test.js, R]          # placeholder: resolved below to N or A by title; R kept only if neither fires
+  - [adapters.conformance, W]
+  - [test_external_did_conformance, W]
+  - [test_internal_compliance_checker, W]
+  - [test_did_resolver_metadata_shape, W]
+  - [test_lifecycle_use_cases, I]
+  - [test_lifecycle_parity, I]
+  - [test_experiment_records_are_well_formed, D]
+  - [test_experiment_harness, D]
+  - [test_t12_comparison_framework, D]
+  - [PseudonymPool, G]
+
+class_rules:                # [regex (case-insensitive), class]
+  - ["attack|attacker|hijack|replay|forg|tamper|theft|thief|steal|stolen|malleab|poison|bypass|impersonat|spoof|front-?run|sybil", A]
+  - ["\\bgas\\b|gasUsed|pinned", G]
+  - ["latenc|throughput|p95|percentile|bootstrap|mann|timing", L]
+  - ["should not|not allow|cannot|can't|reject|revert|invalid|fail|disallow|refuse|wrong|missing|expired|duplicate|non-owner|unauthori[sz]ed|unknown|malformed|forbid|only (the )?owner|onlyowner|must not", N]
+  - ["conform|DID Core|contentType|metadata shape|representation|ABNF|CAIP|datetime|schema|\\bspec\\b|specification", W]
+  - ["determinis|byte-identical|\\bseed|artifact|provenance|snapshot|\\bstamp", D]
+  - ["scale|scaling|O\\(1\\)|grows|history length|slope", S]
+
+op_rules:                   # [regex (case-insensitive), op or ops separated by ';']
+  - ["royalt|toll|payment|ERC-2981", misc]
+  - ["hybrid's core operations|core operations", "C1;U3;V3"]
+  - ["owner change|unauthori[sz]ed owner", U1]
+  - ["default owner", R1]
+  - ["\\bnonce\\b", U5]
+  - ["duplicate VIN|VIN length|VIN registration", C1]
+  - ["authori[sz]e\\b|authori[sz]ation", V1]
+  - ["did:ethr|zero-pads|40 hex", R3]
+  - ["status registry", V6]
+  - ["impostor|unknown vehicle", K4]
+  - ["chain id|two chains|matching chain|malformed chain|chain configured", K8]
+  - ["limitation is documented", misc]
+  - ["holder binding|holder control|identity theft|thief", K5]
+  - ["rpc snapshot|benchmark uses|untimed|normalCdf|mann|percentile|bootstrap", pipeline-stats]
+  - ["setAttributeSigned|meta-?tx|UserOp|handleOp|relay", U5]
+  - ["selective disclosure|disclos|salted|SD-JWT", K3]
+  - ["(?<!re)presentation|\\bVP\\b|challenge|domain", K5]
+  - ["schema", K7]
+  - ["contentType|resolveRepresentation|representation", K9]
+  - ["invalidDid|methodNotSupported|notFound|error code|unknown method|ABNF|CAIP", K10]
+  - ["vin.?cipher|AES|GCM|HKDF|encrypt|decrypt|VIN privacy|vin normalis|normaliz", K11]
+  - ["freshness|refresh|probe|staleness|chain.?time|clock", K12]
+  - ["pseudonym", M7]
+  - ["CRL|check_revocation|revocation status|isRevoked|is_revoked", M5]
+  - ["BSM|packet|stale|future|timestamp|ages out|replay cache|message", M3]
+  - ["certificate chain|trust_ca|trust anchor|CA signature|enrol|X\\.?509", M1]
+  - ["recover(y)? (the )?(owner|controller|account|identity)|guardian|social recovery|recoverOwner", U6]
+  - ["revokeDelegate|revoke.{0,25}delegate|removeKey|remove key", D1]
+  - ["revokeAttribute|revoke attribute|removeClaim|remove.{0,4}claim|revokeClaimContent", D2]
+  - ["deactivat|burn|end-of-life|end of life|decommission|revokeVehicle|renounce", D3]
+  - ["revoke_credential|revokeCredential|revoke credential|revocation|revoked|revoke", V5]
+  - ["hasCredential|claimExists|hasValidClaim|status check|statusCheck|status list|credential status", V6]
+  - ["attest", V3]
+  - ["issuer key|grantRole|ISSUER_ROLE|authori[sz]e (issuer|manufacturer)|trusted issuer|allow-list|allowlist|role", V1]
+  - ["addClaim|add claim|issueCredential|issue credential|anchor|attest|claim", V3]
+  - ["verify_credential|verify credential|verify|verification|verified", K4]
+  - ["issue|issuance|sign_document|proof", K1]
+  - ["validDelegate|valid delegate|isDelegate", R4]
+  - ["addDelegate|add delegate|delegate", U2]
+  - ["changeOwner|change owner|rotate|rotation|transferOwnership|new owner", U1]
+  - ["transferFrom|safeTransferFrom|transfer|resale|sale|soulbound|rebind", U4]
+  - ["service endpoint|serviceEndpoint|service record|setAttribute|attribute|setData|data key|tokenURI|uri", U3]
+  - ["getDIDFromVIN|VIN to DID|map VIN|by VIN|from VIN|VIN lookup|vinHash", R2]
+  - ["resolve|DID document|resolution|getKeys|history|query|queries|enumerat|aggregat", R3]
+  - ["identityOwner|ownerOf|correct owner|tokenOwnerOf|vehicleOwnerOf|owner of|balance", R1]
+  - ["with all attributes|with attributes|birth|setVehicleAttributes|setDataBatch", C2]
+  - ["create|mint|register|deploy|constructor|new identity", C1]
+  - ["lifecycle|event", L02]
+  - ["use case|use_case", L01]
+  - ["toll|royalt|interface|name and symbol|changed block|execute|payment", misc]
+
+file_op_defaults:           # applied when no op rule fires
+  - [test_figures_check, pipeline-stats]
+  - [test_steward, misc]
+  - [5_zkp-agent-identity, K11]
+  - [test_sumo_replay_cache, M3]
+  - [test_vin_cipher, K11]
+  - [test_t3_testbed_trusted_issuers, V1]
+  - [test_lifecycle_parity, L02]
+  - [tools/run_identity, pipeline-stats]
+  - [phase2/backends, L02]
+  - [phase2/idtx, misc]
+  - [adapters.conformance, C1]
+  - [stats.test, pipeline-stats]
+  - [test_lifecycle_use_cases, L01]
+  - [test_internal_compliance_checker, K4]
+  - [test_external_did_conformance, K8]
+  - [test_did_resolver, K8]
+  - [test_infrastructure, M3]
+  - [test_experiment_records, pipeline-stats]
+  - [test_v2v_harness, M3]
+  - [test_pki_certificate_chain, M1]
+  - [test_t9_freshness, M3]
+  - [test_freshness_k, K12]
+  - [test_d51, K12]
+  - [test_erc1056_key_resolution, R3]
+  - [test_mobi_vid, K4]
+  - [test_vc_layer, K1]
+  - [test_review02_negative, K4]
+  - [test_proof_options, K1]
+  - [test_aggregator, R3]
+
+# Test files registered from their structured results instead of their source (build() above unit_entries):
+results_derived:
+  - [2_w3c-ssi-layer/, "per-test record sandbox/grand/report/py_layers.json (WM-2 A7)"]
+  - [sandbox/py-suites/, "per-test record sandbox/grand/report/py_layers.json (WM-2 A7)"]
+  - [1_blockchain-identity/test/L1-identity-mechanisms/, "L1 cells from sandbox/grand/report/L1-asymmetry.json"]
+  - [1_blockchain-identity/test/L2-identity-system/security/, "attack cells from security-analysis/results/attack_results.json"]
+
+# Test files deliberately not registered, each with its reason. --check-complete fails on any tracked test file
+# that is in none of: sources, results_derived, excluded.
+excluded:
+  - [1_blockchain-identity/_research-copies/, "archived copies of the pre-sandbox ERC-721 tests; not run by any suite or CI job"]
+  - [cv2x-testbed/scripts/test_use_cases.py, "script-style; its 12 use cases run as tests in sandbox/py-suites/L4-exemplar-interactions/test_lifecycle_use_cases.py, which is registered"]
+  - [cv2x-testbed/scripts/test_vin_encryption.py, "pytest file outside every CI collection path (inventory II.8 #8); the same cipher is tested by 2_w3c-ssi-layer/mobi-vid/tests/test_vin_cipher.py, which is registered"]
+  - [cv2x-testbed/scripts/test_mobi_vid.py, "script-style demo; not pytest-collectable; its compliance print is hard-coded (inventory II.2); not evidence"]
+  - [cv2x-testbed/scripts/test_comparison.py, "script-style; its blockchain figures are labelled assumed, not measured (inventory II.2); not evidence"]
+  - [cv2x-testbed/scripts/test_identity_comparison.py, "script-style; needs a deployment file; not run by any suite or CI job"]
